@@ -29,7 +29,7 @@ if (mix.inProduction()) {
     '@fortawesome/vue-fontawesome'
   ])
 }
-mix.browserSync('laravel.lti.local')
+mix.browserSync('laravel.lti.local/admin/login')
 // new BundleAnalyzerPlugin()
 mix.webpackConfig({
   plugins: [

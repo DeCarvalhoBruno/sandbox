@@ -12,21 +12,21 @@ class Admin
         ],
             function (Router $r) {
                 $r->group([
-                    'middleware' => ['web'],
-                ], call_user_func('static::guestWebRoutes'));
-                $r->group([
                     'middleware' => ['ajax'],
                 ], call_user_func('static::guestAjaxRoutes'));
-
                 $r->group([
                     'middleware' => ['auth:ajax']
                 ], call_user_func('static::authWebRoutes'));
+                $r->group([
+                    'middleware' => ['web'],
+                ], call_user_func('static::guestWebRoutes'));
             });
     }
 
     public static function guestWebRoutes()
     {
         return function (Router $r) {
+            $r->get('/test', 'Admin@test');
             $r->get('{path}', 'Admin@index')->where('path', '(.*)');
         };
     }
@@ -34,6 +34,7 @@ class Admin
     public static function guestAjaxRoutes()
     {
         return function (Router $r) {
+            $r->get('', 'Admin@index')->name('admin.dashboard');
             $r->post('login', 'Auth\Login@login')->name('admin.login');
             $r->post('register', 'Auth\Register@register')->name('admin.register');
             $r->post('password/email', 'Auth\ForgotPassword@sendResetLinkEmail')->name('admin.password.email-reset');
@@ -45,10 +46,11 @@ class Admin
     public static function authWebRoutes()
     {
         return function (Router $r) {
-            $r->get('', 'Admin@index')->name('admin.dashboard');
             $r->post('logout', 'Auth\Login@logout')->name('admin.logout');
             $r->patch('settings/profile', 'Settings\Profile@update')->name('admin.settings.profile');
             $r->patch('settings/password', 'Settings\Password@update')->name('admin.settings.password');
+
+            $r->get('users', 'User@index')->name('admin.user.index');
         };
     }
 }

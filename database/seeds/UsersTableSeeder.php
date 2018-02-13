@@ -12,30 +12,51 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
 
-//        $faker = Faker\Factory::create();
-
-        factory(App\User::class)->create([
-            'name' => 'system',
-            'email' => 'system@localhost.local',
-            'password' => bcrypt(str_random(15)),
-            'remember_token' => null,
-        ]);
-
-        factory(App\User::class)->create([
-            'name' => 'JohnDoe',
+        $pwd = bcrypt('pqsszord');
+        $u = factory(App\Models\User::class)->create([
             'email' => 'john.doe@example.com',
-            'password' => bcrypt('pqsszord'),
+            'username' => 'john_doe',
+            'password' => $pwd,
+            'activated' => true,
             'remember_token' => null,
         ]);
+        factory(App\Models\Person::class)->create([
+            'person_first_name' => 'John',
+            'person_last_name' => 'Doe',
+            'user_id' => $u->getAttribute('user_id')
+        ]);
 
-        factory(App\User::class)->create([
-            'name' => 'JaneDoe',
+        $u = factory(App\Models\User::class)->create([
             'email' => 'jane.doe@example.com',
-            'password' => bcrypt('pqsszord'),
+            'username' => 'jane_doe',
+            'password' => $pwd,
+            'activated' => true,
             'remember_token' => null,
         ]);
 
+        factory(App\Models\Person::class)->create([
+            'person_first_name' => 'Jane',
+            'person_last_name' => 'Doe',
+            'user_id' => $u->getAttribute('user_id')
+        ]);
 
+        $faker = Faker\Factory::create();
 
+        for ($i = 1; $i <= 50; $i++) {
+            $fn = $faker->firstName;
+            $ln = $faker->lastName;
+
+            $u = factory(App\Models\User::class)->create([
+                'username' => substr(strtolower(substr($fn, 0, 1) . '_' . $ln), 0, 15),
+                'activated' => true,
+                'email' => $faker->unique()->safeEmail,
+                'password' => $pwd,
+            ]);
+            factory(App\Models\Person::class)->create([
+                'person_first_name' => $fn,
+                'person_last_name' => $ln,
+                'user_id' => $u->getAttribute('user_id')
+            ]);
+        }
     }
 }

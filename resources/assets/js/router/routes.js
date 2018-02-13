@@ -16,7 +16,7 @@ const SettingsPassword = () => import('~/pages/admin/settings/password').then(
 
 export default [
   {
-    path: '/admin',
+    path: '/admin/',
     redirect: {name: 'admin.dashboard'},
   },
   {

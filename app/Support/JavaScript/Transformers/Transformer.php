@@ -21,6 +21,8 @@ class Transformer
      */
     protected $viewBinder;
 
+    protected $vars = [];
+
     /**
      * All transformable types.
      *
@@ -39,7 +41,7 @@ class Transformer
      * Create a new JS transformer instance.
      *
      * @param ViewBinder $viewBinder
-     * @param string     $namespace
+     * @param string $namespace
      */
     function __construct(ViewBinder $viewBinder, $namespace = 'window')
     {
@@ -50,32 +52,27 @@ class Transformer
     /**
      * Bind the given array of variables to the view.
      */
-    public function put()
+    public function bindJsVariablesToView()
     {
-        $javascript = $this->constructJavaScript(
-            $this->normalizeInput(func_get_args())
-        );
-
-        $this->viewBinder->bind($javascript);
-
-        return $javascript;
-    }
-
-    /**
-     * Translate the array of PHP variables to a JavaScript syntax.
-     *
-     * @param  array $variables
-     * @return array
-     */
-    public function constructJavaScript($variables)
-    {
+        if (empty($this->vars)) {
+            return;
+        }
         $js = $this->constructNamespace();
 
-        foreach ($variables as $name => $value) {
+        foreach ($this->vars as $name => $value) {
             $js .= $this->initializeVariable($name, $value);
         }
+        $this->viewBinder->bind($js);
+    }
 
-        return $js;
+    public function put($key, $value)
+    {
+        $this->vars[$key] = $value;
+    }
+
+    public function putArray(Array $array)
+    {
+        $this->vars = array_merge($this->vars,$array);
     }
 
     /**
@@ -85,10 +82,6 @@ class Transformer
      */
     protected function constructNamespace()
     {
-        if ($this->namespace == 'window') {
-            return '';
-        }
-
         return "window.{$this->namespace} = window.{$this->namespace} || {};";
     }
 
@@ -115,8 +108,7 @@ class Transformer
     {
         foreach ($this->transformers as $transformer) {
             $js = (new $transformer)->transform($value);
-
-            if (! is_null($js)) {
+            if (!is_null($js)) {
                 return $js;
             }
         }

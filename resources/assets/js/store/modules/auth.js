@@ -2,19 +2,17 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import * as types from '../mutation-types'
 
-const {csrfToken, user} = window.config
+const {user} = window.config
 
 // state
 export const state = {
   user,
-  csrfToken,
   token: Cookies.get('token')
 }
 
 // getters
 export const getters = {
   user: state => state.user,
-  csrfToken: state => state.csrfToken,
   token: state => state.token,
 
   check: state => state.user !== null

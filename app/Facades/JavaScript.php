@@ -2,6 +2,14 @@
 
 use Illuminate\Support\Facades\Facade;
 
+/**
+ *
+ * @method static void bindJsVariablesToView
+ * @method static void put($key, $value)
+ * @method static void putArray(Array $array)
+ *
+ * @see \App\Support\JavaScript\Transformers\Transformer
+ */
 class JavaScript extends Facade
 {
     /**
