@@ -3,8 +3,7 @@ import * as types from '../mutation-types'
 
 const locales = {
   'en': 'EN',
-  'zh-CN': '中文',
-  'es': 'ES'
+  'fr': 'FR'
 }
 const {locale} = window.config
 

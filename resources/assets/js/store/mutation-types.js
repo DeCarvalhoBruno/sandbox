@@ -8,3 +8,6 @@ export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE'
 
 // lang.js
 export const SET_LOCALE = 'SET_LOCALE'
+
+// table.js
+export const FETCH_TABLE_DATA = 'FETCH_TABLE_DATA'

@@ -21,7 +21,7 @@
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
                             <router-link :to="{ name: 'admin.login' }" class="nav-link" active-class="active">
-                                {{ $t('login') }}
+                                {{ $t('general.login') }}
                             </router-link>
                         </li>
                     </ul>

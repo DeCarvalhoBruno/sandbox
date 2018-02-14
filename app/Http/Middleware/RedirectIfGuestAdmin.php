@@ -17,14 +17,9 @@ class RedirectIfGuestAdmin
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if ( ! \Auth::guard()->check()) {
-            if ($request->acceptsJson()) {
-                return response('Unauthorized.', 401);
-            } else {
-                return redirect()->guest(route('admin.login'));
-            }
+        if (!\Auth::guard()->check()) {
+            return redirect()->guest(route('admin.login'));
         }
-
         return $next($request);
     }
 }

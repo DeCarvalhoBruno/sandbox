@@ -1,13 +1,13 @@
 <template>
   <div class="row">
     <div class="col-lg-8 m-auto">
-      <card :title="$t('reset_password')">
+      <card :title="$t('pages.auth.reset_password')">
         <form @submit.prevent="send" @keydown="form.onKeydown($event)">
           <alert-success :form="form" :message="status"/>
 
           <!-- Email -->
           <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('email') }}</label>
+            <label class="col-md-3 col-form-label text-md-right">{{ $t('genral.email') }}</label>
             <div class="col-md-7">
               <input ref="email" v-model="form.email" type="email" name="email" class="form-control"
                 :class="{ 'is-invalid': form.errors.has('email') }">
@@ -19,7 +19,7 @@
           <div class="form-group row">
             <div class="col-md-9 ml-md-auto">
               <v-button :loading="form.busy">
-                {{ $t('send_password_reset_link') }}
+                {{ $t('pages.auth.send_password_reset_link') }}
               </v-button>
             </div>
           </div>
@@ -36,7 +36,7 @@ export default {
   middleware: 'guest',
 
   metaInfo () {
-    return { title: this.$t('reset_password') }
+    return { title: this.$t('pages.auth.reset_password') }
   },
 
   data: () => ({

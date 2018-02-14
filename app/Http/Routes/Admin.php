@@ -12,15 +12,16 @@ class Admin
         ],
             function (Router $r) {
                 $r->group([
-                    'middleware' => ['ajax'],
+                    'middleware' => ['ajax', 'authenticated_admin'],
                 ], call_user_func('static::guestAjaxRoutes'));
                 $r->group([
                     'middleware' => ['auth:ajax']
-                ], call_user_func('static::authWebRoutes'));
+                ], call_user_func('static::authAjaxRoutes'));
                 $r->group([
                     'middleware' => ['web'],
                 ], call_user_func('static::guestWebRoutes'));
-            });
+            }
+        );
     }
 
     public static function guestWebRoutes()
@@ -43,14 +44,12 @@ class Admin
 
     }
 
-    public static function authWebRoutes()
+    public static function authAjaxRoutes()
     {
         return function (Router $r) {
             $r->post('logout', 'Auth\Login@logout')->name('admin.logout');
             $r->patch('settings/profile', 'Settings\Profile@update')->name('admin.settings.profile');
             $r->patch('settings/password', 'Settings\Password@update')->name('admin.settings.password');
-
-            $r->get('users', 'User@index')->name('admin.user.index');
         };
     }
 }

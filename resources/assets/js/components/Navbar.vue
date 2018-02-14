@@ -33,13 +33,13 @@
                         <div class="dropdown-menu">
                             <router-link :to="{ name: 'admin.settings.profile' }" class="dropdown-item pl-3">
                                 <fa icon="cog" fixed-width/>
-                                {{ $t('settings') }}
+                                {{ $t('general.settings') }}
                             </router-link>
 
                             <div class="dropdown-divider"></div>
                             <a @click.prevent="logout" class="dropdown-item pl-3"  href="#">
                                 <fa icon="sign-out-alt" fixed-width/>
-                                {{ $t('logout') }}
+                                {{ $t('general.logout') }}
                             </a>
                         </div>
                     </li>

@@ -1,11 +1,11 @@
 <template>
     <div class="row">
         <div class="col-lg-8 m-auto">
-            <card :title="$t('login')">
+            <card :title="$t('general.login')">
                 <form @submit.prevent="login" @keydown="form.onKeydown($event)">
                     <!-- Email -->
                     <div class="form-group row">
-                        <label class="col-md-3 col-form-label text-md-right">{{ $t('email') }}</label>
+                        <label class="col-md-3 col-form-label text-md-right">{{ $t('general.email') }}</label>
                         <div class="col-md-7">
                             <input v-model="form.email" type="email" name="email" class="form-control"
                                    :class="{ 'is-invalid': form.errors.has('email') }">
@@ -15,7 +15,7 @@
 
                     <!-- Password -->
                     <div class="form-group row">
-                        <label class="col-md-3 col-form-label text-md-right">{{ $t('password') }}</label>
+                        <label class="col-md-3 col-form-label text-md-right">{{ $t('general.password') }}</label>
                         <div class="col-md-7">
                             <input v-model="form.password" type="password" name="password" class="form-control"
                                    :class="{ 'is-invalid': form.errors.has('password') }">
@@ -28,11 +28,11 @@
                         <div class="col-md-3"></div>
                         <div class="col-md-7 d-flex">
                             <checkbox v-model="remember" name="remember">
-                                {{ $t('remember_me') }}
+                                {{ $t('pages.auth.remember_me') }}
                             </checkbox>
 
                             <router-link :to="{ name: 'admin.password.request' }" class="small ml-auto my-auto">
-                                {{ $t('forgot_password') }}
+                                {{ $t('pages.auth.forgot_password') }}
                             </router-link>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                         <div class="col-md-7 offset-md-3 d-flex">
                             <!-- Submit Button -->
                             <v-button :loading="form.busy">
-                                {{ $t('login') }}
+                                {{ $t('general.login') }}
                             </v-button>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
   export default {
     middleware: 'guest',
     metaInfo () {
-      return {title: this.$t('login')}
+      return {title: this.$t('general.login')}
     },
 
     data: () => ({

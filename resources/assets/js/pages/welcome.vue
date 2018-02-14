@@ -3,15 +3,15 @@
     <div class="top-right links">
       <template v-if="authenticated">
         <router-link :to="{ name: 'home' }">
-          {{ $t('home') }}
+          {{ $t('general.home') }}
         </router-link>
       </template>
       <template v-else>
         <router-link :to="{ name: 'login' }">
-          {{ $t('login') }}
+          {{ $t('general.login') }}
         </router-link>
         <router-link :to="{ name: 'register' }">
-          {{ $t('register') }}
+          {{ $t('general.register') }}
         </router-link>
       </template>
     </div>
@@ -39,7 +39,7 @@ export default {
   layout: 'basic',
 
   metaInfo () {
-    return { title: this.$t('home') }
+    return { title: this.$t('general.home') }
   },
 
   computed: mapGetters({

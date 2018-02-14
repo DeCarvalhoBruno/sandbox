@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-md-3">
-      <card :title="$t('settings')" class="settings-card">
+      <card :title="$t('general.settings')" class="settings-card">
         <ul class="nav flex-column nav-pills">
           <li v-for="tab in tabs" class="nav-item">
             <router-link :to="{ name: tab.route }" class="nav-link" active-class="active">
@@ -30,12 +30,12 @@ export default {
       return [
         {
           icon: 'user',
-          name: this.$t('profile'),
+          name: this.$t('generalprofile'),
           route: 'settings.profile'
         },
         {
           icon: 'lock',
-          name: this.$t('password'),
+          name: this.$t('general.password'),
           route: 'settings.password'
         }
       ]

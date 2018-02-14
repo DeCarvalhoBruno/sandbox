@@ -1,6 +1,6 @@
 <template>
-  <card :title="$t('home')">
-    {{ $t('you_are_logged_in') }}
+  <card :title="$t(general.home')">
+
   </card>
 </template>
 
@@ -9,7 +9,7 @@ export default {
   middleware: 'auth',
 
   metaInfo () {
-    return { title: this.$t('home') }
+    return { title: this.$t('general.home') }
   }
 }
 </script>
