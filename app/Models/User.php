@@ -2,46 +2,54 @@
 
 namespace App\Models;
 
+use App\Contracts\HasASystemEntity;
 use App\Notifications\ResetPassword;
+use App\Traits\Models\DoesSqlStuff;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\User as LaravelUser;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Traits\Models\HasASystemEntity as HasASystemEntityTrait;
+use App\Traits\Models\HasANameColumn;
 
-class User extends Authenticatable implements JWTSubject
+class User extends LaravelUser implements JWTSubject, HasASystemEntity
 {
-    use Notifiable;
-    public $primaryKey = 'user_id';
+    use Notifiable, HasASystemEntityTrait, HasANameColumn, DoesSqlStuff;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    public $table = 'users';
+    protected $primaryKey = 'user_id';
+    public static $nameColumn = 'username';
     protected $fillable = [
-        'username', 'email', 'password','activated','remember_token'
+        'username',
+        'email',
+        'password',
+        'activated',
+        'remember_token'
     ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
-        'password', 'remember_token','activated','created_at','updated_at'
+        'user_id',
+        'password',
+        'remember_token',
+        'activated',
+        'created_at',
+        'updated_at',
+        'person_id'
     ];
+    protected $systemEntityID = \App\Models\SystemEntity::USERS;
 
-    protected $with = ['person'];
 
-    public function person()
+    protected static function boot()
     {
-        return $this->hasOne(User::class);
-
+        parent::boot();
+        static::addGlobalScope('person', function ($builder) {
+            (new static)->scopePerson($builder);
+        });
     }
 
     /**
      * Send the password reset notification.
      *
-     * @param  string  $token
+     * @param  string $token
      * @return void
      */
     public function sendPasswordResetNotification($token)
@@ -64,4 +72,17 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     *
+     * @return \Illuminate\Database\Eloquent\Builder $query
+     */
+    public function scopePerson(Builder $query)
+    {
+        return $this->join($query,Person::class);
+    }
+
 }

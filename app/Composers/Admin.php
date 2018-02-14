@@ -1,6 +1,7 @@
 <?php namespace App\Composers;
 
 use App\Facades\JavaScript;
+use App\Models\User;
 
 class Admin extends Composer
 {

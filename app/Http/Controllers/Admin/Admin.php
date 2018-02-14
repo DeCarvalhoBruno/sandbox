@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Person;
 
 class Admin extends Controller
 {
@@ -13,8 +14,10 @@ class Admin extends Controller
 
     public function test()
     {
-        dd(\App\Models\SystemEntity::getModelPrimaryKey(\App\Models\SystemEntity::PEOPLE));
-
+//        $f = (new \App\Models\User)->first();
+        dd(\App\Models\User::first());
+//dd((new \App\Models\User())->getKey());
+        return view('admin.layouts.test');
     }
 
 }

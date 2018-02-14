@@ -7,9 +7,9 @@ class SystemEntity extends Model
 {
     use EnumerableTrait;
 
-    const SYSTEM = 0x0001;
-    const PEOPLE = 0x9001;
-    const USERS = 0xc350; //50000
+    const PEOPLE = 0x960; //2400
+    const SYSTEM = 0xaf0; //2800
+    const USERS = 0xc1c; //3100
 
     public $timestamps = false;
     protected $table = 'system_entities';

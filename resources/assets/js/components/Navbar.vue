@@ -28,7 +28,7 @@
                     <li v-if="user" class="nav-item dropdown mr-5">
                         <a class="nav-link dropdown-toggle text-light"
                            href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ user.name }}
+                            {{ user.username }}
                         </a>
                         <div class="dropdown-menu">
                             <router-link :to="{ name: 'admin.settings.profile' }" class="dropdown-item pl-3">
