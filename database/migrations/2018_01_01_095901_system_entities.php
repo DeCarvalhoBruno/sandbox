@@ -105,6 +105,20 @@ class SystemEntities extends Migration
                     $this->entityPrimaryKeyColumns[$entity['system_entity_name']])
             );
         }
+        \DB::unprepared('
+                CREATE TRIGGER t_people_create_fullname BEFORE INSERT ON people
+                    FOR EACH ROW 
+                    BEGIN
+                      SET NEW.full_name = CONCAT(NEW.first_name, " ", NEW.last_name);
+                    END
+            ');
+        \DB::unprepared('
+                CREATE TRIGGER t_people_update_fullname BEFORE UPDATE ON people
+                    FOR EACH ROW 
+                    BEGIN
+                      SET NEW.full_name = CONCAT(NEW.first_name, " ", NEW.last_name);
+                    END
+            ');
         $u = factory(App\Models\User::class)->create([
             'username' => 'system',
             'email' => 'system@localhost.local',
@@ -115,8 +129,8 @@ class SystemEntities extends Migration
         ]);
         factory(App\Models\Person::class)->create([
             'person_id' => 1,
-            'person_first_name' => 'system',
-            'person_last_name' => '',
+            'first_name' => 'system',
+            'last_name' => '',
             'user_id' => 1
         ]);
     }

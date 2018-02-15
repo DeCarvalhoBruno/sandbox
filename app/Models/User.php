@@ -31,12 +31,14 @@ class User extends LaravelUser implements JWTSubject, HasASystemEntity
         'password',
         'remember_token',
         'activated',
-        'created_at',
         'updated_at',
         'person_id'
     ];
+    protected $sortable = [
+      'created_at'
+    ];
     protected $systemEntityID = \App\Models\SystemEntity::USERS;
-
+    public $timestamps = false;
 
     protected static function boot()
     {
@@ -45,6 +47,11 @@ class User extends LaravelUser implements JWTSubject, HasASystemEntity
             (new static)->scopePerson($builder);
         });
     }
+
+//    public function getUrlAttribute($value)
+//    {
+//        return strtoupper($value);
+//    }
 
     /**
      * Send the password reset notification.
@@ -74,15 +81,40 @@ class User extends LaravelUser implements JWTSubject, HasASystemEntity
     }
 
     /**
+     * @param mixed $query
+     * @param \App\Filters\ThreadFilters $filters
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeFilter($query, $filters)
+    {
+        return $filters->apply($query);
+    }
+
+    /**
      * @param \Illuminate\Database\Eloquent\Builder $query
      *
      * @link https://laravel.com/docs/5.6/eloquent#query-scopes
      *
      * @return \Illuminate\Database\Eloquent\Builder $query
      */
+    public function scopeActivated(Builder $query)
+    {
+        return $query->where('activated', '=',1);
+
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder $query
+     */
     public function scopePerson(Builder $query)
     {
         return $this->join($query,Person::class);
+    }
+
+    public function getSortableColumns()
+    {
+        return $this->sortable;
     }
 
 }

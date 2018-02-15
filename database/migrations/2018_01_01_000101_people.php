@@ -16,9 +16,12 @@ class People extends Migration
         Schema::enableForeignKeyConstraints();
         Schema::create('people', function (Blueprint $table) {
             $table->increments('person_id');
-            $table->string('person_first_name', 100)->nullable();
-            $table->string('person_last_name', 100)->nullable();
+            $table->string('first_name', 75)->nullable();
+            $table->string('last_name', 75)->nullable();
+            $table->string('full_name', 150)->nullable();
             $table->integer('user_id')->unsigned();
+
+            $table->timestamps();
 
             $table->foreign('user_id')
                 ->references('user_id')->on('users')

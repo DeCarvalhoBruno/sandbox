@@ -3,28 +3,27 @@
 namespace App\Http\Controllers\Ajax\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Filters\User as UserFilter;
+use App\Providers\Models\User as UserProvider;
 
 class User extends Controller
 {
-    public function index()
+    public function index(UserProvider $userProvider, UserFilter $userFilter)
     {
+        $columns = [
+            'full_name' => trans('full_name'),
+            'email' => trans('email'),
+            'created_at' => trans('created_at')
+        ];
         return [
-            [
-                'code' => 'ZW',
-                'name' => 'Zimbabwe',
-                'created_at' => '2015-04-24T01:46:50.459583',
-                'updated_at' => '2015-04-24T01:46:50.459593',
-                'uri' => 'http://api.lobbyfacts.eu/api/1/country/245',
-                'id' => 245
-            ],
-            [
-                'code' => 'SC',
-                'name' => 'Seychelles',
-                'created_at' => '2015-04-24T01:46:50.344980',
-                'updated_at' => '2015-04-24T01:46:50.344984',
-                'uri' => 'http://api.lobbyfacts.eu/api/1/country/197',
-                'id' => 197
-            ]
+            'columns' => $columns,
+            'table' => $userProvider->select([
+                'full_name',
+                'email',
+                'users.user_id',
+                'created_at'
+            ])->activated()->filter($userFilter)->limit(10)->get()->toArray(),
+            'sortableColumns' => $userProvider->createModel()->getSortableColumns()
         ];
     }
 }

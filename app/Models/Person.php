@@ -12,11 +12,10 @@ class Person extends Model implements HasASystemEntity
 
     public $table = 'people';
     public $primaryKey = 'person_id';
-    public $timestamps = false;
 
     protected $fillable = [
-        'person_first_name',
-        'person_last_name',
+        'first_name',
+        'last_name',
         'user_id'
     ];
     protected $hidden = [

@@ -1,9 +1,8 @@
 <template>
     <div>
-        <v-client-table :columns="columns" :data="table" :options="options" name="table">
-            <a slot="uri" slot-scope="props" target="_blank" :href="props.row.uri"
-               class="fa fa-eye"></a>
-        </v-client-table>
+        <v-table :rows="rows" :columns="columns" :sortable-columns="sortableColumns" :entity="'users'">
+
+        </v-table>
     </div>
 </template>
 
@@ -11,37 +10,32 @@
   import Vue from 'vue'
   import store from '~/store'
   import { mapGetters } from 'vuex'
-  import { ClientTable, Event } from 'vue-tables-2'
+  import Table from '~/components/table/table'
 
-  Vue.use(ClientTable, null, true, 'bootstrap4')
+  Vue.use(Table)
 
   export default {
     layout: 'basic',
     middleware: 'check-auth',
     name: 'users',
-    data () {
+    components: {
+      'v-table': Table
+    },
+    data: function () {
       return {
-        columns: ['name', 'code', 'uri'],
-        options: {
-          headings: {
-            name: 'Country Name',
-            code: 'Country Code',
-            uri: 'View Record'
-          },
-          sortable: ['name', 'code'],
-          filterable: ['name', 'code']
-        },
-        methods: {}
       }
     },
+
     computed: mapGetters({
-      table: 'table/table'
+      rows: 'table/table',
+      columns: 'table/columns',
+      sortableColumns: 'table/sortableColumns'
     }),
-    created () {
-    },
+
     beforeRouteEnter (to, from, next) {
       store.dispatch('table/fetchData', {
-        entity: 'users'
+        entity: 'users',
+        queryString: to.fullPath
       }).then(res => next())
 
       // next(vm => {

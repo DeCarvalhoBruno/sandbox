@@ -46,6 +46,9 @@ return [
             "new_password" => "New Password",
         ]
     ],
+    "tables" => [
+        "empty" => 'There is currently no data available.'
+    ],
     "go_home" => "Go Home",
     "toggle_navigation" => "Toggle navigation",
     "your_info" => "Your Info",

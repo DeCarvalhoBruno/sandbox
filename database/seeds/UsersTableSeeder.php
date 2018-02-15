@@ -21,8 +21,8 @@ class UsersTableSeeder extends Seeder
             'remember_token' => null,
         ]);
         factory(App\Models\Person::class)->create([
-            'person_first_name' => 'John',
-            'person_last_name' => 'Doe',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
             'user_id' => $u->getAttribute('user_id')
         ]);
 
@@ -35,27 +35,36 @@ class UsersTableSeeder extends Seeder
         ]);
 
         factory(App\Models\Person::class)->create([
-            'person_first_name' => 'Jane',
-            'person_last_name' => 'Doe',
+            'first_name' => 'Jane',
+            'last_name' => 'Doe',
             'user_id' => $u->getAttribute('user_id')
         ]);
 
         $faker = Faker\Factory::create();
 
-        for ($i = 1; $i <= 50; $i++) {
+        $usernames = [];
+        for ($i = 1; $i <= 500; $i++) {
             $fn = $faker->firstName;
             $ln = $faker->lastName;
+            $username = substr(strtolower(substr($fn, 0, 1) . '_' . $ln), 0, 15);
+
+            if( isset($usernames[$username])){
+                $usernames[$username]++;
+            }else{
+                $usernames[$username]=0;
+            }
 
             $u = factory(App\Models\User::class)->create([
-                'username' => substr(strtolower(substr($fn, 0, 1) . '_' . $ln), 0, 15),
+                'username' => ($usernames[$username] == 0) ? $username : $username . $usernames[$username],
                 'activated' => true,
                 'email' => $faker->unique()->safeEmail,
                 'password' => $pwd,
             ]);
             factory(App\Models\Person::class)->create([
-                'person_first_name' => $fn,
-                'person_last_name' => $ln,
-                'user_id' => $u->getAttribute('user_id')
+                'first_name' => $fn,
+                'last_name' => $ln,
+                'user_id' => $u->getAttribute('user_id'),
+                'created_at' => $faker->dateTimeBetween('-2 years')
             ]);
         }
     }

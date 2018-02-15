@@ -22,3 +22,4 @@ yarn-error.log
 /yarn.lock
 /public
 /bootstrap/cache/
+/package-lock.json

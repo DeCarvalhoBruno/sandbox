@@ -47,7 +47,7 @@ abstract class Model
      *
      * @return string
      */
-    public function getModel()
+    public function getModelName()
     {
         return $this->model;
     }
@@ -62,7 +62,7 @@ abstract class Model
         $model = $this->createModel();
 
         return $model->newQuery()
-                     ->where($model->getKeyName(), '>', 0)
+                     ->where($model->getKeyName(), '>', 1)
                      ->get($columns);
     }
 
@@ -95,6 +95,14 @@ abstract class Model
     public function build()
     {
         return $this->createModel();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function select($select)
+    {
+        return $this->createModel()->select($select);
     }
 
     /**

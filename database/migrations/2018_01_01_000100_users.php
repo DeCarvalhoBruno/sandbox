@@ -20,7 +20,6 @@ class Users extends Migration
             $table->string('password')->nullable();
             $table->boolean('activated')->default(false);
             $table->rememberToken()->nullable();
-            $table->timestamps();
         });
     }
 

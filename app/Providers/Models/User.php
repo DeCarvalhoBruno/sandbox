@@ -2,17 +2,16 @@
 
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Hashing\BcryptHasher;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Support\Str;
 
 /**
  * Class User
  * @see \Illuminate\Auth\EloquentUserProvider
+ * @method \App\Models\User createModel(array $attributes = [])
  */
 class User extends Model implements UserProvider
 {
-
     protected $model = \App\Models\User::class;
     protected $hasher;
 
