@@ -27,26 +27,8 @@ module.exports = [
       },
       {
         type: 'tree',
-        icon: 'fa fa-user',
-        name: 'Edit',
-        items: [
-          {
-            type: 'item',
-            icon: 'fa fa-circle-o',
-            name: 'Add',
-            router: {
-              name: 'admin.settings.profile'
-            }
-          },
-          {
-            type: 'item',
-            icon: 'fa fa-circle-o',
-            name: 'Edit',
-            router: {
-              name: 'admin.login'
-            }
-          }
-        ]
+        icon: 'fa fa-star',
+        name: 'Add'
       }
     ]
   },

@@ -11,3 +11,6 @@ export const SET_LOCALE = 'SET_LOCALE'
 
 // table.js
 export const FETCH_TABLE_DATA = 'FETCH_TABLE_DATA'
+
+// message.js
+export const SET_MESSAGE = 'SET_MESSAGE'

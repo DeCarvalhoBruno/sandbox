@@ -14,7 +14,6 @@ export const state = {
 export const getters = {
   user: state => state.user,
   token: state => state.token,
-
   check: state => state.user !== null
 }
 
@@ -46,6 +45,7 @@ export const actions = {
   saveToken ({commit, dispatch}, payload) {
     commit(types.SAVE_TOKEN, payload)
   },
+
   updateUser ({commit}, payload) {
     commit(types.UPDATE_USER, payload)
   },

@@ -1,71 +1,78 @@
 <template>
     <div class="row">
         <div class="col-lg-8 m-auto">
-            <card :title="$t('general.login')">
-                <form @submit.prevent="login" @keydown="form.onKeydown($event)">
-                    <!-- Email -->
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label text-md-right">{{ $t('general.email') }}</label>
-                        <div class="col-md-7">
-                            <input v-model="form.email" type="email" name="email" class="form-control"
-                                   :class="{ 'is-invalid': form.errors.has('email') }">
-                            <has-error :form="form" field="email"/>
-                        </div>
-                    </div>
+            <div class="card">
+                <div class="card-header">
+                    {{ $t('general.login') }}
+                </div>
 
-                    <!-- Password -->
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label text-md-right">{{ $t('general.password') }}</label>
-                        <div class="col-md-7">
-                            <input v-model="form.password" type="password" name="password" class="form-control"
-                                   :class="{ 'is-invalid': form.errors.has('password') }">
-                            <has-error :form="form" field="password"/>
+                <div class="card-body">
+                    <alert-form :form="form"/>
+                    <form @submit.prevent="login" @keydown="form.onKeydown($event)">
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-md-right">{{ $t('general.email') }}</label>
+                            <div class="col-md-7">
+                                <input v-model="form.email" type="email" name="email" class="form-control"
+                                       :class="{ 'is-invalid': form.errors.has('email') }">
+                                <has-error :form="form" field="email"/>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Remember Me -->
-                    <div class="form-group row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-7 d-flex">
-                            <checkbox v-model="remember" name="remember">
-                                {{ $t('pages.auth.remember_me') }}
-                            </checkbox>
-
-                            <router-link :to="{ name: 'admin.password.request' }" class="small ml-auto my-auto">
-                                {{ $t('pages.auth.forgot_password') }}
-                            </router-link>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-md-right">{{ $t('general.password') }}</label>
+                            <div class="col-md-7">
+                                <input v-model="form.password" type="password" name="password" class="form-control"
+                                       :class="{ 'is-invalid': form.errors.has('password') }">
+                                <has-error :form="form" field="password"/>
+                            </div>
                         </div>
-                    </div>
+                        <div class="form-group row">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-7 d-flex">
+                                <checkbox v-model="remember" name="remember">
+                                    {{ $t('pages.auth.remember_me') }}
+                                </checkbox>
 
-                    <div class="form-group row">
-                        <div class="col-md-7 offset-md-3 d-flex">
-                            <!-- Submit Button -->
-                            <v-button :loading="form.busy">
-                                {{ $t('general.login') }}
-                            </v-button>
+                                <router-link :to="{ name: 'admin.password.request' }" class="small ml-auto my-auto">
+                                    {{ $t('pages.auth.forgot_password') }}
+                                </router-link>
+                            </div>
                         </div>
-                    </div>
-                </form>
-            </card>
+                        <div class="form-group row">
+                            <div class="col-md-7 offset-md-3 d-flex">
+                                <v-button :loading="form.busy">
+                                    {{ $t('general.login') }}
+                                </v-button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-  import Form from 'vform'
+  import Button from '~/components/Button'
+  import Checkbox from '~/components/Checkbox'
+  import { Form, HasError, AlertForm } from '~/components/form'
 
   export default {
     middleware: 'guest',
     metaInfo () {
       return {title: this.$t('general.login')}
     },
-
+    components: {
+      'v-button': Button,
+      Checkbox,
+      HasError,
+      AlertForm,
+    },
     data: () => ({
       form: new Form({
         email: '',
         password: ''
       }),
-      remember: false
+      remember: false,
     }),
 
     methods: {
@@ -73,7 +80,6 @@
         try {
           const {data} = await this.form.post('/admin/login')
           this.$store.dispatch('auth/updateUser', {user: data.user})
-
           this.$store.dispatch('auth/saveToken', {
             token: data.token,
             remember: this.remember
@@ -81,8 +87,6 @@
         } catch (e) {
 
         }
-
-        // Redirect home.
         this.$router.push({name: 'admin.dashboard'})
       }
     }

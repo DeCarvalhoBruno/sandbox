@@ -14,10 +14,6 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarToggler">
-                    <ul class="navbar-nav">
-                        <!--<locale-dropdown/>-->
-                    </ul>
-
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
                             <router-link :to="{ name: 'admin.login' }" class="nav-link" active-class="active">
@@ -30,7 +26,11 @@
         </nav>
 
         <div class="container mt-4">
-            <child/>
+            <transition name="page" mode="out-in">
+                <slot>
+                    <router-view/>
+                </slot>
+            </transition>
         </div>
     </div>
 </template>
@@ -39,12 +39,12 @@
   import Navbar from '~/components/Navbar'
 
   export default {
-    name: 'MainLayout',
+    name: 'default',
     data: () => ({
       appName: window.config.appName
     }),
     components: {
-      Navbar
+      Navbar,
     }
   }
 </script>

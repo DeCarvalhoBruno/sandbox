@@ -9,21 +9,36 @@
                 <tr>
                     <th v-for="(name,label,index ) in columns"
                         :key="index"
-                        @click="sort(name)"
-                    >
+                        @click="sort(name)">
                         {{label}}
+                    </th>
+                    <th>
+                        {{$t('general.actions')}}
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-for="(row,rowIdx) in rows"
-                    :key="rowIdx"
-                >
-                    <td v-for="(colName,cl,colIdx) in columns" :key="colIdx"
-                    >
+                    :key="rowIdx">
+                    <td v-for="(colName,cl,colIdx) in columns" :key="colIdx">
                         {{row[colName]}}
                     </td>
-
+                    <td>
+                        <div class="inline">
+                            <router-link :to="{ name: 'admin.user.edit', params: { user_id: row.user_id } }">
+                                <button class="btn btn-sm btn-info">
+                                <span class="fa fa-pencil">
+                            </span>
+                            </button>
+                            </router-link>
+                            <button class="btn btn-sm btn-danger">
+                                <span class="fa fa-trash-o">
+                                <router-link :to="{ name: 'admin.dashboard' }">
+                                </router-link>
+                            </span>
+                            </button>
+                        </div>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -62,7 +77,7 @@
       },
 
       toggleSortOrder () {
-        this.sortOrder = (this.sortOrder=='asc') ? 'desc' : 'asc'
+        this.sortOrder = (this.sortOrder == 'asc') ? 'desc' : 'asc'
         return this.sortOrder
       }
 

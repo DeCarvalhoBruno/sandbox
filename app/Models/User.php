@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Contracts\HasASystemEntity;
 use App\Notifications\ResetPassword;
 use App\Traits\Models\DoesSqlStuff;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as LaravelUser;
@@ -27,7 +28,6 @@ class User extends LaravelUser implements JWTSubject, HasASystemEntity
         'remember_token'
     ];
     protected $hidden = [
-        'user_id',
         'password',
         'remember_token',
         'activated',
@@ -35,8 +35,9 @@ class User extends LaravelUser implements JWTSubject, HasASystemEntity
         'person_id'
     ];
     protected $sortable = [
-      'created_at'
+        'created_at'
     ];
+
     protected $systemEntityID = \App\Models\SystemEntity::USERS;
     public $timestamps = false;
 
@@ -48,10 +49,10 @@ class User extends LaravelUser implements JWTSubject, HasASystemEntity
         });
     }
 
-//    public function getUrlAttribute($value)
-//    {
-//        return strtoupper($value);
-//    }
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::createFromFormat('Y-m-d H:i:s', $value)->diffForHumans();
+    }
 
     /**
      * Send the password reset notification.
@@ -99,7 +100,7 @@ class User extends LaravelUser implements JWTSubject, HasASystemEntity
      */
     public function scopeActivated(Builder $query)
     {
-        return $query->where('activated', '=',1);
+        return $query->where('activated', '=', 1);
 
     }
 
@@ -109,7 +110,7 @@ class User extends LaravelUser implements JWTSubject, HasASystemEntity
      */
     public function scopePerson(Builder $query)
     {
-        return $this->join($query,Person::class);
+        return $this->join($query, Person::class);
     }
 
     public function getSortableColumns()

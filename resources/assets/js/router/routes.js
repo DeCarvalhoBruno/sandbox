@@ -6,7 +6,10 @@ const PasswordRequest = () => import('~/pages/admin/auth/password/email').then(
 
 const Dashboard = () => import('~/pages/admin/dashboard').then(
   m => m.default || m)
+
 const Users = () => import('~/pages/admin/users/index').then(m => m.default || m)
+const UserEdit = () => import('~/pages/admin/users/edit').then(m => m.default || m)
+
 const Settings = () => import('~/pages/admin/settings/index').then(
   m => m.default || m)
 const SettingsProfile = () => import('~/pages/admin/settings/profile').then(
@@ -27,7 +30,14 @@ export default [
   {
     path: '/admin/users',
     name: 'admin.user.index',
+    meta: {parent:'admin.dashboard'},
     component: Users
+  },
+  {
+    path: '/admin/user/:user_id',
+    name: 'admin.user.edit',
+    meta: {parent:'admin.user.index'},
+    component: UserEdit
   },
   {
     path: '/admin/settings',

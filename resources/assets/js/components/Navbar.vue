@@ -51,7 +51,6 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import LocaleDropdown from './LocaleDropdown'
 
   export default {
     data: () => ({
@@ -61,10 +60,6 @@
     computed: mapGetters({
       user: 'auth/user',
     }),
-
-    components: {
-      LocaleDropdown
-    },
 
     methods: {
       async logout () {

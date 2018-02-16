@@ -34,8 +34,5 @@ export const actions = {
       .then(({data}) => {
         commit(types.FETCH_TABLE_DATA, data)
       })
-  },
-  // async sort ({commit}, {entity, order, name, queryString}) {
-  //   axios.get(`/ajax/admin/${entity}${getQueryString(queryString)}`)
-  // }
+  }
 }

@@ -5,7 +5,7 @@ import i18n from '~/plugins/i18n'
 import App from '~/components/App'
 
 import '~/plugins'
-import '~/components'
+// import '~/components'
 
 new Vue({
   i18n,

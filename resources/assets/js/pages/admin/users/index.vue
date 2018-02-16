@@ -1,11 +1,3 @@
-<template>
-    <div>
-        <v-table :rows="rows" :columns="columns" :sortable-columns="sortableColumns" :entity="'users'">
-
-        </v-table>
-    </div>
-</template>
-
 <script>
   import Vue from 'vue'
   import store from '~/store'
@@ -21,10 +13,6 @@
     components: {
       'v-table': Table
     },
-    data: function () {
-      return {
-      }
-    },
 
     computed: mapGetters({
       rows: 'table/table',
@@ -37,17 +25,19 @@
         entity: 'users',
         queryString: to.fullPath
       }).then(res => next())
+    },
 
-      // next(vm => {
-      //   store.dispatch('table/fetchData', {
-      //     entity: vm.$i18n.t('route.users')
-      //   })
-      // })
-
-      // getPost(to.params.id, (err, post) => {
-      //   next(vm => vm.setData(err, post))
-      // })
+    render: function (h) {
+      return h('div', {},
+        [
+          h(Table, {
+            props: {
+              rows: this.rows,
+              columns: this.columns,
+              'sortable-columns': this.sortableColumns,
+              entity: 'users'
+            }
+          })])
     }
   }
-
 </script>

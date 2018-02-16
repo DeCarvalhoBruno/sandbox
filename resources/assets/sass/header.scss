@@ -172,16 +172,23 @@
     top: 15px;
     right: 10px;
     @include border-radius(2px);
-    > li > a {
+    > li > a, > li > span {
       color: #444;
       text-decoration: none;
       display: inline-block;
-      > .fa, > .glyphicon, > .ion {
-        margin-right: 5px;
-      }
+      padding:0 .7rem;
+    }
+    > li > a:hover{
+      color: #969696;
+    }
+    > li > span:hover {
+      cursor:default;
     }
     > li + li:before {
       content: '>\00a0';
+    }
+    > li + li{
+      margin-left:.3rem;
     }
   }
 
