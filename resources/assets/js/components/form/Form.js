@@ -8,13 +8,20 @@ class Form {
    *
    * @param {Object} data
    */
-  constructor (data = {}) {
+  constructor (data = null) {
     this.busy = false
     this.successful = false
     this.errors = new Errors()
-    this.originalData = deepCopy(data)
+    if (data != null) {
+      this.originalData = deepCopy(data)
+      Object.assign(this, data)
+    }
+  }
 
-    Object.assign(this, data)
+  fill (data) {
+    Object.keys(data).forEach(key => {
+      this[key] = data[key]
+    })
   }
 
   /**

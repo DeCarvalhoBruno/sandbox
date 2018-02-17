@@ -57,7 +57,7 @@ class UsersTableSeeder extends Seeder
             $u = factory(App\Models\User::class)->create([
                 'username' => ($usernames[$username] == 0) ? $username : $username . $usernames[$username],
                 'activated' => true,
-                'email' => $faker->unique()->safeEmail,
+                'email' => sprintf('%s.%s@%s',strtolower($fn),strtolower($ln),$faker->freeEmailDomain),
                 'password' => $pwd,
             ]);
             factory(App\Models\Person::class)->create([

@@ -23,3 +23,4 @@ yarn-error.log
 /public
 /bootstrap/cache/
 /package-lock.json
+/resources/assets/fonts

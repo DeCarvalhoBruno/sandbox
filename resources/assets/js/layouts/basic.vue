@@ -7,7 +7,7 @@
                 <ol class="breadcrumb">
                     <li v-for="(crumb,index) in breadCrumbs" :key="index">
                         <template v-if="crumb.route!=$router.currentRoute.name">
-                        <router-link :to="{ name: crumb.route }">{{crumb.label}}</router-link>
+                            <router-link :to="{ name: crumb.route }">{{crumb.label}}</router-link>
                         </template>
                         <template v-else>
                             <span>{{crumb.label}}</span>
@@ -27,9 +27,11 @@
             </section>
             <section class="content">
                 <transition name="page" mode="out-in">
-                    <slot>
-                        <router-view/>
-                    </slot>
+                    <div class="container-fluid">
+                        <slot>
+                            <router-view/>
+                        </slot>
+                    </div>
                 </transition>
             </section>
         </div>
@@ -96,7 +98,7 @@
         return path
       },
       translateRouteName (route) {
-        return {route:route, label: this.$t('route.' + (route.replace(/\.+/g, '-')))}
+        return {route: route, label: this.$t('route.' + (route.replace(/\.+/g, '-')))}
       }
     }
   }

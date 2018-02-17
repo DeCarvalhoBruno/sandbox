@@ -12,7 +12,7 @@ class Admin
         ],
             function (Router $r) {
                 $r->group([
-                    'middleware' => ['auth:ajax']
+                    'middleware' => ['ajax']
                 ], call_user_func('static::authAjaxRoutes'));
             }
         );
@@ -21,7 +21,9 @@ class Admin
     public static function authAjaxRoutes()
     {
         return function (Router $r) {
-            $r->get('users', 'User@index')->name('admin.user.index');
+            $r->get('users', 'User@index');
+            $r->get('user/{user}', 'User@show');
+            $r->patch('user/{user}/update', 'User@update');
         };
     }
 }

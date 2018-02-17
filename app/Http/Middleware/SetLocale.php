@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Carbon\Carbon;
 use Closure;
 
 class SetLocale
@@ -31,6 +32,7 @@ class SetLocale
         $locales = config('app.locales');
 
         $locale = $request->server('HTTP_ACCEPT_LANGUAGE');
+        Carbon::setLocale($locale);
         $locale = substr($locale, 0, strpos($locale, ',') ?: strlen($locale));
 
         if (array_key_exists($locale, $locales)) {
