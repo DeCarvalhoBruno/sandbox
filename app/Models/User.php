@@ -35,7 +35,8 @@ class User extends LaravelUser implements JWTSubject, HasASystemEntity
         'person_id'
     ];
     protected $sortable = [
-        'created_at'
+        'full_name',
+        'email'
     ];
 
     protected $systemEntityID = \App\Models\SystemEntity::USERS;

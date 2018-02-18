@@ -17,7 +17,7 @@
                 <div class="container">
                     <b-alert v-if="hasMessage" :show="dismissCountDown"
                              dismissible
-                             variant="warning"
+                             :variant="variant"
                              @dismissed="dismissCountdown=0"
                              @dismiss-count-down="countDownChanged"
                     >
@@ -65,11 +65,13 @@
     },
     computed: mapGetters({
       hasMessage: 'session/hasMessage',
-      message: 'session/message'
+      message: 'session/message',
+      variant: 'session/variant'
     }),
     watch: {
       '$route' () {
         this.breadCrumbs = this.makeBreadcrumbs(this.$router.currentRoute).reverse()
+        this.dismissCountDown = this.dismissSecs
       }
     },
     mounted () {

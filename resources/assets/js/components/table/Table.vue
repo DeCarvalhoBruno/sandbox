@@ -10,7 +10,7 @@
                     <th v-for="(name,label,index ) in columns"
                         :key="index"
                         @click="sort(name)">
-                        {{label}}
+                        {{label}}<i v-if="sortableColumns.includes(name)" class="fa float-right" :class="['fa-sort-amount-'+'desc']"></i>
                     </th>
                     <th>
                         {{$t('general.actions')}}
@@ -29,7 +29,7 @@
                                 <button class="btn btn-sm btn-info">
                                 <span class="fa fa-pencil">
                             </span>
-                            </button>
+                                </button>
                             </router-link>
                             <button class="btn btn-sm btn-danger">
                                 <span class="fa fa-trash-o">
@@ -42,26 +42,51 @@
                 </tr>
                 </tbody>
             </table>
+            <div class="paginator">
+                <b-pagination-nav :link-gen="linkGen" :total-rows="total" :value="currentPage"
+                                  :per-page="perPage" :limit="perPage" :number-of-pages="lastPage">
+                </b-pagination-nav>
+            </div>
         </template>
     </div>
 </template>
 
 <script>
+  import Vue from 'vue'
+
+  import { mapGetters } from 'vuex'
+  import { PaginationNav } from 'bootstrap-vue/es/components'
+
+  Vue.use(PaginationNav)
+
   export default {
     name: 'v-table',
+    components: {
+      PaginationNav
+    },
     data: function () {
       return {
         sortOrder: 'desc'
       }
     },
     props: {
-      rows: null,
-      columns: null,
-      sortableColumns: null,
-      entity: null
+      entity: {
+        type: String,
+        required: true
+      }
     },
-    mounted () {
-
+    computed: {
+      ...mapGetters({
+        rows: 'table/rows',
+        columns: 'table/columns',
+        sortableColumns: 'table/sortableColumns',
+        currentPage: 'table/currentPage',
+        from: 'table/from',
+        to: 'table/to',
+        lastPage: 'table/lastPage',
+        perPage: 'table/perPage',
+        total: 'table/total'
+      })
     },
     watch: {
       '$route' () {
@@ -73,14 +98,26 @@
     },
     methods: {
       sort (column) {
-        this.$router.push({query: {sortByCol: column, order: this.toggleSortOrder()}})
-      },
+        if (!this.sortableColumns.includes(column)) {
+          return
+        }
 
+        let obj = Object.assign({}, this.$route.query)
+        obj.sortByCol = column
+        obj.order = this.toggleSortOrder()
+        this.$router.push({query: obj})
+      },
       toggleSortOrder () {
         this.sortOrder = (this.sortOrder == 'asc') ? 'desc' : 'asc'
         return this.sortOrder
+      },
+      linkGen (pageNum) {
+        let obj = {
+          name: 'admin.user.index', query: Object.assign({}, this.$route.query)
+        }
+        obj.query.page = pageNum
+        return obj
       }
-
     }
   }
 </script>

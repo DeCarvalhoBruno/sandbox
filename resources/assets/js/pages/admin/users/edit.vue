@@ -96,7 +96,7 @@
         } catch (e) {
 
         }
-        this.$store.dispatch('session/setMessage','User was updated')
+        this.$store.dispatch('session/setMessage',this.$t('message.user_update_ok'))
         this.$router.push({name: 'admin.user.index'})
       }
     },

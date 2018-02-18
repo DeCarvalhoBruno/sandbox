@@ -25,8 +25,8 @@ axios.interceptors.response.use(response => response, error => {
   if (status >= 500) {
     swal({
       type: 'error',
-      title: i18n.t('error_alert_title'),
-      text: i18n.t('error_alert_text'),
+      title: i18n.t('modal.error.h'),
+      text: i18n.t('modal.error.t'),
       reverseButtons: true,
       confirmButtonText: i18n.t('ok'),
       cancelButtonText: i18n.t('cancel')
@@ -36,8 +36,8 @@ axios.interceptors.response.use(response => response, error => {
   if (status === 401 && store.getters['auth/check']) {
     swal({
       type: 'warning',
-      title: i18n.t('token_expired_alert_title'),
-      text: i18n.t('token_expired_alert_text'),
+      title: i18n.t('modal.token_expired.h'),
+      text: i18n.t('modal.token_expired.t'),
       reverseButtons: true,
       confirmButtonText: i18n.t('ok'),
       cancelButtonText: i18n.t('cancel')

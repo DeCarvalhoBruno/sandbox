@@ -34,19 +34,41 @@ class UserTest extends TestCase
     {
         $user = $this->signIn()->createUser();
         $this->patchJson("/ajax/admin/user/{$user->user_id}/update",
-            ['first_name' => 'Bobby', 'last_name' => 'Wagner', 'username' => 'b_wagner'])->assertStatus(200);
+            ['first_name' => 'Bobby', 'last_name' => 'Wagner', 'username' => 'b_wagner','email'=>'user@example.com'])->assertStatus(204);
 
         $changedUser = User::find($user->user_id);
-        $this->assertNotEquals($user->first_name.' ' .$user->last_name,$changedUser->first_name.' ' .$changedUser->last_name);
-        $this->assertNotEquals($user->username,$changedUser->username);
+        $this->assertNotEquals($user->first_name . ' ' . $user->last_name,
+            $changedUser->first_name . ' ' . $changedUser->last_name);
+        $this->assertNotEquals($user->username, $changedUser->username);
+        $this->assertNotEquals($user->email, $changedUser->email);
 
     }
 
-    public function test_update_without_required_params()
+    public function test_update_without_valid_email()
     {
+        $response = $this->validation_testing_setup(['new_email' => 'fdhj@f']);
+        $json = $response->json();
+        $this->assertArrayHasKey('new_email', $json['errors']);
+    }
+
+    public function test_update_without_valid_username()
+    {
+        $response = $this->validation_testing_setup(['new_username' => 'fdhj@f']);
+        $json = $response->json();
+        $this->assertArrayHasKey('new_username', $json['errors']);
+    }
+
+    private function validation_testing_setup($formParams)
+    {
+        $this->withExceptionHandling();
         $user = $this->signIn()->createUser();
 
-        $this->patchJson("/ajax/admin/user/{$user->user_id}/update",
-            ['first_name' => 'Bobby', 'last_name' => 'Wagner', 'username' => 'b_wagner','email'=>'fdhj@f']);
+        $response = $this->patchJson(
+            "/ajax/admin/user/{$user->user_id}/update",$formParams
+        );
+
+        $response->assertStatus(422);
+        return $response;
+
     }
 }

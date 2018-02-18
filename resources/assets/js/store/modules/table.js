@@ -9,22 +9,40 @@ function getQueryString (string) {
 
 // state
 export const state = {
-  table: [],
+  rows: [],
   columns: [],
-  sortableColumns: []
+  sortableColumns: [],
+  currentPage: 1,
+  from: 0,
+  lastPage: 0,
+  perPage: 0,
+  to: 0,
+  total: 0
 }
 
 export const getters = {
-  table: state => state.table,
+  rows: state => state.rows,
   columns: state => state.columns,
-  sortableColumns: state => state.sortableColumns
+  sortableColumns: state => state.sortableColumns,
+  currentPage: state => state.currentPage,
+  from: state => state.from,
+  lastPage: state => state.lastPage,
+  perPage: state => state.perPage,
+  to: state => state.to,
+  total: state => state.total
 }
 
 export const mutations = {
   [types.FETCH_TABLE_DATA] (state, data) {
-    state.table = data.table
+    state.rows = data.table.data
     state.columns = data.columns
     state.sortableColumns = data.sortableColumns
+    state.currentPage = data.table.current_page
+    state.from = data.table.from
+    state.lastPage = data.table.last_page
+    state.perPage = data.table.per_page
+    state.to = data.table.to
+    state.total = data.table.total
   }
 }
 
