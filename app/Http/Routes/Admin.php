@@ -7,7 +7,7 @@ class Admin
     public function bind(Router $router)
     {
         $router->group([
-            'prefix' => 'admin',
+            'prefix' => '/admin',
             'namespace' => 'App\Http\Controllers\Admin',
         ],
             function (Router $r) {
@@ -28,7 +28,7 @@ class Admin
     {
         return function (Router $r) {
             $r->get('/test', 'Admin@test');
-            $r->get('{path}', 'Admin@index')->where('path', '(.*)');
+            $r->get('/{path}', 'Admin@index')->where('path', '(.*)');
         };
     }
 

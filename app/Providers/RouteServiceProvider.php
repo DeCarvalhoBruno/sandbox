@@ -16,8 +16,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected $namespace = 'App\Http\Controllers';
     private $routeSets = [
-        \App\Http\Routes\Admin::class,
         \App\Http\Routes\Ajax\Admin::class,
+        \App\Http\Routes\Admin::class,
 
     ];
 

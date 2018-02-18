@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Ajax\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Contracts\Models\User as UserProvider;
 use App\Filters\User as UserFilter;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateUser;
-use App\Providers\Models\User as UserProvider;
+use Illuminate\Http\Response;
 
 class User extends Controller
 {
@@ -28,14 +29,15 @@ class User extends Controller
         ];
     }
 
-    public function show($userId){
-        return (new UserProvider())->getOne($userId,['first_name','last_name','email','username']);
+    public function show($userId, UserProvider $userProvider){
+        return $userProvider->getOne($userId,['first_name','last_name','email','username']);
     }
 
     public function update($userId, UpdateUser $request, UserProvider $userProvider)
     {
-//        $userProvider->getOne($userId);
-        return response('');
+        $userProvider->updateOne($userId,$request->all());
+
+        return response(null,Response::HTTP_NO_CONTENT);
     }
 
 

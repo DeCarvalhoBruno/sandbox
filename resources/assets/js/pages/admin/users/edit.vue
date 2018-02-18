@@ -4,15 +4,14 @@
             <div class="col-md-8 offset-md-2">
                 <form @submit.prevent="save" @keydown="form.onKeydown($event)">
                     <div class="form-group row">
-                        <label for="username" class="col-md-3 col-form-label">{{$t('db.username')}}</label>
+                        <label for="new_username" class="col-md-3 col-form-label">{{$t('db.new_username')}}</label>
                         <div class="col-md-9">
-                            <input v-model="form.username" type="text"
-                                   name="username" id="username" class="form-control"
-                                   :class="{ 'is-invalid': form.errors.has('username') }"
-                                   placeholder="User name"
-                                   aria-describedby="help_username">
-                            <has-error :form="form" field="username"/>
-                            <small id="help_username" class="text-muted">{{$t('form.description.username')}}</small>
+                            <input v-model="form.new_username" type="text"
+                                   name="new_username" id="new_username" class="form-control" :class="{ 'is-invalid': form.errors.has('new_username') }"
+                                   :placeholder="$t('db.new_username')"
+                                   aria-describedby="help_new_username">
+                            <has-error :form="form" field="new_username"/>
+                            <small id="help_new_username" class="text-muted">{{$t('form.description.new_username',[form.username])}}</small>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -40,18 +39,6 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="email" class="col-md-3 col-form-label">{{$t('general.email')}}</label>
-                        <div class="col-md-9">
-                            <input v-model="form.email" type="email"
-                                   name="email" id="email" class="form-control"
-                                   :class="{ 'is-invalid': form.errors.has('email') }"
-                                   :placeholder="$t('general.email')"
-                                   aria-describedby="help_email">
-                            <has-error :form="form" field="email"/>
-                            <small id="help_email" class="text-muted">{{$t('form.description.email')}}</small>
-                        </div>
-                    </div>
-                    <div class="form-group row">
                         <label for="new_email" class="col-md-3 col-form-label">{{$t('db.new_email')}}</label>
                         <div class="col-md-9">
                             <input v-model="form.new_email" type="text"
@@ -59,7 +46,7 @@
                                    :placeholder="$t('db.new_email')"
                                    aria-describedby="help_new_email">
                             <has-error :form="form" field="new_email"/>
-                            <small id="help_new_email" class="text-muted">{{$t('form.description.new_email')}}</small>
+                            <small id="help_new_email" class="text-muted">{{$t('form.description.new_email',[form.email])}}</small>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -93,16 +80,15 @@
     },
     data () {
       return {
-        form: new Form({
-          'new_email':''
-        }),
+        form: new Form(),
         user_id: this.$router.currentRoute.params.user_id,
         userInfo: null
       }
     },
     methods: {
       getUserInfo (data) {
-        this.form.fill(data)
+        this.form = new Form(data)
+        // this.form.fill(data)
       },
       async save () {
         try {
@@ -110,7 +96,8 @@
         } catch (e) {
 
         }
-        // this.$router.push({name: 'admin.dashboard'})
+        this.$store.dispatch('session/setMessage','User was updated')
+        this.$router.push({name: 'admin.user.index'})
       }
     },
     beforeRouteEnter (to, from, next) {

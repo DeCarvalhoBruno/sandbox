@@ -7,12 +7,12 @@ class Admin
     public function bind(Router $router)
     {
         $router->group([
-            'prefix' => 'ajax/admin',
+            'prefix' => '/ajax/admin',
             'namespace' => 'App\Http\Controllers\Ajax\Admin',
         ],
             function (Router $r) {
                 $r->group([
-                    'middleware' => ['ajax']
+                    'middleware' => ['auth.ajax:ajax']
                 ], call_user_func('static::authAjaxRoutes'));
             }
         );

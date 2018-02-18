@@ -33,7 +33,9 @@ class SystemEntities extends Migration
         $this->addEntities();
         $this->systemEntityTypes();
         $this->createSystemEntities();
-        $this->createTriggers();
+        if (app()->environment() != 'testing') {
+            $this->createTriggers();
+        }
 
     }
 

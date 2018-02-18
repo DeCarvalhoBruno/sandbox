@@ -11,7 +11,7 @@ class MakeRequest extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'make:request2';
+    protected $name = 'make:sanitizer';
 
     /**
      * The console command description.

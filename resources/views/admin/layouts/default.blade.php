@@ -11,11 +11,11 @@
 <body id="backend" class="hold-transition skin-blue sidebar-mini">
 <div id="app"></div>
 @include('layouts.footer')
-@if (app()->isLocal())
-    <script src="{{ mix('js/app.js') }}"></script>
-@else
+@if (app()->environment()=='production')
     <script src="{{ mix('js/manifest.js') }}"></script>
     <script src="{{ mix('js/vendor.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
+@else
     <script src="{{ mix('js/app.js') }}"></script>
 @endif
 </body>

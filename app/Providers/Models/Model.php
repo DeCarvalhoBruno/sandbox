@@ -19,7 +19,7 @@ abstract class Model
      */
     public function __construct($model = null)
     {
-        if ( ! empty($model)) {
+        if (!empty($model)) {
             $this->model = $model;
         }
     }
@@ -62,8 +62,8 @@ abstract class Model
         $model = $this->createModel();
 
         return $model->newQuery()
-                     ->where($model->getKeyName(), '>', 1)
-                     ->get($columns);
+            ->where($model->getKeyName(), '>', 1)
+            ->get($columns);
     }
 
     /**
@@ -142,29 +142,30 @@ abstract class Model
 
     /**
      * For models using the HasASystemEntity trait
-     * 
+     *
      * @see \App\Traits\Models\HasASystemEntity
      * @param int $id
      * @param int $systemEntityID
      *
      * @return mixed
      */
-    public function deleteWithMedia($id,$systemEntityID){
+    public function deleteWithMedia($id, $systemEntityID)
+    {
         $model = $this->createModel();
 
-        return $model->deleteWithMedia($id,$systemEntityID);
+        return $model->deleteWithMedia($id, $systemEntityID);
     }
 
     /**
      * @param array $ids
      * @param int $systemEntityID
      */
-    public function deleteMultiple(array $ids,$systemEntityID)
+    public function deleteMultiple(array $ids, $systemEntityID)
     {
         $model = $this->createModel();
 
-        foreach($ids as $id){
-            $model->deleteWithMedia($id,$systemEntityID);
+        foreach ($ids as $id) {
+            $model->deleteWithMedia($id, $systemEntityID);
         }
     }
 
@@ -176,14 +177,14 @@ abstract class Model
      * @param int $id
      * @param int $systemEntityID
      */
-    public function destroyOne($id,$systemEntityID)
+    public function destroyOne($id, $systemEntityID)
     {
-        $model  = $this->createModel();
+        $model = $this->createModel();
         $result = $model->withTrashed()->where($model->getKeyName(), $id)->first();
-        if ( ! is_null($result)) {
+        if (!is_null($result)) {
             $result->forceDelete();
-            if($model instanceof HasASystemEntity){
-                $model->deleteWithMedia($id,$systemEntityID);
+            if ($model instanceof HasASystemEntity) {
+                $model->deleteWithMedia($id, $systemEntityID);
             }
         }
     }
@@ -197,9 +198,9 @@ abstract class Model
      */
     public function restoreOne($id)
     {
-        $model  = $this->createModel();
+        $model = $this->createModel();
         $result = $model->withTrashed()->where($model->getKeyName(), $id)->first();
-        if ( ! is_null($result)) {
+        if (!is_null($result)) {
             $result->restore();
         }
     }
@@ -217,9 +218,18 @@ abstract class Model
          * We substract one because a lot of tables have a dummy record of id 0 used for system purposes.
          */
         return $model->newQuery()
-                     ->select(
-                         \DB::raw(sprintf('count(%s)-1 as cnt', $model->getKeyName())))
-                     ->value('cnt');
+            ->select(
+                \DB::raw(sprintf('count(%s)-1 as cnt', $model->getKeyName())))
+            ->value('cnt');
+    }
+
+    protected function filterFillables($data)
+    {
+        $fillables = array_flip($this->createModel()->getFillable());
+
+        return array_filter($data, function ($key) use ($fillables) {
+            return isset($fillables[$key]);
+        }, ARRAY_FILTER_USE_KEY);
     }
 
 }

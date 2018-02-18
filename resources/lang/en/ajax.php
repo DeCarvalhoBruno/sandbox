@@ -26,15 +26,16 @@ return [
         'username'=>'User name',
         'first_name'=>'First name',
         'last_name'=>'Last name',
-        'new_email'=>'New E-mail'
+        'new_email'=>'New e-mail',
+        'new_username'=>'New username'
     ],
     'form'=>[
       'description'=>[
           'username'=>'The user\'s shorthand name.',
           'first_name'=>'The user\'s first (given) name.',
           'last_name'=>'The user\'s last (family) name.',
-          'email'=>'Used for all correspondence.',
-          'new_email'=>'The e-mail added here has to be unique across the platform.'
+          'new_email'=>'"{0}" is the current e-mail address.',
+          'new_username'=>'"{0}" is the current username.'
       ]
     ],
     'modal' => [

@@ -16,7 +16,8 @@ class Person extends Model implements HasASystemEntity
     protected $fillable = [
         'first_name',
         'last_name',
-        'user_id'
+        'user_id',
+        'created_at'
     ];
     protected $hidden = [
         'person_id'

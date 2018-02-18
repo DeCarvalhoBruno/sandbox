@@ -4,22 +4,43 @@ use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Hashing\BcryptHasher;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Support\Str;
+use App\Contracts\Models\User as UserInterface;
+use App\Contracts\Models\Person as PersonInterface;
 
 /**
  * Class User
  * @see \Illuminate\Auth\EloquentUserProvider
  * @method \App\Models\User createModel(array $attributes = [])
+ * @method \App\Models\User getOne($id, $columns = ['*'])
  */
-class User extends Model implements UserProvider
+class User extends Model implements UserProvider, UserInterface
 {
     protected $model = \App\Models\User::class;
+    /**
+     * @var \Illuminate\Contracts\Hashing\Hasher
+     */
     protected $hasher;
+    /**
+     * @var \App\Providers\Models\Person
+     */
+    private $person;
 
-    public function __construct($model = null)
+    public function __construct(PersonInterface $p)
     {
-        parent::__construct($model);
+        parent::__construct();
         $this->hasher = new BcryptHasher();
+        $this->person = $p;
     }
+
+    public function updateOne($id, $data)
+    {
+        $model = $this->createModel();
+        $this->person->createModel()->where($model->getKeyName(), $id)->update($this->person->filterFillables($data));
+
+        return $model->newQueryWithoutScopes()->where($model->getKeyName(), $id)
+            ->update($this->filterFillables($data));
+    }
+
 
     /**
      * Retrieve a user by their unique identifier.

@@ -41,6 +41,8 @@ class Kernel extends HttpKernel
             'bindings',
         ],
         'ajax' => [
+//                        \Illuminate\Session\Middleware\StartSession::class,
+//            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ]
     ];
@@ -54,6 +56,7 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\RedirectIfGuestAdmin::class,
+        'auth.ajax' => \App\Http\Middleware\Ajax\RedirectIfGuestAdmin::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'authenticated_admin' => \App\Http\Middleware\RedirectIfAuthenticatedAdmin::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,

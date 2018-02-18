@@ -10,6 +10,7 @@ class Admin extends Controller
 
     public function index()
     {
+//        dd(app('router')->getCurrentRoute());
         return view('admin.layouts.default');
 
     }

@@ -43,17 +43,21 @@ class Sanitizer
         'strip_tags' => Filters\StripTags::class,
     ];
 
+    private $activateTagStrippingFilter = true;
+
     /**
      *  Create a new sanitizer instance.
      *
      * @param  array $data
      * @param  array $rules Rules to be applied to each data attribute
+     * @param bool $activateTagStrippingFilter
      */
-    public function __construct(array $data, array $rules)
+    public function __construct(array $data, array $rules, $activateTagStrippingFilter = true)
     {
         $this->data = $data;
         $this->rules = $this->parseRulesArray($rules);
-        $this->filters = array_merge($this->filters);
+        $this->activateTagStrippingFilter = $activateTagStrippingFilter;
+
     }
 
     /**
@@ -67,7 +71,6 @@ class Sanitizer
         $parsedRules = [];
         foreach ($rules as $attribute => $attributeRules) {
             $attributeRulesArray = is_array($attributeRules) ? $attributeRules : explode('|', $attributeRules);
-            array_push($attributeRulesArray,'strip_tags');
             foreach ($attributeRulesArray as $attributeRule) {
                 $parsedRule = $this->parseRuleString($attributeRule);
                 if ($parsedRule) {
@@ -148,6 +151,9 @@ class Sanitizer
             foreach ($this->rules[$attribute] as $rule) {
                 $value = $this->applyFilter($rule['name'], $value, $rule['options']);
             }
+        }
+        if ($this->activateTagStrippingFilter){
+            $value = $this->applyFilter('strip_tags', $value);
         }
         return $value;
     }

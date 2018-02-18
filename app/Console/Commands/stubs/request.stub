@@ -4,19 +4,37 @@ use App\Support\Requests\FormRequest;
 
 class DummyClass extends FormRequest
 {
+    protected $activateTagStrippingFilter = true;
 
-    public function authorize()
-    {
-        return true;
-    }
-
+    /**
+     * Validation rules
+     *
+     * @return array
+     */
     public function rules()
     {
-        return [];
+        return [
+
+        ];
     }
 
+    /**
+     * Sanitization filters
+     *
+     * @return array
+     */
     public function filters()
     {
-        return [];
+        return [
+
+        ];
+    }
+
+    /**
+     * Any post validation action is performed here.
+     */
+    public function afterValidation()
+    {
+
     }
 }
