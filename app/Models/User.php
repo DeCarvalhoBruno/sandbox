@@ -114,9 +114,14 @@ class User extends LaravelUser implements JWTSubject, HasASystemEntity
         return $this->join($query, Person::class);
     }
 
-    public function getSortableColumns()
+    public function getColumnInfo($columns)
     {
-        return $this->sortable;
+        $sortable = array_flip($this->sortable);
+        $result = [];
+        foreach ($columns as $name => $label) {
+            $result[$name] = ['name' => $name, 'label' => $label, 'sortable' => isset($sortable[$name])];
+        }
+        return $result;
     }
 
 }

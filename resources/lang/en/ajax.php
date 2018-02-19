@@ -19,15 +19,17 @@ return [
         'register' => 'Register',
         'success' => 'Success!',
         'password' => 'Password',
-        'actions' => 'actions',
+        'actions' => 'Actions',
         'email' => 'E-mail',
     ],
     'db' => [
         'username' => 'User name',
         'first_name' => 'First name',
         'last_name' => 'Last name',
+        'full_name' => 'Full name',
         'new_email' => 'New e-mail',
-        'new_username' => 'New username'
+        'new_username' => 'New username',
+        'user_created_at' => 'Registration date'
     ],
     'form' => [
         'description' => [
@@ -41,7 +43,8 @@ return [
     'modal' => [
         'error' => [
             'h' => 'Oops...',
-            't' => 'Something went wrong! Please try again.'],
+            't' => 'Something went wrong! Please try again.'
+        ],
         'token_expired' => [
             'h' => 'Session Expired!',
             't' => 'Please log in again to continue.',
@@ -70,7 +73,10 @@ return [
         ]
     ],
     'tables' => [
-        'empty' => 'There is currently no data available.'
+        'empty' => 'There is currently no data available.',
+        'sort_asc' => 'Sort in ascending order',
+        'sort_desc' => 'Sort in descending order',
+
     ],
     'go_home' => 'Go Home',
     'toggle_navigation' => 'Toggle navigation',

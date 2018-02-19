@@ -14,12 +14,12 @@
             <button v-if="user" class="navbar-toggler" type="button" data-toggle="push-menu"
                     data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <fa icon="bars"/>
             </button>
             <div v-if="user" class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <span><a class="nav-link sidebar-toggle" data-toggle="push-menu" role="button"></a></span>
+                        <span><a class="nav-link sidebar-toggle" data-toggle="push-menu" role="button"><fa icon="bars"/></a></span>
                     </li>
                 </ul>
 

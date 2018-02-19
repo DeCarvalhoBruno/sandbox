@@ -83,8 +83,6 @@
   }
   li > a > .fa-angle-left,
   li > a > .pull-right-container > .fa-angle-left {
-    width: auto;
-    height: auto;
     padding: 0;
     margin-right: 10px;
     @include transition(transform .5s ease);
@@ -128,12 +126,12 @@
       > .ion {
         width: 20px;
       }
-      > .pull-right-container > .fa-angle-left,
-      > .pull-right-container > .fa-angle-down,
-      > .fa-angle-left,
-      > .fa-angle-down {
-        width: auto;
-      }
+      //> .pull-right-container > .fa-angle-left,
+      //> .pull-right-container > .fa-angle-down,
+      //> .fa-angle-left,
+      //> .fa-angle-down {
+      //  width: auto;
+      //}
     }
   }
 }

@@ -6,7 +6,7 @@ module.exports = [
   },
   {
     type: 'tree',
-    icon: 'fa fa-dashboard',
+    icon: 'tachometer-alt',
     name: 'Dashboard',
     router: {
       name: 'admin.dashboard'
@@ -14,12 +14,12 @@ module.exports = [
   },
   {
     type: 'tree',
-    icon: 'fa fa-user',
+    icon: 'user',
     name: 'Users',
     items: [
       {
         type: 'item',
-        icon: 'fa fa-circle-o',
+        icon: 'star',
         name: 'List',
         router: {
           name: 'admin.user.index'
@@ -27,19 +27,19 @@ module.exports = [
       },
       {
         type: 'tree',
-        icon: 'fa fa-star',
+        icon: 'star',
         name: 'Add'
       }
     ]
   },
   {
     type: 'tree',
-    icon: 'fa fa-key',
+    icon: 'key',
     name: 'Permissions',
     items: [
       {
         type: 'item',
-        icon: 'fa fa-arrow-right',
+        icon: 'arrow-right',
         name: 'List',
         router: {
           name: 'admin.settings.profile'

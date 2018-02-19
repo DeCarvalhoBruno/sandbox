@@ -11,7 +11,6 @@ function getQueryString (string) {
 export const state = {
   rows: [],
   columns: [],
-  sortableColumns: [],
   currentPage: 1,
   from: 0,
   lastPage: 0,
@@ -23,7 +22,6 @@ export const state = {
 export const getters = {
   rows: state => state.rows,
   columns: state => state.columns,
-  sortableColumns: state => state.sortableColumns,
   currentPage: state => state.currentPage,
   from: state => state.from,
   lastPage: state => state.lastPage,
@@ -36,21 +34,36 @@ export const mutations = {
   [types.FETCH_TABLE_DATA] (state, data) {
     state.rows = data.table.data
     state.columns = data.columns
-    state.sortableColumns = data.sortableColumns
     state.currentPage = data.table.current_page
     state.from = data.table.from
     state.lastPage = data.table.last_page
     state.perPage = data.table.per_page
     state.to = data.table.to
     state.total = data.table.total
+  },
+  [types.UPDATE_TABLE_DATA] (state, data) {
+    state.rows = data.table.data
+    state.currentPage = data.table.current_page
+    state.from = data.table.from
+    state.lastPage = data.table.last_page
+    state.perPage = data.table.per_page
+    state.to = data.table.to
+    state.total = data.table.total
+  },
+  [types.UPDATE_TABLE_COLUMN] (state, data) {
+    state.columns[data.columnName].order = data.direction
   }
 }
 
 export const actions = {
-  async fetchData ({commit}, {entity, queryString}) {
+  async fetchData ({commit}, {entity, queryString, refresh}) {
     await axios.get(`/ajax/admin/${entity}${getQueryString(queryString)}`)
       .then(({data}) => {
-        commit(types.FETCH_TABLE_DATA, data)
+        if (refresh === true) {
+          commit(types.UPDATE_TABLE_DATA, data)
+        } else {
+          commit(types.FETCH_TABLE_DATA, data)
+        }
       })
   }
 }

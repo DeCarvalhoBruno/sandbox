@@ -1,34 +1,41 @@
 <template>
     <router-link tag="li" v-if="router && router.name" :to="router">
         <a href="#">
-            <i :class="icon"></i> <span>{{ name }}</span>
+            <fa :icon="icon"/>
+            <span>{{ name }}</span>
             <span class="pull-right-container" v-show="badge">
-        <small class="label pull-right"
-               :class="[badge.type==='String'?'bg-green':'label-primary']">{{ badge.data }}</small>
-      </span>
+                <small class="label pull-right"
+                   :class="[badge.type==='String'?'bg-green':'label-primary']">{{ badge.data }}
+                </small>
+            </span>
         </a>
     </router-link>
     <li :class="getMenuClass" v-else>
         {{ isHeader ? name : '' }}
         <a href="#" v-if="!isHeader">
-            <i :class="icon"></i> <span>{{ name }}</span>
+            <fa :icon="icon"/>
+            <span>{{ name }}</span>
             <span class="pull-right-container">
-        <small v-if="badge && badge.data" class="label pull-right"
-               :class="[badge.type==='String'?'bg-green':'label-primary']">{{ badge.data }}</small>
-        <i v-else class="fa fa-angle-left pull-right"></i>
-      </span>
+                <small v-if="badge && badge.data" class="label pull-right"
+                       :class="[badge.type==='String'?'bg-green':'label-primary']">{{ badge.data }}
+                </small>
+                <fa v-else icon="angle-left"/>
+            </span>
         </a>
         <ul class="treeview-menu" v-if="items.length > 0">
-            <router-link tag="li" v-for="(item,index) in items" :data="item" :key="index" :to="item.router" v-if="item.type=='item'" :active-class="'current-view'">
+            <router-link tag="li" v-for="(item,index) in items" :data="item" :key="index" :to="item.router"
+                         v-if="item.type=='item'" :active-class="'current-view'">
                 <a v-if="item.router && item.router.name">
-                    <i :class="item.icon"> {{ item.name }}</i>
+                    <fa :icon="item.icon"/>{{ item.name }}
                 </a>
                 <a v-else>
-                    <i :class="item.icon"> {{ item.name }}</i>
+                    <fa :icon="item.icon"/>{{ item.name }}
                 </a>
             </router-link>
             <li class="treeview" v-else>
-                <a href="#"><i :class="item.icon"> {{ item.name }}</i></a>
+                <a href="#">
+                    <fa :icon="item.icon"/>{{ item.name }}
+                </a>
                 <ul class="treeview-menu">
                     <drawer-item
                             v-for="(i,index) in item.items"
@@ -41,8 +48,7 @@
                             :badge="i.badge"
                             :items="i.items"
                             :router="i.router"
-                            :link="i.link"
-                    >
+                            :link="i.link">
                     </drawer-item>
                 </ul>
             </li>

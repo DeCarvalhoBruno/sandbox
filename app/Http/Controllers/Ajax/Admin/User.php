@@ -13,11 +13,6 @@ class User extends Controller
     public function index(UserProvider $userProvider, UserFilter $userFilter)
     {
         return [
-            'columns' => [
-                'full_name' => trans('full_name'),
-                'email' => trans('email'),
-                'created_at' => trans('created_at')
-            ],
             'table' => $userProvider
                 ->select([
                     'full_name',
@@ -25,7 +20,11 @@ class User extends Controller
                     'users.user_id',
                     'created_at'
                 ])->activated()->filter($userFilter)->paginate(10),
-            'sortableColumns' => $userProvider->createModel()->getSortableColumns()
+            'columns' => $userProvider->createModel()->getColumnInfo([
+                'full_name' => trans('ajax.db.full_name'),
+                'email' => trans('ajax.general.email'),
+                'created_at' => trans('ajax.db.user_created_at')
+            ])
         ];
     }
 

@@ -7,10 +7,12 @@
             <table class="table table-bordered table-hover table-striped">
                 <thead>
                 <tr>
-                    <th v-for="(name,label,index ) in columns"
+                    <th v-for="(info,index) in columns"
                         :key="index"
-                        @click="sort(name)">
-                        {{label}}<i v-if="sortableColumns.includes(name)" class="fa float-right" :class="['fa-sort-amount-'+'desc']"></i>
+                        @click="sort(info)">
+                        {{info.label}}<span v-if="info.sortable" :title="$t('tables.sort_'+(info.order=='asc'?'desc':'asc'))">
+                        <fa class="float-right"
+                            :icon="info.order=='asc'?'angle-double-down':'angle-double-up'"/></span>
                     </th>
                     <th>
                         {{$t('general.actions')}}
@@ -20,22 +22,22 @@
                 <tbody>
                 <tr v-for="(row,rowIdx) in rows"
                     :key="rowIdx">
-                    <td v-for="(colName,cl,colIdx) in columns" :key="colIdx">
-                        {{row[colName]}}
+                    <td v-for="(info,colIdx) in columns" :key="colIdx">
+                        {{row[info.name]}}
                     </td>
                     <td>
                         <div class="inline">
                             <router-link :to="{ name: 'admin.user.edit', params: { user_id: row.user_id } }">
                                 <button class="btn btn-sm btn-info">
-                                <span class="fa fa-pencil">
-                            </span>
+                                    <fa icon="pencil-alt">
+                                    </fa>
                                 </button>
                             </router-link>
                             <button class="btn btn-sm btn-danger">
-                                <span class="fa fa-trash-o">
-                                <router-link :to="{ name: 'admin.dashboard' }">
-                                </router-link>
-                            </span>
+                                <fa icon="trash-alt">
+                                    <router-link :to="{ name: 'admin.dashboard' }">
+                                    </router-link>
+                                </fa>
                             </button>
                         </div>
                     </td>
@@ -79,7 +81,6 @@
       ...mapGetters({
         rows: 'table/rows',
         columns: 'table/columns',
-        sortableColumns: 'table/sortableColumns',
         currentPage: 'table/currentPage',
         from: 'table/from',
         to: 'table/to',
@@ -92,19 +93,20 @@
       '$route' () {
         this.$store.dispatch('table/fetchData', {
           entity: 'users',
-          queryString: this.$route.fullPath
+          queryString: this.$route.fullPath,
+          refresh: true
         })
       }
     },
     methods: {
       sort (column) {
-        if (!this.sortableColumns.includes(column)) {
+        if (!column.sortable) {
           return
         }
-
         let obj = Object.assign({}, this.$route.query)
-        obj.sortByCol = column
+        obj.sortByCol = column.name
         obj.order = this.toggleSortOrder()
+        this.updateColumn({columnName: column.name, direction: obj.order})
         this.$router.push({query: obj})
       },
       toggleSortOrder () {
@@ -117,6 +119,9 @@
         }
         obj.query.page = pageNum
         return obj
+      },
+      updateColumn (obj) {
+        this.$store.commit('table/UPDATE_TABLE_COLUMN', obj)
       }
     }
   }
