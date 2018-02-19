@@ -3,9 +3,9 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Models\SystemEntity;
+use App\Models\Entity;
 
-class SystemEntities extends Migration
+class Entities extends Migration
 {
     /**
      * Run the migrations.
@@ -14,25 +14,25 @@ class SystemEntities extends Migration
      */
     public function up()
     {
-        Schema::create('system_entities', function (Blueprint $table) {
-            $table->increments('system_entity_id');
-            $table->string('system_entity_name', 75)->nullable();
+        Schema::create('entities', function (Blueprint $table) {
+            $table->increments('entity_id');
+            $table->string('entity_name', 75)->nullable();
         });
 
-        Schema::create('system_entity_types', function (Blueprint $table) {
-            $table->increments('system_entity_type_id');
+        Schema::create('entity_types', function (Blueprint $table) {
+            $table->increments('entity_type_id');
 
-            $table->integer('system_entity_id')->unsigned();
-            $table->smallInteger('system_entity_type_target_id')->unsigned()->comment('the ID in the entity\'s (user,message,etc.) table');
+            $table->integer('entity_id')->unsigned();
+            $table->smallInteger('entity_type_target_id')->unsigned()->comment('the ID in the entity\'s (user,message,etc.) table');
 
-            $table->foreign('system_entity_id')
-                ->references('system_entity_id')->on('system_entities')
+            $table->foreign('entity_id')
+                ->references('entity_id')->on('entities')
                 ->onDelete('cascade');
         });
 
         $this->addEntities();
-        $this->systemEntityTypes();
-        $this->createSystemEntities();
+        $this->entityTypes();
+        $this->createEntities();
         if (app()->environment() != 'testing') {
             $this->createTriggers();
         }
@@ -41,41 +41,41 @@ class SystemEntities extends Migration
 
     private function addEntities()
     {
-        $entities = SystemEntity::getConstants();
+        $entities = Entity::getConstants();
         foreach ($entities as $entityName => $key) {
             $this->entities[] = [
-                'system_entity_id' => $key,
-                'system_entity_name' => strtolower($entityName)
+                'entity_id' => $key,
+                'entity_name' => strtolower($entityName)
             ];
         }
-        SystemEntity::insert($this->entities);
+        Entity::insert($this->entities);
     }
 
-    private function systemEntityTypes()
+    private function entityTypes()
     {
-        $systemEntityTypes = [];
+        $entityTypes = [];
 
         //The system entity has an ID of one and doesn't match a table in the DB
         $entities = \DB::select('
-            SELECT system_entity_id,system_entity_name AS name
-            FROM system_entities
-            WHERE system_entity_name != "system" ORDER BY system_entity_id ASC');
+            SELECT entity_id,entity_name AS name
+            FROM entities
+            WHERE entity_name != "system" ORDER BY entity_id ASC');
         $k = 1;
 
         //We keep track of each entity's ID
         foreach ($entities as $entity) {
-            $class = SystemEntity::getModelClassName($entity->system_entity_id);
+            $class = Entity::getModelClassName($entity->entity_id);
             $primaryKey = (new $class)->getKeyName();
             $this->entityPrimaryKeyColumns[$entity->name] = $primaryKey;
             $ids = \DB::select(sprintf('
             SELECT %s
             FROM %s', $primaryKey, $entity->name));
 
-            //Examples: SystemEntity::USERS, SystemEntity::ACTIVITIES
-            $systemEntityID = constant(
-                sprintf('%s::%s', SystemEntity::class, strtoupper($entity->name))
+            //Examples: Entity::USERS, Entity::ACTIVITIES
+            $entityID = constant(
+                sprintf('%s::%s', Entity::class, strtoupper($entity->name))
             );
-            $this->entityIDtoEntityTypeIDTable[$systemEntityID] = [];
+            $this->entityIDtoEntityTypeIDTable[$entityID] = [];
         }
     }
 
@@ -84,27 +84,27 @@ class SystemEntities extends Migration
         $entities = $this->entities;
         //We don't want the first element in that list, it doesn't match a db table.
         foreach ($entities as $entity) {
-            if ($entity['system_entity_name'] == 'system') {
+            if ($entity['entity_name'] == 'system') {
                 continue;
             }
             \DB::unprepared(sprintf('
-                CREATE TRIGGER t_create_system_entity_type_%1$s AFTER INSERT ON %1$s
+                CREATE TRIGGER t_create_entity_type_%1$s AFTER INSERT ON %1$s
                     FOR EACH ROW
                         BEGIN
                             DECLARE var_entity INTEGER;
-                                SELECT system_entity_id INTO var_entity from system_entities WHERE system_entity_name="%1$s";
-                                INSERT into system_entity_types(system_entity_id,system_entity_type_target_id) VALUES (var_entity,NEW.%2$s);
+                                SELECT entity_id INTO var_entity from entities WHERE entity_name="%1$s";
+                                INSERT into entity_types(entity_id,entity_type_target_id) VALUES (var_entity,NEW.%2$s);
                             END
-                              ', $entity['system_entity_name'],
-                    $this->entityPrimaryKeyColumns[$entity['system_entity_name']])
+                              ', $entity['entity_name'],
+                    $this->entityPrimaryKeyColumns[$entity['entity_name']])
             );
             \DB::unprepared(sprintf('
-                CREATE TRIGGER t_delete_system_entity_type_%1$s AFTER DELETE ON %1$s
+                CREATE TRIGGER t_delete_entity_type_%1$s AFTER DELETE ON %1$s
                     FOR EACH ROW
                         BEGIN
-                            DELETE FROM system_entity_types WHERE system_entity_type_target_id=OLD.%2$s;
-                        END', $entity['system_entity_name'],
-                    $this->entityPrimaryKeyColumns[$entity['system_entity_name']])
+                            DELETE FROM entity_types WHERE entity_type_target_id=OLD.%2$s;
+                        END', $entity['entity_name'],
+                    $this->entityPrimaryKeyColumns[$entity['entity_name']])
             );
         }
         \DB::unprepared('
@@ -137,24 +137,24 @@ class SystemEntities extends Migration
         ]);
     }
 
-    private function createSystemEntities()
+    private function createEntities()
     {
         $entity = \App\Models\User::create([]);
         $entity->save();
         $userPk = $entity->getKeyName();
         $entity->setAttribute($userPk, 0);
         $entity->save();
-        \App\Models\SystemEntityType::insert([
-            'system_entity_id' => SystemEntity::USERS,
-            'system_entity_type_target_id' => 0
+        \App\Models\EntityType::insert([
+            'entity_id' => Entity::USERS,
+            'entity_type_target_id' => 0
         ]);
         $entity = \App\Models\Person::create([$userPk => 0]);
         $entity->save();
         $entity->setAttribute($entity->getKeyName(), 0);
         $entity->save();
-        \App\Models\SystemEntityType::insert([
-            'system_entity_id' => SystemEntity::PEOPLE,
-            'system_entity_type_target_id' => 0
+        \App\Models\EntityType::insert([
+            'entity_id' => Entity::PEOPLE,
+            'entity_type_target_id' => 0
         ]);
 
     }

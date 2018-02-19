@@ -1,6 +1,6 @@
 <?php namespace App\Providers\Models;
 
-use App\Contracts\HasASystemEntity;
+use App\Contracts\HasAnEntity;
 
 abstract class Model
 {
@@ -141,31 +141,31 @@ abstract class Model
     }
 
     /**
-     * For models using the HasASystemEntity trait
+     * For models using the HasAnEntity trait
      *
-     * @see \App\Traits\Models\HasASystemEntity
+     * @see \App\Traits\Models\HasAnEntity
      * @param int $id
-     * @param int $systemEntityID
+     * @param int $entityID
      *
      * @return mixed
      */
-    public function deleteWithMedia($id, $systemEntityID)
+    public function deleteWithMedia($id, $entityID)
     {
         $model = $this->createModel();
 
-        return $model->deleteWithMedia($id, $systemEntityID);
+        return $model->deleteWithMedia($id, $entityID);
     }
 
     /**
      * @param array $ids
-     * @param int $systemEntityID
+     * @param int $entityID
      */
-    public function deleteMultiple(array $ids, $systemEntityID)
+    public function deleteMultiple(array $ids, $entityID)
     {
         $model = $this->createModel();
 
         foreach ($ids as $id) {
-            $model->deleteWithMedia($id, $systemEntityID);
+            $model->deleteWithMedia($id, $entityID);
         }
     }
 
@@ -175,16 +175,16 @@ abstract class Model
      * @see  \Illuminate\Database\Eloquent\SoftDeletes::forceDelete
      *
      * @param int $id
-     * @param int $systemEntityID
+     * @param int $entityID
      */
-    public function destroyOne($id, $systemEntityID)
+    public function destroyOne($id, $entityID)
     {
         $model = $this->createModel();
         $result = $model->withTrashed()->where($model->getKeyName(), $id)->first();
         if (!is_null($result)) {
             $result->forceDelete();
-            if ($model instanceof HasASystemEntity) {
-                $model->deleteWithMedia($id, $systemEntityID);
+            if ($model instanceof HasAnEntity) {
+                $model->deleteWithMedia($id, $entityID);
             }
         }
     }

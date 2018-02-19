@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Contracts\HasASystemEntity;
-use App\Traits\Models\HasASystemEntity as HasASystemEntityTrait;
+use App\Contracts\HasAnEntity;
+use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Person extends Model implements HasASystemEntity
+class Person extends Model implements HasAnEntity
 {
-    use HasASystemEntityTrait;
+    use HasAnEntityTrait;
 
     public $table = 'people';
     public $primaryKey = 'person_id';
@@ -22,7 +22,7 @@ class Person extends Model implements HasASystemEntity
     protected $hidden = [
         'person_id'
     ];
-    protected $systemEntityID = \App\Models\SystemEntity::PEOPLE;
+    protected $entityID = \App\Models\Entity::PEOPLE;
 
 
 }

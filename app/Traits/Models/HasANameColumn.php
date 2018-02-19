@@ -7,7 +7,7 @@ trait HasANameColumn
     /**
      * Get the name of the column in the entity's table that gives it its name, i.e name, title, label, etc.
      *
-     * @see \App\Models\SystemEntity
+     * @see \App\Models\Entity
      * @return string
      */
     public function getNameColumn(){

@@ -3,7 +3,7 @@
 use App\Traits\EnumerableTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class SystemEntity extends Model
+class Entity extends Model
 {
     use EnumerableTrait;
 
@@ -12,9 +12,9 @@ class SystemEntity extends Model
     const USERS = 0xc1c; //3100
 
     public $timestamps = false;
-    protected $table = 'system_entities';
-    protected $primaryKey = 'system_entity_id';
-    protected $fillable = ['system_entity_id', 'system_entity_name'];
+    protected $table = 'entities';
+    protected $primaryKey = 'entity_id';
+    protected $fillable = ['entity_id', 'entity_name'];
     public static $classMap = [
     ];
 

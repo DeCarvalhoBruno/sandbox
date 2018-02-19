@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Contracts\HasASystemEntity;
+use App\Contracts\HasAnEntity;
 use App\Notifications\ResetPassword;
 use App\Traits\Models\DoesSqlStuff;
 use Carbon\Carbon;
@@ -10,12 +10,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as LaravelUser;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use App\Traits\Models\HasASystemEntity as HasASystemEntityTrait;
+use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use App\Traits\Models\HasANameColumn;
 
-class User extends LaravelUser implements JWTSubject, HasASystemEntity
+class User extends LaravelUser implements JWTSubject, HasAnEntity
 {
-    use Notifiable, HasASystemEntityTrait, HasANameColumn, DoesSqlStuff;
+    use Notifiable, HasAnEntityTrait, HasANameColumn, DoesSqlStuff;
 
     public $table = 'users';
     protected $primaryKey = 'user_id';
@@ -39,7 +39,7 @@ class User extends LaravelUser implements JWTSubject, HasASystemEntity
         'email'
     ];
 
-    protected $systemEntityID = \App\Models\SystemEntity::USERS;
+    protected $entityID = \App\Models\Entity::USERS;
     public $timestamps = false;
 
     protected static function boot()
