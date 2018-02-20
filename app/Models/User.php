@@ -17,6 +17,10 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity
 {
     use Notifiable, HasAnEntityTrait, HasANameColumn, DoesSqlStuff;
 
+    const PERMISSION_VIEW = 0b1;
+    const PERMISSION_ADD = 0b10;
+    const PERMISSION_EDIT = 0b100;
+
     public $table = 'users';
     protected $primaryKey = 'user_id';
     public static $nameColumn = 'username';
@@ -84,7 +88,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity
 
     /**
      * @param mixed $query
-     * @param \App\Filters\ThreadFilters $filters
+     * @param \App\Filters\Filters $filters
      * @return \Illuminate\Database\Query\Builder
      */
     public function scopeFilter($query, $filters)

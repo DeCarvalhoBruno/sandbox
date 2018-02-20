@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class UsersTableSeeder extends Seeder
+class UsersSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -25,6 +25,15 @@ class UsersTableSeeder extends Seeder
             'last_name' => 'Doe',
             'user_id' => $u->getAttribute('user_id')
         ]);
+        factory(App\Models\GroupMember::class)->create([
+            "group_id" => 2,
+            'user_id' => $u->getAttribute('user_id')
+        ]);
+        factory(App\Models\GroupMember::class)->create([
+            "group_id" => 4,
+            'user_id' => $u->getAttribute('user_id')
+        ]);
+
 
         $u = factory(App\Models\User::class)->create([
             'email' => 'jane.doe@example.com',
@@ -39,6 +48,14 @@ class UsersTableSeeder extends Seeder
             'last_name' => 'Doe',
             'user_id' => $u->getAttribute('user_id')
         ]);
+        factory(App\Models\GroupMember::class)->create([
+            "group_id" => 2,
+            'user_id' => $u->getAttribute('user_id')
+        ]);
+        factory(App\Models\GroupMember::class)->create([
+            "group_id" => 4,
+            'user_id' => $u->getAttribute('user_id')
+        ]);
 
         $faker = Faker\Factory::create();
 
@@ -48,16 +65,16 @@ class UsersTableSeeder extends Seeder
             $ln = $faker->lastName;
             $username = substr(strtolower(substr($fn, 0, 1) . '_' . $ln), 0, 15);
 
-            if( isset($usernames[$username])){
+            if (isset($usernames[$username])) {
                 $usernames[$username]++;
-            }else{
-                $usernames[$username]=0;
+            } else {
+                $usernames[$username] = 0;
             }
 
             $u = factory(App\Models\User::class)->create([
                 'username' => ($usernames[$username] == 0) ? $username : $username . $usernames[$username],
                 'activated' => true,
-                'email' => sprintf('%s.%s@%s',strtolower($fn),strtolower($ln),$faker->freeEmailDomain),
+                'email' => sprintf('%s.%s@%s', strtolower($fn), strtolower($ln), $faker->freeEmailDomain),
                 'password' => $pwd,
             ]);
             factory(App\Models\Person::class)->create([
@@ -66,6 +83,20 @@ class UsersTableSeeder extends Seeder
                 'user_id' => $u->getAttribute('user_id'),
                 'created_at' => $faker->dateTimeBetween('-2 years')
             ]);
+            if ($i % 50 == 0) {
+                $groupID = 3;
+                factory(App\Models\GroupMember::class)->create([
+                    "group_id" => 4,
+                    'user_id' => $u->getAttribute('user_id')
+                ]);
+            } else {
+                $groupID = 4;
+            }
+            factory(App\Models\GroupMember::class)->create([
+                "group_id" => $groupID,
+                'user_id' => $u->getAttribute('user_id')
+            ]);
+
         }
     }
 }

@@ -36,6 +36,53 @@ class Entities extends Migration
         if (app()->environment() != 'testing') {
             $this->createTriggers();
         }
+        $this->createGroups();
+
+    }
+
+    private static function createGroups()
+    {
+        $u = factory(App\Models\User::class)->create([
+            'username' => 'root',
+            'email' => 'system@localhost.local',
+            'password' => bcrypt(str_random(15)),
+            'activated' => true,
+            'user_id' => 1,
+            'remember_token' => null,
+        ]);
+        factory(App\Models\Person::class)->create([
+            'person_id' => 1,
+            'first_name' => 'root',
+            'last_name' => '',
+            'user_id' => 1
+        ]);
+
+        (new \App\Models\Group)->insert([
+            [
+                'group_name' => 'root',
+                'group_id' => 1,
+                'group_mask' => 0x1
+            ],
+            [
+                'group_name' => 'superadmins',
+                'group_id' => 2,
+                'group_mask' => 0x2
+            ],
+            [
+                'group_name' => 'admins',
+                'group_id' => 3,
+                'group_mask' => 0x7D0
+            ],
+            [
+                'group_name' => 'users',
+                'group_id' => 4,
+                'group_mask' => 0x1388
+            ],
+        ]);
+        factory(App\Models\GroupMember::class)->create([
+            "group_id" => 1,
+            'user_id' => 1
+        ]);
 
     }
 
@@ -66,6 +113,9 @@ class Entities extends Migration
         foreach ($entities as $entity) {
             $class = Entity::getModelClassName($entity->entity_id);
             $primaryKey = (new $class)->getKeyName();
+            if ($primaryKey == 'id') {
+                continue;
+            }
             $this->entityPrimaryKeyColumns[$entity->name] = $primaryKey;
             $ids = \DB::select(sprintf('
             SELECT %s
@@ -84,7 +134,7 @@ class Entities extends Migration
         $entities = $this->entities;
         //We don't want the first element in that list, it doesn't match a db table.
         foreach ($entities as $entity) {
-            if ($entity['entity_name'] == 'system') {
+            if (!isset($this->entityPrimaryKeyColumns[$entity['entity_name']]) || $entity['entity_name'] == 'system') {
                 continue;
             }
             \DB::unprepared(sprintf('
@@ -121,20 +171,6 @@ class Entities extends Migration
                       SET NEW.full_name = CONCAT(NEW.first_name, " ", NEW.last_name);
                     END
             ');
-        $u = factory(App\Models\User::class)->create([
-            'username' => 'system',
-            'email' => 'system@localhost.local',
-            'password' => bcrypt(str_random(15)),
-            'activated' => false,
-            'user_id' => 1,
-            'remember_token' => null,
-        ]);
-        factory(App\Models\Person::class)->create([
-            'person_id' => 1,
-            'first_name' => 'system',
-            'last_name' => '',
-            'user_id' => 1
-        ]);
     }
 
     private function createEntities()
@@ -144,7 +180,7 @@ class Entities extends Migration
         $userPk = $entity->getKeyName();
         $entity->setAttribute($userPk, 0);
         $entity->save();
-        \App\Models\EntityType::insert([
+        (new \App\Models\EntityType)->insert([
             'entity_id' => Entity::USERS,
             'entity_type_target_id' => 0
         ]);
@@ -152,11 +188,10 @@ class Entities extends Migration
         $entity->save();
         $entity->setAttribute($entity->getKeyName(), 0);
         $entity->save();
-        \App\Models\EntityType::insert([
+        (new \App\Models\EntityType)->insert([
             'entity_id' => Entity::PEOPLE,
             'entity_type_target_id' => 0
         ]);
-
     }
 
 

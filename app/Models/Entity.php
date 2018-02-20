@@ -7,9 +7,11 @@ class Entity extends Model
 {
     use EnumerableTrait;
 
-    const PEOPLE = 0x960; //2400
-    const SYSTEM = 0xaf0; //2800
-    const USERS = 0xc1c; //3100
+    const GROUPS = 0x44c;               //1100
+    const GROUP_MEMBERS = 0x44d;        //1101
+    const PEOPLE = 0x960;               //2400
+    const SYSTEM = 0xaf0;               //2800
+    const USERS = 0xc1c;                //3100
 
     public $timestamps = false;
     protected $table = 'entities';
