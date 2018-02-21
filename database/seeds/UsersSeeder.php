@@ -12,7 +12,7 @@ class UsersSeeder extends Seeder
     public function run()
     {
 
-        $pwd = bcrypt('pqsszord');
+        $pwd = bcrypt('secret');
         $u = factory(App\Models\User::class)->create([
             'email' => 'john.doe@example.com',
             'username' => 'john_doe',
@@ -33,7 +33,6 @@ class UsersSeeder extends Seeder
             "group_id" => 4,
             'user_id' => $u->getAttribute('user_id')
         ]);
-
 
         $u = factory(App\Models\User::class)->create([
             'email' => 'jane.doe@example.com',

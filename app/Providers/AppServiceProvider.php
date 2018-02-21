@@ -11,6 +11,7 @@ class AppServiceProvider extends ServiceProvider
     public $bindings = [
         I\Person::class,
         I\User::class,
+        I\Permission::class,
     ];
 
     /**

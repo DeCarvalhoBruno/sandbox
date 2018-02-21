@@ -2,8 +2,6 @@
 
 use App\Contracts\Models\Person as PersonInterface;
 /**
- * Class User
- * @see \Illuminate\Auth\EloquentUserProvider
  * @method \App\Models\Person createModel(array $attributes = [])
  * @method \App\Models\Person getOne($id, $columns = ['*'])
  */

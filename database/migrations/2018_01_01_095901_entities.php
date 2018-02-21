@@ -23,12 +23,15 @@ class Entities extends Migration
             $table->increments('entity_type_id');
 
             $table->integer('entity_id')->unsigned();
-            $table->smallInteger('entity_type_target_id')->unsigned()->comment('the ID in the entity\'s (user,message,etc.) table');
+            $table->integer('entity_type_target_id')->unsigned()->comment('the ID in the entity\'s (user,message,etc.) table');
 
             $table->foreign('entity_id')
-                ->references('entity_id')->on('entities')
-                ->onDelete('cascade');
+                ->references('entity_id')->on('entities');
         });
+
+//        Schema::table('entity_types', function (Blueprint $table) {
+//
+//        });
 
         $this->addEntities();
         $this->entityTypes();
@@ -83,7 +86,6 @@ class Entities extends Migration
             "group_id" => 1,
             'user_id' => 1
         ]);
-
     }
 
     private function addEntities()
@@ -142,10 +144,10 @@ class Entities extends Migration
                     FOR EACH ROW
                         BEGIN
                             DECLARE var_entity INTEGER;
-                                SELECT entity_id INTO var_entity from entities WHERE entity_name="%1$s";
-                                INSERT into entity_types(entity_id,entity_type_target_id) VALUES (var_entity,NEW.%2$s);
-                            END
-                              ', $entity['entity_name'],
+                            SELECT entity_id INTO var_entity from entities WHERE entity_name="%1$s";
+                            INSERT into entity_types(entity_id,entity_type_target_id) VALUES (var_entity,NEW.%2$s);
+                        END
+                        ', $entity['entity_name'],
                     $this->entityPrimaryKeyColumns[$entity['entity_name']])
             );
             \DB::unprepared(sprintf('
@@ -153,7 +155,8 @@ class Entities extends Migration
                     FOR EACH ROW
                         BEGIN
                             DELETE FROM entity_types WHERE entity_type_target_id=OLD.%2$s;
-                        END', $entity['entity_name'],
+                        END
+                        ', $entity['entity_name'],
                     $this->entityPrimaryKeyColumns[$entity['entity_name']])
             );
         }
@@ -163,14 +166,14 @@ class Entities extends Migration
                     BEGIN
                       SET NEW.full_name = CONCAT(NEW.first_name, " ", NEW.last_name);
                     END
-            ');
+        ');
         \DB::unprepared('
                 CREATE TRIGGER t_people_update_fullname BEFORE UPDATE ON people
                     FOR EACH ROW 
                     BEGIN
                       SET NEW.full_name = CONCAT(NEW.first_name, " ", NEW.last_name);
                     END
-            ');
+        ');
     }
 
     private function createEntities()
@@ -188,10 +191,6 @@ class Entities extends Migration
         $entity->save();
         $entity->setAttribute($entity->getKeyName(), 0);
         $entity->save();
-        (new \App\Models\EntityType)->insert([
-            'entity_id' => Entity::PEOPLE,
-            'entity_type_target_id' => 0
-        ]);
     }
 
 

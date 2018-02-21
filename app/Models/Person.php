@@ -2,14 +2,10 @@
 
 namespace App\Models;
 
-use App\Contracts\HasAnEntity;
-use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Person extends Model implements HasAnEntity
+class Person extends Model
 {
-    use HasAnEntityTrait;
-
     public $table = 'people';
     public $primaryKey = 'person_id';
 
@@ -22,7 +18,6 @@ class Person extends Model implements HasAnEntity
     protected $hidden = [
         'person_id'
     ];
-    protected $entityID = \App\Models\Entity::PEOPLE;
 
 
 }
