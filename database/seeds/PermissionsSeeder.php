@@ -13,6 +13,11 @@ class PermissionsSeeder extends Seeder
     {
         (new \App\Models\Permission())->insert([
             [
+                'entity_type_id'=>7,
+                'entity_id'=>\App\Models\Entity::USERS,
+                'permission_mask'=>0b101,
+            ],
+            [
                 'entity_type_id'=>100,
                 'entity_id'=>\App\Models\Entity::USERS,
                 'permission_mask'=>0b111,

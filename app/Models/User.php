@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Contracts\HasAnEntity;
 use App\Notifications\ResetPassword;
+use App\Traits\EnumerableTrait;
 use App\Traits\Models\DoesSqlStuff;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,7 +16,7 @@ use App\Traits\Models\HasANameColumn;
 
 class User extends LaravelUser implements JWTSubject, HasAnEntity
 {
-    use Notifiable, HasAnEntityTrait, HasANameColumn, DoesSqlStuff;
+    use Notifiable, HasAnEntityTrait, HasANameColumn, DoesSqlStuff,EnumerableTrait;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;

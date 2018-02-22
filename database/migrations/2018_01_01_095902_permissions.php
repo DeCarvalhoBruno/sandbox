@@ -26,35 +26,21 @@ class Permissions extends Migration
                 ->references('entity_id')->on('entities');
         });
 
-        Schema::create('permissions', function (Blueprint $table) {
-            $table->increments('permission_id');
+;
 
-            $table->integer('entity_id')->unsigned();
-            $table->integer('entity_type_id')->unsigned();
-
-            $table->integer('permission_mask')->unsigned()->default(0);
-
-            $table->foreign('entity_type_id')
-                ->references('entity_type_id')->on('entity_types')
-                ->onDelete('cascade');
-            $table->foreign('entity_id')
-                ->references('entity_id')->on('entities')
-                ->onDelete('cascade');
-        });
-
-        Schema::create('permission_processed', function (Blueprint $table) {
-            $table->increments('permission_processed_id');
-            $table->integer('entity_type_id')->unsigned();
-
-            $table->foreign('entity_type_id')
-                ->references('entity_type_id')->on('entity_types')
-                ->onDelete('cascade');
-            $table->string('permission_processed_tag',25)->nullable();
-
-            $table->integer('permission_processed_mask')->unsigned()->default(0);
-
-            $table->index(['permission_processed_id','entity_type_id'],'idx_effective_permision_tag');
-        });
+//        Schema::create('permission_processed', function (Blueprint $table) {
+//            $table->increments('permission_processed_id');
+//            $table->integer('entity_type_id')->unsigned();
+//
+//            $table->foreign('entity_type_id')
+//                ->references('entity_type_id')->on('entity_types')
+//                ->onDelete('cascade');
+//            $table->string('permission_processed_tag',25)->nullable();
+//
+//            $table->integer('permission_processed_mask')->unsigned()->default(0);
+//
+//            $table->index(['permission_processed_id','entity_type_id'],'idx_effective_permision_tag');
+//        });
 
 //        $entity = \App\Models\PermissionProcessed::create([]);
 //        $entity->save();
@@ -97,6 +83,11 @@ class Permissions extends Migration
                 'entity_type_id' => 4,
                 'entity_id' => \App\Models\Entity::GROUP_MEMBERS,
                 'permission_mask' => 0b1010,
+            ],
+            [
+                'entity_type_id' => 5,
+                'entity_id' => \App\Models\Entity::USERS,
+                'permission_mask' => 0b101,
             ],
         ]);
 

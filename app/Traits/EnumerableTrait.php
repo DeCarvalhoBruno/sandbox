@@ -7,19 +7,27 @@ trait EnumerableTrait
     /**
      * @return mixed
      */
-    public static function getConstants()
+    public static function getConstants($prefix = null)
     {
         if (static::$constCacheArray == null) {
             static::$constCacheArray = [];
         }
+        if (!is_null($prefix)) {
+            $fn = function ($val, $key) use ($prefix) {
+                return is_int($val) && strpos($key, $prefix) !== false;
+            };
+        } else {
+            $fn = function ($val) use ($prefix) {
+                return is_int($val);
+            };
+        }
+
         $calledClass = get_called_class();
         if (!array_key_exists($calledClass, static::$constCacheArray)) {
             $reflect = new \ReflectionClass($calledClass);
+
             static::$constCacheArray[$calledClass] = array_filter(
-                $reflect->getConstants(),
-                function ($val) {
-                    return is_int($val);
-                }
+                $reflect->getConstants(), $fn, ARRAY_FILTER_USE_BOTH
             );
         }
 

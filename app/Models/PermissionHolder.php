@@ -2,10 +2,12 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class EntityTypeOwner extends Model
+class PermissionHolder extends Model
 {
 
-    public $primaryKey = 'EntityTypeOwner_id';
+    public $primaryKey = 'permission_holder_id';
     public $timestamps = false;
+
+
 
 }
