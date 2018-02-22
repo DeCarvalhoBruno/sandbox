@@ -19,39 +19,14 @@ class Entities extends Migration
             $table->string('entity_name', 75)->nullable();
         });
 
-        Schema::create('permissions', function (Blueprint $table) {
-            $table->increments('permission_id');
-
-            $table->integer('entity_id')->unsigned();
-            $table->integer('entity_type_id')->unsigned()->default(0);
-
-            $table->integer('permission_mask')->unsigned()->default(0);
-
-            $table->foreign('entity_id')
-                ->references('entity_id')->on('entities');
-        });
-
-        Schema::create('permission_entities', function (Blueprint $table) {
-            $table->increments('permission_entity_id');
-
-            $table->integer('permission_id')->unsigned()->default(0);
-            $table->integer('permission_entity_mask')->unsigned()->default(0);
-
-            $table->foreign('permission_id')
-                ->references('permission_id')->on('permissions');
-        });
-
         Schema::create('entity_types', function (Blueprint $table) {
             $table->increments('entity_type_id');
 
             $table->integer('entity_id')->unsigned()->default(Entity::SYSTEM);
             $table->integer('entity_type_target_id')->unsigned()->comment('the ID in the entity\'s (users,products,etc.) table');
-            $table->integer('permission_entity_id')->unsigned()->default(0);
 
             $table->foreign('entity_id')
                 ->references('entity_id')->on('entities');
-            $table->foreign('permission_entity_id')
-                ->references('permission_entity_id')->on('permission_entities');
         });
 
         $this->addEntities();
@@ -198,19 +173,7 @@ class Entities extends Migration
 
     private function createEntities()
     {
-        $entity = \App\Models\Permission::create(['entity_id'=>Entity::SYSTEM]);
-        $entity->save();
-        $pk = $entity->getKeyName();
-        $entity->setAttribute($pk, 0);
-        $entity->save();
-
-        $entity = \App\Models\PermissionEntity::create(['permission_id'=>0]);
-        $entity->save();
-        $pk = $entity->getKeyName();
-        $entity->setAttribute($pk, 0);
-        $entity->save();
-
-        $entity = \App\Models\EntityType::create(['entity_type_target_id'=>0]);
+        $entity = \App\Models\EntityType::create(['entity_type_target_id' => 0]);
         $entity->save();
         $pk = $entity->getKeyName();
         $entity->setAttribute($pk, 0);
@@ -224,18 +187,13 @@ class Entities extends Migration
         (new \App\Models\EntityType)->insert([
             'entity_id' => Entity::USERS,
             'entity_type_target_id' => 0,
-            'entity_type_id'=>1
+            'entity_type_id' => 1
         ]);
         $entity = \App\Models\Person::create([$pk => 0]);
         $entity->save();
         $entity->setAttribute($entity->getKeyName(), 0);
         $entity->save();
 
-        Schema::table('permissions', function (Blueprint $table) {
-            $table->foreign('entity_type_id')
-                ->references('entity_type_id')->on('entity_types')
-                ->onDelete('cascade');
-        });
     }
 
 
