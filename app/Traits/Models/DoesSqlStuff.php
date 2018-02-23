@@ -20,4 +20,23 @@ trait DoesSqlStuff
             sprintf('%s.%s', $modelToJoin->getTable(), $this->getKeyName())
         );
     }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param string $modelName
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function joinWithJoinedPK($builder, $modelName)
+    {
+        /** @var \Illuminate\Database\Eloquent\Model $modelToJoin */
+        $modelToJoin = new $modelName;
+        return $builder->join(
+            $modelToJoin->getTable(),
+            $modelToJoin->getQualifiedKeyName(),
+            '=',
+            sprintf('%s.%s', $this->getTable(), $modelToJoin->getKeyName())
+        );
+    }
+
+
 }

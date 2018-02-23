@@ -16,7 +16,7 @@ use App\Traits\Models\HasANameColumn;
 
 class User extends LaravelUser implements JWTSubject, HasAnEntity
 {
-    use Notifiable, HasAnEntityTrait, HasANameColumn, DoesSqlStuff,EnumerableTrait;
+    use Notifiable, HasAnEntityTrait, HasANameColumn, DoesSqlStuff, EnumerableTrait;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;

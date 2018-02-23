@@ -14,27 +14,27 @@ class PermissionsSeeder extends Seeder
         (new \App\Models\Permission())->insert([
             [
                 'entity_type_id'=>7,
-                'permission_entity_id'=>1,
+                'entity_id'=>\App\Models\Entity::USERS,
                 'permission_mask'=>0b101,
             ],
             [
                 'entity_type_id'=>100,
-                'permission_entity_id'=>1,
+                'entity_id'=>\App\Models\Entity::USERS,
                 'permission_mask'=>0b111,
             ],
             [
                 'entity_type_id'=>100,
-                'permission_entity_id'=>2,
+                'entity_id'=>\App\Models\Entity::GROUPS,
                 'permission_mask'=>0b1111,
             ],
             [
                 'entity_type_id'=>100,
-                'permission_entity_id'=>3,
+                'entity_id'=>\App\Models\Entity::GROUP_MEMBERS,
                 'permission_mask'=>0b1010,
             ],
             [
                 'entity_type_id'=>101,
-                'permission_entity_id'=>3,
+                'entity_id'=>\App\Models\Entity::GROUP_MEMBERS,
                 'permission_mask'=>0b1010,
             ],
         ]);
