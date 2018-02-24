@@ -232,4 +232,35 @@ abstract class Model
         }, ARRAY_FILTER_USE_KEY);
     }
 
+    /**
+     * @param string$table
+     * @return int|null
+     */
+    public static function getLastID($table)
+    {
+        $result = \DB::select(
+            sprintf('SELECT AUTO_INCREMENT AS c FROM information_schema.tables
+                WHERE table_name = "%s" AND table_schema = "%s"',
+                (new $table)->getTable(),
+                config('database.connections.mysql.database')
+            )
+        );
+        return !empty($result) ? $result[0]->c : null;
+
+    }
+
+    /**
+     * @param string $model
+     * @return int|null
+     */
+    public static function getRowCount($model)
+    {
+        /** @var \Illuminate\Database\Eloquent\Model $m */
+        $m = new $model;
+        $result = \DB::select(
+            sprintf('SELECT count(%s) as c FROM %s', $m->getKeyName(),$m->getTable()));
+        return !empty($result) ? $result[0]->c : null;
+
+    }
+
 }

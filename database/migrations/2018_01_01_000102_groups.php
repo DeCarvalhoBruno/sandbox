@@ -14,14 +14,14 @@ class Groups extends Migration
     public function up()
     {
         Schema::create('groups', function (Blueprint $table) {
-            $table->increments('group_id');
+            $table->smallIncrements('group_id');
 
             $table->string('group_name', 75)->nullable();
             $table->integer('group_mask')->unsigned();
         });
 
         Schema::create('group_members', function (Blueprint $table) {
-            $table->integer('group_id')->unsigned();
+            $table->unsignedSmallInteger('group_id')->unsigned();
             $table->integer('user_id')->unsigned();
 
             $table->foreign('group_id')

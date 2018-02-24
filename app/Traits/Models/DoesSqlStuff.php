@@ -38,5 +38,23 @@ trait DoesSqlStuff
         );
     }
 
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param string $modelName
+     * @param string $key
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function joinWithKey($builder, $modelName, $key)
+    {
+        /** @var \Illuminate\Database\Eloquent\Model $modelToJoin */
+        $modelToJoin = new $modelName;
+        return $builder->join(
+            $modelToJoin->getTable(),
+            sprintf('%s.%s', $modelToJoin->getTable(), $key),
+            '=',
+            sprintf('%s.%s', $this->getTable(), $key)
+        );
+    }
+
 
 }

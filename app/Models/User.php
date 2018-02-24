@@ -119,6 +119,68 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity
         return $this->join($query, Person::class);
     }
 
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param int|null $userId
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeEntityType(Builder $builder, $userId = null)
+    {
+        return $builder->join('entity_types', function ($q) use ($userId) {
+            $q->on('entity_types.entity_type_target_id', '=', 'users.user_id')->where('entity_types.entity_id',
+                '=', Entity::USERS);
+            if (!is_null($userId)) {
+                $q->where('entity_types.entity_type_target_id',
+                    '=', $userId);
+            }
+        });
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopePermissionRecord(Builder $builder)
+    {
+        return $builder->join('permission_records', function ($q) {
+            $q->on('permission_records.permission_target_id', '=',
+                'entity_types.entity_type_id')->where('permission_records.entity_id',
+                '=', Entity::USERS);
+        });
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopePermissionStore(Builder $builder)
+    {
+        return $builder->join('permission_stores', 'permission_stores.permission_store_id', '=',
+            'permission_records.permission_store_id');
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param int $userId
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopePermissionMask(Builder $builder, $userId)
+    {
+        return $builder->join('permission_masks', function ($q) use ($userId) {
+            $q->on('permission_masks.permission_store_id', '=', 'permission_records.permission_store_id')
+                ->where('permission_masks.permission_holder_id', '=', $userId)
+                ->where('permission_mask', '>', 0);
+        });
+    }
+
+    /**
+     * @param $columns
+     * @return array
+     */
     public function getColumnInfo($columns)
     {
         $sortable = array_flip($this->sortable);

@@ -16,7 +16,7 @@ class Permissions extends Migration
         Schema::create('permission_actions', function (Blueprint $table) {
             $table->increments('permission_action_id');
 
-            $table->integer('entity_id')->unsigned();
+            $table->unsignedSmallInteger('entity_id')->unsigned();
 
             $table->integer('permission_action_bits')->unsigned()->default(0);
 
@@ -30,7 +30,7 @@ class Permissions extends Migration
             $table->increments('permission_id');
 
             $table->integer('entity_type_id')->unsigned();
-            $table->integer('entity_id')->unsigned();
+            $table->unsignedSmallInteger('entity_id')->unsigned();
 
             $table->integer('permission_mask')->unsigned()->default(0);
 
@@ -43,71 +43,37 @@ class Permissions extends Migration
 
         Schema::create('permission_stores', function (Blueprint $table) {
             $table->increments('permission_store_id');
-            $table->string('permission_store_name', 75);
         });
 
-        Schema::create('permission_store_types', function (Blueprint $table) {
-            $table->increments('permission_store_type_id');
-
-            $table->integer('permission_store_target_id')->unsigned();
-
-        });
-
-        Schema::create('permission_store_records', function (Blueprint $table) {
-            $table->increments('permission_store_record_id');
-
-            $table->integer('entity_id')->unsigned();
+        Schema::create('permission_masks', function (Blueprint $table) {
             $table->integer('permission_store_id')->unsigned();
-
-            $table->integer('permission_target_id')->unsigned();
             $table->integer('permission_holder_id')->unsigned();
+            $table->integer('permission_mask')->unsigned();
 
-            $table->integer('permission_store_type_id')->unsigned();
+            $table->foreign('permission_store_id')
+                ->references('permission_store_id')->on('permission_stores');
+            $table->foreign('permission_holder_id')
+                ->references('entity_type_id')->on('entity_types');
+            $table->index(['permission_store_id', 'permission_holder_id'], 'idx_permission_masks');
+        });
+
+        Schema::create('permission_records', function (Blueprint $table) {
+            $table->unsignedSmallInteger('entity_id')->unsigned();
+            $table->integer('permission_target_id')->unsigned();
+
+            $table->integer('permission_store_id')->unsigned();
 
             $table->foreign('entity_id')
                 ->references('entity_id')->on('entities');
-            $table->foreign('permission_store_id')
-                ->references('permission_store_id')->on('permission_stores');
             $table->foreign('permission_target_id')
                 ->references('entity_type_id')->on('entity_types');
-            $table->foreign('permission_holder_id')
-                ->references('entity_type_id')->on('entity_types');
-            $table->foreign('permission_store_type_id')
-                ->references('permission_store_type_id')->on('permission_store_types');
-
-//            $table->index(['entity_id', 'permission_store_target_id', 'permission_store_holder_id'],
-//                'idx_permission_store');
+            $table->foreign('permission_store_id')
+                ->references('permission_store_id')->on('permission_stores');
+            $table->index(['entity_id', 'permission_target_id', 'permission_store_id'], 'idx_permission_store_records');
         });
-
-        Schema::create('permission_store_default', function (Blueprint $table) {
-            $table->increments('permission_store_default_id');
-
-            $table->integer('permission_store_type_id')->unsigned();
-            $table->integer('permission_mask')->unsigned();
-
-            $table->foreign('permission_store_type_id')
-                ->references('permission_store_type_id')->on('permission_store_types');
-        });
-
-        Schema::create('permission_store_computed', function (Blueprint $table) {
-            $table->increments('permission_store_computed_id');
-
-            $table->integer('permission_store_type_id')->unsigned();
-
-            $table->integer('permission_mask')->unsigned();
-
-            $table->foreign('permission_store_type_id')
-                ->references('permission_store_type_id')->on('permission_store_types');
-        });
-//        $entity = \App\Models\PermissionStore::create([]);
-//        $entity->save();
-//        $pk = $entity->getKeyName();
-//        $entity->setAttribute($pk, 0);
-//        $entity->save();
 
         $this->seedPermissions();
         $this->seedPermissionActions();
-        $this->seedPermissionStore();
     }
 
     private function seedPermissions()
@@ -202,17 +168,5 @@ class Permissions extends Migration
             ],
         ]);
 
-    }
-
-    private function seedPermissionStore()
-    {
-        (new \App\Models\PermissionStore())->insert([
-            [
-                'permission_store_name' => 'default'
-            ],
-            [
-                'permission_store_name' => 'computed'
-            ],
-        ]);
     }
 }

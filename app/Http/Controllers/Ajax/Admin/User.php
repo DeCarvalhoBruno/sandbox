@@ -18,8 +18,9 @@ class User extends Controller
                     'full_name',
                     'email',
                     'users.user_id',
-                    'created_at'
-                ])->activated()->filter($userFilter)->paginate(10),
+                    'created_at',
+                    'permission_mask'
+                ])->entityType()->permissionRecord()->permissionStore()->permissionMask(auth()->user()->getAttribute('entity_type_id'))->activated()->filter($userFilter)->paginate(10),
             'columns' => $userProvider->createModel()->getColumnInfo([
                 'full_name' => trans('ajax.db.full_name'),
                 'email' => trans('ajax.general.email'),

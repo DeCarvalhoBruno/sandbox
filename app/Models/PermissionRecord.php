@@ -2,17 +2,15 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class PermissionStoreRecord extends Model
+class PermissionRecord extends Model
 {
 
     public $timestamps = false;
 
     protected $fillable = [
-        'permission_entity_id',
-        'permission_store_id',
+        'entity_id',
         'permission_target_id',
-        'permission_holder_id',
-        'permission_store_type_id'
+        'permission_store_id',
     ];
 
 }

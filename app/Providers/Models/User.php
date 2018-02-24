@@ -52,7 +52,9 @@ class User extends Model implements UserProvider, UserInterface
     {
         $model = $this->createModel();
 
-        return $model->newQuery()
+        return $model->newQueryWithoutScopes()
+            ->select(['users.user_id', 'users.username', 'entity_type_id'])
+            ->entityType($identifier)
             ->where($model->getQualifiedKeyName(), $identifier)
             ->first();
     }
@@ -68,7 +70,11 @@ class User extends Model implements UserProvider, UserInterface
     {
         $model = $this->createModel();
 
-        $model = $model->where($model->getQualifiedKeyName(), $identifier)->first();
+        $model = $model->newQueryWithoutScopes()->select([
+            'users.user_id',
+            'username',
+            'remember_token'
+        ])->where($model->getQualifiedKeyName(), $identifier)->first();
 
         if (!$model) {
             return null;
@@ -113,7 +119,7 @@ class User extends Model implements UserProvider, UserInterface
             return;
         }
 
-        $query = $this->createModel()->newQuery();
+        $query = $this->createModel()->newQueryWithoutScopes()->select(['users.user_id', 'password', 'username']);
 
         foreach ($credentials as $key => $value) {
             if (!Str::contains($key, 'password')) {

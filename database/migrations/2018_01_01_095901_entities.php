@@ -15,14 +15,14 @@ class Entities extends Migration
     public function up()
     {
         Schema::create('entities', function (Blueprint $table) {
-            $table->increments('entity_id');
+            $table->smallIncrements('entity_id');
             $table->string('entity_name', 75)->nullable();
         });
 
         Schema::create('entity_types', function (Blueprint $table) {
             $table->increments('entity_type_id');
 
-            $table->integer('entity_id')->unsigned()->default(Entity::SYSTEM);
+            $table->unsignedSmallInteger('entity_id')->unsigned()->default(Entity::SYSTEM);
             $table->integer('entity_type_target_id')->unsigned()->comment('the ID in the entity\'s (users,products,etc.) table');
 
             $table->foreign('entity_id')

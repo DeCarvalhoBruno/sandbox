@@ -5,7 +5,5 @@ use Illuminate\Database\Eloquent\Model;
 class PermissionStore extends Model
 {
     public $timestamps = false;
-
-    protected $fillable = ['permission_store_name'];
-
+    public $primaryKey = 'permission_store_id';
 }
