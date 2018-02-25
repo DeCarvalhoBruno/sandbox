@@ -48,6 +48,10 @@ return [
         'token_expired' => [
             'h' => 'Session Expired!',
             't' => 'Please log in again to continue.',
+        ],
+        'unauthorized'=>[
+            'h' => 'Access Denied',
+            't' => 'You are not authorized to view this page.',
         ]
     ],
     'error' => [
@@ -59,7 +63,8 @@ return [
     'message' => [
         'info_updated' => 'Your info has been updated!',
         'password_updated' => 'Your password has been updated!',
-        'user_update_ok' => 'The user was updated successfully.'
+        'user_update_ok' => 'The user was updated successfully.',
+        'group_update_ok' => 'The group was updated successfully.'
     ],
     'pages' => [
         'auth' => [

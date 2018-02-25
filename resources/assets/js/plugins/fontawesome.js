@@ -20,11 +20,12 @@ import {
   faStar,
   faKey,
   faAngleLeft,
-  faArrowRight
+  faArrowRight,
+  faObjectGroup
 } from '@fortawesome/fontawesome-free-solid/shakable.es'
 
 fontawesome.library.add(
   faUser, faLock, faSignOutAlt, faCog, faAngleDoubleUp, faAngleDoubleDown,
   faTrashAlt, faPencilAlt, faBars, faTachometerAlt, faStar, faKey, faAngleLeft,
-  faArrowRight
+  faArrowRight,faObjectGroup
 )

@@ -19,8 +19,14 @@ class User extends Controller
                     'email',
                     'users.user_id',
                     'created_at',
-                    'permission_mask'
-                ])->entityType()->permissionRecord()->permissionStore()->permissionMask(auth()->user()->getAttribute('entity_type_id'))->activated()->filter($userFilter)->paginate(10),
+                    'permission_mask',
+                    'username'
+                ])->entityType()
+                ->permissionRecord()
+                ->permissionStore()
+                ->permissionMask(auth()->user()->getAttribute('entity_type_id'))
+                ->activated()
+                ->filter($userFilter)->paginate(10),
             'columns' => $userProvider->createModel()->getColumnInfo([
                 'full_name' => trans('ajax.db.full_name'),
                 'email' => trans('ajax.general.email'),
@@ -29,14 +35,25 @@ class User extends Controller
         ];
     }
 
-    public function show($userId, UserProvider $userProvider)
+    /**
+     * @param $username
+     * @param \App\Contracts\Models\User|\App\Providers\Models\User $userProvider
+     * @return mixed
+     */
+    public function edit($username, UserProvider $userProvider)
     {
-        return $userProvider->getOne($userId, ['first_name', 'last_name', 'email', 'username']);
+        return $userProvider->getOneByUsername($username, ['first_name', 'last_name', 'email', 'username'])->first();
     }
 
-    public function update($userId, UpdateUser $request, UserProvider $userProvider)
+    /**
+     * @param $username
+     * @param \App\Http\Requests\Admin\UpdateUser $request
+     * @param \App\Contracts\Models\User|\App\Providers\Models\User $userProvider
+     * @return \Illuminate\Http\Response
+     */
+    public function update($username, UpdateUser $request, UserProvider $userProvider)
     {
-        $userProvider->updateOne($userId, $request->all());
+        $userProvider->updateOneByUsername($username, $request->all());
         return response(null, Response::HTTP_NO_CONTENT);
     }
 

@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Contracts\Models\User as UserInterface;
+use App\Models as Models;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -13,7 +15,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        Models\User::class
     ];
 
     /**
@@ -27,7 +29,10 @@ class AuthServiceProvider extends ServiceProvider
         \Auth::provider('CustomUserProvider', function () use ($userProvider) {
             return $userProvider;
         });
-        $this->registerPolicies();
+
+        foreach ($this->policies as $value) {
+            Gate::policy($value, str_replace('\\Models', '\\Policies', $value));
+        }
 
         //
     }

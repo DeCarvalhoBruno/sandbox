@@ -28,8 +28,7 @@ axios.interceptors.response.use(response => response, error => {
       title: i18n.t('modal.error.h'),
       text: i18n.t('modal.error.t'),
       reverseButtons: true,
-      confirmButtonText: i18n.t('ok'),
-      cancelButtonText: i18n.t('cancel')
+      confirmButtonText: i18n.t('general.ok')
     })
   }
 
@@ -44,6 +43,16 @@ axios.interceptors.response.use(response => response, error => {
     }).then(async () => {
       await store.dispatch('auth/logout')
       router.push({name: 'login'})
+    })
+  }
+
+  if (status === 403) {
+    swal({
+      type: 'error',
+      title: i18n.t('modal.unauthorized.h'),
+      text: i18n.t('modal.unauthorized.t'),
+      reverseButtons: true,
+      confirmButtonText: i18n.t('general.ok')
     })
   }
 

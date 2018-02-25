@@ -34,6 +34,26 @@ module.exports = [
   },
   {
     type: 'tree',
+    icon: 'object-group',
+    name: 'Groups',
+    items: [
+      {
+        type: 'item',
+        icon: 'star',
+        name: 'List',
+        router: {
+          name: 'admin.group.index'
+        }
+      },
+      {
+        type: 'tree',
+        icon: 'star',
+        name: 'Add'
+      }
+    ]
+  },
+  {
+    type: 'tree',
     icon: 'key',
     name: 'Permissions',
     items: [

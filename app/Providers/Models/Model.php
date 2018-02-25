@@ -90,11 +90,18 @@ abstract class Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Model
      */
     public function build()
     {
         return $this->createModel();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder|static
+     */
+    public function noScopes(){
+        return $this->createModel()->newQueryWithoutScopes();
     }
 
     /**

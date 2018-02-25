@@ -50,8 +50,8 @@ class GroupMember extends Model implements HasAnEntity
     public function scopeEntityType(Builder $builder)
     {
         return $builder->join('entity_types', function ($q) {
-            $q->on('entity_types.entity_type_target_id', '=', 'group_members.user_id')->where('entity_types.entity_id',
-                '=', Entity::USERS);
+            $q->on('entity_types.entity_type_target_id', '=', 'group_members.user_id')
+                ->where('entity_types.entity_id','=', Entity::USERS);
         });
     }
 

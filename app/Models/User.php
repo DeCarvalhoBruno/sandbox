@@ -128,8 +128,8 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity
     public function scopeEntityType(Builder $builder, $userId = null)
     {
         return $builder->join('entity_types', function ($q) use ($userId) {
-            $q->on('entity_types.entity_type_target_id', '=', 'users.user_id')->where('entity_types.entity_id',
-                '=', Entity::USERS);
+            $q->on('entity_types.entity_type_target_id', '=', 'users.user_id')
+                ->where('entity_types.entity_id', '=', Entity::USERS);
             if (!is_null($userId)) {
                 $q->where('entity_types.entity_type_target_id',
                     '=', $userId);
@@ -145,9 +145,8 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity
     public function scopePermissionRecord(Builder $builder)
     {
         return $builder->join('permission_records', function ($q) {
-            $q->on('permission_records.permission_target_id', '=',
-                'entity_types.entity_type_id')->where('permission_records.entity_id',
-                '=', Entity::USERS);
+            $q->on('permission_records.permission_target_id', '=', 'entity_types.entity_type_id')
+                ->where('permission_records.entity_id', '=', Entity::USERS);
         });
     }
 
@@ -158,8 +157,11 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity
      */
     public function scopePermissionStore(Builder $builder)
     {
-        return $builder->join('permission_stores', 'permission_stores.permission_store_id', '=',
-            'permission_records.permission_store_id');
+        return $builder->join('permission_stores',
+            'permission_stores.permission_store_id',
+            '=',
+            'permission_records.permission_store_id'
+        );
     }
 
     /**

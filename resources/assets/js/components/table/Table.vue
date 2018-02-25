@@ -27,7 +27,7 @@
                     </td>
                     <td>
                         <div class="inline">
-                            <router-link :to="{ name: 'admin.user.edit', params: { user_id: row.user_id } }">
+                            <router-link :to="{ name: 'admin.user.edit', params: { user: row.username } }">
                                 <button class="btn btn-sm btn-info">
                                     <fa icon="pencil-alt">
                                     </fa>

@@ -34,7 +34,8 @@ class User extends Permission
         $this->fullPermissionsBitmask = array_sum(\App\Models\User::getConstants('PERMISSION'));
     }
 
-    public function assignPermissions(){
+    public function assignPermissions()
+    {
         $this->userList = $this->arrangeUsersByUserID();
         $this->prepareAllForDb(
             $this->getUsersWithPermissions()
@@ -157,12 +158,13 @@ class User extends Permission
         \DB::beginTransaction();
 
         $default = $this->default->get();
-            $defaultPermissionStoreId = (new PermissionStore)->insertGetId([]);
+        $defaultPermissionStoreId = (new PermissionStore)->insertGetId([]);
         foreach ($default as $permission) {
             (new PermissionMask())->insert([
                 'permission_store_id' => $defaultPermissionStoreId,
                 'permission_holder_id' => $permission->getHolder(),
-                'permission_mask' => $permission->getMask()
+                'permission_mask' => $permission->getMask(),
+                'permission_is_default' => true
             ]);
         }
         foreach ($this->userList as $user) {

@@ -81,18 +81,17 @@
     data () {
       return {
         form: new Form(),
-        user_id: this.$router.currentRoute.params.user_id,
+        username: this.$router.currentRoute.params.user,
         userInfo: null
       }
     },
     methods: {
       getUserInfo (data) {
         this.form = new Form(data)
-        // this.form.fill(data)
       },
       async save () {
         try {
-          const {data} = await this.form.patch(`/ajax/admin/user/${this.user_id}/update`)
+          const {data} = await this.form.patch(`/ajax/admin/user/${this.username}/update`)
         } catch (e) {
 
         }
@@ -101,7 +100,7 @@
       }
     },
     beforeRouteEnter (to, from, next) {
-      axios.get(`/ajax/admin/user/${to.params.user_id}`).then(({data})=>{
+      axios.get(`/ajax/admin/user/${to.params.user}`).then(({data})=>{
         next(vm => vm.getUserInfo(data))
       })
     },

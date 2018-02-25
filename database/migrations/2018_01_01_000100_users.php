@@ -20,6 +20,7 @@ class Users extends Migration
             $table->string('password')->nullable();
             $table->boolean('activated')->default(false);
             $table->rememberToken()->nullable();
+            $table->index('remember_token','idx_users_remember_token');
         });
     }
 

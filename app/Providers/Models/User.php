@@ -32,13 +32,51 @@ class User extends Model implements UserProvider, UserInterface
         $this->person = $p;
     }
 
-    public function updateOne($id, $data)
+    /**
+     * @param \App\Models\User $model
+     * @param string $field
+     * @param mixed $value
+     * @param array $data
+     * @return int
+     */
+    public function updateOneUser($model, $field, $value, $data)
+    {
+        $user = $this->createModel()->newQuery()->select('person_id')->where($field, $value)->first();
+        $this->person->createModel()->where('person_id', $user->person_id)->update($this->person->filterFillables($data));
+
+        return $model->newQueryWithoutScopes()->where($field, $value)
+            ->update($this->filterFillables($data));
+    }
+
+    /**
+     * @param int $id
+     * @param array $data
+     * @return int
+     */
+    public function updateOneById($id, $data)
     {
         $model = $this->createModel();
-        $this->person->createModel()->where($model->getKeyName(), $id)->update($this->person->filterFillables($data));
+        return $this->updateOneUser($model, $model->getKeyName(), $id, $data);
+    }
 
-        return $model->newQueryWithoutScopes()->where($model->getKeyName(), $id)
-            ->update($this->filterFillables($data));
+    /**
+     * @param string $username
+     * @param array $data
+     * @return int
+     */
+    public function updateOneByUsername($username, $data)
+    {
+        return $this->updateOneUser($this->createModel(), 'username', $username, $data);
+    }
+
+    /**
+     * @param string $username
+     * @param array $columns
+     * @return \App\Models\User
+     */
+    public function getOneByUsername($username, $columns = ['*'])
+    {
+        return $this->createModel()->newQuery()->select($columns)->where('username', $username);
     }
 
 

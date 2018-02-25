@@ -10,6 +10,9 @@ const Dashboard = () => import('~/pages/admin/dashboard').then(
 const Users = () => import('~/pages/admin/users/index').then(m => m.default || m)
 const UserEdit = () => import('~/pages/admin/users/edit').then(m => m.default || m)
 
+const Groups = () => import('~/pages/admin/groups/index').then(m => m.default || m)
+const GroupEdit = () => import('~/pages/admin/groups/edit').then(m => m.default || m)
+
 const Settings = () => import('~/pages/admin/settings/index').then(
   m => m.default || m)
 const SettingsProfile = () => import('~/pages/admin/settings/profile').then(
@@ -34,10 +37,22 @@ export default [
     component: Users
   },
   {
-    path: '/admin/user/:user_id',
+    path: '/admin/user/:user',
     name: 'admin.user.edit',
     meta: {parent:'admin.user.index'},
     component: UserEdit
+  },
+  {
+    path: '/admin/groups',
+    name: 'admin.group.index',
+    meta: {parent:'admin.dashboard'},
+    component: Groups
+  },
+  {
+    path: '/admin/group/:group',
+    name: 'admin.group.edit',
+    meta: {parent:'admin.group.index'},
+    component: GroupEdit
   },
   {
     path: '/admin/settings',

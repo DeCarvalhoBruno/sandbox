@@ -49,6 +49,7 @@ class Permissions extends Migration
             $table->integer('permission_store_id')->unsigned();
             $table->integer('permission_holder_id')->unsigned();
             $table->integer('permission_mask')->unsigned();
+            $table->boolean('permission_is_default')->default(false);
 
             $table->foreign('permission_store_id')
                 ->references('permission_store_id')->on('permission_stores');
