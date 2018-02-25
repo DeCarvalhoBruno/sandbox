@@ -32,25 +32,25 @@ export default [
   },
   {
     path: '/admin/users',
-    name: 'admin.user.index',
+    name: 'admin.users.index',
     meta: {parent:'admin.dashboard'},
     component: Users
   },
   {
-    path: '/admin/user/:user',
-    name: 'admin.user.edit',
-    meta: {parent:'admin.user.index'},
+    path: '/admin/users/:user',
+    name: 'admin.users.edit',
+    meta: {parent:'admin.users.index'},
     component: UserEdit
   },
   {
     path: '/admin/groups',
-    name: 'admin.group.index',
+    name: 'admin.groups.index',
     meta: {parent:'admin.dashboard'},
     component: Groups
   },
   {
-    path: '/admin/group/:group',
-    name: 'admin.group.edit',
+    path: '/admin/groups/:group',
+    name: 'admin.groups.edit',
     meta: {parent:'admin.group.index'},
     component: GroupEdit
   },

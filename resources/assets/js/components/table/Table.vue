@@ -14,9 +14,8 @@
                         <fa class="float-right"
                             :icon="info.order=='asc'?'angle-double-down':'angle-double-up'"/></span>
                     </th>
-                    <th>
-                        {{$t('general.actions')}}
-                    </th>
+                    <slot name="header-action">
+                    </slot>
                 </tr>
                 </thead>
                 <tbody>
@@ -25,22 +24,8 @@
                     <td v-for="(info,colIdx) in columns" :key="colIdx">
                         {{row[info.name]}}
                     </td>
-                    <td>
-                        <div class="inline">
-                            <router-link :to="{ name: 'admin.user.edit', params: { user: row.username } }">
-                                <button class="btn btn-sm btn-info">
-                                    <fa icon="pencil-alt">
-                                    </fa>
-                                </button>
-                            </router-link>
-                            <button class="btn btn-sm btn-danger">
-                                <fa icon="trash-alt">
-                                    <router-link :to="{ name: 'admin.dashboard' }">
-                                    </router-link>
-                                </fa>
-                            </button>
-                        </div>
-                    </td>
+                    <slot name="body-action" :row="row">
+                    </slot>
                 </tr>
                 </tbody>
             </table>
@@ -92,7 +77,7 @@
     watch: {
       '$route' () {
         this.$store.dispatch('table/fetchData', {
-          entity: 'users',
+          entity: this.entity,
           queryString: this.$route.fullPath,
           refresh: true
         })
@@ -115,7 +100,7 @@
       },
       linkGen (pageNum) {
         let obj = {
-          name: 'admin.user.index', query: Object.assign({}, this.$route.query)
+          name: `admin.${this.entity}.index`, query: Object.assign({}, this.$route.query)
         }
         obj.query.page = pageNum
         return obj

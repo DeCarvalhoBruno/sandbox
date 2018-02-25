@@ -22,7 +22,7 @@ module.exports = [
         icon: 'star',
         name: 'List',
         router: {
-          name: 'admin.user.index'
+          name: 'admin.users.index'
         }
       },
       {
@@ -42,7 +42,7 @@ module.exports = [
         icon: 'star',
         name: 'List',
         router: {
-          name: 'admin.group.index'
+          name: 'admin.groups.index'
         }
       },
       {

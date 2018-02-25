@@ -22,12 +22,12 @@ class Admin
     {
         return function (Router $r) {
             $r->get('users', 'User@index')->middleware('can:view,App\Models\User');
-            $r->get('user/{user}', 'User@edit')->middleware('can:update,App\Models\User');
-            $r->patch('user/{user}/update', 'User@update')->middleware('can:update,App\Models\User');
+            $r->get('users/{user}', 'User@edit')->middleware('can:update,App\Models\User');
+            $r->patch('users/{user}/update', 'User@update')->middleware('can:update,App\Models\User');
 
-            $r->get('groups', 'User@index')->middleware('can:view,App\Models\User');
-            $r->get('user/{user}', 'User@edit')->middleware('can:update,App\Models\User');
-            $r->patch('user/{user}/update', 'User@update')->middleware('can:update,App\Models\User');
+            $r->get('groups', 'Group@index')->middleware('can:view,App\Models\Group');
+            $r->get('groups/{group}', 'Group@edit')->middleware('can:update,App\Models\Group');
+            $r->patch('groups/{group}/update', 'Group@update')->middleware('can:update,App\Models\Group');
         };
     }
 }

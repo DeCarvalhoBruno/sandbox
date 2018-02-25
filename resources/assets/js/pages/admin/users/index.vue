@@ -1,3 +1,29 @@
+<template>
+    <div>
+        <v-table :entity="'users'">
+            <th slot="header-action">
+                {{$t('general.actions')}}
+            </th>
+                <td slot="body-action" slot-scope="props">
+                    <div class="inline">
+                        <router-link :to="{ name: 'admin.users.edit', params: { user: props.row.username } }">
+                            <button class="btn btn-sm btn-info">
+                                <fa icon="pencil-alt">
+                                </fa>
+                            </button>
+                        </router-link>
+                        <button class="btn btn-sm btn-danger">
+                            <fa icon="trash-alt">
+                                <router-link :to="{ name: 'admin.dashboard' }">
+                                </router-link>
+                            </fa>
+                        </button>
+                    </div>
+                </td>
+        </v-table>
+    </div>
+</template>
+
 <script>
   import Vue from 'vue'
   import store from '~/store'
@@ -17,15 +43,6 @@
         entity: 'users',
         queryString: to.fullPath
       }).then(res => next())
-    },
-    render: function (h) {
-      return h('div', {},
-        [
-          h(Table, {
-            props: {
-              entity: 'users'
-            }
-          })])
     }
   }
 </script>

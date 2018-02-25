@@ -86,7 +86,7 @@
       }
     },
     methods: {
-      getUserInfo (data) {
+      getInfo (data) {
         this.form = new Form(data)
       },
       async save () {
@@ -96,12 +96,12 @@
 
         }
         this.$store.dispatch('session/setMessage',this.$t('message.user_update_ok'))
-        this.$router.push({name: 'admin.user.index'})
+        this.$router.push({name: 'admin.users.index'})
       }
     },
     beforeRouteEnter (to, from, next) {
-      axios.get(`/ajax/admin/user/${to.params.user}`).then(({data})=>{
-        next(vm => vm.getUserInfo(data))
+      axios.get(`/ajax/admin/users/${to.params.user}`).then(({data})=>{
+        next(vm => vm.getInfo(data))
       })
     },
   }

@@ -2,8 +2,10 @@
 return [
     'route' => [
         'admin-dashboard' => 'Home',
-        'admin-user-index' => 'User',
-        'admin-user-edit' => 'Edit'
+        'admin-users-index' => 'User',
+        'admin-groups-index' => 'Group',
+        'admin-users-edit' => 'Edit',
+        'admin-groups-edit' => 'Edit',
     ],
     'general' => [
         'ok' => 'Ok',
