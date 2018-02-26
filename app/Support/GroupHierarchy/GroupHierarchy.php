@@ -1,10 +1,10 @@
 <?php namespace App\Support\GroupHierarchy;
 
-use App\Traits\EnumerableTrait;
+use App\Traits\Enumerable;
 
 class GroupHierarchy
 {
-    use EnumerableTrait;
+    use Enumerable;
 
     const root = 1;
     const superadmins = 2;

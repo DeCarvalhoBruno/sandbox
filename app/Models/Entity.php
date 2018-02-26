@@ -1,11 +1,11 @@
 <?php namespace App\Models;
 
-use App\Traits\EnumerableTrait;
+use App\Traits\Enumerable;
 use Illuminate\Database\Eloquent\Model;
 
 class Entity extends Model
 {
-    use EnumerableTrait;
+    use Enumerable;
 
     const GROUPS = 0x44c;               //1100
     const GROUP_MEMBERS = 0x44d;        //1101

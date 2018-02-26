@@ -1,11 +1,13 @@
 <?php namespace App\Traits;
 
-trait EnumerableTrait
+trait Enumerable
 {
     private static $constCacheArray = null;
 
     /**
+     * @param string $prefix
      * @return mixed
+     * @throws \ReflectionException
      */
     public static function getConstants($prefix = null)
     {
@@ -39,6 +41,7 @@ trait EnumerableTrait
      * @param bool $strict
      *
      * @return bool
+     * @throws \ReflectionException
      */
     public static function isValidName($name, $strict = false)
     {
@@ -57,6 +60,7 @@ trait EnumerableTrait
      * @param mixed $value
      *
      * @return bool
+     * @throws \ReflectionException
      */
     public static function isValidValue($value)
     {
@@ -69,6 +73,7 @@ trait EnumerableTrait
      * @param mixed $name
      *
      * @return null
+     * @throws \ReflectionException
      */
     public static function getConstantNameByID($name)
     {
@@ -82,7 +87,8 @@ trait EnumerableTrait
     /**
      * @param int $id
      *
-     * @return null
+     * @return boolean
+     * @throws \ReflectionException
      */
     public static function getConstantByID($id)
     {

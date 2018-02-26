@@ -17,11 +17,11 @@ class PermissionData
 
     /**
      *
-     * @param $target
-     * @param $holder
-     * @param $mask
+     * @param \stdClass $target
+     * @param \stdClass $holder
+     * @param int $mask
      */
-    public function __construct($target, $holder, $mask)
+    public function __construct($target, $holder, $mask=0)
     {
         $this->target = $target;
         $this->holder = $holder;
@@ -30,7 +30,12 @@ class PermissionData
 
     public function setTarget($value = null)
     {
-        $this->target = $value;
+        $this->target->entity_type_id = $value;
+    }
+
+    public function setMask($value = null)
+    {
+        $this->mask = $value;
     }
 
     /**
@@ -38,7 +43,7 @@ class PermissionData
      */
     public function getTarget()
     {
-        return $this->target;
+        return $this->target->entity_type_id;
     }
 
     /**
@@ -46,7 +51,7 @@ class PermissionData
      */
     public function getHolder()
     {
-        return $this->holder;
+        return $this->holder->entity_type_id;
     }
 
     /**

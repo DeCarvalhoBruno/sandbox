@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Entity;
 use App\Models\PermissionMask;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Models\User as UserModel;
 
 class User
 {
@@ -25,11 +26,11 @@ class User
 
     public function view()
     {
-        return ($this->defaultPermissions & \App\Models\User::PERMISSION_VIEW) !== 0;
+        return ($this->defaultPermissions & UserModel::PERMISSION_VIEW) !== 0;
     }
 
     public function update()
     {
-        return ($this->defaultPermissions & \App\Models\User::PERMISSION_EDIT) !== 0;
+        return ($this->defaultPermissions & UserModel::PERMISSION_EDIT) !== 0;
     }
 }

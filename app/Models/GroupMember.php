@@ -1,6 +1,7 @@
 <?php namespace App\Models;
 
 use App\Contracts\HasAnEntity;
+use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use Illuminate\Database\Eloquent\Builder;
@@ -8,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class GroupMember extends Model implements HasAnEntity
 {
-    use HasAnEntityTrait, DoesSqlStuff;
+    use HasAnEntityTrait, DoesSqlStuff, Enumerable;
 
     const PERMISSION_ADD = 0b10;
     const PERMISSION_DELETE = 0b1000;
@@ -39,7 +40,7 @@ class GroupMember extends Model implements HasAnEntity
      */
     public function scopeUser(Builder $builder)
     {
-        return $this->joinWithKey($builder, User::class,'user_id');
+        return $this->joinWithKey($builder, User::class, 'user_id');
     }
 
     /**
@@ -51,7 +52,7 @@ class GroupMember extends Model implements HasAnEntity
     {
         return $builder->join('entity_types', function ($q) {
             $q->on('entity_types.entity_type_target_id', '=', 'group_members.user_id')
-                ->where('entity_types.entity_id','=', Entity::USERS);
+                ->where('entity_types.entity_id', '=', Entity::USERS);
         });
     }
 

@@ -18,7 +18,7 @@ class PermissionStoreData
      * @param int $type
      * @param PermissionData[] $permissions
      */
-    public function __construct($type, array $permissions)
+    public function __construct($type, array $permissions=[])
     {
         $this->type = $type;
 
@@ -29,21 +29,25 @@ class PermissionStoreData
         } else {
             $this->permissions = $permissions;
         }
-
-    }
-
-    public function has($user)
-    {
-        return isset($this->permissions[$user]);
     }
 
     /**
-     * @param $user
+     * @param string $item
+     * @return bool
+     *
+     */
+    public function has($item)
+    {
+        return isset($this->permissions[$item]);
+    }
+
+    /**
+     * @param string $item
      * @return \App\Support\Permissions\PermissionData|\App\Support\Permissions\PermissionData[]
      */
-    public function get($user=null)
+    public function get($item=null)
     {
-        return $this->permissions[$user] ?? $this->permissions;
+        return $this->permissions[$item] ?? $this->permissions;
     }
 
     /**
@@ -60,6 +64,11 @@ class PermissionStoreData
     public function getType(): int
     {
         return $this->type;
+    }
+
+    public function hasPremissions()
+    {
+        return !empty($this->permissions);
     }
 
 }

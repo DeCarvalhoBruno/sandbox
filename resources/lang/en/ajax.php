@@ -31,7 +31,8 @@ return [
         'full_name' => 'Full name',
         'new_email' => 'New e-mail',
         'new_username' => 'New username',
-        'user_created_at' => 'Registration date'
+        'user_created_at' => 'Registration date',
+        'group_name'=>'Group name'
     ],
     'form' => [
         'description' => [

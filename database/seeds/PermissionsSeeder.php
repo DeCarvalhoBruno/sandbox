@@ -25,7 +25,7 @@ class PermissionsSeeder extends Seeder
             [
                 'entity_type_id'=>100,
                 'entity_id'=>\App\Models\Entity::GROUPS,
-                'permission_mask'=>0b1111,
+                'permission_mask'=>0b1101,
             ],
             [
                 'entity_type_id'=>100,

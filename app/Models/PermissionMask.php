@@ -9,7 +9,6 @@ class PermissionMask extends Model
 
     protected $fillable = ['permission_store_id', 'permission_holder_id', 'permission_mask', 'permission_is_default'];
 
-
     /**
      * @link https://laravel.com/docs/5.6/eloquent#query-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder

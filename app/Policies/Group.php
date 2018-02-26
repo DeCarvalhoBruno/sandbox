@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Entity;
 use App\Models\PermissionMask;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Models\Group as GroupModel;
 
 class Group
 {
@@ -17,21 +18,19 @@ class Group
 
     public function __construct()
     {
-//        $this->defaultPermissions = PermissionMask::getDefaultPermission(
-//            auth()->user()->getAttribute('entity_type_id'),
-//            Entity::GROUPS
-//        );
+        $this->defaultPermissions = PermissionMask::getDefaultPermission(
+            auth()->user()->getAttribute('entity_type_id'),
+            Entity::GROUPS
+        );
     }
 
     public function view()
     {
-//        return ($this->defaultPermissions & \App\Models\Group::PERMISSION_VIEW) !== 0;
-        return true;
+        return ($this->defaultPermissions & GroupModel::PERMISSION_VIEW) !== 0;
     }
 
     public function update()
     {
-//        return ($this->defaultPermissions & \App\Models\Group::PERMISSION_EDIT) !== 0;
-        return true;
+        return ($this->defaultPermissions & GroupModel::PERMISSION_EDIT) !== 0;
     }
 }

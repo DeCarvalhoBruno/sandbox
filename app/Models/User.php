@@ -4,8 +4,9 @@ namespace App\Models;
 
 use App\Contracts\HasAnEntity;
 use App\Notifications\ResetPassword;
-use App\Traits\EnumerableTrait;
+use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
+use App\Traits\Presentable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
@@ -16,7 +17,7 @@ use App\Traits\Models\HasANameColumn;
 
 class User extends LaravelUser implements JWTSubject, HasAnEntity
 {
-    use Notifiable, HasAnEntityTrait, HasANameColumn, DoesSqlStuff, EnumerableTrait;
+    use Notifiable, HasAnEntityTrait, HasANameColumn, DoesSqlStuff, Enumerable, Presentable;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;
@@ -140,13 +141,14 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity
     /**
      * @link https://laravel.com/docs/5.6/eloquent#query-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param int $entityId
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    public function scopePermissionRecord(Builder $builder)
+    public static function scopePermissionRecord(Builder $builder, $entityId = Entity::USERS)
     {
-        return $builder->join('permission_records', function ($q) {
+        return $builder->join('permission_records', function ($q) use ($entityId) {
             $q->on('permission_records.permission_target_id', '=', 'entity_types.entity_type_id')
-                ->where('permission_records.entity_id', '=', Entity::USERS);
+                ->where('permission_records.entity_id', '=', $entityId);
         });
     }
 
@@ -155,7 +157,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    public function scopePermissionStore(Builder $builder)
+    public static function scopePermissionStore(Builder $builder)
     {
         return $builder->join('permission_stores',
             'permission_stores.permission_store_id',
@@ -170,7 +172,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity
      * @param int $userId
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    public function scopePermissionMask(Builder $builder, $userId)
+    public static function scopePermissionMask(Builder $builder, $userId)
     {
         return $builder->join('permission_masks', function ($q) use ($userId) {
             $q->on('permission_masks.permission_store_id', '=', 'permission_records.permission_store_id')
@@ -178,19 +180,4 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity
                 ->where('permission_mask', '>', 0);
         });
     }
-
-    /**
-     * @param $columns
-     * @return array
-     */
-    public function getColumnInfo($columns)
-    {
-        $sortable = array_flip($this->sortable);
-        $result = [];
-        foreach ($columns as $name => $label) {
-            $result[$name] = ['name' => $name, 'label' => $label, 'sortable' => isset($sortable[$name])];
-        }
-        return $result;
-    }
-
 }
