@@ -1,11 +1,12 @@
 <?php
 return [
-    'route' => [
+    'breadcrumb' => [
         'admin-dashboard' => 'Home',
         'admin-users-index' => 'User',
         'admin-groups-index' => 'Group',
         'admin-users-edit' => 'Edit',
         'admin-groups-edit' => 'Edit',
+        'admin-groups-members' => 'Edit Members',
     ],
     'general' => [
         'ok' => 'Ok',
@@ -32,7 +33,9 @@ return [
         'new_email' => 'New e-mail',
         'new_username' => 'New username',
         'user_created_at' => 'Registration date',
-        'group_name'=>'Group name'
+        'group_name' => 'Group name',
+        'group_mask' => 'Group mask',
+        'member_count' => 'Number of members'
     ],
     'form' => [
         'description' => [
@@ -40,7 +43,9 @@ return [
             'first_name' => 'The user\'s first (given) name.',
             'last_name' => 'The user\'s last (family) name.',
             'new_email' => '"{0}" is the current e-mail address.',
-            'new_username' => '"{0}" is the current username.'
+            'new_username' => '"{0}" is the current username.',
+            'group_name' => 'The group name can only contain alphanumeric characters and underscores.',
+            'group_mask' => 'Determines the group\'s position in its hierarchy. The lower the mask, the higher the group status.'
         ]
     ],
     'modal' => [
@@ -52,7 +57,7 @@ return [
             'h' => 'Session Expired!',
             't' => 'Please log in again to continue.',
         ],
-        'unauthorized'=>[
+        'unauthorized' => [
             'h' => 'Access Denied',
             't' => 'You are not authorized to view this page.',
         ]

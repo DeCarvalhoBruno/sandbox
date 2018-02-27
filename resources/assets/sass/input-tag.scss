@@ -1,0 +1,51 @@
+.input-tag-container {
+  .input-tag {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .input-tag input {
+    flex: 1;
+    background: transparent;
+    border: none;
+  }
+
+  .input-tag span {
+    margin-right: 0.3rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .tag-remove {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    overflow: hidden;
+  }
+
+  .tag-remove:before, .tag-remove:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    background: #5dc282;
+
+    height: 2px;
+    margin-top: -1px;
+  }
+
+  .tag-remove:before {
+    transform: rotate(45deg);
+  }
+  .tag-remove:after {
+    transform: rotate(-45deg);
+  }
+
+  .typeahead > span {
+    cursor: pointer;
+    margin-right: 0.3rem;
+  }
+}

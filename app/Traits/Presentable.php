@@ -16,4 +16,14 @@ trait Presentable
         return $result;
     }
 
+    /**
+     * @param mixed $query
+     * @param \App\Filters\Filters $filters
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeFilter($query, $filters)
+    {
+        return $filters->apply($query);
+    }
+
 }

@@ -100,7 +100,7 @@
         return path
       },
       translateRouteName (route) {
-        return {route: route, label: this.$t('route.' + (route.replace(/\.+/g, '-')))}
+        return {route: route, label: this.$t('breadcrumb.' + (route.replace(/\.+/g, '-')))}
       }
     }
   }

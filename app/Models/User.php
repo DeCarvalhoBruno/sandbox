@@ -89,16 +89,6 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity
     }
 
     /**
-     * @param mixed $query
-     * @param \App\Filters\Filters $filters
-     * @return \Illuminate\Database\Query\Builder
-     */
-    public function scopeFilter($query, $filters)
-    {
-        return $filters->apply($query);
-    }
-
-    /**
      * @param \Illuminate\Database\Eloquent\Builder $query
      *
      * @link https://laravel.com/docs/5.6/eloquent#query-scopes

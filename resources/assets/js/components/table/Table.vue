@@ -30,7 +30,7 @@
                 </tbody>
             </table>
             <div class="paginator">
-                <b-pagination-nav :link-gen="linkGen" :total-rows="total" :value="currentPage"
+                <b-pagination-nav v-if="lastPage>1" :link-gen="linkGen" :total-rows="total" :value="currentPage"
                                   :per-page="perPage" :limit="perPage" :number-of-pages="lastPage">
                 </b-pagination-nav>
             </div>

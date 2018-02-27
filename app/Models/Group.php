@@ -2,6 +2,7 @@
 
 use App\Contracts\HasAnEntity;
 use App\Traits\Enumerable;
+use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\HasANameColumn;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use App\Traits\Presentable;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model implements HasAnEntity
 {
-    use HasAnEntityTrait, HasANameColumn, Enumerable, Presentable;
+    use HasAnEntityTrait, HasANameColumn, Enumerable, Presentable, DoesSqlStuff;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;
@@ -23,13 +24,22 @@ class Group extends Model implements HasAnEntity
     protected $fillable = [
         'group_name',
         'group_mask',
-        'group_id'
     ];
     protected $sortable = [
         'group_name',
     ];
 
     public $timestamps = false;
+
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeGroupMember(Builder $builder)
+    {
+        return $this->join($builder, GroupMember::class);
+    }
 
     /**
      * @link https://laravel.com/docs/5.6/eloquent#query-scopes
@@ -51,7 +61,7 @@ class Group extends Model implements HasAnEntity
      */
     public static function scopePermissionRecord(Builder $builder)
     {
-        return User::scopePermissionRecord($builder,Entity::GROUPS);
+        return User::scopePermissionRecord($builder, Entity::GROUPS);
     }
 
     /**
@@ -72,7 +82,7 @@ class Group extends Model implements HasAnEntity
      */
     public static function scopePermissionMask(Builder $builder, $userId)
     {
-        return User::scopePermissionMask($builder,$userId);
+        return User::scopePermissionMask($builder, $userId);
     }
 
 }

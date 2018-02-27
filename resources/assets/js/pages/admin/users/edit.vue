@@ -91,12 +91,12 @@
       },
       async save () {
         try {
-          const {data} = await this.form.patch(`/ajax/admin/user/${this.username}/update`)
+          const {data} = await this.form.patch(`/ajax/admin/users/${this.username}/update`)
+          this.$store.dispatch('session/setMessage',this.$t('message.user_update_ok'))
+          this.$router.push({name: 'admin.users.index'})
         } catch (e) {
 
         }
-        this.$store.dispatch('session/setMessage',this.$t('message.user_update_ok'))
-        this.$router.push({name: 'admin.users.index'})
       }
     },
     beforeRouteEnter (to, from, next) {
