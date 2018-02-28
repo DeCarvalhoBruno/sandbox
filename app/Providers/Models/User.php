@@ -182,6 +182,18 @@ class User extends Model implements UserProvider, UserInterface
         return $this->hasher->check($plain, $user->getAuthPassword());
     }
 
+    public function search($search,$userEntityId)
+    {
+        return $this->createModel()->newQuery()
+            ->select(['full_name as text','username as id'])
+            ->entityType()
+            ->permissionRecord()
+            ->permissionStore()
+            ->permissionMask($userEntityId)
+            ->where('full_name','like',sprintf('%%%s%%',$search))
+            ->limit(5);
+    }
+
     /**
      * Gets the hasher implementation.
      *

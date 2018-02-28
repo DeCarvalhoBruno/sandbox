@@ -38,7 +38,6 @@
     mounted () {
       $('.treeview>a').each(function () {
         $(this).tree()
-        // tree.call($(this))
       })
 
     }

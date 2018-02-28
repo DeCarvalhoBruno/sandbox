@@ -57,5 +57,14 @@ class User extends Controller
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
+    public function search($search, UserProvider $userProvider)
+    {
+        return response(
+            $userProvider->search(
+                preg_replace('/[^\w\s\-\']/', '', strip_tags($search)),
+                auth()->user()->getAttribute('entity_type_id')
+            )->get(), Response::HTTP_OK);
+    }
+
 
 }

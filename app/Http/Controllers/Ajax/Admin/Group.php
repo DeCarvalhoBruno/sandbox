@@ -51,7 +51,7 @@ class Group extends Controller
     }
 
     /**
-     * @param $groupName
+     * @param string $groupName
      * @param \App\Http\Requests\Admin\UpdateGroup $request
      * @param \App\Contracts\Models\Group|\App\Providers\Models\Group $groupProvider
      * @return \Illuminate\Http\Response
@@ -60,6 +60,16 @@ class Group extends Controller
     {
         $groupProvider->updateOneByName($groupName, $request->all());
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @param string $groupName
+     * @param \App\Contracts\Models\Group|\App\Providers\Models\Group $groupProvider
+     * @return \Illuminate\Http\Response
+     */
+    public function members($groupName,GroupProvider $groupProvider)
+    {
+        return response($groupProvider->getMembers($groupName)->get(), Response::HTTP_OK);
     }
 
 

@@ -11,8 +11,10 @@
             </span>
 
             <input type="text"
-                   placeholder="placeholder"
+                   :placeholder="dataPlaceholder"
                    v-model="input"
+                   ref="search"
+                   @focus="dataPlaceholder=''"
                    @keypress.enter.prevent="tagFromInput"
                    @keypress.backspace="removeLastTag"
                    @keypress.down="nextSearchResult"
@@ -20,7 +22,6 @@
                    @keypress.esc="ignoreSearchResults"
                    @keyup="searchTag"
                    @value="tags">
-
             <input type="hidden" :name="elementId" :id="elementId" v-model="hiddenInput">
         </div>
 
@@ -39,6 +40,8 @@
 </template>
 
 <script>
+  import axios from 'axios'
+
   export default {
     name: 'input-tag',
     props: {
@@ -51,7 +54,7 @@
       },
       oldTags: [Array, String],
       typeahead: Boolean,
-      placeholder:String
+      placeholder: String
     },
 
     data () {
@@ -59,13 +62,18 @@
         badgeId: 0,
         tagBadges: [],
         tags: [],
+        tagBag: [],
 
         input: '',
         oldInput: '',
         hiddenInput: '',
 
         searchResults: [],
-        searchSelection: 0
+        searchSelection: 0,
+        dataPlaceholder: this.placeholder,
+        searchTriggerDelay: 800,
+        searchTriggerLength: 2,
+        lastSearchTime: 0
       }
     },
 
@@ -75,11 +83,11 @@
           ? this.oldTags
           : this.oldTags.split(',')
 
-        for (let slug of oldTags) {
-          let existingTag = this.existingTags[slug]
-          let text = existingTag ? existingTag : slug
+        for (let id of oldTags) {
+          let existingTag = this.existingTags[id]
+          let text = existingTag ? existingTag : id
 
-          this.addTag(slug, text)
+          this.addTag(id, text)
         }
       }
     },
@@ -90,7 +98,8 @@
         this.hiddenInput = this.tags.join(',')
 
         // Update the bound v-model value
-        this.$emit('input', this.tags)
+        // this.$emit('input', this.tags)
+        this.$emit('updateAddedUsers',this.tagBag)
       }
     },
 
@@ -108,15 +117,15 @@
           if (text.length) {
             this.input = ''
 
-            // Determine the tag's slug and text depending on if the tag exists
+            // Determine the tag's id and text depending on if the tag exists
             // on the site already or not
-            let slug = this.makeSlug(text)
-            let existingTag = this.existingTags[slug]
+            let id = this.makeSlug(text)
+            let existingTag = this.existingTags[id]
 
-            slug = existingTag ? slug : text
+            id = existingTag ? id : text
             text = existingTag ? existingTag : text
 
-            this.addTag(slug, text)
+            this.addTag(id, text)
           }
         }
       },
@@ -124,24 +133,25 @@
       tagFromSearch (tag) {
         this.searchResults = []
         this.input = ''
-
-        this.addTag(tag.slug, tag.text)
+        this.$refs.search.focus()
+        this.addTag(tag.id, tag.text)
       },
 
       makeSlug (value) {
         return value.toLowerCase().replace(/\s/g, '-')
       },
 
-      addTag (slug, text) {
+      addTag (id, text) {
         // Attach the tag if it hasn't been attached yet
-        let searchSlug = this.makeSlug(slug)
+        let searchSlug = this.makeSlug(id)
         let found = this.tags.find((text) => {
           return searchSlug == this.makeSlug(text)
         })
 
         if (!found) {
           this.tagBadges.push(text.replace(/\s/g, '&nbsp;'))
-          this.tags.push(slug)
+          this.tags.push(id)
+          this.tagBag.push({id,text})
         }
       },
 
@@ -154,36 +164,43 @@
       removeTag (index) {
         this.tags.splice(index, 1)
         this.tagBadges.splice(index, 1)
+        this.tagBag.splice(index, 1)
+        this.$refs.search.focus()
       },
 
-      searchTag (e) {
+      async searchTag () {
         if (this.typeahead === true) {
+          let now = Date.now ? Date.now() : new Date().getTime()
+          if ((this.input.length < this.searchTriggerLength) || (this.lastSearchTime > now - this.searchTriggerDelay)) {
+            return
+          }
+
+          this.lastSearchTime = now
           if (this.oldInput != this.input) {
-            this.searchResults = [{slug:'balla',text:'ballaz'}]
+            this.$emit('searching')
+            this.searchResults = await this.searchTerm(this.input)
+            this.$emit('searched')
             this.searchSelection = 0
             let input = this.input.trim()
 
             if (input.length) {
-              for (let slug in this.existingTags) {
-                let text = this.existingTags[slug].toLowerCase()
+              for (let id in this.existingTags) {
+                let text = this.existingTags[id].toLowerCase()
 
                 if (text.search(input.toLowerCase()) > -1) {
-                  this.searchResults.push({slug, text: this.existingTags[slug]})
+                  this.searchResults.push({id, text: this.existingTags[id]})
                 }
               }
-
-              // Sort the search results alphabetically
-              this.searchResults.sort((a, b) => {
-                if (a.text < b.text) return -1
-                if (a.text > b.text) return 1
-
-                return 0
-              })
             }
 
             this.oldInput = this.input
           }
         }
+      },
+
+      async searchTerm (term) {
+        let {data} = await axios.get(`/ajax/admin/users/search/${term}`)
+        return data
       },
 
       nextSearchResult () {

@@ -12,8 +12,10 @@
   }
 
   .input-tag span {
-    margin-right: 0.3rem;
-    margin-bottom: 0.2rem;
+    //margin-right: 0.3rem;
+    //margin-bottom: 0.2rem;
+    padding:.6rem .4rem;
+
   }
 
   .tag-remove {
@@ -48,4 +50,10 @@
     cursor: pointer;
     margin-right: 0.3rem;
   }
+}
+
+.search-spinner-wrapper{
+  width:1rem;
+  padding:0.5rem 0 0 0;
+  margin-left:.2rem;
 }

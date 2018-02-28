@@ -46,7 +46,7 @@ return [
             'new_username' => '"{0}" is the current username.',
             'group_name' => 'The group name can only contain alphanumeric characters and underscores.',
             'group_mask' => 'Determines the group\'s position in its hierarchy. The lower the mask, the higher the group status.'
-        ]
+        ],
     ],
     'modal' => [
         'error' => [
@@ -83,6 +83,20 @@ return [
             'reset_password' => 'Reset Password',
             'your_password' => 'Your Password',
             'new_password' => 'New Password',
+        ],
+        'members'=>[
+            'member_search'=>'Type user full name here, i.e \'Jane Doe\'',
+            'group_name'=>'Group:',
+            'edit_preview'=>'Preview',
+            'no_changes'=>'No changes so far.',
+            'add_members'=>'Add members',
+            'remove_members'=>'Remove members',
+            'user_add_tag'=>'The following users will be added:',
+            'user_no_add'=>'No added members.',
+            'user_remove_tag'=>'The following users will be removed:',
+            'user_no_remove'=>'No removed members.',
+            'user_none'=>'There are no members in this group.',
+            'current_members'=>'The following users are members of this group:',
         ]
     ],
     'tables' => [

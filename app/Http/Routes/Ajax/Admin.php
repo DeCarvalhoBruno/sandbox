@@ -24,11 +24,12 @@ class Admin
             $r->get('users', 'User@index')->middleware('can:view,App\Models\User');
             $r->get('users/{user}', 'User@edit')->middleware('can:update,App\Models\User');
             $r->patch('users/{user}/update', 'User@update')->middleware('can:update,App\Models\User');
+            $r->get('users/search/{search}', 'User@search')->middleware('can:view,App\Models\User');
 
             $r->get('groups', 'Group@index')->middleware('can:view,App\Models\Group');
             $r->get('groups/{group}', 'Group@edit')->middleware('can:update,App\Models\Group');
             $r->patch('groups/{group}/update', 'Group@update')->middleware('can:update,App\Models\Group');
-            $r->patch('groups/{group}/members', 'Group@members')->middleware('can:update,App\Models\Group');
+            $r->get('groups/{group}/members', 'Group@members')->middleware('can:view,App\Models\Group');
         };
     }
 }

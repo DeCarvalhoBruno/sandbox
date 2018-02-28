@@ -10,7 +10,7 @@ class Group extends Model implements GroupInterface
 {
     protected $model = \App\Models\Group::class;
 
-    public function getOneByName($groupName,$columns=['*'])
+    public function getOneByName($groupName, $columns = ['*'])
     {
         return $this->createModel()->newQuery()->select($columns)->where('group_name', '=', $groupName);
     }
@@ -47,5 +47,11 @@ class Group extends Model implements GroupInterface
     {
         return $model->newQuery()->where($field, $value)
             ->update($this->filterFillables($data));
+    }
+
+    public function getMembers($groupName)
+    {
+        return $this->createModel()->newQuery()->select(['full_name','username'])->groupMember()->user()->where('group_name', '=', $groupName);
+
     }
 }
