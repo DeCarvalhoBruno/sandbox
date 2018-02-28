@@ -1,8 +1,14 @@
 <template>
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">{{$t('pages.members.group_name')}}&nbsp;{{this.$route.params.group}}</h5>
-            <div class="card mb-3">
+            <div class="card-title">
+                <button class="btn btn-primary float-right" :disabled="removedUsers.length===0&&addedUsers.length===0">
+                    {{$t('general.save_changes')}}
+                </button>
+                <h5>{{$t('pages.members.group_name')}}&nbsp;{{this.$route.params.group}}
+                </h5>
+            </div>
+            <div id="member_edit_preview" class="card">
                 <div class="card-header">
                     {{$t('pages.members.edit_preview')}}
                 </div>
@@ -27,9 +33,11 @@
                                 <p>{{$t('pages.members.user_remove_tag')}}</p>
                             </div>
                             <ul v-if="removedUsers.length>0" class="list-group">
-                                <li v-for="removedUser in removedUsers"
+                                <li v-for="(removedUser,idx) in removedUsers" :key="idx"
                                     class="list-group-item list-group-item-action list-group-item-danger">
                                     {{removedUser.text}}
+                                    <i href="#" class="button-list-close"
+                                       @click="returnToUsersList(removedUser,idx)"></i>
                                 </li>
                             </ul>
                             <p v-else>{{$t('pages.members.user_no_remove')}}</p>
@@ -45,15 +53,14 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="search-spinner-wrapper">
-                            <fa icon="cog" size="lg" :spin="isAnimated"/>
+                            <fa icon="cog" size="lg" :spin="addIsAnimated"/>
                         </div>
                         <div class="input-tag-container col-md-8">
                             <input-tag :typeahead="true"
-                                       :elementId="'full_name'"
                                        :placeholder="$t('pages.members.member_search')"
-                                       @searching="searching"
-                                       @searched="searched"
-                                       @updateAddedUsers="updateAddedUsers"/>
+                                       @searching="addSearching"
+                                       @searched="addSearched"
+                                       @updateAddedItems="updateAddedUsers"/>
                         </div>
                     </div>
                 </div>
@@ -63,16 +70,28 @@
                     {{$t('pages.members.remove_members')}}
                 </div>
                 <div class="card-body">
-                    <div v-if="members.length>0">
+                    <div class="row" v-if="this.userCount>5">
+                        <div class="search-spinner-wrapper">
+                            <fa icon="cog" size="lg" :spin="delIsAnimated"/>
+                        </div>
+                        <div class="input-tag-container col-md-8">
+                            <input-tag :typeahead="true"
+                                       :placeholder="$t('pages.members.member_search')"
+                                       @searching="delSearching"
+                                       @searched="delSearched"
+                                       @updateAddedItems="updateRemovedUsers"/>
+                        </div>
+                    </div>
+                    <div v-else-if="this.userCount>0">
                         <div class="container row">
                             <p>{{$t('pages.members.current_members')}}</p>
                         </div>
-                        <div class="container row">
-                            <ul class="list-group">
-                                <li v-for="member in members" class="list-group-item list-group-item-action">
-                                    {{member.full_name}}
-                                </li>
-                            </ul>
+                        <div id="group_members_list" class="container row">
+                            <div v-for="(member,idx) in members" :key="idx" class="card col-md-3">
+                                <p>{{member.text}}
+                                    <i href="#" class="button-list-close" @click="addToRemoveUsersList(member,idx)"></i>
+                                </p>
+                            </div>
                         </div>
                     </div>
                     <p v-else>{{$t('pages.members.user_none')}}</p>
@@ -95,24 +114,47 @@
     },
     data () {
       return {
-        isAnimated: false,
+        addIsAnimated: false,
+        delIsAnimated: false,
+        removeIsAnimated: false,
         addedUsers: [],
         removedUsers: [],
-        members: []
+        members: [],
+        userCount: 0
       }
     },
     methods: {
-      searching () {
-        this.isAnimated = true
+      addSearching () {
+        this.addIsAnimated = true
       },
-      searched () {
-        this.isAnimated = false
+      addSearched () {
+        this.addIsAnimated = false
+      },
+      delSearching () {
+        this.delIsAnimated = true
+      },
+      delSearched () {
+        this.delIsAnimated = false
       },
       updateAddedUsers (users) {
         this.addedUsers = users
       },
+      updateRemovedUsers (users) {
+        this.addedUsers = users
+      },
       getInfo (data) {
-        this.members = data
+        this.userCount = data.count
+        if (data.hasOwnProperty('users')) {
+          this.members = data.users
+        }
+      },
+      addToRemoveUsersList (elem, index) {
+        this.members.splice(index, 1)
+        this.removedUsers.push(elem)
+      },
+      returnToUsersList (elem, index) {
+        this.removedUsers.splice(index, 1)
+        this.members.unshift(elem)
       }
     },
     beforeRouteEnter (to, from, next) {

@@ -3,3 +3,47 @@
     min-height:70px;
   }
 }
+
+#group_members_list>.card, .list-group-item{
+  .button-list-close{
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    overflow: hidden;
+    float: right;
+    padding: 1rem 0 0 0;
+    margin: 0;
+  }
+
+  .button-list-close:before, .button-list-close:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    background: #5dc282;
+
+    height: 2px;
+    margin-top: -1px;
+  }
+
+  .button-list-close:before {
+    transform: rotate(45deg);
+  }
+  .button-list-close:after {
+    transform: rotate(-45deg);
+  }
+}
+
+#group_members_list>.card, .list-group-item {
+  p {
+    padding: 1rem 0 0 0;
+  }
+}
+
+#member_edit_preview {
+  margin-top:1.5rem;
+  clear:both;
+}

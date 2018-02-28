@@ -51,7 +51,22 @@ class Group extends Model implements GroupInterface
 
     public function getMembers($groupName)
     {
-        return $this->createModel()->newQuery()->select(['full_name','username'])->groupMember()->user()->where('group_name', '=', $groupName);
+        $model = $this->createModel();
+        $count = $model->newQuery()->select(\DB::raw('count(group_members.user_id) as c'))->groupMember()->user()->where('group_name',
+            '=', $groupName)->pluck('c')->pop();
+        if ($count > 25) {
+            return ['count' => $count];
+        } else {
+            return [
+                'count' => $count,
+                'users' =>
+                    $this->createModel()->newQuery()->select(['full_name as text', 'username as id'])
+                        ->groupMember()->user()->where('group_name', '=', $groupName)
+                        ->orderBy('last_name','asc')->get()
+            ];
+
+        }
+
 
     }
 }

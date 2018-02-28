@@ -69,7 +69,7 @@ class Group extends Controller
      */
     public function members($groupName,GroupProvider $groupProvider)
     {
-        return response($groupProvider->getMembers($groupName)->get(), Response::HTTP_OK);
+        return response($groupProvider->getMembers($groupName), Response::HTTP_OK);
     }
 
 

@@ -16,6 +16,7 @@ return [
         'settings' => 'Settings',
         'profile' => 'Profile',
         'save' => 'Save',
+        'save_changes' => 'Save Changes',
         'update' => 'Update',
         'logout' => 'Logout',
         'login' => 'Log In',

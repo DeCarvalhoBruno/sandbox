@@ -3,18 +3,16 @@
         <div class="form-control input-tag">
             <span class="badge badge-pill badge-light"
                   v-for="(badge, index) in tagBadges"
-                  :key="index"
-            >
+                  :key="index">
                 <span v-html="badge"></span>
-
-                <i href="#" class="tag-remove" @click.prevent="removeTag(index)"></i>
+                <i href="#" class="button-badge-close" @click.prevent="removeTag(index)"></i>
             </span>
-
             <input type="text"
                    :placeholder="dataPlaceholder"
                    v-model="input"
                    ref="search"
                    @focus="dataPlaceholder=''"
+                   @blur="dataPlaceholder=placeholder"
                    @keypress.enter.prevent="tagFromInput"
                    @keypress.backspace="removeLastTag"
                    @keypress.down="nextSearchResult"
@@ -24,8 +22,7 @@
                    @value="tags">
             <input type="hidden" :name="elementId" :id="elementId" v-model="hiddenInput">
         </div>
-
-        <p v-show="searchResults.length" class="typeahead">
+        <p v-show="searchResults.length" class="search-results-area">
             <span v-for="(tag, index) in searchResults"
                   :key="index"
                   v-text="tag.text"
@@ -96,10 +93,7 @@
       tags () {
         // Updating the hidden input
         this.hiddenInput = this.tags.join(',')
-
-        // Update the bound v-model value
-        // this.$emit('input', this.tags)
-        this.$emit('updateAddedUsers',this.tagBag)
+        this.$emit('updateAddedItems',this.tagBag)
       }
     },
 
