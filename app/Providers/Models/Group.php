@@ -1,6 +1,8 @@
 <?php namespace App\Providers\Models;
 
 use App\Contracts\Models\Group as GroupInterface;
+use App\Events\UpdatedGroups;
+use App\Models\GroupMember;
 use App\Support\MysqlRawQueries;
 
 /**
@@ -90,20 +92,37 @@ class Group extends Model implements GroupInterface
             ->get();
     }
 
+    /**
+     * @param string $groupName
+     * @param \StdClass $data
+     */
     public function updateMembers($groupName, $data)
     {
+        if (is_null($data->added) && is_null($data->removed)) {
+            return;
+        }
         $model = $this->createModel();
+        $groupId = $model->newQuery()->select('group_id')
+            ->where('group_name', '=', $groupName)->pluck('group_id')->pop();
         if (!is_null($data->added)) {
-            $user = new \App\Models\User();
-//            $userIds = $user->newQueryWithoutScopes()->select(['user_id'])->whereIn('username',
-//                $data->added)->pluck('user_id');
             $userIds = MysqlRawQueries::getUsersInArrayNotInGroup($data->added, $groupName);
-
+            if (is_int($groupId)) {
+                $groupMembers = [];
+                foreach ($userIds as $userId) {
+                    $groupMembers[] = ['user_id' => $userId, 'group_id' => $groupId];
+                }
+                (new GroupMember())->insert($groupMembers);
+            }
         }
 
         if (!is_null($data->removed)) {
-
+            $userIds = (new \App\Models\User)->newQueryWithoutScopes()->select(['user_id'])
+                ->whereIn('username', $data->removed)
+                ->pluck('user_id')->toArray();
+            if (!is_null($userIds) && !empty($userIds)) {
+                GroupMember::query()->whereIn('user_id', $userIds)->delete();
+            }
         }
-
+        event(new UpdatedGroups);
     }
 }

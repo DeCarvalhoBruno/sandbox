@@ -52,9 +52,11 @@ class Permissions extends Migration
             $table->boolean('permission_is_default')->default(false);
 
             $table->foreign('permission_store_id')
-                ->references('permission_store_id')->on('permission_stores');
+                ->references('permission_store_id')->on('permission_stores')
+                ->onDelete('cascade');
             $table->foreign('permission_holder_id')
-                ->references('entity_type_id')->on('entity_types');
+                ->references('entity_type_id')->on('entity_types')
+                ->onDelete('cascade');
             $table->index(['permission_store_id', 'permission_holder_id'], 'idx_permission_masks');
         });
 
@@ -69,7 +71,8 @@ class Permissions extends Migration
             $table->foreign('permission_target_id')
                 ->references('entity_type_id')->on('entity_types');
             $table->foreign('permission_store_id')
-                ->references('permission_store_id')->on('permission_stores');
+                ->references('permission_store_id')->on('permission_stores')
+                ->onDelete('cascade');
             $table->index(['entity_id', 'permission_target_id', 'permission_store_id'], 'idx_permission_store_records');
         });
 

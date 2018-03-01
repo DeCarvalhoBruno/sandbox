@@ -24,11 +24,24 @@ abstract class Permission
      * @var int
      */
     protected $entityId;
+    /**
+     * @var array
+     */
+    private static $permissionBoundEntities=[
+      User::class,
+      Group::class,
+    ];
 
     protected function __construct($modelClass, $entityId)
     {
         $this->fullPermissionsBitmask = array_sum(forward_static_call([$modelClass, 'getConstants'], 'PERMISSION'));
         $this->entityId = $entityId;
+    }
+
+    public static function assignToAll(){
+        foreach(self::$permissionBoundEntities as $permissionObject){
+            (new $permissionObject)->assignPermissions();
+        }
     }
 
     /**
@@ -47,7 +60,8 @@ abstract class Permission
         $usersWithPermissions = $tmp = [];
         foreach ($dbEntries as $dbEntry) {
             //Query does two left joins, so users without groups appear with a null group.
-            //This "if" is for users without groups who have individual permissions assigned to them
+            //This "if" is for users who have individual permissions assigned to them.
+            //Individual permissions bypass group permissions.
             if (!is_null($dbEntry->group_user_id) && (!isset($tmp[$dbEntry->group_user_id]))) {
                 $dbEntry->user_id = $dbEntry->group_user_id;
                 $usersWithPermissions[$dbEntry->group_user_id] = $dbEntry;
