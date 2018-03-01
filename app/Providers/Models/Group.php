@@ -1,6 +1,7 @@
 <?php namespace App\Providers\Models;
 
 use App\Contracts\Models\Group as GroupInterface;
+use App\Support\MysqlRawQueries;
 
 /**
  * @method \App\Models\Group createModel(array $attributes = [])
@@ -10,6 +11,11 @@ class Group extends Model implements GroupInterface
 {
     protected $model = \App\Models\Group::class;
 
+    /**
+     * @param string $groupName
+     * @param array $columns
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function getOneByName($groupName, $columns = ['*'])
     {
         return $this->createModel()->newQuery()->select($columns)->where('group_name', '=', $groupName);
@@ -49,6 +55,10 @@ class Group extends Model implements GroupInterface
             ->update($this->filterFillables($data));
     }
 
+    /**
+     * @param $groupName
+     * @return array
+     */
     public function getMembers($groupName)
     {
         $model = $this->createModel();
@@ -62,11 +72,38 @@ class Group extends Model implements GroupInterface
                 'users' =>
                     $this->createModel()->newQuery()->select(['full_name as text', 'username as id'])
                         ->groupMember()->user()->where('group_name', '=', $groupName)
-                        ->orderBy('last_name','asc')->get()
+                        ->orderBy('last_name', 'asc')->get()
             ];
+        }
+    }
+
+    /**
+     * @param string $groupName
+     * @param string $search
+     * @return \App\Models\Group[]
+     */
+    public function searchMembers($groupName, $search)
+    {
+        return $this->createModel()->newQuery()->select(['full_name as text', 'username as id'])
+            ->groupMember()->user()->where('group_name', '=', $groupName)
+            ->where('full_name', 'like', sprintf('%%%s%%', $search))
+            ->get();
+    }
+
+    public function updateMembers($groupName, $data)
+    {
+        $model = $this->createModel();
+        if (!is_null($data->added)) {
+            $user = new \App\Models\User();
+//            $userIds = $user->newQueryWithoutScopes()->select(['user_id'])->whereIn('username',
+//                $data->added)->pluck('user_id');
+            $userIds = MysqlRawQueries::getUsersInArrayNotInGroup($data->added, $groupName);
 
         }
 
+        if (!is_null($data->removed)) {
+
+        }
 
     }
 }

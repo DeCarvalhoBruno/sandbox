@@ -51,7 +51,8 @@
       },
       oldTags: [Array, String],
       typeahead: Boolean,
-      placeholder: String
+      placeholder: String,
+      searchUrl:String,
     },
 
     data () {
@@ -170,7 +171,7 @@
           }
 
           this.lastSearchTime = now
-          if (this.oldInput != this.input) {
+          if (this.oldInput !== this.input) {
             this.$emit('searching')
             this.searchResults = await this.searchTerm(this.input)
             this.$emit('searched')
@@ -193,7 +194,7 @@
       },
 
       async searchTerm (term) {
-        let {data} = await axios.get(`/ajax/admin/users/search/${term}`)
+        let {data} = await axios.get(this.searchUrl+term)
         return data
       },
 

@@ -29,7 +29,10 @@ class Admin
             $r->get('groups', 'Group@index')->middleware('can:view,App\Models\Group');
             $r->get('groups/{group}', 'Group@edit')->middleware('can:update,App\Models\Group');
             $r->patch('groups/{group}/update', 'Group@update')->middleware('can:update,App\Models\Group');
-            $r->get('groups/{group}/members', 'Group@members')->middleware('can:view,App\Models\Group');
+
+            $r->get('members/{group}/search/{search}', 'GroupMember@search')->middleware('can:view,App\Models\Group');
+            $r->get('members/{group}', 'GroupMember@index')->middleware('can:view,App\Models\Group');
+            $r->patch('members/{group}', 'GroupMember@update')->middleware('can:view,App\Models\Group');
         };
     }
 }

@@ -2,13 +2,19 @@
     <div class="card">
         <div class="card-body">
             <div class="card-title">
-                <button class="btn btn-primary float-right" :disabled="removedUsers.length===0&&addedUsers.length===0">
-                    {{$t('general.save_changes')}}
-                </button>
+
+                <form @submit.prevent="update">
+                    <input type="hidden" name="added_users" v-model="form.added">
+                    <input type="hidden" name="removed_users" v-model="form.removed">
+                    <button class="btn btn-primary float-right"
+                            :disabled="removedUsers.length===0&&addedUsers.length===0">
+                        {{$t('general.save_changes')}}
+                    </button>
+                </form>
                 <h5>{{$t('pages.members.group_name')}}&nbsp;{{this.$route.params.group}}
                 </h5>
             </div>
-            <div id="member_edit_preview" class="card">
+            <div id="member_edit_preview" class="card mb-3">
                 <div class="card-header">
                     {{$t('pages.members.edit_preview')}}
                 </div>
@@ -19,7 +25,7 @@
                                 <p>{{$t('pages.members.user_add_tag')}}</p>
                             </div>
                             <div class="row">
-                                <ul v-if="addedUsers.length>0" class="list-group">
+                                <ul v-if="addedUsers.length>0" class="list-group col-md-6">
                                     <li v-for="addedUser in addedUsers"
                                         class="list-group-item list-group-item-action list-group-item-success">
                                         {{addedUser.text}}
@@ -32,11 +38,11 @@
                             <div class="row">
                                 <p>{{$t('pages.members.user_remove_tag')}}</p>
                             </div>
-                            <ul v-if="removedUsers.length>0" class="list-group">
+                            <ul v-if="removedUsers.length>0" class="list-group col-md-6">
                                 <li v-for="(removedUser,idx) in removedUsers" :key="idx"
                                     class="list-group-item list-group-item-action list-group-item-danger">
                                     {{removedUser.text}}
-                                    <i href="#" class="button-list-close"
+                                    <i v-if="userCount<=userCountThreshold" href="#" class="button-list-close"
                                        @click="returnToUsersList(removedUser,idx)"></i>
                                 </li>
                             </ul>
@@ -58,6 +64,7 @@
                         <div class="input-tag-container col-md-8">
                             <input-tag :typeahead="true"
                                        :placeholder="$t('pages.members.member_search')"
+                                       :searchUrl="'/ajax/admin/users/search/'"
                                        @searching="addSearching"
                                        @searched="addSearched"
                                        @updateAddedItems="updateAddedUsers"/>
@@ -70,19 +77,20 @@
                     {{$t('pages.members.remove_members')}}
                 </div>
                 <div class="card-body">
-                    <div class="row" v-if="this.userCount>5">
+                    <div class="row" v-if="userCount>userCountThreshold">
                         <div class="search-spinner-wrapper">
                             <fa icon="cog" size="lg" :spin="delIsAnimated"/>
                         </div>
                         <div class="input-tag-container col-md-8">
                             <input-tag :typeahead="true"
                                        :placeholder="$t('pages.members.member_search')"
+                                       :searchUrl="`/ajax/admin/members/${this.$route.params.group}/search/`"
                                        @searching="delSearching"
                                        @searched="delSearched"
                                        @updateAddedItems="updateRemovedUsers"/>
                         </div>
                     </div>
-                    <div v-else-if="this.userCount>0">
+                    <div v-else-if="userCount>0">
                         <div class="container row">
                             <p>{{$t('pages.members.current_members')}}</p>
                         </div>
@@ -120,7 +128,12 @@
         addedUsers: [],
         removedUsers: [],
         members: [],
-        userCount: 0
+        userCount: 0,
+        userCountThreshold: 25,
+        form:{
+          removed:[],
+          added:[]
+        }
       }
     },
     methods: {
@@ -140,7 +153,7 @@
         this.addedUsers = users
       },
       updateRemovedUsers (users) {
-        this.addedUsers = users
+        this.removedUsers = users
       },
       getInfo (data) {
         this.userCount = data.count
@@ -151,14 +164,20 @@
       addToRemoveUsersList (elem, index) {
         this.members.splice(index, 1)
         this.removedUsers.push(elem)
+        this.form.removed = this.removedUsers
       },
       returnToUsersList (elem, index) {
         this.removedUsers.splice(index, 1)
         this.members.unshift(elem)
+        this.form.removed = this.removedUsers
+      },
+      update (e) {
+        axios.patch(`/ajax/admin/members/${this.$route.params.group}`,this.form)
+
       }
     },
     beforeRouteEnter (to, from, next) {
-      axios.get(`/ajax/admin/groups/${to.params.group}/members`).then(({data}) => {
+      axios.get(`/ajax/admin/members/${to.params.group}`).then(({data}) => {
         next(vm => vm.getInfo(data))
       })
     }

@@ -42,7 +42,8 @@ class User extends Model implements UserProvider, UserInterface
     public function updateOneUser($model, $field, $value, $data)
     {
         $user = $this->createModel()->newQuery()->select('person_id')->where($field, $value)->first();
-        $this->person->createModel()->where('person_id', $user->person_id)->update($this->person->filterFillables($data));
+        $this->person->createModel()->where('person_id',
+            $user->person_id)->update($this->person->filterFillables($data));
 
         return $model->newQueryWithoutScopes()->where($field, $value)
             ->update($this->filterFillables($data));
@@ -182,15 +183,20 @@ class User extends Model implements UserProvider, UserInterface
         return $this->hasher->check($plain, $user->getAuthPassword());
     }
 
-    public function search($search,$userEntityId)
+    /**
+     * @param string $search
+     * @param int $userEntityId
+     * @return mixed
+     */
+    public function search($search, $userEntityId)
     {
         return $this->createModel()->newQuery()
-            ->select(['full_name as text','username as id'])
+            ->select(['full_name as text', 'username as id'])
             ->entityType()
             ->permissionRecord()
             ->permissionStore()
             ->permissionMask($userEntityId)
-            ->where('full_name','like',sprintf('%%%s%%',$search))
+            ->where('full_name', 'like', sprintf('%%%s%%', $search))
             ->limit(5);
     }
 

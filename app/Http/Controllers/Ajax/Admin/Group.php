@@ -47,7 +47,7 @@ class Group extends Controller
      */
     public function edit($groupName, GroupProvider $groupProvider)
     {
-        return $groupProvider->getOneByName($groupName,['group_name','group_mask'])->first();
+        return $groupProvider->getOneByName($groupName, ['group_name', 'group_mask'])->first();
     }
 
     /**
@@ -61,16 +61,5 @@ class Group extends Controller
         $groupProvider->updateOneByName($groupName, $request->all());
         return response(null, Response::HTTP_NO_CONTENT);
     }
-
-    /**
-     * @param string $groupName
-     * @param \App\Contracts\Models\Group|\App\Providers\Models\Group $groupProvider
-     * @return \Illuminate\Http\Response
-     */
-    public function members($groupName,GroupProvider $groupProvider)
-    {
-        return response($groupProvider->getMembers($groupName), Response::HTTP_OK);
-    }
-
 
 }
