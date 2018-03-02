@@ -75,7 +75,6 @@ class Permissions extends Migration
                 ->onDelete('cascade');
             $table->index(['entity_id', 'permission_target_id', 'permission_store_id'], 'idx_permission_store_records');
         });
-
         $this->seedPermissions();
         $this->seedPermissionActions();
     }

@@ -10,7 +10,7 @@ class UpdateGroup extends FormRequest
     {
         return [
             'group_name' => 'required|regex:/^(\w){1,15}$/|unique:groups,group_name',
-            'group_mask' => 'required|integer|min:2000',
+            'group_mask' => 'required|integer|min:100',
         ];
     }
 }

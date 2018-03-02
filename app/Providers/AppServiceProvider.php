@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Contracts\RawQueries;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use App\Contracts\Models as I;
@@ -24,7 +25,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->make('view')->composer('admin.layouts.default', \App\Composers\Admin::class);
 
-        Schema::defaultStringLength(191);
+        if (app()->environment() == 'local') {
+            Schema::defaultStringLength(191);
+        }
+
     }
 
     /**
@@ -36,7 +40,8 @@ class AppServiceProvider extends ServiceProvider
     {
         foreach ($this->bindings as $interface) {
             $this->app->bind($interface, str_replace('\\Contracts', '\\Providers', $interface));
-
         }
+        $dbDefaultEngine = ucfirst(config('database.default'));
+        $this->app->bind(RawQueries::class, sprintf('\\App\\Support\\Database\\%sRawQueries', $dbDefaultEngine));
     }
 }

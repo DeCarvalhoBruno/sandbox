@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers\Admin;
 
+use App\Contracts\RawQueries;
 use App\Filters\User as UserFilter;
 use App\Http\Controllers\Controller;
 use App\Providers\Models\User as UserProvider;
@@ -20,6 +21,7 @@ class Admin extends Controller
 //        $f=PermissionMask::getDefaultPermission(7,Entity::USERS);
 //        dd($f);
 //        dd(5&\App\Models\User::PERMISSION_ADD);
+//        $userIds = MysqlRawQueries::getUsersInArrayNotInGroup($data->added, $groupName);
         return view('admin.layouts.test');
     }
 

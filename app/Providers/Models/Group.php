@@ -1,6 +1,7 @@
 <?php namespace App\Providers\Models;
 
 use App\Contracts\Models\Group as GroupInterface;
+use App\Contracts\RawQueries;
 use App\Events\UpdatedGroups;
 use App\Models\GroupMember;
 use App\Support\MysqlRawQueries;
@@ -82,14 +83,15 @@ class Group extends Model implements GroupInterface
     /**
      * @param string $groupName
      * @param string $search
+     * @param int $limit
      * @return \App\Models\Group[]
      */
-    public function searchMembers($groupName, $search,$limit=10)
+    public function searchMembers($groupName, $search, $limit = 10)
     {
         return $this->createModel()->newQuery()->select(['full_name as text', 'username as id'])
             ->groupMember()->user()->where('group_name', '=', $groupName)
             ->where('full_name', 'like', sprintf('%%%s%%', $search))
-            ->limit(10)->get();
+            ->limit($limit)->get();
     }
 
     /**
@@ -105,7 +107,9 @@ class Group extends Model implements GroupInterface
         $groupId = $model->newQuery()->select('group_id')
             ->where('group_name', '=', $groupName)->pluck('group_id')->pop();
         if (!empty($data->added) && is_int($groupId)) {
-            $userIds = MysqlRawQueries::getUsersInArrayNotInGroup($data->added, $groupName);
+            /** @var \App\Support\Database\MysqlRawQueries $rawQueries */
+            $rawQueries = app()->make(RawQueries::class);
+            $userIds = $rawQueries->getUsersInArrayNotInGroup($data->added, $groupName);
             if (is_int($groupId)) {
                 $groupMembers = [];
                 foreach ($userIds as $userId) {

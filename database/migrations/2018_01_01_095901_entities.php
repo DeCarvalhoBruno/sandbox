@@ -7,6 +7,9 @@ use App\Models\Entity;
 
 class Entities extends Migration
 {
+
+    private $entityPrimaryKeyColumns = [];
+
     /**
      * Run the migrations.
      *
@@ -32,9 +35,9 @@ class Entities extends Migration
         $this->addEntities();
         $this->entityTypes();
         $this->createEntities();
-        if (app()->environment() != 'testing') {
-            $this->createTriggers();
-        }
+//        if (app()->environment() != 'testing') {
+        $this->createTriggers();
+//        }
         $this->createGroups();
 
     }
@@ -129,46 +132,23 @@ class Entities extends Migration
     private function createTriggers()
     {
         $entities = $this->entities;
+        $db = app()->make(\App\Contracts\RawQueries::class);
         //We don't want the first element in that list, it doesn't match a db table.
         foreach ($entities as $entity) {
             if (!isset($this->entityPrimaryKeyColumns[$entity['entity_name']]) || $entity['entity_name'] == 'system') {
                 continue;
             }
-            \DB::unprepared(sprintf('
-                CREATE TRIGGER t_create_entity_type_%1$s AFTER INSERT ON %1$s
-                    FOR EACH ROW
-                        BEGIN
-                            DECLARE var_entity INTEGER;
-                            SELECT entity_id INTO var_entity from entities WHERE entity_name="%1$s";
-                            INSERT into entity_types(entity_id,entity_type_target_id) VALUES (var_entity,NEW.%2$s);
-                        END
-                        ', $entity['entity_name'],
-                    $this->entityPrimaryKeyColumns[$entity['entity_name']])
+            $db->triggerCreateEntityType(
+                $entity['entity_name'],
+                $this->entityPrimaryKeyColumns[$entity['entity_name']]
             );
-            \DB::unprepared(sprintf('
-                CREATE TRIGGER t_delete_entity_type_%1$s AFTER DELETE ON %1$s
-                    FOR EACH ROW
-                        BEGIN
-                            DELETE FROM entity_types WHERE entity_type_target_id=OLD.%2$s;
-                        END
-                        ', $entity['entity_name'],
-                    $this->entityPrimaryKeyColumns[$entity['entity_name']])
+            $db->triggerDeleteEntityType(
+                $entity['entity_name'],
+                $this->entityPrimaryKeyColumns[$entity['entity_name']]
             );
         }
-        \DB::unprepared('
-                CREATE TRIGGER t_people_create_fullname BEFORE INSERT ON people
-                    FOR EACH ROW 
-                    BEGIN
-                      SET NEW.full_name = CONCAT(NEW.first_name, " ", NEW.last_name);
-                    END
-        ');
-        \DB::unprepared('
-                CREATE TRIGGER t_people_update_fullname BEFORE UPDATE ON people
-                    FOR EACH ROW 
-                    BEGIN
-                      SET NEW.full_name = CONCAT(NEW.first_name, " ", NEW.last_name);
-                    END
-        ');
+        $db->triggerUserFullName();
+
     }
 
     private function createEntities()

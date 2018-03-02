@@ -20,8 +20,8 @@ class UpdateMember extends FormRequest
 
     private function extractUsers($data)
     {
-        return (!is_null($data)) ? array_map(function ($v) {
+        return (!is_null($data)) ? array_filter(array_map(function ($v) {
             return isset($v['id']) ? $v['id'] : null;
-        }, $data) : null;
+        }, $data)) : null;
     }
 }
