@@ -67,7 +67,7 @@
                                        :searchUrl="'/ajax/admin/users/search/'"
                                        @searching="addSearching"
                                        @searched="addSearched"
-                                       @updateAddedItems="updateAddedUsers"/>
+                                       @updateAddedItems="updateAddedUsersFromSearch"/>
                         </div>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                                        :searchUrl="`/ajax/admin/members/${this.$route.params.group}/search/`"
                                        @searching="delSearching"
                                        @searched="delSearched"
-                                       @updateAddedItems="updateRemovedUsers"/>
+                                       @updateAddedItems="updateRemovedUsersFromSearch"/>
                         </div>
                     </div>
                     <div v-else-if="userCount>0">
@@ -130,9 +130,9 @@
         members: [],
         userCount: 0,
         userCountThreshold: 25,
-        form:{
-          removed:[],
-          added:[]
+        form: {
+          removed: [],
+          added: []
         }
       }
     },
@@ -149,11 +149,13 @@
       delSearched () {
         this.delIsAnimated = false
       },
-      updateAddedUsers (users) {
+      updateAddedUsersFromSearch (users) {
         this.addedUsers = users
+        this.form.added = this.addedUsers
       },
-      updateRemovedUsers (users) {
+      updateRemovedUsersFromSearch (users) {
         this.removedUsers = users
+        this.form.removed = this.removedUsers
       },
       getInfo (data) {
         this.userCount = data.count
@@ -172,7 +174,10 @@
         this.form.removed = this.removedUsers
       },
       update (e) {
-        axios.patch(`/ajax/admin/members/${this.$route.params.group}`,this.form)
+        axios.patch(`/ajax/admin/members/${this.$route.params.group}`, this.form).then(() => {
+          this.$store.dispatch('session/setMessageSuccess', this.$t('message.group_update_ok'))
+          this.$router.push({name: 'admin.groups.index'})
+        })
 
       }
     },

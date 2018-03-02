@@ -67,7 +67,7 @@
       async save () {
         try {
           const {data} = await this.form.patch(`/ajax/admin/groups/${this.group}/update`)
-          this.$store.dispatch('session/setMessage',this.$t('message.group_update_ok'))
+          this.$store.dispatch('session/setMessageSuccess',this.$t('message.group_update_ok'))
           this.$router.push({name: 'admin.groups.index'})
         } catch (e) {
 

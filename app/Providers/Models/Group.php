@@ -84,12 +84,12 @@ class Group extends Model implements GroupInterface
      * @param string $search
      * @return \App\Models\Group[]
      */
-    public function searchMembers($groupName, $search)
+    public function searchMembers($groupName, $search,$limit=10)
     {
         return $this->createModel()->newQuery()->select(['full_name as text', 'username as id'])
             ->groupMember()->user()->where('group_name', '=', $groupName)
             ->where('full_name', 'like', sprintf('%%%s%%', $search))
-            ->get();
+            ->limit(10)->get();
     }
 
     /**
@@ -98,13 +98,13 @@ class Group extends Model implements GroupInterface
      */
     public function updateMembers($groupName, $data)
     {
-        if (is_null($data->added) && is_null($data->removed)) {
+        if (empty($data->added) && empty($data->removed)) {
             return;
         }
         $model = $this->createModel();
         $groupId = $model->newQuery()->select('group_id')
             ->where('group_name', '=', $groupName)->pluck('group_id')->pop();
-        if (!is_null($data->added)) {
+        if (!empty($data->added) && is_int($groupId)) {
             $userIds = MysqlRawQueries::getUsersInArrayNotInGroup($data->added, $groupName);
             if (is_int($groupId)) {
                 $groupMembers = [];
@@ -115,7 +115,7 @@ class Group extends Model implements GroupInterface
             }
         }
 
-        if (!is_null($data->removed)) {
+        if (!empty($data->removed) && is_int($groupId)) {
             $userIds = (new \App\Models\User)->newQueryWithoutScopes()->select(['user_id'])
                 ->whereIn('username', $data->removed)
                 ->pluck('user_id')->toArray();

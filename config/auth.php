@@ -98,4 +98,6 @@ return [
         ],
     ],
 
+    'root_password'=>env('ROOT_PASSWORD')
+
 ];

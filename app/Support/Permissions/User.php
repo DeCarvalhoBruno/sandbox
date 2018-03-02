@@ -35,8 +35,6 @@ class User extends Permission
      */
     private function populateDb()
     {
-        \DB::beginTransaction();
-
         //There is only one default permission, which allows us not to have to create X times X permissions for everyone.
         $default = $this->default->get();
         $defaultPermissionStoreId = (new PermissionStore)->insertGetId([]);
@@ -79,7 +77,6 @@ class User extends Permission
         }
         (new PermissionRecord)->insert($permissionRecords);
 
-        \DB::commit();
         unset($this->allUsersInfo);
     }
 

@@ -1,7 +1,6 @@
 <?php namespace App\Support\Permissions;
 
 use App\Models\Entity;
-use App\Models\GroupMember;
 use App\Models\PermissionMask;
 use App\Models\PermissionRecord;
 use App\Models\PermissionStore;
@@ -34,7 +33,6 @@ class Group extends Permission
         }
         unset($users);
 
-//        dd($usersWithPermissions, $groups,$userInfo);
         $permissionMasks = $permissionRecords = [];
         foreach ($usersWithPermissions as $userWithPermission) {
             $permissionStoreId = (new PermissionStore())->insertGetId([]);
@@ -54,7 +52,6 @@ class Group extends Permission
             foreach ($usersWithPermissions as $userWithPermission) {
                 if ($userInfo[$userWithPermission->user_id]->group_mask < $group->getAttribute('group_mask')) {
                     $permissionStoreId = (new PermissionStore())->insertGetId([]);
-//                    $permissionStoreId = 1;
                     $permissionMasks[] = [
                         'permission_store_id' => $permissionStoreId,
                         'permission_holder_id' => $userInfo[$userWithPermission->user_id]->entity_type_id,
@@ -71,7 +68,6 @@ class Group extends Permission
         }
         (new PermissionRecord)->insert($permissionRecords);
         (new PermissionMask)->insert($permissionMasks);
-//        dd($permissionRecords, $permissionMasks);
     }
 
     private function sqlGetGroups()

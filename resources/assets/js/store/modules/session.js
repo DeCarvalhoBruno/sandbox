@@ -2,7 +2,7 @@ import * as types from '../mutation-types'
 
 export const state = {
   message: null,
-  variant: null
+  variant: 'success'
 }
 
 export const getters = {
@@ -12,14 +12,14 @@ export const getters = {
 }
 
 export const mutations = {
-  [types.SET_MESSAGE] (state, message, variant) {
-    state.message = message
-    state.variant = variant
+  [types.SET_MESSAGE] (state, data) {
+    state.message = data.message
+    state.variant = data.variant
   }
 }
 
 export const actions = {
-  setMessage ({commit}, message, variant = 'success') {
-    commit(types.SET_MESSAGE, message, variant)
+  setMessageSuccess ({commit}, message) {
+    commit(types.SET_MESSAGE, {message, variant: 'success'})
   }
 }
