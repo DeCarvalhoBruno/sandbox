@@ -22,6 +22,49 @@ abstract class RawQueries
         }, $userIds);
     }
 
+    public function getAllUserPermissions($entityTypeId)
+    {
+        $results = \DB::select(
+            '
+                (
+                  SELECT
+                    permissions.entity_type_id,
+                    permission_mask,
+                    entities.entity_id,
+                    "default" AS "type"
+                  FROM permissions
+                    JOIN entities ON permissions.entity_id = entities.entity_id AND permissions.entity_type_id IN (
+                      SELECT et_group.entity_type_id
+                      FROM group_members
+                        JOIN entity_types et_user
+                          ON et_user.entity_type_target_id = group_members.user_id AND et_user.entity_type_id = ?
+                        JOIN entity_types et_group ON et_group.entity_type_target_id = group_members.group_id
+                      GROUP BY group_members.group_id)
+                )
+                UNION
+                (
+                  SELECT
+                    permission_masks.permission_holder_id AS entity_type_id,
+                    permission_masks.permission_mask,
+                    entities.entity_id,
+                    "computed" AS "type"
+                  FROM permission_masks
+                    JOIN permission_stores ON permission_masks.permission_store_id = permission_stores.permission_store_id AND
+                                              permission_masks.permission_holder_id = ? AND permission_is_default = 1
+                    JOIN permission_records ON permission_stores.permission_store_id = permission_records.permission_store_id
+                    JOIN entities ON entities.entity_id = permission_records.entity_id
+                  GROUP BY permission_masks.permission_store_id,permission_masks.permission_mask,permission_masks.permission_holder_id,entities.entity_id,type
+                )
+           ', [$entityTypeId, $entityTypeId]
+        );
+        $permission = [];
+        foreach ($results as $result) {
+            $permission[$result->type][] = $result;
+        }
+        return $permission;
+
+    }
+
     public function triggerCreateEntityType($name, $primaryKey)
     {
         \DB::unprepared(

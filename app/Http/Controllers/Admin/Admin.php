@@ -18,10 +18,9 @@ class Admin extends Controller
 //        (new \App\Support\Permissions\User)->assignPermissions();
 //        (new \App\Support\Permissions\Group)->assignPermissions();
 
-//        $f=PermissionMask::getDefaultPermission(7,Entity::USERS);
-//        dd($f);
-//        dd(5&\App\Models\User::PERMISSION_ADD);
-//        $userIds = MysqlRawQueries::getUsersInArrayNotInGroup($data->added, $groupName);
+$f = app()->make(RawQueries::class);
+dd($f->getAllUserPermissions(7));
+
         return view('admin.layouts.test');
     }
 

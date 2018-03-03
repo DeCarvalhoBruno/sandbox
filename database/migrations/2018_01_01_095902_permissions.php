@@ -92,11 +92,11 @@ class Permissions extends Migration
                 'entity_id' => \App\Models\Entity::GROUPS,
                 'permission_mask' => 0b1111
             ],
-            [
-                'entity_type_id' => 3,
-                'entity_id' => \App\Models\Entity::GROUP_MEMBERS,
-                'permission_mask' => 0b1010
-            ],
+//            [
+//                'entity_type_id' => 3,
+//                'entity_id' => \App\Models\Entity::GROUP_MEMBERS,
+//                'permission_mask' => 0b1010
+//            ],
             [
                 'entity_type_id' => 4,
                 'entity_id' => \App\Models\Entity::USERS,
@@ -107,11 +107,11 @@ class Permissions extends Migration
                 'entity_id' => \App\Models\Entity::GROUPS,
                 'permission_mask' => 0b1111,
             ],
-            [
-                'entity_type_id' => 4,
-                'entity_id' => \App\Models\Entity::GROUP_MEMBERS,
-                'permission_mask' => 0b1010,
-            ],
+//            [
+//                'entity_type_id' => 4,
+//                'entity_id' => \App\Models\Entity::GROUP_MEMBERS,
+//                'permission_mask' => 0b1010,
+//            ],
             [
                 'entity_type_id' => 5,
                 'entity_id' => \App\Models\Entity::USERS,
@@ -159,16 +159,16 @@ class Permissions extends Migration
                 'permission_action_bits' => 0b1000,
                 'permission_action_name' => 'delete'
             ],
-            [
-                'entity_id' => \App\Models\Entity::GROUP_MEMBERS,
-                'permission_action_bits' => 0b10,
-                'permission_action_name' => 'add'
-            ],
-            [
-                'entity_id' => \App\Models\Entity::GROUP_MEMBERS,
-                'permission_action_bits' => 0b1000,
-                'permission_action_name' => 'delete'
-            ],
+//            [
+//                'entity_id' => \App\Models\Entity::GROUP_MEMBERS,
+//                'permission_action_bits' => 0b10,
+//                'permission_action_name' => 'add'
+//            ],
+//            [
+//                'entity_id' => \App\Models\Entity::GROUP_MEMBERS,
+//                'permission_action_bits' => 0b1000,
+//                'permission_action_name' => 'delete'
+//            ],
         ]);
 
     }

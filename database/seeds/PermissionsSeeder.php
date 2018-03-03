@@ -27,16 +27,16 @@ class PermissionsSeeder extends Seeder
                 'entity_id'=>\App\Models\Entity::GROUPS,
                 'permission_mask'=>0b1101,
             ],
-            [
-                'entity_type_id'=>100,
-                'entity_id'=>\App\Models\Entity::GROUP_MEMBERS,
-                'permission_mask'=>0b1010,
-            ],
-            [
-                'entity_type_id'=>101,
-                'entity_id'=>\App\Models\Entity::GROUP_MEMBERS,
-                'permission_mask'=>0b1010,
-            ],
+//            [
+//                'entity_type_id'=>100,
+//                'entity_id'=>\App\Models\Entity::GROUP_MEMBERS,
+//                'permission_mask'=>0b1010,
+//            ],
+//            [
+//                'entity_type_id'=>101,
+//                'entity_id'=>\App\Models\Entity::GROUP_MEMBERS,
+//                'permission_mask'=>0b1010,
+//            ],
         ]);
     }
 }

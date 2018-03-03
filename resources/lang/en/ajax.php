@@ -98,7 +98,11 @@ return [
             'user_no_remove'=>'No removed members.',
             'user_none'=>'There are no members in this group.',
             'current_members'=>'The following users are members of this group:',
+        ],
+        'users'=>[
+            'tab_permissions'=>'User Permissions'
         ]
+
     ],
     'tables' => [
         'empty' => 'There is currently no data available.',

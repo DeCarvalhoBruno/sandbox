@@ -43,7 +43,8 @@ class PermissionMask extends Model
         return static::query()->select('permission_mask')
             ->permissionStore($entityTypeId)
             ->permissionRecord($entityId)
-            ->limit(1)
+            ->groupBy('permission_masks.permission_store_id')
+            ->groupBy('permission_masks.permission_mask')
             ->pluck('permission_mask')
             ->pop();
     }

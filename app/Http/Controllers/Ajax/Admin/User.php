@@ -42,7 +42,11 @@ class User extends Controller
      */
     public function edit($username, UserProvider $userProvider)
     {
-        return $userProvider->getOneByUsername($username, ['first_name', 'last_name', 'email', 'username'])->first();
+        return [
+            'user' => $userProvider->getOneByUsername($username,
+                ['first_name', 'last_name', 'email', 'username', 'full_name'])->first(),
+            'permissions'=>''
+        ];
     }
 
     /**
