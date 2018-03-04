@@ -8,11 +8,14 @@
                             <label for="new_username" class="col-md-3 col-form-label">{{$t('db.new_username')}}</label>
                             <div class="col-md-9">
                                 <input v-model="form.new_username" type="text"
-                                       name="new_username" id="new_username" class="form-control" :class="{ 'is-invalid': form.errors.has('new_username') }"
+                                       name="new_username" id="new_username" class="form-control"
+                                       :class="{ 'is-invalid': form.errors.has('new_username') }"
                                        :placeholder="$t('db.new_username')"
                                        aria-describedby="help_new_username">
                                 <has-error :form="form" field="new_username"/>
-                                <small id="help_new_username" class="text-muted">{{$t('form.description.new_username',[form.username])}}</small>
+                                <small id="help_new_username" class="text-muted">
+                                    {{$t('form.description.new_username',[form.username])}}
+                                </small>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -24,7 +27,8 @@
                                        :placeholder="$t('db.first_name')"
                                        aria-describedby="help_first_name">
                                 <has-error :form="form" field="first_name"/>
-                                <small id="help_first_name" class="text-muted">{{$t('form.description.first_name')}}</small>
+                                <small id="help_first_name" class="text-muted">{{$t('form.description.first_name')}}
+                                </small>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -36,18 +40,22 @@
                                        :placeholder="$t('db.last_name')"
                                        aria-describedby="help_last_name">
                                 <has-error :form="form" field="last_name"/>
-                                <small id="help_last_name" class="text-muted">{{$t('form.description.last_name')}}</small>
+                                <small id="help_last_name" class="text-muted">{{$t('form.description.last_name')}}
+                                </small>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="new_email" class="col-md-3 col-form-label">{{$t('db.new_email')}}</label>
                             <div class="col-md-9">
                                 <input v-model="form.new_email" type="text"
-                                       name="new_email" id="new_email" class="form-control" :class="{ 'is-invalid': form.errors.has('new_email') }"
+                                       name="new_email" id="new_email" class="form-control"
+                                       :class="{ 'is-invalid': form.errors.has('new_email') }"
                                        :placeholder="$t('db.new_email')"
                                        aria-describedby="help_new_email">
                                 <has-error :form="form" field="new_email"/>
-                                <small id="help_new_email" class="text-muted">{{$t('form.description.new_email',[form.email])}}</small>
+                                <small id="help_new_email" class="text-muted">
+                                    {{$t('form.description.new_email',[form.email])}}
+                                </small>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -61,7 +69,47 @@
                 </div>
             </b-tab>
             <b-tab :title="$t('pages.users.tab_permissions')" active>
-
+                <div class="container">
+                    <div class="callout callout-warning">
+                        <p><span class="callout-tag callout-tag-warning"><fa icon="exclamation"/></span> Setting individual permissions for this user will override permissions set on groups of which the user is a member.</p>
+                        <p>We recommend setting permissions on groups instead, and use individual user permissions to handle exceptions.</p>
+                    </div>
+                    <hr>
+                    <div>
+                        <div class="card mb-2" v-for="(permissions,entity) in this.permissions.default" :key="entity">
+                            <div class="card-header">{{entity}}</div>
+                            <div class="card-body">
+                                <table class="table table-sm">
+                                    <thead>
+                                    <tr>
+                                        <th>Permission</th>
+                                        <th>Value</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(type) in permissions.group">
+                                        <td>{{type}}</td>
+                                        <td v-if="permissions.hasOwnProperty('user')">
+                                            <button v-if="permissions.user.includes(type)"
+                                                    class="btn btn-circle btn-success">
+                                                <fa icon="check"/>
+                                            </button>
+                                            <button v-else class="btn btn-circle btn-danger">
+                                                <fa icon="times"/>
+                                            </button>
+                                        </td>
+                                        <td v-else>
+                                            <button class="btn btn-circle btn-success">
+                                                <fa icon="check"/>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </b-tab>
         </b-tabs>
     </b-card>
@@ -94,18 +142,20 @@
       return {
         form: new Form(),
         username: this.$router.currentRoute.params.user,
-        userInfo: null
+        userInfo: {},
+        permissions: {}
       }
     },
     methods: {
       getInfo (data) {
         this.form = new Form(data.user)
-        this.userInfo =data.user;
+        this.userInfo = data.user
+        this.permissions = data.permissions
       },
       async save () {
         try {
           const {data} = await this.form.patch(`/ajax/admin/users/${this.username}`)
-          this.$store.dispatch('session/setMessageSuccess',this.$t('message.user_update_ok'))
+          this.$store.dispatch('session/setMessageSuccess', this.$t('message.user_update_ok'))
           this.$router.push({name: 'admin.users.index'})
         } catch (e) {
 
@@ -113,9 +163,9 @@
       }
     },
     beforeRouteEnter (to, from, next) {
-      axios.get(`/ajax/admin/users/${to.params.user}`).then(({data})=>{
+      axios.get(`/ajax/admin/users/${to.params.user}`).then(({data}) => {
         next(vm => vm.getInfo(data))
       })
-    },
+    }
   }
 </script>

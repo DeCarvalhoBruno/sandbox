@@ -1,0 +1,24 @@
+// Background colors
+%bg-red,
+%bg-yellow,
+%bg-aqua,
+%bg-green
+ {
+  color: #fff !important;
+}
+
+%bg-red {
+  background-color: $red !important;
+}
+
+%bg-yellow {
+  background-color: $yellow !important;
+}
+
+%bg-aqua {
+  background-color: $aqua !important;
+}
+
+%bg-green {
+  background-color: $green !important;
+}

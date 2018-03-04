@@ -27,6 +27,8 @@ return [
         'email' => 'E-mail',
     ],
     'db' => [
+        'user' => 'Users',
+        'group' => 'Groups',
         'username' => 'User name',
         'first_name' => 'First name',
         'last_name' => 'Last name',
@@ -85,22 +87,22 @@ return [
             'your_password' => 'Your Password',
             'new_password' => 'New Password',
         ],
-        'members'=>[
-            'member_search'=>'Type user full name here, i.e \'Jane Doe\'',
-            'group_name'=>'Group:',
-            'edit_preview'=>'Preview',
-            'no_changes'=>'No changes so far.',
-            'add_members'=>'Add members',
-            'remove_members'=>'Remove members',
-            'user_add_tag'=>'The following users will be added:',
-            'user_no_add'=>'No added members.',
-            'user_remove_tag'=>'The following users will be removed:',
-            'user_no_remove'=>'No removed members.',
-            'user_none'=>'There are no members in this group.',
-            'current_members'=>'The following users are members of this group:',
+        'members' => [
+            'member_search' => 'Type user full name here, i.e \'Jane Doe\'',
+            'group_name' => 'Group:',
+            'edit_preview' => 'Preview',
+            'no_changes' => 'No changes so far.',
+            'add_members' => 'Add members',
+            'remove_members' => 'Remove members',
+            'user_add_tag' => 'The following users will be added:',
+            'user_no_add' => 'No added members.',
+            'user_remove_tag' => 'The following users will be removed:',
+            'user_no_remove' => 'No removed members.',
+            'user_none' => 'There are no members in this group.',
+            'current_members' => 'The following users are members of this group:',
         ],
-        'users'=>[
-            'tab_permissions'=>'User Permissions'
+        'users' => [
+            'tab_permissions' => 'User Permissions'
         ]
 
     ],

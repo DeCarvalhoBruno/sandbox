@@ -16,32 +16,77 @@ class Entity extends Model
     protected $table = 'entities';
     protected $primaryKey = 'entity_id';
     protected $fillable = ['entity_id', 'entity_name'];
+    /**
+     * @var array Used in case a specific model isn't in \App\Models
+     */
     public static $classMap = [
     ];
 
+    /**
+     * Creates an instance of the model using its entity_id
+     *
+     * @param int $entityID
+     * @param array $attributes
+     * @return \Illuminate\Database\Eloquent\Model
+     * @throws \ReflectionException
+     */
     public static function createModel($entityID, array $attributes = [])
     {
-        $class = static::getModelClassName($entityID);
+        $class = static::getModelClassNamespace($entityID);
         if (class_exists($class)) {
             return new $class($attributes);
         }
-
         return null;
     }
 
+    /**
+     * Returns the model's full namespace using its entity_id
+     * Useful for instantiating a model.
+     *
+     * @param int $entityID
+     * @return string
+     * @throws \ReflectionException
+     */
+    public static function getModelClassNamespace($entityID)
+    {
+        $className = static::getModelClass($entityID);
+        $classNamespace = sprintf('\App\Models\%s',
+            isset(static::$classMap[$className]) ?
+                static::$classMap[$className] :
+                $className);
+        if (class_exists($classNamespace)) {
+            return $classNamespace;
+        }
+        throw new \UnexpectedValueException(sprintf('Class %s does not exist. (%s)', $className, $entityID));
+    }
+
+    /**
+     * Returns the model's class name using its entity_id
+     *
+     * @param int $entityID
+     * @return null|string
+     * @throws \ReflectionException
+     */
     public static function getModelClass($entityID)
     {
         $entities = array_flip(static::getConstants());
         if (isset($entities[$entityID])) {
             return ucfirst(camel_case(str_singular(strtolower($entities[$entityID]))));
         }
-
         return null;
     }
 
+    /**
+     * Get the model's primary key using its entity_id
+     *
+     * @param int $entityID
+     * @param bool $getQualifiedName Should the table name be included in the result
+     * @return mixed
+     * @throws \ReflectionException
+     */
     public static function getModelPrimaryKey($entityID, $getQualifiedName = false)
     {
-        $class = self::getModelClassName($entityID);
+        $class = self::getModelClassNamespace($entityID);
         $instance = new $class();
         if ($getQualifiedName === false) {
             return $instance->getKeyName();
@@ -50,26 +95,18 @@ class Entity extends Model
         return $instance->getQualifiedKeyName();
     }
 
-    public static function getModelClassName($entityID)
-    {
-        $className = static::getModelClass($entityID);
-        $classPath = sprintf('\App\Models\%s',
-            isset(static::$classMap[$className]) ?
-                static::$classMap[$className] :
-                $className);
-        if (class_exists($classPath)) {
-            return $classPath;
-        }
-        throw new \UnexpectedValueException(sprintf('Class %s does not exist. (%s)', $className, $entityID));
-    }
-
-    public static function getModelSimpleName($entityID)
+    /**
+     * Get the model's presentable name, i.e 'Users', 'Groups', using its entity_id
+     * @param $entityID
+     * @return null|string
+     * @throws \ReflectionException
+     */
+    public static function getModelPresentableName($entityID)
     {
         $entities = array_flip(static::getConstants());
         if (isset($entities[$entityID])) {
             return str_singular(strtolower($entities[$entityID]));
         }
-
         return null;
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ajax\Admin;
 
 use App\Contracts\Models\User as UserProvider;
+use App\Contracts\RawQueries;
 use App\Filters\User as UserFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateUser;
@@ -24,7 +25,7 @@ class User extends Controller
                 ])->entityType()
                 ->permissionRecord()
                 ->permissionStore()
-                ->permissionMask(auth()->user()->getAttribute('entity_type_id'))
+                ->permissionMask(auth()->user()->getEntityType())
                 ->activated()
                 ->filter($userFilter)->paginate(10),
             'columns' => $userProvider->createModel()->getColumnInfo([
@@ -42,10 +43,11 @@ class User extends Controller
      */
     public function edit($username, UserProvider $userProvider)
     {
+        $f = app()->make(RawQueries::class);
         return [
             'user' => $userProvider->getOneByUsername($username,
                 ['first_name', 'last_name', 'email', 'username', 'full_name'])->first(),
-            'permissions'=>''
+            'permissions'=>$f->getAllUserPermissions(auth()->user()->getEntityType())
         ];
     }
 

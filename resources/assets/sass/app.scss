@@ -46,17 +46,20 @@
 //**********************************************
 @import "mixins";
 @import "core";
+@import "misc";
 @import "header";
-@import "sidebar";
-@import "sidebar-mini";
-@import "dropdown";
+@import "sidebar-drawer/sidebar";
+@import "sidebar-drawer/sidebar-mini";
+@import "sidebar-drawer/dropdown";
 @import "skin";
 @import "transitions";
-@import "buttons";
-@import "tables";
-@import "progress";
+@import "elements/buttons";
+@import "elements/tables";
 @import "content";
-@import "input-tag";
+@import "elements/input-tag";
+@import "widgets/callout";
+
+
 
 .navbar-laravel {
   background-color: #fff;

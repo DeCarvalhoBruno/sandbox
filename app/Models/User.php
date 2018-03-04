@@ -6,6 +6,7 @@ use App\Contracts\HasAnEntity;
 use App\Notifications\ResetPassword;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
+use App\Traits\Models\HasPermissions;
 use App\Traits\Presentable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,7 +18,7 @@ use App\Traits\Models\HasANameColumn;
 
 class User extends LaravelUser implements JWTSubject, HasAnEntity
 {
-    use Notifiable, HasAnEntityTrait, HasANameColumn, DoesSqlStuff, Enumerable, Presentable;
+    use Notifiable, HasAnEntityTrait, HasANameColumn, DoesSqlStuff, Enumerable, Presentable, HasPermissions;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;
@@ -59,6 +60,15 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity
     public function getCreatedAtAttribute($value)
     {
         return Carbon::createFromFormat('Y-m-d H:i:s', $value)->diffForHumans();
+    }
+
+    /**
+     * @return int
+     */
+    public function getEntityType()
+    {
+        return $this->getAttribute('entity_type_id');
+
     }
 
     /**

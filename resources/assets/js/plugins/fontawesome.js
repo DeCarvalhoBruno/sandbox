@@ -22,11 +22,14 @@ import {
   faAngleLeft,
   faArrowRight,
   faObjectGroup,
-  faUsers
+  faUsers,
+  faCheck,
+  faTimes,
+  faExclamation
 } from '@fortawesome/fontawesome-free-solid/shakable.es'
 
 fontawesome.library.add(
   faUser, faLock, faSignOutAlt, faCog, faAngleDoubleUp, faAngleDoubleDown,
   faTrashAlt, faPencilAlt, faBars, faTachometerAlt, faStar, faKey, faAngleLeft,
-  faArrowRight,faObjectGroup,faUsers
+  faArrowRight, faObjectGroup, faUsers, faCheck, faTimes, faExclamation
 )

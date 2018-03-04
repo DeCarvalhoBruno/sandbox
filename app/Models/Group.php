@@ -5,13 +5,14 @@ use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\HasANameColumn;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
+use App\Traits\Models\HasPermissions;
 use App\Traits\Presentable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model implements HasAnEntity
 {
-    use HasAnEntityTrait, HasANameColumn, Enumerable, Presentable, DoesSqlStuff;
+    use HasAnEntityTrait, HasANameColumn, Enumerable, Presentable, DoesSqlStuff, HasPermissions;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;
@@ -48,8 +49,8 @@ class Group extends Model implements HasAnEntity
      */
     public function scopeUser(Builder $builder)
     {
-        return $builder->join('users', 'users.user_id','=','group_members.user_id')
-            ->join('people', 'users.user_id','=','people.user_id');
+        return $builder->join('users', 'users.user_id', '=', 'group_members.user_id')
+            ->join('people', 'users.user_id', '=', 'people.user_id');
     }
 
     /**

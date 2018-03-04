@@ -1,5 +1,7 @@
 <?php namespace App\Support\Database;
 
+use App\Models\Entity;
+
 abstract class RawQueries
 {
     public function getUsersInArrayNotInGroup($testedArray, $group)
@@ -31,6 +33,7 @@ abstract class RawQueries
                     permissions.entity_type_id,
                     permission_mask,
                     entities.entity_id,
+                    et.entity_id as holder_entity,
                     "default" AS "type"
                   FROM permissions
                     JOIN entities ON permissions.entity_id = entities.entity_id AND permissions.entity_type_id IN (
@@ -40,6 +43,7 @@ abstract class RawQueries
                           ON et_user.entity_type_target_id = group_members.user_id AND et_user.entity_type_id = ?
                         JOIN entity_types et_group ON et_group.entity_type_target_id = group_members.group_id
                       GROUP BY group_members.group_id)
+                  JOIN entity_types et ON permissions.entity_type_id = et.entity_type_id
                 )
                 UNION
                 (
@@ -47,22 +51,33 @@ abstract class RawQueries
                     permission_masks.permission_holder_id AS entity_type_id,
                     permission_masks.permission_mask,
                     entities.entity_id,
+                    entities.entity_id as holder_entity,
                     "computed" AS "type"
                   FROM permission_masks
                     JOIN permission_stores ON permission_masks.permission_store_id = permission_stores.permission_store_id AND
                                               permission_masks.permission_holder_id = ? AND permission_is_default = 1
                     JOIN permission_records ON permission_stores.permission_store_id = permission_records.permission_store_id
                     JOIN entities ON entities.entity_id = permission_records.entity_id
-                  GROUP BY permission_masks.permission_store_id,permission_masks.permission_mask,permission_masks.permission_holder_id,entities.entity_id,type
+                  GROUP BY permission_masks.permission_store_id,permission_masks.permission_mask,
+                  permission_masks.permission_holder_id,entities.entity_id,type,holder_entity
                 )
            ', [$entityTypeId, $entityTypeId]
         );
         $permission = [];
         foreach ($results as $result) {
-            $permission[$result->type][] = $result;
-        }
-        return $permission;
+            $model = Entity::createModel($result->entity_id);
 
+            if ($result->type == 'computed') {
+                $permission[$result->type][trans(sprintf('ajax.db.%s',
+                    Entity::getModelPresentableName($result->entity_id)))] = $model->getReadablePermissions($result->permission_mask,
+                    true);
+            } else {
+                $permission[$result->type][trans(sprintf('ajax.db.%s',
+                    Entity::getModelPresentableName($result->entity_id)))][trans(Entity::getModelPresentableName($result->holder_entity))] = $model->getReadablePermissions($result->permission_mask,
+                    true);
+            }
+        }
+        return (object)$permission;
     }
 
     public function triggerCreateEntityType($name, $primaryKey)
