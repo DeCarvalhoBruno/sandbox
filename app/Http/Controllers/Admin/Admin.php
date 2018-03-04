@@ -17,9 +17,8 @@ class Admin extends Controller
 
     public function test(UserProvider $userProvider, UserFilter $userFilter)
     {
-        $f = app()->make(RawQueries::class);
-        dd($f->getAllUserPermissions(auth()->user()->getEntityType()));
-
+//        $f = app()->make(RawQueries::class);
+//        dd($f->getAllUserPermissions(auth()->user()->getEntityType()));
 //        $s=new Group();
 //        dd($s->getReadablePermissions(5));
 

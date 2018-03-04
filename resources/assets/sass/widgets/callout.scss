@@ -56,7 +56,7 @@
     font-size: 12px;
     line-height: 1.428571429;
     &.callout-tag-warning{
-      background-color: darken($yellow, 5%);
+      background-color: lighten($light-blue, 5%);
     }
   }
 }

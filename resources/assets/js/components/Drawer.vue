@@ -39,7 +39,6 @@
       $('.treeview>a').each(function () {
         $(this).tree()
       })
-
     }
   }
 </script>

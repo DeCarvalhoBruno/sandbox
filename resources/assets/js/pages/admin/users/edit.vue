@@ -76,7 +76,7 @@
                     </div>
                     <hr>
                     <div>
-                        <div class="card mb-2" v-for="(permissions,entity) in this.permissions.default" :key="entity">
+                        <div class="card mb-2" v-for="(permissionSet,entity) in permissions.default" :key="entity">
                             <div class="card-header">{{entity}}</div>
                             <div class="card-body">
                                 <table class="table table-sm">
@@ -87,20 +87,12 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr v-for="(type) in permissions.group">
+
+                                    <tr v-for="(value,type) in permissionSet" :key="type">
                                         <td>{{type}}</td>
-                                        <td v-if="permissions.hasOwnProperty('user')">
-                                            <button v-if="permissions.user.includes(type)"
-                                                    class="btn btn-circle btn-success">
-                                                <fa icon="check"/>
-                                            </button>
-                                            <button v-else class="btn btn-circle btn-danger">
-                                                <fa icon="times"/>
-                                            </button>
-                                        </td>
-                                        <td v-else>
-                                            <button class="btn btn-circle btn-success">
-                                                <fa icon="check"/>
+                                        <td>
+                                            <button class="btn btn-circle" :ref="entity+type" :class="[hasPermission(permissions.computed,entity,type)?'btn-success':'btn-danger']" @click="togglePermissionButton">
+                                                <fa :icon="hasPermission(permissions.computed,entity,type)?'check':'times'"/>
                                             </button>
                                         </td>
                                     </tr>
@@ -160,6 +152,21 @@
         } catch (e) {
 
         }
+      },
+      hasPermission(permissions,entity,type){
+        return permissions.hasOwnProperty(entity)&&permissions[entity].hasOwnProperty(type);
+      },
+      togglePermissionButton(e){
+        // console.log(e.target.setAttribute('class',''))
+        //console.log(this.$refs[el])
+        // this.$refs[el].setAttribute('class','btn')
+
+        // let baseClass=e.target.getAttribute('class').match(/(danger)/)?'btn btn-circle btn-success':'btn btn-circle btn-danger'
+        // e.target.setAttribute('class',baseClass)
+        // let icon = e.target.childNodes[0].dataset.icon.match(/(times)/)?'check':'times'
+        // e.target.childNodes[0].dataset.icon=icon
+        //
+        // console.log(e.target.childNodes[0].dataset)
       }
     },
     beforeRouteEnter (to, from, next) {

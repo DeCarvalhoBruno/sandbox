@@ -22,7 +22,6 @@
     open          : '.sidebar-open',
     mainSidebar   : '.main-sidebar',
     contentWrapper: '.content-wrapper',
-    searchInput   : '.sidebar-form .form-control',
     button        : '[data-toggle="push-menu"]',
     mini          : '.sidebar-mini',
     expanded      : '.sidebar-expanded-on-hover',
@@ -63,11 +62,6 @@
         this.close()
       }
     }.bind(this))
-
-    // __Fix for android devices
-    $(Selector.searchInput).click(function (e) {
-      e.stopPropagation()
-    })
   }
 
   PushMenu.prototype.toggle = function () {

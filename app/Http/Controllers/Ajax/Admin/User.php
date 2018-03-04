@@ -44,10 +44,11 @@ class User extends Controller
     public function edit($username, UserProvider $userProvider)
     {
         $f = app()->make(RawQueries::class);
+        $user = $userProvider->getOneByUsername($username,
+            ['first_name', 'last_name', 'email', 'username', 'full_name','entity_type_id'])->entityType()->first();
         return [
-            'user' => $userProvider->getOneByUsername($username,
-                ['first_name', 'last_name', 'email', 'username', 'full_name'])->first(),
-            'permissions'=>$f->getAllUserPermissions(auth()->user()->getEntityType())
+            'user' => $user,
+            'permissions'=>$f->getAllUserPermissions($user->getEntitytype())
         ];
     }
 

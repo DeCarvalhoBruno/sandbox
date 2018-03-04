@@ -23,42 +23,43 @@
                     </li>
                 </ul>
 
-                <ul class="navbar-nav ml-auto">
-                    <!-- Authenticated -->
-                    <li v-if="user" class="nav-item dropdown mr-5">
-                        <a class="nav-link dropdown-toggle text-light"
-                           href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ user.username }}
-                        </a>
-                        <div class="dropdown-menu">
-                            <router-link :to="{ name: 'admin.settings.profile' }" class="dropdown-item pl-3">
-                                <fa icon="cog" fixed-width/>
-                                {{ $t('general.settings') }}
-                            </router-link>
+                <b-dropdown right :text="user.username" variant="dark" class="navbar-nav ml-auto">
+                    <b-dropdown-item>
+                        <router-link :to="{ name: 'admin.settings.profile' }">
+                            <fa icon="cog" fixed-width/>
+                            {{ $t('general.settings') }}
+                        </router-link>
 
-                            <div class="dropdown-divider"></div>
-                            <a @click.prevent="logout" class="dropdown-item pl-3"  href="#">
-                                <fa icon="sign-out-alt" fixed-width/>
-                                {{ $t('general.logout') }}
-                            </a>
-                        </div>
-                    </li>
-                </ul>
+                    </b-dropdown-item>
+                    <b-dropdown-divider/>
+                    <b-dropdown-item-button @click="logout">
+                        <fa icon="sign-out-alt" fixed-width/>
+                        {{ $t('general.logout') }}
+                    </b-dropdown-item-button>
+                </b-dropdown>
             </div>
         </nav>
     </header>
 </template>
 
 <script>
+  import Vue from 'vue'
   import { mapGetters } from 'vuex'
+  import { Dropdown } from 'bootstrap-vue/es/components'
+
+  Vue.use(Dropdown)
 
   export default {
     data: () => ({
-      appName: window.config.appName,
+      appName: window.config.appName
     }),
 
+    components: {
+      Dropdown
+    },
+
     computed: mapGetters({
-      user: 'auth/user',
+      user: 'auth/user'
     }),
 
     methods: {
