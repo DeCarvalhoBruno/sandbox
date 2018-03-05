@@ -22,6 +22,8 @@ class Permission extends Model
     }
 
     /**
+     * Getting permissions pertaining to a particular entity.
+     *
      * @link https://laravel.com/docs/5.6/eloquent#query-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $entityId
@@ -32,6 +34,22 @@ class Permission extends Model
         return $builder->join('entities', function ($q) use ($entityId) {
             $q->on('permissions.entity_id', '=', 'entities.entity_id')
                 ->where('entities.entity_id', '=', $entityId);
+        });
+    }
+
+    /**
+     * Getting permissions for all entities
+     *
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param int $entityTypeId
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeEntityAll($builder, $entityTypeId)
+    {
+        return $builder->join('entities', function ($q) use ($entityTypeId) {
+            $q->on('permissions.entity_id', '=', 'entities.entity_id')
+                ->where('permissions.entity_type_id', '=', $entityTypeId);
         });
     }
 
@@ -53,9 +71,35 @@ class Permission extends Model
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
+    public function scopeGroup($builder)
+    {
+        return $builder->join('groups', function ($q) {
+            $q->on('groups.group_id', '=', 'entity_types.entity_type_target_id')
+                ->where('entity_types.entity_id', '=', Entity::GROUPS);
+        });
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
     public function scopeLeftUser($builder)
     {
         return $builder->leftJoin('users', function ($q) {
+            $q->on('users.user_id', '=', 'entity_types.entity_type_target_id')
+                ->where('entity_types.entity_id', '=', Entity::USERS);
+        });
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeUser($builder)
+    {
+        return $builder->join('users', function ($q) {
             $q->on('users.user_id', '=', 'entity_types.entity_type_target_id')
                 ->where('entity_types.entity_id', '=', Entity::USERS);
         });

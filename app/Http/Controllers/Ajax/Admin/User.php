@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ajax\Admin;
 
 use App\Contracts\Models\User as UserProvider;
+use App\Contracts\Models\Permission as PermissionProvider;
 use App\Contracts\RawQueries;
 use App\Filters\User as UserFilter;
 use App\Http\Controllers\Controller;
@@ -56,12 +57,17 @@ class User extends Controller
      * @param $username
      * @param \App\Http\Requests\Admin\UpdateUser $request
      * @param \App\Contracts\Models\User|\App\Providers\Models\User $userProvider
+     * @param \App\Contracts\Models\Permission|\App\Providers\Models\Permission $permissionProvider
      * @return \Illuminate\Http\Response
      */
-    public function update($username, UpdateUser $request, UserProvider $userProvider)
+    public function update($username, UpdateUser $request, UserProvider $userProvider, PermissionProvider $permissionProvider)
     {
-        $userProvider->updateOneByUsername($username, $request->all());
-        return response(null, Response::HTTP_NO_CONTENT);
+//        $userProvider->updateOneByUsername($username, $request->all());
+//        return response(null, Response::HTTP_NO_CONTENT);
+        $f = $permissionProvider->updateIndividual($request->getPermissions(),$request->get('entity_type_id'));
+
+
+        return response($f, Response::HTTP_OK);
     }
 
     public function search($search, UserProvider $userProvider)

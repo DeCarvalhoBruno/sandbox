@@ -2,10 +2,13 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\Entity;
 use App\Support\Requests\FormRequest;
 
 class UpdateUser extends FormRequest
 {
+    private $permissions=[];
+
     public function rules()
     {
         return [
@@ -17,13 +20,27 @@ class UpdateUser extends FormRequest
     public function afterValidation()
     {
         $input = $this->input();
+        $pe = $input['permissions'];
+        $result=[];
+        foreach($pe as $k=>$v){
+            $result[Entity::getConstant(strtoupper($k))] = $v;
+        }
+        $this->permissions = $result;
         if (isset($input['new_email'])) {
             $input['email'] = $input['new_email'];
         }
         if (isset($input['new_username'])) {
             $input['username'] = $input['new_username'];
         }
-        unset($input['new_email'], $input['new_username']);
+        unset($input['new_email'], $input['new_username'],$input['permissions']);
         $this->replace($input);
+    }
+
+    /**
+     * @return array
+     */
+    public function getPermissions(): array
+    {
+        return $this->permissions;
     }
 }

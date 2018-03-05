@@ -24,6 +24,10 @@ class Form {
     })
   }
 
+  addField ($name, $value) {
+    this[$name] = $value
+  }
+
   /**
    * Get the form data.
    *
