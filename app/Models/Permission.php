@@ -9,7 +9,7 @@ class Permission extends Model
 
     public $primaryKey = 'permission_id';
     public $timestamps = false;
-    protected $fillable = ['entity_type_id', 'entity_id','permission_mask'];
+    protected $fillable = ['entity_type_id', 'entity_id', 'permission_mask'];
 
     /**
      * @link https://laravel.com/docs/5.6/eloquent#query-scopes
@@ -42,14 +42,18 @@ class Permission extends Model
      *
      * @link https://laravel.com/docs/5.6/eloquent#query-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
-     * @param int $entityTypeId
+     * @param int|array $entityTypeIds
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    public function scopeEntityAll($builder, $entityTypeId)
+    public function scopeEntityAll($builder, $entityTypeIds)
     {
-        return $builder->join('entities', function ($q) use ($entityTypeId) {
-            $q->on('permissions.entity_id', '=', 'entities.entity_id')
-                ->where('permissions.entity_type_id', '=', $entityTypeId);
+        return $builder->join('entities', function ($q) use ($entityTypeIds) {
+            $q->on('permissions.entity_id', '=', 'entities.entity_id');
+            if (is_array($entityTypeIds)) {
+                $q->whereIn('permissions.entity_type_id', $entityTypeIds);
+            } else {
+                $q->where('permissions.entity_type_id', '=', $entityTypeIds);
+            }
         });
     }
 

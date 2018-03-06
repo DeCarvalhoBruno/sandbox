@@ -25,11 +25,12 @@ return [
         'password' => 'Password',
         'actions' => 'Actions',
         'email' => 'E-mail',
-        'back'=>'Back'
+        'back'=>'Back',
+        'permissions'=>'Permissions'
     ],
     'db' => [
-        'user' => 'Users',
-        'group' => 'Groups',
+        'user' => 'User|Users',
+        'group' => 'Group|Groups',
         'username' => 'User name',
         'first_name' => 'First name',
         'last_name' => 'Last name',
@@ -103,7 +104,7 @@ return [
             'current_members' => 'The following users are members of this group:',
         ],
         'users' => [
-            'tab_permissions' => 'User Permissions'
+
         ]
 
     ],

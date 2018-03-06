@@ -32,17 +32,11 @@
                         </div>
                     </div>
                 </b-tab>
-                <b-tab :title="$t('pages.users.tab_permissions')" active>
+                <b-tab :title="$t('general.permissions')" active>
                     <div class="container">
-                        <div class="callout callout-warning">
-                            <p><span class="callout-tag callout-tag-warning"><fa icon="exclamation"/></span> Setting
-                                individual permissions for this user will override permissions set on groups of which
-                                the
-                                user is a member.
-                            </p>
-                            <p>We recommend setting permissions on groups instead, and use individual user permissions
-                                to
-                                handle exceptions.</p>
+                        <div class="callout callout-info">
+                            <p>Permissions for all members of the group are defined here.</p>
+                            <p>Individual permissions can also be set at the user level, in which case user permissions will override permissions set here.</p>
                         </div>
                         <hr>
                         <div>
@@ -91,15 +85,17 @@
 
 <script>
   import Vue from 'vue'
+  import axios from 'axios'
+  import { Card, Tabs } from 'bootstrap-vue/es/components'
+  Vue.use(Card)
+  Vue.use(Tabs)
+
   import Button from '~/components/Button'
   import Checkbox from '~/components/Checkbox'
   import { Form, HasError, AlertForm } from '~/components/form'
-  import axios from 'axios'
-  import { Card, Tabs } from 'bootstrap-vue/es/components'
   import ButtonCircle from '~/components/ButtonCircle'
+  import PermissionMixin from '~/mixins/permissions'
 
-  Vue.use(Card)
-  Vue.use(Tabs)
 
   export default {
     layout: 'basic',
@@ -121,6 +117,7 @@
         permissions:{}
       }
     },
+    mixins: [PermissionMixin],
     methods: {
       getInfo (data) {
         this.form = new Form(data.group)

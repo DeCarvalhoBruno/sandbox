@@ -2,7 +2,7 @@
     <b-card no-body>
         <form @submit.prevent="save" @keydown="form.onKeydown($event)">
             <b-tabs card>
-                <b-tab :title="groupInfo.group_name" active>
+                <b-tab :title="userInfo.full_name" active>
                     <div class="col-md-8 offset-md-2">
                         <div class="form-group row">
                             <label for="new_username" class="col-md-3 col-form-label">{{$t('db.new_username')}}</label>
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                 </b-tab>
-                <b-tab :title="$t('pages.users.tab_permissions')">
+                <b-tab :title="$t('general.permissions')">
                     <div class="container">
                         <div class="callout callout-warning">
                             <p><span class="callout-tag callout-tag-warning"><fa icon="exclamation"/></span> Setting
@@ -72,7 +72,6 @@
                                 to
                                 handle exceptions.</p>
                         </div>
-                        <hr>
                         <div>
                             <div class="card mb-2" v-for="(permissionSet,entity) in permissions.default" :key="entity">
                                 <div class="card-header">{{entity}}</div>
@@ -120,6 +119,7 @@
   import Vue from 'vue'
   import Button from '~/components/Button'
   import Checkbox from '~/components/Checkbox'
+  import PermissionMixin from '~/mixins/permissions'
   import { Form, HasError, AlertForm } from '~/components/form'
   import { Card, Tabs } from 'bootstrap-vue/es/components'
   import ButtonCircle from '~/components/ButtonCircle'
@@ -149,7 +149,7 @@
         permissions: {}
       }
     },
-
+    mixins: [PermissionMixin],
     methods: {
       getInfo (data) {
         this.form = new Form(data.user)
@@ -158,46 +158,14 @@
       },
       async save () {
         try {
-          this.form.addField('permissions', this.getPermissions())
+          this.form.addField('permissions', this.getPermissions(this.$refs.buttonCircle))
           const {data} = await this.form.patch(`/ajax/admin/users/${this.username}`)
           this.$store.dispatch('session/setMessageSuccess', this.$t('message.user_update_ok'))
           this.$router.push({name: 'admin.users.index'})
         } catch (e) {
         }
-      },
-      hasPermission (permissions, entity, type) {
-        return (permissions.hasOwnProperty(entity) && permissions[entity].hasOwnProperty(type))
-      },
-      togglePermission (val) {
-        return val
-      },
-      getPermissions () {
-        let permissions = this.$refs.buttonCircle
-        let permissionsLength = permissions.length
-        let savedPermissions = {hasChanged: false}
-        for (let i = 0; i < permissionsLength; i++) {
-          let p = permissions[i].$attrs.entity
-          if (!savedPermissions.hasOwnProperty(p)) {
-            savedPermissions[p] = {mask:0,hasChanged: false}
-          }
-          let currentlyEnabled = this.permissionIsCurrentlyEnabled(permissions[i].$el)
-          if (currentlyEnabled) {
-            savedPermissions[p].mask += permissions[i].$attrs.maskval
-          }
-          if (currentlyEnabled !== permissions[i].$attrs.hasPermission) {
-            savedPermissions[p].hasChanged = true
-            savedPermissions.hasChanged = true
-          }
-        }
-        // console.log(savedPermissions)
-        return savedPermissions
-      },
-      permissionIsCurrentlyEnabled (el) {
-        //class name is btn btn-circle btn-danger/btn-success
-        return el.className.match(/d/) == null
       }
     },
-
     beforeRouteEnter (to, from, next) {
       axios.get(`/ajax/admin/users/${to.params.user}`).then(({data}) => {
         next(vm => vm.getInfo(data))

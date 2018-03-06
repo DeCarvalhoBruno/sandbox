@@ -1,7 +1,10 @@
 <?php namespace App\Providers\Models;
 
+use App\Contracts\HasPermissions;
 use App\Contracts\Models\Permission as PermissionInterface;
 use App\Events\UpdatedUser;
+use App\Models\Entity;
+use App\Models\EntityType;
 use App\Models\Permission as PermissionModel;
 
 /**
@@ -39,6 +42,27 @@ class Permission extends Model implements PermissionInterface
             }
         }
         event(new UpdatedUser);
+    }
+
+    public function getRootAndGroupPermissions($entityTypeId)
+    {
+        $results= $this->createModel()->newQuery()->newQuery()
+            ->select(['permission_id', 'permission_mask', 'entities.entity_id','entity_type_id'])
+            ->entityAll([$entityTypeId,EntityType::ROOT_GROUP_ENTITY_TYPE_ID])->get();
+        $permission = [];
+        foreach ($results as $result) {
+            $type=($result->entity_type_id==EntityType::ROOT_GROUP_ENTITY_TYPE_ID)?'default':'computed';
+            $permission[$type][trans_choice(sprintf('ajax.db.%s',
+                Entity::getModelPresentableName($result->entity_id)),2)] =
+                Entity::createModel($result->entity_id,[],HasPermissions::class)
+                    ->getReadablePermissions($result->permission_mask, true);
+        }
+        //We're supposed to get an array with computed and default permissions but some users
+        // don't have permissions on anything.
+        if (!isset($permission['computed'])) {
+            $permission['computed'] = [];
+        }
+        return $permission;
     }
 
 }

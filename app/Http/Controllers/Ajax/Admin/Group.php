@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Ajax\Admin;
 
-use App\Contracts\RawQueries;
 use App\Http\Controllers\Controller;
 use App\Filters\Group as GroupFilter;
-use App\Providers\Models\Group as GroupProvider;
+use App\Contracts\Models\Group as GroupProvider;
 use App\Http\Requests\Admin\UpdateGroup;
 use Illuminate\Http\Response;
+use App\Contracts\Models\Permission as PermissionProvider;
 
 class Group extends Controller
 {
@@ -43,16 +43,17 @@ class Group extends Controller
 
     /**
      * @param string $groupName
-     * @param \App\Providers\Models\Group|\App\Providers\Models\Group $groupProvider
+     * @param \App\Contracts\Models\Group|\App\Providers\Models\Group $groupProvider
+     * @param \App\Contracts\Models\Permission|\App\Providers\Models\Permission $permissionProvider
      * @return array
      */
-    public function edit($groupName, GroupProvider $groupProvider)
+    public function edit($groupName, GroupProvider $groupProvider, PermissionProvider $permissionProvider)
     {
-        $f = app()->make(RawQueries::class);
-        $group = $groupProvider->getOneByName($groupName, ['group_name', 'group_mask'])->first();
+        $group = $groupProvider->getOneByName($groupName, ['group_name', 'group_mask','entity_type_id'])
+            ->entityType()->first();
         return [
             'group' => $group,
-            'permissions' => []
+            'permissions' => $permissionProvider->getRootAndGroupPermissions($group->getAttribute('entity_type_id'))
         ];
     }
 

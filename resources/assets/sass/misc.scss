@@ -12,11 +12,11 @@
 }
 
 %bg-yellow {
-  background-color: $yellow !important;
+  background-color: darken($yellow, 5%) !important;
 }
 
 %bg-aqua {
-  background-color: $aqua !important;
+  background-color: darken($aqua, 5%) !important;
 }
 
 %bg-green {

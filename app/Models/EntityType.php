@@ -11,7 +11,7 @@ class EntityType extends Model
     protected $primaryKey = 'entity_type_id';
     protected $fillable = ['entity_id', 'entity_type_target_id','entity_type_id'];
     const ROOT_ENTITY_TYPE_ID=2;
-
+    const ROOT_GROUP_ENTITY_TYPE_ID=3;
 
     /**
      * Gets the entity type ID with an entity ID
