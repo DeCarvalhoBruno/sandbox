@@ -37,22 +37,24 @@ class User extends Model implements UserProvider, UserInterface
      * @param string $field
      * @param mixed $value
      * @param array $data
-     * @return int
+     * @return \App\Models\User
      */
     public function updateOneUser($model, $field, $value, $data)
     {
-        $user = $this->createModel()->newQuery()->select('person_id')->where($field, $value)->first();
+        $user = $this->createModel()->newQuery()->select(['person_id','entity_type_id'])
+            ->where($field, $value)->entityType()->first();
         $this->person->createModel()->where('person_id',
             $user->person_id)->update($this->person->filterFillables($data));
 
-        return $model->newQueryWithoutScopes()->where($field, $value)
+        $model->newQueryWithoutScopes()->where($field, $value)
             ->update($this->filterFillables($data));
+        return $user;
     }
 
     /**
      * @param int $id
      * @param array $data
-     * @return int
+     * @return \App\Models\User
      */
     public function updateOneById($id, $data)
     {
@@ -63,7 +65,7 @@ class User extends Model implements UserProvider, UserInterface
     /**
      * @param string $username
      * @param array $data
-     * @return int
+     * @return \App\Models\User
      */
     public function updateOneByUsername($username, $data)
     {

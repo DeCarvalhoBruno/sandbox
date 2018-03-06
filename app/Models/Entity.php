@@ -2,6 +2,7 @@
 
 use App\Traits\Enumerable;
 use Illuminate\Database\Eloquent\Model;
+use Prophecy\Exception\Call\UnexpectedCallException;
 
 class Entity extends Model
 {
@@ -27,14 +28,23 @@ class Entity extends Model
      *
      * @param int $entityID
      * @param array $attributes
+     * @param string $testContract
      * @return \Illuminate\Database\Eloquent\Model
      * @throws \ReflectionException
      */
-    public static function createModel($entityID, array $attributes = [])
+    public static function createModel($entityID, array $attributes = [], $testContract = null)
     {
         $class = static::getModelClassNamespace($entityID);
         if (class_exists($class)) {
-            return new $class($attributes);
+            $o = new $class($attributes);
+            if (!is_null($testContract) && !($o instanceof $testContract)) {
+                throw new \UnexpectedValueException(
+                    sprintf('Model %s is supposed to be an instance of %s'.!($class instanceof $testContract),
+                        $class,
+                        $testContract)
+                );
+            }
+            return $o;
         }
         return null;
     }

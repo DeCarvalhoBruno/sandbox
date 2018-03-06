@@ -9,7 +9,7 @@ class Permission extends Model
 
     public $primaryKey = 'permission_id';
     public $timestamps = false;
-    protected $fillable = ['entity_type_id', 'entity_id'];
+    protected $fillable = ['entity_type_id', 'entity_id','permission_mask'];
 
     /**
      * @link https://laravel.com/docs/5.6/eloquent#query-scopes

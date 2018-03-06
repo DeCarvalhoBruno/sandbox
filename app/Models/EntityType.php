@@ -10,6 +10,7 @@ class EntityType extends Model
     public static $simpleEntityColumn = 'entity_type_target_id';
     protected $primaryKey = 'entity_type_id';
     protected $fillable = ['entity_id', 'entity_type_target_id','entity_type_id'];
+    const ROOT_ENTITY_TYPE_ID=2;
 
 
     /**

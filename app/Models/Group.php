@@ -5,14 +5,15 @@ use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\HasANameColumn;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
-use App\Traits\Models\HasPermissions;
+use App\Traits\Models\HasPermissions as HasPermissionsTrait;
+use App\Contracts\HasPermissions;
 use App\Traits\Presentable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class Group extends Model implements HasAnEntity
+class Group extends Model implements HasAnEntity, HasPermissions
 {
-    use HasAnEntityTrait, HasANameColumn, Enumerable, Presentable, DoesSqlStuff, HasPermissions;
+    use HasAnEntityTrait, HasANameColumn, Enumerable, Presentable, DoesSqlStuff, HasPermissionsTrait;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;

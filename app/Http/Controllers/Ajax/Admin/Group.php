@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ajax\Admin;
 
+use App\Contracts\RawQueries;
 use App\Http\Controllers\Controller;
 use App\Filters\Group as GroupFilter;
 use App\Providers\Models\Group as GroupProvider;
@@ -47,7 +48,12 @@ class Group extends Controller
      */
     public function edit($groupName, GroupProvider $groupProvider)
     {
-        return $groupProvider->getOneByName($groupName, ['group_name', 'group_mask'])->first();
+        $f = app()->make(RawQueries::class);
+        $group = $groupProvider->getOneByName($groupName, ['group_name', 'group_mask'])->first();
+        return [
+            'group' => $group,
+            'permissions' => []
+        ];
     }
 
     /**

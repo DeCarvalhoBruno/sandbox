@@ -2,7 +2,7 @@
     <b-card no-body>
         <form @submit.prevent="save" @keydown="form.onKeydown($event)">
             <b-tabs card>
-                <b-tab :title="userInfo.full_name" active>
+                <b-tab :title="groupInfo.group_name" active>
                     <div class="col-md-8 offset-md-2">
                         <div class="form-group row">
                             <label for="new_username" class="col-md-3 col-form-label">{{$t('db.new_username')}}</label>
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                 </b-tab>
-                <b-tab :title="$t('pages.users.tab_permissions')" active>
+                <b-tab :title="$t('pages.users.tab_permissions')">
                     <div class="container">
                         <div class="callout callout-warning">
                             <p><span class="callout-tag callout-tag-warning"><fa icon="exclamation"/></span> Setting
@@ -93,7 +93,8 @@
                                                         :maskval="maskValue"
                                                         :entity="entity"
                                                         :enabled="hasPermission(permissions.computed,entity,type)"
-                                                        />
+                                                        :hasPermission="hasPermission(permissions.computed,entity,type)"
+                                                />
                                             </td>
                                         </tr>
                                         </tbody>
@@ -122,10 +123,10 @@
   import { Form, HasError, AlertForm } from '~/components/form'
   import { Card, Tabs } from 'bootstrap-vue/es/components'
   import ButtonCircle from '~/components/ButtonCircle'
+  import axios from 'axios'
 
   Vue.use(Card)
   Vue.use(Tabs)
-  import axios from 'axios'
 
   export default {
     layout: 'basic',
@@ -145,7 +146,7 @@
         form: new Form(),
         username: this.$router.currentRoute.params.user,
         userInfo: {},
-        permissions: {},
+        permissions: {}
       }
     },
 
@@ -157,15 +158,10 @@
       },
       async save () {
         try {
-          //@TODO: get permissions won't work because the user may have group permissions that don't have to be overriden
-          //@TODO: have to send only values that have changed
-
-
-
-          this.form.addField('permissions',this.getPermissions())
+          this.form.addField('permissions', this.getPermissions())
           const {data} = await this.form.patch(`/ajax/admin/users/${this.username}`)
-          // this.$store.dispatch('session/setMessageSuccess', this.$t('message.user_update_ok'))
-          // this.$router.push({name: 'admin.users.index'})
+          this.$store.dispatch('session/setMessageSuccess', this.$t('message.user_update_ok'))
+          this.$router.push({name: 'admin.users.index'})
         } catch (e) {
         }
       },
@@ -175,22 +171,33 @@
       togglePermission (val) {
         return val
       },
-      getPermissions(){
+      getPermissions () {
         let permissions = this.$refs.buttonCircle
         let permissionsLength = permissions.length
-        let savedPermissions = {}
+        let savedPermissions = {hasChanged: false}
         for (let i = 0; i < permissionsLength; i++) {
           let p = permissions[i].$attrs.entity
           if (!savedPermissions.hasOwnProperty(p)) {
-            savedPermissions[p] = 0
+            savedPermissions[p] = {mask:0,hasChanged: false}
           }
-          if (permissions[i].$el.className.match(/(success)/)) {
-            savedPermissions[p] += permissions[i].$attrs.maskval
+          let currentlyEnabled = this.permissionIsCurrentlyEnabled(permissions[i].$el)
+          if (currentlyEnabled) {
+            savedPermissions[p].mask += permissions[i].$attrs.maskval
+          }
+          if (currentlyEnabled !== permissions[i].$attrs.hasPermission) {
+            savedPermissions[p].hasChanged = true
+            savedPermissions.hasChanged = true
           }
         }
+        // console.log(savedPermissions)
         return savedPermissions
+      },
+      permissionIsCurrentlyEnabled (el) {
+        //class name is btn btn-circle btn-danger/btn-success
+        return el.className.match(/d/) == null
       }
     },
+
     beforeRouteEnter (to, from, next) {
       axios.get(`/ajax/admin/users/${to.params.user}`).then(({data}) => {
         next(vm => vm.getInfo(data))

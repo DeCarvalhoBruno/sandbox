@@ -6,7 +6,8 @@ use App\Contracts\HasAnEntity;
 use App\Notifications\ResetPassword;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
-use App\Traits\Models\HasPermissions;
+use App\Traits\Models\HasPermissions as HasPermissionsTrait;
+use App\Contracts\HasPermissions;
 use App\Traits\Presentable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,9 +17,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use App\Traits\Models\HasANameColumn;
 
-class User extends LaravelUser implements JWTSubject, HasAnEntity
+class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermissions
 {
-    use Notifiable, HasAnEntityTrait, HasANameColumn, DoesSqlStuff, Enumerable, Presentable, HasPermissions;
+    use Notifiable, HasAnEntityTrait, HasANameColumn, DoesSqlStuff, Enumerable, Presentable, HasPermissionsTrait;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;

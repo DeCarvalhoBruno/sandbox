@@ -1,6 +1,8 @@
 <?php namespace App\Support\Database;
 
 use App\Models\Entity;
+use App\Models\EntityType;
+use App\Contracts\HasPermissions;
 
 abstract class RawQueries
 {
@@ -65,13 +67,13 @@ abstract class RawQueries
                   GROUP BY permission_masks.permission_store_id,permission_masks.permission_mask,
                   permission_masks.permission_holder_id,entities.entity_id,type
                 )
-           ', [2, $entityTypeId]
+           ', [EntityType::ROOT_ENTITY_TYPE_ID, $entityTypeId]
         );
         $permission = [];
         foreach ($results as $result) {
             $permission[$result->type][trans(sprintf('ajax.db.%s',
-                Entity::getModelPresentableName($result->entity_id)))] = Entity::createModel($result->entity_id)->getReadablePermissions($result->permission_mask,
-                true);
+                Entity::getModelPresentableName($result->entity_id)))] =
+                Entity::createModel($result->entity_id,[],HasPermissions::class)->getReadablePermissions($result->permission_mask, true);
         }
         //We're supposed to get an array with computed and default permissions but some users
         // don't have permissions on anything.

@@ -17,21 +17,21 @@
   }
 
   var Selector = {
-    wrapper       : '.wrapper',
+    wrapper: '.wrapper',
     contentWrapper: '.content-wrapper',
-    mainHeader    : '.main-header',
-    sidebar       : '.sidebar',
-    sidebarMenu   : '.sidebar-menu',
-    logo          : '.main-header .logo'
+    mainHeader: '.main-header',
+    sidebar: '.sidebar',
+    sidebarMenu: '.sidebar-menu',
+    logo: '.main-header .logo'
   }
 
   var ClassName = {
-    fixed         : 'fixed',
+    fixed: 'fixed',
     holdTransition: 'hold-transition'
   }
 
   var Layout = function (options) {
-    this.options      = options
+    this.options = options
     this.bindedResize = false
     this.activate()
   }
@@ -43,7 +43,7 @@
 
     if (this.options.resetHeight) {
       $('body, html, ' + Selector.wrapper).css({
-        'height'    : 'auto',
+        'height': 'auto',
         'min-height': '100%'
       })
     }
@@ -52,9 +52,12 @@
       $(window).resize(function () {
         this.fix()
 
-        $(Selector.logo + ', ' + Selector.sidebar).one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
-          this.fix()
-        }.bind(this))
+        $(Selector.logo + ', ' + Selector.sidebar)
+          .one(
+            'webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
+            function () {
+              this.fix()
+            }.bind(this))
       }.bind(this))
 
       this.bindedResize = true
@@ -71,36 +74,29 @@
 
   Layout.prototype.fix = function () {
     // Get window height and the wrapper height
-    var neg           = $(Selector.mainHeader).outerHeight()
-    var windowHeight  = $(window).height()
+    var neg = $(Selector.mainHeader).outerHeight()
+    var windowHeight = $(window).height()
     var sidebarHeight = $(Selector.sidebar).height() || 0
 
     // Set the min-height of the content and sidebar based on
     // the height of the document.
-    if ($('body').hasClass(ClassName.fixed)) {
-      $(Selector.contentWrapper).css('min-height', windowHeight)
+    if (windowHeight >= sidebarHeight) {
+      $(Selector.contentWrapper).css('min-height', windowHeight - neg)
     } else {
-      var postSetHeight
-
-      if (windowHeight >= sidebarHeight) {
-        $(Selector.contentWrapper).css('min-height', windowHeight - neg)
-        postSetHeight = windowHeight - neg
-      } else {
-        $(Selector.contentWrapper).css('min-height', sidebarHeight)
-        postSetHeight = sidebarHeight
-      }
+      $(Selector.contentWrapper).css('min-height', sidebarHeight)
     }
   }
 
   // Plugin Definition
   // =================
-  function Plugin(option) {
+  function Plugin (option) {
     return this.each(function () {
       var $this = $(this)
-      var data  = $this.data(DataKey)
+      var data = $this.data(DataKey)
 
       if (!data) {
-        var options = $.extend({}, Default, $this.data(), typeof option === 'object' && option)
+        var options = $.extend({}, Default, $this.data(), typeof option ===
+          'object' && option)
         $this.data(DataKey, (data = new Layout(options)))
       }
 
@@ -115,7 +111,7 @@
 
   var old = $.fn.layout
 
-  $.fn.layout            = Plugin
+  $.fn.layout = Plugin
   $.fn.layout.Constuctor = Layout
 
   // No conflict mode

@@ -6,7 +6,6 @@
         type: Boolean,
         required: true
       },
-      test:String
     },
     data () {
       return {

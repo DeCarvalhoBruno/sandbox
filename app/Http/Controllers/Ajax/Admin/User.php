@@ -46,10 +46,10 @@ class User extends Controller
     {
         $f = app()->make(RawQueries::class);
         $user = $userProvider->getOneByUsername($username,
-            ['first_name', 'last_name', 'email', 'username', 'full_name','entity_type_id'])->entityType()->first();
+            ['first_name', 'last_name', 'email', 'username', 'full_name', 'entity_type_id'])->entityType()->first();
         return [
             'user' => $user,
-            'permissions'=>$f->getAllUserPermissions($user->getEntitytype())
+            'permissions' => $f->getAllUserPermissions($user->getEntitytype())
         ];
     }
 
@@ -60,14 +60,19 @@ class User extends Controller
      * @param \App\Contracts\Models\Permission|\App\Providers\Models\Permission $permissionProvider
      * @return \Illuminate\Http\Response
      */
-    public function update($username, UpdateUser $request, UserProvider $userProvider, PermissionProvider $permissionProvider)
-    {
-//        $userProvider->updateOneByUsername($username, $request->all());
-//        return response(null, Response::HTTP_NO_CONTENT);
-        $f = $permissionProvider->updateIndividual($request->getPermissions(),$request->get('entity_type_id'));
+    public function update(
+        $username,
+        UpdateUser $request,
+        UserProvider $userProvider,
+        PermissionProvider $permissionProvider
+    ) {
+        $user = $userProvider->updateOneByUsername($username, $request->all());
+        $permissions = $request->getPermissions();
 
-
-        return response($f, Response::HTTP_OK);
+        if (!is_null($permissions)) {
+            $permissionProvider->updateIndividual($permissions, $user->getEntityType());
+        }
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 
     public function search($search, UserProvider $userProvider)

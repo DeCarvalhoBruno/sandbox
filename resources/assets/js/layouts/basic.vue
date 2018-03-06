@@ -4,6 +4,9 @@
         <drawer :menu-items="MenuItems"/>
         <div class="content-wrapper">
             <section class="content-header">
+                <div class="link-back">
+                    <a @click="$router.go(-1)"><&nbsp;{{$t('general.back')}}</a>
+                </div>
                 <ol class="breadcrumb">
                     <li v-for="(crumb,index) in breadCrumbs" :key="index">
                         <template v-if="crumb.route!=$router.currentRoute.name">

@@ -25,6 +25,7 @@ return [
         'password' => 'Password',
         'actions' => 'Actions',
         'email' => 'E-mail',
+        'back'=>'Back'
     ],
     'db' => [
         'user' => 'Users',
@@ -74,8 +75,8 @@ return [
     'message' => [
         'info_updated' => 'Your info has been updated!',
         'password_updated' => 'Your password has been updated!',
-        'user_update_ok' => 'The user was updated successfully.',
-        'group_update_ok' => 'The group was updated successfully.'
+        'user_update_ok' => 'The user was updated successfully. It may take a few extra seconds for permissions to update.',
+        'group_update_ok' => 'The group was updated successfully. It may take a few extra seconds for permissions to update.'
     ],
     'pages' => [
         'auth' => [

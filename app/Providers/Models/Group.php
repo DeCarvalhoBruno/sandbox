@@ -2,7 +2,7 @@
 
 use App\Contracts\Models\Group as GroupInterface;
 use App\Contracts\RawQueries;
-use App\Events\UpdatedGroups;
+use App\Events\UpdatedGroupMembers;
 use App\Models\GroupMember;
 use App\Support\MysqlRawQueries;
 
@@ -127,6 +127,6 @@ class Group extends Model implements GroupInterface
                 GroupMember::query()->whereIn('user_id', $userIds)->delete();
             }
         }
-        event(new UpdatedGroups);
+        event(new UpdatedGroupMembers);
     }
 }

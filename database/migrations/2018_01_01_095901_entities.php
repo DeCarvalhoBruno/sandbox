@@ -112,8 +112,7 @@ class Entities extends Migration
 
         //We keep track of each entity's ID
         foreach ($entities as $entity) {
-            $class = Entity::getModelClassName($entity->entity_id);
-            $primaryKey = (new $class)->getKeyName();
+            $primaryKey = Entity::createModel($entity->entity_id)->getKeyName();
             if ($primaryKey == 'id') {
                 continue;
             }
