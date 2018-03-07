@@ -60,17 +60,15 @@
                         </div>
                     </div>
                 </b-tab>
-                <b-tab :title="$t('general.permissions')">
+                <b-tab :title="$tc('general.permission',2)">
                     <div class="container">
                         <div class="callout callout-warning">
-                            <p><span class="callout-tag callout-tag-warning"><fa icon="exclamation"/></span> Setting
-                                individual permissions for this user will override permissions set on groups of which
-                                the
-                                user is a member.
+                            <p><span class="callout-tag callout-tag-warning"><fa icon="exclamation"/></span>
+                                &nbsp;{{$t('pages.users.warning1')}}
                             </p>
-                            <p>We recommend setting permissions on groups instead, and use individual user permissions
-                                to
-                                handle exceptions.</p>
+                            <p>
+                                {{$t('pages.users.warning2')}}
+                            </p>
                         </div>
                         <div>
                             <div class="card mb-2" v-for="(permissionSet,entity) in permissions.default" :key="entity">
@@ -79,8 +77,8 @@
                                     <table class="table table-sm">
                                         <thead>
                                         <tr>
-                                            <th>Permission</th>
-                                            <th>Value</th>
+                                            <th>{{$tc('general.permission',1)}}</th>
+                                            <th>{{$t('general.toggle')}}</th>
                                         </tr>
                                         </thead>
                                         <tbody>

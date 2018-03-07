@@ -26,7 +26,8 @@ return [
         'actions' => 'Actions',
         'email' => 'E-mail',
         'back'=>'Back',
-        'permissions'=>'Permissions'
+        'permission'=>'Permission|Permissions',
+        'toggle'=>'Toggle On/Off'
     ],
     'db' => [
         'user' => 'User|Users',
@@ -104,9 +105,16 @@ return [
             'current_members' => 'The following users are members of this group:',
         ],
         'users' => [
-
+            'warning1'=>'Setting individual permissions for this user 
+            will override permissions set on groups of which the user is a member.',
+            'warning2'=>'We recommend setting permissions on groups instead, 
+            and use individual user permissions to handle exceptions.'
+        ],
+        'groups' => [
+            'info1'=>'Permissions for all members of the group are defined here.',
+            'info2'=>'Individual permissions can also be set at the user level,
+            in which case user permissions will override permissions set here.'
         ]
-
     ],
     'tables' => [
         'empty' => 'There is currently no data available.',

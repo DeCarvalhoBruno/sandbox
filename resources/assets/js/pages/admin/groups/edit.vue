@@ -32,11 +32,11 @@
                         </div>
                     </div>
                 </b-tab>
-                <b-tab :title="$t('general.permissions')" active>
+                <b-tab :title="$tc('general.permission',2)" active>
                     <div class="container">
                         <div class="callout callout-info">
-                            <p>Permissions for all members of the group are defined here.</p>
-                            <p>Individual permissions can also be set at the user level, in which case user permissions will override permissions set here.</p>
+                            <p>{{$t('pages.groups.info1')}}</p>
+                            <p>{{$t('pages.groups.info2')}}</p>
                         </div>
                         <hr>
                         <div>
@@ -46,8 +46,8 @@
                                     <table class="table table-sm">
                                         <thead>
                                         <tr>
-                                            <th>Permission</th>
-                                            <th>Value</th>
+                                            <th>{{$tc('general.permission',1)}}</th>
+                                            <th>{{$t('general.toggle')}}</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -87,6 +87,7 @@
   import Vue from 'vue'
   import axios from 'axios'
   import { Card, Tabs } from 'bootstrap-vue/es/components'
+
   Vue.use(Card)
   Vue.use(Tabs)
 
@@ -95,7 +96,6 @@
   import { Form, HasError, AlertForm } from '~/components/form'
   import ButtonCircle from '~/components/ButtonCircle'
   import PermissionMixin from '~/mixins/permissions'
-
 
   export default {
     layout: 'basic',
@@ -114,7 +114,7 @@
       return {
         form: new Form(),
         group: this.$router.currentRoute.params.group,
-        permissions:{}
+        permissions: {}
       }
     },
     mixins: [PermissionMixin],
@@ -125,9 +125,10 @@
       },
       async save () {
         try {
+          this.form.addField('permissions', this.getPermissions(this.$refs.buttonCircle))
           const {data} = await this.form.patch(`/ajax/admin/groups/${this.group}`)
-          this.$store.dispatch('session/setMessageSuccess', this.$t('message.group_update_ok'))
-          this.$router.push({name: 'admin.groups.index'})
+          // this.$store.dispatch('session/setMessageSuccess', this.$t('message.group_update_ok'))
+          // this.$router.push({name: 'admin.groups.index'})
         } catch (e) {
 
         }

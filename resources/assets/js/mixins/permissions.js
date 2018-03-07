@@ -26,9 +26,6 @@ export default {
       return (permissions.hasOwnProperty(entity) &&
         permissions[entity].hasOwnProperty(type))
     },
-    togglePermission (val) {
-      return val
-    },
     permissionIsCurrentlyEnabled (el) {
       // class name is btn btn-circle btn-danger/btn-success
       return el.className.match(/d/) == null

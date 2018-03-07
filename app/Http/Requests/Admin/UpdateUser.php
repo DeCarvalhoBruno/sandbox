@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests\Admin;
 
-use App\Models\Entity;
 use App\Support\Requests\FormRequest;
+use App\Traits\ProcessesPermissions;
 
 class UpdateUser extends FormRequest
 {
-    private $permissions = null;
+    use ProcessesPermissions;
 
     public function rules()
     {
@@ -21,16 +21,7 @@ class UpdateUser extends FormRequest
     {
         $input = $this->input();
 
-        $pe = $input['permissions'];
-        if (isset($pe['hasChanged']) && $pe['hasChanged'] == "true") {
-            $result = [];
-            foreach ($pe as $k => $v) {
-                if ($v['hasChanged'] == 'true') {
-                    $result[Entity::getConstant(strtoupper($k))] = $v['mask'];
-                }
-            }
-            $this->permissions = $result;
-        }
+        $this->processPermissions($input['permissions']);
 
         if (isset($input['new_email'])) {
             $input['email'] = $input['new_email'];
@@ -40,13 +31,5 @@ class UpdateUser extends FormRequest
         }
         unset($input['new_email'], $input['new_username'], $input['permissions']);
         $this->replace($input);
-    }
-
-    /**
-     * @return array
-     */
-    public function getPermissions()
-    {
-        return $this->permissions;
     }
 }

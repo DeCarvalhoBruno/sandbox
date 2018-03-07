@@ -23,8 +23,6 @@
     methods: {
       toggle (e) {
         this.buttonEnabled = !this.buttonEnabled
-
-        // this.$emit('buttonCircleClicked',this.buttonEnabled)
       }
     },
     render (h) {

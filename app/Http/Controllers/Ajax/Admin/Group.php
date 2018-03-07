@@ -65,8 +65,10 @@ class Group extends Controller
      */
     public function update($groupName, UpdateGroup $request, GroupProvider $groupProvider)
     {
-        $groupProvider->updateOneByName($groupName, $request->all());
-        return response(null, Response::HTTP_NO_CONTENT);
+//        $groupProvider->updateOneByName($groupName, $request->all());
+//        return response(null, Response::HTTP_NO_CONTENT);
+
+        return response($request->getPermissions(), Response::HTTP_OK);
     }
 
 }

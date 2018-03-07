@@ -28,6 +28,13 @@ class Form {
     this[$name] = $value
   }
 
+  getField ($name) {
+    if (this.hasOwnProperty($name)){
+      return this[$name]
+    }
+    return null
+  }
+
   /**
    * Get the form data.
    *
