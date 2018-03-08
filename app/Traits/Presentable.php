@@ -1,17 +1,24 @@
 <?php namespace App\Traits;
 
+use App\Filters\Filters;
+use Illuminate\Database\Eloquent\Builder;
+
 trait Presentable
 {
     /**
      * @param $columns
      * @return array
      */
-    public function getColumnInfo($columns)
+    public function getColumnInfo($columns): array
     {
         $sortable = array_flip($this->sortable);
         $result = [];
         foreach ($columns as $name => $label) {
-            $result[$name] = ['name' => $name, 'label' => $label, 'sortable' => isset($sortable[$name])];
+            $result[$name] = [
+                'name' => $name,
+                'label' => $label,
+                'sortable' => isset($sortable[trans(sprintf('ajax.db_raw.%s', $name))])
+            ];
         }
         return $result;
     }
@@ -19,9 +26,9 @@ trait Presentable
     /**
      * @param mixed $query
      * @param \App\Filters\Filters $filters
-     * @return \Illuminate\Database\Query\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeFilter($query, $filters)
+    public function scopeFilter($query, Filters $filters): Builder
     {
         return $filters->apply($query);
     }

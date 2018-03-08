@@ -35,9 +35,7 @@ class Entities extends Migration
         $this->addEntities();
         $this->entityTypes();
         $this->createEntities();
-//        if (app()->environment() != 'testing') {
         $this->createTriggers();
-//        }
         $this->createGroups();
 
     }

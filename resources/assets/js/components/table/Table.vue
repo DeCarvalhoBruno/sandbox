@@ -1,18 +1,20 @@
 <template>
     <div class="table-container table-responsive">
-        <template v-if="rows.length==0">
+        <template v-if="rows.length===0">
             <h3>{{$t('tables.empty')}}</h3>
         </template>
         <template v-else>
             <table class="table table-bordered table-hover table-striped">
                 <thead>
                 <tr>
+                    <slot name="header-select-all">
+                    </slot>
                     <th v-for="(info,index) in columns"
                         :key="index"
                         @click="sort(info)">
-                        {{info.label}}<span v-if="info.sortable" :title="$t('tables.sort_'+(info.order=='asc'?'desc':'asc'))">
+                        {{info.label}}<span v-if="info.sortable" :title="$t('tables.sort_'+getOrder(info.order))">
                         <fa class="float-right"
-                            :icon="info.order=='asc'?'angle-double-down':'angle-double-up'"/></span>
+                            :icon="info.order===$t('filters.asc')?'angle-double-down':'angle-double-up'"/></span>
                     </th>
                     <slot name="header-action">
                     </slot>
@@ -21,6 +23,8 @@
                 <tbody>
                 <tr v-for="(row,rowIdx) in rows"
                     :key="rowIdx">
+                    <slot name="body-select-row" :row="row">
+                    </slot>
                     <td v-for="(info,colIdx) in columns" :key="colIdx">
                         {{row[info.name]}}
                     </td>
@@ -35,6 +39,7 @@
                 </b-pagination-nav>
             </div>
         </template>
+
     </div>
 </template>
 
@@ -60,11 +65,15 @@
       entity: {
         type: String,
         required: true
-      }
+      },
+      rows: {
+        type: Array,
+        required: true
+      },
+      isMultiSelect: false
     },
     computed: {
       ...mapGetters({
-        rows: 'table/rows',
         columns: 'table/columns',
         currentPage: 'table/currentPage',
         from: 'table/from',
@@ -89,13 +98,14 @@
           return
         }
         let obj = Object.assign({}, this.$route.query)
-        obj.sortByCol = column.name
-        obj.order = this.toggleSortOrder()
-        this.updateColumn({columnName: column.name, direction: obj.order})
+        obj[this.$t('filters.sortBy')] = column.name
+        let orderTranslated = this.$t('filters.order')
+        obj[orderTranslated] = this.toggleSortOrder()
+        this.updateColumn({columnName: column.name, direction: obj[orderTranslated]})
         this.$router.push({query: obj})
       },
       toggleSortOrder () {
-        this.sortOrder = (this.sortOrder == 'asc') ? 'desc' : 'asc'
+        this.sortOrder = this.getOrder(this.sortOrder)
         return this.sortOrder
       },
       linkGen (pageNum) {
@@ -107,6 +117,11 @@
       },
       updateColumn (obj) {
         this.$store.commit('table/UPDATE_TABLE_COLUMN', obj)
+      },
+      getOrder (val) {
+        let asc = this.$t('filters.asc')
+        let desc = this.$t('filters.desc')
+        return val === asc ? desc : asc
       }
     }
   }

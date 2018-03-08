@@ -44,6 +44,10 @@ export default [
     component: UserEdit
   },
   {
+    path: '/admin/users/:user/delete',
+    name: 'admin.users.delete',
+  },
+  {
     path: '/admin/groups',
     name: 'admin.groups.index',
     meta: {parent:'admin.dashboard'},

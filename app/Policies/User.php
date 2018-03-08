@@ -33,4 +33,9 @@ class User
     {
         return ($this->defaultPermissions & UserModel::PERMISSION_EDIT) !== 0;
     }
+
+    public function delete()
+    {
+        return ($this->defaultPermissions & UserModel::PERMISSION_DELETE) !== 0;
+    }
 }

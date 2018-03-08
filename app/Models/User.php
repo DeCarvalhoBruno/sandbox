@@ -24,6 +24,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;
     const PERMISSION_EDIT = 0b100;
+    const PERMISSION_DELETE = 0b1000;
 
     public $table = 'users';
     protected $primaryKey = 'user_id';

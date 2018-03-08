@@ -69,7 +69,8 @@ class Permissions extends Migration
             $table->foreign('entity_id')
                 ->references('entity_id')->on('entities');
             $table->foreign('permission_target_id')
-                ->references('entity_type_id')->on('entity_types');
+                ->references('entity_type_id')->on('entity_types')
+                ->onDelete('cascade');
             $table->foreign('permission_store_id')
                 ->references('permission_store_id')->on('permission_stores')
                 ->onDelete('cascade');
@@ -85,7 +86,7 @@ class Permissions extends Migration
             [
                 'entity_type_id' => 3,
                 'entity_id' => \App\Models\Entity::USERS,
-                'permission_mask' => 0b111
+                'permission_mask' => 0b1111
             ],
             [
                 'entity_type_id' => 3,
@@ -100,7 +101,7 @@ class Permissions extends Migration
             [
                 'entity_type_id' => 4,
                 'entity_id' => \App\Models\Entity::USERS,
-                'permission_mask' => 0b111,
+                'permission_mask' => 0b1111,
             ],
             [
                 'entity_type_id' => 4,
@@ -115,7 +116,7 @@ class Permissions extends Migration
             [
                 'entity_type_id' => 5,
                 'entity_id' => \App\Models\Entity::USERS,
-                'permission_mask' => 0b101,
+                'permission_mask' => 0b0101,
             ],
         ]);
 
@@ -138,6 +139,11 @@ class Permissions extends Migration
                 'entity_id' => \App\Models\Entity::USERS,
                 'permission_action_bits' => 0b100,
                 'permission_action_name' => 'edit'
+            ],
+            [
+                'entity_id' => \App\Models\Entity::USERS,
+                'permission_action_bits' => 0b1000,
+                'permission_action_name' => 'delete'
             ],
             [
                 'entity_id' => \App\Models\Entity::GROUPS,

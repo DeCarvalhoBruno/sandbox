@@ -18,10 +18,10 @@ class User extends Controller
         return [
             'table' => $userProvider
                 ->select([
-                    'full_name',
-                    'email',
-                    'users.user_id',
-                    'created_at',
+                    \DB::raw('"" as selected'),
+                    'full_name as ' . trans('ajax.db_raw_reverse.full_name'),
+                    'email as ' . trans('ajax.db_raw_reverse.email'),
+                    'created_at as ' . trans('ajax.db_raw_reverse.created_at'),
                     'permission_mask',
                     'username'
                 ])->entityType()
@@ -31,9 +31,9 @@ class User extends Controller
                 ->activated()
                 ->filter($userFilter)->paginate(10),
             'columns' => $userProvider->createModel()->getColumnInfo([
-                'full_name' => trans('ajax.db.full_name'),
-                'email' => trans('ajax.general.email'),
-                'created_at' => trans('ajax.db.user_created_at')
+                trans('ajax.db_raw_reverse.full_name') => trans('ajax.db.full_name'),
+                trans('ajax.db_raw_reverse.email') => trans('ajax.general.email'),
+                trans('ajax.db_raw_reverse.created_at') => trans('ajax.db.user_created_at')
             ])
         ];
     }
@@ -85,6 +85,11 @@ class User extends Controller
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * @param string $search
+     * @param \App\Contracts\Models\User|\App\Providers\Models\User $userProvider
+     * @return \Illuminate\Http\Response
+     */
     public function search($search, UserProvider $userProvider)
     {
         return response(
@@ -92,6 +97,17 @@ class User extends Controller
                 preg_replace('/[^\w\s\-\']/', '', strip_tags($search)),
                 auth()->user()->getAttribute('entity_type_id')
             )->get(), Response::HTTP_OK);
+    }
+
+    /**
+     * @param string $username
+     * @param \App\Contracts\Models\User|\App\Providers\Models\User $userProvider
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($username, UserProvider $userProvider)
+    {
+        $userProvider->deleteOneByUsername($username);
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 
 

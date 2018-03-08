@@ -41,7 +41,7 @@ class User extends Model implements UserProvider, UserInterface
      */
     public function updateOneUser($model, $field, $value, $data)
     {
-        $user = $model->newQuery()->select(['person_id','entity_type_id'])
+        $user = $model->newQuery()->select(['person_id', 'entity_type_id'])
             ->where($field, $value)->entityType()->first();
         $this->person->createModel()->where('person_id',
             $user->person_id)->update($this->person->filterFillables($data));
@@ -70,6 +70,14 @@ class User extends Model implements UserProvider, UserInterface
     public function updateOneByUsername($username, $data)
     {
         return $this->updateOneUser($this->createModel(), 'username', $username, $data);
+    }
+
+    public function deleteOneByUsername($username)
+    {
+        return $this->createModel()->newQueryWithoutScopes()
+            ->where('username', '=', $username)
+            ->delete();
+
     }
 
     /**

@@ -25,9 +25,10 @@ return [
         'password' => 'Password',
         'actions' => 'Actions',
         'email' => 'E-mail',
-        'back'=>'Back',
-        'permission'=>'Permission|Permissions',
-        'toggle'=>'Toggle On/Off'
+        'back' => 'Back',
+        'permission' => 'Permission|Permissions',
+        'toggle' => 'Toggle On/Off',
+        'select_all'=>'Select all'
     ],
     'db' => [
         'user' => 'User|Users',
@@ -43,6 +44,18 @@ return [
         'new_group_name' => 'New group name',
         'group_mask' => 'Group mask',
         'member_count' => 'Number of members'
+    ],
+    'db_raw' => [
+        'full_name' => 'full_name',
+        'email' => 'email',
+        'group_name' => 'group_name',
+        'created_at'=>'created_at'
+    ],
+    'db_raw_reverse' => [
+        'full_name' => 'full_name',
+        'email' => 'email',
+        'group_name' => 'group_name',
+        'created_at'=>'created_at',
     ],
     'form' => [
         'description' => [
@@ -78,8 +91,9 @@ return [
     'message' => [
         'info_updated' => 'Your info has been updated!',
         'password_updated' => 'Your password has been updated!',
-        'user_update_ok' => 'The user was updated successfully. It may take a few extra seconds for permissions to update.',
-        'group_update_ok' => 'The group was updated successfully. It may take a few extra seconds for permissions to update.'
+        'user_update_ok' => 'The user was updated. It may take a few seconds for permissions to update.',
+        'user_delete_ok' => 'The user was deleted.',
+        'group_update_ok' => 'The group was updated. It may take a few seconds for permissions to update.'
     ],
     'pages' => [
         'auth' => [
@@ -106,22 +120,33 @@ return [
             'current_members' => 'The following users are members of this group:',
         ],
         'users' => [
-            'warning1'=>'Setting individual permissions for this user 
+            'warning1' => 'Setting individual permissions for this user 
             will override permissions set on groups of which the user is a member.',
-            'warning2'=>'We recommend setting permissions on groups instead, 
+            'warning2' => 'We recommend setting permissions on groups instead, 
             and use individual user permissions to handle exceptions.'
         ],
         'groups' => [
-            'info1'=>'Permissions for all members of the group are defined here.',
-            'info2'=>'Individual permissions can also be set at the user level,
+            'info1' => 'Permissions for all members of the group are defined here.',
+            'info2' => 'Individual permissions can also be set at the user level,
             in which case user permissions will override permissions set here.'
         ]
     ],
     'tables' => [
         'empty' => 'There is currently no data available.',
-        'sort_asc' => 'Sort in ascending order',
-        'sort_desc' => 'Sort in descending order',
-
+        'sort_ascending' => 'Sort in ascending order',
+        'sort_descending' => 'Sort in descending order',
+        'select_item'=>'Select {name}',
+        'edit_item'=>'Edit {name}',
+        'delete_item'=>'Delete {name}'
+    ],
+    'filters' => [
+        'sortBy' => 'sortBy',
+        'order' => 'order',
+        'name' => 'username',
+        'asc' => 'ascending',
+        'desc' => 'descending',
+        'ascending' => 'asc',
+        'descending' => 'desc'
     ],
     'go_home' => 'Go Home',
     'toggle_navigation' => 'Toggle navigation',
