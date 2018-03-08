@@ -61,7 +61,7 @@
     data: function () {
       return {
         MenuItems,
-        dismissSecs: 5,
+        dismissSecs: 10,
         dismissCountDown: 0,
         breadCrumbs: []
       }

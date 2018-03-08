@@ -7,7 +7,6 @@ trait Enumerable
     /**
      * @param string $prefix
      * @return mixed
-     * @throws \ReflectionException
      */
     public static function getConstants($prefix = null)
     {
@@ -26,7 +25,11 @@ trait Enumerable
 
         $calledClass = get_called_class();
         if (!array_key_exists($calledClass, static::$constCacheArray)) {
-            $reflect = new \ReflectionClass($calledClass);
+            try {
+                $reflect = new \ReflectionClass($calledClass);
+            } catch (\ReflectionException $e) {
+                throw new \UnexpectedValueException(sprintf('Class %s does not exist.', $calledClass));
+            }
 
             static::$constCacheArray[$calledClass] = array_filter(
                 $reflect->getConstants(), $fn, ARRAY_FILTER_USE_BOTH
@@ -41,7 +44,6 @@ trait Enumerable
      * @param bool $strict
      *
      * @return bool
-     * @throws \ReflectionException
      */
     public static function isValidName($name, $strict = false)
     {
@@ -60,7 +62,6 @@ trait Enumerable
      * @param mixed $value
      *
      * @return bool
-     * @throws \ReflectionException
      */
     public static function isValidValue($value)
     {
@@ -73,7 +74,6 @@ trait Enumerable
      * @param mixed $name
      *
      * @return null
-     * @throws \ReflectionException
      */
     public static function getConstantNameByID($name)
     {
@@ -88,7 +88,6 @@ trait Enumerable
      * @param int $id
      *
      * @return boolean
-     * @throws \ReflectionException
      */
     public static function getConstantByID($id)
     {
@@ -103,7 +102,6 @@ trait Enumerable
      * @param mixed $id
      *
      * @return string
-     * @throws \Exception
      */
     public static function getConstantName($id)
     {
@@ -111,23 +109,26 @@ trait Enumerable
         if (!is_null($name)) {
             return strtolower($name);
         }
-        throw new \Exception(sprintf('Constant %s does not exist.', $id));
+        throw new \UnexpectedValueException(sprintf('Constant %s does not exist.', $id));
     }
 
     /**
      * @param $name
      *
      * @return mixed
-     * @throws \Exception
      */
     public static function getConstant($name)
     {
-        $c = new \ReflectionClass(static::class);
+        try {
+            $c = new \ReflectionClass(static::class);
+        } catch (\ReflectionException $e) {
+            throw new \UnexpectedValueException(sprintf('Class %s does not exist.', static::class));
+        }
         $id = $c->getConstant($name);
         if (!is_null($id)) {
             return $id;
         }
-        throw new \Exception(sprintf('Constant %s does not exist.', $name));
+        throw new \UnexpectedValueException(sprintf('Constant %s does not exist.', $name));
     }
 
 }

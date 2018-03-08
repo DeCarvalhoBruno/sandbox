@@ -1,6 +1,7 @@
 <?php namespace App\Models;
 
 use App\Traits\Models\DoesSqlStuff;
+use App\Traits\Models\HasAnEntity;
 use Illuminate\Database\Eloquent\Model;
 
 class Permission extends Model
@@ -107,6 +108,17 @@ class Permission extends Model
             $q->on('users.user_id', '=', 'entity_types.entity_type_target_id')
                 ->where('entity_types.entity_id', '=', Entity::USERS);
         });
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param int $entityId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function applyEntityScope($builder, $entityId)
+    {
+        $method = ucfirst(str_singular(Entity::getConstantName($entityId)));
+        return call_user_func([$builder, $method]);
     }
 
 }

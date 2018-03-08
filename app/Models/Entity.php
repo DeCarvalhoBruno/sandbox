@@ -2,7 +2,6 @@
 
 use App\Traits\Enumerable;
 use Illuminate\Database\Eloquent\Model;
-use Prophecy\Exception\Call\UnexpectedCallException;
 
 class Entity extends Model
 {

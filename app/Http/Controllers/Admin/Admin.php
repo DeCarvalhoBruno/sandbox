@@ -1,10 +1,7 @@
 <?php namespace App\Http\Controllers\Admin;
 
-use App\Contracts\RawQueries;
 use App\Filters\User as UserFilter;
 use App\Http\Controllers\Controller;
-use App\Models\Group;
-use App\Models\User;
 use App\Providers\Models\User as UserProvider;
 
 class Admin extends Controller

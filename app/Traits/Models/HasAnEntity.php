@@ -11,7 +11,8 @@ trait HasAnEntity
      * @see \App\Models\Entity
      * @return int
      */
-    public function getEntity(){
+    public function getEntity()
+    {
         return $this->entityID;
     }
 

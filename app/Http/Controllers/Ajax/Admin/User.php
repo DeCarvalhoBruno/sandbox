@@ -8,6 +8,7 @@ use App\Contracts\RawQueries;
 use App\Filters\User as UserFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateUser;
+use App\Models\Entity;
 use Illuminate\Http\Response;
 
 class User extends Controller
@@ -46,10 +47,19 @@ class User extends Controller
     {
         $f = app()->make(RawQueries::class);
         $user = $userProvider->getOneByUsername($username,
-            ['first_name', 'last_name', 'email', 'username', 'full_name', 'entity_type_id'])->entityType()->first();
+            [
+                'first_name',
+                'last_name',
+                'email',
+                'username',
+                'full_name',
+                'entity_type_id'
+            ])->entityType()->first()->toArray();
+        $entityTypeId = $user['entity_type_id'];
+        unset($user['entity_type_id']);
         return [
             'user' => $user,
-            'permissions' => $f->getAllUserPermissions($user->getEntitytype())
+            'permissions' => $f->getAllUserPermissions($entityTypeId)
         ];
     }
 
@@ -70,7 +80,7 @@ class User extends Controller
         $permissions = $request->getPermissions();
 
         if (!is_null($permissions)) {
-            $permissionProvider->updateIndividual($permissions, $user->getEntityType());
+            $permissionProvider->updateIndividual($permissions, $user->getEntityType(), Entity::USERS);
         }
         return response(null, Response::HTTP_NO_CONTENT);
     }

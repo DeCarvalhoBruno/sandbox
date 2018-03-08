@@ -4,7 +4,6 @@ use App\Contracts\Models\Group as GroupInterface;
 use App\Contracts\RawQueries;
 use App\Events\UpdatedGroupMembers;
 use App\Models\GroupMember;
-use App\Support\MysqlRawQueries;
 
 /**
  * @method \App\Models\Group createModel(array $attributes = [])
@@ -54,8 +53,12 @@ class Group extends Model implements GroupInterface
      */
     public function updateOneGroup($model, $field, $value, $data)
     {
-        return $model->newQuery()->where($field, $value)
+        $group = $model->newQuery()->select(['group_id', 'entity_type_id'])
+            ->where($field, $value)->entityType()->first();
+
+        $model->newQuery()->where($field, $value)
             ->update($this->filterFillables($data));
+        return $group;
     }
 
     /**
@@ -65,8 +68,8 @@ class Group extends Model implements GroupInterface
     public function getMembers($groupName)
     {
         $model = $this->createModel();
-        $count = $model->newQuery()->select(\DB::raw('count(group_members.user_id) as c'))->groupMember()->user()->where('group_name',
-            '=', $groupName)->pluck('c')->pop();
+        $count = $model->newQuery()->select(\DB::raw('count(group_members.user_id) as c'))
+            ->groupMember()->user()->where('group_name', '=', $groupName)->pluck('c')->pop();
         if ($count > 25) {
             return ['count' => $count];
         } else {

@@ -5,15 +5,17 @@
                 <b-tab :title="form.group_name" active>
                     <div class="col-md-8 offset-md-2">
                         <div class="form-group row">
-                            <label for="group_name" class="col-md-3 col-form-label">{{$t('db.group_name')}}</label>
+                            <label for="new_group_name"
+                                   class="col-md-3 col-form-label">{{$t('db.new_group_name')}}</label>
                             <div class="col-md-9">
-                                <input v-model="form.group_name" type="text"
-                                       name="group_name" id="group_name" class="form-control"
-                                       :class="{ 'is-invalid': form.errors.has('group_name') }"
-                                       :placeholder="$t('db.group_name')"
-                                       aria-describedby="help_group_name">
-                                <has-error :form="form" field="group_name"/>
-                                <small id="help_group_name" class="text-muted">{{$t('form.description.group_name')}}
+                                <input v-model="form.new_group_name" type="text"
+                                       name="new_group_name" id="new_group_name" class="form-control"
+                                       :class="{ 'is-invalid': form.errors.has('new_group_name') }"
+                                       :placeholder="$t('db.new_group_name')"
+                                       aria-describedby="help_new_group_name">
+                                <has-error :form="form" field="new_group_name"/>
+                                <small id="help_new_group_name" class="text-muted">
+                                    {{$t('form.description.group_name',[form.group_name])}}
                                 </small>
                             </div>
                         </div>
@@ -127,12 +129,9 @@
         try {
           this.form.addField('permissions', this.getPermissions(this.$refs.buttonCircle))
           const {data} = await this.form.patch(`/ajax/admin/groups/${this.group}`)
-          // this.$store.dispatch('session/setMessageSuccess', this.$t('message.group_update_ok'))
-          // this.$router.push({name: 'admin.groups.index'})
-        } catch (e) {
-
-        }
-
+          this.$router.push({name: 'admin.groups.index'})
+          this.$store.dispatch('session/setMessageSuccess', this.$t('message.group_update_ok'))
+        } catch (e) {}
       }
     },
     beforeRouteEnter (to, from, next) {

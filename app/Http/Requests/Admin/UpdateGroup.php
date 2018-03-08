@@ -12,7 +12,7 @@ class UpdateGroup extends FormRequest
     public function rules()
     {
         return [
-            'group_name' => 'required|regex:/^(\w){1,15}$/|unique:groups,group_name',
+            'new_group_name' => 'regex:/^(\w){1,15}$/|unique:groups,group_name',
             'group_mask' => 'required|integer|min:100',
         ];
     }
@@ -22,11 +22,11 @@ class UpdateGroup extends FormRequest
         $input = $this->input();
         $this->processPermissions($input['permissions']);
 
-        if (isset($input['new_group_'])) {
-            $input['email'] = $input['new_email'];
+        if (isset($input['new_group_name'])) {
+            $input['group_name'] = $input['new_group_name'];
         }
 
-        unset($input['new_email'], $input['new_username'], $input['permissions']);
+        unset($input['new_group_name'], $input['permissions']);
         $this->replace($input);
     }
 }

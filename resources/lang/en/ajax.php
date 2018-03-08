@@ -40,6 +40,7 @@ return [
         'new_username' => 'New username',
         'user_created_at' => 'Registration date',
         'group_name' => 'Group name',
+        'new_group_name' => 'New group name',
         'group_mask' => 'Group mask',
         'member_count' => 'Number of members'
     ],
@@ -50,7 +51,7 @@ return [
             'last_name' => 'The user\'s last (family) name.',
             'new_email' => '"{0}" is the current e-mail address.',
             'new_username' => '"{0}" is the current username.',
-            'group_name' => 'The group name can only contain alphanumeric characters and underscores.',
+            'group_name' => '"{0}" is the current group name. The group name can only contain alphanumeric characters and underscores.',
             'group_mask' => 'Determines the group\'s position in its hierarchy. The lower the mask, the higher the group status.'
         ],
     ],

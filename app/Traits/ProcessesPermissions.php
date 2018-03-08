@@ -1,11 +1,14 @@
 <?php namespace App\Traits;
 
+use App\Models\Entity;
+
 trait ProcessesPermissions
 {
     private $permissions=null;
 
     /**
      * @param array $input
+     * @throws \Exception
      */
     public function processPermissions($input)
     {

@@ -15,14 +15,21 @@ class Permission extends Model implements PermissionInterface
 {
     protected $model = PermissionModel::class;
 
-    public function updateIndividual($permissionData, $entityTypeId)
+    /**
+     * @param array $permissionData
+     * @param int $entityTypeId
+     * @param int $entityId
+     */
+    public function updateIndividual($permissionData, $entityTypeId, $entityId)
     {
         if (!is_int($entityTypeId)) {
             return;
         }
-        $result = $this->createModel()->newQuery()
+        $query = $this->createModel()->newQuery()
             ->select(['permission_id', 'permission_mask', 'entities.entity_id'])
-            ->entityAll($entityTypeId)->entityType()->user()->get()->toArray();
+            ->entityAll($entityTypeId)->entityType();
+        $result = $this->createModel()->applyEntityScope($query, $entityId)->get()->toArray();
+
         $currentPermissions = [];
         foreach ($result as $v) {
             $currentPermissions[$v['entity_id']] = (object)$v;
@@ -44,17 +51,25 @@ class Permission extends Model implements PermissionInterface
         event(new UpdatedUser);
     }
 
+    /**
+     * Gets all root permissions on groups which we see as "max" permissions
+     * as well as the current group permissions.
+     *
+     * @param int $entityTypeId
+     * @return array
+     * @throws \ReflectionException
+     */
     public function getRootAndGroupPermissions($entityTypeId)
     {
-        $results= $this->createModel()->newQuery()->newQuery()
-            ->select(['permission_id', 'permission_mask', 'entities.entity_id','entity_type_id'])
-            ->entityAll([$entityTypeId,EntityType::ROOT_GROUP_ENTITY_TYPE_ID])->get();
+        $results = $this->createModel()->newQuery()->newQuery()
+            ->select(['permission_id', 'permission_mask', 'entities.entity_id', 'entity_type_id'])
+            ->entityAll([$entityTypeId, EntityType::ROOT_GROUP_ENTITY_TYPE_ID])->get();
         $permission = [];
         foreach ($results as $result) {
-            $type=($result->entity_type_id==EntityType::ROOT_GROUP_ENTITY_TYPE_ID)?'default':'computed';
+            $type = ($result->entity_type_id == EntityType::ROOT_GROUP_ENTITY_TYPE_ID) ? 'default' : 'computed';
             $permission[$type][trans_choice(sprintf('ajax.db.%s',
-                Entity::getModelPresentableName($result->entity_id)),2)] =
-                Entity::createModel($result->entity_id,[],HasPermissions::class)
+                Entity::getModelPresentableName($result->entity_id)), 2)] =
+                Entity::createModel($result->entity_id, [], HasPermissions::class)
                     ->getReadablePermissions($result->permission_mask, true);
         }
         //We're supposed to get an array with computed and default permissions but some users
