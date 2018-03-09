@@ -70,6 +70,10 @@
         type: Array,
         required: true
       },
+      total: {
+        type: Number,
+        required: true
+      },
       isMultiSelect: false
     },
     computed: {
@@ -80,7 +84,6 @@
         to: 'table/to',
         lastPage: 'table/lastPage',
         perPage: 'table/perPage',
-        total: 'table/total'
       })
     },
     watch: {

@@ -9,6 +9,7 @@ use App\Filters\User as UserFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateUser;
 use App\Models\Entity;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class User extends Controller
@@ -108,6 +109,14 @@ class User extends Controller
     {
         $userProvider->deleteOneByUsername($username);
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function batchDestroy(Request $request, UserProvider $userProvider)
+    {
+        $users = $request->only('users');
+
+        return response($request->only('users'), Response::HTTP_OK);
+//        return response(null, Response::HTTP_NO_CONTENT);
     }
 
 

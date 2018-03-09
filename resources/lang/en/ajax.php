@@ -28,7 +28,8 @@ return [
         'back' => 'Back',
         'permission' => 'Permission|Permissions',
         'toggle' => 'Toggle On/Off',
-        'select_all'=>'Select all'
+        'select_all' => 'Select all',
+        'apply' => 'Apply'
     ],
     'db' => [
         'user' => 'User|Users',
@@ -49,13 +50,13 @@ return [
         'full_name' => 'full_name',
         'email' => 'email',
         'group_name' => 'group_name',
-        'created_at'=>'created_at'
+        'created_at' => 'created_at'
     ],
     'db_raw_reverse' => [
         'full_name' => 'full_name',
         'email' => 'email',
         'group_name' => 'group_name',
-        'created_at'=>'created_at',
+        'created_at' => 'created_at',
     ],
     'form' => [
         'description' => [
@@ -92,7 +93,7 @@ return [
         'info_updated' => 'Your info has been updated!',
         'password_updated' => 'Your password has been updated!',
         'user_update_ok' => 'The user was updated. It may take a few seconds for permissions to update.',
-        'user_delete_ok' => 'The user was deleted.',
+        'user_delete_ok' => 'The user was deleted.|The users were deleted.',
         'group_update_ok' => 'The group was updated. It may take a few seconds for permissions to update.'
     ],
     'pages' => [
@@ -135,9 +136,12 @@ return [
         'empty' => 'There is currently no data available.',
         'sort_ascending' => 'Sort in ascending order',
         'sort_descending' => 'Sort in descending order',
-        'select_item'=>'Select {name}',
-        'edit_item'=>'Edit {name}',
-        'delete_item'=>'Delete {name}'
+        'select_item' => 'Select {name}',
+        'edit_item' => 'Edit {name}',
+        'delete_item' => 'Delete {name}',
+        'grouped_actions'=>'Grouped actions',
+        'option_del_user'=>'Delete user',
+        'btn_apply_title'=>'Apply action to all selected users'
     ],
     'filters' => [
         'sortBy' => 'sortBy',

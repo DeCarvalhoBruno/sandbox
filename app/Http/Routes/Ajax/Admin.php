@@ -25,6 +25,7 @@ class Admin
             $r->get('users/{user}', 'User@edit')->middleware('can:update,App\Models\User');
             $r->patch('users/{user}', 'User@update')->middleware('can:update,App\Models\User');
             $r->delete('users/{user}', 'User@destroy')->middleware('can:delete,App\Models\User');
+            $r->post('users/batch/delete', 'User@batchDestroy')->middleware('can:delete,App\Models\User');
             $r->get('users/search/{search}', 'User@search')->middleware('can:view,App\Models\User');
 
             $r->get('groups', 'Group@index')->middleware('can:view,App\Models\Group');
