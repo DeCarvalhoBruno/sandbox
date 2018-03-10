@@ -29,7 +29,9 @@ return [
         'permission' => 'Permission|Permissions',
         'toggle' => 'Toggle On/Off',
         'select_all' => 'Select all',
-        'apply' => 'Apply'
+        'apply' => 'Apply',
+        'search' => 'Search',
+        'reset_filters'=>'Reset Filters'
     ],
     'db' => [
         'user' => 'User|Users',
@@ -124,7 +126,9 @@ return [
             'warning1' => 'Setting individual permissions for this user 
             will override permissions set on groups of which the user is a member.',
             'warning2' => 'We recommend setting permissions on groups instead, 
-            and use individual user permissions to handle exceptions.'
+            and use individual user permissions to handle exceptions.',
+            'filter_full_name' => 'Filter by full name',
+            'filter_group' => 'Filter by group',
         ],
         'groups' => [
             'info1' => 'Permissions for all members of the group are defined here.',
@@ -139,14 +143,16 @@ return [
         'select_item' => 'Select {name}',
         'edit_item' => 'Edit {name}',
         'delete_item' => 'Delete {name}',
-        'grouped_actions'=>'Grouped actions',
-        'option_del_user'=>'Delete user',
-        'btn_apply_title'=>'Apply action to all selected users'
+        'grouped_actions' => 'Grouped actions',
+        'option_del_user' => 'Delete user',
+        'btn_apply_title' => 'Apply action to all selected users'
     ],
     'filters' => [
         'sortBy' => 'sortBy',
         'order' => 'order',
         'name' => 'username',
+        'group'=>'group',
+        'registration'=>'created_at',
         'asc' => 'ascending',
         'desc' => 'descending',
         'ascending' => 'asc',

@@ -17,6 +17,7 @@
                         </template>
                     </li>
                 </ol>
+                <hr>
                 <div class="container">
                     <b-alert v-if="hasMessage" :show="dismissCountDown"
                              dismissible

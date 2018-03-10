@@ -16,21 +16,24 @@ class User extends Controller
 {
     public function index(UserProvider $userProvider, UserFilter $userFilter)
     {
+        $users = $userProvider
+            ->select([
+                \DB::raw('"" as selected'),
+                'full_name as ' . trans('ajax.db_raw_reverse.full_name'),
+                'email as ' . trans('ajax.db_raw_reverse.email'),
+                'created_at as ' . trans('ajax.db_raw_reverse.created_at'),
+                'permission_mask',
+                'username'
+            ])->entityType()
+            ->permissionRecord()
+            ->permissionStore()
+            ->permissionMask(auth()->user()->getEntityType())
+            ->activated()
+            ->filter($userFilter);
+        $groups = (clone $users)->select('group_name')->groupMember()->groupBy('group_name');
         return [
-            'table' => $userProvider
-                ->select([
-                    \DB::raw('"" as selected'),
-                    'full_name as ' . trans('ajax.db_raw_reverse.full_name'),
-                    'email as ' . trans('ajax.db_raw_reverse.email'),
-                    'created_at as ' . trans('ajax.db_raw_reverse.created_at'),
-                    'permission_mask',
-                    'username'
-                ])->entityType()
-                ->permissionRecord()
-                ->permissionStore()
-                ->permissionMask(auth()->user()->getEntityType())
-                ->activated()
-                ->filter($userFilter)->paginate(10),
+            'table' => $users->paginate(10),
+            'groups' => $groups->pluck('group_name'),
             'columns' => $userProvider->createModel()->getColumnInfo([
                 trans('ajax.db_raw_reverse.full_name') => trans('ajax.db.full_name'),
                 trans('ajax.db_raw_reverse.email') => trans('ajax.general.email'),

@@ -2,11 +2,55 @@
     <div class="container">
         <div class="row">
             <div class="container">
-                <div class="row py-2">
+                <div class="row mb-5">
+                    <button type="button" class="btn btn-primary" @click="$router.push({query:null})">
+                        {{$t('general.reset_filters')}}
+                    </button>
+                </div>
+                <div class="row pb-1">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input type="text" class="form-control"
+                                   :placeholder="$t('pages.users.filter_full_name')"
+                                   :aria-label="$t('pages.users.filter_full_name')"
+                                   v-model="fullNameFilter">
+                            <div class="input-group-append">
+                                <button class="btn btn-default btn-outline-dark"
+                                        type="button" :title="$t('general.search')"
+                                        @click="filterFullName">
+                                    <fa icon="user"/>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="custom-select mr-sm-2" id="select_filter_groups" v-model="groupFilter">
+                            <option disabled value="">{{$t('pages.users.filter_group')}}</option>
+                            <option v-for="group in extras.groups">{{group}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <select class="custom-select" id="inputGroupSelect02">
+                                <option selected>Choose...</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <div class="input-group-append">
+                                <button class="btn btn-default btn-outline-dark"
+                                        type="button" :title="$t('general.search')"
+                                        @click="filterCreatedAt">
+                                    <fa icon="calendar"/>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pb-1">
                     <div class="col-md-8">
                         <div class="form-row align-items-center">
                             <div class="col my-1">
-                                <!--<label class="sr-only" for="select_apply_to_all"></label>-->
                                 <select class="custom-select mr-sm-2" id="select_apply_to_all" v-model="selectApply">
                                     <option disabled value="">{{$t('tables.grouped_actions')}}</option>
                                     <option value="del">{{$t('tables.option_del_user')}}</option>
@@ -92,14 +136,28 @@
     data: function () {
       return {
         allSelected: false,
-        selectApply: ''
+        selectApply: '',
+        fullNameFilter: '',
+        groupFilter: ''
       }
     },
     computed: {
       ...mapGetters({
         rows: 'table/rows',
-        total: 'table/total'
+        total: 'table/total',
+        extras: 'table/extras'
       })
+    },
+    watch: {
+      groupFilter () {
+        let obj = Object.assign({}, this.$route.query)
+        obj[this.$t('filters.group')] = this.groupFilter
+        this.$router.push({query: obj})
+      }
+    },
+    created () {
+      this.fullNameFilter = this.$route.query[this.$t('filters.name')]
+      // this.groups=
     },
     methods: {
       toggleSelectAll () {
@@ -113,12 +171,12 @@
         })
       },
       deleteRows (data) {
-        console.log(this.getSelectedRows())
+        // @TODO: code this
       },
       async deleteRow (data) {
         try {
           await axios.delete(`/ajax/admin/users/${data.username}`)
-          this.$store.dispatch('session/setMessageSuccess', this.$tc('message.user_delete_ok',1))
+          this.$store.dispatch('session/setMessageSuccess', this.$tc('message.user_delete_ok', 1))
           this.$store.dispatch('table/fetchData', {
             entity: 'users',
             queryString: this.$route.fullPath
@@ -142,8 +200,8 @@
         switch (this.selectApply) {
           case 'del':
             try {
-              await axios.post(`/ajax/admin/users/batch/delete`,{users:this.getSelectedRows('username')})
-              this.$store.dispatch('session/setMessageSuccess', this.$tc('message.user_delete_ok',2))
+              await axios.post(`/ajax/admin/users/batch/delete`, {users: this.getSelectedRows('username')})
+              this.$store.dispatch('session/setMessageSuccess', this.$tc('message.user_delete_ok', 2))
               this.$store.dispatch('table/fetchData', {
                 entity: 'users',
                 queryString: this.$route.fullPath
@@ -153,6 +211,13 @@
             }
             break
         }
+      },
+      filterFullName () {
+        let obj = Object.assign({}, this.$route.query)
+        obj[this.$t('filters.name')] = this.fullNameFilter
+        this.$router.push({query: obj})
+      },
+      filterCreatedAt () {
 
       }
     },

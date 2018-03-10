@@ -16,7 +16,8 @@ export const state = {
   lastPage: 0,
   perPage: 0,
   to: 0,
-  total: 0
+  total: 0,
+  extras: {}
 }
 
 export const getters = {
@@ -27,7 +28,8 @@ export const getters = {
   lastPage: state => state.lastPage,
   perPage: state => state.perPage,
   to: state => state.to,
-  total: state => state.total
+  total: state => state.total,
+  extras: state => state.extras
 }
 
 export const mutations = {
@@ -40,6 +42,7 @@ export const mutations = {
     state.perPage = data.table.per_page
     state.to = data.table.to
     state.total = data.table.total
+    state.extras = {groups: data.groups}
   },
   [types.UPDATE_TABLE_DATA] (state, data) {
     state.rows = data.table.data
@@ -49,6 +52,7 @@ export const mutations = {
     state.perPage = data.table.per_page
     state.to = data.table.to
     state.total = data.table.total
+    state.extras = {groups: data.groups}
   },
   [types.UPDATE_TABLE_COLUMN] (state, data) {
     state.columns[data.columnName].order = data.direction

@@ -2,7 +2,7 @@
 
 class User extends Filters
 {
-    protected $filters = ['sortBy', 'order', 'name'];
+    protected $filters = ['sortBy', 'order', 'name','createdAt','group'];
 
     protected $acceptedSortColumns = ['full_name', 'email', 'created_at'];
 
@@ -35,5 +35,23 @@ class User extends Filters
             trans(sprintf('ajax.db_raw.%s', 'full_name')),
             'like',
             sprintf('%%%s%%', $name));
+    }
+
+    /**
+     * @param string $name
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function group($name)
+    {
+        return $this->builder->groupMember($name);
+    }
+
+    /**
+     * @param string $date
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function createdAt($date)
+    {
+        return $this->builder;
     }
 }

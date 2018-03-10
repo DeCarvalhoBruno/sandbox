@@ -182,4 +182,25 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
                 ->where('permission_mask', '>', 0);
         });
     }
+
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param string $groupName
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public static function scopeGroupMember(Builder $builder, $groupName = null)
+    {
+        return $builder->join('group_members',
+            'group_members.user_id',
+            '=',
+            'users.user_id'
+        )->join('groups', function ($q) use ($groupName) {
+            $q->on('group_members.group_id', '=', 'groups.group_id');
+            if (!is_null($groupName)) {
+                $q->where('group_name', '=', $groupName);
+            }
+        });
+    }
+
 }
