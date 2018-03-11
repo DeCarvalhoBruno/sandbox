@@ -2,7 +2,7 @@
     <b-card no-body>
         <form @submit.prevent="save" @keydown="form.onKeydown($event)">
             <b-tabs card>
-                <b-tab :title="form.group_name" active>
+                <b-tab :title="form.group_name">
                     <div class="col-md-8 offset-md-2">
                         <div class="form-group row">
                             <label for="new_group_name"
@@ -34,7 +34,7 @@
                         </div>
                     </div>
                 </b-tab>
-                <b-tab :title="$tc('general.permission',2)" active>
+                <b-tab :title="$tc('general.permission',2)">
                     <div class="container">
                         <div class="callout callout-info">
                             <p>{{$t('pages.groups.info1')}}</p>

@@ -2,8 +2,8 @@
 return [
     'breadcrumb' => [
         'admin-dashboard' => 'Home',
-        'admin-users-index' => 'User',
-        'admin-groups-index' => 'Group',
+        'admin-users-index' => 'Users',
+        'admin-groups-index' => 'Groups',
         'admin-users-edit' => 'Edit',
         'admin-groups-edit' => 'Edit',
         'admin-groups-members' => 'Edit Members',
@@ -31,7 +31,7 @@ return [
         'select_all' => 'Select all',
         'apply' => 'Apply',
         'search' => 'Search',
-        'reset_filters'=>'Reset Filters'
+        'reset_filters' => 'Reset Filters'
     ],
     'db' => [
         'user' => 'User|Users',
@@ -129,6 +129,7 @@ return [
             and use individual user permissions to handle exceptions.',
             'filter_full_name' => 'Filter by full name',
             'filter_group' => 'Filter by group',
+            'filter_created_at' => 'Filter by registration date',
         ],
         'groups' => [
             'info1' => 'Permissions for all members of the group are defined here.',
@@ -150,13 +151,20 @@ return [
     'filters' => [
         'sortBy' => 'sortBy',
         'order' => 'order',
-        'name' => 'username',
-        'group'=>'group',
-        'registration'=>'created_at',
+        'name' => 'full_name',
+        'group' => 'group',
+        'registration' => 'created_at',
         'asc' => 'ascending',
         'desc' => 'descending',
         'ascending' => 'asc',
-        'descending' => 'desc'
+        'descending' => 'desc',
+        'filter_by' => 'Filtered by:'
+    ],
+    'filters_inv' => [
+        'full_name' => 'Full name',
+        'email' => 'E-Mail',
+        'ascending' => 'Ascending',
+        'descending' => 'Descending',
     ],
     'go_home' => 'Go Home',
     'toggle_navigation' => 'Toggle navigation',

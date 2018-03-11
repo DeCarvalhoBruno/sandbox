@@ -30,7 +30,10 @@ class User extends Controller
             ->permissionMask(auth()->user()->getEntityType())
             ->activated()
             ->filter($userFilter);
-        $groups = (clone $users)->select('group_name')->groupMember()->groupBy('group_name');
+        $groups = (clone $users)->select('group_name')->groupBy('group_name');
+        if (!$userFilter->hasFilter('group')) {
+            $groups->groupMember();
+        }
         return [
             'table' => $users->paginate(10),
             'groups' => $groups->pluck('group_name'),

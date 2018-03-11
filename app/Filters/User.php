@@ -2,7 +2,7 @@
 
 class User extends Filters
 {
-    protected $filters = ['sortBy', 'order', 'name','createdAt','group'];
+    protected $filters = ['sortBy', 'order', 'name', 'createdAt', 'group'];
 
     protected $acceptedSortColumns = ['full_name', 'email', 'created_at'];
 

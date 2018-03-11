@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-table :entity="'groups'">
+        <v-table :entity="'groups'" :rows="rows" :total="total">
             <th slot="header-action">
                 {{$t('general.actions')}}
             </th>
@@ -35,6 +35,7 @@
   import Vue from 'vue'
   import store from '~/store'
   import Table from '~/components/table/table'
+  import { mapGetters } from 'vuex'
 
   Vue.use(Table)
 
@@ -44,6 +45,13 @@
     middleware: 'check-auth',
     components: {
       'v-table': Table
+    },
+    computed: {
+      ...mapGetters({
+        rows: 'table/rows',
+        total: 'table/total',
+        extras: 'table/extras'
+      })
     },
     beforeRouteEnter (to, from, next) {
       store.dispatch('table/fetchData', {

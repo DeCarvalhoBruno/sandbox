@@ -1,11 +1,11 @@
 #main_wrapper {
-  .content-header{
-    min-height:70px;
+  .content-header {
+    min-height: 70px;
   }
 }
 
-#group_members_list>.card, .list-group-item{
-  .button-list-close{
+#group_members_list > .card, .list-group-item {
+  .button-list-close {
     cursor: pointer;
     position: relative;
     display: inline-block;
@@ -37,13 +37,24 @@
   }
 }
 
-#group_members_list>.card, .list-group-item {
+#filters_list {
+  .btn{
+    white-space: normal;
+  }
+  .button-list-close {
+    font-size: 1.4em;
+    padding-left:1rem;
+    color: #003cc2;
+  }
+}
+
+#group_members_list > .card, .list-group-item {
   p {
     padding: 1rem 0 0 0;
   }
 }
 
 #member_edit_preview {
-  margin-top:1.5rem;
-  clear:both;
+  margin-top: 1.5rem;
+  clear: both;
 }

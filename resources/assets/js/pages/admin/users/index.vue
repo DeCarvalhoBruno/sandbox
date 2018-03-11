@@ -3,9 +3,23 @@
         <div class="row">
             <div class="container">
                 <div class="row mb-5">
-                    <button type="button" class="btn btn-primary" @click="$router.push({query:null})">
-                        {{$t('general.reset_filters')}}
-                    </button>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-primary" @click="resetFilters">
+                            {{$t('general.reset_filters')}}
+                        </button>
+                    </div>
+                    <div id="filters_list" class="col-md-4">
+                        <span
+                                class="btn btn-default btn-outline-warning ml-2"
+                                v-for="(button,idx) in filterButtons"
+                                :key="idx" v-model="filterButtons"
+                        >{{button}}<button type="button" class="close button-list-close"
+                                           aria-label="Close"
+                                           @click="removeFilter(idx)">
+                                <span aria-hidden="true">&times;</span>
+                                        </button>
+                        </span>
+                    </div>
                 </div>
                 <div class="row pb-1">
                     <div class="col-md-4">
@@ -13,7 +27,8 @@
                             <input type="text" class="form-control"
                                    :placeholder="$t('pages.users.filter_full_name')"
                                    :aria-label="$t('pages.users.filter_full_name')"
-                                   v-model="fullNameFilter">
+                                   v-model="fullNameFilter"
+                                   @keyup.enter="filterFullName">
                             <div class="input-group-append">
                                 <button class="btn btn-default btn-outline-dark"
                                         type="button" :title="$t('general.search')"
@@ -24,25 +39,34 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <select class="custom-select mr-sm-2" id="select_filter_groups" v-model="groupFilter">
-                            <option disabled value="">{{$t('pages.users.filter_group')}}</option>
-                            <option v-for="group in extras.groups">{{group}}</option>
-                        </select>
+                        <div class="input-group">
+                            <select class="custom-select" v-model="groupFilter">
+                                <option disabled value="">{{$t('pages.users.filter_group')}}</option>
+                                <option v-for="(group,idx) in extras.groups" :key="idx">{{group}}</option>
+                            </select>
+                            <div class="input-group-append">
+                                <label class="input-group-text"
+                                       :title="$t('general.search')">
+                                    <fa icon="users"/>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <div class="input-group">
-                            <select class="custom-select" id="inputGroupSelect02">
-                                <option selected>Choose...</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <select class="custom-select" id="inputGroupSelect02" v-model="createdAtFilter">
+                                <option disabled value="">{{$t('pages.users.filter_created_at')}}</option>
+                                <option value="1">Registered today</option>
+                                <option value="7">Registered less than a week ago</option>
+                                <option value="30">Registered less than a month ago</option>
+                                <option value="365">Registered less than a year ago</option>
                             </select>
                             <div class="input-group-append">
-                                <button class="btn btn-default btn-outline-dark"
-                                        type="button" :title="$t('general.search')"
-                                        @click="filterCreatedAt">
+                                <label class="input-group-text"
+                                       type="button" :title="$t('general.search')"
+                                       @click="filterCreatedAt">
                                     <fa icon="calendar"/>
-                                </button>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -137,8 +161,10 @@
       return {
         allSelected: false,
         selectApply: '',
+        groupFilter: '',
+        createdAtFilter: '',
         fullNameFilter: '',
-        groupFilter: ''
+        filterButtons: {}
       }
     },
     computed: {
@@ -150,16 +176,60 @@
     },
     watch: {
       groupFilter () {
-        let obj = Object.assign({}, this.$route.query)
-        obj[this.$t('filters.group')] = this.groupFilter
-        this.$router.push({query: obj})
+        if (this.groupFilter) {
+          let obj = Object.assign({}, this.$route.query)
+          obj[this.$t('filters.group')] = this.groupFilter
+          this.$router.push({query: obj})
+        }
+      },
+      '$route' () {
+        this.setFilterButtons()
       }
     },
     created () {
-      this.fullNameFilter = this.$route.query[this.$t('filters.name')]
+      this.setFilterButtons()
+      // this.fullNameFilter = this.$route.query[this.$t('filters.name')]
+
+      /*
+      let queryStringFilters = Object.keys(this.$route.query)
+      // console.log(queryStringFilters)
+      if (queryStringFilters.length > 0) {
+        let queryStringValues = Object.values(this.$route.query)
+        let filters = []
+        queryStringFilters.forEach((v, idx) => {
+          filters.push((this.$te('filters_inv.'+queryStringValues[idx]))?this.$t('filters_inv.'+queryStringValues[idx]):queryStringValues[idx])
+        })
+        this.breadCrumbs.push({label: this.$t('filters.filter_by') +' '+ filters.join(' : ')})
+      }
+        */
       // this.groups=
     },
     methods: {
+      setFilterButtons () {
+        this.fullNameFilter = this.$route.query[this.$t('filters.name')]
+        if (this.fullNameFilter) {
+          // this.filterButtons[this.$t('filters.name')]={title: this.fullNameFilter, name: this.$t('filters.name')}
+          this.$set(this.filterButtons, this.$t('filters.name'), this.fullNameFilter)
+        }
+        this.groupFilter = this.$route.query[this.$t('filters.group')]
+        if (this.groupFilter) {
+          this.$set(this.filterButtons, this.$t('filters.group'), this.groupFilter)
+        } else {
+          this.groupFilter = ''
+        }
+      },
+      resetFilters () {
+        this.filterButtons = {}
+        this.$router.push({query: null})
+      },
+      removeFilter (idx) {
+        let currentFilters = Object.assign({}, this.$route.query)
+        delete currentFilters[idx]
+        let obj = Object.assign({}, this.filterButtons)
+        delete obj[idx]
+        this.filterButtons = obj
+        this.$router.push({query: currentFilters})
+      },
       toggleSelectAll () {
         this.allSelected = !this.allSelected
         this.rows.forEach(row => {
@@ -206,9 +276,7 @@
                 entity: 'users',
                 queryString: this.$route.fullPath
               })
-            } catch (e) {
-
-            }
+            } catch (e) {}
             break
         }
       },

@@ -35,7 +35,7 @@ abstract class Filters
      */
     public function __construct(Request $request)
     {
-        $this->parsedFilters = $request->only($this->getFilters());
+        $this->parsedFilters = array_filter($request->only($this->getFilters()));
         $this->acceptedSortColumns = array_flip($this->acceptedSortColumns);
     }
 
@@ -84,5 +84,14 @@ abstract class Filters
             $onlyFilters[] = $key;
         }
         return $onlyFilters;
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     */
+    public function hasFilter($value)
+    {
+        return isset($this->parsedFilters[$this->translateFilter($value)]);
     }
 }
