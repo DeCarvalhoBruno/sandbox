@@ -113,16 +113,19 @@ class User extends Controller
      */
     public function destroy($username, UserProvider $userProvider)
     {
-        $userProvider->deleteOneByUsername($username);
+        $userProvider->deleteByUsername($username);
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Contracts\Models\User|\App\Providers\Models\User $userProvider
+     * @return \Illuminate\Http\Response
+     */
     public function batchDestroy(Request $request, UserProvider $userProvider)
     {
-        $users = $request->only('users');
-
-        return response($request->only('users'), Response::HTTP_OK);
-//        return response(null, Response::HTTP_NO_CONTENT);
+        $userProvider->deleteByUsername($request->only('users'));
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 
 

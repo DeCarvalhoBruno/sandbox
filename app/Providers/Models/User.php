@@ -72,12 +72,18 @@ class User extends Model implements UserProvider, UserInterface
         return $this->updateOneUser($this->createModel(), 'username', $username, $data);
     }
 
-    public function deleteOneByUsername($username)
+    /**
+     * @param string|array $username
+     */
+    public function deleteByUsername($username)
     {
-        return $this->createModel()->newQueryWithoutScopes()
-            ->where('username', '=', $username)
-            ->delete();
-
+        if (is_array($username)) {
+            $this->createModel()->newQueryWithoutScopes()
+                ->whereIn('username', $username['users'])->delete();
+       } else {
+            $this->createModel()->newQueryWithoutScopes()
+                ->where('username', '=', $username)->delete();
+        }
     }
 
     /**
@@ -87,7 +93,8 @@ class User extends Model implements UserProvider, UserInterface
      */
     public function getOneByUsername($username, $columns = ['*'])
     {
-        return $this->createModel()->newQuery()->select($columns)->where('username', $username);
+        return $this->createModel()->newQuery()
+            ->select($columns)->where('username', $username);
     }
 
 

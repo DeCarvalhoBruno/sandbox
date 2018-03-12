@@ -63,8 +63,7 @@
                             </select>
                             <div class="input-group-append">
                                 <label class="input-group-text"
-                                       type="button" :title="$t('general.search')"
-                                       @click="filterCreatedAt">
+                                      :title="$t('general.search')">
                                     <fa icon="calendar"/>
                                 </label>
                             </div>
@@ -238,9 +237,6 @@
           }
         })
       },
-      deleteRows (data) {
-        // @TODO: code this
-      },
       async deleteRow (data) {
         try {
           await axios.delete(`/ajax/admin/users/${data.username}`)
@@ -283,9 +279,6 @@
         obj[this.$t('filters.name')] = this.fullNameFilter
         this.$router.push({query: obj})
       },
-      filterCreatedAt () {
-
-      }
     },
     beforeRouteEnter (to, from, next) {
       store.dispatch('table/fetchData', {
