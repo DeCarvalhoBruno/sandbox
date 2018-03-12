@@ -1,8 +1,10 @@
 <?php namespace App\Filters;
 
+use Carbon\Carbon;
+
 class User extends Filters
 {
-    protected $filters = ['sortBy', 'order', 'name', 'createdAt', 'group'];
+    protected $filters = ['sortBy', 'order', 'fullName', 'createdAt', 'group'];
 
     protected $acceptedSortColumns = ['full_name', 'email', 'created_at'];
 
@@ -29,7 +31,7 @@ class User extends Filters
      * @param string $name
      * @return \Illuminate\Database\Query\Builder
      */
-    public function name($name)
+    public function fullName($name)
     {
         return $this->builder->where(
             trans(sprintf('ajax.db_raw.%s', 'full_name')),
@@ -52,6 +54,22 @@ class User extends Filters
      */
     public function createdAt($date)
     {
-        return $this->builder;
+        switch ($date) {
+            case trans("ajax.filters_inv.week"):
+                $testedDate = Carbon::now()->subWeek()->toDateTimeString();
+                break;
+            case trans("ajax.filters_inv.month"):
+                $testedDate = Carbon::now()->subMonth()->toDateTimeString();
+                break;
+            case trans("ajax.filters_inv.year"):
+                $testedDate = Carbon::now()->subYear()->toDateTimeString();
+                break;
+            default:
+                $testedDate = Carbon::now()->setTime(0, 0, 0)->toDateTimeString();
+        }
+        return $this->builder->where(
+            'people.created_at',
+            '>',
+            $testedDate);
     }
 }

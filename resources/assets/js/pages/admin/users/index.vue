@@ -56,10 +56,10 @@
                         <div class="input-group">
                             <select class="custom-select" id="inputGroupSelect02" v-model="createdAtFilter">
                                 <option disabled value="">{{$t('pages.users.filter_created_at')}}</option>
-                                <option value="1">Registered today</option>
-                                <option value="7">Registered less than a week ago</option>
-                                <option value="30">Registered less than a month ago</option>
-                                <option value="365">Registered less than a year ago</option>
+                                <option value="day">Registered today</option>
+                                <option value="week">Registered less than a week ago</option>
+                                <option value="month">Registered less than a month ago</option>
+                                <option value="year">Registered less than a year ago</option>
                             </select>
                             <div class="input-group-append">
                                 <label class="input-group-text"
@@ -182,33 +182,25 @@
           this.$router.push({query: obj})
         }
       },
+      createdAtFilter () {
+        if (this.createdAtFilter) {
+          let obj = Object.assign({}, this.$route.query)
+          obj[this.$t('filters.created')] = this.createdAtFilter
+          this.$router.push({query: obj})
+        }
+      },
       '$route' () {
         this.setFilterButtons()
+
       }
     },
     created () {
       this.setFilterButtons()
-      // this.fullNameFilter = this.$route.query[this.$t('filters.name')]
-
-      /*
-      let queryStringFilters = Object.keys(this.$route.query)
-      // console.log(queryStringFilters)
-      if (queryStringFilters.length > 0) {
-        let queryStringValues = Object.values(this.$route.query)
-        let filters = []
-        queryStringFilters.forEach((v, idx) => {
-          filters.push((this.$te('filters_inv.'+queryStringValues[idx]))?this.$t('filters_inv.'+queryStringValues[idx]):queryStringValues[idx])
-        })
-        this.breadCrumbs.push({label: this.$t('filters.filter_by') +' '+ filters.join(' : ')})
-      }
-        */
-      // this.groups=
     },
     methods: {
       setFilterButtons () {
         this.fullNameFilter = this.$route.query[this.$t('filters.name')]
         if (this.fullNameFilter) {
-          // this.filterButtons[this.$t('filters.name')]={title: this.fullNameFilter, name: this.$t('filters.name')}
           this.$set(this.filterButtons, this.$t('filters.name'), this.fullNameFilter)
         }
         this.groupFilter = this.$route.query[this.$t('filters.group')]
@@ -216,6 +208,12 @@
           this.$set(this.filterButtons, this.$t('filters.group'), this.groupFilter)
         } else {
           this.groupFilter = ''
+        }
+        this.createdAtFilter = this.$route.query[this.$t('filters.created')]
+        if (this.createdAtFilter) {
+          this.$set(this.filterButtons, this.$t('filters.created'), this.$t('filters.'+this.createdAtFilter))
+        } else {
+          this.createdAtFilter = ''
         }
       },
       resetFilters () {

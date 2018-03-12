@@ -4,25 +4,29 @@
         <drawer :menu-items="MenuItems"/>
         <div class="content-wrapper">
             <section class="content-header">
-                <div class="link-back">
-                    <a @click="$router.go(-1)"><&nbsp;{{$t('general.back')}}</a>
+                <div id="top_link_container" class="container">
+                    <div class="row">
+                        <div class="link-back" v-if="hasBreadCrumbs()">
+                            <a @click="$router.go(-1)"><&nbsp;{{$t('general.back')}}</a>
+                        </div>
+                        <ol class="breadcrumb">
+                            <li v-for="(crumb,index) in breadCrumbs" :key="index">
+                                <template v-if="crumb.route!==$router.currentRoute.name">
+                                    <router-link :to="{ name: crumb.route }">{{crumb.label}}</router-link>
+                                </template>
+                                <template v-else>
+                                    <span>{{crumb.label}}</span>
+                                </template>
+                            </li>
+                        </ol>
+                    </div>
                 </div>
-                <ol class="breadcrumb">
-                    <li v-for="(crumb,index) in breadCrumbs" :key="index">
-                        <template v-if="crumb.route!=$router.currentRoute.name">
-                            <router-link :to="{ name: crumb.route }">{{crumb.label}}</router-link>
-                        </template>
-                        <template v-else>
-                            <span>{{crumb.label}}</span>
-                        </template>
-                    </li>
-                </ol>
                 <hr>
                 <div class="container">
                     <b-alert v-if="hasMessage" :show="dismissCountDown"
                              dismissible
                              :variant="variant"
-                             @dismissed="dismissCountdown=0"
+                             @dismissed="alertDismissed"
                              @dismiss-count-down="countDownChanged"
                     >
                         {{message}}
@@ -82,8 +86,18 @@
       this.dismissCountDown = this.dismissSecs
     },
     methods: {
+      hasBreadCrumbs () {
+        return this.breadCrumbs.length > 2
+      },
+      alertDismissed () {
+        this.dismissCountdown = 0
+        this.$store.dispatch('session/clearMessage')
+      },
       countDownChanged (dismissCountDown) {
         this.dismissCountDown = dismissCountDown
+        if (dismissCountDown === 0) {
+          this.$store.dispatch('session/clearMessage')
+        }
       },
       makeBreadcrumbs (route, path = [], child = false) {
         if (!child) {

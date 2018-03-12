@@ -69,7 +69,7 @@ abstract class Filters
      */
     private function translateFilter($value)
     {
-        return trans(sprintf('ajax.filters.%s', $value));
+        return trans(sprintf('ajax.filters_inv.%s', $value));
     }
 
     /**

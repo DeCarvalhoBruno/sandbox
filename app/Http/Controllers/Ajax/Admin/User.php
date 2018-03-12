@@ -19,9 +19,9 @@ class User extends Controller
         $users = $userProvider
             ->select([
                 \DB::raw('"" as selected'),
-                'full_name as ' . trans('ajax.db_raw_reverse.full_name'),
-                'email as ' . trans('ajax.db_raw_reverse.email'),
-                'created_at as ' . trans('ajax.db_raw_reverse.created_at'),
+                'full_name as ' . trans('ajax.db_raw_inv.full_name'),
+                'email as ' . trans('ajax.db_raw_inv.email'),
+                'created_at as ' . trans('ajax.db_raw_inv.created_at'),
                 'permission_mask',
                 'username'
             ])->entityType()
@@ -38,9 +38,9 @@ class User extends Controller
             'table' => $users->paginate(10),
             'groups' => $groups->pluck('group_name'),
             'columns' => $userProvider->createModel()->getColumnInfo([
-                trans('ajax.db_raw_reverse.full_name') => trans('ajax.db.full_name'),
-                trans('ajax.db_raw_reverse.email') => trans('ajax.general.email'),
-                trans('ajax.db_raw_reverse.created_at') => trans('ajax.db.user_created_at')
+                trans('ajax.db_raw_inv.full_name') => trans('ajax.db.full_name'),
+                trans('ajax.db_raw_inv.email') => trans('ajax.general.email'),
+                trans('ajax.db_raw_inv.created_at') => trans('ajax.db.user_created_at')
             ])
         ];
     }

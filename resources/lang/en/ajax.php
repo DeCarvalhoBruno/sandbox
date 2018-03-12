@@ -54,7 +54,7 @@ return [
         'group_name' => 'group_name',
         'created_at' => 'created_at'
     ],
-    'db_raw_reverse' => [
+    'db_raw_inv' => [
         'full_name' => 'full_name',
         'email' => 'email',
         'group_name' => 'group_name',
@@ -151,20 +151,30 @@ return [
     'filters' => [
         'sortBy' => 'sortBy',
         'order' => 'order',
-        'name' => 'full_name',
+        'name' => 'name',
         'group' => 'group',
-        'registration' => 'created_at',
+        'created' => 'registration',
         'asc' => 'ascending',
         'desc' => 'descending',
         'ascending' => 'asc',
         'descending' => 'desc',
-        'filter_by' => 'Filtered by:'
+        'day' => 'Today',
+        'week' => '< 1 week',
+        'month' => '< 1 month',
+        'year' => '< 1 year'
     ],
     'filters_inv' => [
-        'full_name' => 'Full name',
-        'email' => 'E-Mail',
-        'ascending' => 'Ascending',
-        'descending' => 'Descending',
+        'registration' => 'createdAt',
+        'group' => 'group',
+        'name' => 'fullName',
+        'sortBy' => 'sortBy',
+        'order' => 'order',
+        'fullName' => 'name',
+        'createdAt' => 'registration',
+        'day' => 'day',
+        'week' => 'week',
+        'month' => 'month',
+        'year' => 'year'
     ],
     'go_home' => 'Go Home',
     'toggle_navigation' => 'Toggle navigation',
