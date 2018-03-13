@@ -22,7 +22,8 @@ class UserTest extends TestCase
         $response = $this->getJson('/ajax/admin/users/' . $user->username);
 
         $response->assertStatus(200);
-        $this->assertArraySubset(['first_name', 'last_name', 'email', 'username'], array_keys($response->json()));
+        $json = $response->json();
+        $this->assertArraySubset(['first_name', 'last_name', 'email', 'username'], array_keys($json['user']));
     }
 
     public function test_without_authentication()
@@ -39,9 +40,15 @@ class UserTest extends TestCase
         $user = $this->signIn()->createUser();
         $username = 'b_wagner';
         $this->patchJson("/ajax/admin/users/{$user->username}",
-            ['first_name' => 'Bobby', 'last_name' => 'Wagner', 'username' => 'b_wagner','email'=>'user@example.com'])->assertStatus(204);
+            [
+                'first_name' => 'Bobby',
+                'last_name' => 'Wagner',
+                'username' => 'b_wagner',
+                'email' => 'user@example.com',
+                'permissions' => []
+            ])->assertStatus(204);
 
-        $changedUser = User::query()->where('username',$username)->first();
+        $changedUser = User::query()->where('username', $username)->first();
         $this->assertNotEquals($user->first_name . ' ' . $user->last_name,
             $changedUser->first_name . ' ' . $changedUser->last_name);
         $this->assertNotEquals($user->username, $changedUser->username);
@@ -51,14 +58,14 @@ class UserTest extends TestCase
 
     public function test_update_without_valid_email()
     {
-        $response = $this->validation_testing_setup(['new_email' => 'fdhj@f']);
+        $response = $this->validation_testing_setup(['new_email' => 'fdhj@f','permissions'=>[]]);
         $json = $response->json();
         $this->assertArrayHasKey('new_email', $json['errors']);
     }
 
     public function test_update_without_valid_username()
     {
-        $response = $this->validation_testing_setup(['new_username' => 'fdhj@f']);
+        $response = $this->validation_testing_setup(['new_username' => 'fdhj@f','permissions'=>[]]);
         $json = $response->json();
         $this->assertArrayHasKey('new_username', $json['errors']);
     }
@@ -69,7 +76,7 @@ class UserTest extends TestCase
         $user = $this->signIn()->createUser();
 
         $response = $this->patchJson(
-            "/ajax/admin/users/{$user->username}",$formParams
+            "/ajax/admin/users/{$user->username}", $formParams
         );
 
         $response->assertStatus(422);

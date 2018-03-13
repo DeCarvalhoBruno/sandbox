@@ -96,7 +96,8 @@ return [
         'password_updated' => 'Your password has been updated!',
         'user_update_ok' => 'The user was updated. It may take a few seconds for permissions to update.',
         'user_delete_ok' => 'The user was deleted.|The users were deleted.',
-        'group_update_ok' => 'The group was updated. It may take a few seconds for permissions to update.'
+        'group_update_ok' => 'The group was updated. It may take a few seconds for permissions to update.',
+        'group_delete_ok' => 'The group was deleted.'
     ],
     'pages' => [
         'auth' => [

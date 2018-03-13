@@ -159,7 +159,7 @@
           this.form.addField('permissions', this.getPermissions(this.$refs.buttonCircle))
           const {data} = await this.form.patch(`/ajax/admin/users/${this.username}`)
           this.$router.push({name: 'admin.users.index'})
-          this.$store.dispatch('session/setMessageSuccess', this.$t('message.user_update_ok'))
+          this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.user_update_ok'))
         } catch (e) {}
       }
     },

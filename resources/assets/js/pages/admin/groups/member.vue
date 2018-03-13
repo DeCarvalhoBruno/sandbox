@@ -175,7 +175,7 @@
       },
       update (e) {
         axios.patch(`/ajax/admin/members/${this.$route.params.group}`, this.form).then(() => {
-          this.$store.dispatch('session/setMessageSuccess', this.$t('message.group_update_ok'))
+          this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.group_update_ok'))
           this.$router.push({name: 'admin.groups.index'})
         })
 

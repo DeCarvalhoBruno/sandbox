@@ -23,13 +23,13 @@
                 </div>
                 <hr>
                 <div class="container">
-                    <b-alert v-if="hasMessage" :show="dismissCountDown"
+                    <b-alert v-if="hasAlertMessage" :show="dismissCountDown"
                              dismissible
-                             :variant="variant"
+                             :variant="alertVariant"
                              @dismissed="alertDismissed"
                              @dismiss-count-down="countDownChanged"
                     >
-                        {{message}}
+                        {{alertMessage}}
                     </b-alert>
                 </div>
             </section>
@@ -42,6 +42,14 @@
                     </div>
                 </transition>
             </section>
+            <b-modal :show="modal.show" :visible="modal.show">
+                <div class="d-block text-center" :title="modal.title">
+                    <h3>Hello World!</h3>
+                </div>
+                <div slot="modal-footer">
+                    <button></button>
+                </div>
+            </b-modal>
         </div>
     </div>
 </template>
@@ -52,16 +60,18 @@
   import Navbar from '../components/Navbar'
   import Drawer from '../components/Drawer'
   import MenuItems from '../menu-items'
-  import { Alert } from 'bootstrap-vue/es/components'
+  import { Alert, Modal } from 'bootstrap-vue/es/components'
 
   Vue.use(Alert)
+  Vue.use(Modal)
 
   export default {
     name: 'basic',
     components: {
       Navbar,
       Drawer,
-      Alert
+      Alert,
+      Modal
     },
     data: function () {
       return {
@@ -72,9 +82,10 @@
       }
     },
     computed: mapGetters({
-      hasMessage: 'session/hasMessage',
-      message: 'session/message',
-      variant: 'session/variant'
+      hasAlertMessage: 'session/hasMessage',
+      alertMessage: 'session/message',
+      alertVariant: 'session/variant',
+      modal:'session/modal'
     }),
     watch: {
       '$route' () {
@@ -91,12 +102,12 @@
       },
       alertDismissed () {
         this.dismissCountdown = 0
-        this.$store.dispatch('session/clearMessage')
+        this.$store.dispatch('session/clearAlertMessage')
       },
       countDownChanged (dismissCountDown) {
         this.dismissCountDown = dismissCountDown
         if (dismissCountDown === 0) {
-          this.$store.dispatch('session/clearMessage')
+          this.$store.dispatch('session/clearAlertMessage')
         }
       },
       makeBreadcrumbs (route, path = [], child = false) {

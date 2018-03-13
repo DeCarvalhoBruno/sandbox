@@ -1,31 +1,49 @@
 import * as types from '../mutation-types'
 
 export const state = {
-  message: null,
-  variant: 'success'
+  alertMessage: null,
+  alertVariant: 'success',
+  modalMessage: null,
+  modalVariant: 'default',
+  modal: {
+    show: false,
+    message: null,
+    variant: 'default',
+    title: ''
+  }
 }
 
 export const getters = {
-  message: state => state.message,
-  variant: state => state.variant,
-  hasMessage: state => state.message != null
+  alertMessage: state => state.alertMessage,
+  alertVariant: state => state.alertVariant,
+  modal: state => state.modal,
+  modalMessage: state => state.modalMessage,
+  modalVariant: state => state.modalVariant,
+  hasMessage: state => state.alertMessage != null
 }
 
 export const mutations = {
-  [types.SET_MESSAGE] (state, data) {
-    state.message = data.message
-    state.variant = data.variant
+  [types.SET_ALERT_MESSAGE] (state, data) {
+    state.alertMessage = data.alertMessage
+    state.alertVariant = data.alertVariant
   },
-  [types.CLEAR_MESSAGE] (state) {
-    state.message = null
+  [types.CLEAR_ALERT_MESSAGE] (state) {
+    state.alertMessage = null
+  },
+  [types.SET_MODAL] (state, data) {
+    state.modal = data
   }
 }
 
 export const actions = {
-  setMessageSuccess ({commit}, message) {
-    commit(types.SET_MESSAGE, {message, variant: 'success'})
+  setAlertMessageSuccess ({commit}, alertMessage) {
+    commit(types.SET_ALERT_MESSAGE, {alertMessage, alertVariant: 'success'})
   },
-  clearMessage ({commit}) {
-    commit(types.CLEAR_MESSAGE)
+  clearAlertMessage ({commit}) {
+    commit(types.CLEAR_ALERT_MESSAGE)
+  },
+  setModal ({commit}, {params}) {
+    commit(types.SET_MODAL, params)
   }
+
 }

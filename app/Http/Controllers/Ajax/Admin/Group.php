@@ -22,7 +22,7 @@ class Group extends Controller
             'table' => \App\Models\Group::query()
                 ->select([
                     'groups.group_id',
-                    'group_name',
+                    'group_name as ' . trans('ajax.db_raw_inv.group_name'),
                     'permission_mask',
                     \DB::raw('count(group_members.user_id) as member_count')
                 ])->groupMember()->entityType()
@@ -35,7 +35,7 @@ class Group extends Controller
                 ])
                 ->filter($filter)->paginate(10),
             'columns' => (new \App\Models\Group)->getColumnInfo([
-                'group_name' => trans('ajax.db.group_name'),
+                trans('ajax.db_raw_inv.group_name') => trans('ajax.db.group_name'),
                 'member_count' => trans('ajax.db.member_count'),
             ])
         ];
@@ -87,6 +87,6 @@ class Group extends Controller
 
     public function destroy()
     {
-        
+
     }
 }

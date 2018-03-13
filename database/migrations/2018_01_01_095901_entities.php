@@ -64,17 +64,17 @@ class Entities extends Migration
                 'group_mask' => 1
             ],
             [
-                'group_name' => 'superadmins',
+                'group_name' => 'Super Admins',
                 'group_id' => 2,
                 'group_mask' => 2
             ],
             [
-                'group_name' => 'admins',
+                'group_name' => 'Admins',
                 'group_id' => 3,
                 'group_mask' => 2000
             ],
             [
-                'group_name' => 'users',
+                'group_name' => 'Users',
                 'group_id' => 4,
                 'group_mask' => 5000
             ],

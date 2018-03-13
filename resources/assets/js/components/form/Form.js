@@ -202,8 +202,8 @@ class Form {
       return {...response.data.errors}
     }
 
-    if (response.data.message) {
-      return {error: response.data.message}
+    if (response.data.alertMessage) {
+      return {error: response.data.alertMessage}
     }
 
     return {...response.data}

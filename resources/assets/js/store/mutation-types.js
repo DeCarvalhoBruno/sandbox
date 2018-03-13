@@ -15,5 +15,6 @@ export const UPDATE_TABLE_DATA = 'UPDATE_TABLE_DATA'
 export const UPDATE_TABLE_COLUMN = 'UPDATE_TABLE_COLUMN'
 
 // message.js
-export const SET_MESSAGE = 'SET_MESSAGE'
-export const CLEAR_MESSAGE = 'CLEAR_MESSAGE'
+export const SET_ALERT_MESSAGE = 'SET_MESSAGE'
+export const CLEAR_ALERT_MESSAGE = 'CLEAR_MESSAGE'
+export const SET_MODAL = 'SET_MODAL'

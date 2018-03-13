@@ -12,18 +12,17 @@
                             </fa>
                         </button>
                     </router-link>
-                    <router-link :to="{ name: 'admin.dashboard' }">
-                        <button class="btn btn-sm btn-danger">
-                            <fa icon="trash-alt">
-                            </fa>
-                        </button>
-                    </router-link>
-                    <router-link
-                            :to="{ name: 'admin.groups.members', params: { group: props.row.group_name }}">
-                    <button class="btn btn-sm btn-success">
-                        <fa icon="users">
+                    <button class="btn btn-sm btn-danger"
+                    @click="deleteRow(props.row)">
+                        <fa icon="trash-alt">
                         </fa>
                     </button>
+                    <router-link
+                            :to="{ name: 'admin.groups.members', params: { group: props.row.group_name }}">
+                        <button class="btn btn-sm btn-success">
+                            <fa icon="users">
+                            </fa>
+                        </button>
                     </router-link>
                 </div>
             </td>
@@ -52,6 +51,18 @@
         total: 'table/total',
         extras: 'table/extras'
       })
+    },
+    methods:{
+      async deleteRow (data) {
+        try {
+          await axios.delete(`/ajax/admin/groups/${data.group}`)
+          this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.group_delete_ok'))
+          this.$store.dispatch('table/fetchData', {
+            entity: 'groups',
+            queryString: this.$route.fullPath
+          })
+        } catch (e) {}
+      },
     },
     beforeRouteEnter (to, from, next) {
       store.dispatch('table/fetchData', {

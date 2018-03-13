@@ -12,10 +12,11 @@
                         <span
                                 class="btn btn-default btn-outline-warning ml-2"
                                 v-for="(button,idx) in filterButtons"
-                                :key="idx" v-model="filterButtons"
+                                :key="idx"
+                                v-model="filterButtons"
+                                @click="removeFilter(idx)"
                         >{{button}}<button type="button" class="close button-list-close"
-                                           aria-label="Close"
-                                           @click="removeFilter(idx)">
+                                           aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                         </button>
                         </span>
@@ -113,8 +114,8 @@
                     <div class="form-check">
                         <input class="form-check-input position-static"
                                type="checkbox"
-                               :aria-label="$t('tables.select_item',{name:props.row[$t('db_raw_reverse.full_name')]})"
-                               :title="$t('tables.select_item',{name:props.row[$t('db_raw_reverse.full_name')]})"
+                               :aria-label="$t('tables.select_item',{name:props.row[$t('db_raw_inv.full_name')]})"
+                               :title="$t('tables.select_item',{name:props.row[$t('db_raw_inv.full_name')]})"
                                v-model="props.row.selected">
                     </div>
                 </td>
@@ -122,13 +123,13 @@
                     <div class="inline">
                         <router-link :to="{ name: 'admin.users.edit', params: { user: props.row.username } }">
                             <button type="button" class="btn btn-sm btn-info"
-                                    :title="$t('tables.edit_item',{name:props.row[$t('db_raw_reverse.full_name')]})">
+                                    :title="$t('tables.edit_item',{name:props.row[$t('db_raw_inv.full_name')]})">
                                 <fa icon="pencil-alt">
                                 </fa>
                             </button>
                         </router-link>
                         <button type="button" class="btn btn-sm btn-danger"
-                                :title="$t('tables.delete_item',{name:props.row[$t('db_raw_reverse.full_name')]})"
+                                :title="$t('tables.delete_item',{name:props.row[$t('db_raw_inv.full_name')]})"
                                 @click="deleteRow(props.row)">
                             <fa icon="trash-alt">
                             </fa>
@@ -154,7 +155,7 @@
     middleware: 'check-auth',
     name: 'users',
     components: {
-      'v-table': Table
+      'v-table': Table,
     },
     data: function () {
       return {
@@ -240,7 +241,7 @@
       async deleteRow (data) {
         try {
           await axios.delete(`/ajax/admin/users/${data.username}`)
-          this.$store.dispatch('session/setMessageSuccess', this.$tc('message.user_delete_ok', 1))
+          this.$store.dispatch('session/setAlertMessageSuccess', this.$tc('message.user_delete_ok', 1))
           this.$store.dispatch('table/fetchData', {
             entity: 'users',
             queryString: this.$route.fullPath
@@ -265,7 +266,7 @@
           case 'del':
             try {
               await axios.post(`/ajax/admin/users/batch/delete`, {users: this.getSelectedRows('username')})
-              this.$store.dispatch('session/setMessageSuccess', this.$tc('message.user_delete_ok', 2))
+              this.$store.dispatch('session/setAlertMessageSuccess', this.$tc('message.user_delete_ok', 2))
               this.$store.dispatch('table/fetchData', {
                 entity: 'users',
                 queryString: this.$route.fullPath
