@@ -5,7 +5,6 @@ use App\Support\Database\RawQueries as RawQueriesClass;
 
 class MysqlRawQueries extends RawQueriesClass implements RawQueries
 {
-
     public function triggerUserFullName(){
         \DB::unprepared('
                 CREATE TRIGGER t_people_create_fullname BEFORE INSERT ON people
@@ -22,5 +21,4 @@ class MysqlRawQueries extends RawQueriesClass implements RawQueries
                     END
         ');
     }
-
 }

@@ -141,7 +141,8 @@ class Entities extends Migration
             );
             $db->triggerDeleteEntityType(
                 $entity['entity_name'],
-                $this->entityPrimaryKeyColumns[$entity['entity_name']]
+                $this->entityPrimaryKeyColumns[$entity['entity_name']],
+                $entity['entity_id']
             );
         }
         $db->triggerUserFullName();

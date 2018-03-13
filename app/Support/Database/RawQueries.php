@@ -72,8 +72,9 @@ abstract class RawQueries
         $permission = [];
         foreach ($results as $result) {
             $permission[$result->type][trans_choice(sprintf('ajax.db.%s',
-                Entity::getModelPresentableName($result->entity_id)),2)] =
-                Entity::createModel($result->entity_id,[],HasPermissions::class)->getReadablePermissions($result->permission_mask, true);
+                Entity::getModelPresentableName($result->entity_id)), 2)] =
+                Entity::createModel($result->entity_id, [],
+                    HasPermissions::class)->getReadablePermissions($result->permission_mask, true);
         }
         //We're supposed to get an array with computed and default permissions but some users
         // don't have permissions on anything.
@@ -87,29 +88,29 @@ abstract class RawQueries
     {
         \DB::unprepared(
             sprintf('
-                CREATE TRIGGER t_create_entity_type_%1$s AFTER INSERT ON %1$s
-                    FOR EACH ROW
-                        BEGIN
-                            INSERT into entity_types(entity_id,entity_type_target_id)
-                            SELECT entity_id,NEW.%2$s as entity_type_target_id FROM entities WHERE entity_name="%1$s";
-                        END
-                ',
+CREATE TRIGGER t_create_entity_type_%1$s AFTER INSERT ON %1$s
+FOR EACH ROW
+BEGIN
+INSERT into entity_types(entity_id,entity_type_target_id)
+SELECT entity_id,NEW.%2$s as entity_type_target_id FROM entities WHERE entity_name="%1$s";
+END
+',
                 $name, $primaryKey
             )
         );
     }
 
-    public function triggerDeleteEntityType($name, $primaryKey)
+    public function triggerDeleteEntityType($name, $primaryKey, $entityId)
     {
         \DB::unprepared(
             sprintf('
-                CREATE TRIGGER t_delete_entity_type_%1$s AFTER DELETE ON %1$s
-                    FOR EACH ROW
-                        BEGIN
-                            DELETE FROM entity_types WHERE entity_type_target_id=OLD.%2$s;
-                        END
-                ',
-                $name, $primaryKey
+CREATE TRIGGER t_delete_entity_type_%1$s AFTER DELETE ON %1$s
+FOR EACH ROW
+BEGIN
+DELETE FROM entity_types WHERE entity_type_target_id=OLD.%2$s and entity_id=%3$s;
+END
+',
+                $name, $primaryKey, $entityId
             )
         );
     }

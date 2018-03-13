@@ -9,7 +9,7 @@ interface RawQueries
 
     public function triggerCreateEntityType($name, $primaryKey);
 
-    public function triggerDeleteEntityType($name, $primaryKey);
+    public function triggerDeleteEntityType($name, $primaryKey, $entityTypeId);
 
     public function triggerUserFullName();
 
