@@ -64,7 +64,7 @@
                             </select>
                             <div class="input-group-append">
                                 <label class="input-group-text"
-                                      :title="$t('general.search')">
+                                       :title="$t('general.search')">
                                     <fa icon="calendar"/>
                                 </label>
                             </div>
@@ -130,7 +130,7 @@
                         </router-link>
                         <button type="button" class="btn btn-sm btn-danger"
                                 :title="$t('tables.delete_item',{name:props.row[$t('db_raw_inv.full_name')]})"
-                                @click="deleteRow(props.row)">
+                                @click="deleteRowConfirm(props.row)">
                             <fa icon="trash-alt">
                             </fa>
                         </button>
@@ -155,7 +155,7 @@
     middleware: 'check-auth',
     name: 'users',
     components: {
-      'v-table': Table,
+      'v-table': Table
     },
     data: function () {
       return {
@@ -164,7 +164,8 @@
         groupFilter: '',
         createdAtFilter: '',
         fullNameFilter: '',
-        filterButtons: {}
+        filterButtons: {},
+        selectionBuffer: {}
       }
     },
     computed: {
@@ -196,8 +197,13 @@
     },
     created () {
       this.setFilterButtons()
+      this.$root.$on('modal_confirmed', this.applyMethod)
     },
     methods: {
+      applyMethod (name) {
+        this[name]()
+        this.$store.commit('session/HIDE_MODAL')
+      },
       setFilterButtons () {
         this.fullNameFilter = this.$route.query[this.$t('filters.name')]
         if (this.fullNameFilter) {
@@ -211,7 +217,7 @@
         }
         this.createdAtFilter = this.$route.query[this.$t('filters.created')]
         if (this.createdAtFilter) {
-          this.$set(this.filterButtons, this.$t('filters.created'), this.$t('filters.'+this.createdAtFilter))
+          this.$set(this.filterButtons, this.$t('filters.created'), this.$t('filters.' + this.createdAtFilter))
         } else {
           this.createdAtFilter = ''
         }
@@ -238,10 +244,25 @@
           }
         })
       },
-      async deleteRow (data) {
+      deleteRowConfirm (data) {
+        this.$store.dispatch('session/showModal', {
+          data: {
+            method: 'deleteRow',
+            title: this.$t('modal.user_delete.h'),
+            confirmBtnClass: 'btn-danger',
+            confirmBtnText: this.$t('general.delete'),
+            text: '<h3>' + this.$t('modal.user_delete.t', {name: data.full_name}) + '</h3>'
+          }
+        })
+        this.selectionBuffer = data
+      },
+      async deleteRow () {
         try {
-          await axios.delete(`/ajax/admin/users/${data.username}`)
-          this.$store.dispatch('session/setAlertMessageSuccess', this.$tc('message.user_delete_ok', 1))
+          await axios.delete(`/ajax/admin/users/${this.selectionBuffer.username}`)
+          this.$store.dispatch(
+            'session/setAlertMessageSuccess',
+            this.$tc('message.user_delete_ok', 1, {name: this.selectionBuffer.full_name})
+          )
           this.$store.dispatch('table/fetchData', {
             entity: 'users',
             queryString: this.$route.fullPath
@@ -279,7 +300,7 @@
         let obj = Object.assign({}, this.$route.query)
         obj[this.$t('filters.name')] = this.fullNameFilter
         this.$router.push({query: obj})
-      },
+      }
     },
     beforeRouteEnter (to, from, next) {
       store.dispatch('table/fetchData', {

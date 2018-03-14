@@ -31,7 +31,8 @@ return [
         'select_all' => 'Select all',
         'apply' => 'Apply',
         'search' => 'Search',
-        'reset_filters' => 'Reset Filters'
+        'reset_filters' => 'Reset Filters',
+        'delete'=>'Delete'
     ],
     'db' => [
         'user' => 'User|Users',
@@ -83,6 +84,10 @@ return [
         'unauthorized' => [
             'h' => 'Access Denied',
             't' => 'You are not authorized to view this page.',
+        ],
+        'user_delete'=>[
+            'h' => 'Confirm user deletion',
+            't' => 'Do you really want to delete user {name}?'
         ]
     ],
     'error' => [
@@ -95,7 +100,7 @@ return [
         'info_updated' => 'Your info has been updated!',
         'password_updated' => 'Your password has been updated!',
         'user_update_ok' => 'The user was updated. It may take a few seconds for permissions to update.',
-        'user_delete_ok' => 'The user was deleted.|The users were deleted.',
+        'user_delete_ok' => 'User {name} was deleted.|The users were deleted.',
         'group_update_ok' => 'The group was updated. It may take a few seconds for permissions to update.',
         'group_delete_ok' => 'The group was deleted.'
     ],

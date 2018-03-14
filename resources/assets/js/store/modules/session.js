@@ -6,10 +6,14 @@ export const state = {
   modalMessage: null,
   modalVariant: 'default',
   modal: {
+    method: '',
     show: false,
-    message: null,
     variant: 'default',
-    title: ''
+    title: '',
+    text: '',
+    type: 'confirm',
+    confirmBtnClass: 'btn-default',
+    confirmBtnText: 'OK'
   }
 }
 
@@ -19,7 +23,7 @@ export const getters = {
   modal: state => state.modal,
   modalMessage: state => state.modalMessage,
   modalVariant: state => state.modalVariant,
-  hasMessage: state => state.alertMessage != null
+  hasAlertMessage: state => state.alertMessage != null
 }
 
 export const mutations = {
@@ -30,8 +34,20 @@ export const mutations = {
   [types.CLEAR_ALERT_MESSAGE] (state) {
     state.alertMessage = null
   },
-  [types.SET_MODAL] (state, data) {
-    state.modal = data
+  [types.SHOW_MODAL] (state, data) {
+    let modalDefaults = Object.keys(data.defaults)
+    modalDefaults.forEach((val) => {
+      if (data.hasOwnProperty(val)) {
+        state.modal[val] = data[val]
+      }
+    })
+    state.modal.show = true
+  },
+  [types.HIDE_MODAL] (state) {
+    state.modal.show = false
+  },
+  [types.CONFIRM_MODAL] (state) {
+    state.modal.show = false
   }
 }
 
@@ -42,8 +58,18 @@ export const actions = {
   clearAlertMessage ({commit}) {
     commit(types.CLEAR_ALERT_MESSAGE)
   },
-  setModal ({commit}, {params}) {
-    commit(types.SET_MODAL, params)
+  showModal ({commit}, {data}) {
+    let defaults = {
+      method: '',
+      show: false,
+      variant: 'default',
+      title: '',
+      text: '',
+      type: 'confirm',
+      confirmBtnClass: 'btn-default',
+      confirmBtnText: 'OK'
+    }
+    data.defaults = defaults
+    commit(types.SHOW_MODAL, data)
   }
-
 }

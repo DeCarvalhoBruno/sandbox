@@ -12,7 +12,9 @@
                         <ol class="breadcrumb">
                             <li v-for="(crumb,index) in breadCrumbs" :key="index">
                                 <template v-if="crumb.route!==$router.currentRoute.name">
-                                    <router-link :to="{ name: crumb.route }">{{crumb.label}}</router-link>
+                                    <router-link
+                                            :to="{ name: crumb.route }">{{crumb.label}}
+                                    </router-link>
                                 </template>
                                 <template v-else>
                                     <span>{{crumb.label}}</span>
@@ -42,12 +44,27 @@
                     </div>
                 </transition>
             </section>
-            <b-modal :show="modal.show" :visible="modal.show">
-                <div class="d-block text-center" :title="modal.title">
-                    <h3>Hello World!</h3>
+            <b-modal v-model="modal.show">
+                <div slot="modal-header">
+                    <h5>{{modal.title}}</h5>
+                </div>
+                <div class="d-block text-center">
+                    <h3 v-html="modal.text"></h3>
                 </div>
                 <div slot="modal-footer">
-                    <button></button>
+                    <template v-if="modal.type==='confirm'">
+                        <button type="button" class="btn"
+                                :class="modal.confirmBtnClass"
+                                @click="$root.$emit('modal_confirmed',modal.method)"
+                        >{{modal.confirmBtnText}}
+                        </button>
+                        <button
+                                type="button"
+                                class="btn btn-secondary"
+                                @click="$store.commit('session/HIDE_MODAL')"
+                        >{{$t('general.cancel')}}
+                        </button>
+                    </template>
                 </div>
             </b-modal>
         </div>
@@ -82,10 +99,10 @@
       }
     },
     computed: mapGetters({
-      hasAlertMessage: 'session/hasMessage',
-      alertMessage: 'session/message',
-      alertVariant: 'session/variant',
-      modal:'session/modal'
+      hasAlertMessage: 'session/hasAlertMessage',
+      alertMessage: 'session/alertMessage',
+      alertVariant: 'session/alertVariant',
+      modal: 'session/modal'
     }),
     watch: {
       '$route' () {

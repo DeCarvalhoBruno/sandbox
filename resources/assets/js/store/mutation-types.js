@@ -14,7 +14,8 @@ export const FETCH_TABLE_DATA = 'FETCH_TABLE_DATA'
 export const UPDATE_TABLE_DATA = 'UPDATE_TABLE_DATA'
 export const UPDATE_TABLE_COLUMN = 'UPDATE_TABLE_COLUMN'
 
-// message.js
+// session.js
 export const SET_ALERT_MESSAGE = 'SET_MESSAGE'
 export const CLEAR_ALERT_MESSAGE = 'CLEAR_MESSAGE'
-export const SET_MODAL = 'SET_MODAL'
+export const SHOW_MODAL = 'SHOW_MODAL'
+export const HIDE_MODAL = 'HIDE_MODAL'
