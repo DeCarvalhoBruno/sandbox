@@ -45,9 +45,6 @@ export const mutations = {
   },
   [types.HIDE_MODAL] (state) {
     state.modal.show = false
-  },
-  [types.CONFIRM_MODAL] (state) {
-    state.modal.show = false
   }
 }
 

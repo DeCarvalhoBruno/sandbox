@@ -48,6 +48,16 @@ class Group extends Model implements HasAnEntity, HasPermissions
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
+    public function scopeLeftGroupMember(Builder $builder)
+    {
+        return $this->leftJoin($builder, GroupMember::class);
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
     public function scopeUser(Builder $builder)
     {
         return $builder->join('users', 'users.user_id', '=', 'group_members.user_id')

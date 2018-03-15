@@ -12,6 +12,7 @@ const UserEdit = () => import('~/pages/admin/users/edit').then(m => m.default ||
 
 const Groups = () => import('~/pages/admin/groups/index').then(m => m.default || m)
 const GroupEdit = () => import('~/pages/admin/groups/edit').then(m => m.default || m)
+const GroupAdd = () => import('~/pages/admin/groups/add').then(m => m.default || m)
 const GroupMember = () => import('~/pages/admin/groups/member').then(m => m.default || m)
 
 const Settings = () => import('~/pages/admin/settings/index').then(
@@ -52,6 +53,12 @@ export default [
     name: 'admin.groups.index',
     meta: {parent:'admin.dashboard'},
     component: Groups
+  },
+  {
+    path: '/admin/groups/create',
+    name: 'admin.groups.add',
+    meta: {parent:'admin.groups.index'},
+    component: GroupAdd
   },
   {
     path: '/admin/groups/:group',

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Ajax\Admin;
 
+use App\Events\UpdatedUser;
 use App\Http\Controllers\Controller;
 use App\Filters\Group as GroupFilter;
 use App\Contracts\Models\Group as GroupProvider;
+use App\Http\Requests\Admin\CreateGroup;
 use App\Http\Requests\Admin\UpdateGroup;
 use App\Models\Entity;
 use Illuminate\Http\Response;
@@ -25,7 +27,7 @@ class Group extends Controller
                     'group_name as ' . trans('ajax.db_raw_inv.group_name'),
                     'permission_mask',
                     \DB::raw('count(group_members.user_id) as member_count')
-                ])->groupMember()->entityType()
+                ])->leftGroupMember()->entityType()
                 ->permissionRecord()
                 ->permissionStore()
                 ->permissionMask(auth()->user()->getAttribute('entity_type_id'))->groupBy([
@@ -66,7 +68,7 @@ class Group extends Controller
      * @param string $groupName
      * @param \App\Http\Requests\Admin\UpdateGroup $request
      * @param \App\Contracts\Models\Group|\App\Providers\Models\Group $groupProvider
-     * @param \App\Contracts\Models\Permission $permissionProvider
+     * @param \App\Contracts\Models\Permission|\App\Providers\Models\Permission $permissionProvider
      * @return \Illuminate\Http\Response
      */
     public function update(
@@ -79,7 +81,10 @@ class Group extends Controller
         $permissions = $request->getPermissions();
 
         if (!is_null($permissions)) {
-            $permissionProvider->updateIndividual($permissions, $group->getAttribute('entity_type_id'), Entity::GROUPS);
+            $permissionProvider->updateIndividual(
+                $permissions,
+                $group->getAttribute('entity_type_id'),
+                Entity::GROUPS);
         }
 
         return response(null, Response::HTTP_NO_CONTENT);
@@ -88,5 +93,40 @@ class Group extends Controller
     public function destroy()
     {
 
+    }
+
+    /**
+     * @param \App\Contracts\Models\Permission|\App\Providers\Models\Permission $permissionProvider
+     * @return array
+     * @throws \ReflectionException
+     */
+    public function add(PermissionProvider $permissionProvider)
+    {
+        return [
+            'permissions' => $permissionProvider->getRootAndGroupPermissions()
+        ];
+    }
+
+    /**
+     * @param \App\Http\Requests\Admin\CreateGroup $request
+     * @param \App\Contracts\Models\Group|\App\Providers\Models\Group $groupProvider
+     * @param \App\Contracts\Models\Permission|\App\Providers\Models\Permission $permissionProvider
+     * @return \Illuminate\Http\Response
+     */
+    public function create(CreateGroup $request, GroupProvider $groupProvider, PermissionProvider $permissionProvider)
+    {
+
+        $group = $groupProvider->createOne($request->all());
+        $permissions = $request->getPermissions();
+
+        if (!is_null($permissions)) {
+            $permissionProvider->updateIndividual(
+                $permissions,
+                $group->getAttribute('entity_type_id'), Entity::GROUPS);
+        } else {
+            event(new UpdatedUser);
+        }
+
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }

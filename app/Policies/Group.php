@@ -33,4 +33,14 @@ class Group
     {
         return ($this->defaultPermissions & GroupModel::PERMISSION_EDIT) !== 0;
     }
+
+    public function add()
+    {
+        return ($this->defaultPermissions & GroupModel::PERMISSION_ADD) !== 0;
+    }
+
+    public function delete()
+    {
+        return ($this->defaultPermissions & GroupModel::PERMISSION_DELETE) !== 0;
+    }
 }

@@ -28,7 +28,7 @@
         type: Object,
         required: true
       },
-      alertMessage: {
+      message: {
         type: String,
         required: false,
         default: null

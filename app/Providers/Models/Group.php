@@ -62,6 +62,20 @@ class Group extends Model implements GroupInterface
     }
 
     /**
+     * @param $data
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function createOne($data)
+    {
+        $this->createModel()->insert($data);
+        return $this->createModel()->newQuery()
+            ->select(['entity_type_id'])
+            ->where('group_name','=',$data['group_name'])
+            ->entityType()->first();
+    }
+
+
+    /**
      * @param $groupName
      * @return array
      */

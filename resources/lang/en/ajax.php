@@ -6,6 +6,7 @@ return [
         'admin-groups-index' => 'Groups',
         'admin-users-edit' => 'Edit',
         'admin-groups-edit' => 'Edit',
+        'admin-groups-add' => 'New Group',
         'admin-groups-members' => 'Edit Members',
     ],
     'general' => [
@@ -18,6 +19,7 @@ return [
         'save' => 'Save',
         'save_changes' => 'Save Changes',
         'update' => 'Update',
+        'create' => 'Create',
         'logout' => 'Logout',
         'login' => 'Log In',
         'register' => 'Register',
@@ -68,7 +70,8 @@ return [
             'last_name' => 'The user\'s last (family) name.',
             'new_email' => '"{0}" is the current e-mail address.',
             'new_username' => '"{0}" is the current username.',
-            'group_name' => '"{0}" is the current group name. The group name can only contain alphanumeric characters and underscores.',
+            'group_name'=>'The group name can only contain alphanumeric characters and underscores.',
+            'new_group_name' => '"{0}" is the current group name. The group name can only contain alphanumeric characters and underscores.',
             'group_mask' => 'Determines the group\'s position in its hierarchy. The lower the mask, the higher the group status.'
         ],
     ],
@@ -102,7 +105,8 @@ return [
         'user_update_ok' => 'The user was updated. It may take a few seconds for permissions to update.',
         'user_delete_ok' => 'User {name} was deleted.|The users were deleted.',
         'group_update_ok' => 'The group was updated. It may take a few seconds for permissions to update.',
-        'group_delete_ok' => 'The group was deleted.'
+        'group_delete_ok' => 'The group was deleted.',
+        'group_create_ok' => 'The group was created.'
     ],
     'pages' => [
         'auth' => [

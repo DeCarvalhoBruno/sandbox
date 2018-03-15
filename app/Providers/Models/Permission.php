@@ -59,11 +59,15 @@ class Permission extends Model implements PermissionInterface
      * @return array
      * @throws \ReflectionException
      */
-    public function getRootAndGroupPermissions($entityTypeId)
+    public function getRootAndGroupPermissions($entityTypeId=null)
     {
+        $entities = [EntityType::ROOT_GROUP_ENTITY_TYPE_ID];
+        if (!is_null($entityTypeId)) {
+            array_push($entities, $entityTypeId);
+        }
         $results = $this->createModel()->newQuery()->newQuery()
             ->select(['permission_id', 'permission_mask', 'entities.entity_id', 'entity_type_id'])
-            ->entityAll([$entityTypeId, EntityType::ROOT_GROUP_ENTITY_TYPE_ID])->get();
+            ->entityAll($entities)->get();
         $permission = [];
         foreach ($results as $result) {
             $type = ($result->entity_type_id == EntityType::ROOT_GROUP_ENTITY_TYPE_ID) ? 'default' : 'computed';

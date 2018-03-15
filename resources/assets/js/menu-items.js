@@ -39,16 +39,19 @@ module.exports = [
     items: [
       {
         type: 'item',
-        icon: 'star',
+        icon: '',
         name: 'List',
         router: {
           name: 'admin.groups.index'
         }
       },
       {
-        type: 'tree',
-        icon: 'star',
-        name: 'Add'
+        type: 'item',
+        icon: '',
+        name: 'Add',
+        router: {
+          name: 'admin.groups.add'
+        }
       }
     ]
   },
