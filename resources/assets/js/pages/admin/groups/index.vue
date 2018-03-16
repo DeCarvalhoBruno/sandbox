@@ -35,6 +35,7 @@
   import store from '~/store'
   import Table from '~/components/table/table'
   import { mapGetters } from 'vuex'
+  import axios from 'axios'
 
   Vue.use(Table)
 
@@ -55,8 +56,11 @@
     methods:{
       async deleteRow (data) {
         try {
-          await axios.delete(`/ajax/admin/groups/${data.group}`)
-          this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.group_delete_ok'))
+          await axios.delete(`/ajax/admin/groups/${data.group_name}`)
+          this.$store.dispatch(
+            'session/setAlertMessageSuccess',
+            this.$t('message.group_delete_ok',{group:data.group_name})
+          )
           this.$store.dispatch('table/fetchData', {
             entity: 'groups',
             queryString: this.$route.fullPath

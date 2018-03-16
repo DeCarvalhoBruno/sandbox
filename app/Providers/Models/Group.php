@@ -74,6 +74,11 @@ class Group extends Model implements GroupInterface
             ->entityType()->first();
     }
 
+    public function deleteByName($groupName)
+    {
+        $this->createModel()->newQuery()->where('group_name','=',$groupName)->delete();
+    }
+
 
     /**
      * @param $groupName

@@ -105,7 +105,7 @@ return [
         'user_update_ok' => 'The user was updated. It may take a few seconds for permissions to update.',
         'user_delete_ok' => 'User {name} was deleted.|The users were deleted.',
         'group_update_ok' => 'The group was updated. It may take a few seconds for permissions to update.',
-        'group_delete_ok' => 'The group was deleted.',
+        'group_delete_ok' => 'Group {group} was deleted.',
         'group_create_ok' => 'The group was created.'
     ],
     'pages' => [

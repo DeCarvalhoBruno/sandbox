@@ -90,9 +90,15 @@ class Group extends Controller
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
-    public function destroy()
+    /**
+     * @param string $groupName
+     * @param \App\Contracts\Models\Group|\App\Providers\Models\Group $groupProvider
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($groupName, GroupProvider $groupProvider)
     {
-
+        $groupProvider->deleteByName($groupName);
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 
     /**
