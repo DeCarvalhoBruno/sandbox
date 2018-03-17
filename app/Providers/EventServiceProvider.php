@@ -2,8 +2,7 @@
 
 namespace App\Providers;
 
-use App\Events\UpdatedGroupMembers;
-use App\Events\UpdatedUser;
+use App\Events\UpdatedPermissionEntity;
 use App\Listeners\UpdatePermissions;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -15,10 +14,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        UpdatedUser::class => [
-            UpdatePermissions::class,
-        ],
-        UpdatedGroupMembers::class => [
+        UpdatedPermissionEntity::class => [
             UpdatePermissions::class,
         ],
     ];

@@ -3,6 +3,7 @@
 use App\Contracts\Models\Group as GroupInterface;
 use App\Contracts\RawQueries;
 use App\Events\UpdatedGroupMembers;
+use App\Events\UpdatedPermissionEntity;
 use App\Models\GroupMember;
 
 /**
@@ -77,8 +78,8 @@ class Group extends Model implements GroupInterface
     public function deleteByName($groupName)
     {
         $this->createModel()->newQuery()->where('group_name','=',$groupName)->delete();
+        event(new UpdatedPermissionEntity);
     }
-
 
     /**
      * @param $groupName
@@ -149,6 +150,6 @@ class Group extends Model implements GroupInterface
                 GroupMember::query()->whereIn('user_id', $userIds)->delete();
             }
         }
-        event(new UpdatedGroupMembers);
+        event(new UpdatedPermissionEntity);
     }
 }

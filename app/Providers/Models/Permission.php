@@ -2,7 +2,7 @@
 
 use App\Contracts\HasPermissions;
 use App\Contracts\Models\Permission as PermissionInterface;
-use App\Events\UpdatedUser;
+use App\Events\UpdatedPermissionEntity;
 use App\Models\Entity;
 use App\Models\EntityType;
 use App\Models\Permission as PermissionModel;
@@ -48,7 +48,6 @@ class Permission extends Model implements PermissionInterface
                 ])->save();
             }
         }
-        event(new UpdatedUser);
     }
 
     /**
