@@ -7,13 +7,19 @@ const PasswordRequest = () => import('~/pages/admin/auth/password/email').then(
 const Dashboard = () => import('~/pages/admin/dashboard').then(
   m => m.default || m)
 
-const Users = () => import('~/pages/admin/users/index').then(m => m.default || m)
-const UserEdit = () => import('~/pages/admin/users/edit').then(m => m.default || m)
+const Users = () => import('~/pages/admin/users/index').then(
+  m => m.default || m)
+const UserEdit = () => import('~/pages/admin/users/edit').then(
+  m => m.default || m)
 
-const Groups = () => import('~/pages/admin/groups/index').then(m => m.default || m)
-const GroupEdit = () => import('~/pages/admin/groups/edit').then(m => m.default || m)
-const GroupAdd = () => import('~/pages/admin/groups/add').then(m => m.default || m)
-const GroupMember = () => import('~/pages/admin/groups/member').then(m => m.default || m)
+const Groups = () => import('~/pages/admin/groups/index').then(
+  m => m.default || m)
+const GroupEdit = () => import('~/pages/admin/groups/edit').then(
+  m => m.default || m)
+const GroupAdd = () => import('~/pages/admin/groups/add').then(
+  m => m.default || m)
+const GroupMember = () => import('~/pages/admin/groups/member').then(
+  m => m.default || m)
 
 const Settings = () => import('~/pages/admin/settings/index').then(
   m => m.default || m)
@@ -25,7 +31,7 @@ const SettingsPassword = () => import('~/pages/admin/settings/password').then(
 export default [
   {
     path: '/admin/',
-    redirect: {name: 'admin.dashboard'},
+    redirect: {name: 'admin.dashboard'}
   },
   {
     path: '/admin/dashboard',
@@ -35,46 +41,47 @@ export default [
   {
     path: '/admin/users',
     name: 'admin.users.index',
-    meta: {parent:'admin.dashboard'},
+    meta: {parent: 'admin.dashboard'},
     component: Users
   },
   {
     path: '/admin/users/:user',
     name: 'admin.users.edit',
-    meta: {parent:'admin.users.index'},
+    meta: {parent: 'admin.users.index'},
     component: UserEdit
   },
   {
     path: '/admin/users/:user/delete',
-    name: 'admin.users.delete',
+    name: 'admin.users.delete'
   },
   {
     path: '/admin/groups',
     name: 'admin.groups.index',
-    meta: {parent:'admin.dashboard'},
+    meta: {parent: 'admin.dashboard'},
     component: Groups
   },
   {
     path: '/admin/groups/create',
     name: 'admin.groups.add',
-    meta: {parent:'admin.groups.index'},
+    meta: {parent: 'admin.groups.index'},
     component: GroupAdd
   },
   {
     path: '/admin/groups/:group',
     name: 'admin.groups.edit',
-    meta: {parent:'admin.groups.index'},
+    meta: {parent: 'admin.groups.index'},
     component: GroupEdit
   },
   {
     path: '/admin/groups/:group/members',
     name: 'admin.groups.members',
-    meta: {parent:'admin.groups.index'},
+    meta: {parent: 'admin.groups.index'},
     component: GroupMember
   },
   {
     path: '/admin/settings',
     component: Settings,
+    meta: {parent: 'admin.dashboard'},
     children: [
       {
         path: '',

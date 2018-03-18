@@ -35,14 +35,20 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import Button from '~/components/Button'
   import { Form, HasError, AlertForm } from '~/components/form'
+  import { Card, Nav } from 'bootstrap-vue/es/components'
+
+  Vue.use(Card)
 
   export default {
     scrollToTop: false,
     components: {
       'v-button': Button,
-      HasError, AlertForm
+      HasError,
+      AlertForm,
+      Card
     },
     metaInfo () {
       return {title: this.$t('general.settings')}

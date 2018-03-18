@@ -1,51 +1,57 @@
 <template>
-  <div class="row">
-    <div class="col-md-3">
-      <card :title="$t('general.settings')" class="settings-card">
-        <ul class="nav flex-column nav-pills">
-          <li v-for="tab in tabs" class="nav-item">
-            <router-link :to="{ name: tab.route }" class="nav-link" active-class="active">
-              <fa :icon="tab.icon" fixed-width/>
-              {{ tab.name }}
-            </router-link>
-          </li>
-        </ul>
-      </card>
-    </div>
-
-    <div class="col-md-9">
-      <transition name="fade" mode="out-in">
-        <router-view/>
-      </transition>
-    </div>
-  </div>
+    <b-card :title="$t('general.settings')" no-body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <b-nav vertical pills>
+                        <b-nav-item v-for="(tab,idx) in tabs" :key="idx">
+                            <router-link :to="{ name: tab.route }" class="nav-link" active-class="active">
+                                <fa :icon="tab.icon" fixed-width/>
+                                {{ tab.name }}
+                            </router-link>
+                        </b-nav-item>
+                    </b-nav>
+                </div>
+                <div class="col-md-8">
+                    <transition name="fade" mode="out-in">
+                        <router-view/>
+                    </transition>
+                </div>
+            </div>
+        </div>
+    </b-card>
 </template>
 
 <script>
-export default {
-  middleware: 'auth',
+  import Vue from 'vue'
+  import { Card, Nav } from 'bootstrap-vue/es/components'
 
-  computed: {
-    tabs () {
-      return [
-        {
-          icon: 'user',
-          name: this.$t('generalprofile'),
-          route: 'settings.profile'
-        },
-        {
-          icon: 'lock',
-          name: this.$t('general.password'),
-          route: 'settings.password'
-        }
-      ]
+  Vue.use(Card)
+  Vue.use(Nav)
+
+  export default {
+    layout: 'basic',
+    middleware: 'check-auth',
+    name: 'settings-index',
+    components: {
+      Card,
+      Nav
+    },
+    computed: {
+      tabs () {
+        return [
+          {
+            icon: 'user',
+            name: this.$t('general.profile'),
+            route: 'admin.settings.profile'
+          },
+          {
+            icon: 'lock',
+            name: this.$t('general.password'),
+            route: 'admin.settings.password'
+          }
+        ]
+      }
     }
   }
-}
 </script>
-
-<style>
-.settings-card .card-body {
-  padding: 0;
-}
-</style>

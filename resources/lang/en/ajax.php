@@ -8,6 +8,8 @@ return [
         'admin-groups-edit' => 'Edit',
         'admin-groups-add' => 'New Group',
         'admin-groups-members' => 'Edit Members',
+        'admin-settings-password' => 'User password',
+        'admin-settings-profile' => 'User profile',
     ],
     'general' => [
         'ok' => 'Ok',
