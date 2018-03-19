@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Settings;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 
 class Password extends Controller
 {
@@ -22,5 +23,6 @@ class Password extends Controller
         $request->user()->update([
             'password' => bcrypt($request->password),
         ]);
+        return response('',Response::HTTP_NO_CONTENT);
     }
 }

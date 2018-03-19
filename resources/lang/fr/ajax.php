@@ -2,11 +2,14 @@
 return [
     'breadcrumb' => [
         'admin-dashboard' => 'Home',
-        'admin-users-index' => 'User',
-        'admin-groups-index' => 'Group',
+        'admin-users-index' => 'Users',
+        'admin-groups-index' => 'Groups',
         'admin-users-edit' => 'Edit',
         'admin-groups-edit' => 'Edit',
+        'admin-groups-add' => 'New Group',
         'admin-groups-members' => 'Edit Members',
+        'admin-settings-password' => 'Your password',
+        'admin-settings-profile' => 'Your profile',
     ],
     'general' => [
         'ok' => 'Ok',
@@ -18,6 +21,7 @@ return [
         'save' => 'Save',
         'save_changes' => 'Save Changes',
         'update' => 'Update',
+        'create' => 'Create',
         'logout' => 'Logout',
         'login' => 'Log In',
         'register' => 'Register',
@@ -27,7 +31,12 @@ return [
         'email' => 'E-mail',
         'back' => 'Back',
         'permission' => 'Permission|Permissions',
-        'toggle' => 'Toggle On/Off'
+        'toggle' => 'Toggle On/Off',
+        'select_all' => 'Select all',
+        'apply' => 'Apply',
+        'search' => 'Search',
+        'reset_filters' => 'Reset Filters',
+        'delete'=>'Delete'
     ],
     'db' => [
         'user' => 'User|Users',
@@ -44,6 +53,18 @@ return [
         'group_mask' => 'Group mask',
         'member_count' => 'Number of members'
     ],
+    'db_raw' => [
+        'full_name' => 'full_name',
+        'email' => 'email',
+        'group_name' => 'group_name',
+        'created_at' => 'created_at'
+    ],
+    'db_raw_inv' => [
+        'full_name' => 'full_name',
+        'email' => 'email',
+        'group_name' => 'group_name',
+        'created_at' => 'created_at',
+    ],
     'form' => [
         'description' => [
             'username' => 'The user\'s shorthand name.',
@@ -51,7 +72,8 @@ return [
             'last_name' => 'The user\'s last (family) name.',
             'new_email' => '"{0}" is the current e-mail address.',
             'new_username' => '"{0}" is the current username.',
-            'group_name' => '"{0}" is the current group name. The group name can only contain alphanumeric characters and underscores.',
+            'group_name'=>'The group name can only contain alphanumeric characters and underscores.',
+            'new_group_name' => '"{0}" is the current group name. The group name can only contain alphanumeric characters and underscores.',
             'group_mask' => 'Determines the group\'s position in its hierarchy. The lower the mask, the higher the group status.'
         ],
     ],
@@ -67,6 +89,10 @@ return [
         'unauthorized' => [
             'h' => 'Access Denied',
             't' => 'You are not authorized to view this page.',
+        ],
+        'user_delete'=>[
+            'h' => 'Confirm user deletion',
+            't' => 'Do you really want to delete user {name}?'
         ]
     ],
     'error' => [
@@ -78,8 +104,11 @@ return [
     'message' => [
         'info_updated' => 'Your info has been updated!',
         'password_updated' => 'Your password has been updated!',
-        'user_update_ok' => 'The user was updated successfully. It may take a few extra seconds for permissions to update.',
-        'group_update_ok' => 'The group was updated successfully. It may take a few extra seconds for permissions to update.'
+        'user_update_ok' => 'The user was updated. It may take a few seconds for permissions to update.',
+        'user_delete_ok' => 'User {name} was deleted.|The users were deleted.',
+        'group_update_ok' => 'The group was updated. It may take a few seconds for permissions to update.',
+        'group_delete_ok' => 'Group {group} was deleted.',
+        'group_create_ok' => 'The group was created.'
     ],
     'pages' => [
         'auth' => [
@@ -88,7 +117,6 @@ return [
             'send_password_reset_link' => 'Send Password Reset Link',
             'confirm_password' => 'Confirm Password',
             'reset_password' => 'Reset Password',
-            'your_password' => 'Your Password',
             'new_password' => 'New Password',
         ],
         'members' => [
@@ -109,7 +137,10 @@ return [
             'warning1' => 'Setting individual permissions for this user 
             will override permissions set on groups of which the user is a member.',
             'warning2' => 'We recommend setting permissions on groups instead, 
-            and use individual user permissions to handle exceptions.'
+            and use individual user permissions to handle exceptions.',
+            'filter_full_name' => 'Filter by full name',
+            'filter_group' => 'Filter by group',
+            'filter_created_at' => 'Filter by registration date',
         ],
         'groups' => [
             'info1' => 'Permissions for all members of the group are defined here.',
@@ -121,14 +152,40 @@ return [
         'empty' => 'There is currently no data available.',
         'sort_ascending' => 'Sort in ascending order',
         'sort_descending' => 'Sort in descending order',
-
+        'select_item' => 'Select {name}',
+        'edit_item' => 'Edit {name}',
+        'delete_item' => 'Delete {name}',
+        'grouped_actions' => 'Grouped actions',
+        'option_del_user' => 'Delete user',
+        'btn_apply_title' => 'Apply action to all selected users'
     ],
     'filters' => [
-        'sortByCol' => 's',
-        'order' => 'o',
-        'name' => 'n',
+        'sortBy' => 'sortBy',
+        'order' => 'order',
+        'name' => 'name',
+        'group' => 'group',
+        'created' => 'registration',
         'asc' => 'ascending',
-        'desc' => 'descending'
+        'desc' => 'descending',
+        'ascending' => 'asc',
+        'descending' => 'desc',
+        'day' => 'Today',
+        'week' => '< 1 week',
+        'month' => '< 1 month',
+        'year' => '< 1 year'
+    ],
+    'filters_inv' => [
+        'registration' => 'createdAt',
+        'group' => 'group',
+        'name' => 'fullName',
+        'sortBy' => 'sortBy',
+        'order' => 'order',
+        'fullName' => 'name',
+        'createdAt' => 'registration',
+        'day' => 'day',
+        'week' => 'week',
+        'month' => 'month',
+        'year' => 'year'
     ],
     'go_home' => 'Go Home',
     'toggle_navigation' => 'Toggle navigation',

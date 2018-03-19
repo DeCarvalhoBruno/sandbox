@@ -8,8 +8,8 @@ return [
         'admin-groups-edit' => 'Edit',
         'admin-groups-add' => 'New Group',
         'admin-groups-members' => 'Edit Members',
-        'admin-settings-password' => 'User password',
-        'admin-settings-profile' => 'User profile',
+        'admin-settings-password' => 'Your password',
+        'admin-settings-profile' => 'Your profile',
     ],
     'general' => [
         'ok' => 'Ok',
@@ -117,7 +117,6 @@ return [
             'send_password_reset_link' => 'Send Password Reset Link',
             'confirm_password' => 'Confirm Password',
             'reset_password' => 'Reset Password',
-            'your_password' => 'Your Password',
             'new_password' => 'New Password',
         ],
         'members' => [
@@ -190,5 +189,4 @@ return [
     ],
     'go_home' => 'Go Home',
     'toggle_navigation' => 'Toggle navigation',
-    'your_info' => 'Your Info',
 ];

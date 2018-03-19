@@ -21,7 +21,9 @@ class UpdateUser extends FormRequest
     {
         $input = $this->input();
 
-        $this->processPermissions($input['permissions']);
+        if (isset($input['permissions'])) {
+            $this->processPermissions($input['permissions']);
+        }
 
         if (isset($input['new_email'])) {
             $input['email'] = $input['new_email'];

@@ -53,6 +53,11 @@ class Admin
                 ->middleware('can:view,App\Models\Group');
             $r->patch('members/{group}', 'GroupMember@update')
                 ->middleware('can:view,App\Models\Group');
+
+            $r->patch('settings/password', 'Settings\Password@update')
+                ->middleware('can:view,App\Models\Group');
+            $r->patch('settings/profile', 'Settings\Profile@update')
+                ->middleware('can:view,App\Models\Group');
         };
     }
 }

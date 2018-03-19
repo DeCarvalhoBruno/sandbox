@@ -1,36 +1,65 @@
 <template>
-    <b-card :title="$t('your_info')">
-        <form @submit.prevent="update" @keydown="form.onKeydown($event)">
-            <alert-form :form="form" :message="$t('message.info_updated')"/>
-
-            <!-- Name -->
-            <div class="form-group row">
-                <label class="col-md-3 col-form-label text-md-right">{{ $t('general.name') }}</label>
-                <div class="col-md-7">
-                    <input v-model="form.name" type="text" name="name" class="form-control"
-                           :class="{ 'is-invalid': form.errors.has('name') }">
-                    <has-error :form="form" field="name"/>
-                </div>
+    <form @submit.prevent="update" @keydown="form.onKeydown($event)">
+        <div class="form-group row">
+            <label for="new_username" class="col-md-3 col-form-label">{{$t('db.new_username')}}</label>
+            <div class="col-md-9">
+                <input v-model="form.new_username" type="text"
+                       name="new_username" id="new_username" class="form-control"
+                       :class="{ 'is-invalid': form.errors.has('new_username') }"
+                       :placeholder="$t('db.new_username')"
+                       aria-describedby="help_new_username">
+                <has-error :form="form" field="new_username"/>
+                <small id="help_new_username" class="text-muted">
+                    {{$t('form.description.new_username',[form.username])}}
+                </small>
             </div>
-
-            <!-- Email -->
-            <div class="form-group row">
-                <label class="col-md-3 col-form-label text-md-right">{{ $t('general.email') }}</label>
-                <div class="col-md-7">
-                    <input v-model="form.email" type="email" name="email" class="form-control"
-                           :class="{ 'is-invalid': form.errors.has('email') }">
-                    <has-error :form="form" field="email"/>
-                </div>
+        </div>
+        <div class="form-group row">
+            <label for="first_name" class="col-md-3 col-form-label">{{$t('db.first_name')}}</label>
+            <div class="col-md-9">
+                <input v-model="form.first_name" type="text"
+                       name="first_name" id="first_name" class="form-control"
+                       :class="{ 'is-invalid': form.errors.has('first_name') }"
+                       :placeholder="$t('db.first_name')"
+                       aria-describedby="help_first_name">
+                <has-error :form="form" field="first_name"/>
+                <small id="help_first_name" class="text-muted">{{$t('form.description.first_name')}}
+                </small>
             </div>
-
-            <!-- Submit Button -->
-            <div class="form-group row">
-                <div class="col-md-9 ml-md-auto">
-                    <v-button type="success" :loading="form.busy">{{ $t('general.update') }}</v-button>
-                </div>
+        </div>
+        <div class="form-group row">
+            <label for="last_name" class="col-md-3 col-form-label">{{$t('db.last_name')}}</label>
+            <div class="col-md-9">
+                <input v-model="form.last_name" type="text"
+                       name="last_name" id="last_name" class="form-control"
+                       :class="{ 'is-invalid': form.errors.has('last_name') }"
+                       :placeholder="$t('db.last_name')"
+                       aria-describedby="help_last_name">
+                <has-error :form="form" field="last_name"/>
+                <small id="help_last_name" class="text-muted">{{$t('form.description.last_name')}}
+                </small>
             </div>
-        </form>
-    </b-card>
+        </div>
+        <div class="form-group row">
+            <label for="new_email" class="col-md-3 col-form-label">{{$t('db.new_email')}}</label>
+            <div class="col-md-9">
+                <input v-model="form.new_email" type="text"
+                       name="new_email" id="new_email" class="form-control"
+                       :class="{ 'is-invalid': form.errors.has('new_email') }"
+                       :placeholder="$t('db.new_email')"
+                       aria-describedby="help_new_email">
+                <has-error :form="form" field="new_email"/>
+                <small id="help_new_email" class="text-muted">
+                    {{$t('form.description.new_email',[form.email])}}
+                </small>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-9 ml-md-auto">
+                <v-button :loading="form.busy">{{ $t('general.update') }}</v-button>
+            </div>
+        </div>
+    </form>
 </template>
 
 <script>
@@ -47,29 +76,25 @@
     metaInfo () {
       return {title: this.$t('general.settings')}
     },
-
     data: () => ({
       form: new Form({
-        name: '',
+        username: '',
+        first_name: '',
+        last_name: '',
         email: ''
       })
     }),
-
     computed: mapGetters({
       user: 'auth/user'
     }),
-
     created () {
-      // Fill the form with user data.
       this.form.keys().forEach(key => {
         this.form[key] = this.user[key]
       })
     },
-
     methods: {
       async update () {
-        const {data} = await this.form.patch('/api/settings/profile')
-
+        const {data} = await this.form.patch('/ajax/admin/settings/profile')
         this.$store.dispatch('auth/updateUser', {user: data})
       }
     }

@@ -80,7 +80,7 @@ class User extends Model implements UserProvider, UserInterface
         if (is_array($username)) {
             $this->createModel()->newQueryWithoutScopes()
                 ->whereIn('username', $username['users'])->delete();
-       } else {
+        } else {
             $this->createModel()->newQueryWithoutScopes()
                 ->where('username', '=', $username)->delete();
         }
@@ -108,8 +108,14 @@ class User extends Model implements UserProvider, UserInterface
     {
         $model = $this->createModel();
 
-        return $model->newQueryWithoutScopes()
-            ->select(['users.user_id', 'users.username', 'entity_type_id'])
+        return $model->newQuery()
+            ->select([
+                'entity_type_id',
+                'people.first_name',
+                'people.last_name',
+                'users.username',
+                'users.email'
+            ])
             ->entityType($identifier)
             ->where($model->getQualifiedKeyName(), $identifier)
             ->first();

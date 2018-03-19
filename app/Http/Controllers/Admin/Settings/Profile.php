@@ -2,26 +2,24 @@
 
 namespace App\Http\Controllers\Admin\Settings;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\Admin\UpdateUser;
 use App\Http\Controllers\Controller;
+use App\Providers\Models\User as UserProvider;
+use Illuminate\Http\Response;
 
 class Profile extends Controller
 {
     /**
      * Update the user's profile information.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\Admin\UpdateUser $request
+     * @param \App\Providers\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(UpdateUser $request, UserProvider $user)
     {
-        $user = $request->user();
+        auth()->user()->update($user->filterFillables($request->all()));
 
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$user->id,
-        ]);
-
-        return tap($user)->update($request->only('name', 'email'));
+        return response('', Response::HTTP_NO_CONTENT);
     }
 }

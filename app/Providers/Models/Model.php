@@ -100,7 +100,8 @@ abstract class Model
     /**
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
-    public function noScopes(){
+    public function noScopes()
+    {
         return $this->createModel()->newQueryWithoutScopes();
     }
 
@@ -230,7 +231,14 @@ abstract class Model
             ->value('cnt');
     }
 
-    protected function filterFillables($data)
+    /**
+     * Filter the data array only keeping items matching the model's
+     * fillable property
+     *
+     * @param array $data
+     * @return array
+     */
+    public function filterFillables($data)
     {
         $fillables = array_flip($this->createModel()->getFillable());
 
@@ -240,7 +248,7 @@ abstract class Model
     }
 
     /**
-     * @param string$table
+     * @param string $table
      * @return int|null
      */
     public static function getLastID($table)
@@ -265,7 +273,7 @@ abstract class Model
         /** @var \Illuminate\Database\Eloquent\Model $m */
         $m = new $model;
         $result = \DB::select(
-            sprintf('SELECT count(%s) as c FROM %s', $m->getKeyName(),$m->getTable()));
+            sprintf('SELECT count(%s) AS c FROM %s', $m->getKeyName(), $m->getTable()));
         return !empty($result) ? $result[0]->c : null;
 
     }

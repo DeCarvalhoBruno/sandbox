@@ -12,10 +12,8 @@
                         </b-nav-item>
                     </b-nav>
                 </div>
-                <div class="col-md-8">
-                    <transition name="fade" mode="out-in">
+                <div class="col-md-8 my-5">
                         <router-view/>
-                    </transition>
                 </div>
             </div>
         </div>
