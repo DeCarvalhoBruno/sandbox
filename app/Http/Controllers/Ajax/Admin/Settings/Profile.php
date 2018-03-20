@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Settings;
+namespace App\Http\Controllers\Ajax\Admin\Settings;
 
 use App\Http\Requests\Admin\UpdateUser;
 use App\Http\Controllers\Controller;
@@ -18,8 +18,13 @@ class Profile extends Controller
      */
     public function update(UpdateUser $request, UserProvider $user)
     {
-        auth()->user()->update($user->filterFillables($request->all()));
 
-        return response('', Response::HTTP_NO_CONTENT);
+//        $savedUser = auth()->user()->update($user->filterFillables($request->all()));
+//        return response($request->all(), Response::HTTP_OK);
+        $savedUser = $user->updateOneByUsername(
+            auth()->user()->getAttribute('username'),
+            $request->all()
+        );
+        return response($savedUser, Response::HTTP_OK);
     }
 }

@@ -27,9 +27,13 @@ class UpdateUser extends FormRequest
 
         if (isset($input['new_email'])) {
             $input['email'] = $input['new_email'];
+        } else {
+            unset($input['email']);
         }
         if (isset($input['new_username'])) {
             $input['username'] = $input['new_username'];
+        }else{
+            unset($input['username']);
         }
         unset($input['new_email'], $input['new_username'], $input['permissions']);
         $this->replace($input);

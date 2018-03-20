@@ -41,14 +41,22 @@ class User extends Model implements UserProvider, UserInterface
      */
     public function updateOneUser($model, $field, $value, $data)
     {
-        $user = $model->newQuery()->select(['person_id', 'entity_type_id'])
-            ->where($field, $value)->entityType()->first();
+        $user = $model->newQuery()->select([
+            'person_id',
+        ])->where($field, $value)->entityType()->first();
         $this->person->createModel()->where('person_id',
             $user->person_id)->update($this->person->filterFillables($data));
 
         $model->newQueryWithoutScopes()->where($field, $value)
             ->update($this->filterFillables($data));
-        return $user;
+//        $user->update($this->filterFillables($data));
+        return $model->newQuery()->select([
+            'entity_type_id',
+            'people.first_name',
+            'people.last_name',
+            'users.username',
+            'users.email'
+        ])->where($field, $data[$field])->entityType()->first();
     }
 
     /**

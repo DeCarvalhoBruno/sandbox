@@ -96,6 +96,9 @@
       async update () {
         const {data} = await this.form.patch('/ajax/admin/settings/profile')
         this.$store.dispatch('auth/updateUser', {user: data})
+        this.form.keys().forEach(key => {
+          this.form[key] = this.user[key]
+        })
       }
     }
   }
