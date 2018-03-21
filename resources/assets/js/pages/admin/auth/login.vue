@@ -7,7 +7,7 @@
                 </div>
 
                 <div class="card-body">
-                    <alert-form :form="form"/>
+                    <alert-form :form="form" :show-errors="false"/>
                     <form @submit.prevent="login" @keydown="form.onKeydown($event)">
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label text-md-right">{{ $t('general.email') }}</label>

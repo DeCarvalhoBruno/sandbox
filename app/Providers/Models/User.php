@@ -49,14 +49,18 @@ class User extends Model implements UserProvider, UserInterface
 
         $model->newQueryWithoutScopes()->where($field, $value)
             ->update($this->filterFillables($data));
-//        $user->update($this->filterFillables($data));
-        return $model->newQuery()->select([
-            'entity_type_id',
-            'people.first_name',
-            'people.last_name',
-            'users.username',
-            'users.email'
-        ])->where($field, $data[$field])->entityType()->first();
+
+        if (isset($data[$field])) {
+            return $model->newQuery()->select([
+                'entity_type_id',
+                'people.first_name',
+                'people.last_name',
+                'users.username',
+                'users.email'
+            ])->where($field, $data[$field])->entityType()->first();
+        } else {
+            return $user;
+        }
     }
 
     /**

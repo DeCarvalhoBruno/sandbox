@@ -1,8 +1,7 @@
 <template>
     <div>
         <b-alert v-if="form.errors.any()" :show="true" variant="danger">
-            <div v-if="message" v-html="message"></div>
-            <div v-else>{{$t('error.form')}}</div>
+            <div>{{$t('error.form')}}</div>
             <ul v-if="showErrors">
                 <li v-for="error in form.errors.flatten()" v-html="error"></li>
             </ul>
@@ -36,7 +35,7 @@
       showErrors: {
         type: Boolean,
         required: false,
-        default: false
+        default: true
       }
     }
   }

@@ -18,9 +18,6 @@ class Profile extends Controller
      */
     public function update(UpdateUser $request, UserProvider $user)
     {
-
-//        $savedUser = auth()->user()->update($user->filterFillables($request->all()));
-//        return response($request->all(), Response::HTTP_OK);
         $savedUser = $user->updateOneByUsername(
             auth()->user()->getAttribute('username'),
             $request->all()

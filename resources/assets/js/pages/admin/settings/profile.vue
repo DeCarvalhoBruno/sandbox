@@ -99,6 +99,7 @@
         this.form.keys().forEach(key => {
           this.form[key] = this.user[key]
         })
+        this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.profile_updated'))
       }
     }
   }

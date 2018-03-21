@@ -102,7 +102,7 @@ return [
 
     ],
     'message' => [
-        'info_updated' => 'Your info has been updated!',
+        'profile_updated' => 'Your profile has been updated!',
         'password_updated' => 'Your password has been updated!',
         'user_update_ok' => 'The user was updated. It may take a few seconds for permissions to update.',
         'user_delete_ok' => 'User {name} was deleted.|The users were deleted.',
