@@ -23,6 +23,8 @@ const GroupMember = () => import('~/pages/admin/groups/member').then(
 
 const Settings = () => import('~/pages/admin/settings/index').then(
   m => m.default || m)
+const SettingsGeneral = () => import('~/pages/admin/settings/general').then(
+  m => m.default || m)
 const SettingsProfile = () => import('~/pages/admin/settings/profile').then(
   m => m.default || m)
 const SettingsPassword = () => import('~/pages/admin/settings/password').then(
@@ -86,6 +88,11 @@ export default [
       {
         path: '',
         redirect: {name: 'admin.settings.profile'}
+      },
+      {
+        path: 'general',
+        name: 'admin.settings.general',
+        component: SettingsGeneral
       },
       {
         path: 'profile',

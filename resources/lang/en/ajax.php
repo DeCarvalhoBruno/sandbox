@@ -10,6 +10,7 @@ return [
         'admin-groups-members' => 'Edit Members',
         'admin-settings-password' => 'Your password',
         'admin-settings-profile' => 'Your profile',
+        'admin-settings-general' => 'Your general settings',
     ],
     'general' => [
         'ok' => 'Ok',
@@ -18,6 +19,7 @@ return [
         'home' => 'Home',
         'settings' => 'Settings',
         'profile' => 'Profile',
+        'general' => 'General',
         'save' => 'Save',
         'save_changes' => 'Save Changes',
         'update' => 'Update',
@@ -36,7 +38,7 @@ return [
         'apply' => 'Apply',
         'search' => 'Search',
         'reset_filters' => 'Reset Filters',
-        'delete'=>'Delete'
+        'delete' => 'Delete'
     ],
     'db' => [
         'user' => 'User|Users',
@@ -72,7 +74,7 @@ return [
             'last_name' => 'The user\'s last (family) name.',
             'new_email' => '"{0}" is the current e-mail address.',
             'new_username' => '"{0}" is the current username.',
-            'group_name'=>'The group name can only contain alphanumeric characters and underscores.',
+            'group_name' => 'The group name can only contain alphanumeric characters and underscores.',
             'new_group_name' => '"{0}" is the current group name. The group name can only contain alphanumeric characters and underscores.',
             'group_mask' => 'Determines the group\'s position in its hierarchy. The lower the mask, the higher the group status.'
         ],
@@ -90,7 +92,7 @@ return [
             'h' => 'Access Denied',
             't' => 'You are not authorized to view this page.',
         ],
-        'user_delete'=>[
+        'user_delete' => [
             'h' => 'Confirm user deletion',
             't' => 'Do you really want to delete user {name}?'
         ]

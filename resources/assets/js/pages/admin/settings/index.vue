@@ -13,7 +13,7 @@
                     </b-nav>
                 </div>
                 <div class="col-md-8 my-5">
-                        <router-view/>
+                    <router-view/>
                 </div>
             </div>
         </div>
@@ -38,6 +38,11 @@
     computed: {
       tabs () {
         return [
+          {
+            icon: 'cog',
+            name: this.$t('general.general'),
+            route: 'admin.settings.general'
+          },
           {
             icon: 'user',
             name: this.$t('general.profile'),
