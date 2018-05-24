@@ -1,5 +1,31 @@
 <?php
 return [
+    'routes' => [
+        'admins' => 'admin',
+        'admin' => [
+            'dashboard' => 'admin/dashboard',
+            'users' => [
+                'index' => 'admin/users',
+                'users.edit' => 'admin/users/:user',
+            ],
+            'groups' => [
+                'index' => 'admin/groups',
+                'add' => 'admin/groups/create',
+                'edit' => 'admin/groups/:group',
+                'members' => 'admin/groups/:group/members',
+            ],
+            'settings' => [
+                'general' => 'admin/settings/general',
+                'profile' => 'admin/settings/profile',
+                'password' => 'admin/settings/password',
+            ],
+            'login' => 'admin/login',
+            'password' => [
+                'request' => 'admin/password/reset',
+                'reset' => 'admin/password/reset/:token'
+            ]
+        ]
+    ],
     'breadcrumb' => [
         'admin-dashboard' => 'Home',
         'admin-users-index' => 'Users',

@@ -33,6 +33,7 @@ const SettingsPassword = () => import('~/pages/admin/settings/password').then(
 export default [
   {
     path: '/admin/',
+    name: 'admins',
     redirect: {name: 'admin.dashboard'}
   },
   {
@@ -81,26 +82,27 @@ export default [
     component: GroupMember
   },
   {
-    path: '/admin/settings',
+    path: '',
     component: Settings,
     meta: {parent: 'admin.dashboard'},
     children: [
       {
-        path: '',
+        path: '/admin/settings',
+        name: 'admin.settings',
         redirect: {name: 'admin.settings.profile'}
       },
       {
-        path: 'general',
+        path: '/admin/settings/general',
         name: 'admin.settings.general',
         component: SettingsGeneral
       },
       {
-        path: 'profile',
+        path: '/admin/settings/profile',
         name: 'admin.settings.profile',
         component: SettingsProfile
       },
       {
-        path: 'password',
+        path: '/admin/settings/password',
         name: 'admin.settings.password',
         component: SettingsPassword
       }
