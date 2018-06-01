@@ -30,7 +30,9 @@ const SettingsProfile = () => import('~/pages/admin/settings/profile').then(
 const SettingsPassword = () => import('~/pages/admin/settings/password').then(
   m => m.default || m)
 
-export default [
+import store from '~/store'
+
+let defaults = [
   {
     path: '/admin/',
     name: 'admins',
@@ -82,7 +84,7 @@ export default [
     component: GroupMember
   },
   {
-    path: '',
+    path: '/admin/settings',
     component: Settings,
     meta: {parent: 'admin.dashboard'},
     children: [
@@ -128,3 +130,23 @@ export default [
     component: require('~/pages/errors/404.vue')
   }
 ]
+
+async function loadLocalizedRouteUrls (locale) {
+  return await import(`~/lang/routes-${locale}`)
+}
+
+(async function () {
+  let locale = store.getters['lang/locale']
+  let routes = await loadLocalizedRouteUrls(locale)
+  let isDefaultLocale = (
+    locale === store.getters['lang/fallback']
+  )
+  if (!isDefaultLocale) {
+    for (var i in defaults) {
+      if (routes.hasOwnProperty(defaults[i].name)) {
+        defaults[i].path = '/' + locale + '/' + routes[defaults[i].name]
+      }
+    }
+  }
+})()
+export default defaults

@@ -46,6 +46,13 @@ class ConvertLangFilesToJs extends Command
                     fclose($fh);
                     $this->info('    - '.$subdir);
                 }
+                $file = sprintf('%s/routes-admin.php',$langDir);
+                if(is_file($file)){
+                    $fh = fopen(sprintf('resources/assets/js/lang/routes-%s.json',$subdir),'w');
+                    fwrite($fh,json_encode(include($file)));
+                    fclose($fh);
+                    $this->info('    - (routes)'.$subdir);
+                }
 
             }
         }

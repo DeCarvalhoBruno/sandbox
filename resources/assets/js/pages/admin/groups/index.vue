@@ -6,24 +6,31 @@
             </th>
             <td slot="body-action" slot-scope="props">
                 <div class="inline">
-                    <router-link :to="{ name: 'admin.groups.edit', params: { group: props.row.group_name } }">
-                        <button class="btn btn-sm btn-info">
-                            <fa icon="pencil-alt">
-                            </fa>
-                        </button>
-                    </router-link>
+                    <template v-if="props.row.group_name">
+                        <router-link :to="{
+                        name: 'admin.groups.edit',
+                        params: { group: props.row.group_name }
+                        }">
+                            <button class="btn btn-sm btn-info">
+                                <fa icon="pencil-alt">
+                                </fa>
+                            </button>
+                        </router-link>
+                    </template>
                     <button class="btn btn-sm btn-danger"
-                    @click="deleteRow(props.row)">
+                            @click="deleteRow(props.row)">
                         <fa icon="trash-alt">
                         </fa>
                     </button>
-                    <router-link
-                            :to="{ name: 'admin.groups.members', params: { group: props.row.group_name }}">
-                        <button class="btn btn-sm btn-success">
-                            <fa icon="users">
-                            </fa>
-                        </button>
-                    </router-link>
+                    <template v-if="props.row.group_name">
+                        <router-link
+                                :to="{ name: 'admin.groups.members', params: { group: props.row.group_name }}">
+                            <button class="btn btn-sm btn-success">
+                                <fa icon="users">
+                                </fa>
+                            </button>
+                        </router-link>
+                    </template>
                 </div>
             </td>
         </v-table>
@@ -53,20 +60,20 @@
         extras: 'table/extras'
       })
     },
-    methods:{
+    methods: {
       async deleteRow (data) {
         try {
           await axios.delete(`/ajax/admin/groups/${data.group_name}`)
           this.$store.dispatch(
             'session/setAlertMessageSuccess',
-            this.$t('message.group_delete_ok',{group:data.group_name})
+            this.$t('message.group_delete_ok', {group: data.group_name})
           )
           this.$store.dispatch('table/fetchData', {
             entity: 'groups',
             queryString: this.$route.fullPath
           })
         } catch (e) {}
-      },
+      }
     },
     beforeRouteEnter (to, from, next) {
       store.dispatch('table/fetchData', {

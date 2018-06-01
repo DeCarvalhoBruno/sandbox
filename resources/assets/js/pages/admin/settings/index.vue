@@ -5,7 +5,7 @@
                 <div class="col-md-3">
                     <b-nav vertical pills>
                         <b-nav-item v-for="(tab,idx) in tabs" :key="idx">
-                            <router-link :to="$routeTranslate({ name: tab.route },$i18n)" class="nav-link" active-class="active">
+                            <router-link :to="{ name: tab.route }" class="nav-link" active-class="active">
                                 <fa :icon="tab.icon" fixed-width/>
                                 {{ tab.name }}
                             </router-link>

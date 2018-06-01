@@ -1,3 +1,11 @@
+/*****
+ *
+ ****************************************************
+ *        NOT USED, TO BE DELETED
+ ****************************************************
+ *
+ * @param Vue
+ */
 export default function install (Vue) {
   Vue.prototype['$routeTranslate'] = (route, i18n) => {
     let name = 'routes.' + route.name

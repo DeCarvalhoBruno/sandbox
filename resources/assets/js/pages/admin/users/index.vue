@@ -121,13 +121,15 @@
                 </td>
                 <td slot="body-action" slot-scope="props">
                     <div class="inline">
-                        <router-link :to="{ name: 'admin.users.edit', params: { user: props.row.username } }">
-                            <button type="button" class="btn btn-sm btn-info"
-                                    :title="$t('tables.edit_item',{name:props.row[$t('db_raw_inv.full_name')]})">
-                                <fa icon="pencil-alt">
-                                </fa>
-                            </button>
-                        </router-link>
+                        <template v-if="props.row.username">
+                            <router-link :to="{ name: 'admin.users.edit', params: { user: props.row.username } }">
+                                <button type="button" class="btn btn-sm btn-info"
+                                        :title="$t('tables.edit_item',{name:props.row[$t('db_raw_inv.full_name')]})">
+                                    <fa icon="pencil-alt">
+                                    </fa>
+                                </button>
+                            </router-link>
+                        </template>
                         <button type="button" class="btn btn-sm btn-danger"
                                 :title="$t('tables.delete_item',{name:props.row[$t('db_raw_inv.full_name')]})"
                                 @click="deleteRowConfirm(props.row)">

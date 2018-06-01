@@ -10,13 +10,15 @@ const {locale} = window.config
 // state
 export const state = {
   locale: Cookies.get('locale') || locale,
-  locales: locales
+  locales: locales,
+  fallback: 'en'
 }
 
 // getters
 export const getters = {
   locale: state => state.locale,
-  locales: state => state.locales
+  locales: state => state.locales,
+  fallback: state => state.fallback
 }
 
 // mutations
