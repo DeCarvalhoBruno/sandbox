@@ -1,13 +1,13 @@
-module.exports = [
+export default [
   {
     type: 'item',
     isHeader: true,
-    name: 'MAIN NAVIGATION'
+    name: 'sidebar.main_nav'
   },
   {
     type: 'tree',
     icon: 'tachometer-alt',
-    name: 'Dashboard',
+    name: 'sidebar.dashboard',
     router: {
       name: 'admin.dashboard'
     }
@@ -15,12 +15,12 @@ module.exports = [
   {
     type: 'tree',
     icon: 'user',
-    name: 'Users',
+    name: 'sidebar.users',
     items: [
       {
         type: 'item',
         icon: 'star',
-        name: 'List',
+        name: 'sidebar.list',
         router: {
           name: 'admin.users.index'
         }
@@ -28,19 +28,19 @@ module.exports = [
       {
         type: 'tree',
         icon: 'star',
-        name: 'Add'
+        name: 'sidebar.add'
       }
     ]
   },
   {
     type: 'tree',
     icon: 'object-group',
-    name: 'Groups',
+    name: 'sidebar.groups',
     items: [
       {
         type: 'item',
         icon: '',
-        name: 'List',
+        name: 'sidebar.list',
         router: {
           name: 'admin.groups.index'
         }
@@ -48,7 +48,7 @@ module.exports = [
       {
         type: 'item',
         icon: '',
-        name: 'Add',
+        name: 'sidebar.add',
         router: {
           name: 'admin.groups.add'
         }

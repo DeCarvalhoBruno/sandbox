@@ -1,31 +1,5 @@
 <?php
 return [
-    'routes' => [
-        'admins' => 'admin',
-        'admin' => [
-            'dashboard' => 'admin/dashboard',
-            'users' => [
-                'index' => 'admin/users',
-                'users.edit' => 'admin/users/:user',
-            ],
-            'groups' => [
-                'index' => 'admin/groups',
-                'add' => 'admin/groups/create',
-                'edit' => 'admin/groups/:group',
-                'members' => 'admin/groups/:group/members',
-            ],
-            'settings' => [
-                'general' => 'admin/settings/general',
-                'profile' => 'admin/settings/profile',
-                'password' => 'admin/settings/password',
-            ],
-            'login' => 'admin/login',
-            'password' => [
-                'request' => 'admin/password/reset',
-                'reset' => 'admin/password/reset/:token'
-            ]
-        ]
-    ],
     'breadcrumb' => [
         'admin-dashboard' => 'Home',
         'admin-users-index' => 'Users',
@@ -37,6 +11,14 @@ return [
         'admin-settings-password' => 'Your password',
         'admin-settings-profile' => 'Your profile',
         'admin-settings-general' => 'Your general settings',
+    ],
+    'sidebar' => [
+        'main_nav' => 'MAIN NAVIGATION',
+        'dashboard' => 'Dashboard',
+        'users' => 'Users',
+        'groups' => 'Groups',
+        'list' => 'List',
+        'add' => 'Add'
     ],
     'general' => [
         'ok' => 'Ok',
@@ -174,6 +156,9 @@ return [
             'info1' => 'Permissions for all members of the group are defined here.',
             'info2' => 'Individual permissions can also be set at the user level,
             in which case user permissions will override permissions set here.'
+        ],
+        'settings' => [
+            'language' => 'Language'
         ]
     ],
     'tables' => [
@@ -214,6 +199,10 @@ return [
         'week' => 'week',
         'month' => 'month',
         'year' => 'year'
+    ],
+    'locales' => [
+        'en' => 'English',
+        'fr' => 'French'
     ],
     'go_home' => 'Go Home',
     'toggle_navigation' => 'Toggle navigation',

@@ -30,98 +30,83 @@ const SettingsProfile = () => import('~/pages/admin/settings/profile').then(
 const SettingsPassword = () => import('~/pages/admin/settings/password').then(
   m => m.default || m)
 
+import routesI18n from '~/lang/routes'
 import store from '~/store'
 
-let defaults = [
+let routes = [
   {
-    path: '/admin/',
     name: 'admins',
     redirect: {name: 'admin.dashboard'}
   },
   {
-    path: '/admin/dashboard',
     name: 'admin.dashboard',
     component: Dashboard
   },
   {
-    path: '/admin/users',
     name: 'admin.users.index',
     meta: {parent: 'admin.dashboard'},
     component: Users
   },
   {
-    path: '/admin/users/:user',
     name: 'admin.users.edit',
     meta: {parent: 'admin.users.index'},
     component: UserEdit
   },
   {
-    path: '/admin/users/:user/delete',
     name: 'admin.users.delete'
   },
   {
-    path: '/admin/groups',
     name: 'admin.groups.index',
     meta: {parent: 'admin.dashboard'},
     component: Groups
   },
   {
-    path: '/admin/groups/create',
     name: 'admin.groups.add',
     meta: {parent: 'admin.groups.index'},
     component: GroupAdd
   },
   {
-    path: '/admin/groups/:group',
     name: 'admin.groups.edit',
     meta: {parent: 'admin.groups.index'},
     component: GroupEdit
   },
   {
-    path: '/admin/groups/:group/members',
     name: 'admin.groups.members',
     meta: {parent: 'admin.groups.index'},
     component: GroupMember
   },
   {
-    path: '/admin/settings',
+    path: '',
     component: Settings,
     meta: {parent: 'admin.dashboard'},
     children: [
       {
-        path: '/admin/settings',
         name: 'admin.settings',
         redirect: {name: 'admin.settings.profile'}
       },
       {
-        path: '/admin/settings/general',
         name: 'admin.settings.general',
         component: SettingsGeneral
       },
       {
-        path: '/admin/settings/profile',
         name: 'admin.settings.profile',
         component: SettingsProfile
       },
       {
-        path: '/admin/settings/password',
         name: 'admin.settings.password',
         component: SettingsPassword
       }
     ]
   },
   {
-    path: '/admin/login',
     name: 'admin.login',
     component: Login
   },
   {
-    path: '/admin/password/reset',
     name: 'admin.password.request',
     component: PasswordRequest
   },
   {
-    path: '/admin/password/reset/:token',
     name: 'admin.password.reset',
     component: PasswordReset
   },
@@ -131,22 +116,26 @@ let defaults = [
   }
 ]
 
-async function loadLocalizedRouteUrls (locale) {
-  return await import(`~/lang/routes-${locale}`)
+let locale = store.getters['lang/locale']
+let isDefaultLocale = (
+  locale === store.getters['lang/fallback']
+)
+let prefix = ''
+if (!isDefaultLocale) {
+  prefix += '/' + locale
 }
+routes = translateRoute(routes, locale, prefix)
 
-(async function () {
-  let locale = store.getters['lang/locale']
-  let routes = await loadLocalizedRouteUrls(locale)
-  let isDefaultLocale = (
-    locale === store.getters['lang/fallback']
-  )
-  if (!isDefaultLocale) {
-    for (var i in defaults) {
-      if (routes.hasOwnProperty(defaults[i].name)) {
-        defaults[i].path = '/' + locale + '/' + routes[defaults[i].name]
-      }
+function translateRoute (routes, locale, prefix) {
+  for (var i in routes) {
+    if (routesI18n[locale].hasOwnProperty(routes[i].name)) {
+      routes[i].path = prefix + '/' + routesI18n[locale][routes[i].name]
+    }
+    if (routes[i].hasOwnProperty('children')) {
+      routes[i].children = translateRoute(routes[i].children, locale, prefix)
     }
   }
-})()
-export default defaults
+  return routes
+}
+
+export default routes

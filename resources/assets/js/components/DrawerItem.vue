@@ -4,7 +4,7 @@
             <template v-if="icon!==''">
                 <fa :icon="icon"/>
             </template>
-            <span>{{ name }}</span>
+            <span>{{ $t(name) }}</span>
             <span class="pull-right-container" v-show="badge">
                 <small class="label pull-right"
                    :class="[badge.type==='String'?'bg-green':'label-primary']">{{ badge.data }}
@@ -18,7 +18,7 @@
             <template v-if="icon!==''">
                 <fa :icon="icon"/>
             </template>
-            <span>{{ name }}</span>
+            <span>{{ $t(name) }}</span>
             <span class="pull-right-container">
                 <small v-if="badge && badge.data" class="label pull-right"
                        :class="[badge.type==='String'?'bg-green':'label-primary']">{{ badge.data }}
@@ -32,19 +32,19 @@
                 <a v-if="item.router && item.router.name">
                     <template v-if="item.icon!==''">
                         <fa :icon="item.icon"/>
-                    </template>{{ item.name }}
+                    </template>{{ $t(item.name) }}
                 </a>
                 <a v-else>
                     <template v-if="item.icon!==''">
                         <fa :icon="item.icon"/>
-                    </template>{{ item.name }}
+                    </template>{{ $t(item.name) }}
                 </a>
             </router-link>
             <li class="treeview" v-else>
                 <a href="#">
                     <template v-if="item.icon!==''">
                         <fa :icon="item.icon"/>
-                    </template>{{ item.name }}
+                    </template>{{ $t(item.name) }}
                 </a>
                 <ul class="treeview-menu">
                     <drawer-item

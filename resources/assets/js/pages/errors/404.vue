@@ -1,5 +1,5 @@
 <template>
-  <card class="text-center">
+  <div class="card">
     <h3 class="mb-4">{{ $t('error.page_not_found') }}</h3>
 
     <div class="links">
@@ -7,7 +7,7 @@
         {{ $t('go_home') }}
       </router-link>
     </div>
-  </card>
+  </div>
 </template>
 
 <script>

@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\ConvertLangFilesToJs::class,
+        Commands\GenerateLangFiles::class,
         Commands\MakeRequest::class
     ];
 

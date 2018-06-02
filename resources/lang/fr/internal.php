@@ -1,8 +1,9 @@
 <?php return [
-    'permissions' => [
-        'PERMISSION_VIEW' => 'View',
-        'PERMISSION_ADD' => 'Add',
-        'PERMISSION_EDIT' => 'Edit',
-        'PERMISSION_DELETE' => 'Delete',
-    ],
+   'permissions' => [
+      'PERMISSION_VIEW' => '',
+      'PERMISSION_ADD' => '',
+      'PERMISSION_EDIT' => '',
+      'PERMISSION_DELETE' => '',
+   ],
+
 ];

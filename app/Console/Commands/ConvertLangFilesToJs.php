@@ -31,31 +31,33 @@ class ConvertLangFilesToJs extends Command
         $origDir = "resources/lang/";
 
         $dir = opendir($origDir);
-        if ( ! $dir) {
+        if (!$dir) {
             die(sprintf("%s could not be read.", $origDir));
         }
 
         $this->info('The following files were converted:');
+        $routes = [];
         while (($subdir = readdir($dir)) !== false) {
             $langDir = $origDir . $subdir;
             if (is_dir($langDir)) {
-                $file = sprintf('%s/ajax.php',$langDir);
-                if(is_file($file)){
-                    $fh = fopen(sprintf('resources/assets/js/lang/%s.json',$subdir),'w');
-                    fwrite($fh,json_encode(include($file)));
+                $file = sprintf('%s/ajax.php', $langDir);
+                if (is_file($file)) {
+                    $fh = fopen(sprintf('resources/assets/js/lang/%s.json', $subdir), 'w');
+                    fwrite($fh, json_encode(include($file)));
                     fclose($fh);
-                    $this->info('    - '.$subdir);
+                    $this->info('    - ' . $subdir);
                 }
-                $file = sprintf('%s/routes-admin.php',$langDir);
-                if(is_file($file)){
-                    $fh = fopen(sprintf('resources/assets/js/lang/routes-%s.json',$subdir),'w');
-                    fwrite($fh,json_encode(include($file)));
-                    fclose($fh);
-                    $this->info('    - (routes)'.$subdir);
+                $file = sprintf('%s/routes-admin.php', $langDir);
+                if (is_file($file)) {
+                    $routes[$subdir] = include($file);
+                    $this->info('    - (routes)' . $subdir);
                 }
 
             }
         }
+        $fh = fopen('resources/assets/js/lang/routes.json', 'w');
+        fwrite($fh, json_encode($routes));
+        fclose($fh);
 
         closedir($dir);
     }

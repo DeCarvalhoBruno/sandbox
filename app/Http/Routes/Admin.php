@@ -9,19 +9,26 @@ class Admin
         $router->group([
             'prefix' => '/admin',
             'namespace' => 'App\Http\Controllers\Admin',
-        ],
-            function (Router $r) {
-                $r->group([
-                    'middleware' => ['ajax', 'authenticated_admin'],
-                ], call_user_func('static::guestAjaxRoutes'));
-                $r->group([
-                    'middleware' => ['auth:ajax']
-                ], call_user_func('static::authAjaxRoutes'));
-                $r->group([
-                    'middleware' => ['web'],
-                ], call_user_func('static::guestWebRoutes'));
-            }
-        );
+        ], call_user_func('static::defaultRouteGroup'));
+        $router->group([
+            'prefix' => '/{lang}/admin',
+            'namespace' => 'App\Http\Controllers\Admin',
+        ], call_user_func('static::defaultRouteGroup'));
+    }
+
+    public static function defaultRouteGroup()
+    {
+        return function (Router $r) {
+            $r->group([
+                'middleware' => ['ajax', 'authenticated_admin'],
+            ], call_user_func('static::guestAjaxRoutes'));
+            $r->group([
+                'middleware' => ['auth:ajax']
+            ], call_user_func('static::authAjaxRoutes'));
+            $r->group([
+                'middleware' => ['web'],
+            ], call_user_func('static::guestWebRoutes'));
+        };
     }
 
     public static function guestWebRoutes()

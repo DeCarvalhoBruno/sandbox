@@ -2,20 +2,15 @@
     <form @submit.prevent="update" @keydown="form.onKeydown($event)">
         <!--<alert-form :form="form" :message="$t('message.password_updated')"/>-->
         <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('pages.auth.new_password') }}</label>
+            <label class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.language') }}</label>
             <div class="col-md-7">
                 <select class="custom-select" v-model="form.locale">
                     <!--<option disabled value="">{{$t('pages.users.filter_group')}}</option>-->
-                    <option v-for="(locale,idx) in locales" :key="idx">{{locale}}</option>
+                    <option v-for="(locale,idx) in locales" :key="idx" :value="locale">{{$t('locales.'+locale)}}
+                    </option>
                 </select>
             </div>
 
-        </div>
-        <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('pages.auth.confirm_password') }}</label>
-            <div class="col-md-7">
-
-            </div>
         </div>
         <div class="form-group row">
             <div class="col-md-9 ml-md-auto">
@@ -26,10 +21,10 @@
 </template>
 
 <script>
-  import Vue from 'vue'
   import { mapGetters } from 'vuex'
   import Button from '~/components/Button'
   import { Form, HasError, AlertForm } from '~/components/form'
+  import routesI18n from '~/lang/routes'
 
   export default {
     scrollToTop: false,
@@ -45,16 +40,27 @@
     metaInfo () {
       return {title: this.$t('general.settings')}
     },
-    data: () => ({
-      form: new Form({
-        locale: '',
-      })
-    }),
+    data: function () {
+      return {
+        form: new Form({
+          locale: this.$store.getters['lang/locale']
+        })
+      }
+    },
     methods: {
-      async update () {
-        await this.form.patch('/ajax/admin/settings/password')
-        this.form.reset()
-        this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.password_updated'))
+      update () {
+        let locale = this.form.locale
+        this.$store.dispatch('lang/setLocale', {locale})
+        let prefix = ''
+        if (locale !== this.$store.getters['lang/fallback']) {
+          prefix += '/' + locale
+        }
+        window.history.pushState('', '', prefix + '/' + routesI18n[locale]['admin.settings.general'])
+        this.$router.go(1)
+        this.$router.go()
+
+        this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.profile_updated'))
+
       }
     }
   }

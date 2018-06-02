@@ -2,8 +2,8 @@ import Cookies from 'js-cookie'
 import * as types from '../mutation-types'
 
 const locales = {
-  'en': 'EN',
-  'fr': 'FR'
+  'en': 'en',
+  'fr': 'fr'
 }
 const {locale} = window.config
 

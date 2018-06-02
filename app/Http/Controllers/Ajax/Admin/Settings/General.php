@@ -18,14 +18,7 @@ class General extends Controller
      */
     public function update(Request $request, UserProvider $user)
     {
-        $this->validate($request, [
-            'password' => 'required|confirmed|min:6',
-        ]);
 
-        $user->updateOneByUsername(
-            auth()->user()->getAttribute('username'),
-            ['password' => bcrypt($request->get('password'))]
-        );
 
         return response('', Response::HTTP_NO_CONTENT);
     }
