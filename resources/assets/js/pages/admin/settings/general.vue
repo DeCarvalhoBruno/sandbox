@@ -50,16 +50,17 @@
     methods: {
       update () {
         let locale = this.form.locale
-        this.$store.dispatch('lang/setLocale', {locale})
-        let prefix = ''
-        if (locale !== this.$store.getters['lang/fallback']) {
-          prefix += '/' + locale
+        if (locale !== this.locale) {
+          this.$store.dispatch('lang/setLocale', {locale})
+          let prefix = ''
+          if (locale !== this.$store.getters['lang/fallback']) {
+            prefix += '/' + locale
+          }
+          window.history.pushState('', '', prefix + '/' + routesI18n[locale]['admin.settings.general'])
+          this.$router.go(1)
+          this.$router.go()
+          this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.profile_updated'))
         }
-        window.history.pushState('', '', prefix + '/' + routesI18n[locale]['admin.settings.general'])
-        this.$router.go(1)
-        this.$router.go()
-
-        this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.profile_updated'))
 
       }
     }

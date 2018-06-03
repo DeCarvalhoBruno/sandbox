@@ -55,6 +55,12 @@
             </div>
         </div>
         <div class="form-group row">
+            <button type="button" class="btn btn-primary" @click="testModal2">Show Modal</button>
+            <b-modal id="myModal" ref="modalone">
+                <h5>First Modal</h5>
+            </b-modal>
+        </div>
+        <div class="form-group row">
             <div class="col-md-9 ml-md-auto">
                 <v-button :loading="form.busy">{{ $t('general.update') }}</v-button>
             </div>
@@ -66,12 +72,15 @@
   import Button from '~/components/Button'
   import { Form, HasError, AlertForm } from '~/components/form'
   import { mapGetters } from 'vuex'
+  import { Modal } from 'bootstrap-vue/es/components'
 
   export default {
     scrollToTop: false,
     components: {
       'v-button': Button,
-      HasError, AlertForm
+      HasError,
+      AlertForm,
+      Modal
     },
     metaInfo () {
       return {title: this.$t('general.settings')}
@@ -92,7 +101,32 @@
         this.form[key] = this.user[key]
       })
     },
+    mounted(){
+      let v = this
+      // console.log(this.$refs.modalone)
+      // this.$refs.modalone.$on('hide', function (e) {
+      //   // console.log(e)
+      //   e.preventDefault()
+      //   //this.hide()
+      //
+      // })
+      this.$refs.modaltwo.$on('hide', function (e) {
+        // console.log(v.$refs.modalone)
+        v.bla()
+        // e.preventDefault()
+      })
+
+    },
     methods: {
+      testModal(evt){
+        this.$refs.modaltwo.show()
+      },
+      testModal2(evt){
+        this.$refs.modalone.show()
+      },
+      bla(){
+        this.$refs.modalone.show()
+      },
       async update () {
         const {data} = await this.form.patch('/ajax/admin/settings/profile')
         this.$store.dispatch('auth/updateUser', {user: data})

@@ -11,12 +11,12 @@ class NestedSet
     /**
      * The name of default lft column.
      */
-    const LFT = '_lft';
+    const LFT = 'lft';
 
     /**
      * The name of default rgt column.
      */
-    const RGT = '_rgt';
+    const RGT = 'rgt';
 
     /**
      * The name of default parent id column.

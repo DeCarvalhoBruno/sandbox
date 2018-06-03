@@ -3,6 +3,12 @@ const mix = require('laravel-mix')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 // const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
+// mix.autoload({
+//   jquery: ['$', 'jQuery']
+//   // 'exports-loader?Util!bootstrap/js/dist/util': ['Util'],
+//   // 'exports-loader?Modal!bootstrap/js/dist/modal': ['Modal']
+// })
+
 mix.js('resources/assets/js/app.js', 'public/js')
   .sass('resources/assets/sass/app.scss', 'public/css')
   .sourceMaps()
