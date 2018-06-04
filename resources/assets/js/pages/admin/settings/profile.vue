@@ -55,10 +55,16 @@
             </div>
         </div>
         <div class="form-group row">
-            <button type="button" class="btn btn-primary" @click="testModal2">Show Modal</button>
-            <b-modal id="myModal" ref="modalone">
-                <h5>First Modal</h5>
-            </b-modal>
+            <b-card no-body class="w-100">
+                <b-tabs card>
+                    <b-tab :title="$t('pages.settings.avatar-tab')" active>
+                        <dropzone :id="'dzone'" :options="{url:'/ajax/admin/media/add'}"></dropzone>
+                    </b-tab>
+                    <b-tab :title="$t('pages.settings.avatar-ul-tab')">
+                        Tab Contents 2
+                    </b-tab>
+                </b-tabs>
+            </b-card>
         </div>
         <div class="form-group row">
             <div class="col-md-9 ml-md-auto">
@@ -69,10 +75,16 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import Button from '~/components/Button'
+  import Dropzone from '~/components/Dropzone'
   import { Form, HasError, AlertForm } from '~/components/form'
   import { mapGetters } from 'vuex'
-  import { Modal } from 'bootstrap-vue/es/components'
+  import { Modal, Tabs, Card } from 'bootstrap-vue/es/components'
+  Vue.use(Modal)
+  Vue.use(Tabs)
+  Vue.use(Card)
+
 
   export default {
     scrollToTop: false,
@@ -80,7 +92,10 @@
       'v-button': Button,
       HasError,
       AlertForm,
-      Modal
+      Modal,
+      Tabs,
+      Card,
+      Dropzone
     },
     metaInfo () {
       return {title: this.$t('general.settings')}
@@ -102,31 +117,9 @@
       })
     },
     mounted(){
-      let v = this
-      // console.log(this.$refs.modalone)
-      // this.$refs.modalone.$on('hide', function (e) {
-      //   // console.log(e)
-      //   e.preventDefault()
-      //   //this.hide()
-      //
-      // })
-      this.$refs.modaltwo.$on('hide', function (e) {
-        // console.log(v.$refs.modalone)
-        v.bla()
-        // e.preventDefault()
-      })
 
     },
     methods: {
-      testModal(evt){
-        this.$refs.modaltwo.show()
-      },
-      testModal2(evt){
-        this.$refs.modalone.show()
-      },
-      bla(){
-        this.$refs.modalone.show()
-      },
       async update () {
         const {data} = await this.form.patch('/ajax/admin/settings/profile')
         this.$store.dispatch('auth/updateUser', {user: data})

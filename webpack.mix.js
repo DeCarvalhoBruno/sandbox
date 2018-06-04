@@ -17,23 +17,22 @@ mix.js('resources/assets/js/app.js', 'public/js')
 if (mix.inProduction()) {
   mix.version()
 
-  mix.extract([
-    'vue',
-    'vform',
-    'axios',
-    'vuex',
-    'jquery',
-    'popper.js',
-    'vue-i18n',
-    'vue-meta',
-    'js-cookie',
-    'bootstrap',
-    'vue-router',
-    'sweetalert2',
-    'vuex-router-sync',
-    '@fortawesome/fontawesome',
-    '@fortawesome/vue-fontawesome'
-  ])
+  // mix.extract([
+  //   'vue',
+  //   'vform',
+  //   'axios',
+  //   'vuex',
+  //   'jquery',
+  //   'popper.js',
+  //   'vue-i18n',
+  //   'vue-meta',
+  //   'js-cookie',
+  //   'vue-router',
+  //   'sweetalert2',
+  //   'vuex-router-sync',
+  //   '@fortawesome/fontawesome',
+  //   '@fortawesome/vue-fontawesome'
+  // ])
 }
 mix.browserSync('laravel.lti.local/admin/login')
 // new BundleAnalyzerPlugin()

@@ -158,7 +158,9 @@ return [
             in which case user permissions will override permissions set here.'
         ],
         'settings' => [
-            'language' => 'Language'
+            'language' => 'Language',
+            'avatar-tab'=>'Avatar',
+            'avatar-ul-tab'=>'Upload avatar'
         ]
     ],
     'tables' => [
