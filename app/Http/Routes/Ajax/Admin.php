@@ -59,7 +59,7 @@ class Admin
             $r->patch('settings/profile', 'Settings\Profile@update')
                 ->middleware('can:view,App\Models\Group');
 
-            $r->get('media/add', 'Media@add')
+            $r->post('media/add', 'Media@add')
                 ->middleware('can:update,App\Models\User');
         };
     }

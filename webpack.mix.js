@@ -1,6 +1,7 @@
 const path = require('path')
 const mix = require('laravel-mix')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const webpack = require('webpack')
 // const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 // mix.autoload({
@@ -45,12 +46,19 @@ mix.webpackConfig({
       exclude: 'vendor',
       verbose: true,
       dry: false
+    }),
+    new webpack.ProvidePlugin({
+      '$': 'jquery',
+      jQuery: 'jquery',
+      Popper: 'popper'
     })
   ],
   resolve: {
     extensions: ['.js', '.json', '.vue'],
     alias: {
-      '~': path.join(__dirname, './resources/assets/js')
+      '~': path.join(__dirname, './resources/assets/js'),
+      'jquery': 'jquery/dist/jquery.min.js',
+      'popper': 'popper.js/dist/popper.min.js'
     }
   },
   output: {

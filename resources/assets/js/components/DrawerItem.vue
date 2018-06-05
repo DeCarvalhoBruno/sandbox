@@ -13,7 +13,7 @@
         </a>
     </router-link>
     <li :class="getMenuClass" v-else>
-        {{ isHeader ? name : '' }}
+        {{ isHeader ? $t(name) : '' }}
         <a href="#" v-if="!isHeader">
             <template v-if="icon!==''">
                 <fa :icon="icon"/>

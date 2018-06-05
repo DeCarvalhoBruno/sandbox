@@ -98,7 +98,6 @@ div.table.previews-container > .file-row {
   }
 }
 
-
 .previews-container .preview-actions span {
   margin: 0 10px;
 }
@@ -107,34 +106,7 @@ div.table.previews-container > .file-row {
   cursor: pointer;
 }
 
-.previews-container .action-delete-file .fa {
-  color: #de0000;
-}
-
-.previews-container .action-delete-file .fa:hover {
-  color: #760000;
-}
-
-.previews-container .action-edit-file .fa {
-  color: #bfad41;
-}
-
-.previews-container .action-edit-file .fa:hover {
-  color: #8c7f30;
-}
-
-.previews-container .action-resize-file .fa {
-  color: #77cfd6;
-}
-
-.previews-container .action-resize-file .fa:hover {
-  color: #539196;
-}
-
-.previews-container .action-use-file .fa {
-  color: #6ad668;
-}
-
-.previews-container .action-use-file .fa:hover {
-  color: #489046;
+.dropzone-error.error {
+  font-style: italic;
+  padding:0 1rem;
 }

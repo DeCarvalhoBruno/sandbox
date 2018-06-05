@@ -159,8 +159,8 @@ return [
         ],
         'settings' => [
             'language' => 'Language',
-            'avatar-tab'=>'Avatar',
-            'avatar-ul-tab'=>'Upload avatar'
+            'avatar-tab' => 'Avatar',
+            'avatar-ul-tab' => 'Upload avatar'
         ]
     ],
     'tables' => [
@@ -173,6 +173,20 @@ return [
         'grouped_actions' => 'Grouped actions',
         'option_del_user' => 'Delete user',
         'btn_apply_title' => 'Apply action to all selected users'
+    ],
+    'dropzone' => [
+        'choose_file' => 'Drag and drop your file here (or click to browse)',
+        'max_size' => 'Maximum size:',
+        'accepted_formats' => 'Accepted file formats: ',
+        'file_too_big' => 'File is too big ({{filesize}} MB, maximum allowed: {{maxFilesize}} MB).',
+        'invalid_type' => 'This file type is not allowed.',
+        'response_error' => 'Server responded with code {{statusCode}}.',
+        'cancel_upload' => 'Cancel upload',
+        'cancel_confirm' => 'Confirm upload?',
+        'remove_file' => '',
+        'max_files_exceeded' => 'The maximum number of files was reached.',
+        'delete_media' => 'Delete media',
+        'edit_media' => 'Edit media'
     ],
     'filters' => [
         'sortBy' => 'sortBy',
@@ -205,6 +219,9 @@ return [
     'locales' => [
         'en' => 'English',
         'fr' => 'French'
+    ],
+    'units' => [
+        'MB' => 'MB'
     ],
     'go_home' => 'Go Home',
     'toggle_navigation' => 'Toggle navigation',

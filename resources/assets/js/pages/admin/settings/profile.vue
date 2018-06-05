@@ -58,8 +58,14 @@
             <b-card no-body class="w-100">
                 <b-tabs card>
                     <b-tab :title="$t('pages.settings.avatar-tab')" active>
-                        <dropzone :id="'dzone'" :options="{url:'/ajax/admin/media/add'}"></dropzone>
+                        <dropzone :id="'dzone'"
+                                  :options="{url:'/ajax/admin/media/add'}"
+                                  :post-data="{
+                                  type:'users',
+                                  target:user.username,
+                                  media:'IMAGE_AVATAR'}"></dropzone>
                     </b-tab>
+
                     <b-tab :title="$t('pages.settings.avatar-ul-tab')">
                         Tab Contents 2
                     </b-tab>
@@ -81,10 +87,10 @@
   import { Form, HasError, AlertForm } from '~/components/form'
   import { mapGetters } from 'vuex'
   import { Modal, Tabs, Card } from 'bootstrap-vue/es/components'
+
   Vue.use(Modal)
   Vue.use(Tabs)
   Vue.use(Card)
-
 
   export default {
     scrollToTop: false,
@@ -116,8 +122,10 @@
         this.form[key] = this.user[key]
       })
     },
-    mounted(){
-
+    mounted () {
+      // this.$on('dropzone.success',function(){
+      //
+      // })
     },
     methods: {
       async update () {

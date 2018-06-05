@@ -10,4 +10,14 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    /**
+     * @var \Illuminate\Http\Request
+     */
+    protected $request;
+
+    public function __construct()
+    {
+        $this->request = app('request');
+    }
 }
