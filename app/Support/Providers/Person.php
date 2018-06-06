@@ -1,4 +1,4 @@
-<?php namespace App\Providers\Models;
+<?php namespace App\Support\Providers;
 
 use App\Contracts\Models\Person as PersonInterface;
 /**

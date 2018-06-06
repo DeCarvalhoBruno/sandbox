@@ -1,4 +1,4 @@
-<?php namespace App\Providers\Models;
+<?php namespace App\Support\Providers;
 
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Hashing\BcryptHasher;
@@ -21,7 +21,7 @@ class User extends Model implements UserProvider, UserInterface
      */
     protected $hasher;
     /**
-     * @var \App\Providers\Models\Person
+     * @var \App\Providers\Person
      */
     private $person;
 

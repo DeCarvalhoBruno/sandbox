@@ -29,7 +29,6 @@ class Entity extends Model
      * @param array $attributes
      * @param string $testContract
      * @return \Illuminate\Database\Eloquent\Model
-     * @throws \ReflectionException
      */
     public static function createModel($entityID, array $attributes = [], $testContract = null)
     {
@@ -38,7 +37,7 @@ class Entity extends Model
             $o = new $class($attributes);
             if (!is_null($testContract) && !($o instanceof $testContract)) {
                 throw new \UnexpectedValueException(
-                    sprintf('Model %s is supposed to be an instance of %s'.!($class instanceof $testContract),
+                    sprintf('Model %s is supposed to be an instance of %s' . !($class instanceof $testContract),
                         $class,
                         $testContract)
                 );
@@ -54,19 +53,22 @@ class Entity extends Model
      *
      * @param int $entityID
      * @return string
-     * @throws \ReflectionException
      */
     public static function getModelClassNamespace($entityID)
     {
-        $className = static::getModelClass($entityID);
-        $classNamespace = sprintf('\App\Models\%s',
-            isset(static::$classMap[$className]) ?
-                static::$classMap[$className] :
-                $className);
-        if (class_exists($classNamespace)) {
-            return $classNamespace;
+        try {
+            $className = static::getModelClass($entityID);
+            $classNamespace = sprintf('\App\Models\%s',
+                isset(static::$classMap[$className]) ?
+                    static::$classMap[$className] :
+                    $className);
+            if (class_exists($classNamespace)) {
+                return $classNamespace;
+            }
+            throw new \UnexpectedValueException(sprintf('Class %s does not exist. (%s)', $className, $entityID));
+        } catch (\ReflectionException $re) {
+            throw new \UnexpectedValueException('Reflection failed .'.$re->getMessage());
         }
-        throw new \UnexpectedValueException(sprintf('Class %s does not exist. (%s)', $className, $entityID));
     }
 
     /**
@@ -74,7 +76,6 @@ class Entity extends Model
      *
      * @param int $entityID
      * @return null|string
-     * @throws \ReflectionException
      */
     public static function getModelClass($entityID)
     {
@@ -91,7 +92,6 @@ class Entity extends Model
      * @param int $entityID
      * @param bool $getQualifiedName Should the table name be included in the result
      * @return mixed
-     * @throws \ReflectionException
      */
     public static function getModelPrimaryKey($entityID, $getQualifiedName = false)
     {
@@ -108,7 +108,6 @@ class Entity extends Model
      * Get the model's presentable name, i.e 'Users', 'Groups', using its entity_id
      * @param $entityID
      * @return null|string
-     * @throws \ReflectionException
      */
     public static function getModelPresentableName($entityID)
     {

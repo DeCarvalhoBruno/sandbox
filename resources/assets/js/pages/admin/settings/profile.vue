@@ -63,7 +63,7 @@
                                   :post-data="{
                                   type:'users',
                                   target:user.username,
-                                  media:'IMAGE_AVATAR'}"></dropzone>
+                                  media:'image_avatar'}"></dropzone>
                     </b-tab>
 
                     <b-tab :title="$t('pages.settings.avatar-ul-tab')">

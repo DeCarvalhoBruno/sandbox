@@ -5,15 +5,16 @@ namespace App\Providers;
 use App\Contracts\RawQueries;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use App\Contracts\Models as I;
+use App\Contracts\Models as Contract;
 
 class AppServiceProvider extends ServiceProvider
 {
     public $bindings = [
-        I\Person::class,
-        I\User::class,
-        I\Group::class,
-        I\Permission::class,
+        Contract\Person::class,
+        Contract\User::class,
+        Contract\Group::class,
+        Contract\Permission::class,
+        Contract\Media::class
     ];
 
     /**
@@ -39,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         foreach ($this->bindings as $interface) {
-            $this->app->bind($interface, str_replace('\\Contracts', '\\Providers', $interface));
+            $this->app->bind($interface, str_replace('\\Contracts\\Models', '\\Support\\Providers', $interface));
         }
         $dbDefaultEngine = ucfirst(config('database.default'));
         $this->app->bind(RawQueries::class, sprintf('\\App\\Support\\Database\\%sRawQueries', $dbDefaultEngine));

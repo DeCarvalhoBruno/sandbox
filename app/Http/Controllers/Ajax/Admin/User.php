@@ -48,7 +48,7 @@ class User extends Controller
 
     /**
      * @param $username
-     * @param \App\Contracts\Models\User|\App\Providers\Models\User $userProvider
+     * @param \App\Contracts\Models\User|\App\Providers\User $userProvider
      * @return mixed
      */
     public function edit($username, UserProvider $userProvider)
@@ -74,8 +74,8 @@ class User extends Controller
     /**
      * @param $username
      * @param \App\Http\Requests\Admin\UpdateUser $request
-     * @param \App\Contracts\Models\User|\App\Providers\Models\User $userProvider
-     * @param \App\Contracts\Models\Permission|\App\Providers\Models\Permission $permissionProvider
+     * @param \App\Contracts\Models\User|\App\Providers\User $userProvider
+     * @param \App\Contracts\Models\Permission|\App\Providers\Permission $permissionProvider
      * @return \Illuminate\Http\Response
      */
     public function update(
@@ -96,7 +96,7 @@ class User extends Controller
 
     /**
      * @param string $search
-     * @param \App\Contracts\Models\User|\App\Providers\Models\User $userProvider
+     * @param \App\Contracts\Models\User|\App\Providers\User $userProvider
      * @return \Illuminate\Http\Response
      */
     public function search($search, UserProvider $userProvider)
@@ -110,7 +110,7 @@ class User extends Controller
 
     /**
      * @param string $username
-     * @param \App\Contracts\Models\User|\App\Providers\Models\User $userProvider
+     * @param \App\Contracts\Models\User|\App\Providers\User $userProvider
      * @return \Illuminate\Http\Response
      */
     public function destroy($username, UserProvider $userProvider)
@@ -121,7 +121,7 @@ class User extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param \App\Contracts\Models\User|\App\Providers\Models\User $userProvider
+     * @param \App\Contracts\Models\User|\App\Providers\User $userProvider
      * @return \Illuminate\Http\Response
      */
     public function batchDestroy(Request $request, UserProvider $userProvider)

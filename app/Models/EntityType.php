@@ -9,32 +9,31 @@ class EntityType extends Model
     public static $entityColumn = 'entity_types.entity_type_target_id';
     public static $simpleEntityColumn = 'entity_type_target_id';
     protected $primaryKey = 'entity_type_id';
-    protected $fillable = ['entity_id', 'entity_type_target_id','entity_type_id'];
-    const ROOT_ENTITY_TYPE_ID=2;
-    const ROOT_GROUP_ENTITY_TYPE_ID=3;
+    protected $fillable = ['entity_id', 'entity_type_target_id', 'entity_type_id'];
+    const ROOT_ENTITY_TYPE_ID = 2;
+    const ROOT_GROUP_ENTITY_TYPE_ID = 3;
 
     /**
      * Gets the entity type ID with an entity ID
      *
      * Example: getEntityTypeID(15,5)
      * returns user entity type id for user ID 5 (15 is the user entity ID)
+     * ID 5 could belong to a group, forum post, etc., so we specify the entityId
+     * so the query can start from the user table
      *
+     * @see \App\Models\Entity
      * @param $entityID
-     * @param $targetID
+     * @param int|array|\stdClass $filter
      *
      * @return array|int
      */
-    public static function getEntityTypeID($entityID, $targetID)
+    public static function getEntityTypeID($entityID, $filter)
     {
-        $baseBuilder = static::query();
-        $builderWithEntity = call_user_func([$baseBuilder, 'entityType'], $entityID)
-            ->where('entity_id', $entityID);
-        if (is_array($targetID)) {
-            return $builderWithEntity->whereIn('entity_type_target_id',
-                $targetID)->pluck('entity_type_id')->all();
-        } else {
-            return $builderWithEntity->where('entity_type_target_id', $targetID)->value('entity_type_id');
+        $baseBuilder = static::getEntityInfo($entityID, $filter);
+        if (is_array($filter)) {
+            return $baseBuilder->pluck('entity_type_id')->all();
         }
+        return $baseBuilder->value('entity_type_id');
     }
 
     /**
@@ -46,27 +45,34 @@ class EntityType extends Model
      * @see \App\Models\Entity
      *
      * @param int $entityID
-     * @param int $targetID
-     *
+     * @param int|array $filter
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function getEntityInfo($entityID, $targetID)
+    public static function getEntityInfo($entityID, $filter)
     {
         $baseBuilder = static::query();
         $builderWithEntity = call_user_func([$baseBuilder, 'entityType'], $entityID)
             ->where('entity_id', $entityID);
-        if (is_array($targetID)) {
-            $builderWithEntity->whereIn('entity_type_target_id', $targetID);
+
+        if (is_int($filter)) {
+            $builderWithEntity->where('entity_type_target_id', $filter);
+        } elseif (is_array($filter)) {
+            $builderWithEntity->whereIn('entity_type_target_id', $filter);
         } else {
-            $builderWithEntity->where('entity_type_target_id', $targetID);
+            $builderWithEntity->where(static::getEntityNameColumn($entityID), '=', $filter);
         }
 
         return $builderWithEntity;
     }
 
+    /**
+     * @param $entityID
+     * @param $entityTypeID
+     * @return mixed
+     */
     public static function buildQueryFromEntity($entityID, $entityTypeID)
     {
-        $class = Entity::getModelClassName($entityID);
+        $class = Entity::getModelClassNamespace($entityID);
         $baseBuilder = new $class();
 
         $builderWithEntity = $baseBuilder->newQuery()
@@ -84,9 +90,14 @@ class EntityType extends Model
         return $builderWithEntity;
     }
 
+    /**
+     * @param $entityID
+     * @param $targetID
+     * @return mixed
+     */
     public static function buildQueryFromTarget($entityID, $targetID)
     {
-        $class = Entity::getModelClassName($entityID);
+        $class = Entity::getModelClassNamespace($entityID);
         $baseBuilder = new $class();
 
         $builderWithEntity = $baseBuilder->newQuery()
@@ -114,9 +125,9 @@ class EntityType extends Model
      */
     public static function getEntityNameColumn($entityID)
     {
-        $targetType = Entity::getModelClassName($entityID);
+        $targetType = Entity::getModelClassNamespace($entityID);
 
-        return call_user_func([$targetType, 'getNameColumn']);
+        return $targetType::$nameColumn;
     }
 
     /**
@@ -139,11 +150,12 @@ class EntityType extends Model
      * @param int $entityID
      *
      * @return mixed
+     * @throws \ReflectionException
      */
     public function scopeEntityType(Builder $query, $entityID)
     {
         $table = Entity::getConstantName($entityID);
-        $class = Entity::getModelClassName($entityID);
+        $class = Entity::getModelClassNamespace($entityID);
         $primaryKey = (new $class)->getKeyName();
 
         return $query->join(

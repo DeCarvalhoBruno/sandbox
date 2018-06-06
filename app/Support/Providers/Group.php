@@ -1,8 +1,7 @@
-<?php namespace App\Providers\Models;
+<?php namespace App\Support\Providers;
 
 use App\Contracts\Models\Group as GroupInterface;
 use App\Contracts\RawQueries;
-use App\Events\UpdatedGroupMembers;
 use App\Events\UpdatedPermissionEntity;
 use App\Models\GroupMember;
 
