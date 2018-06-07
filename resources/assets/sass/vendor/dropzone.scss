@@ -6,6 +6,7 @@
   color: #7f889a;
   background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3MCIgaGVpZ2h0PSI3MCI+CjxyZWN0IHdpZHRoPSI3MCIgaGVpZ2h0PSI3MCIgZmlsbD0iI2ZlZmVmZSI+PC9yZWN0Pgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSg0NSkiPgo8cmVjdCB3aWR0aD0iOTkiIGhlaWdodD0iMjUiIGZpbGw9IiNmN2Y3ZjciPjwvcmVjdD4KPHJlY3QgeT0iLTUwIiB3aWR0aD0iOTkiIGhlaWdodD0iMjUiIGZpbGw9IiNmN2Y3ZjciPjwvcmVjdD4KPC9nPgo8L3N2Zz4=");
   transition: all 1s ease-in-out;
+  padding: .5rem;
 }
 
 .file-upload .file-upload-container:hover, #pol_avatar_select .file-select-container:hover {
@@ -14,8 +15,8 @@
 }
 
 .tab-v2 .tab-content.tab-avatar {
-  margin:0;
-  padding:0;
+  margin: 0;
+  padding: 0;
 }
 
 .tab-avatar #avatar_container {
@@ -82,18 +83,18 @@
 /* Mimic table appearance */
 div.table.previews-container {
   display: table;
-  margin-bottom:0;
+  margin-bottom: 0;
 }
 
 div.table.previews-container > .file-row {
   //display: table-row;
   border: 1px solid #d6d6d6;
-  border-radius:3px;
-  margin:.5rem 1rem 0;
+  border-radius: 3px;
+  margin: .5rem 1rem 0;
   box-shadow: 2px 3px 4px #b8b8b8;
   transition: all .5s ease-in-out;
 
-  &:hover{
+  &:hover {
     background-color: #f5f5f5;
   }
 }
@@ -108,5 +109,5 @@ div.table.previews-container > .file-row {
 
 .dropzone-error.error {
   font-style: italic;
-  padding:0 1rem;
+  padding: 0 1rem;
 }

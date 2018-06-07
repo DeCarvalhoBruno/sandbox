@@ -13,6 +13,7 @@ class Media
     private $newName;
     private $newPath;
     private $newFullPath;
+    private $targetName;
 
     /**
      *
@@ -25,6 +26,7 @@ class Media
     public function __construct($fileObject, $targetName, $targetType, $mediaType)
     {
         $this->originalName = $fileObject->getClientOriginalName();
+        $this->targetName = $targetName;
         $this->newName = makeFilename($targetName, $fileObject->getClientOriginalExtension());
         $this->newPath = media_entity_root_path($targetType, $mediaType);
         $this->newFullPath=$this->newPath.$this->newName;
@@ -43,6 +45,31 @@ class Media
     {
         $image = Image::makeCroppedImage($this->fileObject->getRealPath(),MediaTypeImgFormat::THUMBNAIL);
         Image::saveImg($image,$this->newFullPath);
+    }
+
+    /**
+     * Get the name of the resource after which this media is named.
+     * I.e John Doe's avatar picture 'target name' is his username, john_doe
+     */
+    public function getTargetName()
+    {
+        return $this->targetName;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getOriginalName(): ?string
+    {
+        return $this->originalName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNewName(): string
+    {
+        return $this->newName;
     }
 
 }

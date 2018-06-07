@@ -14,7 +14,10 @@ class AppServiceProvider extends ServiceProvider
         Contract\User::class,
         Contract\Group::class,
         Contract\Permission::class,
-        Contract\Media::class
+        Contract\Media::class,
+        Contract\File::class,
+        Contract\Image::class,
+        Contract\Text::class
     ];
 
     /**

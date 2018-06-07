@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Ajax\Admin;
 
 use App\Contracts\Models\Media as MediaInterface;
-use App\Exceptions\DiskFolderNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Models\Entity;
-use App\Support\Media\Image;
 use Illuminate\Http\Response;
 use App\Models\Media\Media as MediaModel;
 
@@ -54,14 +52,23 @@ class Media extends Controller
 
             switch ($input->media) {
                 case "image_avatar":
-//                    $media->processAvatar();
-                    $this->mediaRepo->saveAvatar(Entity::getConstant($input->type),$input->target);
+                    $media->processAvatar();
+                    $mediaEntity = $this->mediaRepo->image()->saveAvatar(Entity::getConstant($input->type), $media);
+                    $dimensions = '128x128';
                     break;
                 default:
                     break;
             }
+            return response([
+                'id' => $mediaEntity->getSlug(),
+                'dimensions' => $dimensions,
+                'path' => sprintf('/media/%s/%s/%s', $input->type, $input->media, $media->getNewName())
+            ], Response::HTTP_OK);
         }
-        return response(null, Response::HTTP_NO_CONTENT);
+        return response([
+            null
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+
     }
 
 }

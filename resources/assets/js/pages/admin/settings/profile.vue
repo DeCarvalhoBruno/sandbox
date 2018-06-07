@@ -58,16 +58,25 @@
             <b-card no-body class="w-100">
                 <b-tabs card>
                     <b-tab :title="$t('pages.settings.avatar-tab')" active>
-                        <dropzone :id="'dzone'"
-                                  :options="{url:'/ajax/admin/media/add'}"
-                                  :post-data="{
-                                  type:'users',
-                                  target:user.username,
-                                  media:'image_avatar'}"></dropzone>
+                        <wizard ref="wizard" :steps="steps">
+                            <div slot="s1">
+                                <dropzone :id="'dzone'"
+                                          :options="{url:'/ajax/admin/media/add'}"
+                                          :post-data="{
+                                                type:'users',
+                                                target:user.username,
+                                                media:'image_avatar'}">
+                                </dropzone>
+                            </div>
+                            <div slot="s2">
+                                <cropper :src="cropper_src" :canvas-height="cropperCropHeight" :canvas-width="cropperCropWidth"></cropper>
+                            </div>
+                            <div slot="s3">
+                            </div>
+                        </wizard>
                     </b-tab>
-
                     <b-tab :title="$t('pages.settings.avatar-ul-tab')">
-                        Tab Contents 2
+
                     </b-tab>
                 </b-tabs>
             </b-card>
@@ -84,6 +93,9 @@
   import Vue from 'vue'
   import Button from '~/components/Button'
   import Dropzone from '~/components/Dropzone'
+  import Wizard from '~/components/Wizard'
+  import Cropper from '~/components/Cropper'
+
   import { Form, HasError, AlertForm } from '~/components/form'
   import { mapGetters } from 'vuex'
   import { Modal, Tabs, Card } from 'bootstrap-vue/es/components'
@@ -101,19 +113,40 @@
       Modal,
       Tabs,
       Card,
-      Dropzone
+      Dropzone,
+      Wizard,
+      Cropper
     },
     metaInfo () {
       return {title: this.$t('general.settings')}
     },
-    data: () => ({
-      form: new Form({
-        username: '',
-        first_name: '',
-        last_name: '',
-        email: ''
-      })
-    }),
+    data () {
+      return {
+        steps: [
+          {
+            label: 'Upload',
+            slot: 's1'
+          },
+          {
+            label: 'Edit',
+            slot: 's2'
+          },
+          {
+            label: 'Review',
+            slot: 's3'
+          }
+        ],
+        form: new Form({
+          username: '',
+          first_name: '',
+          last_name: '',
+          email: ''
+        }),
+        cropper_src:null,
+        cropperCropHeight:0,
+        cropperCropWidth:0
+      }
+    },
     computed: mapGetters({
       user: 'auth/user'
     }),
@@ -123,9 +156,14 @@
       })
     },
     mounted () {
-      // this.$on('dropzone.success',function(){
-      //
-      // })
+      let vm=this;
+      this.$root.$on('dropzone_file_uploaded',function(data){
+        vm.cropper_src=data.dataURL
+        let dimensions = data.dimensions.split('.');
+        vm.cropperCropWidth=dimensions[0]
+        vm.cropperCropHeight=dimensions[1]
+        delete(data.dataURL)
+      })
     },
     methods: {
       async update () {

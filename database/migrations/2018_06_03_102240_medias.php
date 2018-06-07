@@ -21,7 +21,7 @@ class Medias extends Migration
             $table->unsignedInteger('parent_id')->nullable();
             $table->unsignedInteger('lft')->default(0);
             $table->unsignedInteger('rgt')->default(0);
-            $table->string('media_name',75)->nullable();
+            $table->string('media_name', 75)->nullable();
 
             $table->index(array('lft', 'rgt', 'parent_id'));
         });
@@ -73,7 +73,6 @@ class Medias extends Migration
 
             $table->string('media_type_img_filename', 255)->nullable();
             $table->string('media_type_img_original_filename', 255)->nullable();
-            $table->timestamps();
 
             $table->foreign('media_type_img_id', 'fk_img_format_types')
                 ->references('media_type_img_id')->on('media_type_img')
@@ -142,24 +141,36 @@ class Medias extends Migration
             $table->string('media_category_name', 75)->nullable();
         });
 
+        Schema::create('media_category_records', function (Blueprint $table) {
+            $table->increments('media_category_record_id');
+
+            $table->unsignedInteger('media_category_record_target_id');
+            $table->unsignedInteger('media_category_id');
+
+            $table->foreign('media_category_id')
+                ->references('media_category_id')->on('media_categories')
+                ->onDelete('cascade');
+        });
+
         Schema::create('media_entities', function (Blueprint $table) {
             $table->increments('media_entity_id');
 
             $table->unsignedInteger('entity_type_id');
-            $table->unsignedInteger('media_record_id');
-            $table->unsignedInteger('media_category_id')->default(\App\Models\Media\MediaCategory::MEDIA);
+            $table->unsignedInteger('media_category_record_id');
+            $table->string('media_entity_slug',32);
             $table->boolean('media_entity_in_use')->default(true);
 
             $table->foreign('entity_type_id')
                 ->references('entity_type_id')->on('entity_types')
                 ->onDelete('cascade');
 
-            $table->foreign('media_category_id')
-                ->references('media_category_id')->on('media_categories')
+            $table->foreign('media_category_record_id')
+                ->references('media_category_record_id')->on('media_category_records')
                 ->onDelete('cascade');
 
-            $table->index(['media_entity_id', 'entity_type_id', 'media_category_id'],
-                'idx_entity_category_media');
+            $table->index(['media_entity_id', 'media_entity_slug'],'idx_media_entity_slug');
+            $table->index(['media_entity_id', 'entity_type_id', 'media_category_record_id'],
+                'idx_media_entity_category');
         });
 
         $categories = [
@@ -174,9 +185,10 @@ class Medias extends Migration
 
         $this->addMediaGroups();
         $this->addMedia();
+        $this->imageFormats();
     }
 
-    private function addMedia()
+   private function addMedia()
     {
         $nameColumn = 'media_name';
         $mediaIdColumn = 'media_id';
@@ -243,6 +255,73 @@ class Medias extends Migration
         ];
         MediaGroup::create($files);
         MediaGroup::create($images);
+    }
+
+    public function imageFormats()
+    {
+        $imageFormats = [
+            [
+                'media_type_img_format_name' => 'ORIGINAL',
+                'media_type_img_format_width' => 0,
+                'media_type_img_format_height' => 0
+            ],
+            [
+                'media_type_img_format_name' => 'THUMBNAIL',
+                'media_type_img_format_width' => \App\Support\Media\Image::$thumbnailWidth,
+                'media_type_img_format_height' => \App\Support\Media\Image::$thumbnailHeight
+            ]
+        ];
+        \App\Models\Media\MediaTypeImgFormat::insert($imageFormats);
+
+    }
+
+    private function mediaInUseProcedure()
+    {
+        $sql = <<<SQL
+CREATE PROCEDURE sp_update_media__entity_in_use(IN in_media_entity_id BIGINT)
+    MODIFIES SQL DATA
+      BEGIN
+            DECLARE var_entity INT DEFAULT 0;
+    DECLARE var_category INT DEFAULT 0;
+    DECLARE var_target INT DEFAULT 0;
+    DECLARE var_media_is_used INT DEFAULT 0;
+    
+    SELECT
+      entity_id,
+      media_category_records.media_category_id,
+      entity_types.entity_type_target_id,
+      media_entity_in_use
+    INTO var_entity, var_category, var_target, var_media_is_used
+    FROM media_entities
+      JOIN entity_types
+        ON media_entities.entity_type_id = entity_types.entity_type_id
+      JOIN media_category_records
+        ON media_entities.media_category_record_id = media_category_records.media_category_record_id
+    WHERE media_entity_id = in_media_entity_id;
+
+    
+    IF var_media_is_used = 1
+    THEN
+      UPDATE media_entities
+      SET media_entity_in_use = 0
+      WHERE media_entity_id IN
+            (SELECT msei
+             FROM (
+                    SELECT media_entity_id AS msei
+                    FROM media_entities
+                      JOIN entity_types
+                        ON media_entities.entity_type_id = entity_types.entity_type_id
+                      JOIN media_category_records
+                        ON media_entities.media_category_record_id =
+                           media_category_records.media_category_record_id
+                    WHERE media_entity_id != in_media_entity_id
+                          AND entity_id = var_entity
+                          AND media_category_records.media_category_id = var_category
+                          AND entity_types.system_entity_type_target_id = var_target) AS mse);
+    END IF;
+      END;
+SQL;
+        \DB::connection()->getPdo()->exec($sql);
     }
 
 

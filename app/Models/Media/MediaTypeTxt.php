@@ -66,7 +66,7 @@ class MediaTypeTxt extends Model
         ]);
         $mediaCategoryRecord->save();
 
-        $mediaSystemEntity = MediaSystemEntity::create([
+        $mediaSystemEntity = MediaEntity::create([
             'system_entity_type_id'      => $entityTypeID,
             'media_category_record_id'   => $mediaCategoryRecord->getKey(),
             'media_system_entity_in_use' => $inUse

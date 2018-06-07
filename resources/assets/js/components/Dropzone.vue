@@ -8,7 +8,7 @@
             <input type="hidden" :value="postData.category" name="category">
         </form>
         <div class="file-upload-container" dz-clickable>
-            <h3 class="dropfile-instructions">{{ $t('dropzone.choose_file')}}</h3>
+            <h4 class="dropfile-instructions">{{ $t('dropzone.choose_file')}}</h4>
             <p class="dropfile-instructions">{{ $t('dropzone.max_size')}} {{maxFilesize}}{{$t('units.MB')}}</p>
             <p class="dropfile-instructions">{{ $t('dropzone.accepted_formats')}} JPG, PNG</p>
             <fa class="fa-4x" icon="cloud-upload-alt"/>
@@ -127,9 +127,8 @@
     mounted () {
       this.dropzone = new Dropzone(this.$refs.dropzone, this.dropzoneSettings)
       let vm = this
-
       this.dropzone.on('success', function (file, response) {
-
+        vm.$root.$emit('dropzone_file_uploaded',{...file,...response})
       })
 
       this.dropzone.on('error', function (file, message) {
@@ -141,7 +140,6 @@
       this.dropzone.on('removedfile', function (file, message) {
 
       })
-
     },
     beforeDestroy () {
       this.dropzone.destroy()
