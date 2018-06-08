@@ -60,22 +60,34 @@
                     <b-tab :title="$t('pages.settings.avatar-tab')" active>
                         <wizard ref="wizard" :steps="steps">
                             <div slot="s1">
+
                                 <dropzone :id="'dzone'"
-                                          :options="{url:'/ajax/admin/media/add'}"
+                                :options="{url:'/ajax/admin/media/add',autoProcessQueue: false}"
+                                :post-data="{
+                                type:'users',
+                                target:user.username,
+                                media:'image_avatar'}">
+                                </dropzone>
+
+                            </div>
+                            <div slot="s2">
+                                <cropper :src="cropper_src" :crop-height="cropperCropHeight" :crop-width="cropperCropWidth"></cropper>
+                            </div>
+                            <div slot="s3">
+
+                                <dropzone :id="'dzone3'"
+                                          :options="{url:'/ajax/admin/media/add',autoProcessQueue: true}"
+                                          :images="imagesToUpload"
                                           :post-data="{
                                                 type:'users',
                                                 target:user.username,
                                                 media:'image_avatar'}">
                                 </dropzone>
                             </div>
-                            <div slot="s2">
-                                <cropper :src="cropper_src" :canvas-height="cropperCropHeight" :canvas-width="cropperCropWidth"></cropper>
-                            </div>
-                            <div slot="s3">
-                            </div>
                         </wizard>
                     </b-tab>
                     <b-tab :title="$t('pages.settings.avatar-ul-tab')">
+
 
                     </b-tab>
                 </b-tabs>
@@ -144,7 +156,8 @@
         }),
         cropper_src:null,
         cropperCropHeight:0,
-        cropperCropWidth:0
+        cropperCropWidth:0,
+        imagesToUpload:[]
       }
     },
     computed: mapGetters({
@@ -159,11 +172,12 @@
       let vm=this;
       this.$root.$on('dropzone_file_uploaded',function(data){
         vm.cropper_src=data.dataURL
-        let dimensions = data.dimensions.split('.');
-        vm.cropperCropWidth=dimensions[0]
-        vm.cropperCropHeight=dimensions[1]
+        let dimensions = data.dimensions.split('x');
+        vm.cropperCropWidth=parseInt(dimensions[0])
+        vm.cropperCropHeight=parseInt(dimensions[1])
         delete(data.dataURL)
       })
+
     },
     methods: {
       async update () {

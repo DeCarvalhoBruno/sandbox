@@ -52,7 +52,7 @@ class Media extends Controller
 
             switch ($input->media) {
                 case "image_avatar":
-                    $media->processAvatar();
+//                    $media->processAvatar();
                     $mediaEntity = $this->mediaRepo->image()->saveAvatar(Entity::getConstant($input->type), $media);
                     $dimensions = '128x128';
                     break;

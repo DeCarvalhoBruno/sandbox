@@ -46,7 +46,8 @@ return [
         'apply' => 'Apply',
         'search' => 'Search',
         'reset_filters' => 'Reset Filters',
-        'delete' => 'Delete'
+        'delete' => 'Delete',
+        'reload'=>'Reload'
     ],
     'db' => [
         'user' => 'User|Users',

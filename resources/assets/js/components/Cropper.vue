@@ -5,23 +5,30 @@
 
             </li>
             <li><h3>Redimensionnez l'image</h3>
-                <div class="row">
-                    <div class="cropper row">
-                        <img ref="img" class="cropper-img" :src="src"/>
-                    </div>
-                    <div class="cropper-commands row">
-                        <div class="row">
-                            <button type="button" title="Réinitialiser" class="btn btn-primary cropper-reset" @click="cropper.reset()">
-                                <fa icon="sync-alt"/>
-                            </button>
+                <div class="container p-0">
+                        <div class="cropper row">
+                            <img ref="img" class="cropper-img" :src="src"/>
                         </div>
+                        <div class="cropper-commands row">
+                            <div class="container p-0">
+                                <div class="row">
+                                    <div class="col align-self-center">
 
-                    </div>
-                    <div class="row">
-                        <div class="row">
-                            <p class="cropper-errors text-danger"></p>
+                                    <button type="button" :title="$t('general.reload')"
+                                            class="btn btn-primary cropper-reset" @click="cropper.reset()">
+                                        <fa icon="sync-alt"/>
+                                    </button>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
-                    </div>
+                        <div class="row">
+                            <div class="row">
+                                <p class="cropper-errors text-danger"></p>
+                            </div>
+                        </div>
                 </div>
             </li>
             <li><h3>Prévisualisez le résultat</h3>
@@ -34,7 +41,7 @@
             </li>
             <li><h3>Appliquez les changements</h3>
                 <div class="row">
-                    <button id="btn_resize{!! $modalID !!}" class="btn btn-primary" type="submit">
+                    <button id="btn_resize" class="btn btn-primary" type="button">
                         Recadrer
                     </button>
                 </div>
@@ -56,6 +63,7 @@
       return {}
     },
     mounted(){
+          let vm=this
       this.cropper = new Cropper(this.$refs.img, {
         preview: ".cropper-preview",
         dragMode: "move",
@@ -63,7 +71,7 @@
         cropBoxResizable:false,
 
         ready: function () {
-          this.cropper.setCropBoxData({width:this.cropWidth,height:this.cropHeight})
+          this.cropper.setCropBoxData({width:vm.cropWidth,height:vm.cropHeight})
 
 
 
