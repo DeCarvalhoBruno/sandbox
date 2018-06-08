@@ -58,26 +58,25 @@
             <b-card no-body class="w-100">
                 <b-tabs card>
                     <b-tab :title="$t('pages.settings.avatar-tab')" active>
-                        <wizard ref="wizard" :steps="steps">
+                        <wizard ref="wizard" :steps="steps" has-step-buttons="false" :current-step-parent="currentStep">
                             <div slot="s1">
-
                                 <dropzone :id="'dzone'"
-                                :options="{url:'/ajax/admin/media/add',autoProcessQueue: false}"
-                                :post-data="{
+                                          :options="{url:'/ajax/admin/media/add',autoProcessQueue: false}"
+                                          :post-data="{
                                 type:'users',
                                 target:user.username,
                                 media:'image_avatar'}">
                                 </dropzone>
-
                             </div>
                             <div slot="s2">
-                                <cropper :src="cropper_src" :crop-height="cropperCropHeight" :crop-width="cropperCropWidth"></cropper>
+                                <cropper :src="cropper_src" :crop-height="cropperCropHeight"
+                                         :crop-width="cropperCropWidth"></cropper>
                             </div>
                             <div slot="s3">
-
                                 <dropzone :id="'dzone3'"
                                           :options="{url:'/ajax/admin/media/add',autoProcessQueue: true}"
                                           :images="imagesToUpload"
+                                          :is-interactive="false"
                                           :post-data="{
                                                 type:'users',
                                                 target:user.username,
@@ -154,32 +153,57 @@
           last_name: '',
           email: ''
         }),
-        cropper_src:null,
-        cropperCropHeight:0,
-        cropperCropWidth:0,
-        imagesToUpload:[]
+        cropper_src: null,
+        cropperCropHeight: 0,
+        cropperCropWidth: 0,
+        imagesToUpload: null,
+        currentStep:true
       }
     },
-    computed: mapGetters({
-      user: 'auth/user'
-    }),
+    computed: {
+      ...mapGetters({
+                   user: 'auth/user'
+                 }),
+      // nextStep(){
+      //   console.log(this.currentStep)
+      //   return this.currentStep++
+      // }
+    },
     created () {
       this.form.keys().forEach(key => {
         this.form[key] = this.user[key]
       })
-    },
-    mounted () {
-      let vm=this;
-      this.$root.$on('dropzone_file_uploaded',function(data){
-        vm.cropper_src=data.dataURL
-        let dimensions = data.dimensions.split('x');
-        vm.cropperCropWidth=parseInt(dimensions[0])
-        vm.cropperCropHeight=parseInt(dimensions[1])
-        delete(data.dataURL)
-      })
 
     },
+    mounted () {
+      let vm = this
+      this.$root.$on('dropzone_file_uploaded', function (data) {
+        vm.cropper_src = data.dataURL
+        let dimensions = data.dimensions.split('x')
+        vm.cropperCropWidth = parseInt(dimensions[0])
+        vm.cropperCropHeight = parseInt(dimensions[1])
+        delete(data.dataURL)
+      })
+      this.$root.$on('dropzone_thumbnail_created', function (file) {
+        vm.imagesToUpload = file
+        vm.cropper_src = file.dataURL
+        vm.cropperCropWidth = 128
+        vm.cropperCropHeight = 128
+      })
+      this.$root.$on('dropzone_file_chosen', function (file) {
+        vm.imagesToUpload = file
+        vm.cropper_src = file.dataURL
+        vm.cropperCropWidth = 128
+        vm.cropperCropHeight = 128
+        // console.log(file.name)
+        vm.currentStep=!vm.currentStep
+      })
+    },
+
     methods: {
+      wizardNextStep(){
+        return true;
+      },
       async update () {
         const {data} = await this.form.patch('/ajax/admin/settings/profile')
         this.$store.dispatch('auth/updateUser', {user: data})

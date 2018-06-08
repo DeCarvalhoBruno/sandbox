@@ -9,8 +9,10 @@
                 :style="wizardStepStyle"
                 v-for="(step, index) of steps" :key="index">
                 <span class="wizard_step_line" :class="{'vgw-mobile': isMobile}"></span>
+                <a href.prevent="#" @click="changeStep(index)">
                 <span class="wizard_step_label">{{step.label}}</span>
                 <span class="wizard_step_indicator"></span>
+                    </a>
             </li>
         </ul>
         <span
@@ -21,13 +23,13 @@
             <div class="wizard_body_step">
                 <slot :name="currentSlot"></slot>
             </div>
-            <div class="wizard_body_actions clearfix container p-0">
+            <div v-show="!hasStepButtons" class="wizard_body_actions clearfix container p-0">
                 <div class="row">
                     <div class="col">
                         <a v-if="backEnabled" class="wizard_back float-left"
                            @click="goBack()">
                             <i class="vgw-icon vgw-prev"></i>
-                            <span>{{previousStepLabel}}</span>
+                            <span>Back</span>
                         </a>
                     </div>
                     <div class="col">
@@ -37,19 +39,17 @@
                         <a v-if="currentStep != steps.length - 1" class="wizard_next float-right"
                            :class="{'disabled': options[currentStep].nextDisabled}"
                            @click="goNext()">
-                            <span>{{nextStepLabel}}</span>
+                            <span>Next</span>
                             <i class="vgw-icon vgw-next"></i>
                             <!-- <img src="../images/next.png" alt="next icon"> -->
                         </a>
                         <a v-if="currentStep == steps.length - 1" class="wizard_next float-right final-step"
                            :class="{'disabled': options[currentStep].nextDisabled}"
                            @click="goNext()">
-                            {{finalStepLabel}}
+                            Save
                         </a>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -60,11 +60,9 @@
     name: 'wizard',
     props: {
       steps: {},
-      previousStepLabel: {default: 'Back'},
-      nextStepLabel: {default: 'Next'},
-      finalStepLabel: {default: 'Save'},
-      onNext: {},
-      onBack: {}
+      hasStepButtons:{default:true},
+      onNext:null,
+      currentStepParent:Boolean
     },
     watch: {
       steps: {
@@ -72,6 +70,9 @@
           this.parseOptions()
         },
         immediate: true
+      },
+      currentStepParent(){
+        this.currentStep = 1
       }
     },
     data () {
@@ -117,27 +118,26 @@
       }
     },
     methods: {
-      goNext (skipFunction) {
-        if (!skipFunction && typeof this.onNext == 'function') {
-          if (!this.onNext(this.currentStep)) {
-            return
+      changeStep(index){
+        if(index==0&&this.currentStep!==index)
+          this.currentStep=index
+      },
+      goNext () {
+        if (typeof this.onNext == 'function'){
+          if(!this.onNext(this.currentStep)) {
+            //returned false. don't do anything
+            return;
           }
         }
         if (this.currentStep < this.steps.length - 1) {
           this.currentStep++
         }
       },
-      goBack (skipFunction) {
-        if (!skipFunction && typeof this.onBack == 'function') {
-          if (!this.onBack(this.currentStep)) {
-            return
-          }
-        }
+      goBack () {
         if (this.currentStep > 0) {
           this.currentStep--
         }
       },
-
       parseOptions () {
         this.options = []
         for (let i = 0; i < this.steps.length; i++) {
