@@ -29,8 +29,7 @@
                              dismissible
                              :variant="alertVariant"
                              @dismissed="alertDismissed"
-                             @dismiss-count-down="countDownChanged"
-                    >
+                             @dismiss-count-down="countDownChanged">
                         {{alertMessage}}
                     </b-alert>
                 </div>
@@ -61,8 +60,7 @@
                         <button
                                 type="button"
                                 class="btn btn-secondary"
-                                @click="$store.commit('session/HIDE_MODAL')"
-                        >{{$t('general.cancel')}}
+                                @click="$store.commit('session/HIDE_MODAL')">{{$t('general.cancel')}}
                         </button>
                     </template>
                 </div>

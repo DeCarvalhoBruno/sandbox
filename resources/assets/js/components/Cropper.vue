@@ -43,7 +43,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col align-self-center">
-                            <button id="btn_resize" class="btn btn-primary" type="button">
+                            <button class="btn btn-primary btn-crop" @click="crop()" type="button">
                                 Crop & Upload
                             </button>
                         </div>
@@ -92,6 +92,13 @@
         data.width = this.cropWidth
         data.height = this.cropHeight
         this.cropper.setCropBoxData(data)
+      },
+      crop(){
+        //this.cropper.getData()
+        this.$root.$emit(
+          'cropper_cropped',
+          this.cropper.getCroppedCanvas({imageSmoothingQuality:'high',width:128,height:128})
+        )
       }
     }
   }

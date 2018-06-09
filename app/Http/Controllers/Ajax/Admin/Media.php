@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Ajax\Admin;
 use App\Contracts\Models\Media as MediaInterface;
 use App\Http\Controllers\Controller;
 use App\Models\Entity;
-use Illuminate\Http\Response;
 use App\Models\Media\Media as MediaModel;
+use App\Support\Media\UploadedImage;
+use Illuminate\Http\Response;
 
 class Media extends Controller
 {
@@ -43,7 +44,7 @@ class Media extends Controller
                 throw new \UnexpectedValueException('This media type does not match anything on disk');
             }
 
-            $media = new \App\Support\Media\Media(
+            $media = new UploadedImage(
                 $file,
                 $input->target,
                 $input->type,
@@ -52,7 +53,7 @@ class Media extends Controller
 
             switch ($input->media) {
                 case "image_avatar":
-//                    $media->processAvatar();
+                    $media->processAvatar();
                     $mediaEntity = $this->mediaRepo->image()->saveAvatar(Entity::getConstant($input->type), $media);
                     $dimensions = '128x128';
                     break;
@@ -62,7 +63,7 @@ class Media extends Controller
             return response([
                 'id' => $mediaEntity->getSlug(),
                 'dimensions' => $dimensions,
-                'path' => sprintf('/media/%s/%s/%s', $input->type, $input->media, $media->getNewName())
+                'path' => sprintf('/media/%s/%s/%s', $input->type, $input->media, $media->getNewFilename())
             ], Response::HTTP_OK);
         }
         return response([

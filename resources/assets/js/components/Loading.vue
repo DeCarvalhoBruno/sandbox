@@ -76,7 +76,7 @@
       return h(
         'div',
         {
-          class: 'progress',
+          class: 'app-progress',
           style: {
             width: `${this.percent}%`,
             height: this.height,

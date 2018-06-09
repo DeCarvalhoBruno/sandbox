@@ -22,7 +22,7 @@ class AuthServiceProvider extends ServiceProvider
     /**
      * Register any authentication / authorization services.
      *
-     * @param \App\Contracts\Models\User|\App\Providers\Models\User $userProvider
+     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
      * @return void
      */
     public function boot(UserInterface $userProvider)

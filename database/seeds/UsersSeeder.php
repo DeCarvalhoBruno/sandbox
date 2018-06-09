@@ -11,7 +11,7 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
-
+        $this->image = new \App\Support\Providers\Image();
         $pwd = bcrypt('secret');
         $u = factory(App\Models\User::class)->create([
             'email' => 'john.doe@example.com',
@@ -20,6 +20,7 @@ class UsersSeeder extends Seeder
             'activated' => true,
             'remember_token' => null,
         ]);
+        $this->createAvatar('john_doe', 'John Doe');
         factory(App\Models\Person::class)->create([
             'first_name' => 'John',
             'last_name' => 'Doe',
@@ -47,6 +48,9 @@ class UsersSeeder extends Seeder
             'last_name' => 'Doe',
             'user_id' => $u->getAttribute('user_id')
         ]);
+
+        $this->createAvatar('jane_doe', 'Jane Doe');
+
         factory(App\Models\GroupMember::class)->create([
             "group_id" => 2,
             'user_id' => $u->getAttribute('user_id')
@@ -82,6 +86,9 @@ class UsersSeeder extends Seeder
                 'user_id' => $u->getAttribute('user_id'),
                 'created_at' => $faker->dateTimeBetween('-2 years')
             ]);
+
+            $this->createAvatar($username, sprintf('%s %s', $fn, $ln));
+
             if ($i % 50 == 0) {
                 $groupID = 3;
                 factory(App\Models\GroupMember::class)->create([
@@ -97,5 +104,13 @@ class UsersSeeder extends Seeder
             ]);
 
         }
+    }
+
+    public function createAvatar($username, $name)
+    {
+        $f = new \App\Support\Media\GeneratedAvatar($username, $name, 'users', 'image_avatar');
+        $f->processAvatar();
+        $this->image->saveAvatar(\App\Models\Entity::USERS, $f);
+
     }
 }

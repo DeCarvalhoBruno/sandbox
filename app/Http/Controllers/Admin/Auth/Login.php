@@ -28,7 +28,7 @@ class Login extends LoginController
         $expiration = $this->guard()->getPayload()->get('exp');
 
         return [
-            'user' => auth()->user(),
+            'user' => auth()->user()->only(['username','first_name','last_name']),
             'token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $expiration - time(),

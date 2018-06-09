@@ -5,7 +5,7 @@ use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\Image as InterventionImage;
 use Intervention\Image\ImageManagerStatic;
 
-class Image extends InterventionImage
+class ImageProcessor extends InterventionImage
 {
     public static $thumbnailHeight = 128;
     public static $thumbnailWidth = 128;

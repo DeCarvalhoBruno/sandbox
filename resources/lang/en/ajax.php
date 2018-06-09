@@ -161,6 +161,7 @@ return [
         'settings' => [
             'language' => 'Language',
             'avatar-tab' => 'Avatar',
+            'avatar-ul-tab' => 'Upload avatar',
             'avatar-ul-tab' => 'Upload avatar'
         ]
     ],

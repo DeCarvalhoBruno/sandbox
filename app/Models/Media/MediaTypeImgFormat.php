@@ -1,6 +1,6 @@
 <?php namespace App\Models\Media;
 
-use App\Support\Media\Image;
+use App\Support\Media\ImageProcessor;
 use App\Traits\Enumerable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,11 +25,11 @@ class MediaTypeImgFormat extends Model
             case static::ORIGINAL:
                 return (object)['width' => '0', 'height' => '0'];
             case static::THUMBNAIL:
-                return (object)['width' => Image::$thumbnailWidth, 'height' => Image::$thumbnailHeight];
+                return (object)['width' => ImageProcessor::$thumbnailWidth, 'height' => ImageProcessor::$thumbnailHeight];
             default:
                 return [
                     static::ORIGINAL  => (object)['width' => '0', 'height' => '0'],
-                    static::THUMBNAIL => (object)['width' => Image::$thumbnailWidth, 'height' => Image::$thumbnailHeight],
+                    static::THUMBNAIL => (object)['width' => ImageProcessor::$thumbnailWidth, 'height' => ImageProcessor::$thumbnailHeight],
                 ];
         }
     }

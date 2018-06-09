@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Ajax\Admin\Settings;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
-use App\Providers\Models\User as UserProvider;
+use App\Support\Providers\User as UserProvider;
 
 class Password extends Controller
 {
@@ -13,7 +13,7 @@ class Password extends Controller
      * Update the user's password.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param \App\Providers\Models\User $user
+     * @param \App\Support\Providers\User $user
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, UserProvider $user)

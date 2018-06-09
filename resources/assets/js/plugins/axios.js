@@ -38,8 +38,8 @@ axios.interceptors.response.use(response => response, error => {
       title: i18n.t('modal.token_expired.h'),
       text: i18n.t('modal.token_expired.t'),
       reverseButtons: true,
-      confirmButtonText: i18n.t('ok'),
-      cancelButtonText: i18n.t('cancel')
+      confirmButtonText: i18n.t('general.ok'),
+      cancelButtonText: i18n.t('general.cancel')
     }).then(async () => {
       await store.dispatch('auth/logout')
       router.push({name: 'admin.login'})

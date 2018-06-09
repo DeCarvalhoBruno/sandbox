@@ -3,23 +3,19 @@
         <ul class="wizard_steps">
             <li class="wizard_step"
                 :class="{
-                  'active': isMobile ? currentStep === index : currentStep >= index,
-                  'vgw-mobile': isMobile,
+                  'active': currentStep >= index,
                 }"
                 :style="wizardStepStyle"
                 v-for="(step, index) of steps" :key="index">
-                <span class="wizard_step_line" :class="{'vgw-mobile': isMobile}"></span>
+                <span class="wizard_step_line"></span>
                 <a href.prevent="#" @click="changeStep(index)">
                 <span class="wizard_step_label">{{step.label}}</span>
                 <span class="wizard_step_indicator"></span>
                     </a>
             </li>
         </ul>
-        <span
-            class="wizard_arrow"
-            :style="{ left: arrowPosition }">
-        </span>
-        <div ref="wizard-body" class="wizard_body" :class="{'vgw-mobile': isMobile}">
+        <span class="wizard_arrow" :style="{ left: arrowPosition }"></span>
+        <div ref="wizard-body" class="wizard_body">
             <div class="wizard_body_step">
                 <slot :name="currentSlot"></slot>
             </div>
@@ -32,16 +28,15 @@
                             <span>Back</span>
                         </a>
                     </div>
-                    <div class="col">
-                        <span class="wizard-step-number">{{currentStep}}/{{steps.length}}</span>
-                    </div>
+                    <!--<div class="col">-->
+                        <!--<span class="wizard-step-number">{{currentStep}}/{{steps.length}}</span>-->
+                    <!--</div>-->
                     <div class="col">
                         <a v-if="currentStep != steps.length - 1" class="wizard_next float-right"
                            :class="{'disabled': options[currentStep].nextDisabled}"
                            @click="goNext()">
                             <span>Next</span>
                             <i class="vgw-icon vgw-next"></i>
-                            <!-- <img src="../images/next.png" alt="next icon"> -->
                         </a>
                         <a v-if="currentStep == steps.length - 1" class="wizard_next float-right final-step"
                            :class="{'disabled': options[currentStep].nextDisabled}"
@@ -62,7 +57,7 @@
       steps: {},
       hasStepButtons:{default:true},
       onNext:null,
-      currentStepParent:Boolean
+      currentStepChanged:Boolean
     },
     watch: {
       steps: {
@@ -71,8 +66,8 @@
         },
         immediate: true
       },
-      currentStepParent(){
-        this.currentStep = 1
+      currentStepChanged(){
+        this.currentStep++
       }
     },
     data () {
@@ -86,22 +81,11 @@
     },
     computed: {
       wizardStepStyle () {
-        if (this.isMobile) {
-          return {
-            width: '100%'
-          }
-        }
         return {
           width: `${100 / this.steps.length}%`
         }
       },
-      mobileArrowPosition () {
-        return 'calc(50% - 14px)'
-      },
       arrowPosition () {
-        if (this.isMobile) {
-          return this.mobileArrowPosition
-        }
         var stepSize = 100 / this.steps.length
         var currentStepStart = stepSize * this.currentStep
         var currentStepMiddle = currentStepStart + (stepSize / 2)
@@ -154,7 +138,7 @@
       }
     },
     mounted () {
-      this.isMobile = this.$refs['wizard-body'].clientWidth < 400
+      // this.isMobile = this.$refs['wizard-body'].clientWidth < 400
       window.addEventListener('resize', this.handleResize)
     },
     beforeDestroy () {

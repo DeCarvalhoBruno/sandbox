@@ -58,7 +58,11 @@
             <b-card no-body class="w-100">
                 <b-tabs card>
                     <b-tab :title="$t('pages.settings.avatar-tab')" active>
-                        <wizard ref="wizard" :steps="steps" has-step-buttons="false" :current-step-parent="currentStep">
+
+                    </b-tab>
+                    <b-tab :title="$t('pages.settings.avatar-ul-tab')">
+                        <wizard ref="wizard" :steps="steps" has-step-buttons="false"
+                                :current-step-changed="currentStepChanged">
                             <div slot="s1">
                                 <dropzone :id="'dzone'"
                                           :options="{url:'/ajax/admin/media/add',autoProcessQueue: false}"
@@ -75,7 +79,7 @@
                             <div slot="s3">
                                 <dropzone :id="'dzone3'"
                                           :options="{url:'/ajax/admin/media/add',autoProcessQueue: true}"
-                                          :images="imagesToUpload"
+                                          :image="imageToUpload"
                                           :is-interactive="false"
                                           :post-data="{
                                                 type:'users',
@@ -84,10 +88,6 @@
                                 </dropzone>
                             </div>
                         </wizard>
-                    </b-tab>
-                    <b-tab :title="$t('pages.settings.avatar-ul-tab')">
-
-
                     </b-tab>
                 </b-tabs>
             </b-card>
@@ -106,6 +106,7 @@
   import Dropzone from '~/components/Dropzone'
   import Wizard from '~/components/Wizard'
   import Cropper from '~/components/Cropper'
+  import axios from 'axios'
 
   import { Form, HasError, AlertForm } from '~/components/form'
   import { mapGetters } from 'vuex'
@@ -135,15 +136,15 @@
       return {
         steps: [
           {
-            label: 'Upload',
+            label: 'Select',
             slot: 's1'
           },
           {
-            label: 'Edit',
+            label: 'Crop',
             slot: 's2'
           },
           {
-            label: 'Review',
+            label: 'Upload',
             slot: 's3'
           }
         ],
@@ -156,62 +157,54 @@
         cropper_src: null,
         cropperCropHeight: 0,
         cropperCropWidth: 0,
-        imagesToUpload: null,
-        currentStep:true
+        imageToUpload: null,
+        currentStepChanged: true,
+        userInfo:null,
+        permissions:null
       }
     },
     computed: {
       ...mapGetters({
-                   user: 'auth/user'
-                 }),
-      // nextStep(){
-      //   console.log(this.currentStep)
-      //   return this.currentStep++
-      // }
+        user: 'auth/user'
+      })
     },
     created () {
-      this.form.keys().forEach(key => {
-        this.form[key] = this.user[key]
-      })
+      // this.form.keys().forEach(key => {
+      //   this.form[key] = this.userInfo[key]
+      // })
 
+      this.getInfo()
     },
     mounted () {
       let vm = this
-      this.$root.$on('dropzone_file_uploaded', function (data) {
-        vm.cropper_src = data.dataURL
-        let dimensions = data.dimensions.split('x')
-        vm.cropperCropWidth = parseInt(dimensions[0])
-        vm.cropperCropHeight = parseInt(dimensions[1])
-        delete(data.dataURL)
-      })
-      this.$root.$on('dropzone_thumbnail_created', function (file) {
-        vm.imagesToUpload = file
-        vm.cropper_src = file.dataURL
-        vm.cropperCropWidth = 128
-        vm.cropperCropHeight = 128
-      })
       this.$root.$on('dropzone_file_chosen', function (file) {
-        vm.imagesToUpload = file
+        // vm.imageToUpload.push(file)
         vm.cropper_src = file.dataURL
         vm.cropperCropWidth = 128
         vm.cropperCropHeight = 128
-        // console.log(file.name)
-        vm.currentStep=!vm.currentStep
+        vm.currentStepChanged = !vm.currentStepChanged
+      })
+
+      this.$root.$on('cropper_cropped',function(data){
+        vm.imageToUpload = data.toDataURL()
+        vm.currentStepChanged = !vm.currentStepChanged
       })
     },
-
     methods: {
-      wizardNextStep(){
-        return true;
-      },
       async update () {
         const {data} = await this.form.patch('/ajax/admin/settings/profile')
         this.$store.dispatch('auth/updateUser', {user: data})
         this.form.keys().forEach(key => {
-          this.form[key] = this.user[key]
+          this.form[key] = this.userInfo[key]
         })
         this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.profile_updated'))
-      }
+      },
+      async getInfo () {
+        const {data} = await axios.get(`/ajax/admin/users/${this.user.username}`)
+        this.form = new Form(data.user)
+        this.userInfo = data.user
+        this.permissions = data.permissions
+      },
     }
   }
 </script>

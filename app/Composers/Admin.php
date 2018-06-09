@@ -14,7 +14,7 @@ class Admin extends Composer
         JavaScript::putArray([
             'appName' => config('app.name'),
             'locale' => app()->getLocale(),
-            'user' => auth()->user()
+            'user' => auth()->user()->only(['username'])
         ]);
 
         JavaScript::bindJsVariablesToView();

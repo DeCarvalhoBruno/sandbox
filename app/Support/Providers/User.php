@@ -120,16 +120,8 @@ class User extends Model implements UserProvider, UserInterface
     {
         $model = $this->createModel();
 
-        return $model->newQuery()
-            ->select([
-                'entity_type_id',
-                'people.first_name',
-                'people.last_name',
-                'users.username',
-                'users.email'
-            ])
-            ->entityType($identifier)
-            ->where($model->getQualifiedKeyName(), $identifier)
+        return $model->newQuery()->entityType()
+            ->where($model->getIdentifier(), $identifier)
             ->first();
     }
 
@@ -144,11 +136,8 @@ class User extends Model implements UserProvider, UserInterface
     {
         $model = $this->createModel();
 
-        $model = $model->newQueryWithoutScopes()->select([
-            'users.user_id',
-            'username',
-            'remember_token'
-        ])->where($model->getQualifiedKeyName(), $identifier)->first();
+        $model = $model->newQuery()->entityType()
+            ->where($model->getIdentifier(), $identifier)->first();
 
         if (!$model) {
             return null;
@@ -193,7 +182,7 @@ class User extends Model implements UserProvider, UserInterface
             return;
         }
 
-        $query = $this->createModel()->newQueryWithoutScopes()->select(['users.user_id', 'password', 'username']);
+        $query = $this->createModel()->newQuery()->entityType();
 
         foreach ($credentials as $key => $value) {
             if (!Str::contains($key, 'password')) {

@@ -60,6 +60,14 @@
     margin: 1rem 0;
   }
 
+  .previews-container .progress {
+    width: 13rem;
+  }
+
+  .previews-container #dropzone_progress{
+    opacity: 0;
+  }
+
   .previews-container .preview {
     position: relative;
     margin-top: 1.2rem;
@@ -100,10 +108,6 @@
     }
   }
 
-  .preview-actions .preview-row {
-    margin: 1em 0;
-  }
-
   .action-next-step {
     position: absolute;
     bottom: -2px;
@@ -117,5 +121,6 @@
   .dropzone-error.error {
     font-style: italic;
     padding: 0 1rem;
+    margin-top:.5rem
   }
 }

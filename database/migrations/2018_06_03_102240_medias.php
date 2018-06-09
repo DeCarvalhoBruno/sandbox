@@ -267,8 +267,8 @@ class Medias extends Migration
             ],
             [
                 'media_type_img_format_name' => 'THUMBNAIL',
-                'media_type_img_format_width' => \App\Support\Media\Image::$thumbnailWidth,
-                'media_type_img_format_height' => \App\Support\Media\Image::$thumbnailHeight
+                'media_type_img_format_width' => \App\Support\Media\ImageProcessor::$thumbnailWidth,
+                'media_type_img_format_height' => \App\Support\Media\ImageProcessor::$thumbnailHeight
             ]
         ];
         \App\Models\Media\MediaTypeImgFormat::insert($imageFormats);

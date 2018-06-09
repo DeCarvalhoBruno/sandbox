@@ -1,19 +1,19 @@
 <?php namespace App\Support\Media;
 
+use App\Contracts\Image;
 use App\Exceptions\DiskFolderNotFoundException;
-use App\Models\Media\MediaTypeImgFormat;
 
-class Media
+class UploadedImage implements Image
 {
     /**
      * @var \Symfony\Component\HttpFoundation\File\UploadedFile
      */
     private $fileObject;
-    private $originalName;
-    private $newName;
+    private $originalFilename;
+    private $newFilename;
     private $newPath;
     private $newFullPath;
-    private $targetName;
+    private $targetSlugName;
 
     /**
      *
@@ -25,11 +25,11 @@ class Media
      */
     public function __construct($fileObject, $targetName, $targetType, $mediaType)
     {
-        $this->originalName = $fileObject->getClientOriginalName();
-        $this->targetName = $targetName;
-        $this->newName = makeFilename($targetName, $fileObject->getClientOriginalExtension());
+        $this->originalFilename = $fileObject->getClientOriginalName();
+        $this->targetSlugName = $targetName;
+        $this->newFilename = makeFilename($targetName, $fileObject->getClientOriginalExtension());
         $this->newPath = media_entity_root_path($targetType, $mediaType);
-        $this->newFullPath=$this->newPath.$this->newName;
+        $this->newFullPath=$this->newPath.$this->newFilename;
         if (!is_readable($this->newPath)) {
             throw new DiskFolderNotFoundException(sprintf('Cannot write into %s', $this->newPath));
         }
@@ -38,38 +38,39 @@ class Media
 
     public function move()
     {
-        $this->fileObject->move($this->newPath, $this->newName);
+        $this->fileObject->move($this->newPath, $this->newFilename);
     }
 
     public function processAvatar()
     {
-        $image = Image::makeCroppedImage($this->fileObject->getRealPath(),MediaTypeImgFormat::THUMBNAIL);
-        Image::saveImg($image,$this->newFullPath);
+        $this->fileObject->move($this->newPath, $this->newFilename);
+//        $image = Image::makeCroppedImage($this->fileObject->getRealPath(),MediaTypeImgFormat::THUMBNAIL);
+//        Image::saveImg($image,$this->newFullPath);
     }
 
     /**
      * Get the name of the resource after which this media is named.
      * I.e John Doe's avatar picture 'target name' is his username, john_doe
      */
-    public function getTargetName()
+    public function getTargetSlugName()
     {
-        return $this->targetName;
+        return $this->targetSlugName;
     }
 
     /**
      * @return null|string
      */
-    public function getOriginalName(): ?string
+    public function getOriginalFilename(): ?string
     {
-        return $this->originalName;
+        return $this->originalFilename;
     }
 
     /**
      * @return string
      */
-    public function getNewName(): string
+    public function getNewFilename(): string
     {
-        return $this->newName;
+        return $this->newFilename;
     }
 
 }

@@ -46,8 +46,8 @@ class Group extends Controller
 
     /**
      * @param string $groupName
-     * @param \App\Contracts\Models\Group|\App\Providers\Models\Group $groupProvider
-     * @param \App\Contracts\Models\Permission|\App\Providers\Models\Permission $permissionProvider
+     * @param \App\Contracts\Models\Group|\App\Support\Providers\\Group $groupProvider
+     * @param \App\Contracts\Models\Permission|\App\Support\Providers\\Permission $permissionProvider
      * @return array
      * @throws \ReflectionException
      */
@@ -67,8 +67,8 @@ class Group extends Controller
     /**
      * @param string $groupName
      * @param \App\Http\Requests\Admin\UpdateGroup $request
-     * @param \App\Contracts\Models\Group|\App\Providers\Models\Group $groupProvider
-     * @param \App\Contracts\Models\Permission|\App\Providers\Models\Permission $permissionProvider
+     * @param \App\Contracts\Models\Group|\App\Support\Providers\\Group $groupProvider
+     * @param \App\Contracts\Models\Permission|\App\Support\Providers\\Permission $permissionProvider
      * @return \Illuminate\Http\Response
      */
     public function update(
@@ -93,7 +93,7 @@ class Group extends Controller
 
     /**
      * @param string $groupName
-     * @param \App\Contracts\Models\Group|\App\Providers\Models\Group $groupProvider
+     * @param \App\Contracts\Models\Group|\App\Support\Providers\\Group $groupProvider
      * @return \Illuminate\Http\Response
      */
     public function destroy($groupName, GroupProvider $groupProvider)
@@ -103,7 +103,7 @@ class Group extends Controller
     }
 
     /**
-     * @param \App\Contracts\Models\Permission|\App\Providers\Models\Permission $permissionProvider
+     * @param \App\Contracts\Models\Permission|\App\Support\Providers\\Permission $permissionProvider
      * @return array
      * @throws \ReflectionException
      */
@@ -116,8 +116,8 @@ class Group extends Controller
 
     /**
      * @param \App\Http\Requests\Admin\CreateGroup $request
-     * @param \App\Contracts\Models\Group|\App\Providers\Models\Group $groupProvider
-     * @param \App\Contracts\Models\Permission|\App\Providers\Models\Permission $permissionProvider
+     * @param \App\Contracts\Models\Group|\App\Support\Providers\\Group $groupProvider
+     * @param \App\Contracts\Models\Permission|\App\Support\Providers\\Permission $permissionProvider
      * @return \Illuminate\Http\Response
      */
     public function create(CreateGroup $request, GroupProvider $groupProvider, PermissionProvider $permissionProvider)

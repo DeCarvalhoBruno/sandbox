@@ -28,7 +28,7 @@
       id: String,
       options: Object,
       postData: Object,
-      images: Array,
+      image: null,
       isInteractive: {
         type: Boolean,
         default: true
@@ -83,18 +83,22 @@
         }
       })
       // console.log(this.images.length,this.images)
-      if (this.images && this.images.length > 0) {
-        this.manuallyAddFile(this.images[0])
-        // console.log(this.dropzone.getAcceptedFiles())
+      if (this.image) {
+        this.addFileFromDataUrl(this.image)
       }
 
       this.dropzone.on('success', function (file, response) {
-        // console.log(file)
-
-        // vm.$root.$emit('dropzone_file_uploaded', {...file, ...response})
       })
 
-      //
+      this.dropzone.on("sending", function(file) {
+        // Show the total progress bar when upload starts
+        document.querySelector("#dropzone_progress").style.opacity = "1";
+      });
+
+      this.dropzone.on("queuecomplete", function(progress) {
+        // document.querySelector("#dropzone_progress").style.opacity = "0";
+      });
+
       this.dropzone.on('error', function (file, message) {
         let selector = file.previewElement.querySelector('.dropzone-error')
         selector.innerHTML = '<strong>' + message + '</strong>'
@@ -134,7 +138,7 @@
         })
 
       },
-      manuallyAddFile: function (dataUrl) {
+      addFileFromDataUrl: function (dataUrl) {
         let dz = this.dropzone
 
         let blob = this.dataURItoFile(dataUrl)
@@ -149,7 +153,7 @@
         blob.status = Dropzone.ADDED
         dz.emit('addedfile', blob)
         dz.emit('thumbnail', blob, dataUrl)
-        // dz._enqueueThumbnail(blob)
+        dz._enqueueThumbnail(blob)
 
         return dz.accept(blob, function (error) {
           if (error) {
@@ -178,6 +182,26 @@
         this.$emit('dropzone-file-added-manually', file)
         */
       },
+      addFile(file){
+        let dz = this.dropzone
+
+        dz.files.push(file)
+        file.status = Dropzone.ADDED
+        dz.emit('addedfile', file)
+        dz.emit('thumbnail', file, file.dataURL)
+
+        return dz.accept(file, function (error) {
+          if (error) {
+            file.accepted = false
+            dz._errorProcessing([file], error)
+          } else {
+            file.accepted = true
+            // console.log(file)
+            dz.enqueueFile(file)
+          }
+          return dz._updateMaxFilesReachedClass()
+        })
+      },
       getPreviewTemplate () {
         return `
 <div class="table files previews-container">
@@ -203,20 +227,18 @@
               'dropzone.edit_media')}"><svg aria-hidden="true" data-prefix="fas" data-icon="pencil-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-pencil-alt fa-w-16"><path fill="currentColor" d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3 0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9 0l60.1 60.1c18.8 18.7 18.8 49.1 0 67.9zM284.2 99.8L21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3 0-17l-111-111c-4.8-4.7-12.4-4.7-17.1 0zM124.1 339.9c-5.5-5.5-5.5-14.3 0-19.8l154-154c5.5-5.5 14.3-5.5 19.8 0s5.5 14.3 0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8 0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z" class=""></path></svg></button>
                     </div>
                     <div class="row preview-row">
-                        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0"
-                        aria-valuemax="100" aria-valuenow="0">
-                            <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress>
-                        </div>
+                        <div id="dropzone_progress" class="progress">
+                          <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress></div>
                         </div>
                     </div>
+                </div>
                     <div class="row">
-                        <button type="button" class="btn btn-lg btn-primary action-next-step">Use image</button>
-                        <input type="hidden" class="row-id" value="">
+                        <button type="button" class="btn btn-lg btn-primary action-next-step">Proceed to cropping</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row mt-1">
             <div class="col">
                 <span class="dropzone-error clearfix text-danger"></span>
             </div>

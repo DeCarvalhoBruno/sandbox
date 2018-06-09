@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Ajax\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateMember;
-use App\Providers\Models\Group as GroupProvider;
+use App\Support\Providers\Group as GroupProvider;
 use Illuminate\Http\Response;
 
 class GroupMember extends Controller
@@ -12,7 +12,7 @@ class GroupMember extends Controller
 
     /**
      * @param string $groupName
-     * @param \App\Contracts\Models\Group|\App\Providers\Models\Group $groupProvider
+     * @param \App\Contracts\Models\Group|\App\Support\Providers\Group $groupProvider
      * @return \Illuminate\Http\Response
      */
     public function index($groupName, GroupProvider $groupProvider)
@@ -23,7 +23,7 @@ class GroupMember extends Controller
     /**
      * @param string $groupName
      * @param string $search
-     * @param \App\Contracts\Models\Group|\App\Providers\Models\Group $groupProvider
+     * @param \App\Contracts\Models\Group|\App\Support\Providers\Group $groupProvider
      * @return \Illuminate\Http\Response
      */
     public function search($groupName, $search, GroupProvider $groupProvider)
@@ -33,7 +33,7 @@ class GroupMember extends Controller
 
     /**
      * @param string $groupName
-     * @param \App\Contracts\Models\Group|\App\Providers\Models\Group $groupProvider
+     * @param \App\Contracts\Models\Group|\App\Support\Providers\Group $groupProvider
      * @param \App\Http\Requests\Admin\UpdateMember $request
      * @return \Illuminate\Http\Response
      */
