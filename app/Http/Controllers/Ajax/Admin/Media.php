@@ -61,9 +61,9 @@ class Media extends Controller
                     break;
             }
             return response([
-                'id' => $mediaEntity->getSlug(),
+                'id' => $mediaEntity->getUuid(),
                 'dimensions' => $dimensions,
-                'path' => sprintf('/media/%s/%s/%s', $input->type, $input->media, $media->getNewFilename())
+                'path' => sprintf('/media/%s/%s/%s', $input->type, $input->media, $media->getHddFilename())
             ], Response::HTTP_OK);
         }
         return response([

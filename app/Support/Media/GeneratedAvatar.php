@@ -6,28 +6,31 @@ use Laravolt\Avatar\Avatar;
 class GeneratedAvatar implements Image
 {
     private $targetName;
-    private $targetSlugName;
+    private $targetSlug;
     private $filename;
+    private $fileExtension='png';
     private $path;
+    private $uuid;
 
     /**
      *
-     * @param $targetSlugname
+     * @param $targetSlug
      * @param $targetName
      * @param $targetType
      * @param $mediaType
      */
-    public function __construct($targetSlugname, $targetName, $targetType, $mediaType)
+    public function __construct($targetSlug, $targetName, $targetType, $mediaType)
     {
         $this->targetName = $targetName;
-        $this->targetSlugName = $targetSlugname;
-        $this->filename = makeFilename($targetName, 'png');
+        $this->targetSlug = $targetSlug;
+        $this->uuid = makeHexUuid();
+        $this->filename = sprintf('%s.%s',$this->uuid,$this->fileExtension);
         $this->path = media_entity_root_path($targetType, $mediaType);
     }
 
     public function processAvatar()
     {
-        $avatar = (new Avatar(app('config')->get('laravolt.avatar')))
+        (new Avatar(app('config')->get('laravolt.avatar')))
             ->create(strtoupper($this->targetName))
             ->save($this->path . $this->filename);
     }
@@ -43,20 +46,35 @@ class GeneratedAvatar implements Image
     /**
      * @return mixed
      */
-    public function getTargetSlugName()
+    public function getTargetSlug()
     {
-        return $this->targetSlugName;
+        return $this->targetSlug;
     }
 
-    public function getOriginalFilename()
+    public function getFilename()
     {
         return null;
     }
 
-    public function getNewFilename()
+    public function getHddFilename()
     {
         return $this->filename;
     }
+
+    public function getUuid()
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileExtension(): string
+    {
+        return $this->fileExtension;
+    }
+
+
 
 
 }

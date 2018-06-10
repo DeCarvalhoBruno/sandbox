@@ -1,25 +1,22 @@
 <?php namespace App\Support\Providers;
 
+use App\Contracts\Image as ImageContract;
 use App\Contracts\Models\Image as ImageInterface;
 use App\Models\EntityType;
 use App\Models\Media\MediaCategory;
 use App\Models\Media\MediaCategoryRecord;
+use App\Models\Media\MediaDigital;
 use App\Models\Media\MediaEntity;
 use App\Models\Media\MediaRecord;
 use App\Models\Media\MediaType;
-use App\Models\Media\MediaTypeImg;
-use App\Models\Media\MediaTypeImgFormat;
-use App\Models\Media\MediaTypeImgFormatType;
-use Ramsey\Uuid\Uuid;
-use App\Contracts\Image as ImageContract;
 
 /**
- * @method \App\Models\Media\MediaTypeImg createModel(array $attributes = [])
+ * @method \App\Models\Media\MediaDigital createModel(array $attributes = [])
  */
 class Image extends Model implements ImageInterface
 {
 
-    protected $model = \App\Models\Media\MediaTypeImg::class;
+    protected $model = \App\Models\Media\MediaDigital::class;
 
     /**
      * @param $entityId
@@ -29,7 +26,7 @@ class Image extends Model implements ImageInterface
      */
     public function saveAvatar($entityId, ImageContract $image)
     {
-        $targetEntityTypeId = EntityType::getEntityTypeID($entityId, $image->getTargetSlugName());
+        $targetEntityTypeId = EntityType::getEntityTypeID($entityId, $image->getTargetSlug());
         if(!is_int($targetEntityTypeId)){
             throw new \UnexpectedValueException('Entity could not be found for image saving');
         }
@@ -48,20 +45,18 @@ class Image extends Model implements ImageInterface
     {
         \DB::beginTransaction();
         //For now the title of the image is the entity's slug, so we have an idea of which is which in mysql
-        $mediaType = MediaType::create(['media_type_title' => $media->getTargetSlugName()]);
+        $mediaType = MediaType::create([
+            'media_title' => $media->getTargetSlug(),
+            'media_uuid' => $media->getUuid(),
+        ]);
         $mediaType->save();
 
-        $mediaTypeImg = MediaTypeImg::create([
+        $mediaImg = MediaDigital::create([
             'media_type_id' => $mediaType->getKey(),
+            'media_extension' => $media->getFileExtension(),
+            'media_filename' => $media->getFilename(),
         ]);
-        $mediaTypeImg->save();
-
-        MediaTypeImgFormatType::insert([
-            'media_type_img_filename' => $media->getNewFilename(),
-            'media_type_img_original_filename' => $media->getOriginalFilename(),
-            'media_type_img_id' => $mediaTypeImg->getKey(),
-            'media_type_img_format_id' => MediaTypeImgFormat::ORIGINAL
-        ]);
+        $mediaImg->save();
 
         $mediaRecord = MediaRecord::create([
             'media_type_id' => $mediaType->getKey(),
@@ -70,16 +65,13 @@ class Image extends Model implements ImageInterface
         $mediaRecord->save();
 
         $mediaCategoryRecord = MediaCategoryRecord::create([
-            'media_category_record_target_id' => $mediaRecord->getKey(),
-            'media_category_id' => MediaCategory::MEDIA
+            'media_record_target_id' => $mediaRecord->getKey(),
         ]);
         $mediaCategoryRecord->save();
 
         $mediaSystemEntity = MediaEntity::create([
             'entity_type_id' => $entityTypeID,
             'media_category_record_id' => $mediaCategoryRecord->getKey(),
-            'media_entity_slug' => Uuid::uuid4()->getHex(),
-            'media_entity_in_use' => true
         ]);
 
         \DB::commit();

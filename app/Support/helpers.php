@@ -1,6 +1,6 @@
 <?php
 
-if ( ! function_exists('media_entity_path')) {
+if (!function_exists('media_entity_path')) {
     /**
      * Retrieves the path of an image relative to the public folder
      *
@@ -31,7 +31,7 @@ if ( ! function_exists('media_entity_path')) {
 
 }
 
-if ( ! function_exists('media_entity_root_path')) {
+if (!function_exists('media_entity_root_path')) {
     /**
      * Retrieves the path of an image relative to the server root
      *
@@ -55,7 +55,7 @@ if ( ! function_exists('media_entity_root_path')) {
 
 }
 
-if ( ! function_exists('replaceLinksInTranslatedString')) {
+if (!function_exists('replaceLinksInTranslatedString')) {
     function replaceLinksInTranslatedString($link, $string)
     {
         $matches = [];
@@ -68,7 +68,7 @@ if ( ! function_exists('replaceLinksInTranslatedString')) {
     }
 }
 
-if ( ! function_exists('encrypt')) {
+if (!function_exists('encrypt')) {
     /**
      * Encrypt the given value.
      *
@@ -82,56 +82,36 @@ if ( ! function_exists('encrypt')) {
     }
 }
 
-if ( ! function_exists('getImagePlaceholderPath')) {
+if (!function_exists('getImagePlaceholderPath')) {
     function getImagePlaceholderPath()
     {
         return '/media/system/placeholders/no-thumb.png';
     }
 }
 
-if ( ! function_exists('getProfileImagePlaceholderPath')) {
+if (!function_exists('getProfileImagePlaceholderPath')) {
     function getProfileImagePlaceholderPath()
     {
         return '/media/avatars/image/42-8fgiluf11zixx1soizcf2bufnjfyh.png';
     }
 }
 
-if ( ! function_exists('makeFilename')) {
+if (!function_exists('makeHexUuid')) {
     /**
-     * Takes a file name, keeps the 16 first characters and pads the rest of the string with random characters.
      *
-     * @param $filename
-     * @param null $extension
-     * @param int $entityId
-     *
-     * @return string The 24 character filename+extension
+     * @return string The 32 character UUID
      */
-    function makeFilename($filename, $extension = null, $entityId = null)
+    function makeHexUuid()
     {
-//        if (empty($filename) && $entityId > 0) {
-//            $filename = \App\Models\Entity::getConstantName($entityId);
-//        }
-        if (is_null($extension)) {
-            $extensionPosition = strrpos($filename, ".");
-
-            return strtolower(sprintf('%s.%s',
-                str_pad(slugify(substr(substr($filename, 0, $extensionPosition), 0, 16)), 32, '-' . str_random(32),
-                    STR_PAD_RIGHT),
-                substr($filename, $extensionPosition + 1)));
-        } else {
-            return strtolower(sprintf('%s.%s',
-                str_pad(slugify(substr($filename, 0, 16)), 32, '-' . str_random(32), STR_PAD_RIGHT),
-                $extension));
-        }
-
+        return \Ramsey\Uuid\Uuid::uuid4()->getHex();
     }
 }
 
-if ( ! function_exists('encodeHashIDs')) {
+if (!function_exists('encodeHashIDs')) {
     function encodeHashIDs()
     {
         $arguments = func_get_args();
-        $string    = [];
+        $string = [];
         foreach ($arguments as $argument) {
             if ($argument > 0) {
                 $string[] = encodeHashID($argument);
@@ -144,7 +124,7 @@ if ( ! function_exists('encodeHashIDs')) {
     }
 }
 
-if ( ! function_exists('decodeHashIDs')) {
+if (!function_exists('decodeHashIDs')) {
     /**
      * @param string $id
      *
@@ -160,8 +140,10 @@ if ( ! function_exists('decodeHashIDs')) {
                 if (preg_match('#^[0-9]{5,7}$#', $id)) {
                     $idList[] = 0;
                     //Usable IDs contain 8 to 10 numbers
-                } else if (preg_match('#^[0-9]{8,10}$#', $id)) {
-                    $idList[] = decodeHashID($id);
+                } else {
+                    if (preg_match('#^[0-9]{8,10}$#', $id)) {
+                        $idList[] = decodeHashID($id);
+                    }
                 }
             }
         }
@@ -170,7 +152,7 @@ if ( ! function_exists('decodeHashIDs')) {
     }
 }
 
-if ( ! function_exists('encodeHashID')) {
+if (!function_exists('encodeHashID')) {
     function encodeHashID($id)
     {
         $hasher = new \Jenssegers\Optimus\Optimus(275604547, 880216171, 847305208);
@@ -179,7 +161,7 @@ if ( ! function_exists('encodeHashID')) {
     }
 }
 
-if ( ! function_exists('decodeHashID')) {
+if (!function_exists('decodeHashID')) {
     function decodeHashID($id)
     {
         if (is_numeric($id)) {
@@ -192,7 +174,7 @@ if ( ! function_exists('decodeHashID')) {
     }
 }
 
-if ( ! function_exists('getTmpMediaSessionKey')) {
+if (!function_exists('getTmpMediaSessionKey')) {
     function getTmpMediaSessionKey($entityId, $mediaCategoryID)
     {
         return sprintf('media_%s_%s', $entityId,
@@ -201,7 +183,7 @@ if ( ! function_exists('getTmpMediaSessionKey')) {
 
 }
 
-if ( ! function_exists('slugify')) {
+if (!function_exists('slugify')) {
     function slugify($text, $strict = true)
     {
         $text = html_entity_decode($text, ENT_QUOTES, 'UTF-8');
@@ -231,9 +213,28 @@ if ( ! function_exists('slugify')) {
     }
 }
 
-if ( ! function_exists('isFloat')) {
+if (!function_exists('isFloat')) {
     function isFloat($value)
     {
         return ((int)$value != $value);
+    }
+}
+
+if (!function_exists('route_i18n')) {
+    /**
+     * Generate the URL to a named route.
+     *
+     * @param  array|string $name
+     * @param  mixed $parameters
+     * @param  bool $absolute
+     * @return string
+     */
+    function route_i18n($name, $parameters = [], $absolute = true)
+    {
+        $locale = app()->getLocale();
+        if ($locale == config('app.fallback_locale')) {
+            return app('url')->route($name, $parameters, $absolute);
+        }
+        return app('url')->route(sprintf('%s.%s', $locale, $name), $parameters, $absolute);
     }
 }

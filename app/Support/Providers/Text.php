@@ -3,7 +3,7 @@
 use App\Contracts\Models\Text as TextInterface;
 
 /**
- * @method \App\Models\Media\MediaTypeTxt createModel(array $attributes = [])
+ * @method \App\Models\Media\MediaTxt createModel(array $attributes = [])
  */
 class Text extends Model implements TextInterface
 {

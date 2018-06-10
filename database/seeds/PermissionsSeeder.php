@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 
 class PermissionsSeeder extends Seeder
 {
+    use \Illuminate\Foundation\Bus\DispatchesJobs;
     /**
      * Run the database seeds.
      *
@@ -38,5 +39,6 @@ class PermissionsSeeder extends Seeder
 //                'permission_mask'=>0b1010,
 //            ],
         ]);
+        $this->dispatch(new \App\Jobs\UpdatePermissions);
     }
 }

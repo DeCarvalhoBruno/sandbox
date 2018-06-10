@@ -19,7 +19,7 @@ class Permission extends Model
      */
     public function scopeEntityType($builder)
     {
-        return $this->joinWithJoinedPK($builder, EntityType::class);
+        return $this->joinReverse($builder, EntityType::class);
     }
 
     /**

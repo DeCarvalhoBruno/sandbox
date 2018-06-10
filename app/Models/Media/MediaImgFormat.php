@@ -4,7 +4,7 @@ use App\Support\Media\ImageProcessor;
 use App\Traits\Enumerable;
 use Illuminate\Database\Eloquent\Model;
 
-class MediaTypeImgFormat extends Model
+class MediaImgFormat extends Model
 {
     use Enumerable;
 
@@ -12,11 +12,11 @@ class MediaTypeImgFormat extends Model
     const THUMBNAIL = 2;
     public $timestamps = false;
 
-    protected $primaryKey = 'media_type_img_format_id';
+    protected $primaryKey = 'media_img_format_id';
     protected $fillable = [
-        'media_type_img_format_name',
-        'media_type_img_format_width',
-        'media_type_img_format_height'
+        'media_img_format_name',
+        'media_img_format_width',
+        'media_img_format_height'
     ];
 
     public static function getFormatDimensions($formatID = null)

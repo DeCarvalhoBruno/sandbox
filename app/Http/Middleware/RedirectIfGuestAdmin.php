@@ -18,7 +18,7 @@ class RedirectIfGuestAdmin
     public function handle($request, Closure $next, $guard = null)
     {
         if (!\Auth::guard()->check()) {
-            return redirect()->guest(route('admin.login'));
+            return redirect()->guest(route_i18n('admin.login'));
         }
         return $next($request);
     }

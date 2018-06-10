@@ -11,7 +11,7 @@ const webpack = require('webpack')
 // })
 
 mix.js('resources/assets/js/app.js', 'public/js')
-  .sass('resources/assets/sass/app.scss', 'public/css')
+  .sass('resources/assets/sass/backend/app.scss', 'public/css')
   .sourceMaps()
   .disableNotifications()
 

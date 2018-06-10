@@ -31,7 +31,7 @@ class ResetPassword extends Notification
             ->line('You are receiving this email because we received a password reset request for your account.')
             ->action('Reset Password',
                 sprintf('%s/%s?email=%s',
-                    route('admin.password.reset'),
+                    route_i18n('admin.password.reset'),
                     $this->token,
                     urlencode($notifiable->email))
                 )

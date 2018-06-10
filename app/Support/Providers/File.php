@@ -12,7 +12,7 @@ class File extends Model implements FileInterface
     /**
      * @var string This provider's model class
      */
-    protected $model = \App\Models\Media\MediaTypeImg::class;
+    protected $model = \App\Models\Media\MediaDigital::class;
 
     /**
      * @var \App\Contracts\Models\Image|\App\Support\Providers\Image

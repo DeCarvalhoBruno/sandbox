@@ -29,58 +29,26 @@ class Medias extends Migration
         Schema::create('media_types', function (Blueprint $table) {
             $table->increments('media_type_id');
 
-            $table->string('media_type_title', 255)->nullable();
-            $table->text('media_type_description')->nullable();
-            $table->string('media_type_thumbnail', 255)->nullable();
+            $table->string('media_title', 255)->nullable();
+            $table->text('media_description')->nullable();
+            $table->string('media_uuid',32);
+            $table->boolean('media_in_use')->default(true);
+
+            $table->index(['media_type_id', 'media_uuid'],'idx_media_type_uuid');
         });
 
-        Schema::create('media_type_txt', function (Blueprint $table) {
-            $table->increments('media_type_txt_id');
-            $table->unsignedInteger('media_type_id');
+        Schema::create('media_digital', function (Blueprint $table) {
+            $table->increments('media_digital_id');
 
-            $table->string('media_type_txt_filename', 255)->nullable();
-            $table->string('media_type_txt_original_filename', 255)->nullable();
+            $table->unsignedInteger('media_type_id');
+            $table->string('media_filename', 255)->nullable();
+            $table->string('media_extension', 10)->nullable();
+            $table->string('media_thumbnail', 255)->nullable();
+            $table->timestamps();
 
             $table->foreign('media_type_id')
                 ->references('media_type_id')->on('media_types')
                 ->onDelete('cascade');
-            $table->timestamps();
-        });
-
-        Schema::create('media_type_img', function (Blueprint $table) {
-            $table->increments('media_type_img_id');
-
-            $table->unsignedInteger('media_type_id');
-            $table->foreign('media_type_id')
-                ->references('media_type_id')->on('media_types')
-                ->onDelete('cascade');
-            $table->timestamps();
-        });
-
-        Schema::create('media_type_img_formats', function (Blueprint $table) {
-            $table->increments('media_type_img_format_id');
-
-            $table->string('media_type_img_format_name', 50)->nullable();
-            $table->unsignedInteger('media_type_img_format_width')->nullable();
-            $table->unsignedInteger('media_type_img_format_height')->nullable();
-            $table->string('media_type_img_format_acronym', 20)->nullable();
-        });
-
-        Schema::create('media_type_img_format_types', function (Blueprint $table) {
-            $table->increments('media_type_img_format_type_id');
-            $table->unsignedInteger('media_type_img_id');
-            $table->unsignedInteger('media_type_img_format_id');
-
-            $table->string('media_type_img_filename', 255)->nullable();
-            $table->string('media_type_img_original_filename', 255)->nullable();
-
-            $table->foreign('media_type_img_id', 'fk_img_format_types')
-                ->references('media_type_img_id')->on('media_type_img')
-                ->onDelete('cascade');
-            $table->foreign('media_type_img_format_id', 'fk_img_formats')
-                ->references('media_type_img_format_id')->on('media_type_img_formats')
-                ->onDelete('cascade');
-
         });
 
         Schema::create('media_records', function (Blueprint $table) {
@@ -89,12 +57,34 @@ class Medias extends Migration
             $table->unsignedInteger('media_type_id');
             $table->unsignedInteger('media_id');
 
+            $table->foreign('media_type_id')
+                ->references('media_type_id')->on('media_types')
+                ->onDelete('cascade');
             $table->foreign('media_id')
                 ->references('media_id')->on('media')
                 ->onDelete('cascade');
+        });
 
-            $table->foreign('media_type_id')
-                ->references('media_type_id')->on('media_types')
+        Schema::create('media_img_formats', function (Blueprint $table) {
+            $table->increments('media_img_format_id');
+
+            $table->string('media_img_format_name', 50);
+            $table->unsignedInteger('media_img_format_width')->default(0);
+            $table->unsignedInteger('media_img_format_height')->default(0);
+            $table->string('media_img_format_acronym', 20)->nullable();
+        });
+
+        Schema::create('media_img_format_types', function (Blueprint $table) {
+            $table->increments('media_img_format_type_id');
+            $table->unsignedInteger('media_digital_id');
+
+            $table->unsignedInteger('media_img_format_id')->default(\App\Models\Media\MediaImgFormat::ORIGINAL);
+
+            $table->foreign('media_digital_id', 'fk_img_format_types')
+                ->references('media_digital_id')->on('media_digital')
+                ->onDelete('cascade');
+            $table->foreign('media_img_format_id', 'fk_img_formats')
+                ->references('media_img_format_id')->on('media_img_formats')
                 ->onDelete('cascade');
         });
 
@@ -114,6 +104,8 @@ class Medias extends Migration
 
             $table->unsignedInteger('media_group_id');
             $table->string('media_group_type_title', 100)->nullable();
+            $table->string('media_group_type_slug', 100)->nullable();
+            $table->timestamps();
 
             $table->foreign('media_group_id')
                 ->references('media_group_id')->on('media_groups')
@@ -144,12 +136,14 @@ class Medias extends Migration
         Schema::create('media_category_records', function (Blueprint $table) {
             $table->increments('media_category_record_id');
 
-            $table->unsignedInteger('media_category_record_target_id');
-            $table->unsignedInteger('media_category_id');
+            $table->unsignedInteger('media_record_target_id')->comment('Either a media_record id or a media_group_record_id');
+            $table->unsignedInteger('media_category_id')->default(\App\Models\Media\MediaCategory::MEDIA);
 
             $table->foreign('media_category_id')
                 ->references('media_category_id')->on('media_categories')
                 ->onDelete('cascade');
+            $table->index(['media_category_record_id', 'media_record_target_id', 'media_category_id'],
+                'idx_media_category_record');
         });
 
         Schema::create('media_entities', function (Blueprint $table) {
@@ -157,8 +151,6 @@ class Medias extends Migration
 
             $table->unsignedInteger('entity_type_id');
             $table->unsignedInteger('media_category_record_id');
-            $table->string('media_entity_slug',32);
-            $table->boolean('media_entity_in_use')->default(true);
 
             $table->foreign('entity_type_id')
                 ->references('entity_type_id')->on('entity_types')
@@ -168,7 +160,6 @@ class Medias extends Migration
                 ->references('media_category_record_id')->on('media_category_records')
                 ->onDelete('cascade');
 
-            $table->index(['media_entity_id', 'media_entity_slug'],'idx_media_entity_slug');
             $table->index(['media_entity_id', 'entity_type_id', 'media_category_record_id'],
                 'idx_media_entity_category');
         });
@@ -261,17 +252,12 @@ class Medias extends Migration
     {
         $imageFormats = [
             [
-                'media_type_img_format_name' => 'ORIGINAL',
-                'media_type_img_format_width' => 0,
-                'media_type_img_format_height' => 0
-            ],
-            [
-                'media_type_img_format_name' => 'THUMBNAIL',
-                'media_type_img_format_width' => \App\Support\Media\ImageProcessor::$thumbnailWidth,
-                'media_type_img_format_height' => \App\Support\Media\ImageProcessor::$thumbnailHeight
+                'media_img_format_name' => 'ORIGINAL',
+                'media_img_format_width' => 0,
+                'media_img_format_height' => 0
             ]
         ];
-        \App\Models\Media\MediaTypeImgFormat::insert($imageFormats);
+        \App\Models\Media\MediaImgFormat::insert($imageFormats);
 
     }
 

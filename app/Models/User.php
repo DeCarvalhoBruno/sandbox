@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\HasAnEntity;
+use App\Models\Media\MediaEntity;
 use App\Notifications\ResetPassword;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
@@ -206,6 +207,35 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
                 $q->where('group_name', '=', $groupName);
             }
         });
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public static function scopeMediaEntities(Builder $builder)
+    {
+        return $builder->join('media_entities',
+            'media_entities.entity_type_id',
+            '=',
+            'entity_types.entity_type_id'
+        );
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeAvatars(Builder $builder)
+    {
+        return MediaEntity::scopeMediaDigital(
+            MediaEntity::scopeMediaType(
+                MediaEntity::scopeMediaRecord(
+                    MediaEntity::scopeMediaCategoryRecord(
+                        static::scopeMediaEntities($builder))))
+        );
     }
 
 }

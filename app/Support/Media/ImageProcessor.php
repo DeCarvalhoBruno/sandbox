@@ -1,6 +1,6 @@
 <?php namespace App\Support\Media;
 
-use App\Models\Media\MediaTypeImgFormat;
+use App\Models\Media\MediaImgFormat;
 use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\Image as InterventionImage;
 use Intervention\Image\ImageManagerStatic;
@@ -46,7 +46,7 @@ class ImageProcessor extends InterventionImage
         $image,
         $formatId
     ) {
-        $format = MediaTypeImgFormat::getFormatDimensions($formatId);
+        $format = MediaImgFormat::getFormatDimensions($formatId);
 
         if ($image->getHeight() > $format->height || $image->getWidth() > $format->width) {
             $image->fit($format->width, $format->height, function ($constraint) {
@@ -78,12 +78,12 @@ class ImageProcessor extends InterventionImage
      *
      * @return string
      */
-    public static function makeFormatFilenameFromImageFilename($filename, $formatID = MediaTypeImgFormat::THUMBNAIL)
+    public static function makeFormatFilenameFromImageFilename($filename, $formatID = MediaImgFormat::THUMBNAIL)
     {
         $extensionPosition = strrpos($filename, ".");
 
         return sprintf('%s_%s.%s', slugify(substr($filename, 0, $extensionPosition)),
-            MediaTypeImgFormat::getFormatAcronyms($formatID),
+            MediaImgFormat::getFormatAcronyms($formatID),
             substr($filename, $extensionPosition + 1));
     }
 

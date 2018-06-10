@@ -29,7 +29,7 @@ class Auth extends LoginController
 
         $request->session()->invalidate();
 
-        return redirect(route('admin.login'));
+        return redirect(route_i18n('admin.login'));
     }
 
     /**
@@ -39,6 +39,6 @@ class Auth extends LoginController
      */
     public function redirectPath()
     {
-        return route('admin.dashboard');
+        return route_18n('admin.dashboard');
     }
 }

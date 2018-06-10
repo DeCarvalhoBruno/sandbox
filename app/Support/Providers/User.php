@@ -224,6 +224,12 @@ class User extends Model implements UserProvider, UserInterface
             ->limit(5);
     }
 
+    public function getAvatars($userId)
+    {
+        return $this->createModel()->select(['media_uuid as uuid','media_extension as ext'])->newQuery()
+            ->entityType($userId)->avatars()->get()->toArray();
+    }
+
     /**
      * Gets the hasher implementation.
      *

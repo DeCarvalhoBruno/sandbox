@@ -11,10 +11,15 @@ class Admin extends Composer
      */
     public function compose($view)
     {
+        $tmp = auth()->user();
+        $user = null;
+        if ($tmp instanceof User) {
+            $user = $tmp->only(['username']);
+        }
         JavaScript::putArray([
             'appName' => config('app.name'),
             'locale' => app()->getLocale(),
-            'user' => auth()->user()->only(['username'])
+            'user' => $user
         ]);
 
         JavaScript::bindJsVariablesToView();

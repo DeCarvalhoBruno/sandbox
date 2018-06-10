@@ -58,7 +58,15 @@
             <b-card no-body class="w-100">
                 <b-tabs card>
                     <b-tab :title="$t('pages.settings.avatar-tab')" active>
-
+                        <div class="avatar-group">
+                            <ul class="p-0">
+                                <li class="avatar" v-for="(avatar,index) in avatars" :key="index">
+                                    <div class="avatar-inner">
+                                        <img :src="`/media/users/image_avatar/${avatar.uuid}.${avatar.ext}`">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </b-tab>
                     <b-tab :title="$t('pages.settings.avatar-ul-tab')">
                         <wizard ref="wizard" :steps="steps" has-step-buttons="false"
@@ -159,8 +167,9 @@
         cropperCropWidth: 0,
         imageToUpload: null,
         currentStepChanged: true,
-        userInfo:null,
-        permissions:null
+        userInfo: null,
+        permissions: null,
+        avatars: null
       }
     },
     computed: {
@@ -169,11 +178,7 @@
       })
     },
     created () {
-      // this.form.keys().forEach(key => {
-      //   this.form[key] = this.userInfo[key]
-      // })
 
-      this.getInfo()
     },
     mounted () {
       let vm = this
@@ -185,7 +190,7 @@
         vm.currentStepChanged = !vm.currentStepChanged
       })
 
-      this.$root.$on('cropper_cropped',function(data){
+      this.$root.$on('cropper_cropped', function (data) {
         vm.imageToUpload = data.toDataURL()
         vm.currentStepChanged = !vm.currentStepChanged
       })
@@ -199,12 +204,17 @@
         })
         this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.profile_updated'))
       },
-      async getInfo () {
-        const {data} = await axios.get(`/ajax/admin/users/${this.user.username}`)
+      getInfo (data) {
         this.form = new Form(data.user)
         this.userInfo = data.user
         this.permissions = data.permissions
-      },
+        this.avatars = data.avatars
+      }
+    },
+    beforeRouteEnter (to, from, next) {
+      axios.get(`/ajax/admin/users/session`).then(({data}) => {
+        next(vm => vm.getInfo(data))
+      })
     }
   }
 </script>

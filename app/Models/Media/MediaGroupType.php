@@ -7,7 +7,6 @@ class MediaGroupType extends Model
 {
     use HasANameColumn;
 
-    public $timestamps = false;
     protected $primaryKey = 'media_group_type_id';
     protected $fillable = [
         'media_group_type_id',

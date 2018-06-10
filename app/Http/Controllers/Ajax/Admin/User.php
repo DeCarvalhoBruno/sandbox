@@ -130,5 +130,24 @@ class User extends Controller
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
+    public function session(UserProvider $userProvider)
+    {
+        $f = app()->make(RawQueries::class);
+        $user = auth()->user();
+        $entityTypeId = $user->getAttribute('entity_type_id');
+
+        return [
+            'user' => $user->only([
+                'first_name',
+                'last_name',
+                'email',
+                'username',
+                'full_name',
+            ]),
+            'permissions' => $f->getAllUserPermissions($entityTypeId),
+            'avatars'=>$userProvider->getAvatars($user->getKey())
+        ];
+    }
+
 
 }

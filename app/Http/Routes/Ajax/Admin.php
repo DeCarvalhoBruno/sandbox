@@ -23,6 +23,7 @@ class Admin
         return function (Router $r) {
             $r->get('users', 'User@index')
                 ->middleware('can:view,App\Models\User');
+            $r->get('users/session', 'User@session');
             $r->get('users/{user}', 'User@edit')
                 ->middleware('can:update,App\Models\User');
             $r->patch('users/{user}', 'User@update')

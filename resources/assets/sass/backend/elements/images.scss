@@ -1,0 +1,39 @@
+.avatar-group {
+  position: relative;
+  display:block;
+  text-align: center;
+
+  .avatar {
+    position: relative;
+    list-style-type: none;
+    display:inline-block;
+    width: 144px;
+    height: 144px;
+    border:1px solid #000;
+    z-index:0;
+    &.selected {
+      background-color: #0cb400;
+    }
+    &:hover{
+      background-color: #0cb400;
+      transition:background-color ease-in-out 0.2s;
+    }
+    &>.avatar-inner{
+      position: relative;
+      top:7px;
+      left:5px;
+      width: 132px;
+      height: 132px;
+      z-index:1;
+      &>img{
+        position: relative;
+        z-index:2;
+        width: 128px;
+        height: 128px;
+      }
+    }
+
+  }
+
+
+}

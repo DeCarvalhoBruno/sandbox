@@ -43,7 +43,7 @@ trait DoesSqlStuff
      * @param string $modelName
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function joinWithJoinedPK($builder, $modelName)
+    public function joinReverse($builder, $modelName)
     {
         /** @var \Illuminate\Database\Eloquent\Model $modelToJoin */
         $modelToJoin = new $modelName;

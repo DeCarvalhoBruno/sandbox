@@ -9,11 +9,12 @@ class UploadedImage implements Image
      * @var \Symfony\Component\HttpFoundation\File\UploadedFile
      */
     private $fileObject;
-    private $originalFilename;
-    private $newFilename;
-    private $newPath;
-    private $newFullPath;
-    private $targetSlugName;
+    private $filename;
+    private $fileExtension;
+    private $hddFilename;
+    private $hddPath;
+    private $targetSlug;
+    private $uuid;
 
     /**
      *
@@ -25,52 +26,71 @@ class UploadedImage implements Image
      */
     public function __construct($fileObject, $targetName, $targetType, $mediaType)
     {
-        $this->originalFilename = $fileObject->getClientOriginalName();
-        $this->targetSlugName = $targetName;
-        $this->newFilename = makeFilename($targetName, $fileObject->getClientOriginalExtension());
-        $this->newPath = media_entity_root_path($targetType, $mediaType);
-        $this->newFullPath=$this->newPath.$this->newFilename;
-        if (!is_readable($this->newPath)) {
-            throw new DiskFolderNotFoundException(sprintf('Cannot write into %s', $this->newPath));
+        $this->filename = $fileObject->getClientOriginalName();
+        $this->targetSlug = $targetName;
+        $this->uuid = makeHexUuid();
+        $this->fileExtension = $fileObject->getClientOriginalExtension();
+        $this->hddFilename = sprintf('%s.%s', $this->uuid, $this->fileExtension);
+        $this->hddPath = media_entity_root_path($targetType, $mediaType);
+        if (!is_readable($this->hddPath)) {
+            throw new DiskFolderNotFoundException(sprintf('Cannot write into %s', $this->hddPath));
         }
         $this->fileObject = $fileObject;
     }
 
     public function move()
     {
-        $this->fileObject->move($this->newPath, $this->newFilename);
+        $this->fileObject->move($this->hddPath, $this->hddFilename);
     }
 
     public function processAvatar()
     {
-        $this->fileObject->move($this->newPath, $this->newFilename);
-//        $image = Image::makeCroppedImage($this->fileObject->getRealPath(),MediaTypeImgFormat::THUMBNAIL);
-//        Image::saveImg($image,$this->newFullPath);
+        $this->move();
+    }
+
+    public function processImage()
+    {
+        //$image = Image::makeCroppedImage($this->fileObject->getRealPath(),MediaTypeImgFormat::THUMBNAIL);
+        //Image::saveImg($image,$this->newFullPath);
     }
 
     /**
      * Get the name of the resource after which this media is named.
      * I.e John Doe's avatar picture 'target name' is his username, john_doe
      */
-    public function getTargetSlugName()
+    public function getTargetSlug()
     {
-        return $this->targetSlugName;
+        return $this->targetSlug;
     }
 
     /**
      * @return null|string
      */
-    public function getOriginalFilename(): ?string
+    public function getFilename(): ?string
     {
-        return $this->originalFilename;
+        return $this->filename;
     }
 
     /**
      * @return string
      */
-    public function getNewFilename(): string
+    public function getHddFilename(): string
     {
-        return $this->newFilename;
+        return $this->hddFilename;
     }
+
+    public function getUuid()
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFileExtension()
+    {
+        return $this->fileExtension;
+    }
+
 
 }
