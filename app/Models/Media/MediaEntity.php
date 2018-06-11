@@ -72,7 +72,7 @@ class MediaEntity extends Model
     public static function scopeMediaRecord(Builder $builder)
     {
         return $builder->join('media_records',
-            'media_category_records.media_category_record_id', '=', 'media_records.media_record_id');
+            'media_category_records.media_record_target_id', '=', 'media_records.media_record_id');
     }
 
     /**

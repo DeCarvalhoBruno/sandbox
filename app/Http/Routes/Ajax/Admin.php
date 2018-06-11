@@ -55,10 +55,9 @@ class Admin
             $r->patch('members/{group}', 'GroupMember@update')
                 ->middleware('can:view,App\Models\Group');
 
-            $r->patch('settings/password', 'Settings\Password@update')
-                ->middleware('can:view,App\Models\Group');
-            $r->patch('settings/profile', 'Settings\Profile@update')
-                ->middleware('can:view,App\Models\Group');
+            $r->patch('settings/password', 'Settings\Password@update');
+            $r->patch('settings/profile', 'Settings\Profile@update');
+            $r->patch('settings/avatar', 'Settings\Profile@avatar');
 
             $r->post('media/add', 'Media@add')
                 ->middleware('can:update,App\Models\User');

@@ -165,22 +165,6 @@
           }
           return dz._updateMaxFilesReachedClass()
         })
-        /*
-        file.manuallyAdded = true
-        this.dropzone.emit('addedfile', file)
-        this.dropzone.emit('thumbnail', file, dataUrl)
-
-        var thumbnails = file.previewElement.querySelectorAll('[data-dz-thumbnail]')
-        for (var i = 0; i < thumbnails.length; i++) {
-          thumbnails[i].style.width = this.dropzoneSettings.thumbnailWidth + 'px'
-          thumbnails[i].style.height = this.dropzoneSettings.thumbnailHeight + 'px'
-          thumbnails[i].style['object-fit'] = 'contain'
-        }
-        this.dropzone.emit('complete', file)
-        if (this.dropzone.options.maxFiles) this.dropzone.options.maxFiles--
-        this.dropzone.files.push(file)
-        this.$emit('dropzone-file-added-manually', file)
-        */
       },
       addFile(file){
         let dz = this.dropzone
@@ -196,7 +180,6 @@
             dz._errorProcessing([file], error)
           } else {
             file.accepted = true
-            // console.log(file)
             dz.enqueueFile(file)
           }
           return dz._updateMaxFilesReachedClass()
@@ -232,7 +215,7 @@
                         </div>
                     </div>
                 </div>
-                    <div class="row">
+                    <div class="row button-crop-wrapper">
                         <button type="button" class="btn btn-lg btn-primary action-next-step">Proceed to cropping</button>
                     </div>
                 </div>

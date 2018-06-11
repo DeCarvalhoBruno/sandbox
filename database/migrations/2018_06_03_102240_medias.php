@@ -264,48 +264,25 @@ class Medias extends Migration
     private function mediaInUseProcedure()
     {
         $sql = <<<SQL
-CREATE PROCEDURE sp_update_media__entity_in_use(IN in_media_entity_id BIGINT)
-    MODIFIES SQL DATA
-      BEGIN
-            DECLARE var_entity INT DEFAULT 0;
-    DECLARE var_category INT DEFAULT 0;
-    DECLARE var_target INT DEFAULT 0;
-    DECLARE var_media_is_used INT DEFAULT 0;
-    
-    SELECT
-      entity_id,
-      media_category_records.media_category_id,
-      entity_types.entity_type_target_id,
-      media_entity_in_use
-    INTO var_entity, var_category, var_target, var_media_is_used
-    FROM media_entities
-      JOIN entity_types
-        ON media_entities.entity_type_id = entity_types.entity_type_id
-      JOIN media_category_records
-        ON media_entities.media_category_record_id = media_category_records.media_category_record_id
-    WHERE media_entity_id = in_media_entity_id;
-
-    
-    IF var_media_is_used = 1
-    THEN
-      UPDATE media_entities
-      SET media_entity_in_use = 0
-      WHERE media_entity_id IN
-            (SELECT msei
-             FROM (
-                    SELECT media_entity_id AS msei
-                    FROM media_entities
-                      JOIN entity_types
-                        ON media_entities.entity_type_id = entity_types.entity_type_id
-                      JOIN media_category_records
-                        ON media_entities.media_category_record_id =
-                           media_category_records.media_category_record_id
-                    WHERE media_entity_id != in_media_entity_id
-                          AND entity_id = var_entity
-                          AND media_category_records.media_category_id = var_category
-                          AND entity_types.system_entity_type_target_id = var_target) AS mse);
-    END IF;
-      END;
+CREATE PROCEDURE sp_update_media_type_in_use(IN in_media_uuid VARCHAR(32))
+MODIFIES SQL DATA
+  BEGIN
+    UPDATE media_types
+    SET media_in_use = 0
+    WHERE media_type_id in (
+      select mti
+      from (
+         select media_types.media_type_id as mti
+         from media_types
+           join media_records on media_types.media_type_id = media_records.media_type_id
+           join media_category_records
+             on media_category_records.media_record_target_id = media_records.media_record_id
+           join media_entities
+             on media_entities.media_category_record_id = media_category_records.media_category_record_id
+         where media_uuid != in_media_uuid
+      ) as mt
+  );
+  END;
 SQL;
         \DB::connection()->getPdo()->exec($sql);
     }

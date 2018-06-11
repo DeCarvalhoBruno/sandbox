@@ -3,20 +3,26 @@
   display:block;
   text-align: center;
 
-  .avatar {
+  li.avatar {
     position: relative;
     list-style-type: none;
     display:inline-block;
     width: 144px;
     height: 144px;
+    border-radius:3px;
+    margin:5px;
     border:1px solid #000;
     z-index:0;
     &.selected {
       background-color: #0cb400;
+      &:hover{
+        cursor:default;
+      }
     }
     &:hover{
       background-color: #0cb400;
       transition:background-color ease-in-out 0.2s;
+      cursor:pointer;
     }
     &>.avatar-inner{
       position: relative;

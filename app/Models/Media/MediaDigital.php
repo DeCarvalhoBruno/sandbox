@@ -6,6 +6,6 @@ class MediaDigital extends Model
 {
     protected $table = 'media_digital';
     protected $primaryKey = 'media_digital_id';
-    protected $fillable = ['media_type_id','media_filename','media_hdd_filename','media_thumbnail'];
+    protected $fillable = ['media_type_id','media_filename','media_extension','media_thumbnail'];
 
 }

@@ -21,7 +21,7 @@ class Image extends Model implements ImageInterface
     /**
      * @param $entityId
      * @param \App\Contracts\Image $image
-     * @return \App\Models\Media\MediaEntity
+     * @return \App\Models\Media\MediaType
      * @throws \Exception
      */
     public function saveAvatar($entityId, ImageContract $image)
@@ -30,15 +30,14 @@ class Image extends Model implements ImageInterface
         if(!is_int($targetEntityTypeId)){
             throw new \UnexpectedValueException('Entity could not be found for image saving');
         }
-        $mediaSystemEntity = $this->createImage($image, $targetEntityTypeId);
 
-        return $mediaSystemEntity;
+        return $this->createImage($image, $targetEntityTypeId);
     }
 
     /**
-     * @param \App\Support\Media\UploadedImage $media
+     * @param \App\Contracts\Image|\App\Support\Media\UploadedImage $media
      * @param int $entityTypeID
-     * @return \App\Models\Media\MediaEntity
+     * @return \App\Models\Media\MediaType
      * @throws \Exception
      */
     public function createImage($media, $entityTypeID)
@@ -49,34 +48,31 @@ class Image extends Model implements ImageInterface
             'media_title' => $media->getTargetSlug(),
             'media_uuid' => $media->getUuid(),
         ]);
-        $mediaType->save();
 
-        $mediaImg = MediaDigital::create([
+        MediaDigital::create([
             'media_type_id' => $mediaType->getKey(),
             'media_extension' => $media->getFileExtension(),
             'media_filename' => $media->getFilename(),
         ]);
-        $mediaImg->save();
 
         $mediaRecord = MediaRecord::create([
             'media_type_id' => $mediaType->getKey(),
             'media_id' => \App\Models\Media\Media::IMAGE_AVATAR
         ]);
-        $mediaRecord->save();
 
         $mediaCategoryRecord = MediaCategoryRecord::create([
             'media_record_target_id' => $mediaRecord->getKey(),
         ]);
-        $mediaCategoryRecord->save();
 
-        $mediaSystemEntity = MediaEntity::create([
+        MediaEntity::create([
             'entity_type_id' => $entityTypeID,
             'media_category_record_id' => $mediaCategoryRecord->getKey(),
         ]);
 
         \DB::commit();
+        MediaType::setAvatarAsUsed($media->getUuid());
 
-        return $mediaSystemEntity;
+        return $mediaType;
 
     }
 

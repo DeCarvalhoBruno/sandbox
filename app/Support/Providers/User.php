@@ -226,7 +226,7 @@ class User extends Model implements UserProvider, UserInterface
 
     public function getAvatars($userId)
     {
-        return $this->createModel()->select(['media_uuid as uuid','media_extension as ext'])->newQuery()
+        return $this->createModel()->select(['media_uuid as uuid','media_extension as ext','media_in_use as used'])->newQuery()
             ->entityType($userId)->avatars()->get()->toArray();
     }
 

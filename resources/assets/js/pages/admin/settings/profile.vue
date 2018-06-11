@@ -58,9 +58,12 @@
             <b-card no-body class="w-100">
                 <b-tabs card>
                     <b-tab :title="$t('pages.settings.avatar-tab')" active>
+                        <p class="font-italic">Click on an avatar to apply it.</p>
                         <div class="avatar-group">
                             <ul class="p-0">
-                                <li class="avatar" v-for="(avatar,index) in avatars" :key="index">
+                                <li class="avatar" :class="{'selected':avatar.used}"
+                                    v-for="(avatar,index) in avatars"
+                                    :key="index" @click="setAvatarAsUsed(avatar.uuid,avatar.used)">
                                     <div class="avatar-inner">
                                         <img :src="`/media/users/image_avatar/${avatar.uuid}.${avatar.ext}`">
                                     </div>
@@ -68,7 +71,7 @@
                             </ul>
                         </div>
                     </b-tab>
-                    <b-tab :title="$t('pages.settings.avatar-ul-tab')">
+                    <b-tab :title="$t('pages.settings.avatar-ul-tab')" :disabled="avatars.length>6">
                         <wizard ref="wizard" :steps="steps" has-step-buttons="false"
                                 :current-step-changed="currentStepChanged">
                             <div slot="s1">
@@ -169,7 +172,7 @@
         currentStepChanged: true,
         userInfo: null,
         permissions: null,
-        avatars: null
+        avatars: []
       }
     },
     computed: {
@@ -196,6 +199,14 @@
       })
     },
     methods: {
+      setAvatarAsUsed (uuid, alreadyUsed) {
+        if (!alreadyUsed) {
+          let vm = this
+          axios.patch('/ajax/admin/settings/avatar', {uuid: uuid}).then(response => {
+
+          })
+        }
+      },
       async update () {
         const {data} = await this.form.patch('/ajax/admin/settings/profile')
         this.$store.dispatch('auth/updateUser', {user: data})
