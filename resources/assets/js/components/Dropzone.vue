@@ -48,7 +48,6 @@
           maxFilesize: 2, //in MB
           parallelUploads: 1,
           filesizeBase: 1024,
-          previewTemplate: this.getPreviewTemplate(),
           autoQueue: true,
           previewsContainer: '#previews',
           clickable: '.dz-container',
@@ -70,24 +69,26 @@
     },
     mounted () {
       let vm = this
+      this.dropzoneSettings.previewTemplate= this.getPreviewTemplate(
+        this.dropzoneSettings.autoProcessQueue&&this.dropzoneSettings.autoProcessQueue==true
+      )
       this.dropzone = new Dropzone(this.$refs.dropzone, this.dropzoneSettings)
 
       this.dropzone.on('thumbnail', function (file) {
+        if(vm.dropzoneSettings.autoProcessQueue)
+          return
         if (file.status != 'error') {
-          // let rowId = file.previewElement.querySelector('.row-id')
-          // rowId.setAttribute('value',file.upload.uuid)
-          // vm.$root.$emit('dropzone_thumbnail_created', file)
           file.previewElement.querySelector('.action-next-step').addEventListener('click',function(){
             vm.$root.$emit('dropzone_file_chosen', file)
           })
         }
       })
-      // console.log(this.images.length,this.images)
       if (this.image) {
         this.addFileFromDataUrl(this.image)
       }
 
       this.dropzone.on('success', function (file, response) {
+        vm.$root.$emit('dropzone_upload_complete')
       })
 
       this.dropzone.on("sending", function(file) {
@@ -95,19 +96,13 @@
         document.querySelector("#dropzone_progress").style.opacity = "1";
       });
 
-      this.dropzone.on("queuecomplete", function(progress) {
-        // document.querySelector("#dropzone_progress").style.opacity = "0";
-      });
-
       this.dropzone.on('error', function (file, message) {
+        if(vm.dropzoneSettings.autoProcessQueue)
+          return
         let selector = file.previewElement.querySelector('.dropzone-error')
         selector.innerHTML = '<strong>' + message + '</strong>'
         selector.className += ' error'
         file.previewElement.querySelector('.action-next-step').className = 'd-none'
-      })
-
-      this.dropzone.on('removedfile', function (file, message) {
-
       })
     },
     beforeDestroy () {
@@ -185,7 +180,7 @@
           return dz._updateMaxFilesReachedClass()
         })
       },
-      getPreviewTemplate () {
+      getPreviewTemplate (autoProcessQueue) {
         return `
 <div class="table files previews-container">
     <div class="file-row template">
@@ -200,24 +195,16 @@
                         <p class="size" data-dz-size></p>
                     </div>
                     <div class="row preview-row">
-                        <span data-dz-remove class="action-cancel-file">
-                        <i class="fa fa-cancel fa-2x"></i>
-                        </span>
-                        <button data-dz-remove type="button" title="${this.$t('dropzone.delete_media')}" class="action-delete-file btn btn-sm btn-danger">
-                        <svg aria-hidden="true" data-prefix="fas" data-icon="trash-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-inline--fa fa-trash-alt fa-w-14"><path fill="currentColor" d="M0 84V56c0-13.3 10.7-24 24-24h112l9.4-18.7c4-8.2 12.3-13.3 21.4-13.3h114.3c9.1 0 17.4 5.1 21.5 13.3L312 32h112c13.3 0 24 10.7 24 24v28c0 6.6-5.4 12-12 12H12C5.4 96 0 90.6 0 84zm416 56v324c0 26.5-21.5 48-48 48H80c-26.5 0-48-21.5-48-48V140c0-6.6 5.4-12 12-12h360c6.6 0 12 5.4 12 12zm-272 68c0-8.8-7.2-16-16-16s-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V208zm96 0c0-8.8-7.2-16-16-16s-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V208zm96 0c0-8.8-7.2-16-16-16s-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V208z" class=""></path></svg>
-                        </button>
-                        <button type="button" class="btn btn-sm action-edit-file" hidden="hidden" data-toggle="collapse" data-target=".div-media-update" aria-expanded="false" aria-controls="div-media-update" title="${this.$t(
-              'dropzone.edit_media')}"><svg aria-hidden="true" data-prefix="fas" data-icon="pencil-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-pencil-alt fa-w-16"><path fill="currentColor" d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3 0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9 0l60.1 60.1c18.8 18.7 18.8 49.1 0 67.9zM284.2 99.8L21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3 0-17l-111-111c-4.8-4.7-12.4-4.7-17.1 0zM124.1 339.9c-5.5-5.5-5.5-14.3 0-19.8l154-154c5.5-5.5 14.3-5.5 19.8 0s5.5 14.3 0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8 0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z" class=""></path></svg></button>
-                    </div>
-                    <div class="row preview-row">
                         <div id="dropzone_progress" class="progress">
                           <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress></div>
                         </div>
                     </div>
                 </div>
-                    <div class="row button-crop-wrapper">
-                        <button type="button" class="btn btn-lg btn-primary action-next-step">Proceed to cropping</button>
-                    </div>
+                ${autoProcessQueue?``:
+          `<div class="row button-crop-wrapper">
+          <button type="button" class="btn btn-lg btn-primary action-next-step">Proceed to cropping</button>
+          </div>`
+          }
                 </div>
             </div>
         </div>

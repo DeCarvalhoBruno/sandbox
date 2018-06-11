@@ -59,13 +59,25 @@
                 <b-tabs card>
                     <b-tab :title="$t('pages.settings.avatar-tab')" active>
                         <p class="font-italic">Click on an avatar to apply it.</p>
-                        <div class="avatar-group">
+                        <div class="avatar-group" :class="{'avatar-loading':ajaxIsLoading}">
+                            <fa v-show="ajaxIsLoading" class="fa-5x sync-icon" icon="sync" spin></fa>
                             <ul class="p-0">
-                                <li class="avatar" :class="{'selected':avatar.used}"
+                                <li class="avatar-container"
                                     v-for="(avatar,index) in avatars"
                                     :key="index" @click="setAvatarAsUsed(avatar.uuid,avatar.used)">
-                                    <div class="avatar-inner">
-                                        <img :src="`/media/users/image_avatar/${avatar.uuid}.${avatar.ext}`">
+                                    <div class="avatar" :class="{'selected':avatar.used}">
+                                        <div class="avatar-inner">
+                                            <img :src="`/media/users/image_avatar/${avatar.uuid}.${avatar.ext}`">
+                                        </div>
+                                    </div>
+
+                                    <div class="avatar-controls">
+                                        <button type="button" class="btn btn-sm"
+                                                :class="{'btn-danger':!avatar.used,'disabled':avatar.used}"
+                                                :title="$t('pages.settings.delete_avatar')"
+                                                @click="deleteAvatar(avatar.uuid,avatar.used)">
+                                            <fa icon="trash-alt"/>
+                                        </button>
                                     </div>
                                 </li>
                             </ul>
@@ -172,7 +184,8 @@
         currentStepChanged: true,
         userInfo: null,
         permissions: null,
-        avatars: []
+        avatars: [],
+        ajaxIsLoading: false
       }
     },
     computed: {
@@ -186,7 +199,6 @@
     mounted () {
       let vm = this
       this.$root.$on('dropzone_file_chosen', function (file) {
-        // vm.imageToUpload.push(file)
         vm.cropper_src = file.dataURL
         vm.cropperCropWidth = 128
         vm.cropperCropHeight = 128
@@ -197,13 +209,25 @@
         vm.imageToUpload = data.toDataURL()
         vm.currentStepChanged = !vm.currentStepChanged
       })
+
+      this.$root.$on('dropzone_upload_complete', function () {
+        axios.get('/ajax/admin/settings/avatar').then(({data})=>{
+          vm.avatars = data
+        })
+      })
     },
     methods: {
+      deleteAvatar (uuid, alreadyUsed) {
+        if (!alreadyUsed) {
+
+        }
+      },
       setAvatarAsUsed (uuid, alreadyUsed) {
         if (!alreadyUsed) {
-          let vm = this
-          axios.patch('/ajax/admin/settings/avatar', {uuid: uuid}).then(response => {
-
+          this.ajaxIsLoading = true
+          axios.patch('/ajax/admin/settings/setavatar', {uuid: uuid}).then(({data}) => {
+            this.avatars = data
+            this.ajaxIsLoading = false
           })
         }
       },

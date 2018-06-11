@@ -47,7 +47,7 @@ return [
         'search' => 'Search',
         'reset_filters' => 'Reset Filters',
         'delete' => 'Delete',
-        'reload'=>'Reload'
+        'reload' => 'Reload'
     ],
     'db' => [
         'user' => 'User|Users',
@@ -161,8 +161,9 @@ return [
         'settings' => [
             'language' => 'Language',
             'avatar-tab' => 'Avatar',
+            'avatarul-tab' => 'Upload avatar',
             'avatar-ul-tab' => 'Upload avatar',
-            'avatar-ul-tab' => 'Upload avatar'
+            'delete_avatar' => 'Delete avatar'
         ]
     ],
     'tables' => [

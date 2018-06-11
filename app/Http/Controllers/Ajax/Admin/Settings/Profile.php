@@ -28,13 +28,23 @@ class Profile extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Support\Providers\User $user
      * @return \Illuminate\Http\Response
      */
-    public function avatar(Request $request)
+    public function avatar(UserProvider $user)
+    {
+        return response($user->getAvatars(auth()->user()->getKey()), Response::HTTP_OK);
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Support\Providers\User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function setAvatar(Request $request, UserProvider $user)
     {
         MediaType::setAvatarAsUsed($request->get('uuid'));
-        return response('', Response::HTTP_OK);
+        return response($user->getAvatars(auth()->user()->getKey()), Response::HTTP_OK);
     }
 
 }

@@ -28,12 +28,13 @@ import {
   faExclamation,
   faCalendar,
   faCloudUploadAlt,
-  faSyncAlt
+  faSyncAlt,
+  faSync
 } from '@fortawesome/fontawesome-free-solid/shakable.es'
 
 fontawesome.library.add(
   faUser, faLock, faSignOutAlt, faCog, faAngleDoubleUp, faAngleDoubleDown,
   faTrashAlt, faPencilAlt, faBars, faTachometerAlt, faStar, faKey, faAngleLeft,
   faArrowRight, faObjectGroup, faUsers, faCheck, faTimes, faExclamation,
-  faCalendar, faCloudUploadAlt, faSyncAlt
+  faCalendar, faCloudUploadAlt, faSyncAlt, faSync
 )
