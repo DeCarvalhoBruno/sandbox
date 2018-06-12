@@ -1,7 +1,8 @@
 <?php namespace App\Support\Media;
 
 use App\Contracts\Image;
-use App\Exceptions\DiskFolderNotFoundException;
+use App\Models\Entity;
+use App\Models\Media\Media;
 
 class UploadedImage implements Image
 {
@@ -31,10 +32,7 @@ class UploadedImage implements Image
         $this->uuid = makeHexUuid();
         $this->fileExtension = $fileObject->getClientOriginalExtension();
         $this->hddFilename = sprintf('%s.%s', $this->uuid, $this->fileExtension);
-        $this->hddPath = media_entity_root_path($targetType, $mediaType);
-        if (!is_readable($this->hddPath)) {
-            throw new DiskFolderNotFoundException(sprintf('Cannot write into %s', $this->hddPath));
-        }
+        $this->hddPath = media_entity_root_path(Entity::getConstant($targetType), Media::getConstant($mediaType));
         $this->fileObject = $fileObject;
     }
 

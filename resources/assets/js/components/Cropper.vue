@@ -62,7 +62,8 @@
     props: {
       src: String,
       cropHeight: Number,
-      cropWidth: Number
+      cropWidth: Number,
+      filename:String
     },
     data () {
       return {
@@ -94,10 +95,10 @@
         this.cropper.setCropBoxData(data)
       },
       crop(){
-        //this.cropper.getData()
         this.$root.$emit(
           'cropper_cropped',
-          this.cropper.getCroppedCanvas({imageSmoothingQuality:'high',width:128,height:128})
+          this.cropper.getCroppedCanvas({imageSmoothingQuality:'high',width:128,height:128}),
+          this.filename
         )
       }
     }

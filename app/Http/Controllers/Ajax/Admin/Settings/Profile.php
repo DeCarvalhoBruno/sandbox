@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Ajax\Admin\Settings;
 
-use App\Http\Requests\Admin\UpdateUser;
 use App\Http\Controllers\Controller;
-use App\Models\Media\MediaType;
+use App\Http\Requests\Admin\UpdateUser;
+use App\Support\Providers\Avatar;
 use App\Support\Providers\User as UserProvider;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -33,7 +33,7 @@ class Profile extends Controller
      */
     public function avatar(UserProvider $user)
     {
-        return response($user->getAvatars(auth()->user()->getKey()), Response::HTTP_OK);
+        return response($this->getAvatars($user), Response::HTTP_OK);
     }
 
     /**
@@ -43,8 +43,25 @@ class Profile extends Controller
      */
     public function setAvatar(Request $request, UserProvider $user)
     {
-        MediaType::setAvatarAsUsed($request->get('uuid'));
-        return response($user->getAvatars(auth()->user()->getKey()), Response::HTTP_OK);
+        Avatar::setAsUsed($request->get('uuid'));
+        return response($this->getAvatars($user), Response::HTTP_OK);
+    }
+
+    /**
+     * @param int $uuid
+     * @param \App\Support\Providers\User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteAvatar($uuid, UserProvider $user)
+    {
+        (new Avatar())->delete($uuid);
+
+        return response($this->getAvatars($user), Response::HTTP_OK);
+    }
+
+    private function getAvatars(UserProvider $user)
+    {
+        return $user->getAvatars(auth()->user()->getKey());
     }
 
 }

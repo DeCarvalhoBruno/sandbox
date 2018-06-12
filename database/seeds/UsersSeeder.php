@@ -11,7 +11,7 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
-        $this->image = new \App\Support\Providers\Image();
+        $this->avatar = new \App\Support\Providers\Avatar();
         $pwd = bcrypt('secret');
         $u = factory(App\Models\User::class)->create([
             'email' => 'john.doe@example.com',
@@ -108,9 +108,14 @@ class UsersSeeder extends Seeder
 
     public function createAvatar($username, $name)
     {
-        $f = new \App\Support\Media\GeneratedAvatar($username, $name, 'users', 'image_avatar');
+        $f = new \App\Support\Media\GeneratedAvatar(
+            $username,
+            $name,
+            \App\Models\Entity::USERS,
+            \App\Models\Media\Media::IMAGE_AVATAR
+        );
         $f->processAvatar();
-        $this->image->saveAvatar(\App\Models\Entity::USERS, $f);
+        $this->avatar->saveAvatar(\App\Models\Entity::USERS, $f);
 
     }
 }

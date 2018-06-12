@@ -17,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
         Contract\Media::class,
         Contract\File::class,
         Contract\Image::class,
+        Contract\Avatar::class,
         Contract\Text::class
     ];
 

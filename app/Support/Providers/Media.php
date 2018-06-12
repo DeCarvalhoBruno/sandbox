@@ -39,7 +39,7 @@ class Media extends Model implements MediaInterface
     }
 
     /**
-     * @return \App\Contracts\Models\Image
+     * @return \App\Contracts\Models\Image|\App\Support\Providers\Image
      */
     public function image()
     {

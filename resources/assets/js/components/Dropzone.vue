@@ -13,7 +13,7 @@
             <p class="dropfile-instructions">{{ $t('dropzone.accepted_formats')}} JPG, PNG</p>
             <fa class="fa-4x" icon="cloud-upload-alt"/>
         </div>
-        <div id="previews" class="row">
+        <div :id="['previews'+id]" class="row">
         </div>
     </div>
 </template>
@@ -37,19 +37,15 @@
     data () {
       return {
         maxFilesize: 2,
-        fileCounter:0
-      }
-    },
-    computed: {
-      dropzoneSettings () {
-        let defaultValues = {
+        fileCounter: 0,
+        defaultValues: {
           thumbnailWidth: 160,
           thumbnailHeight: 160,
           maxFilesize: 2, //in MB
           parallelUploads: 1,
           filesizeBase: 1024,
           autoQueue: true,
-          previewsContainer: '#previews',
+          previewsContainer: '#previews' + this.id,
           clickable: '.dz-container',
           dictDefaultMessage: '',
           dictFallbackMessage: '',
@@ -61,26 +57,29 @@
           dictCancelUploadConfirmation: this.$t('dropzone.cancel_confirm'),
           dictMaxFilesExceeded: this.$t('dropzone.max_files_exceeded')
         }
-        Object.keys(this.options).forEach(function (key) {
-          defaultValues[key] = this.options[key]
-        }, this)
-        return defaultValues
-      },
+      }
     },
     mounted () {
       let vm = this
-      this.dropzoneSettings.previewTemplate= this.getPreviewTemplate(
-        this.dropzoneSettings.autoProcessQueue&&this.dropzoneSettings.autoProcessQueue==true
+
+      Object.keys(this.options).forEach(function (key) {
+        this.defaultValues[key] = this.options[key]
+      }, this)
+
+      this.defaultValues.previewTemplate = this.getPreviewTemplate(
+        this.defaultValues.autoProcessQueue && this.defaultValues.autoProcessQueue == true
       )
-      this.dropzone = new Dropzone(this.$refs.dropzone, this.dropzoneSettings)
+
+      this.dropzone = new Dropzone(this.$refs.dropzone, this.defaultValues)
 
       this.dropzone.on('thumbnail', function (file) {
-        if(vm.dropzoneSettings.autoProcessQueue)
-          return
         if (file.status != 'error') {
-          file.previewElement.querySelector('.action-next-step').addEventListener('click',function(){
-            vm.$root.$emit('dropzone_file_chosen', file)
-          })
+          let nextStepSelector = file.previewElement.querySelector('.action-next-step')
+          if (nextStepSelector) {
+            nextStepSelector.addEventListener('click', function () {
+              vm.$root.$emit('dropzone_file_chosen', file)
+            })
+          }
         }
       })
       if (this.image) {
@@ -89,15 +88,16 @@
 
       this.dropzone.on('success', function (file, response) {
         vm.$root.$emit('dropzone_upload_complete')
+        document.querySelector('#dropzone_progress').style.opacity = '0'
       })
 
-      this.dropzone.on("sending", function(file) {
+      this.dropzone.on('sending', function (file) {
         // Show the total progress bar when upload starts
-        document.querySelector("#dropzone_progress").style.opacity = "1";
-      });
+        document.querySelector('#dropzone_progress').style.opacity = '1'
+      })
 
       this.dropzone.on('error', function (file, message) {
-        if(vm.dropzoneSettings.autoProcessQueue)
+        if (vm.defaultValues.autoProcessQueue)
           return
         let selector = file.previewElement.querySelector('.dropzone-error')
         selector.innerHTML = '<strong>' + message + '</strong>'
@@ -109,16 +109,16 @@
       this.dropzone.destroy()
     },
     methods: {
-      dataURItoFile (dataURI) {
+      dataURItoFile (data) {
         let byteString, mimestring
 
-        if (dataURI.split(',')[0].indexOf('base64') !== -1) {
-          byteString = atob(dataURI.split(',')[1])
+        if (data.dataURI.split(',')[0].indexOf('base64') !== -1) {
+          byteString = atob(data.dataURI.split(',')[1])
         } else {
-          byteString = decodeURI(dataURI.split(',')[1])
+          byteString = decodeURI(data.dataURI.split(',')[1])
         }
 
-        mimestring = dataURI.split(',')[0].split(':')[1].split(';')[0]
+        mimestring = data.dataURI.split(',')[0].split(':')[1].split(';')[0]
 
         let content = new Array()
         for (let i = 0; i < byteString.length; i++) {
@@ -128,28 +128,24 @@
         let blob = new Blob([new Uint8Array(content)], {type: mimestring})
         let parts = [blob, new ArrayBuffer()]
 
-        return new File(parts, 'image.jpg', {
+        return new File(parts, data.filename, {
           lastModified: new Date(0) // optional - default = now
         })
 
       },
-      addFileFromDataUrl: function (dataUrl) {
+      addFileFromDataUrl: function (data) {
         let dz = this.dropzone
-
-        let blob = this.dataURItoFile(dataUrl)
-
+        let blob = this.dataURItoFile(data)
         blob.upload = {
           progress: 0,
           total: blob.size,
           bytesSent: 0
         }
-
         dz.files.push(blob)
         blob.status = Dropzone.ADDED
         dz.emit('addedfile', blob)
-        dz.emit('thumbnail', blob, dataUrl)
+        dz.emit('thumbnail', blob, data.dataURI)
         dz._enqueueThumbnail(blob)
-
         return dz.accept(blob, function (error) {
           if (error) {
             blob.accepted = false
@@ -161,7 +157,7 @@
           return dz._updateMaxFilesReachedClass()
         })
       },
-      addFile(file){
+      addFile (file) {
         let dz = this.dropzone
 
         dz.files.push(file)
@@ -199,12 +195,13 @@
                           <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress></div>
                         </div>
                     </div>
+                    <div class="row preview-row">
+                    <div>${autoProcessQueue ? 'true' : 'false'}</div>
+                    </div>
                 </div>
-                ${autoProcessQueue?``:
-          `<div class="row button-crop-wrapper">
-          <button type="button" class="btn btn-lg btn-primary action-next-step">Proceed to cropping</button>
-          </div>`
-          }
+                <div class="row button-crop-wrapper">
+                  <button type="button" class="btn btn-lg btn-primary action-next-step">Proceed to cropping</button>
+                  </div>
                 </div>
             </div>
         </div>

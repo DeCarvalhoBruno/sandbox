@@ -57,7 +57,8 @@ class Admin
 
             $r->patch('settings/password', 'Settings\Password@update');
             $r->patch('settings/profile', 'Settings\Profile@update');
-            $r->patch('settings/setavatar', 'Settings\Profile@setAvatar');
+            $r->patch('settings/avatar', 'Settings\Profile@setAvatar');
+            $r->delete('settings/avatar/{uuid}', 'Settings\Profile@deleteAvatar');
             $r->get('settings/avatar', 'Settings\Profile@avatar');
 
             $r->post('media/add', 'Media@add')

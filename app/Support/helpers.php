@@ -43,12 +43,12 @@ if (!function_exists('media_entity_root_path')) {
      */
     function media_entity_root_path($entity, $media_type, $image = null)
     {
-//        if (is_numeric($entity)) {
-//            $entity = \App\Models\Entity::getConstantName($entity);
-//        }
-//        if (is_numeric($media_type)) {
-//            $media_type = \App\Models\Media\Media::getConstantName($media_type);
-//        }
+        if (is_numeric($entity)) {
+            $entity = \App\Models\Entity::getConstantName($entity);
+        }
+        if (is_numeric($media_type)) {
+            $media_type = \App\Models\Media\Media::getConstantName($media_type);
+        }
 
         return sprintf('%s/media/%s/%s/%s', public_path(), $entity, $media_type, $image);
     }

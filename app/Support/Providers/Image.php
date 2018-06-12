@@ -1,9 +1,8 @@
 <?php namespace App\Support\Providers;
 
-use App\Contracts\Image as ImageContract;
 use App\Contracts\Models\Image as ImageInterface;
-use App\Models\EntityType;
-use App\Models\Media\MediaCategory;
+use App\Contracts\Models\Avatar as AvatarInterface;
+use App\Contracts\Image as ImageContract;
 use App\Models\Media\MediaCategoryRecord;
 use App\Models\Media\MediaDigital;
 use App\Models\Media\MediaEntity;
@@ -15,8 +14,25 @@ use App\Models\Media\MediaType;
  */
 class Image extends Model implements ImageInterface
 {
-
+    /**
+     * @var \App\Contracts\Models\Avatar|\App\Support\Providers\Avatar
+     */
+    private $avatar;
     protected $model = \App\Models\Media\MediaDigital::class;
+
+    public function __construct(AvatarInterface $ai, $model = null)
+    {
+        parent::__construct($model);
+        $this->avatar = $ai;
+    }
+
+    /**
+     * @return \App\Contracts\Models\Avatar|\App\Support\Providers\Avatar
+     */
+    public function avatar()
+    {
+        return $this->avatar;
+    }
 
     /**
      * @param $entityId
@@ -26,12 +42,7 @@ class Image extends Model implements ImageInterface
      */
     public function saveAvatar($entityId, ImageContract $image)
     {
-        $targetEntityTypeId = EntityType::getEntityTypeID($entityId, $image->getTargetSlug());
-        if(!is_int($targetEntityTypeId)){
-            throw new \UnexpectedValueException('Entity could not be found for image saving');
-        }
-
-        return $this->createImage($image, $targetEntityTypeId);
+        return $this->createImage($image, $this->avatar()->save($entityId, $image));
     }
 
     /**
@@ -70,7 +81,7 @@ class Image extends Model implements ImageInterface
         ]);
 
         \DB::commit();
-        MediaType::setAvatarAsUsed($media->getUuid());
+        $this->avatar->setAsUsed($media->getUuid());
 
         return $mediaType;
 
