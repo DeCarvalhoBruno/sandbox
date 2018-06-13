@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Ajax\Admin;
 
-use App\Contracts\Models\Image;
 use App\Contracts\Models\Media as MediaInterface;
+use App\Support\Providers\User as UserProvider;
 use App\Http\Controllers\Controller;
 use App\Models\Entity;
 use App\Models\Media\Media as MediaModel;
 use App\Support\Media\UploadedImage;
-use App\Support\Providers\Avatar;
 use Illuminate\Http\Response;
 
 class Media extends Controller
@@ -26,8 +25,6 @@ class Media extends Controller
 
     /**
      * @return \Illuminate\Http\Response
-     * @throws \App\Exceptions\DiskFolderNotFoundException
-     * @throws \ReflectionException
      */
     public function add()
     {
@@ -55,15 +52,13 @@ class Media extends Controller
 
             switch ($input->media) {
                 case "image_avatar":
-                    $media->processAvatar();
-                    $this->mediaRepo->image()->saveAvatar(Entity::getConstant($input->type), $media);
+                    $media->saveTemporaryAvatar();
                     break;
                 default:
                     break;
             }
             return response([
-                'id' => $media->getUuid(),
-                'path' => sprintf('/media/%s/%s/%s', $input->type, $input->media, $media->getHddFilename())
+                'filename' => $media->getHddFilename(),
             ], Response::HTTP_OK);
         }
         return response([
@@ -71,5 +66,23 @@ class Media extends Controller
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
 
     }
+
+
+    public function crop(UserProvider $user)
+    {
+        $input = (object)$this->request->only(['uuid', 'height', 'width', 'x', 'y']);
+
+        /**
+         * @var \App\Support\Media\SimpleImage $avatarInfo
+         */
+        $avatarInfo = \Cache::get('temporary_avatars')->pull(substr($input->uuid, 0, 32));
+
+        $avatarInfo->cropAvatar($input);
+        $this->mediaRepo->image()->saveAvatar($avatarInfo);
+
+        return response($user->getAvatars(auth()->user()->getKey()), Response::HTTP_OK);
+
+    }
+
 
 }

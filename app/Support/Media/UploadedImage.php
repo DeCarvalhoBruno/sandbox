@@ -2,7 +2,7 @@
 
 use App\Contracts\Image;
 use App\Models\Entity;
-use App\Models\Media\Media;
+use Illuminate\Support\Collection;
 
 class UploadedImage implements Image
 {
@@ -16,6 +16,7 @@ class UploadedImage implements Image
     private $hddPath;
     private $targetSlug;
     private $uuid;
+    private $targetType;
 
     /**
      *
@@ -23,7 +24,6 @@ class UploadedImage implements Image
      * @param string $targetName
      * @param $targetType
      * @param $mediaType
-     * @throws \App\Exceptions\DiskFolderNotFoundException
      */
     public function __construct($fileObject, $targetName, $targetType, $mediaType)
     {
@@ -32,8 +32,10 @@ class UploadedImage implements Image
         $this->uuid = makeHexUuid();
         $this->fileExtension = $fileObject->getClientOriginalExtension();
         $this->hddFilename = sprintf('%s.%s', $this->uuid, $this->fileExtension);
-        $this->hddPath = media_entity_root_path(Entity::getConstant($targetType), Media::getConstant($mediaType));
+//        $this->hddPath = media_entity_root_path(Entity::getConstant($targetType), Media::getConstant($mediaType));
+        $this->hddPath = sprintf('%s/media/tmp/', public_path());
         $this->fileObject = $fileObject;
+        $this->targetType = Entity::getConstant($targetType);
     }
 
     public function move()
@@ -41,9 +43,24 @@ class UploadedImage implements Image
         $this->fileObject->move($this->hddPath, $this->hddFilename);
     }
 
-    public function processAvatar()
+    public function saveTemporaryAvatar()
     {
         $this->move();
+        if (\Cache::has('temporary_avatars')) {
+            $data = \Cache::get('temporary_avatars');
+        } else {
+            $data = new Collection();
+        }
+        $data->put($this->uuid,
+            new SimpleImage(
+                $this->filename,
+                $this->targetSlug,
+                $this->targetType,
+                $this->fileExtension,
+                $this->uuid
+            )
+        );
+        \Cache::forever('temporary_avatars', $data);
     }
 
     public function processImage()
@@ -88,6 +105,14 @@ class UploadedImage implements Image
     public function getFileExtension()
     {
         return $this->fileExtension;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTargetType()
+    {
+        return $this->targetType;
     }
 
 

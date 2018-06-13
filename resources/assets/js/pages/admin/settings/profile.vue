@@ -59,7 +59,7 @@
         <div class="form-group row">
             <b-card no-body class="w-100">
                 <b-tabs card>
-                    <b-tab :title="$t('pages.settings.avatar-tab')" active>
+                    <b-tab :title="$t('pages.settings.avatar-tab')">
                         <p v-show="avatars.lenth>1" class="font-italic">Click on an avatar to apply it.</p>
                         <div class="avatar-group" :class="{'avatar-loading':ajaxIsLoading}">
                             <fa v-show="ajaxIsLoading" class="fa-5x sync-icon" icon="sync" spin></fa>
@@ -86,27 +86,22 @@
                             </ul>
                         </div>
                     </b-tab>
-                    <b-tab :title="$t('pages.settings.avatar-ul-tab')" :disabled="avatars.length>6">
+                    <b-tab :title="$t('pages.settings.avatar-ul-tab')" :disabled="avatars.length>6" active>
                         <wizard ref="wizard" :steps="steps" has-step-buttons="false"
                                 :current-step-changed="currentStepChanged">
                             <div slot="s1">
-                                <!--<dropzone :id="'dzone'"-->
-                                <!--:options="{url:'/ajax/admin/media/add',autoProcessQueue: false}"-->
-                                <!--:post-data="{-->
-                                <!--type:'users',-->
-                                <!--target:user.username,-->
-                                <!--media:'image_avatar'}">-->
-                                <!--</dropzone>-->
                                 <dropzone class="dropzone"
                                           tag="section"
                                           v-bind="dropzoneOptions"
+                                          :adapter-options="{
+                                          url: '/ajax/admin/media/add',
+                                            params:{
+                                                type:'users',
+                                                target:user.username,
+                                                media:'image_avatar'
+                                            }
+                                            }"
                                           ref="dropzone">
-                                    <!--<div class="d-flex align-items-center justify-content-center w-100"-->
-                                    <!--style="height:5vh; border-radius: 1rem;">-->
-                                    <!--<button type="button" class="btn btn-primary"-->
-                                    <!--@click="triggerBrowse">Upload Files-->
-                                    <!--</button>-->
-                                    <!--</div>-->
                                     <div class="dz-container" @click="triggerBrowse">
                                         <h4 class="dropfile-instructions">{{ $t('dropzone.choose_file')}}</h4>
                                         <p class="dropfile-instructions">{{ $t('dropzone.max_size')}}
@@ -130,13 +125,16 @@
                                                             </div>
                                                             <div class="col preview-actions">
                                                                 <div class="row preview-row">
-                                                                    <p class="size">{{(file.size/1024/1024).toPrecision(3)}}&nbsp;{{$t('units.MB')}}</p>
+                                                                    <p class="size">
+                                                                        {{(file.size/1024/1024).toPrecision(3)}}&nbsp;{{$t('units.MB')}}</p>
                                                                 </div>
                                                                 <div class="row preview-row">
                                                                     <div id="dropzone_progress" class="progress">
-                                                                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger"
-                                                                             role="progressbar" style="width: 100%"
-                                                                             aria-valuenow="100" aria-valuemin="0"
+                                                                        <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                                                             role="progressbar"
+                                                                             :style="`width: ${file.upload.progress}%`"
+                                                                             :aria-valuenow="file.upload.progress"
+                                                                             aria-valuemin="0"
                                                                              aria-valuemax="100"></div>
                                                                     </div>
                                                                 </div>
@@ -147,7 +145,7 @@
                                                             <div class="row button-crop-wrapper">
                                                                 <button type="button"
                                                                         class="btn btn-lg btn-primary action-next-step"
-                                                                @click="goToCropperStep">
+                                                                        @click="goToCropperStep">
                                                                     Proceed to cropping
                                                                 </button>
                                                             </div>
@@ -165,18 +163,31 @@
                                 </dropzone>
                             </div>
                             <div slot="s2">
-                                <cropper :src="cropper_src" :crop-height="cropperCropHeight"
-                                         :crop-width="cropperCropWidth" :filename="uploadedImageFilename"></cropper>
+                                <cropper :src="cropper_src" :crop-height="minCropBoxHeight"
+                                         :crop-width="minCropBoxWidth" :filename="uploadedImageFilename"></cropper>
                             </div>
                             <div slot="s3">
+                                <div class="container p-0 mt-2">
+                                    <div class="row justify-content-lg-center">
+                                        <div class="col col-lg-6 text-center">
+                                            <img :src="croppedImageData.dataURI"/>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-lg-center mt-3">
+                                        <div class="col col-lg-6 text-center">
+                                            <p class="blinker blinker-red" v-if="ajaxIsLoading">Processing in progress...</p>
+                                            <p v-else>The avatar has been processed, you can return to the avatar tab.</p>
+                                        </div>
+                                    </div>
+                                </div>
                                 <!--<dropzone2 :id="'dzone3'"-->
-                                           <!--:options="{url:'/ajax/admin/media/add',autoProcessQueue: true}"-->
-                                           <!--:image="imageToUpload"-->
-                                           <!--:is-interactive="false"-->
-                                           <!--:post-data="{-->
-                                                <!--type:'users',-->
-                                                <!--target:user.username,-->
-                                                <!--media:'image_avatar'}">-->
+                                <!--:options="{url:'/ajax/admin/media/add',autoProcessQueue: true}"-->
+                                <!--:image="imageToUpload"-->
+                                <!--:is-interactive="false"-->
+                                <!--:post-data="{-->
+                                <!--type:'users',-->
+                                <!--target:user.username,-->
+                                <!--media:'image_avatar'}">-->
                                 <!--</dropzone2>-->
                             </div>
                         </wizard>
@@ -229,7 +240,7 @@
       return {
         steps: [
           {
-            label: 'Select',
+            label: 'Upload',
             slot: 's1'
           },
           {
@@ -237,7 +248,7 @@
             slot: 's2'
           },
           {
-            label: 'Upload',
+            label: 'Review',
             slot: 's3'
           }
         ],
@@ -248,8 +259,8 @@
           email: ''
         }),
         cropper_src: null,
-        cropperCropHeight: 0,
-        cropperCropWidth: 0,
+        minCropBoxHeight: 0,
+        minCropBoxWidth: 0,
         imageToUpload: null,
         currentStepChanged: true,
         userInfo: null,
@@ -258,17 +269,14 @@
         ajaxIsLoading: false,
         uploadedImageFilename: null,
         maxFilesize: 2,
+        croppedImageData: Object,
         dropzoneOptions: {
           // createImageThumbnails:false,
-          thumbnailWidth:2235,
-          thumbnailHeight:1490,
-
-          autoProcessQueue:false,
-          acceptedFileTypes: ['image/*'],
-          clickable: false,
-          adapterOptions: {
-            url: '/ajax/admin/media/add'
-          }
+          // thumbnailWidth:3000,
+          // thumbnailHeight:3000,
+          // autoProcessQueue:false,
+          acceptedFileTypes: ['image/jpg', 'image/jpeg', 'image/png'],
+          clickable: false
         }
       }
     },
@@ -277,53 +285,34 @@
         user: 'auth/user'
       })
     },
-    created () {
 
-    },
     mounted () {
       let vm = this
 
-      this.$refs.dropzone.$on('thumbnail', function(file,dataURI){
-        vm.cropper_src = dataURI
-        vm.cropperCropWidth = 128
-        vm.cropperCropHeight = 128
-        vm.uploadedImageFilename = file.name
-        // console.log(file)
+      this.$refs.dropzone.$on('success', function (file, response) {
+        vm.cropper_src = `/media/tmp/${response.filename}`
+        vm.croppedImageData.filename = response.filename
+        vm.minCropBoxHeight = 128
+        vm.minCropBoxWidth = 128
       })
 
-      this.$refs.dropzone.$on('added-file', function(file){
-        console.log(file)
-        // var reader = new FileReader();
-        // reader.readAsDataURL(file);
-        // reader.onloadend = function () {
-        //   console.log(reader.result);
-        // };
-      })
-
-
-      /*
-      this.$root.$on('dropzone_file_chosen', function (file) {
-        vm.cropper_src = file.dataURL
-        vm.cropperCropWidth = 128
-        vm.cropperCropHeight = 128
+      this.$root.$on('cropper_cropped', function (cp, croppedCanvas) {
+        vm.croppedImageData.dataURI = croppedCanvas.toDataURL()
         vm.currentStepChanged = !vm.currentStepChanged
-        vm.uploadedImageFilename = file.name
-      })
+        vm.ajaxIsLoading = true
 
-      this.$root.$on('cropper_cropped', function (data, filename) {
-        vm.imageToUpload = {dataURI: data.toDataURL(), filename: filename}
-        vm.currentStepChanged = !vm.currentStepChanged
-      })
+        //{ x: 521.5, y: 149, width: 1192, height: 1192, rotate: 0, scaleX: 1, scaleY: 1 }
 
-      this.$root.$on('dropzone_upload_complete', function () {
-        axios.get('/ajax/admin/settings/avatar').then(({data}) => {
-          vm.avatars = data
-        })
+        axios.post('/ajax/admin/media/crop',
+          {uuid: vm.croppedImageData.filename, height: cp.height, width: cp.width, x: cp.x, y: cp.y})
+          .then(({data}) => {
+            vm.avatars = data
+            vm.ajaxIsLoading = false
+          })
       })
-      */
     },
     methods: {
-      goToCropperStep(){
+      goToCropperStep () {
         this.currentStepChanged = !this.currentStepChanged
       },
       triggerBrowse () {

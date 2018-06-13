@@ -11,6 +11,7 @@ class GeneratedAvatar implements Image
     private $fileExtension='png';
     private $path;
     private $uuid;
+    private $targetType;
 
     /**
      *
@@ -26,6 +27,7 @@ class GeneratedAvatar implements Image
         $this->uuid = makeHexUuid();
         $this->filename = sprintf('%s.%s',$this->uuid,$this->fileExtension);
         $this->path = media_entity_root_path($targetType, $mediaType);
+        $this->targetType = $targetType;
     }
 
     public function processAvatar()
@@ -72,6 +74,14 @@ class GeneratedAvatar implements Image
     public function getFileExtension(): string
     {
         return $this->fileExtension;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTargetType()
+    {
+        return $this->targetType;
     }
 
 

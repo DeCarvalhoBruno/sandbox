@@ -35,8 +35,8 @@ if (!function_exists('media_entity_root_path')) {
     /**
      * Retrieves the path of an image relative to the server root
      *
-     * @param string $entity
-     * @param string $media_type
+     * @param int $entity
+     * @param int $media_type
      * @param string $image The image file name
      *
      * @return string

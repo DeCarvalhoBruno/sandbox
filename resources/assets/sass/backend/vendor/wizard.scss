@@ -170,3 +170,19 @@
 .wizard_step.active.vgw-mobile{
   display: inline-block;
 }
+
+/*
+Non-Wizard elements
+******************************* */
+.blinker {
+  animation: blinker 1s linear infinite;
+}
+
+.blinker-red {
+  color: #8a0003;
+  font-weight: bold;
+}
+
+@keyframes blinker {
+  50% { opacity: 0; }
+}

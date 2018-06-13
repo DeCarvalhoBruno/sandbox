@@ -63,6 +63,8 @@ class Admin
 
             $r->post('media/add', 'Media@add')
                 ->middleware('can:update,App\Models\User');
+            $r->post('media/crop', 'Media@crop')
+                ->middleware('can:update,App\Models\User');
         };
     }
 }

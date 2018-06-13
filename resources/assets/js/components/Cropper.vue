@@ -76,10 +76,13 @@
         preview: '.cropper-preview',
         dragMode: 'move',
         viewMode: 1,
-        cropBoxResizable: false,
+        cropBoxResizable: true,
+        zoomable:false,
 
         ready: function () {
           vm.setCropboxDimensions()
+
+
         }
       })
     },
@@ -89,16 +92,17 @@
         this.setCropboxDimensions()
       },
       setCropboxDimensions () {
-        let data = this.cropper.getCropBoxData()
-        data.width = this.cropWidth
-        data.height = this.cropHeight
-        this.cropper.setCropBoxData(data)
+        // let data = this.cropper.getCropBoxData()
+        // data.width = this.cropWidth
+        // data.height = this.cropHeight
+        this.cropper.setAspectRatio(1)
       },
       crop(){
         this.$root.$emit(
           'cropper_cropped',
+          this.cropper.getData(true),
           this.cropper.getCroppedCanvas({imageSmoothingQuality:'high',width:128,height:128}),
-          this.filename
+          // this.filename
         )
       }
     }

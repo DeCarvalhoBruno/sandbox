@@ -3,6 +3,7 @@
 use App\Contracts\Models\Image as ImageInterface;
 use App\Contracts\Models\Avatar as AvatarInterface;
 use App\Contracts\Image as ImageContract;
+use App\Models\EntityType;
 use App\Models\Media\MediaCategoryRecord;
 use App\Models\Media\MediaDigital;
 use App\Models\Media\MediaEntity;
@@ -35,14 +36,18 @@ class Image extends Model implements ImageInterface
     }
 
     /**
-     * @param $entityId
      * @param \App\Contracts\Image $image
      * @return \App\Models\Media\MediaType
      * @throws \Exception
      */
-    public function saveAvatar($entityId, ImageContract $image)
+    public function saveAvatar(ImageContract $image)
     {
-        return $this->createImage($image, $this->avatar()->save($entityId, $image));
+        $targetEntityTypeId = EntityType::getEntityTypeID($image->getTargetType(), $image->getTargetSlug());
+        if (!is_int($targetEntityTypeId)) {
+            throw new \UnexpectedValueException('Entity could not be found for image saving');
+        }
+
+        return $this->createImage($image, $targetEntityTypeId);
     }
 
     /**

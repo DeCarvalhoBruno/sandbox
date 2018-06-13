@@ -1,7 +1,6 @@
 <?php namespace App\Support\Media;
 
 use App\Models\Media\MediaImgFormat;
-use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\Image as InterventionImage;
 use Intervention\Image\ImageManagerStatic;
 
@@ -12,17 +11,15 @@ class ImageProcessor extends InterventionImage
     public static $imageDriver = 'imagick';
     public static $quality = 80;
 
+
+    /**
+     * @param string $path
+     * @return \Intervention\Image\Image
+     */
     public static function makeImg($path)
     {
         ImageManagerStatic::configure(array('driver' => static::$imageDriver));
-        try {
-            $image = ImageManagerStatic::make($path);
-        } catch (NotReadableException $e) {
-            \File::delete($path);
-            throw new NotReadableException($e->getMessage());
-        }
-
-        return $image;
+        return ImageManagerStatic::make($path);
     }
 
     /**
@@ -44,7 +41,7 @@ class ImageProcessor extends InterventionImage
      */
     private static function resizeToFormat(
         $image,
-        $formatId
+        $formatId=MediaImgFormat::THUMBNAIL
     ) {
         $format = MediaImgFormat::getFormatDimensions($formatId);
 
@@ -59,6 +56,58 @@ class ImageProcessor extends InterventionImage
                 $constraint->upsize();
             });
         }
+        return $image;
+    }
+
+    /**
+     * Crops images
+     *
+     * @param string $path
+     * @param \stdClass $imageAlterations
+     * @param int $formatID
+     *
+     * @return \Intervention\Image\Image|boolean
+     */
+    public static function nipNTuck(
+        $path,
+        \stdClass $imageAlterations,
+        $formatID = MediaImgFormat::THUMBNAIL
+    ) {
+        if ($formatID !== MediaImgFormat::ORIGINAL) {
+            return static::resizeToFormat(static::adjustImage($path, $imageAlterations, false),
+                $formatID);
+        } else {
+            //Saving the original
+            $image = static::adjustImage($path, $imageAlterations);
+
+            //Saving the thumbnail
+            return static::resizeToFormat($image, MediaImgFormat::THUMBNAIL);
+        }
+    }
+
+    /**
+     * @param string $path
+     * @param \stdClass $imageAlterations
+     * @param boolean $save
+     *
+     * @return \Intervention\Image\Image
+     */
+    public static function adjustImage($path, \stdClass $imageAlterations, $save = true)
+    {
+        $image        = static::makeImg($path);
+        $imageChanged = false;
+
+        //If height or width is different from original
+        if ($image->getHeight() > $imageAlterations->height || $image->getWidth() > $imageAlterations->width) {
+            $image->crop(ceil($imageAlterations->width), ceil($imageAlterations->height), ceil($imageAlterations->x),
+                ceil($imageAlterations->y));
+            $imageChanged = true;
+        }
+
+        if ($imageChanged === true && $save === true) {
+            $image->save($path, static::$quality);
+        }
+
         return $image;
     }
 
