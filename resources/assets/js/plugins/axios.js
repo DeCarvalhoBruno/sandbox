@@ -23,11 +23,18 @@ axios.interceptors.request.use(request => {
 axios.interceptors.response.use(response => response, error => {
   const {status} = error.response
 
+  let text
+  if (error.response.data && error.response.data.length > 0) {
+    text = error.response.data[0]
+  } else {
+    text = i18n.t('modal.error.t')
+  }
+
   if (status >= 500) {
     swal({
       type: 'error',
       title: i18n.t('modal.error.h'),
-      text: i18n.t('modal.error.t'),
+      text: text,
       reverseButtons: true,
       confirmButtonText: i18n.t('general.ok')
     })

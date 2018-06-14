@@ -9,9 +9,9 @@
                 v-for="(step, index) of steps" :key="index">
                 <span class="wizard_step_line"></span>
                 <a href.prevent="#" @click="changeStep(index)">
-                <span class="wizard_step_label">{{step.label}}</span>
-                <span class="wizard_step_indicator"></span>
-                    </a>
+                    <span class="wizard_step_label">{{step.label}}</span>
+                    <span class="wizard_step_indicator"></span>
+                </a>
             </li>
         </ul>
         <span class="wizard_arrow" :style="{ left: arrowPosition }"></span>
@@ -29,7 +29,7 @@
                         </a>
                     </div>
                     <!--<div class="col">-->
-                        <!--<span class="wizard-step-number">{{currentStep}}/{{steps.length}}</span>-->
+                    <!--<span class="wizard-step-number">{{currentStep}}/{{steps.length}}</span>-->
                     <!--</div>-->
                     <div class="col">
                         <a v-if="currentStep != steps.length - 1" class="wizard_next float-right"
@@ -55,9 +55,9 @@
     name: 'wizard',
     props: {
       steps: {},
-      hasStepButtons:{default:true},
-      onNext:null,
-      currentStepChanged:Boolean
+      hasStepButtons: {default: true},
+      onNext: null,
+      currentStepParent: Number
     },
     watch: {
       steps: {
@@ -66,16 +66,21 @@
         },
         immediate: true
       },
-      currentStepChanged(){
-        this.currentStep++
+      currentStepParent () {
+        this.currentStep = this.currentStepParent
+      },
+      currentStep () {
+        if (this.currentStep === 0) {
+          this.$root.$emit('wizard_step_reset')
+        }
       }
     },
     data () {
       return {
-        currentStep: 0,
         isMounted: false,
         resizer: null,
         isMobile: false,
+        currentStep: 0,
         options: []
       }
     },
@@ -102,15 +107,16 @@
       }
     },
     methods: {
-      changeStep(index){
-        if(index==0&&this.currentStep!==index)
-          this.currentStep=index
+      changeStep (index) {
+        if (index == 0 && this.currentStep !== index) {
+          this.currentStep = index
+        }
       },
       goNext () {
-        if (typeof this.onNext == 'function'){
-          if(!this.onNext(this.currentStep)) {
+        if (typeof this.onNext == 'function') {
+          if (!this.onNext(this.currentStep)) {
             //returned false. don't do anything
-            return;
+            return
           }
         }
         if (this.currentStep < this.steps.length - 1) {

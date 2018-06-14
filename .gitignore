@@ -24,3 +24,4 @@ yarn-error.log
 /bootstrap/cache/
 /package-lock.json
 /resources/assets/fonts
+/resources/assets/js/components/tmp.vue
