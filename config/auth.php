@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'ajax',
+        'guard' => 'web',
         'passwords' => 'users',
     ],
 
@@ -41,7 +41,7 @@ return [
             'provider' => 'users',
         ],
 
-        'ajax' => [
+        'jwt' => [
             'driver' => 'jwt',
             'provider' => 'users',
         ],

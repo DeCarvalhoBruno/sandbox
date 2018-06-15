@@ -12,12 +12,12 @@ class RedirectIfGuestAdmin
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next
-     * @param  string|null $guard
      *
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next)
     {
+        auth()->setDefaultDriver('jwt');
         if (!\Auth::guard()->check()) {
             return response(trans('error.http.401'),Response::HTTP_UNAUTHORIZED);
         }

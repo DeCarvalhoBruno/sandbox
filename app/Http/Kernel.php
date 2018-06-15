@@ -29,20 +29,18 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-//            \App\Http\Middleware\EncryptCookies::class,
-//            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-//            \Illuminate\Session\Middleware\StartSession::class,
-//            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-//            \App\Http\Middleware\VerifyCsrfToken::class,
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
         'api' => [
             'throttle:60,1',
             'bindings',
         ],
-        'ajax' => [
-//                        \Illuminate\Session\Middleware\StartSession::class,
-//            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+        'spa' => [
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ]
     ];
@@ -56,7 +54,7 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\RedirectIfGuestAdmin::class,
-        'auth.ajax' => \App\Http\Middleware\Ajax\RedirectIfGuestAdmin::class,
+        'auth.spa' => \App\Http\Middleware\Ajax\RedirectIfGuestAdmin::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'authenticated_admin' => \App\Http\Middleware\RedirectIfAuthenticatedAdmin::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,

@@ -49,7 +49,7 @@ axios.interceptors.response.use(response => response, error => {
       confirmButtonText: i18n.t('general.ok'),
       cancelButtonText: i18n.t('general.cancel')
     }).then(async () => {
-      await store.dispatch('auth/logout')
+      await store.dispatch('auth/revokeUser')
       router.push({name: 'admin.login'})
     })
   }

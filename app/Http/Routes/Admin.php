@@ -2,7 +2,7 @@
 
 use Illuminate\Routing\Router;
 
-class Admin
+class Admin extends Routes
 {
     public function bind(Router $router)
     {
@@ -16,67 +16,50 @@ class Admin
                 'prefix' => sprintf('/%s/admin', $k),
             ], call_user_func('static::defaultRouteGroup', $k));
         }
-
     }
 
     public static function defaultRouteGroup($locale)
     {
         return function (Router $r) use ($locale) {
             $r->group([
-                'middleware' => ['ajax'],
                 'namespace' => 'App\Http\Controllers\Admin',
-            ], call_user_func('static::guestAjaxRoutes', $locale));
+            ], call_user_func('static::guest', $locale));
             $r->group([
-                'middleware' => ['auth:ajax'],
-                'namespace' => 'App\Http\Controllers\Ajax\Admin',
-            ], call_user_func('static::authAjaxRoutes', $locale));
-            $r->group([
-                'middleware' => ['web'],
+                'middleware' => ['auth.spa','spa'],
                 'namespace' => 'App\Http\Controllers\Admin',
-            ], call_user_func('static::guestWebRoutes'));
+            ], call_user_func('static::auth'));
+            $r->group([
+                'middleware' => ['spa'],
+                'namespace' => 'App\Http\Controllers\Admin',
+            ], call_user_func('static::handledBySPA'));
         };
     }
 
-    public static function guestWebRoutes()
-    {
+    public static function handledBySPA(){
         return function (Router $r) {
-            $r->get('/test', 'Admin@test');
             $r->get('/{path}', 'Admin@index')->where('path', '(.*)');
         };
     }
 
-    public static function guestAjaxRoutes($locale)
+    public static function auth()
+    {
+        return function (Router $r) {
+            $r->post('logout', 'Auth\Login@logout');
+        };
+    }
+
+    public static function guest($locale)
     {
         return function (Router $r) use ($locale) {
             $r->get('', 'Admin@index');
-            $r->get('dashboard', 'Admin@index')->name(self::i18nRouteNames($locale, 'admin.dashboard'));
+//            $r->get('dashboard', 'Admin@index')->name(self::i18nRouteNames($locale, 'admin.dashboard'));
             $r->post('login', 'Auth\Login@login')->name(self::i18nRouteNames($locale, 'admin.login'));
             $r->post('register', 'Auth\Register@register')->name(self::i18nRouteNames($locale, 'admin.register'));
             $r->post('password/email', 'Auth\ForgotPassword@sendResetLinkEmail')->name(self::i18nRouteNames($locale,
                 'admin.password.email-reset'));
             $r->post('password/reset', 'Auth\ResetPassword@reset')->name(self::i18nRouteNames($locale,
                 'admin.password.reset'));
+            $r->get('/test', 'Admin@test');
         };
-
-    }
-
-    public static function authAjaxRoutes($locale)
-    {
-        return function (Router $r) use ($locale) {
-            $r->post('logout', 'Auth\Login@logout')->name(self::i18nRouteNames($locale, 'admin.logout'));
-            $r->patch('settings/profile', 'Settings\Profile@update')->name(self::i18nRouteNames($locale,
-                'admin.settings.profile'));
-            $r->patch('settings/password', 'Settings\Password@update')->name(self::i18nRouteNames($locale,
-                'admin.settings.password'));
-        };
-    }
-
-    private static function i18nRouteNames($locale, $name)
-    {
-        if ($locale != null) {
-            return sprintf('%s.%s', $locale, $name);
-        }
-        return $name;
-
     }
 }

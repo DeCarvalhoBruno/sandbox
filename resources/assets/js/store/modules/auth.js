@@ -50,6 +50,10 @@ export const actions = {
     commit(types.UPDATE_USER, payload)
   },
 
+  revokeUser ({commit}) {
+    commit(types.LOGOUT)
+  },
+
   async logout ({commit}) {
     await axios.post('/admin/logout')
     commit(types.LOGOUT)

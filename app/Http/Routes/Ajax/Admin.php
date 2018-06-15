@@ -12,13 +12,13 @@ class Admin
         ],
             function (Router $r) {
                 $r->group([
-                    'middleware' => 'auth.ajax:ajax'
-                ], call_user_func('static::authAjaxRoutes'));
+                    'middleware' => ['auth.spa','spa']
+                ], call_user_func('static::routes'));
             }
         );
     }
 
-    public static function authAjaxRoutes()
+    public static function routes()
     {
         return function (Router $r) {
             $r->get('users', 'User@index')
@@ -55,6 +55,9 @@ class Admin
             $r->patch('members/{group}', 'GroupMember@update')
                 ->middleware('can:view,App\Models\Group');
 
+            $r->patch('settings/profile', 'Settings\Profile@update');
+            $r->patch('settings/password', 'Settings\Password@update');
+
             $r->patch('settings/password', 'Settings\Password@update');
             $r->patch('settings/profile', 'Settings\Profile@update');
             $r->patch('settings/avatar', 'Settings\Profile@setAvatar');
@@ -65,6 +68,7 @@ class Admin
                 ->middleware('can:update,App\Models\User');
             $r->post('media/crop', 'Media@crop')
                 ->middleware('can:update,App\Models\User');
+
         };
     }
 }

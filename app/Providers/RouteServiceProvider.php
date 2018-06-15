@@ -18,6 +18,7 @@ class RouteServiceProvider extends ServiceProvider
     private $routeSets = [
         \App\Http\Routes\Ajax\Admin::class,
         \App\Http\Routes\Admin::class,
+//        \App\Http\Routes\User::class,
 
     ];
 
