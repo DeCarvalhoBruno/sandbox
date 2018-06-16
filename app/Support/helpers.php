@@ -1,4 +1,6 @@
 <?php
+use Illuminate\Support\Str;
+use Illuminate\Support\HtmlString;
 
 if (!function_exists('media_entity_path')) {
     /**
@@ -55,19 +57,6 @@ if (!function_exists('media_entity_root_path')) {
 
 }
 
-if (!function_exists('replaceLinksInTranslatedString')) {
-    function replaceLinksInTranslatedString($link, $string)
-    {
-        $matches = [];
-        preg_match('#\[([\s\d\p{L}[:punct:]]+)\]#u', $string, $matches);
-        if (count($matches) == 2) {
-            return str_replace($matches[0], sprintf('<a href="%s">%s</a>', $link, $matches[1]), $string);
-        }
-
-        return $string;
-    }
-}
-
 if (!function_exists('encrypt')) {
     /**
      * Encrypt the given value.
@@ -82,20 +71,6 @@ if (!function_exists('encrypt')) {
     }
 }
 
-if (!function_exists('getImagePlaceholderPath')) {
-    function getImagePlaceholderPath()
-    {
-        return '/media/system/placeholders/no-thumb.png';
-    }
-}
-
-if (!function_exists('getProfileImagePlaceholderPath')) {
-    function getProfileImagePlaceholderPath()
-    {
-        return '/media/avatars/image/42-8fgiluf11zixx1soizcf2bufnjfyh.png';
-    }
-}
-
 if (!function_exists('makeHexUuid')) {
     /**
      *
@@ -105,82 +80,6 @@ if (!function_exists('makeHexUuid')) {
     {
         return \Ramsey\Uuid\Uuid::uuid4()->getHex();
     }
-}
-
-if (!function_exists('encodeHashIDs')) {
-    function encodeHashIDs()
-    {
-        $arguments = func_get_args();
-        $string = [];
-        foreach ($arguments as $argument) {
-            if ($argument > 0) {
-                $string[] = encodeHashID($argument);
-            } else {
-                $string[] = strtolower(rand(10000, 9999999));
-            }
-        }
-
-        return implode('-', $string);
-    }
-}
-
-if (!function_exists('decodeHashIDs')) {
-    /**
-     * @param string $id
-     *
-     * @return array
-     */
-    function decodeHashIDs($id)
-    {
-        $idList = [];
-        if (preg_match('#[\d\-]+#', $id)) {
-            $ids = explode('-', $id);
-            foreach ($ids as $id) {
-                //A transmitted id of 0 is obfuscated as a random series of 5 to 7 numbers
-                if (preg_match('#^[0-9]{5,7}$#', $id)) {
-                    $idList[] = 0;
-                    //Usable IDs contain 8 to 10 numbers
-                } else {
-                    if (preg_match('#^[0-9]{8,10}$#', $id)) {
-                        $idList[] = decodeHashID($id);
-                    }
-                }
-            }
-        }
-
-        return $idList;
-    }
-}
-
-if (!function_exists('encodeHashID')) {
-    function encodeHashID($id)
-    {
-        $hasher = new \Jenssegers\Optimus\Optimus(275604547, 880216171, 847305208);
-
-        return $hasher->encode($id);
-    }
-}
-
-if (!function_exists('decodeHashID')) {
-    function decodeHashID($id)
-    {
-        if (is_numeric($id)) {
-            $hasher = new \Jenssegers\Optimus\Optimus(275604547, 880216171, 847305208);
-
-            return $hasher->decode($id);
-        }
-
-        return null;
-    }
-}
-
-if (!function_exists('getTmpMediaSessionKey')) {
-    function getTmpMediaSessionKey($entityId, $mediaCategoryID)
-    {
-        return sprintf('media_%s_%s', $entityId,
-            $mediaCategoryID);
-    }
-
 }
 
 if (!function_exists('slugify')) {
@@ -210,13 +109,6 @@ if (!function_exists('slugify')) {
         }
 
         return $text;
-    }
-}
-
-if (!function_exists('isFloat')) {
-    function isFloat($value)
-    {
-        return ((int)$value != $value);
     }
 }
 

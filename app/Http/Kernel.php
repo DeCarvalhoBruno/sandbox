@@ -40,7 +40,7 @@ class Kernel extends HttpKernel
             'throttle:60,1',
             'bindings',
         ],
-        'spa' => [
+        'admin' => [
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ]
     ];
@@ -54,12 +54,9 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\RedirectIfGuestAdmin::class,
-        'auth.spa' => \App\Http\Middleware\Ajax\RedirectIfGuestAdmin::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'authenticated_admin' => \App\Http\Middleware\RedirectIfAuthenticatedAdmin::class,
-        'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        'auth.admin' => \App\Http\Middleware\Admin\UnauthorizedIfGuest::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-        'can' => \Illuminate\Auth\Middleware\Authorize::class,
+        'can' => \App\Http\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];

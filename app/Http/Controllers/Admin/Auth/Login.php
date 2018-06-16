@@ -1,11 +1,14 @@
 <?php namespace App\Http\Controllers\Admin\Auth;
 
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class Login extends LoginController
+class Login extends Controller
 {
+    use AuthenticatesUsers;
+
     public function __construct()
     {
         auth()->setDefaultDriver('jwt');

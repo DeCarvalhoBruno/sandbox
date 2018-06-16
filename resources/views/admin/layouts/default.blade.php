@@ -6,17 +6,17 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1 maximum-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
     <title>Title</title>
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/app.css','1b8eb') }}" rel="stylesheet">
 </head>
 <body id="backend" class="hold-transition skin-blue sidebar-mini">
 <div id="app"></div>
-@include('layouts.footer')
+@include('layouts.javascript_footer')
 @if (app()->environment()=='production')
-    <script src="{{ mix('js/manifest.js') }}"></script>
-    <script src="{{ mix('js/vendor.js') }}"></script>
-    <script src="{{ mix('js/app.js') }}"></script>
+    {{--<script src="{{ mix('js/manifest.js','1b8eb') }}"></script>--}}
+    {{--<script src="{{ mix('js/vendor.js','1b8eb') }}"></script>--}}
+    <script src="{{ mix('js/app.js','1b8eb') }}"></script>
 @else
-    <script src="{{ mix('js/app.js') }}"></script>
+    <script src="{{ mix('js/app.js','1b8eb') }}"></script>
 @endif
 </body>
 </html>

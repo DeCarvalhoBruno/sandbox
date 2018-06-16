@@ -12,7 +12,7 @@ class Admin
         ],
             function (Router $r) {
                 $r->group([
-                    'middleware' => ['auth.spa','spa']
+                    'middleware' => ['auth.admin','admin']
                 ], call_user_func('static::routes'));
             }
         );

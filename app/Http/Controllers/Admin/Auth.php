@@ -1,10 +1,9 @@
 <?php namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\Login;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Http\Request;
 
-class Auth extends LoginController
+class Auth extends Login
 {
     use ThrottlesLogins;
     /**
@@ -15,21 +14,6 @@ class Auth extends LoginController
     public function showLoginForm()
     {
         return view('admin.login');
-    }
-
-    /**
-     * Log the user out of the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function logout(Request $request)
-    {
-        $this->guard()->logout();
-
-        $request->session()->invalidate();
-
-        return redirect(route_i18n('admin.login'));
     }
 
     /**
