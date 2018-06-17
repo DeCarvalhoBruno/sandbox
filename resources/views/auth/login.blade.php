@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">Login</div>
                 <div class="card-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('login') }}">
+                    <form class="form-horizontal" method="POST" action="{{ route_i18n('login') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group row">
@@ -68,9 +68,17 @@
                                     Login
                                 </button>
 
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
+                                <a class="btn btn-link" href="{{ route_i18n('password.request') }}">
                                     Forgot Your Password?
                                 </a>
+                            </div>
+                        </div>
+                        <div class="form-group row text-center m-0">
+                            <div class="col align-content-lg-center">
+
+                            <a class="btn btn-link" href="{{ route_i18n('register') }}">
+                                Create an account
+                            </a>
                             </div>
                         </div>
                     </form>

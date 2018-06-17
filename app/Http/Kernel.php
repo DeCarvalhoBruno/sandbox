@@ -32,6 +32,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
+//            \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
@@ -53,7 +54,9 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \App\Http\Middleware\RedirectIfGuestAdmin::class,
+        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+        'redirect_guest' => \App\Http\Middleware\Frontend\RedirectIfGuest::class,
+        'redirect_auth' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'auth.admin' => \App\Http\Middleware\Admin\UnauthorizedIfGuest::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \App\Http\Middleware\Authorize::class,

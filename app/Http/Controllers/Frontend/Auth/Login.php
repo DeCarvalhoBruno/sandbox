@@ -16,9 +16,14 @@ class Login extends Controller
 
     public function sendLoginResponse($request)
     {
-        return redirect(route('home'));
-
+        return redirect(route_i18n('home'));
     }
 
+    public function logout()
+    {
+        $this->guard()->logout();
+        $this->request->session()->invalidate();
+        return redirect(route_i18n('home'));
+    }
 
 }

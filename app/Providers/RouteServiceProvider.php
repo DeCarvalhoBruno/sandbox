@@ -19,7 +19,6 @@ class RouteServiceProvider extends ServiceProvider
         \App\Http\Routes\Ajax\Admin::class,
         \App\Http\Routes\Admin::class,
         \App\Http\Routes\Frontend::class,
-
     ];
 
     /**

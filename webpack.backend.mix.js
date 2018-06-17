@@ -2,17 +2,9 @@ const path = require('path')
 const mix = require('laravel-mix')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const webpack = require('webpack')
-// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
-// mix.autoload({
-//   jquery: ['$', 'jQuery']
-//   // 'exports-loader?Util!bootstrap/js/dist/util': ['Util'],
-//   // 'exports-loader?Modal!bootstrap/js/dist/modal': ['Modal']
-// })
-
-// mix.js('src/app.js', 'dist/').sass('src/app.scss', 'dist/')
-
-const publicPath = 'public/1b8eb'
+const folderName = '1b8eb'
+const publicPath = `public/${folderName}`
 
 mix.js('resources/assets/backend/js/app.js', 'js/app.js')
   .sass('resources/assets/backend/sass/app.scss', 'css/app.css')
@@ -46,7 +38,6 @@ if (mix.inProduction()) {
   // ])
 }
 mix.browserSync('laravel.lti.local/admin/login')
-// new BundleAnalyzerPlugin()
 mix.webpackConfig({
   plugins: [
     new CleanWebpackPlugin([
@@ -73,6 +64,6 @@ mix.webpackConfig({
   },
   output: {
     chunkFilename: 'js/[name].[chunkhash].js',
-    publicPath: '/1b8eb/'
+    publicPath: `/${folderName}/`
   }
 })

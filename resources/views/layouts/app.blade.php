@@ -7,11 +7,12 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="p-token" content="{{ get_page_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/app.css','6aa0e') }}" rel="stylesheet">
 </head>
 <body>
 <div id="app">
@@ -29,12 +30,11 @@
                 <ul class="navbar-nav">
                     @if (Auth::guest())
                         <li class="nav-item"><a href="{{ route('login') }}" class="nav-link">Login</a></li>
-                        <li class="nav-item"><a href="{{ route('register') }}" class="nav-link">Register</a></li>
                     @else
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false">
-                                {{ Auth::user()->name }}
+                                {{ Auth::user()->getAttribute('username') }}
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                                 <a href="{{ route('logout') }}" class="dropdown-item"
@@ -55,10 +55,11 @@
         </div>
     </nav>
 
-    @yield('content')
-</div>
+    <div id="content_container">
+        @yield('content')
+    </div></div>
 
 <!-- Scripts -->
-<script src="{{ asset('js/app.js') }}"></script>
+<script src="{{ mix('js/app.js','6aa0e') }}"></script>
 </body>
 </html>

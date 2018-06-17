@@ -1,21 +1,20 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Http\Middleware\Frontend;
 
 use Closure;
 
-class RedirectIfGuestAdmin
+class RedirectIfGuest
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next
-     * @param  string|null $guard
      *
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next)
     {
         if (!\Auth::guard()->check()) {
             return redirect()->guest(route_i18n('admin.login'));

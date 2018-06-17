@@ -4,7 +4,6 @@ import router from '~/router'
 import swal from 'sweetalert2'
 import i18n from '~/plugins/i18n'
 
-let AxiosException = function Exception (message) { this.message = message }
 // Request interceptor
 axios.interceptors.request.use(request => {
   const token = store.getters['auth/token']

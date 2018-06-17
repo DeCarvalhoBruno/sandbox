@@ -21,7 +21,7 @@ class User extends Model implements UserProvider, UserInterface
      */
     protected $hasher;
     /**
-     * @var \App\Providers\Person
+     * @var \App\Support\Providers\Person
      */
     private $person;
 
@@ -30,6 +30,28 @@ class User extends Model implements UserProvider, UserInterface
         parent::__construct();
         $this->hasher = new BcryptHasher();
         $this->person = $p;
+    }
+
+    /**
+     * @param $data
+     * @return bool|\Illuminate\Database\Eloquent\Model
+     */
+    public function createOne($data)
+    {
+        $user = $this->createModel([
+            'username' => $data['username'],
+            'password' => bcrypt($data['password']),
+            'email' => $data['email']
+        ]);
+        $user->save();
+        $this->person->createModel([
+                'user_id' => $user->getKey(),
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name']
+            ]
+        )->save();
+
+        return $user;
     }
 
     /**
@@ -121,7 +143,7 @@ class User extends Model implements UserProvider, UserInterface
         $model = $this->createModel();
 
         return $model->newQuery()->entityType()
-            ->where($model->getIdentifier(), $identifier)
+            ->where($model->getIdentifier($identifier), $identifier)
             ->first();
     }
 
@@ -226,7 +248,11 @@ class User extends Model implements UserProvider, UserInterface
 
     public function getAvatars($userId)
     {
-        return $this->createModel()->select(['media_uuid as uuid','media_extension as ext','media_in_use as used'])->newQuery()
+        return $this->createModel()->select([
+            'media_uuid as uuid',
+            'media_extension as ext',
+            'media_in_use as used'
+        ])->newQuery()
             ->entityType($userId)->avatars()->get()->toArray();
     }
 

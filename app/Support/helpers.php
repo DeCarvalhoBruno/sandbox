@@ -130,3 +130,9 @@ if (!function_exists('route_i18n')) {
         return app('url')->route(sprintf('%s.%s', $locale, $name), $parameters, $absolute);
     }
 }
+
+if (!function_exists('get_page_token')) {
+    function get_page_token(){
+        return substr(md5(app('router')->getCurrentRoute()->getName()),0,10);
+    }
+}

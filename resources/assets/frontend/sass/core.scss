@@ -1,0 +1,8 @@
+//Don't display body until fontawesome icons have finished loading
+.fontawesome-i2svg-pending body {
+  display: none;
+}
+
+.fontawesome-i2svg-active body {
+  display: initial;
+}

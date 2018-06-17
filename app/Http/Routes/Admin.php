@@ -8,7 +8,6 @@ class Admin extends Routes
     {
         $router->group([
             'prefix' => '/admin',
-            'namespace' => 'App\Http\Controllers\Admin',
         ], call_user_func('static::defaultRouteGroup', null));
         $availableLocales = config('app.locales');
         unset($availableLocales[app()->getLocale()]);
@@ -23,11 +22,14 @@ class Admin extends Routes
     {
         return function (Router $r) use ($locale) {
             $r->group([
+                'namespace' => 'App\Http\Controllers\Admin',
             ], call_user_func('static::guest', $locale));
             $r->group([
+                'namespace' => 'App\Http\Controllers\Admin',
                 'middleware' => ['auth.admin','admin'],
             ], call_user_func('static::auth'));
             $r->group([
+                'namespace' => 'App\Http\Controllers\Admin',
                 'middleware' => ['admin'],
             ], call_user_func('static::handledBySPA'));
         };
