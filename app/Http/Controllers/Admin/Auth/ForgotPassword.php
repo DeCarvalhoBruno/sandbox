@@ -1,9 +1,9 @@
 <?php namespace App\Http\Controllers\Admin\Auth;
 
-use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ForgotPassword extends ForgotPasswordController
+class ForgotPassword extends Controller
 {
     /**
      * Get the response for a successful password reset.
