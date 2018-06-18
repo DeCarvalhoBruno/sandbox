@@ -25,3 +25,5 @@ yarn-error.log
 /package-lock.json
 /resources/assets/fonts
 /resources/assets/js/components/tmp.vue
+/resources/emails/tmp
+/resources/emails/views
