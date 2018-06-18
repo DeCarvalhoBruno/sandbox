@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Ajax\Admin;
 use App\Contracts\Models\User as UserProvider;
 use App\Contracts\Models\Permission as PermissionProvider;
 use App\Contracts\RawQueries;
-use App\Events\UpdatedPermissionEntity;
+use App\Events\PermissionEntityUpdated;
 use App\Filters\User as UserFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateUser;
@@ -89,7 +89,7 @@ class User extends Controller
 
         if (!is_null($permissions)) {
             $permissionProvider->updateIndividual($permissions, $user->getEntityType(), Entity::USERS);
-            event(new UpdatedPermissionEntity);
+            event(new PermissionEntityUpdated);
         }
         return response(null, Response::HTTP_NO_CONTENT);
     }

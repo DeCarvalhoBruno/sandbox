@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Ajax\Admin;
 
-use App\Events\UpdatedPermissionEntity;
+use App\Events\PermissionEntityUpdated;
 use App\Http\Controllers\Controller;
 use App\Filters\Group as GroupFilter;
 use App\Contracts\Models\Group as GroupProvider;
@@ -85,7 +85,7 @@ class Group extends Controller
                 $permissions,
                 $group->getAttribute('entity_type_id'),
                 Entity::GROUPS);
-            event(new UpdatedPermissionEntity);
+            event(new PermissionEntityUpdated);
         }
 
         return response(null, Response::HTTP_NO_CONTENT);
@@ -131,7 +131,7 @@ class Group extends Controller
                 $permissions,
                 $group->getAttribute('entity_type_id'), Entity::GROUPS);
         }
-        event(new UpdatedPermissionEntity);
+        event(new PermissionEntityUpdated);
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }

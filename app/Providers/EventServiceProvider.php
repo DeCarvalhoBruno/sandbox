@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
-use App\Events\UpdatedPermissionEntity;
+use App\Events\PermissionEntityUpdated;
+use App\Events\UserRegistered;
 use App\Listeners\UpdatePermissions;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use App\Listeners\UserRegistered as UserRegisteredListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -14,9 +16,13 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        UpdatedPermissionEntity::class => [
+        PermissionEntityUpdated::class => [
             UpdatePermissions::class,
         ],
+        UserRegistered::class => [
+            UpdatePermissions::class,
+            UserRegisteredListener::class
+        ]
     ];
 
     /**

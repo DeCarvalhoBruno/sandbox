@@ -2,7 +2,7 @@
 
 use App\Contracts\HasPermissions;
 use App\Contracts\Models\Permission as PermissionInterface;
-use App\Events\UpdatedPermissionEntity;
+use App\Events\PermissionEntityUpdated;
 use App\Models\Entity;
 use App\Models\EntityType;
 use App\Models\Permission as PermissionModel;
