@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend\Auth;
 
+use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\CreateUser;
 use App\Support\Providers\User as UserProvider;
@@ -28,7 +29,7 @@ class Register extends Controller
     public function register(CreateUser $request, UserProvider $userRepo)
     {
         $user = $userRepo->createOne($request->all());
-//        event(new Registered());
+        event(new UserRegistered($user));
 
         \Auth::guard()->login($user);
 

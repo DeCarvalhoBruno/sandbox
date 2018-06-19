@@ -37,7 +37,7 @@ if (mix.inProduction()) {
   //   '@fortawesome/vue-fontawesome'
   // ])
 }
-mix.browserSync('laravel.lti.local/admin/login')
+mix.browserSync('laravel.local/admin/login')
 mix.webpackConfig({
   plugins: [
     new CleanWebpackPlugin([

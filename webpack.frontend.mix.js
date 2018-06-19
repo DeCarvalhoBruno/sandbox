@@ -43,7 +43,7 @@ if (mix.inProduction()) {
   // ])
 }
 mix.browserSync({
-  proxy: 'laravel.lti.local/login',
+  proxy: 'laravel.local/login',
   files: [
     `public/${folderName}/**/*`,
     'resources/views/**/*',

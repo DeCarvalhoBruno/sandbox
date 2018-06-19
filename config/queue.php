@@ -41,13 +41,6 @@ return [
             'retry_after' => 90,
         ],
 
-        'beanstalkd' => [
-            'driver' => 'beanstalkd',
-            'host' => 'localhost',
-            'queue' => 'default',
-            'retry_after' => 90,
-        ],
-
         'sqs' => [
             'driver' => 'sqs',
             'key' => env('SQS_KEY', 'your-public-key'),
@@ -64,6 +57,25 @@ return [
             'retry_after' => 90,
             'block_for' => null,
         ],
+
+        'beanstalkd' => [
+            'driver' => 'beanstalkd',
+            'host'   => 'localhost',
+            'queue'  => 'default',
+            'ttr'    => 600,
+        ],
+        'db'         => [
+            'driver' => 'beanstalkd',
+            'host'   => 'localhost',
+            'queue'  => 'db',
+            'ttr'    => 600,
+        ],
+        'mail'       => [
+            'driver' => 'beanstalkd',
+            'host'   => 'localhost',
+            'queue'  => 'mail',
+            'ttr'    => 600,
+        ]
 
     ],
 

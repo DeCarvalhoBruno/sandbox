@@ -6,17 +6,18 @@ class Email
 {
     use SerializesModels;
     protected $viewName;
-    protected $view;
+    protected $view=[];
     protected $data;
     protected $domain;
     protected $files;
-    private $from;
-    private $fromName;
-    private $testing;
+    protected $from;
+    protected $fromName;
+    protected $testing;
+
 
     /**
      *
-     * @param array $data
+     * @param \stdClass $data
      * @param array $files
      * @param bool $testing
      */
@@ -24,7 +25,6 @@ class Email
     {
         $this->parseFiles($files);
         $this->data     = $data;
-        $this->view     = new \stdClass();
         $this->from     = \Config::get('mail.from.address');
         $this->fromName = \Config::get('mail.from.name');
         $this->testing  = $testing;
@@ -47,7 +47,7 @@ class Email
     {
         $currentInstance = $this;
 
-        \Mail::send($this->viewName, (array)$this->view, function ($message) use ($currentInstance) {
+        \Mail::send($this->viewName, $this->view, function ($message) use ($currentInstance) {
             return call_user_func([$currentInstance, 'message'], $message);
         });
     }
@@ -65,7 +65,7 @@ class Email
      */
     public function setDomain()
     {
-        $this->domain = 'lti.local';
+        $this->domain = 'local';
     }
 
     /**

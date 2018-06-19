@@ -34,7 +34,7 @@ class User extends Model implements UserProvider, UserInterface
 
     /**
      * @param $data
-     * @return bool|\Illuminate\Database\Eloquent\Model
+     * @return \App\Models\User
      */
     public function createOne($data)
     {
@@ -51,7 +51,7 @@ class User extends Model implements UserProvider, UserInterface
             ]
         )->save();
 
-        return $user;
+        return $user->newQuery()->whereKey($user->getKey())->first();
     }
 
     /**

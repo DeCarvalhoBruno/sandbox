@@ -101,6 +101,17 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
         return 'users.username';
     }
 
+    public function getFullname()
+    {
+        return $this->getAttribute('full_name');
+//        return sprintf(
+//            '%s %s',
+//            $this->getAttribute('first_name'),
+//            $this->getAttribute('last_name')
+//        );
+
+    }
+
     /**
      * @return array
      */

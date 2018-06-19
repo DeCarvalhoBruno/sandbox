@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
         Commands\ConvertLangFilesToJs::class,
         Commands\GenerateLangFiles::class,
         Commands\MakeRequest::class,
-        Commands\CreateRootAssetDirectories::class
+        Commands\CreateRootAssetDirectories::class,
+        Commands\SendTestEmail::class
     ];
 
     /**
