@@ -34,7 +34,7 @@ class Medias extends Migration
             $table->string('media_uuid',32);
             $table->boolean('media_in_use')->default(true);
 
-            $table->index(['media_type_id', 'media_uuid'],'idx_media_type_uuid');
+            $table->unique(['media_type_id', 'media_uuid'],'idx_media_type_uuid');
         });
 
         Schema::create('media_digital', function (Blueprint $table) {
@@ -142,7 +142,7 @@ class Medias extends Migration
             $table->foreign('media_category_id')
                 ->references('media_category_id')->on('media_categories')
                 ->onDelete('cascade');
-            $table->index(['media_category_record_id', 'media_record_target_id', 'media_category_id'],
+            $table->unique(['media_category_record_id', 'media_record_target_id', 'media_category_id'],
                 'idx_media_category_record');
         });
 
@@ -160,7 +160,7 @@ class Medias extends Migration
                 ->references('media_category_record_id')->on('media_category_records')
                 ->onDelete('cascade');
 
-            $table->index(['media_entity_id', 'entity_type_id', 'media_category_record_id'],
+            $table->unique(['media_entity_id', 'entity_type_id', 'media_category_record_id'],
                 'idx_media_entity_category');
         });
 
@@ -177,6 +177,7 @@ class Medias extends Migration
         $this->addMediaGroups();
         $this->addMedia();
         $this->imageFormats();
+        $this->mediaInUseProcedure();
     }
 
    private function addMedia()
@@ -272,16 +273,17 @@ MODIFIES SQL DATA
     WHERE media_type_id in (
       select mti
       from (
-         select media_types.media_type_id as mti
-         from media_types
-           join media_records on media_types.media_type_id = media_records.media_type_id
-           join media_category_records
-             on media_category_records.media_record_target_id = media_records.media_record_id
-           join media_entities
-             on media_entities.media_category_record_id = media_category_records.media_category_record_id
-         where media_uuid != in_media_uuid
-      ) as mt
-  );
+             select media_types.media_type_id as mti
+             from media_types
+               join media_records on media_types.media_type_id = media_records.media_type_id
+               join media_category_records
+                 on media_category_records.media_record_target_id = media_records.media_record_id
+               join media_entities
+                 on media_entities.media_category_record_id = media_category_records.media_category_record_id
+             where media_uuid != in_media_uuid) as mt);
+    UPDATE media_types
+      SET media_in_use=1
+    where media_uuid=in_media_uuid;
   END;
 SQL;
         \DB::connection()->getPdo()->exec($sql);

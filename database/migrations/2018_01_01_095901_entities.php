@@ -146,6 +146,7 @@ class Entities extends Migration
             );
         }
         $db->triggerUserFullName();
+        $db->triggerUserUpdateActivated();
 
     }
 

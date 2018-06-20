@@ -25,7 +25,7 @@ class People extends Migration
             $table->foreign('user_id')
                 ->references('user_id')->on('users')
                 ->onDelete('cascade');
-            $table->index(['user_id', 'person_id'], 'idx_user_person');
+            $table->unique(['user_id', 'person_id'], 'idx_user_person');
         });
     }
 

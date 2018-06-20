@@ -37,7 +37,7 @@ class SendTestEmail extends Command
                 't',
                 't',
                 InputOption::VALUE_REQUIRED,
-                'Name of the email class to use to send the email'
+                'Type of email to send ("welcome", etc.)'
             ),
         );
     }
@@ -49,19 +49,33 @@ class SendTestEmail extends Command
      */
     public function handle()
     {
-        $class = $this->option('t');
-        if ($class) {
-            $fullPath = sprintf('\App\Emails\%s', $class);
-            if (class_exists($fullPath)) {
-                $data = [
-                    'user' => (new User())->newQuery()->where('users.user_id', '=', 2)->first(),
-                    'activation_token' => '123456'
-                ];
-                $this->dispatch(new SendMail(new WelcomeEmail((object)$data)));
-            } else {
-                $this->info(sprintf('%s doesn\'t exist', $fullPath));
-            }
-        }
+        $type = $this->option('t');
+
+        call_user_func(['self',$type]);
+    }
+
+    public function welcome()
+    {
+        $data = [
+            'user' => (new User())->newQuery()->where('users.user_id', '=', 2)->first(),
+            'activation_token' => '123456'
+        ];
+        $this->dispatch(new SendMail(new WelcomeEmail((object)$data)));
+        $this->finishDisplay();
+
+    }
+
+    public function __call($method, $args)
+    {
+        $this->comment('**********************************************');
+        $this->info(sprintf('%s is not a valid email type', $method));
+        $this->comment('**********************************************');
+    }
+
+    public function finishDisplay()
+    {
+        $this->info('the e-mail event was dispatched');
+
     }
 
 }

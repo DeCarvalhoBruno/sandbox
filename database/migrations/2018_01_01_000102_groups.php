@@ -32,7 +32,7 @@ class Groups extends Migration
                 ->references('user_id')->on('users')
                 ->onDelete('cascade');
 
-            $table->index(['group_id', 'user_id'], 'group_members_idx');
+            $table->unique(['group_id', 'user_id'], 'group_members_idx');
         });
     }
 }

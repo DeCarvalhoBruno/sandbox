@@ -225,7 +225,7 @@ class User extends Model implements UserProvider, UserInterface
 
         foreach ($credentials as $key => $value) {
             if (!Str::contains($key, 'password')) {
-                $query->where($key, $value);
+                $query->where($key, $value)->where('activated', '=', true);
             }
         }
 
@@ -273,10 +273,24 @@ class User extends Model implements UserProvider, UserInterface
             ->entityType($userId)->avatars()->get()->toArray();
     }
 
+
+    /**
+     * @param string $token
+     * @return int
+     */
     public function activate($token)
     {
-        $match = (new UserActivation)->newQuery()->where('activation_token','=',$token);
-
+        $model = (new UserActivation);
+        $user = $model->newQuery()
+            ->select(['user_id'])
+            ->where('activation_token', '=', $token)
+            ->first();
+        if (!is_null($user)) {
+            $userId = $user->value('user_id');
+            return $model->newQuery()->where('user_id', '=', $userId)->delete();
+            //A mysql trigger sets the activated boolean on the users table whenever a delete occurs.
+        }
+        return 0;
     }
 
     /**

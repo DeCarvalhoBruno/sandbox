@@ -33,7 +33,7 @@ class Register extends Controller
 
 //        \Auth::guard()->login($user);
 
-        return redirect(route_i18n('home'));
+        return redirect(route_i18n('login'))->with('status', 'registered');
     }
 
 }

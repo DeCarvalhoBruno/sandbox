@@ -1,4 +1,4 @@
-@extends('emails.layouts.main')
+@extends('emails.default')
 @section('content')
     <!--[if mso | IE]>
 </td>

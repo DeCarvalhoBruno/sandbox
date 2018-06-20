@@ -27,7 +27,8 @@ abstract class RawQueries
     }
 
     /**
-     * Returns an object containing the max permissions (we grab root permissions) and user permissions.
+     * Returns an object containing the max permissions (root permissions are max so we grab those)
+     * and user permissions.
      *
      * @param $entityTypeId
      * @return object
@@ -109,6 +110,27 @@ END
 ',
                 $name, $primaryKey, $entityId
             )
+        );
+    }
+
+    public function triggerUserUpdateActivated()
+    {
+        \DB::unprepared(
+'
+CREATE TRIGGER t_users_update_activated AFTER DELETE ON user_activations
+  FOR EACH ROW
+  BEGIN
+    declare var_user_id INT DEFAULT 0;
+    select user_id
+    into var_user_id
+    from users
+    where user_id = old.user_id;
+
+    update users
+    set activated = 1
+    where user_id = var_user_id;
+END;
+'
         );
     }
 

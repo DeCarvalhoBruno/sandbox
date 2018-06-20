@@ -5,12 +5,12 @@ class Admin extends Controller
 
     public function index()
     {
-        return view('admin.layouts.default');
+        return view('admin.default');
     }
 
     public function test()
     {
-        return view('admin.layouts.test');
+        return view('admin.default');
     }
 
 }

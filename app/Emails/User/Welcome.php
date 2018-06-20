@@ -4,7 +4,7 @@ use App\Emails\Email;
 
 class Welcome extends Email
 {
-    protected $viewName = 'emails.users.welcome';
+    protected $viewName = 'emails.website.welcome';
 
     public function prepareViewData()
     {

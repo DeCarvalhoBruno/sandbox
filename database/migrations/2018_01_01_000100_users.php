@@ -32,7 +32,7 @@ class Users extends Migration
                 ->references('user_id')->on('users')
                 ->onDelete('cascade');
 
-            $table->index(['user_id','activation_token'],'idx_users_remember_token');
+            $table->unique(['user_id','activation_token'],'idx_users_remember_token');
         });
     }
 

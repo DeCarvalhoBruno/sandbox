@@ -12,7 +12,8 @@ class Login extends Controller
 
     public function index()
     {
-        return view('website.auth.login');
+        $status = \Session::get('status');
+        return view('website.auth.login',compact('status'));
     }
 
     public function sendLoginResponse($request)
@@ -29,11 +30,13 @@ class Login extends Controller
 
     public function activate($token, UserProvider $userRepo)
     {
-        if (strlen($token) != 32 || !ctype_xdigit($token)) {
-            return view('website.auth.activation_error');
+        if (strlen($token) == 32 && ctype_xdigit($token)) {
+            $nbDeletedRecords = $userRepo->activate($token);
+            if ($nbDeletedRecords === 1) {
+                return redirect(route_i18n('login'))->with('status', 'activated');
+            }
         }
-        $userRepo->activate($token);
-        return redirect(route_i18n('login'))->with('status', 'activated');
+        return view('website.auth.activation_error');
     }
 
 }

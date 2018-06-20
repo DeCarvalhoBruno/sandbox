@@ -13,8 +13,9 @@ mix.js('resources/assets/frontend/js/app.js', 'js/app.js')
   .setPublicPath(path.normalize(publicPath))
   .autoload({
     'exports-loader?Util!bootstrap/js/dist/util': ['Util'],
-    'exports-loader?Tooltip!bootstrap/js/dist/dropdown': ['Dropdown'],
-    'exports-loader?Tooltip!bootstrap/js/dist/tooltip': ['Tooltip']
+    'exports-loader?Dropdown!bootstrap/js/dist/dropdown': ['Dropdown'],
+    'exports-loader?Tooltip!bootstrap/js/dist/tooltip': ['Tooltip'],
+    'exports-loader?Alert!bootstrap/js/dist/tooltip': ['Alert']
   })
   .options({
     fileLoaderDirs: {

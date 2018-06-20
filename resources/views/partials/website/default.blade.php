@@ -5,13 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="p-token" content="{{ get_page_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name') }} - {{$title}}</title>
 
-    <!-- Styles -->
     <link href="{{ mix('css/app.css','6aa0e') }}" rel="stylesheet">
 </head>
 <body>
@@ -32,7 +30,8 @@
                         <li class="nav-item"><a href="{{ route('login') }}" class="nav-link">Login</a></li>
                     @else
                         <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                            <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink"
+                               data-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false">
                                 {{ Auth::user()->getAttribute('username') }}
                             </a>
@@ -57,7 +56,8 @@
 
     <div id="content_container">
         @yield('content')
-    </div></div>
+    </div>
+</div>
 
 <!-- Scripts -->
 <script src="{{ mix('js/app.js','6aa0e') }}"></script>
