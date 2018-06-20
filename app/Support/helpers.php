@@ -82,6 +82,17 @@ if (!function_exists('makeHexUuid')) {
     }
 }
 
+if (!function_exists('makeHexHashedUuid')) {
+    /**
+     *
+     * @return string The 32 character UUID
+     */
+    function makeHexHashedUuid()
+    {
+        return \Ramsey\Uuid\Uuid::uuid5(\Ramsey\Uuid\Uuid::NAMESPACE_DNS,\Ramsey\Uuid\Uuid::uuid4()->toString())->getHex();
+    }
+}
+
 if (!function_exists('slugify')) {
     function slugify($text, $strict = true)
     {

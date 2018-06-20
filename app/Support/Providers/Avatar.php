@@ -1,9 +1,7 @@
 <?php namespace App\Support\Providers;
 
-use App\Contracts\Image as ImageContract;
 use App\Contracts\Models\Avatar as AvatarInterface;
 use App\Models\Entity;
-use App\Models\EntityType;
 
 /**
  * @method \App\Models\Media\MediaType createModel(array $attributes = [])

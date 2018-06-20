@@ -242,6 +242,16 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
+    public function scopeActivation(Builder $builder)
+    {
+        return $this->join($builder,UserActivation::class);
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
     public function scopeAvatars(Builder $builder)
     {
         return MediaEntity::scopeMediaDigital(

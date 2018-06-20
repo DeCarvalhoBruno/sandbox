@@ -1,5 +1,6 @@
 <?php namespace App\Support\Providers;
 
+use App\Models\UserActivation;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Hashing\BcryptHasher;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
@@ -52,6 +53,22 @@ class User extends Model implements UserProvider, UserInterface
         )->save();
 
         return $user->newQuery()->whereKey($user->getKey())->first();
+    }
+
+
+    /**
+     * @param \App\Models\User $user
+     * @return string
+     */
+    public function generateActivationToken($user)
+    {
+        $token = makeHexHashedUuid();
+        (new UserActivation([
+            'user_id' => $user->getKey(),
+            'activation_token' => $token
+        ]))->save();
+        return $token;
+
     }
 
     /**
@@ -254,6 +271,12 @@ class User extends Model implements UserProvider, UserInterface
             'media_in_use as used'
         ])->newQuery()
             ->entityType($userId)->avatars()->get()->toArray();
+    }
+
+    public function activate($token)
+    {
+        $match = (new UserActivation)->newQuery()->where('activation_token','=',$token);
+
     }
 
     /**

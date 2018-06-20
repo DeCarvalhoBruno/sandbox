@@ -39,12 +39,13 @@ class Frontend extends Routes
     public static function guest($locale)
     {
         return function (Router $r) use ($locale) {
-            $r->get('/login', 'Auth\Login@index')
+            $r->get('login', 'Auth\Login@index')
                 ->name(self::i18nRouteNames($locale, 'login'));
+            $r->get('activate/{token}', 'Auth\Login@activate')
+                ->name(self::i18nRouteNames($locale, 'activate'));
 
-            $r->post('login', 'Auth\Login@login');
-            $r->post('logout', 'Auth\Login@logout')
-                ->name(self::i18nRouteNames($locale, 'logout'));
+            $r->post('login', 'Auth\Login@login')->name('login.post');
+            $r->post('logout', 'Auth\Login@logout')->name('logout');
 
             $r->get('register', 'Auth\Register@showRegistrationForm')
                 ->name(self::i18nRouteNames($locale, 'register'));

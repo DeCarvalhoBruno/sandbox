@@ -12,7 +12,8 @@ class Welcome extends Email
             'title' => trans('email.welcome.title'),
             'subject' => trans('email.welcome.subject'),
             'email' => $this->data->user->getAttribute('email'),
-            'user_name' => $this->data->user->getFullname()
+            'user_name' => $this->data->user->getFullname(),
+            'activation_token'=>$this->data->activation_token
         ];
     }
 

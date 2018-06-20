@@ -15,7 +15,10 @@ class UserRegistered extends Listener
     {
         $this->dispatch(
             new \App\Jobs\SendMail(
-                new WelcomeEmail((object)['user'=>$event->getUser()])
+                new WelcomeEmail((object)[
+                    'user' => $event->getUser(),
+                    'activation_token' => $event->getToken()
+                ])
             )
         );
     }

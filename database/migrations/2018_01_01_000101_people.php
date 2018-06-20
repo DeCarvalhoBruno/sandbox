@@ -13,7 +13,6 @@ class People extends Migration
      */
     public function up()
     {
-        Schema::enableForeignKeyConstraints();
         Schema::create('people', function (Blueprint $table) {
             $table->increments('person_id');
             $table->string('first_name', 75)->nullable();

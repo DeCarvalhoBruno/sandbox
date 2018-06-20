@@ -16,7 +16,7 @@ class Register extends Controller
      */
     public function showRegistrationForm()
     {
-        return view('auth.register');
+        return view('website.auth.register');
     }
 
     /**
@@ -29,9 +29,9 @@ class Register extends Controller
     public function register(CreateUser $request, UserProvider $userRepo)
     {
         $user = $userRepo->createOne($request->all());
-        event(new UserRegistered($user));
+        event(new UserRegistered($user, $userRepo->generateActivationToken($user)));
 
-        \Auth::guard()->login($user);
+//        \Auth::guard()->login($user);
 
         return redirect(route_i18n('home'));
     }

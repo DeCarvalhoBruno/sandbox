@@ -16,7 +16,7 @@ class Permissions extends Migration
         Schema::create('permission_actions', function (Blueprint $table) {
             $table->increments('permission_action_id');
 
-            $table->unsignedSmallInteger('entity_id')->unsigned();
+            $table->unsignedSmallInteger('entity_id');
 
             $table->integer('permission_action_bits')->unsigned()->default(0);
 
@@ -30,7 +30,7 @@ class Permissions extends Migration
             $table->increments('permission_id');
 
             $table->integer('entity_type_id')->unsigned();
-            $table->unsignedSmallInteger('entity_id')->unsigned();
+            $table->unsignedSmallInteger('entity_id');
 
             $table->integer('permission_mask')->unsigned()->default(0);
 

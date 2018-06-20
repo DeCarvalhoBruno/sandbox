@@ -169,6 +169,21 @@
                             </td>
                         </tr>
 
+                        <tr>
+                            <td
+                                    align="left"
+                                    style="font-size:0px;padding:10px 25px;padding-top:15px;word-break:break-word;"
+                            >
+
+                                <div
+                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-weight:bold;font-size:16px;line-height:1;text-align:left;color:#000000;"
+                                >
+                                    {!! trans('email.welcome.body3') !!}
+                                </div>
+
+                            </td>
+                        </tr>
+
                     </table>
 
                 </div>
@@ -249,7 +264,7 @@
                                                 valign="middle"
                                         >
                                             <a
-                                                    href="{!! route_i18n('login') !!}"
+                                                    href="{!! route_i18n('activate',$activation_token) !!}"
                                                     style="background:#2f6591;color:white;font-family:Lato, Helvetica, Arial, sans-serif;font-size:18px;font-weight:bold;line-height:23px;Margin:0;text-decoration:none;text-transform:none;"
                                                     target="_blank"
                                             >

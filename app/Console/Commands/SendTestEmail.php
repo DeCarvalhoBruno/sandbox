@@ -54,7 +54,8 @@ class SendTestEmail extends Command
             $fullPath = sprintf('\App\Emails\%s', $class);
             if (class_exists($fullPath)) {
                 $data = [
-                    'user' => (new User())->newQuery()->where('users.user_id', '=', 2)->first()
+                    'user' => (new User())->newQuery()->where('users.user_id', '=', 2)->first(),
+                    'activation_token' => '123456'
                 ];
                 $this->dispatch(new SendMail(new WelcomeEmail((object)$data)));
             } else {

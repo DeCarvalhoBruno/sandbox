@@ -13,6 +13,7 @@ class Users extends Migration
      */
     public function up()
     {
+        Schema::enableForeignKeyConstraints();
         Schema::create('users', function (Blueprint $table) {
             $table->increments('user_id');
             $table->string('email')->unique()->nullable();
@@ -21,6 +22,17 @@ class Users extends Migration
             $table->boolean('activated')->default(false);
             $table->rememberToken()->nullable();
             $table->index('remember_token','idx_users_remember_token');
+        });
+
+        Schema::create('user_activations', function (Blueprint $table) {
+            $table->unsignedInteger('user_id');
+            $table->string('activation_token',32);
+
+            $table->foreign('user_id')
+                ->references('user_id')->on('users')
+                ->onDelete('cascade');
+
+            $table->index(['user_id','activation_token'],'idx_users_remember_token');
         });
     }
 

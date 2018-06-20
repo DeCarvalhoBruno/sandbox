@@ -40,7 +40,7 @@ class Admin extends Routes
         return function (Router $r) use ($locale) {
             $r->get('', 'Admin@index');
             $r->post('login', 'Auth\Login@login')->name(self::i18nRouteNames($locale, 'admin.login'));
-            $r->post('register', 'Auth\Register@register')->name(self::i18nRouteNames($locale, 'admin.register'));
+
             $r->post('password/email', 'Auth\ForgotPassword@sendResetLinkEmail')->name(self::i18nRouteNames($locale,
                 'admin.password.email-reset'));
             $r->post('password/reset', 'Auth\ResetPassword@reset')->name(self::i18nRouteNames($locale,

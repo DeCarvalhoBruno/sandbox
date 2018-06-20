@@ -1,29 +1,27 @@
-@extends('layouts.app')
+@extends('website.layouts.app')
 
 @section('content')
 <div class="container">
     <div class="row justify-content-md-center mt-5">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Login</div>
+                <div class="card-header">Reset Password</div>
                 <div class="card-body">
-                    <form class="form-horizontal" method="POST" action="{{ route_i18n('login') }}">
-                        {{ csrf_field() }}
+                    <form role="form" method="POST" action="{{ url('/password/reset') }}">
+                        {!! csrf_field() !!}
+
+                        <input type="hidden" name="token" value="{{ $token }}">
 
                         <div class="form-group row">
-                            <label for="email" class="col-lg-4 col-form-label text-lg-right">E-Mail Address</label>
+                            <label class="col-lg-4 col-form-label text-lg-right">E-Mail Address</label>
 
                             <div class="col-lg-6">
                                 <input
-                                        id="email"
                                         type="email"
                                         class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
                                         name="email"
-                                        value="{{ old('email') }}"
-                                        required
-                                        autofocus
+                                        value="{{ $email or old('email') }}"
                                 >
-
                                 @if ($errors->has('email'))
                                     <div class="invalid-feedback">
                                         <strong>{{ $errors->first('email') }}</strong>
@@ -33,17 +31,14 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="password" class="col-lg-4 col-form-label text-lg-right">Password</label>
+                            <label class="col-lg-4 col-form-label text-lg-right">Password</label>
 
                             <div class="col-lg-6">
                                 <input
-                                        id="password"
                                         type="password"
                                         class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"
                                         name="password"
-                                        required
                                 >
-
                                 @if ($errors->has('password'))
                                     <div class="invalid-feedback">
                                         <strong>{{ $errors->first('password') }}</strong>
@@ -53,32 +48,26 @@
                         </div>
 
                         <div class="form-group row">
-                            <div class="col-lg-6 offset-lg-4">
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
-                                    </label>
-                                </div>
+                            <label class="col-lg-4 col-form-label text-lg-right">Confirm Password</label>
+                            <div class="col-lg-6">
+                                <input
+                                        type="password"
+                                        class="form-control{{ $errors->has('password_confirmation') ? ' is-invalid' : '' }}"
+                                        name="password_confirmation">
+
+                                @if ($errors->has('password_confirmation'))
+                                    <div class="invalid-feedback">
+                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <div class="col-lg-8 offset-lg-4">
+                            <div class="col-lg-6 offset-lg-4">
                                 <button type="submit" class="btn btn-primary">
-                                    Login
+                                    Reset Password
                                 </button>
-
-                                <a class="btn btn-link" href="{{ route_i18n('password.request') }}">
-                                    Forgot Your Password?
-                                </a>
-                            </div>
-                        </div>
-                        <div class="form-group row text-center m-0">
-                            <div class="col align-content-lg-center">
-
-                            <a class="btn btn-link" href="{{ route_i18n('register') }}">
-                                Create an account
-                            </a>
                             </div>
                         </div>
                     </form>
