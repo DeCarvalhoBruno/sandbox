@@ -47,30 +47,13 @@
                         <tr>
                             <td
                                     align="center"
-                                    style="font-size:0px;padding:10px 25px;padding-top:20px;padding-right:0px;padding-bottom:0px;padding-left:0px;word-break:break-word;"
+                                    style="font-size:0px;padding:10px 25px;padding-top:20px;padding-right:0px;padding-bottom:20px;padding-left:0px;word-break:break-word;"
                             >
 
                                 <div
                                         style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:25px;line-height:27px;text-align:center;color:#ffffff;"
                                 >
-                                    <span style="padding-bottom: 15px">{!! trans('email.welcome.title') !!}</span>
-                                </div>
-
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td
-                                    align="center"
-                                    style="font-size:0px;padding:10px 25px;padding-top:20px;padding-right:0px;padding-bottom:10px;padding-left:0px;word-break:break-word;"
-                            >
-
-                                <div
-                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:20px;line-height:22px;text-align:center;color:#ffffff;"
-                                >
-        <span
-                style="padding-bottom: 15px"><a href="{!! route_i18n('home') !!}"
-                                                style="color:inherit;text-decoration:underline;">{!! route_i18n('home') !!}</a></span>
+                                    <span style="padding-bottom: 15px">{!! trans('email.password_reset.title') !!}</span>
                                 </div>
 
                             </td>
@@ -148,7 +131,7 @@
                                 <div
                                         style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:20px;text-align:left;color:#000000;"
                                 >
-                                    {!! trans('email.welcome.body1') !!}
+                                    {!! trans('email.password_reset.body1') !!}
                                 </div>
 
                             </td>
@@ -161,24 +144,9 @@
                             >
 
                                 <div
-                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:13px;line-height:20px;text-align:left;color:#000000;"
+                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:16px;line-height:1;text-align:left;color:#000000;"
                                 >
-                                    {!! trans('email.welcome.body2') !!}
-                                </div>
-
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td
-                                    align="left"
-                                    style="font-size:0px;padding:10px 25px;padding-top:15px;word-break:break-word;"
-                            >
-
-                                <div
-                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-weight:bold;font-size:16px;line-height:20px;text-align:left;color:#000000;"
-                                >
-                                    {!! trans('email.welcome.body3') !!}
+                                    {!! trans('email.password_reset.body2') !!}
                                 </div>
 
                             </td>
@@ -264,11 +232,13 @@
                                                 valign="middle"
                                         >
                                             <a
-                                                    href="{!! route_i18n('activate',$activation_token) !!}"
+                                                    href="{!! route_i18n('password.reset',
+                                                                ['token'=>$token,
+                                                                'email'=>urlencode($email)]) !!}"
                                                     style="background:#2f6591;color:white;font-family:Lato, Helvetica, Arial, sans-serif;font-size:18px;font-weight:bold;line-height:23px;Margin:0;text-decoration:none;text-transform:none;"
                                                     target="_blank"
                                             >
-                                                {!! trans('email.welcome.cta') !!}
+                                                {!! trans('email.password_reset.cta') !!}
                                             </a>
                                         </td>
                                     </tr>

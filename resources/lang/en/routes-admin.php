@@ -5,6 +5,7 @@ return [
     'admin.users.index' => 'admin/users',
     'admin.users.edit' => 'admin/users/:user',
     'admin.users.delete' => 'admin/users/:user/delete',
+    'admin.blog.index' => 'admin/blog',
     'admin.groups.index' => 'admin/groups',
     'admin.groups.add' => 'admin/groups/create',
     'admin.groups.edit' => 'admin/groups/:group',
@@ -14,6 +15,4 @@ return [
     'admin.settings.profile' => 'admin/settings/profile',
     'admin.settings.password' => 'admin/settings/password',
     'admin.login' => 'admin/login',
-    'admin.password.request' => 'admin/password/reset',
-    'admin.password.reset' => 'admin/password/reset/:token'
 ];

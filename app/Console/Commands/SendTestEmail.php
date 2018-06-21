@@ -60,7 +60,7 @@ class SendTestEmail extends Command
             'user' => (new User())->newQuery()->where('users.user_id', '=', 2)->first(),
             'activation_token' => '123456'
         ];
-        $this->dispatch(new SendMail(new WelcomeEmail((object)$data)));
+        $this->dispatch(new SendMail(new WelcomeEmail($data)));
         $this->finishDisplay();
 
     }

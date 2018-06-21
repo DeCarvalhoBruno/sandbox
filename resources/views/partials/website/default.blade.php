@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="p-token" content="{{ get_page_token() }}">
 
-    <title>{{ config('app.name') }} - {{$title}}</title>
+    <title>{{$title}}</title>
 
     <link href="{{ mix('css/app.css','6aa0e') }}" rel="stylesheet">
 </head>

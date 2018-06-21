@@ -42,6 +42,7 @@
       return {
         title: appName,
         titleTemplate: `%s · ${appName}`
+
       }
     },
 

@@ -17,14 +17,14 @@ class Email
 
     /**
      *
-     * @param \stdClass $data
+     * @param array $data
      * @param array $files
      * @param bool $testing
      */
     public function __construct($data, $files = null, $testing = false)
     {
         $this->parseFiles($files);
-        $this->data     = $data;
+        $this->data     = (object)$data;
         $this->from     = \Config::get('mail.from.address');
         $this->fromName = \Config::get('mail.from.name');
         $this->testing  = $testing;
@@ -50,6 +50,17 @@ class Email
         \Mail::send($this->viewName, $this->view, function ($message) use ($currentInstance) {
             return call_user_func([$currentInstance, 'message'], $message);
         });
+    }
+
+    /**
+     * @param \Illuminate\Mail\Message $message
+     */
+    public function message($message)
+    {
+        $message->subject($this->view['subject']);
+        $message->from($this->from, $this->fromName);
+        $message->to($this->data->user->getAttribute('email'), $this->data->user->getFullname());
+        $message->replyTo($this->from, $this->fromName);
     }
 
     /**

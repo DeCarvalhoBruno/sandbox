@@ -55,6 +55,9 @@ class Admin
             $r->patch('members/{group}', 'GroupMember@update')
                 ->middleware('can:view,App\Models\Group');
 
+            $r->get('blog', 'Blog@index')
+                ->middleware('can:view,App\Models\Blog');
+
             $r->patch('settings/profile', 'Settings\Profile@update');
             $r->patch('settings/password', 'Settings\Password@update');
 

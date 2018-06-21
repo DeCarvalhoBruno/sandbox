@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->make('view')->composer('admin.layouts.default', \App\Composers\Admin::class);
+        $this->app->make('view')->composer('admin.default', \App\Composers\Admin::class);
         $this->app->make('view')->composer('website.*', \App\Composers\Frontend::class);
 
         if (app()->environment() == 'local') {

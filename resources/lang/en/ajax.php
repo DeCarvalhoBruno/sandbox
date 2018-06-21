@@ -1,5 +1,9 @@
 <?php
 return [
+    'title' => [
+        'login' => 'Log In',
+
+    ],
     'breadcrumb' => [
         'admin-dashboard' => 'Home',
         'admin-users-index' => 'Users',
@@ -17,6 +21,7 @@ return [
         'dashboard' => 'Dashboard',
         'users' => 'Users',
         'groups' => 'Groups',
+        'blog' => 'Blog',
         'list' => 'List',
         'add' => 'Add'
     ],

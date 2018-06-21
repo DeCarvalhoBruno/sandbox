@@ -3,20 +3,22 @@
 namespace App\Models;
 
 use App\Contracts\HasAnEntity;
+use App\Contracts\HasPermissions;
+use App\Emails\User\PasswordReset;
+use App\Jobs\SendMail;
 use App\Models\Media\MediaEntity;
-use App\Notifications\ResetPassword;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
+use App\Traits\Models\HasANameColumn;
+use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use App\Traits\Models\HasPermissions as HasPermissionsTrait;
-use App\Contracts\HasPermissions;
 use App\Traits\Presentable;
 use Carbon\Carbon;
+use Illuminate\Bus\Dispatcher;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as LaravelUser;
+use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
-use App\Traits\Models\HasANameColumn;
 
 class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermissions
 {
@@ -75,17 +77,6 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     }
 
     /**
-     * Send the password reset notification.
-     *
-     * @param  string $token
-     * @return void
-     */
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new ResetPassword($token));
-    }
-
-    /**
      * @return int
      */
     public function getJWTIdentifier()
@@ -118,6 +109,37 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * Get the e-mail address where password reset links are sent.
+     *
+     * @return string
+     */
+    public function getEmailForPasswordReset()
+    {
+        return $this->getAttribute('email');
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        app(Dispatcher::class)
+            ->dispatch(
+                new SendMail(
+                    new PasswordReset(
+                        [
+                            'user' => $this,
+                            'token' => $token
+                        ])
+                )
+            );
+
     }
 
     /**
@@ -244,7 +266,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
      */
     public function scopeActivation(Builder $builder)
     {
-        return $this->join($builder,UserActivation::class);
+        return $this->join($builder, UserActivation::class);
     }
 
     /**

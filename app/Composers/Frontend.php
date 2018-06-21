@@ -8,7 +8,15 @@ class Frontend extends Composer
     public function compose($view)
     {
         $data = [
-            'title' => trans(sprintf('titles.%s',str_replace('.', '_', $view->getName())))
+            'title' => sprintf(
+                '%s - %s',
+                trans(
+                    sprintf(
+                        'titles.%s',
+                        str_replace('.', '_', $view->getName())
+                    )
+                ),
+                config('app.name'))
         ];
         $this->addVarsToView($data, $view);
     }

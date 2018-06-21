@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport"
           content="width=device-width, initial-scale=1 maximum-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
-    <title>Title</title>
+    <title></title>
     <link href="{{ mix('css/app.css','1b8eb') }}" rel="stylesheet">
 </head>
 <body id="backend" class="hold-transition skin-blue sidebar-mini">

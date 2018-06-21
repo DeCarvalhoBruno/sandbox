@@ -42,7 +42,7 @@ class ConvertLangFilesToJs extends Command
             if (is_dir($langDir)) {
                 $file = sprintf('%s/ajax.php', $langDir);
                 if (is_file($file)) {
-                    $fh = fopen(sprintf('resources/assets/js/lang/%s.json', $subdir), 'w');
+                    $fh = fopen(sprintf('resources/assets/backend/js/lang/%s.json', $subdir), 'w');
                     fwrite($fh, json_encode(include($file)));
                     fclose($fh);
                     $this->info('    - ' . $subdir);
@@ -55,7 +55,7 @@ class ConvertLangFilesToJs extends Command
 
             }
         }
-        $fh = fopen('resources/assets/js/lang/routes.json', 'w');
+        $fh = fopen('resources/assets/backend/js/lang/routes.json', 'w');
         fwrite($fh, json_encode($routes));
         fclose($fh);
 

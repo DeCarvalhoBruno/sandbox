@@ -1,8 +1,4 @@
 const Login = () => import('~/pages/admin/auth/login').then(m => m.default || m)
-const PasswordReset = () => import('~/pages/admin/auth/password/reset').then(
-  m => m.default || m)
-const PasswordRequest = () => import('~/pages/admin/auth/password/email').then(
-  m => m.default || m)
 
 const Dashboard = () => import('~/pages/admin/dashboard').then(
   m => m.default || m)
@@ -19,6 +15,9 @@ const GroupEdit = () => import('~/pages/admin/groups/edit').then(
 const GroupAdd = () => import('~/pages/admin/groups/add').then(
   m => m.default || m)
 const GroupMember = () => import('~/pages/admin/groups/member').then(
+  m => m.default || m)
+
+const Blog = () => import('~/pages/admin/blog/index').then(
   m => m.default || m)
 
 const Settings = () => import('~/pages/admin/settings/index').then(
@@ -76,6 +75,11 @@ let routes = [
     component: GroupMember
   },
   {
+    name: 'admin.blog.index',
+    meta: {parent: 'admin.dashboard'},
+    component: Blog
+  },
+  {
     path: '',
     component: Settings,
     meta: {parent: 'admin.dashboard'},
@@ -101,14 +105,6 @@ let routes = [
   {
     name: 'admin.login',
     component: Login
-  },
-  {
-    name: 'admin.password.request',
-    component: PasswordRequest
-  },
-  {
-    name: 'admin.password.reset',
-    component: PasswordReset
   },
   {
     path: '*',

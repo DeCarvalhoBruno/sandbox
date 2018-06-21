@@ -54,5 +54,25 @@ export default [
         }
       }
     ]
-  }
+  },
+  {
+    type: 'tree',
+    icon: 'user',
+    name: 'sidebar.blog',
+    items: [
+      {
+        type: 'item',
+        icon: 'star',
+        name: 'sidebar.list',
+        router: {
+          name: 'admin.blog.index'
+        }
+      },
+      {
+        type: 'tree',
+        icon: 'star',
+        name: 'sidebar.add'
+      }
+    ]
+  },
 ]

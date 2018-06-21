@@ -32,9 +32,10 @@
                                     {{ $t('pages.auth.remember_me') }}
                                 </checkbox>
 
-                                <router-link :to="{ name: 'admin.password.request' }" class="small ml-auto my-auto">
-                                    {{ $t('pages.auth.forgot_password') }}
-                                </router-link>
+                                <a href="/password/reset" class="small ml-auto my-auto">{{ $t('pages.auth.forgot_password') }}</a>
+                                <!--<router-link :to="{ name: 'admin.password.request' }" class="small ml-auto my-auto">-->
+                                    <!--{{ $t('pages.auth.forgot_password') }}-->
+                                <!--</router-link>-->
                             </div>
                         </div>
                         <div class="form-group row">
@@ -59,7 +60,7 @@
   export default {
     middleware: 'guest',
     metaInfo () {
-      return {title: this.$t('general.login')}
+      return {title: this.$t('title.login')}
     },
     components: {
       'v-button': Button,
