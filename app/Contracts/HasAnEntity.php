@@ -13,5 +13,4 @@ interface HasAnEntity
      */
     public function getEntity();
 
-//    public function deleteWithMedia($targetID,$entityID);
 }

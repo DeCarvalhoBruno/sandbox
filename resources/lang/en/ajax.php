@@ -57,6 +57,7 @@ return [
     'db' => [
         'user' => 'User|Users',
         'group' => 'Group|Groups',
+        'blog_post' => 'Blog Post|Blog Posts',
         'username' => 'User name',
         'first_name' => 'First name',
         'last_name' => 'Last name',

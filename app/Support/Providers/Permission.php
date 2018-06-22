@@ -58,7 +58,7 @@ class Permission extends Model implements PermissionInterface
      * @return array
      * @throws \ReflectionException
      */
-    public function getRootAndGroupPermissions($entityTypeId=null)
+    public function getRootAndGroupPermissions($entityTypeId = null)
     {
         $entities = [EntityType::ROOT_GROUP_ENTITY_TYPE_ID];
         if (!is_null($entityTypeId)) {
@@ -70,9 +70,12 @@ class Permission extends Model implements PermissionInterface
         $permission = [];
         foreach ($results as $result) {
             $type = ($result->entity_type_id == EntityType::ROOT_GROUP_ENTITY_TYPE_ID) ? 'default' : 'computed';
-            $permission[$type][trans_choice(sprintf('ajax.db.%s',
-                Entity::getModelPresentableName($result->entity_id)), 2)] =
-                Entity::createModel($result->entity_id, [], HasPermissions::class)
+            $permission[$type][trans_choice(
+                sprintf(
+                    'ajax.db.%s',
+                    Entity::getModelPresentableName($result->entity_id)
+                ), 2)] =
+            Entity::createModel($result->entity_id, [], HasPermissions::class)
                     ->getReadablePermissions($result->permission_mask, true);
         }
         //We're supposed to get an array with computed and default permissions but some users

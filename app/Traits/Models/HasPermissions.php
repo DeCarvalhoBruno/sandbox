@@ -5,11 +5,11 @@ trait HasPermissions
 {
     /**
      * Get permissions in a readable format i.e 'view/add/edit/delete'
+     * as opposed to the binary value
      *
      * @param int $value
      * @param bool $toArray
      * @return array|string
-     * @throws \ReflectionException
      */
     public function getReadablePermissions($value = 65535, $toArray = false)
     {

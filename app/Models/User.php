@@ -19,8 +19,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as LaravelUser;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Contracts\Enumerable as EnumerableContract;
 
-class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermissions
+class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermissions, EnumerableContract
 {
     use Notifiable, HasAnEntityTrait, HasANameColumn, DoesSqlStuff, Enumerable, Presentable, HasPermissionsTrait;
 

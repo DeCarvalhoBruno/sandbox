@@ -34,6 +34,8 @@ class Group extends Permission
         unset($users);
 
         $permissionMasks = $permissionRecords = [];
+
+        //The default permissions will be used whenever the user tries to view or edit groups in general
         foreach ($usersWithPermissions as $userWithPermission) {
             $permissionStoreId = (new PermissionStore())->insertGetId([]);
             $permissionMasks[] = [
@@ -48,6 +50,8 @@ class Group extends Permission
                 'permission_store_id' => $permissionStoreId
             ];
         }
+        //For groups there is the specific rule that you're not supposed to see groups above your "pay grade"
+        //that is, groups that have a lower group mask than the higher group you belong to
         foreach ($groups as $group) {
             foreach ($usersWithPermissions as $userWithPermission) {
                 if ($userInfo[$userWithPermission->user_id]->group_mask < $group->getAttribute('group_mask')) {

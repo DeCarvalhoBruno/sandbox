@@ -123,6 +123,11 @@ class Permissions extends Migration
                 'entity_id' => \App\Models\Entity::BLOG_POSTS,
                 'permission_mask' => 0b1111,
             ],
+            [
+                'entity_type_id' => 6,
+                'entity_id' => \App\Models\Entity::BLOG_POSTS,
+                'permission_mask' => 0b0001,
+            ],
         ]);
 
     }

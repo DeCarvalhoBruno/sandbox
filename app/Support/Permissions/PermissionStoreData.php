@@ -18,7 +18,7 @@ class PermissionStoreData
      * @param int $type
      * @param PermissionData[] $permissions
      */
-    public function __construct($type, array $permissions=[])
+    public function __construct($type, array $permissions = [])
     {
         $this->type = $type;
 
@@ -45,7 +45,7 @@ class PermissionStoreData
      * @param string $item
      * @return \App\Support\Permissions\PermissionData|\App\Support\Permissions\PermissionData[]
      */
-    public function get($item=null)
+    public function get($item = null)
     {
         return $this->permissions[$item] ?? $this->permissions;
     }

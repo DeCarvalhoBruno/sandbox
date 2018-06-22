@@ -1,5 +1,6 @@
 <?php namespace App\Support\Permissions;
 
+use App\Contracts\Enumerable;
 use App\Models\GroupMember;
 
 abstract class Permission
@@ -27,19 +28,30 @@ abstract class Permission
     /**
      * @var array
      */
-    private static $permissionBoundEntities=[
-      User::class,
-      Group::class,
+    private static $permissionBoundEntities = [
+        User::class,
+        Group::class,
     ];
 
     protected function __construct($modelClass, $entityId)
     {
+        try {
+            $rc = new \ReflectionClass($modelClass);
+        } catch (\ReflectionException $e) {
+            throw new \UnexpectedValueException(sprintf('Class %s does not exist.', $modelClass));
+        }
+        if (!$rc->implementsInterface(Enumerable::class)) {
+            throw new \UnexpectedValueException(sprintf('Class %s must implement Enumerable, method getConstants has to be called.',
+                $modelClass));
+        }
+
         $this->fullPermissionsBitmask = array_sum(forward_static_call([$modelClass, 'getConstants'], 'PERMISSION'));
         $this->entityId = $entityId;
     }
 
-    public static function assignToAll(){
-        foreach(self::$permissionBoundEntities as $permissionObject){
+    public static function assignToAll()
+    {
+        foreach (self::$permissionBoundEntities as $permissionObject) {
             (new $permissionObject)->assignPermissions();
         }
     }
@@ -57,17 +69,37 @@ abstract class Permission
     protected function getUsersWithPermissions()
     {
         $dbEntries = $this->sqlUsersWithPermissions();
-        $usersWithPermissions = $tmp = [];
+        $usersWithPermissions = $alreadyHasIndividualPermissions = $maxGroupPermission = [];
         foreach ($dbEntries as $dbEntry) {
             //Query does two left joins, so users without groups appear with a null group.
             //This "if" is for users who have individual permissions assigned to them.
             //Individual permissions bypass group permissions.
-            if (!is_null($dbEntry->group_user_id) && (!isset($tmp[$dbEntry->group_user_id]))) {
+            if (!is_null($dbEntry->group_user_id) && !isset($alreadyHasIndividualPermissions[$dbEntry->group_user_id])) {
                 $dbEntry->user_id = $dbEntry->group_user_id;
-                $usersWithPermissions[$dbEntry->group_user_id] = $dbEntry;
+                //If a user is a member of multiple groups with different permission masks
+                //we choose the highest of permissions
+
+
+
+
+                //@TODO: test an addition of permissions when the user has permissions from multiple groups
+
+
+
+
+
+
+
+                if (!isset($maxGroupPermission[$dbEntry->group_user_id])) {
+                    $maxGroupPermission[$dbEntry->user_id] = $dbEntry->permission_mask;
+                    $usersWithPermissions[$dbEntry->group_user_id] = (object)$dbEntry->toArray();
+                } elseif ($dbEntry->permission_mask > $maxGroupPermission[$dbEntry->group_user_id]) {
+                    $maxGroupPermission[$dbEntry->group_user_id] = $dbEntry->permission_mask;
+                    $usersWithPermissions[$dbEntry->group_user_id] = (object)$dbEntry->toArray();
+                }
             } elseif (!is_null($dbEntry->user_id)) {
-                $tmp[$dbEntry->user_id] = $dbEntry;
-                $usersWithPermissions[$dbEntry->user_id] = $dbEntry;
+                $alreadyHasIndividualPermissions[$dbEntry->user_id] = (object)$dbEntry->toArray();
+                $usersWithPermissions[$dbEntry->user_id] = (object)$dbEntry->toArray();
             }
         }
         return $usersWithPermissions;
@@ -84,8 +116,7 @@ abstract class Permission
             'group_members.user_id as group_user_id',
             'users.user_id',
             'permission_mask',
-            'permissions.entity_id',
-            'users.username'
+            'permissions.entity_id'
         ])->entity($this->entityId)
             ->entityType()
             ->leftGroupMember()
@@ -108,8 +139,8 @@ abstract class Permission
         $builder = GroupMember::query()->select([
             'entity_types.entity_type_id',
             'users.user_id',
-            'groups.group_mask',
-            'users.username'])->group()->user()->entityType();
+            'groups.group_mask'
+        ])->group()->user()->entityType();
         if (!is_null($userIdList)) {
             $builder->whereIn('users.user_id', $userIdList);
         }

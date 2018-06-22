@@ -10,8 +10,9 @@ use App\Contracts\HasPermissions;
 use App\Traits\Presentable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use App\Contracts\Enumerable as EnumerableContract;
 
-class Group extends Model implements HasAnEntity, HasPermissions
+class Group extends Model implements HasAnEntity, HasPermissions, EnumerableContract
 {
     use HasAnEntityTrait, HasANameColumn, Enumerable, Presentable, DoesSqlStuff, HasPermissionsTrait;
 

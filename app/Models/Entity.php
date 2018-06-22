@@ -30,7 +30,7 @@ class Entity extends Model
      * @param int $entityID
      * @param array $attributes
      * @param string $testContract
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return \Illuminate\Database\Eloquent\Model|\App\Contracts\HasPermissions
      */
     public static function createModel($entityID, array $attributes = [], $testContract = null)
     {
