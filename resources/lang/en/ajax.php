@@ -67,7 +67,8 @@ return [
         'group_name' => 'Group name',
         'new_group_name' => 'New group name',
         'group_mask' => 'Group mask',
-        'member_count' => 'Number of members'
+        'member_count' => 'Number of members',
+        'blog_post_title'=>'Post title'
     ],
     'db_raw' => [
         'full_name' => 'full_name',
@@ -80,6 +81,7 @@ return [
         'email' => 'email',
         'group_name' => 'group_name',
         'created_at' => 'created_at',
+        'blog_post_title'=>'blog_post_title'
     ],
     'form' => [
         'description' => [

@@ -1,6 +1,25 @@
 <template>
     <div>
-        
+        <v-table :entity="'blog'" :rows="rows" :total="total">
+            <th slot="header-action">
+                {{$t('general.actions')}}
+            </th>
+            <td slot="body-action" slot-scope="props">
+                <div class="inline">
+                    <template v-if="props.row.blog_post_title">
+                        <router-link :to="{
+                        name: 'admin.blog.edit',
+                        params: { group: props.row.blog_post_title }
+                        }">
+                            <button class="btn btn-sm btn-info">
+                                <fa icon="pencil-alt">
+                                </fa>
+                            </button>
+                        </router-link>
+                    </template>
+                </div>
+            </td>
+        </v-table>
     </div>
 </template>
 
@@ -11,6 +30,8 @@
   import { mapGetters } from 'vuex'
   import axios from 'axios'
 
+  Vue.use(Table)
+
   export default {
     layout: 'basic',
     middleware: 'check-auth',
@@ -18,8 +39,21 @@
     components: {
       'v-table': Table
     },
+    computed: {
+      ...mapGetters({
+        rows: 'table/rows',
+        total: 'table/total',
+        extras: 'table/extras'
+      })
+    },
     data () {
       return {}
+    },
+    beforeRouteEnter (to, from, next) {
+      store.dispatch('table/fetchData', {
+        entity: 'blog',
+        queryString: to.fullPath
+      }).then(res => next())
     }
   }
 </script>

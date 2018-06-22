@@ -29,7 +29,7 @@ class Medias extends Migration
         Schema::create('media_types', function (Blueprint $table) {
             $table->increments('media_type_id');
 
-            $table->string('media_title', 255)->nullable();
+            $table->string('media_title')->nullable();
             $table->text('media_description')->nullable();
             $table->string('media_uuid',32);
             $table->boolean('media_in_use')->default(true);
@@ -41,13 +41,26 @@ class Medias extends Migration
             $table->increments('media_digital_id');
 
             $table->unsignedInteger('media_type_id');
-            $table->string('media_filename', 255)->nullable();
+            $table->string('media_filename')->nullable();
             $table->string('media_extension', 10)->nullable();
-            $table->string('media_thumbnail', 255)->nullable();
+            $table->string('media_thumbnail')->nullable();
+            $table->text('media_description')->nullable();
             $table->timestamps();
 
             $table->foreign('media_type_id')
                 ->references('media_type_id')->on('media_types')
+                ->onDelete('cascade');
+        });
+
+        Schema::create('media_img', function (Blueprint $table) {
+            $table->increments('media_img_id');
+
+            $table->unsignedInteger('media_digital_id');
+            $table->string('media_img_alt')->nullable();
+            $table->text('media_img_attribution')->nullable();
+
+            $table->foreign('media_digital_id')
+                ->references('media_digital_id')->on('media_digital')
                 ->onDelete('cascade');
         });
 
