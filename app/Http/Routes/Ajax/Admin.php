@@ -25,7 +25,7 @@ class Admin
                 ->middleware('can:view,App\Models\User');
             $r->get('users/session', 'User@session');
             $r->get('users/{user}', 'User@edit')
-                ->middleware('can:update,App\Models\User');
+                ->middleware('can:edit,App\Models\User');
             $r->patch('users/{user}', 'User@update')
                 ->middleware('can:delete,App\Models\User');
             $r->delete('users/{user}', 'User@destroy')
@@ -42,9 +42,9 @@ class Admin
             $r->post('groups', 'Group@create')
                 ->middleware('can:add,App\Models\Group');
             $r->get('groups/{group}', 'Group@edit')
-                ->middleware('can:update,App\Models\Group');
+                ->middleware('can:edit,App\Models\Group');
             $r->patch('groups/{group}', 'Group@update')
-                ->middleware('can:update,App\Models\Group');
+                ->middleware('can:edit,App\Models\Group');
             $r->delete('groups/{group}', 'Group@destroy')
                 ->middleware('can:delete,App\Models\Group');
 
@@ -56,7 +56,9 @@ class Admin
                 ->middleware('can:view,App\Models\Group');
 
             $r->get('blog', 'Blog@index')
-                ->middleware('can:view,App\Models\Blog');
+                ->middleware('can:view,App\Models\Blog\BlogPost');
+            $r->post('blog/add', 'Blog@add')
+                ->middleware('can:add,App\Models\Blog\BlogPost');
 
             $r->patch('settings/profile', 'Settings\Profile@update');
             $r->patch('settings/password', 'Settings\Password@update');
@@ -68,9 +70,9 @@ class Admin
             $r->get('settings/avatar', 'Settings\Profile@avatar');
 
             $r->post('media/add', 'Media@add')
-                ->middleware('can:update,App\Models\User');
+                ->middleware('can:edit,App\Models\User');
             $r->post('media/crop', 'Media@crop')
-                ->middleware('can:update,App\Models\User');
+                ->middleware('can:edit,App\Models\User');
 
         };
     }

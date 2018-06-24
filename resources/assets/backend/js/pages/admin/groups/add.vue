@@ -1,6 +1,6 @@
 <template>
     <b-card no-body>
-        <form @submit.prevent="save" @keydown="form.onKeydown($event)">
+        <form @submit.prevent="save">
             <b-tabs card>
                 <b-tab :title="$t('breadcrumb.admin-groups-add')">
                     <div class="col-md-8 offset-md-2">

@@ -6,6 +6,19 @@ const webpack = require('webpack')
 const folderName = '1b8eb'
 const publicPath = `public/${folderName}`
 
+Mix.listen('configReady', function (config) {
+  const rules = config.module.rules
+  const targetRegex = /(\.(png|jpe?g|gif)$|^((?!font).)*\.svg$)/
+
+  for (let rule of rules) {
+    if (rule.test.toString() == targetRegex.toString()) {
+      rule.exclude = /\.svg$/
+      break
+    }
+  }
+})
+
+mix.copy('resources/assets/_fonts/aladin-v6-latin-regular.ttf', `${publicPath}/fonts`)
 mix.js('resources/assets/backend/js/app.js', 'js/app.js')
   .sass('resources/assets/backend/sass/app.scss', 'css/app.css')
   .sourceMaps()
@@ -41,10 +54,22 @@ mix.browserSync({
   proxy: 'laravel.local/admin/login',
   files: [
     `public/${folderName}/**/*`,
-    'app/**/*'
+    'app/**/*',
+    'resources/assets/**/*'
   ]
 })
 mix.webpackConfig({
+  module: {
+    rules: [{
+      test: /\.svg$/,
+      use: [{
+        loader: 'html-loader',
+        options: {
+          minimize: true
+        }
+      }]
+    }]
+  },
   plugins: [
     new CleanWebpackPlugin([
       'js', 'css', 'fonts', 'mix-manifest.json'
@@ -60,6 +85,10 @@ mix.webpackConfig({
       Popper: 'popper'
     })
   ],
+  // externals: {
+  //   // 'trumbowyg': 'js/trumbowyg',
+  //   'trumbowyg/dist/ui/icons.svg': 'trumbowyg/dist/ui/icons.svg'
+  // },
   resolve: {
     extensions: ['.js', '.json', '.vue'],
     alias: {
@@ -70,6 +99,6 @@ mix.webpackConfig({
   },
   output: {
     chunkFilename: 'js/[name].[chunkhash].js',
-    publicPath: `/${folderName}/`
+    publicPath: `/${folderName}/`,
   }
 })

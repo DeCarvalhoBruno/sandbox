@@ -1,17 +1,11 @@
 <?php namespace App\Support\Permissions;
 
-use App\Models\Entity;
 use App\Models\PermissionMask;
 use App\Models\PermissionRecord;
 use App\Models\PermissionStore;
 
 class Group extends Permission
 {
-    public function __construct()
-    {
-        parent::__construct(\App\Models\Group::class, Entity::GROUPS);
-    }
-
     public function assignPermissions()
     {
         $this->populateDb($this->getUsersWithPermissions());
@@ -23,13 +17,10 @@ class Group extends Permission
     protected function populateDb($usersWithPermissions)
     {
         $groups = $this->sqlGetGroups();
-        $users = $this->sqlGetUsersGroups(array_keys($usersWithPermissions));
+        $users = $this->sqlGetUsersAndHighestGroup(array_keys($usersWithPermissions));
         $userInfo = [];
         foreach ($users as $user) {
-            //We're only keeping the user's highest group in the hierarchy, the group with the lowest group_mask.
-            if (!isset($userInfo[$user->user_id]) || (isset($userInfo[$user->user_id]) && $user->group_mask < $userInfo[$user->user_id]->group_mask)) {
-                $userInfo[$user->user_id] = (object)$user->toArray();
-            }
+            $userInfo[$user->user_id] = (object)$user->toArray();
         }
         unset($users);
 
@@ -50,8 +41,8 @@ class Group extends Permission
                 'permission_store_id' => $permissionStoreId
             ];
         }
-        //For groups there is the specific rule that you're not supposed to see groups above your "pay grade"
-        //that is, groups that have a lower group mask than the higher group you belong to
+        //For groups there is the specific rule that you're not supposed to see groups above one's "pay grade"
+        //that is, groups that have a lower group mask than the higher group one belongs to
         foreach ($groups as $group) {
             foreach ($usersWithPermissions as $userWithPermission) {
                 if ($userInfo[$userWithPermission->user_id]->group_mask < $group->getAttribute('group_mask')) {

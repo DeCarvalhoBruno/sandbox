@@ -43,6 +43,8 @@
 
 @import '~sweetalert2/src/sweetalert2';
 
+@import "~trumbowyg/dist/ui/sass/trumbowyg.scss";
+
 //**********************************************
 @import "mixins";
 @import "core";
@@ -62,6 +64,7 @@
 @import "vendor/dropzone";
 @import "vendor/wizard";
 @import "vendor/cropper";
+@import "vendor/tinymce";
 
 //**********************************************
 

@@ -97,48 +97,50 @@
 
         </div>
         <div class="row">
-            <v-table :entity="'users'" :is-multi-select="true" :rows="rows" :total="total">
-                <th slot="header-select-all">
-                    <div class="form-check">
-                        <input class="form-check-input position-static"
-                               type="checkbox"
-                               :aria-label="$t('general.select_all')"
-                               :title="$t('general.select_all')"
-                               @click="toggleSelectAll">
-                    </div>
-                </th>
-                <th slot="header-action">
-                    {{$t('general.actions')}}
-                </th>
-                <td slot="body-select-row" slot-scope="props">
-                    <div class="form-check">
-                        <input class="form-check-input position-static"
-                               type="checkbox"
-                               :aria-label="$t('tables.select_item',{name:props.row[$t('db_raw_inv.full_name')]})"
-                               :title="$t('tables.select_item',{name:props.row[$t('db_raw_inv.full_name')]})"
-                               v-model="props.row.selected">
-                    </div>
-                </td>
-                <td slot="body-action" slot-scope="props">
-                    <div class="inline">
-                        <template v-if="props.row.username">
-                            <router-link :to="{ name: 'admin.users.edit', params: { user: props.row.username } }">
-                                <button type="button" class="btn btn-sm btn-info"
-                                        :title="$t('tables.edit_item',{name:props.row[$t('db_raw_inv.full_name')]})">
-                                    <fa icon="pencil-alt">
-                                    </fa>
-                                </button>
-                            </router-link>
-                        </template>
-                        <button type="button" class="btn btn-sm btn-danger"
-                                :title="$t('tables.delete_item',{name:props.row[$t('db_raw_inv.full_name')]})"
-                                @click="deleteRowConfirm(props.row)">
-                            <fa icon="trash-alt">
-                            </fa>
-                        </button>
-                    </div>
-                </td>
-            </v-table>
+            <div class="card col-lg p-0 m-0">
+                <v-table :entity="'users'" :is-multi-select="true" :rows="rows" :total="total">
+                    <th slot="header-select-all">
+                        <div class="form-check">
+                            <input class="form-check-input position-static"
+                                   type="checkbox"
+                                   :aria-label="$t('general.select_all')"
+                                   :title="$t('general.select_all')"
+                                   @click="toggleSelectAll">
+                        </div>
+                    </th>
+                    <th slot="header-action">
+                        {{$t('general.actions')}}
+                    </th>
+                    <td slot="body-select-row" slot-scope="props">
+                        <div class="form-check">
+                            <input class="form-check-input position-static"
+                                   type="checkbox"
+                                   :aria-label="$t('tables.select_item',{name:props.row[$t('db_raw_inv.full_name')]})"
+                                   :title="$t('tables.select_item',{name:props.row[$t('db_raw_inv.full_name')]})"
+                                   v-model="props.row.selected">
+                        </div>
+                    </td>
+                    <td slot="body-action" slot-scope="props">
+                        <div class="inline">
+                            <template v-if="props.row.username">
+                                <router-link :to="{ name: 'admin.users.edit', params: { user: props.row.username } }">
+                                    <button type="button" class="btn btn-sm btn-info"
+                                            :title="$t('tables.edit_item',{name:props.row[$t('db_raw_inv.full_name')]})">
+                                        <fa icon="pencil-alt">
+                                        </fa>
+                                    </button>
+                                </router-link>
+                            </template>
+                            <button type="button" class="btn btn-sm btn-danger"
+                                    :title="$t('tables.delete_item',{name:props.row[$t('db_raw_inv.full_name')]})"
+                                    @click="deleteRowConfirm(props.row)">
+                                <fa icon="trash-alt">
+                                </fa>
+                            </button>
+                        </div>
+                    </td>
+                </v-table>
+            </div>
         </div>
     </div>
 </template>

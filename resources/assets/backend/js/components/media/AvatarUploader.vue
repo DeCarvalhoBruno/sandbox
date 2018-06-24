@@ -1,6 +1,6 @@
 <template>
     <div class="form-group row">
-        <b-card no-body class="w-100">
+        <div class="card w-100">
             <b-tabs card>
                 <b-tab :title="$t('pages.settings.avatar-tab')" @click="avatarTabClicked" active>
                     <p v-show="avatars.lenth>1" class="font-italic">Click on an avatar to apply it.</p>
@@ -96,7 +96,7 @@
                                                 </div>
                                                 <div class="row mt-1">
                                                     <div class="col">
-                                                        <span class="dropzone-error clearfix text-danger"></span>
+                                                        <span class="dropzone-error clearfix text-danger" v-html="error"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -129,7 +129,7 @@
                     </wizard>
                 </b-tab>
             </b-tabs>
-        </b-card>
+        </div>
     </div>
 </template>
 <script>
@@ -140,16 +140,14 @@
   import axios from 'axios'
 
   import { Form, HasError, AlertForm } from '~/components/form'
-  import { Tabs, Card } from 'bootstrap-vue/es/components'
+  import { Tabs } from 'bootstrap-vue/es/components'
 
   Vue.use(Tabs)
-  Vue.use(Card)
 
   export default {
     name: 'avatar-uploader',
     components: {
       Tabs,
-      Card,
       'dropzone': VueTransmit,
       Wizard,
       Cropper
@@ -188,6 +186,7 @@
         uploadedImageFilename: null,
         maxFilesize: 2,
         croppedImageData: Object,
+        error:'',
         dropzoneOptions: {
           // createImageThumbnails:false,
           // thumbnailWidth:3000,
@@ -241,6 +240,9 @@
           vm.minCropBoxHeight = 128
           vm.minCropBoxWidth = 128
           vm.uploadSuccess=true
+        })
+        this.$refs.dropzone.$on('error', function (file, error) {
+          vm.error = error
         })
       },
       deleteAvatar (uuid, alreadyUsed) {

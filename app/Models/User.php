@@ -52,7 +52,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
         'email'
     ];
 
-    protected $entityID = \App\Models\Entity::USERS;
+    public static $entityID = \App\Models\Entity::USERS;
     public $timestamps = false;
 
     protected static function boot()
@@ -224,6 +224,20 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
                 ->where('permission_masks.permission_holder_id', '=', $userId)
                 ->where('permission_mask', '>', 0);
         });
+    }
+
+    public static function queryHighestRankedGroup($userIdList=null)
+    {
+        $query = (new static)->newBaseQueryBuilder()
+            ->select(['users.user_id', \DB::raw('min(groups.group_mask) as gmask')])
+            ->from('users')
+            ->join('group_members', 'group_members.user_id', '=', 'users.user_id')
+            ->join('groups', 'group_members.group_id', '=', 'groups.group_id')
+            ->groupBy('users.user_id');
+        if (!is_null($userIdList)) {
+            $query->whereIn('users.user_id', $userIdList);
+        }
+        return $query;
     }
 
     /**

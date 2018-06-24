@@ -66,7 +66,7 @@
 
 <script>
   import Button from '~/components/Button'
-  import AvatarUploader from '~/components/AvatarUploader'
+  import AvatarUploader from '~/components/media/AvatarUploader'
   import axios from 'axios'
 
   import { Form, HasError, AlertForm } from '~/components/form'

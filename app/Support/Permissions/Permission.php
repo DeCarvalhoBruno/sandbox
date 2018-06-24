@@ -1,6 +1,7 @@
 <?php namespace App\Support\Permissions;
 
-use App\Contracts\Enumerable;
+use App\Models\Entity;
+use App\Models\EntityType;
 use App\Models\GroupMember;
 
 abstract class Permission
@@ -29,30 +30,29 @@ abstract class Permission
      * @var array
      */
     private static $permissionBoundEntities = [
-        User::class,
-        Group::class,
+        Entity::USERS,
+        Entity::GROUPS,
+        Entity::BLOG_POSTS
     ];
 
-    protected function __construct($modelClass, $entityId)
+    protected function __construct($entityId)
     {
-        try {
-            $rc = new \ReflectionClass($modelClass);
-        } catch (\ReflectionException $e) {
-            throw new \UnexpectedValueException(sprintf('Class %s does not exist.', $modelClass));
-        }
-        if (!$rc->implementsInterface(Enumerable::class)) {
-            throw new \UnexpectedValueException(sprintf('Class %s must implement Enumerable, method getConstants has to be called.',
-                $modelClass));
-        }
-
-        $this->fullPermissionsBitmask = array_sum(forward_static_call([$modelClass, 'getConstants'], 'PERMISSION'));
+        $modelClass = Entity::getModelClassNamespace($entityId);
+        $this->fullPermissionsBitmask = array_sum(
+            forward_static_call([$modelClass, 'getConstants'], 'PERMISSION')
+        );
         $this->entityId = $entityId;
     }
 
     public static function assignToAll()
     {
-        foreach (self::$permissionBoundEntities as $permissionObject) {
-            (new $permissionObject)->assignPermissions();
+        foreach (self::$permissionBoundEntities as $entity) {
+            $class = sprintf('%s\\%s', __NAMESPACE__, Entity::getModelClass($entity));
+            if (class_exists($class)) {
+                (new $class($entity))->assignPermissions();
+            } else {
+                (new Generic($entity))->assignPermissions();
+            }
         }
     }
 
@@ -60,7 +60,7 @@ abstract class Permission
      * Arranging users in an array of type:
      *      array[user_id]=user permission
      *
-     * Important note: entries are ordered so that users with individually assigned permissions appear first,
+     * Note: entries are ordered so that users with individually assigned permissions appear first,
      * and users with group related permissions appear next.
      * That way, we make sure that user permissions take priority over group permissions.
      *
@@ -76,30 +76,22 @@ abstract class Permission
             //Individual permissions bypass group permissions.
             if (!is_null($dbEntry->group_user_id) && !isset($alreadyHasIndividualPermissions[$dbEntry->group_user_id])) {
                 $dbEntry->user_id = $dbEntry->group_user_id;
-                //If a user is a member of multiple groups with different permission masks
-                //we choose the highest of permissions
-
-
-
-
-                //@TODO: test an addition of permissions when the user has permissions from multiple groups
-
-
-
-
-
-
-
-                if (!isset($maxGroupPermission[$dbEntry->group_user_id])) {
-                    $maxGroupPermission[$dbEntry->user_id] = $dbEntry->permission_mask;
+                //If a user is a member of multiple groups with different permission masks, we add permissions
+                if (isset($usersWithPermissions[$dbEntry->group_user_id])) {
+                    $usersWithPermissions[$dbEntry->group_user_id]->permission_mask =
+                        (
+                            $usersWithPermissions[$dbEntry->group_user_id]->permission_mask
+                            |
+                            $dbEntry->permission_mask
+                        );
+                } else {
                     $usersWithPermissions[$dbEntry->group_user_id] = (object)$dbEntry->toArray();
-                } elseif ($dbEntry->permission_mask > $maxGroupPermission[$dbEntry->group_user_id]) {
-                    $maxGroupPermission[$dbEntry->group_user_id] = $dbEntry->permission_mask;
-                    $usersWithPermissions[$dbEntry->group_user_id] = (object)$dbEntry->toArray();
+                    unset($usersWithPermissions[$dbEntry->group_user_id]->group_user_id);
                 }
             } elseif (!is_null($dbEntry->user_id)) {
                 $alreadyHasIndividualPermissions[$dbEntry->user_id] = (object)$dbEntry->toArray();
                 $usersWithPermissions[$dbEntry->user_id] = (object)$dbEntry->toArray();
+                unset($usersWithPermissions[$dbEntry->user_id]->group_user_id);
             }
         }
         return $usersWithPermissions;
@@ -115,8 +107,7 @@ abstract class Permission
         return \App\Models\Permission::query()->select([
             'group_members.user_id as group_user_id',
             'users.user_id',
-            'permission_mask',
-            'permissions.entity_id'
+            'permission_mask'
         ])->entity($this->entityId)
             ->entityType()
             ->leftGroupMember()
@@ -139,11 +130,26 @@ abstract class Permission
         $builder = GroupMember::query()->select([
             'entity_types.entity_type_id',
             'users.user_id',
-            'groups.group_mask'
         ])->group()->user()->entityType();
         if (!is_null($userIdList)) {
             $builder->whereIn('users.user_id', $userIdList);
         }
+        return $builder->get();
+    }
+
+    /**
+     * @param null|array $userIdList
+     * @return mixed
+     * @see \App\Models\EntityType::scopeHighestGroup()
+     * @see \App\Models\User::queryHighestRankedGroup
+     */
+    protected function sqlGetUsersAndHighestGroup($userIdList = null)
+    {
+        $builder = EntityType::query()->select([
+            'entity_types.entity_type_id',
+            'users_highest_group.user_id',
+            'users_highest_group.gmask as group_mask'
+        ])->highestGroup(Entity::USERS, $userIdList);
         return $builder->get();
     }
 

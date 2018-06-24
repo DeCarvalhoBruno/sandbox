@@ -22,7 +22,7 @@ class Group extends Model implements HasAnEntity, HasPermissions, EnumerableCont
     const PERMISSION_DELETE = 0b1000;
 
     public $primaryKey = 'group_id';
-    protected $entityID = \App\Models\Entity::GROUPS;
+    public static $entityID = \App\Models\Entity::GROUPS;
     protected $nameColumn = 'group_name';
     protected $fillable = [
         'group_name',

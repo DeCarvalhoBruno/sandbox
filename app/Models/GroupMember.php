@@ -15,7 +15,7 @@ class GroupMember extends Model implements HasAnEntity
     const PERMISSION_ADD = 0b10;
     const PERMISSION_DELETE = 0b1000;
 
-    protected $entityID = \App\Models\Entity::GROUP_MEMBERS;
+    public static $entityID = \App\Models\Entity::GROUP_MEMBERS;
 
     public $timestamps = false;
 

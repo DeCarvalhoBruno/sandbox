@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -9,6 +10,7 @@
     <link href="{{ mix('css/app.css','1b8eb') }}" rel="stylesheet">
 </head>
 <body id="backend" class="hold-transition skin-blue sidebar-mini">
+
 <div id="app"></div>
 @include('partials.javascript_footer')
 @if (app()->environment()=='production')

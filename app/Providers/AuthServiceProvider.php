@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Contracts\Models\User as UserInterface;
-use App\Models as Models;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -15,8 +14,9 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Models\User::class,
-        Models\Group::class
+        \App\Models\User::class => \App\Policies\User::class,
+        \App\Models\Group::class => \App\Policies\Group::class,
+        \App\Models\Blog\BlogPost::class => \App\Policies\Group::class
     ];
 
     /**
@@ -31,8 +31,8 @@ class AuthServiceProvider extends ServiceProvider
             return $userProvider;
         });
 
-        foreach ($this->policies as $value) {
-            Gate::policy($value, str_replace('\\Models', '\\Policies', $value));
+        foreach ($this->policies as $model => $policy) {
+            Gate::policy($model, $policy);
         }
 
         //

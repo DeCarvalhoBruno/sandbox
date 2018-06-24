@@ -7,9 +7,9 @@ use App\Models\PermissionStore;
 
 class User extends Permission
 {
-    public function __construct()
+    public function __construct($entity)
     {
-        parent::__construct(\App\Models\User::class,Entity::USERS);
+        parent::__construct(Entity::USERS);
         //As a precaution, we initialize the following objects even though its very unlikely that they won't be overwritten down the line.
         $this->default = new PermissionStoreData(PermissionStoreData::DEFAULT);
         $this->computed = new PermissionStoreData(PermissionStoreData::COMPUTED);
@@ -38,14 +38,18 @@ class User extends Permission
         //There is only one default permission, which allows us not to have to create X times X permissions for everyone.
         $default = $this->default->get();
         $defaultPermissionStoreId = (new PermissionStore)->insertGetId([]);
+        $permissionMasks = [];
         foreach ($default as $permission) {
-            (new PermissionMask())->insert([
+            $permissionMasks[] = [
                 'permission_store_id' => $defaultPermissionStoreId,
                 'permission_holder_id' => $permission->getHolder(),
                 'permission_mask' => $permission->getMask(),
                 'permission_is_default' => true
-            ]);
+            ];
         }
+        (new PermissionMask)->insert($permissionMasks);
+        unset($permissionMasks);
+
         $permissionRecords = [];
         //For users with permissions that needed some processing, we write them user by user.
         foreach ($this->allUsersInfo as $user) {
@@ -86,15 +90,12 @@ class User extends Permission
      */
     private function prepareAllForDb($usersWithPermissions)
     {
-        $users = $this->sqlGetUsersGroups();
+        $users = $this->sqlGetUsersAndHighestGroup();
         $this->allUsersInfo = [];
         foreach ($users as $user) {
-            //We're only keeping the user's highest group in the hierarchy, the group with the lowest group_mask.
-            if (!isset($this->allUsersInfo[$user->user_id]) || (isset($this->allUsersInfo[$user->user_id]) && $user->group_mask < $this->allUsersInfo[$user->user_id]->group_mask)) {
-                $this->allUsersInfo[$user->user_id] = (object)$user->toArray();
-            }
+            $this->allUsersInfo[$user->user_id] = (object)$user->toArray();
         }
-
+        unset($users);
         $defaultPermissions = null;
         $permissionsToInsert = [];
         foreach ($this->allUsersInfo as $permissionObject) {

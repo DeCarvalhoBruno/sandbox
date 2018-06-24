@@ -12,6 +12,8 @@ return [
         'admin-groups-edit' => 'Edit',
         'admin-groups-add' => 'New Group',
         'admin-groups-members' => 'Edit Members',
+        'admin-blog-index' => 'Blog Posts',
+        'admin-blog-add' => 'Create',
         'admin-settings-password' => 'Your password',
         'admin-settings-profile' => 'Your profile',
         'admin-settings-general' => 'Your general settings',

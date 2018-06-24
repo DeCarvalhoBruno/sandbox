@@ -19,6 +19,8 @@ const GroupMember = () => import('~/pages/admin/groups/member').then(
 
 const Blog = () => import('~/pages/admin/blog/index').then(
   m => m.default || m)
+const BlogAdd = () => import('~/pages/admin/blog/add').then(
+  m => m.default || m)
 
 const Settings = () => import('~/pages/admin/settings/index').then(
   m => m.default || m)
@@ -78,6 +80,11 @@ let routes = [
     name: 'admin.blog.index',
     meta: {parent: 'admin.dashboard'},
     component: Blog
+  },
+  {
+    name: 'admin.blog.add',
+    meta: {parent: 'admin.blog.index'},
+    component: BlogAdd
   },
   {
     path: '',

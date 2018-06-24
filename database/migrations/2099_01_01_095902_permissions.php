@@ -101,12 +101,12 @@ class Permissions extends Migration
             [
                 'entity_type_id' => 4,
                 'entity_id' => \App\Models\Entity::USERS,
-                'permission_mask' => 0b1111,
+                'permission_mask' => 0b1111
             ],
             [
                 'entity_type_id' => 4,
                 'entity_id' => \App\Models\Entity::GROUPS,
-                'permission_mask' => 0b1111,
+                'permission_mask' => 0b1111
             ],
             [
                 'entity_type_id' => 4,
@@ -116,17 +116,12 @@ class Permissions extends Migration
             [
                 'entity_type_id' => 5,
                 'entity_id' => \App\Models\Entity::USERS,
-                'permission_mask' => 0b0101,
+                'permission_mask' => 0b0101
             ],
             [
                 'entity_type_id' => 5,
                 'entity_id' => \App\Models\Entity::BLOG_POSTS,
-                'permission_mask' => 0b1111,
-            ],
-            [
-                'entity_type_id' => 6,
-                'entity_id' => \App\Models\Entity::BLOG_POSTS,
-                'permission_mask' => 0b0001,
+                'permission_mask' => 0b1111
             ],
         ]);
 

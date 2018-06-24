@@ -6,10 +6,6 @@ use App\Models\PermissionStore;
 
 class Generic extends Permission
 {
-    public function __construct($modelClass, $entityId)
-    {
-        parent::__construct($modelClass, $entityId);
-    }
 
     public function assignPermissions()
     {
@@ -24,22 +20,15 @@ class Generic extends Permission
         $users = $this->sqlGetUsersGroups(array_keys($usersWithPermissions));
         $userInfo = [];
         foreach ($users as $user) {
-            //We're only keeping the user's highest group in the hierarchy, the group with the lowest group_mask.
-            if (!isset($userInfo[$user->user_id])) {
-                $userInfo[$user->user_id] = [(object)$user->toArray()];
-            }else{
-                $userInfo[$user->user_id][] = (object)$user->toArray();
-            }
+            $userInfo[$user->user_id] = $user->getAttribute('entity_type_id');
         }
-//        dd($users->toArray(),$usersWithPermissions,$userInfo);
-        dd($usersWithPermissions);
         unset($users);
         $permissionMasks = $permissionRecords = [];
         foreach ($usersWithPermissions as $userWithPermission) {
             $permissionStoreId = (new PermissionStore())->insertGetId([]);
             $permissionMasks[] = [
                 'permission_store_id' => $permissionStoreId,
-                'permission_holder_id' => $userInfo[$userWithPermission->user_id]->entity_type_id,
+                'permission_holder_id' => $userInfo[$userWithPermission->user_id],
                 'permission_mask' => $userWithPermission->permission_mask,
                 'permission_is_default' => true
             ];
@@ -53,10 +42,4 @@ class Generic extends Permission
         (new PermissionMask)->insert($permissionMasks);
 
     }
-
-    private function sqlGetGroups()
-    {
-        return \App\Models\Group::query()->select(['entity_type_id', 'group_mask'])->entityType()->get();
-    }
-
 }

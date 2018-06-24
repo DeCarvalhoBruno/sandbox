@@ -24,11 +24,6 @@ export default [
         router: {
           name: 'admin.users.index'
         }
-      },
-      {
-        type: 'tree',
-        icon: 'star',
-        name: 'sidebar.add'
       }
     ]
   },
@@ -69,10 +64,13 @@ export default [
         }
       },
       {
-        type: 'tree',
+        type: 'item',
         icon: 'star',
-        name: 'sidebar.add'
+        name: 'sidebar.add',
+        router: {
+          name: 'admin.blog.add'
+        }
       }
     ]
-  },
+  }
 ]

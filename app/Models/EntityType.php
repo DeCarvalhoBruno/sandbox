@@ -163,4 +163,20 @@ class EntityType extends Model
             sprintf('%s.%s', $table, $primaryKey), '=', 'entity_types.entity_type_target_id'
         );
     }
+
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param int $entityId
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeHighestGroup(Builder $builder,$entityId,$userIdList)
+    {
+        return $builder->joinSub(User::queryHighestRankedGroup($userIdList),
+            'users_highest_group',
+            'entity_types.entity_type_target_id',
+            '=',
+            'users_highest_group.user_id' )
+            ->where('entity_types.entity_id','=',$entityId);
+    }
 }
