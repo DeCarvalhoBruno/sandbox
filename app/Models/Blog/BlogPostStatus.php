@@ -1,9 +1,13 @@
 <?php namespace App\Models\Blog;
 
+use App\Contracts\Enumerable;
+use App\Traits\Enumerable as EnumerableTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class BlogPostStatus extends Model
+class BlogPostStatus extends Model implements Enumerable
 {
+    use EnumerableTrait;
+
     public $timestamps = false;
     protected $table = 'blog_post_status';
     protected $primaryKey = 'blog_post_status_id';

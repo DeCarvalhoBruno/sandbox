@@ -54,7 +54,8 @@ return [
         'search' => 'Search',
         'reset_filters' => 'Reset Filters',
         'delete' => 'Delete',
-        'reload' => 'Reload'
+        'reload' => 'Reload',
+        'status' => 'Status'
     ],
     'db' => [
         'user' => 'User|Users',
@@ -71,7 +72,7 @@ return [
         'new_group_name' => 'New group name',
         'group_mask' => 'Group mask',
         'member_count' => 'Number of members',
-        'blog_post_title'=>'Post title'
+        'blog_post_title' => 'Post title'
     ],
     'db_raw' => [
         'full_name' => 'full_name',
@@ -84,7 +85,12 @@ return [
         'email' => 'email',
         'group_name' => 'group_name',
         'created_at' => 'created_at',
-        'blog_post_title'=>'blog_post_title'
+        'blog_post_title' => 'blog_post_title'
+    ],
+    'constants' => [
+        'BLOG_POST_STATUS_DRAFT' => 'Draft',
+        'BLOG_POST_STATUS_REVIEW' => 'Under review',
+        'BLOG_POST_STATUS_PUBLISHED' => 'Published'
     ],
     'form' => [
         'description' => [

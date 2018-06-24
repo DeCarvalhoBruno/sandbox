@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Controller;
 use App\Filters\Blog as BlogFilter;
+use App\Models\Blog\BlogPostStatus;
 
 class Blog extends Controller
 {
@@ -21,6 +22,22 @@ class Blog extends Controller
                 trans('ajax.db_raw_inv.blog_post_title') => trans('ajax.db.group_name')
             ])
         ];
+    }
+
+    public function add()
+    {
+        return [
+            'record' => [
+                'blog_post_status' => BlogPostStatus::getConstantByID(BlogPostStatus::BLOG_POST_STATUS_DRAFT)
+            ],
+            'status_list' => BlogPostStatus::getConstants('BLOG'),
+
+        ];
+
+    }
+
+    public function create()
+    {
 
     }
 

@@ -170,13 +170,13 @@ class EntityType extends Model
      * @param int $entityId
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    public function scopeHighestGroup(Builder $builder,$entityId,$userIdList)
+    public function scopeHighestGroup(Builder $builder, $entityId, $userIdList)
     {
         return $builder->joinSub(User::queryHighestRankedGroup($userIdList),
             'users_highest_group',
             'entity_types.entity_type_target_id',
             '=',
-            'users_highest_group.user_id' )
-            ->where('entity_types.entity_id','=',$entityId);
+            'users_highest_group.user_id')
+            ->where('entity_types.entity_id', '=', $entityId);
     }
 }

@@ -129,6 +129,3 @@ trait Enumerable
     }
 
 }
-
-
-

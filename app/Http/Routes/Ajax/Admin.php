@@ -57,7 +57,9 @@ class Admin
 
             $r->get('blog', 'Blog@index')
                 ->middleware('can:view,App\Models\Blog\BlogPost');
-            $r->post('blog/add', 'Blog@add')
+            $r->get('blog/add', 'Blog@add')
+                ->middleware('can:add,App\Models\Blog\BlogPost');
+            $r->post('blog/add', 'Blog@create')
                 ->middleware('can:add,App\Models\Blog\BlogPost');
 
             $r->patch('settings/profile', 'Settings\Profile@update');

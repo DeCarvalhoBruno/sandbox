@@ -74,6 +74,9 @@
         'group_name' => '',
         'created_at' => '',
     ],
+    'constants'=>[
+
+    ],
     'form' => [
         'description' => [
             'username' => '',
