@@ -14,10 +14,11 @@
                                             {{$t(`constants.${status}`)}}
                                         </option>
                                     </select>
-                                        <button type="button"
-                                                class="btn btn-default btn-small"
-                                                @click="toggleEditing('form_status_editing')"
-                                        >{{$t('general.ok')}}</button>
+                                    <button type="button"
+                                            class="btn btn-default btn-small"
+                                            @click="toggleEditing('form_status_editing')"
+                                    >{{$t('general.ok')}}
+                                    </button>
                                 </template>
                                 <template v-else>
                                     <span @click="toggleEditing('form_status_editing')"
@@ -49,8 +50,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row p-0 m-0">
-                <div id="editor_wrapper" class="card col-lg p-0 m-o">
+            <div class="row p-0 m-0 mb-1">
+                <div class="card col-lg p-0 m-0">
 
                     <!--<editor v-model="form.editorInput" :init="editorConfig"></editor>-->
                     <trumbowyg v-model="form.blog_post_content" :config="editorConfig" class="form-control"
@@ -62,12 +63,23 @@
 
                 </div>
             </div>
-        </form>
-        <div class="row p-0 m-0">
-            <div class="card">
-
+            <div class="row p-0 m-0 mb-1">
+                <div class="card col-lg p-0 m-0">
+                        <div class="card-header bg-transparent">Excerpt</div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="blog_post_excerpt"></label>
+                            <textarea class="form-control" name="blog_post_excerpt"
+                                      id="blog_post_excerpt" rows="5" v-model="form.blog_post_excerpt"
+                                      placeholder="Post Excerpt"></textarea>
+                            <small id="help_new_group_name" class="text-muted">
+                                This user-defined summary of the post's content will appear in the frontpage.
+                            </small>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 </template>
 
@@ -91,7 +103,7 @@
       'v-button': Button,
       HasError,
       AlertForm,
-      Trumbowyg,
+      Trumbowyg
       // Editor
     },
     data () {
@@ -104,7 +116,7 @@
         form: new Form({
           blog_post_content: '',
           blog_post_title: '',
-          blog_post_status: '',
+          blog_post_status: ''
         })
       }
     },
@@ -119,9 +131,8 @@
             ['undo', 'redo'], // Only supported in Blink browsers
             ['formatting'],
             ['strong', 'em', 'del'],
-            ['superscript', 'subscript'],
             ['link'],
-            ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+            ['justifyFull'],
             ['unorderedList', 'orderedList'],
             ['horizontalRule'],
             ['removeformat'],
@@ -145,6 +156,8 @@
       },
       async save () {
         try {
+          const {data} = await this.form.post(`/ajax/admin/blog/create`)
+          console.log()
         } catch (e) {}
       },
       getInfo (data) {

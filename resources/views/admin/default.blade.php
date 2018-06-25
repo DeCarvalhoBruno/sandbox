@@ -11,7 +11,7 @@
 </head>
 <body id="backend" class="hold-transition skin-blue sidebar-mini">
 
-<div id="app"></div>
+<div id="app" class="app-backend"></div>
 @include('partials.javascript_footer')
 @if (app()->environment()=='production')
     {{--<script src="{{ mix('js/manifest.js','1b8eb') }}"></script>--}}

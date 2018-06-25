@@ -3,6 +3,7 @@
 use App\Http\Controllers\Controller;
 use App\Filters\Blog as BlogFilter;
 use App\Models\Blog\BlogPostStatus;
+use Illuminate\Http\Request;
 
 class Blog extends Controller
 {
@@ -36,7 +37,7 @@ class Blog extends Controller
 
     }
 
-    public function create()
+    public function create(Request $request)
     {
 
     }
