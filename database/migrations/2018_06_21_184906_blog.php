@@ -27,6 +27,7 @@ class Blog extends Migration
                 ->default(\App\Models\Blog\BlogPostStatus::BLOG_POST_STATUS_DRAFT);
 
             $table->string('blog_post_title')->nullable();
+            $table->string('blog_post_slug')->nullable();
             $table->text('blog_post_content')->nullable();
             $table->text('blog_post_excerpt')->nullable();
             $table->boolean('blog_post_sticky')->default(false);

@@ -6,10 +6,6 @@ use App\Support\Requests\FormRequest;
 
 class UpdateMember extends FormRequest
 {
-    public function rules()
-    {
-        return [];
-    }
 
     public function afterValidation()
     {

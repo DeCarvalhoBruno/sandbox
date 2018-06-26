@@ -22,8 +22,42 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
         'user_id',
         'blog_post_status_id',
         'blog_post_title',
+        'blog_post_slug',
         'blog_post_content',
-        'blog_post_excerpt'
+        'blog_post_excerpt',
+        'blog_post_sticky'
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(
+            function ($model) {
+                $model->blog_post_slug = str_slug(
+                    substr($model->blog_post_title,0,95),
+                    '-',
+                    app()->getLocale()
+                );
+
+                $latestSlug =
+                    static::select(['blog_post_slug'])
+                        ->whereRaw(sprintf(
+                                'blog_post_slug = "%s" or blog_post_slug LIKE "%s-%%"',
+                                $model->blog_post_slug,
+                                $model->blog_post_slug)
+                        )
+                        ->latest($model->getKeyName())
+                        ->value('blog_post_slug');
+                if ($latestSlug) {
+                    $pieces = explode('-', $latestSlug);
+
+                    $number = intval(end($pieces));
+
+                    $model->blog_post_slug .= sprintf('-%s', ($number + 1));
+                }
+            }
+        );
+    }
 
 }

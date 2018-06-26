@@ -31,12 +31,12 @@
                             <div class="col-lg-5">
                             </div>
                             <div class="col-lg-2">
-                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="submit" class="btn btn-primary float-lg-right">Save</button>
                             </div>
                         </div>
                         <div class="form-group row col-lg-10">
                             <div class="col-lg">
-                                <input v-model="form.blog_post_title" type="text"
+                                <input v-model="form.blog_post_title" type="text" required autocomplete="off"
                                        name="blog_post_title" id="blog_post_title" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('blog_post_title') }"
                                        :placeholder="$t('db.blog_post_title')"
@@ -64,7 +64,7 @@
                 </div>
             </div>
             <div class="row p-0 m-0 mb-1">
-                <div class="card col-lg p-0 m-0">
+                <div class="card col-lg-8 p-0 m-0">
                         <div class="card-header bg-transparent">Excerpt</div>
                     <div class="card-body">
                         <div class="form-group">
@@ -73,9 +73,21 @@
                                       id="blog_post_excerpt" rows="5" v-model="form.blog_post_excerpt"
                                       placeholder="Post Excerpt"></textarea>
                             <small id="help_new_group_name" class="text-muted">
-                                This user-defined summary of the post's content will appear in the frontpage.
+                                This user-defined summary of the post can be displayed on the frontpage.
                             </small>
                         </div>
+                    </div>
+                </div>
+                <div class="card col-lg-4 p-0 m-0">
+                    <div class="card-header bg-transparent">Featured image</div>
+                    <div class="card-body">
+                    </div>
+                </div>
+            </div>
+            <div class="row p-0 m-0 mb-1">
+                <div class="card col-lg p-0 m-0">
+                    <div class="card-header bg-transparent">Excerpt</div>
+                    <div class="card-body">
                     </div>
                 </div>
             </div>
@@ -156,7 +168,7 @@
       },
       async save () {
         try {
-          const {data} = await this.form.post(`/ajax/admin/blog/create`)
+          const {data} = await this.form.post(`/ajax/admin/blog/post/create`)
           console.log()
         } catch (e) {}
       },
@@ -168,7 +180,7 @@
       }
     },
     beforeRouteEnter (to, from, next) {
-      axios.get(`/ajax/admin/blog/add`).then(({data}) => {
+      axios.get(`/ajax/admin/blog/post/create`).then(({data}) => {
         next(vm => vm.getInfo(data))
       })
     }

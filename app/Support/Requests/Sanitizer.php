@@ -5,15 +5,6 @@ namespace App\Support\Requests;
 use Closure;
 use InvalidArgumentException;
 
-/**
- * trim             Trims a string
- * escape           Escapes HTML and special chars using php's filter_var
- * lowercase        Converts the given string to all lowercase
- * uppercase        Converts the given string to all uppercase
- * capitalize       Capitalize a string
- * cast             Casts a variable into the given type. Options are: integer, float, string, boolean, object, array and Laravel Collection.
- * date_format      Always takes two arguments, the date's given format and the target format, following DateTime notation.
- */
 class Sanitizer
 {
     /**
@@ -41,6 +32,7 @@ class Sanitizer
         'uppercase' => Filters\Uppercase::class,
         'trim' => Filters\Trim::class,
         'strip_tags' => Filters\StripTags::class,
+        'purify' => Filters\Purify::class
     ];
 
     private $activateTagStrippingFilter = true;
@@ -152,7 +144,7 @@ class Sanitizer
                 $value = $this->applyFilter($rule['name'], $value, $rule['options']);
             }
         }
-        if ($this->activateTagStrippingFilter){
+        if ($this->activateTagStrippingFilter) {
             $value = $this->applyFilter('strip_tags', $value);
         }
         return $value;

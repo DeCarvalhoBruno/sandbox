@@ -2,18 +2,27 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\Blog\BlogPostStatus;
 use App\Support\Requests\FormRequest;
-use App\Traits\ProcessesPermissions;
+use Illuminate\Support\Facades\Validator;
 
 class CreateBlogPost extends FormRequest
 {
-    use ProcessesPermissions;
+    protected $activateTagStrippingFilter = false;
 
     public function rules()
     {
         return [
             'blog_post_title' => 'max:255',
-            'new_username' => 'regex:/^(\w){1,15}$/|unique:users,username',
+            'blog_post_status' => 'status',
+        ];
+    }
+
+    public function filters()
+    {
+        return [
+            'blog_post_title' => 'strip_tags',
+            'blog_post_content' => 'purify'
         ];
     }
 
@@ -21,21 +30,24 @@ class CreateBlogPost extends FormRequest
     {
         $input = $this->input();
 
-        if (isset($input['permissions'])) {
-            $this->processPermissions($input['permissions']);
+        if (isset($input['blog_post_status'])) {
+            $input['blog_post_status_id'] = BlogPostStatus::getConstant($input['blog_post_status']);
+            unset($input['blog_post_status']);
+            $this->replace($input);
         }
-
-        if (isset($input['new_email'])) {
-            $input['email'] = $input['new_email'];
-        } else {
-            unset($input['email']);
-        }
-        if (isset($input['new_username'])) {
-            $input['username'] = $input['new_username'];
-        }else{
-            unset($input['username']);
-        }
-        unset($input['new_email'], $input['new_username'], $input['permissions']);
-        $this->replace($input);
     }
+
+    public function prepareForValidation()
+    {
+        Validator::extend('status', function ($attribute, $value, $parameters, $validator) {
+            return BlogPostStatus::isValidName($value);
+        });
+        parent::prepareForValidation();
+    }
+
+    //        Validator::extend('foo', function ($attribute, $value, $parameters, $validator) {
+    //            return $value == 'foo';
+    //        });
+
+
 }
