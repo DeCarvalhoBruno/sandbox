@@ -18,7 +18,7 @@ Mix.listen('configReady', function (config) {
   }
 })
 
-mix.copy('resources/assets/_fonts/aladin-v6-latin-regular.ttf', `${publicPath}/fonts`)
+mix.copy('resources/assets/_fonts/aladin-v6-latin-regular.ttf', `${path.resolve(__dirname, 'public')}/fonts`)
 mix.js('resources/assets/backend/js/app.js', 'js/app.js')
   .sass('resources/assets/backend/sass/app.scss', 'css/app.css')
   .sourceMaps()

@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreateBlogPost;
 use App\Models\Blog\BlogPost;
 use App\Models\Blog\BlogPostStatus;
+use Illuminate\Http\Response;
 
 class Blog extends Controller
 {
@@ -33,16 +34,23 @@ class Blog extends Controller
                 'blog_post_status' => BlogPostStatus::getConstantByID(BlogPostStatus::BLOG_POST_STATUS_DRAFT)
             ],
             'status_list' => BlogPostStatus::getConstants('BLOG'),
-
         ];
-
     }
 
     public function create(CreateBlogPost $request)
     {
         $post = new BlogPost($request->all());
         $post->save();
-        dd($post);
+        $params = [
+            'slug' => $post->getAttribute('blog_post_slug'),
+        ];
+        if ($post->getAttribute('blog_post_status_id') != BlogPostStatus::BLOG_POST_STATUS_PUBLISHED) {
+            $params['preview'] = true;
+        }
+        return (
+        [
+            'blog_post_slug' => route_i18n('blog', $params)
+        ]);
     }
 
 }

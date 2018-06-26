@@ -45,9 +45,4 @@ class CreateBlogPost extends FormRequest
         parent::prepareForValidation();
     }
 
-    //        Validator::extend('foo', function ($attribute, $value, $parameters, $validator) {
-    //            return $value == 'foo';
-    //        });
-
-
 }

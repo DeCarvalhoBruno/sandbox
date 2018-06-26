@@ -13,14 +13,15 @@ class PermissionMask extends Model
      * @link https://laravel.com/docs/5.6/eloquent#query-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param $userEntityId
+     * @param bool $permissionIsDefault
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    public function scopePermissionStore(Builder $builder, $userEntityId)
+    public function scopePermissionStore(Builder $builder, $userEntityId, $permissionIsDefault = true)
     {
-        return $builder->join('permission_stores', function ($q) use ($userEntityId) {
+        return $builder->join('permission_stores', function ($q) use ($userEntityId, $permissionIsDefault) {
             $q->on('permission_masks.permission_store_id', '=', 'permission_stores.permission_store_id')
                 ->where('permission_masks.permission_holder_id', '=', $userEntityId)
-                ->where('permission_is_default', '=', true);
+                ->where('permission_is_default', '=', $permissionIsDefault);
         });
     }
 
@@ -38,13 +39,50 @@ class PermissionMask extends Model
         });
     }
 
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeEntityType(Builder $builder)
+    {
+        return $builder->join('entity_types', function ($q) {
+            $q->on('entity_types.entity_type_id', '=', 'permission_records.permission_target_id');
+        });
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param $username
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeUser(Builder $builder, $username)
+    {
+        return $builder->join('users', function ($q) use ($username) {
+            $q->on('users.user_id', '=', 'entity_types.entity_type_target_id')
+            ->where('users.username', '=', $username);
+        });
+    }
+
     public static function getDefaultPermission($entityTypeId, $entityId)
     {
         return static::query()->select('permission_mask')
             ->permissionStore($entityTypeId)
             ->permissionRecord($entityId)
-            ->groupBy('permission_masks.permission_store_id')
-            ->groupBy('permission_masks.permission_mask')
+//            ->groupBy('permission_masks.permission_store_id')
+//            ->groupBy('permission_masks.permission_mask')
+            ->pluck('permission_mask')
+            ->pop();
+    }
+
+    public static function getTargetPermission($entityTypeId, $entityId, $username)
+    {
+        return static::query()->select('permission_mask')
+            ->permissionStore($entityTypeId,false)
+            ->permissionRecord($entityId)
+            ->entityType()
+            ->user($username)
             ->pluck('permission_mask')
             ->pop();
     }

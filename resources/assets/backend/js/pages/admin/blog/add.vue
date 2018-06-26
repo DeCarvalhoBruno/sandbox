@@ -41,7 +41,7 @@
                                        :class="{ 'is-invalid': form.errors.has('blog_post_title') }"
                                        :placeholder="$t('db.blog_post_title')"
                                        aria-describedby="help_blog_post_title">
-                                <has-error :form="form" field="blog_post_title"/>
+                                <small class="text-muted" v-show="blog_post_slug">{{blog_post_slug}}</small>
                             </div>
                         </div>
                         <div class="form-group row col-lg p-0 m-0">
@@ -65,7 +65,7 @@
             </div>
             <div class="row p-0 m-0 mb-1">
                 <div class="card col-lg-8 p-0 m-0">
-                        <div class="card-header bg-transparent">Excerpt</div>
+                    <div class="card-header bg-transparent">Excerpt</div>
                     <div class="card-body">
                         <div class="form-group">
                             <label for="blog_post_excerpt"></label>
@@ -125,6 +125,8 @@
         editorConfig: this.getConfig(),
         status_list: null,
         current_status: '',
+        blog_post_slug: null,
+        saveMode:null,
         form: new Form({
           blog_post_content: '',
           blog_post_title: '',
@@ -168,20 +170,22 @@
       },
       async save () {
         try {
-          const {data} = await this.form.post(`/ajax/admin/blog/post/create`)
-          console.log()
+          const {data} = await this.form.post(`/ajax/admin/blog/post/${this.saveMode}`)
+          this.blog_post_slug = data.blog_post_slug
+          this.saveMode = 'edit'
         } catch (e) {}
       },
-      getInfo (data) {
+      getInfo (data, saveMode) {
         this.form = new Form(data.record)
         this.status_list = data.status_list
         this.current_status = this.$t(`constants.${data.record.blog_post_status}`)
-
+        this.saveMode = saveMode
       }
     },
     beforeRouteEnter (to, from, next) {
-      axios.get(`/ajax/admin/blog/post/create`).then(({data}) => {
-        next(vm => vm.getInfo(data))
+      let saveMode = (to.name.lastIndexOf('add') > 0) ? 'create' : 'edit'
+      axios.get(`/ajax/admin/blog/post/${saveMode}`).then(({data}) => {
+        next(vm => vm.getInfo(data, saveMode))
       })
     }
   }

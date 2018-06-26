@@ -59,6 +59,10 @@ class Frontend extends Routes
             $r->get('password/reset/{token}', 'Auth\ResetPassword@showResetForm')
                 ->name(self::i18nRouteNames($locale, 'password.reset'));
             $r->post('password/reset', 'Auth\ResetPassword@reset');
+
+            $r->get('blog/{slug}', 'Blog@getPost')
+                ->name(self::i18nRouteNames($locale, 'blog'));
+
         };
 
     }
