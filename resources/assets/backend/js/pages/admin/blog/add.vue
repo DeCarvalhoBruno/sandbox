@@ -9,7 +9,8 @@
                             <div class="col-lg-5">
                                 <span>{{$t('general.status')}}: </span>
                                 <template v-if="form_status_editing">
-                                    <select v-model="form.blog_post_status">
+                                    <select v-model="form.blog_post_status"
+                                            @change="changedField('blog_post_status')">
                                         <option v-for="(idx,status) in status_list" :key="idx" :value="status">
                                             {{$t(`constants.${status}`)}}
                                         </option>
@@ -40,7 +41,8 @@
                                        name="blog_post_title" id="blog_post_title" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('blog_post_title') }"
                                        :placeholder="$t('db.blog_post_title')"
-                                       aria-describedby="help_blog_post_title">
+                                       aria-describedby="help_blog_post_title"
+                                       @input="changedField('blog_post_title')">
                                 <small class="text-muted" v-show="blog_post_slug">{{blog_post_slug}}</small>
                             </div>
                         </div>
@@ -54,7 +56,9 @@
                 <div class="card col-lg p-0 m-0">
 
                     <!--<editor v-model="form.editorInput" :init="editorConfig"></editor>-->
-                    <trumbowyg v-model="form.blog_post_content" :config="editorConfig" class="form-control"
+                    <trumbowyg v-model="form.blog_post_content" :config="editorConfig"
+                               class="form-control"
+                               @input="changedField('blog_post_content')"
                                name="content"></trumbowyg>
 
                     <!--<input type="text" v-model="message">-->
@@ -71,7 +75,8 @@
                             <label for="blog_post_excerpt"></label>
                             <textarea class="form-control" name="blog_post_excerpt"
                                       id="blog_post_excerpt" rows="5" v-model="form.blog_post_excerpt"
-                                      placeholder="Post Excerpt"></textarea>
+                                      placeholder="Post Excerpt"
+                                      @input="changedField('blog_post_excerpt')"></textarea>
                             <small id="help_new_group_name" class="text-muted">
                                 This user-defined summary of the post can be displayed on the frontpage.
                             </small>
@@ -86,7 +91,7 @@
             </div>
             <div class="row p-0 m-0 mb-1">
                 <div class="card col-lg p-0 m-0">
-                    <div class="card-header bg-transparent">Excerpt</div>
+                    <div class="card-header bg-transparent">Media</div>
                     <div class="card-body">
                     </div>
                 </div>
@@ -126,7 +131,7 @@
         status_list: null,
         current_status: '',
         blog_post_slug: null,
-        saveMode:null,
+        saveMode: null,
         form: new Form({
           blog_post_content: '',
           blog_post_title: '',
@@ -168,9 +173,20 @@
       toggleEditing (value) {
         this[value] = !this[value]
       },
+      changedField (field) {
+          this.form.addChangedField(field)
+      },
       async save () {
         try {
-          const {data} = await this.form.post(`/ajax/admin/blog/post/${this.saveMode}`)
+          let suffix, saveMode
+          let route = this.$route
+          if ((route.name.lastIndexOf('add') > 0)) {
+            saveMode = suffix = 'create'
+          } else {
+            saveMode = 'edit'
+            suffix = `${saveMode}/${route.params.slug}`
+          }
+          const {data} = await this.form.post(`/ajax/admin/blog/post/${suffix}`)
           this.blog_post_slug = data.blog_post_slug
           this.saveMode = 'edit'
         } catch (e) {}
@@ -180,11 +196,20 @@
         this.status_list = data.status_list
         this.current_status = this.$t(`constants.${data.record.blog_post_status}`)
         this.saveMode = saveMode
+        // this.form.setTrackChanges(true)
       }
     },
     beforeRouteEnter (to, from, next) {
-      let saveMode = (to.name.lastIndexOf('add') > 0) ? 'create' : 'edit'
-      axios.get(`/ajax/admin/blog/post/${saveMode}`).then(({data}) => {
+      let suffix, saveMode
+      if ((to.name.lastIndexOf('add') > 0)) {
+        saveMode = suffix = 'create'
+      } else {
+        saveMode = 'edit'
+        suffix = `${saveMode}/${to.params.slug}`
+      }
+
+      let url = `/ajax/admin/blog/post/${suffix}`
+      axios.get(url).then(({data}) => {
         next(vm => vm.getInfo(data, saveMode))
       })
     }

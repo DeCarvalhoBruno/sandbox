@@ -6,10 +6,10 @@
             </th>
             <td slot="body-action" slot-scope="props">
                 <div class="inline">
-                    <template v-if="props.row.blog_post_title">
+                    <template v-if="props.row.blog_post_slug">
                         <router-link :to="{
                         name: 'admin.blog.edit',
-                        params: { group: props.row.blog_post_title }
+                        params: { slug: props.row.blog_post_slug }
                         }">
                             <button class="btn btn-sm btn-info">
                                 <fa icon="pencil-alt">

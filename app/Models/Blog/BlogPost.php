@@ -3,6 +3,7 @@
 use App\Contracts\HasPermissions as HasPermissionsContract;
 use App\Traits\Enumerable;
 use App\Traits\Presentable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Contracts\Enumerable as EnumerableContract;
 use App\Traits\Models\HasPermissions;
@@ -39,7 +40,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
         static::creating(
             function ($model) {
                 $model->blog_post_slug = str_slug(
-                    substr($model->blog_post_title,0,95),
+                    substr($model->blog_post_title, 0, 95),
                     '-',
                     app()->getLocale()
                 );
@@ -61,6 +62,21 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
                     $model->blog_post_slug .= sprintf('-%s', ($number + 1));
                 }
             }
+        );
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeStatus(Builder $builder)
+    {
+        return $builder->join(
+            'blog_post_status',
+            'blog_post_status.blog_post_status_id',
+            '=',
+            'blog_posts.blog_post_status_id'
         );
     }
 

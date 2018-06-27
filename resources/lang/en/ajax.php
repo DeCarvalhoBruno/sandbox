@@ -14,6 +14,7 @@ return [
         'admin-groups-members' => 'Edit Members',
         'admin-blog-index' => 'Blog Posts',
         'admin-blog-add' => 'Create',
+        'admin-blog-edit' => 'Edit',
         'admin-settings-password' => 'Your password',
         'admin-settings-profile' => 'Your profile',
         'admin-settings-general' => 'Your general settings',
@@ -183,7 +184,7 @@ return [
         ]
     ],
     'tables' => [
-        'empty' => 'There is currently no data available.',
+        'empty' => 'No data available.',
         'sort_ascending' => 'Sort in ascending order',
         'sort_descending' => 'Sort in descending order',
         'select_item' => 'Select {name}',

@@ -12,6 +12,8 @@ class Form {
     this.busy = false
     this.successful = false
     this.errors = new Errors()
+    this.changedFields = {}
+    this.trackChanges = false
     if (data != null) {
       this.originalData = deepCopy(data)
       Object.assign(this, data)
@@ -24,15 +26,25 @@ class Form {
     })
   }
 
-  addField ($name, $value) {
-    this[$name] = $value
+  addField (name, value) {
+    this[name] = value
   }
 
   getField ($name) {
-    if (this.hasOwnProperty($name)){
+    if (this.hasOwnProperty($name)) {
       return this[$name]
     }
     return null
+  }
+
+  addChangedField (field) {
+    if (!this.changedFields.hasOwnProperty(field)) {
+      this.changedFields[field] = true
+    }
+  }
+
+  setTrackChanges (value) {
+    this.trackChanges = value
   }
 
   /**
@@ -42,11 +54,17 @@ class Form {
    */
   data () {
     const data = {}
-
-    this.keys().forEach(key => {
-      data[key] = this[key]
-    })
-
+    if (this.trackChanges) {
+      this.keys().forEach(key => {
+        if (this.changedFields.hasOwnProperty(key)) {
+          data[key] = this[key]
+        }
+      })
+    } else {
+      this.keys().forEach(key => {
+        data[key] = this[key]
+      })
+    }
     return data
   }
 
@@ -246,6 +264,12 @@ class Form {
 }
 
 Form.routes = {}
-Form.ignore = ['busy', 'successful', 'errors', 'originalData']
+Form.ignore = [
+  'busy',
+  'successful',
+  'errors',
+  'originalData',
+  'changedFields',
+  'trackChanges']
 
 export default Form

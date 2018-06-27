@@ -13,4 +13,5 @@ trait HasANameColumn
     public function getNameColumn(){
         return $this->getAttribute(static::$nameColumn);
     }
+
 }

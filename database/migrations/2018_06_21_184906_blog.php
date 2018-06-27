@@ -16,7 +16,7 @@ class Blog extends Migration
         Schema::create('blog_post_status', function (Blueprint $table) {
             $table->increments('blog_post_status_id');
 
-            $table->string('blog_post_status_name', 20)->nullable();
+            $table->string('blog_post_status_name', 75)->nullable();
         });
 
         Schema::create('blog_posts', function (Blueprint $table) {
@@ -86,13 +86,19 @@ class Blog extends Migration
 
         $status = [
             [
-                'blog_post_status_name' => 'DRAFT'
+                'blog_post_status_name' => \App\Models\Blog\BlogPostStatus::getConstantByID(
+                    \App\Models\Blog\BlogPostStatus::BLOG_POST_STATUS_DRAFT
+                )
             ],
             [
-                'blog_post_status_name' => 'REVIEW'
+                'blog_post_status_name' => \App\Models\Blog\BlogPostStatus::getConstantByID(
+                    \App\Models\Blog\BlogPostStatus::BLOG_POST_STATUS_REVIEW
+                )
             ],
             [
-                'blog_post_status_name' => 'PUBLISHED'
+                'blog_post_status_name' => \App\Models\Blog\BlogPostStatus::getConstantByID(
+                    \App\Models\Blog\BlogPostStatus::BLOG_POST_STATUS_PUBLISHED
+                )
             ]
         ];
         \App\Models\Blog\BlogPostStatus::insert($status);

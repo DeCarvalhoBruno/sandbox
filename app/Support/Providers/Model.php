@@ -113,40 +113,6 @@ abstract class Model
         return $this->createModel()->select($select);
     }
 
-    /**
-     * @param $data
-     *
-     * @return \Illuminate\Database\Eloquent\Model
-     */
-    public function createOne($data)
-    {
-        return $this->createModel()->create($data);
-    }
-
-    /**
-     * @param $id
-     * @param $data
-     *
-     * @return int
-     */
-    public function updateOne($id, $data)
-    {
-        $model = $this->createModel();
-
-        return $model->where($model->getKeyName(), $id)->update($data);
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return int
-     */
-    public function deleteOne($id)
-    {
-        $model = $this->createModel();
-
-        return $model->where($model->getKeyName(), $id)->delete();
-    }
 
     /**
      * For models using the HasAnEntity trait

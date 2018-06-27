@@ -87,6 +87,11 @@ let routes = [
     component: BlogAdd
   },
   {
+    name: 'admin.blog.edit',
+    meta: {parent: 'admin.blog.index'},
+    component: BlogAdd
+  },
+  {
     path: '',
     component: Settings,
     meta: {parent: 'admin.dashboard'},
