@@ -1,28 +1,30 @@
 <template>
-    <div>
-        <div class="form-control input-tag">
-            <span class="badge badge-pill badge-light"
-                  v-for="(badge, index) in tagBadges"
-                  :key="index">
-                <span v-html="badge"></span>
-                <i href="#" class="button-badge-close" @click.prevent="removeTag(index)"></i>
-            </span>
-            <input type="text"
-                   :placeholder="dataPlaceholder"
-                   v-model="input"
-                   ref="search"
-                   @focus="dataPlaceholder=''"
-                   @blur="dataPlaceholder=placeholder"
-                   @keypress.enter.prevent="tagFromInput"
-                   @keypress.backspace="removeLastTag"
-                   @keypress.down="nextSearchResult"
-                   @keypress.up="prevSearchResult"
-                   @keypress.esc="ignoreSearchResults"
-                   @keyup="searchTag"
-                   @value="tags">
-            <input type="hidden" :name="elementId" :id="elementId" v-model="hiddenInput">
-        </div>
-        <p v-show="searchResults.length" class="search-results-area">
+        <div class="input-tag-wrapper">
+            <div class="search-spinner-wrapper">
+                <fa icon="cog" size="lg" :spin="loadIconIsAnimated"/>
+            </div>
+            <div class="input-tag-container">
+                <div class="form-control input-tag">
+                    <span class="badge badge-pill badge-light"
+                          v-for="(badge, index) in tagBadges"
+                          :key="index">
+                        <span v-html="badge"></span>
+                        <i href="#" class="button-badge-close" @click.prevent="removeTag(index)"></i>
+                    </span>
+                    <input type="text"
+                           :placeholder="dataPlaceholder"
+                           v-model="input"
+                           ref="search"
+                           @focus="dataPlaceholder=''"
+                           @blur="dataPlaceholder=placeholder"
+                           @keypress.enter.prevent="tagFromInput"
+                           @keypress.backspace="removeLastTag"
+                           @keypress.esc="ignoreSearchResults"
+                           @keyup="searchTag"
+                           @value="tags">
+                    <input type="hidden" :name="elementId" :id="elementId" v-model="hiddenInput">
+                </div>
+                <p v-show="searchResults.length" class="search-results-area">
             <span v-for="(tag, index) in searchResults"
                   :key="index"
                   v-text="tag.text"
@@ -32,8 +34,9 @@
                     'badge-primary': index == searchSelection,
                     'badge-dark': index != searchSelection
                 }"></span>
-        </p>
-    </div>
+                </p>
+            </div>
+        </div>
 </template>
 
 <script>
@@ -52,7 +55,10 @@
       oldTags: [Array, String],
       typeahead: Boolean,
       placeholder: String,
-      searchUrl:String,
+      searchUrl: String,
+      limit: {
+        default: 5
+      }
     },
 
     data () {
@@ -69,9 +75,10 @@
         searchResults: [],
         searchSelection: 0,
         dataPlaceholder: this.placeholder,
-        searchTriggerDelay: 800,
-        searchTriggerLength: 2,
-        lastSearchTime: 0
+        searchTriggerDelay: 200,
+        searchTriggerLength: 1,
+        lastSearchTime: 0,
+        loadIconIsAnimated: false
       }
     },
 
@@ -94,7 +101,7 @@
       tags () {
         // Updating the hidden input
         this.hiddenInput = this.tags.join(',')
-        this.$emit('updateAddedItems',this.tagBag)
+        this.$emit('updateAddedItems', this.tagBag)
       }
     },
 
@@ -105,23 +112,6 @@
           this.tagFromSearch(this.searchResults[this.searchSelection])
 
           this.input = ''
-        } else {
-          let text = this.input.trim()
-
-          // If the new tag is not an empty string
-          if (text.length) {
-            this.input = ''
-
-            // Determine the tag's id and text depending on if the tag exists
-            // on the site already or not
-            let id = this.makeSlug(text)
-            let existingTag = this.existingTags[id]
-
-            id = existingTag ? id : text
-            text = existingTag ? existingTag : text
-
-            this.addTag(id, text)
-          }
         }
       },
 
@@ -146,13 +136,15 @@
         if (!found) {
           this.tagBadges.push(text.replace(/\s/g, '&nbsp;'))
           this.tags.push(id)
-          this.tagBag.push({id,text})
+          this.tagBag.push({id, text})
         }
       },
-
-      removeLastTag (e) {
+      async removeLastTag (e) {
+        //If no text was entered we remove the rightmost tag, otherwise we refresh the search results
         if (!e.target.value.length) {
           this.removeTag(this.tags.length - 1)
+        } else {
+          this.searchTag(e.target.value)
         }
       },
 
@@ -163,20 +155,19 @@
         this.$refs.search.focus()
       },
 
-      async searchTag () {
+      async searchTag (e, value) {
+        let input = (typeof value === 'undefined') ? this.input.trim() : value
         if (this.typeahead === true) {
           let now = Date.now ? Date.now() : new Date().getTime()
-          if ((this.input.length < this.searchTriggerLength) || (this.lastSearchTime > now - this.searchTriggerDelay)) {
+          if ((input.length < this.searchTriggerLength) || (this.lastSearchTime > now - this.searchTriggerDelay)) {
             return
           }
-
           this.lastSearchTime = now
-          if (this.oldInput !== this.input) {
-            this.$emit('searching')
-            this.searchResults = await this.searchTerm(this.input)
-            this.$emit('searched')
+          if (this.oldInput !== input) {
+            this.loadIconIsAnimated = true
+            this.searchResults = await this.searchTerm(input)
+            this.loadIconIsAnimated = false
             this.searchSelection = 0
-            let input = this.input.trim()
 
             if (input.length) {
               for (let id in this.existingTags) {
@@ -188,13 +179,13 @@
               }
             }
 
-            this.oldInput = this.input
+            this.oldInput = input
           }
         }
       },
 
       async searchTerm (term) {
-        let {data} = await axios.get(this.searchUrl+term)
+        let {data} = await axios.get(`${this.searchUrl}/${term}/${this.limit}`)
         return data
       },
 

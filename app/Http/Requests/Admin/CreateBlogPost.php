@@ -10,6 +10,8 @@ class CreateBlogPost extends FormRequest
 {
     protected $activateTagStrippingFilter = false;
 
+    private $username;
+
     public function rules()
     {
         return [
@@ -29,6 +31,8 @@ class CreateBlogPost extends FormRequest
     public function afterValidation()
     {
         $input = $this->input();
+        $this->username = $input['blog_post_user'];
+        unset($input['blog_post_user']);
 
         if (isset($input['blog_post_status'])) {
             $input['blog_post_status_id'] = BlogPostStatus::getConstant($input['blog_post_status']);
@@ -44,5 +48,15 @@ class CreateBlogPost extends FormRequest
         });
         parent::prepareForValidation();
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+
 
 }

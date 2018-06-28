@@ -5,6 +5,9 @@ namespace App\Traits\Models;
 trait DoesSqlStuff
 {
     /**
+     * Join a table using the source table's primary key
+     * Example : join(person) on user will use person.user_id to join user on user.user_id
+     *
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param string $modelName
      * @return \Illuminate\Database\Eloquent\Builder
@@ -39,6 +42,8 @@ trait DoesSqlStuff
     }
 
     /**
+     *  Join a table using the joined table's primary key
+     *
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param string $modelName
      * @return \Illuminate\Database\Eloquent\Builder

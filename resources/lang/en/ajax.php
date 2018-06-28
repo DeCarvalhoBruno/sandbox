@@ -84,6 +84,7 @@ return [
     'db_raw_inv' => [
         'full_name' => 'full_name',
         'email' => 'email',
+        'username'=>'username',
         'group_name' => 'group_name',
         'created_at' => 'created_at',
         'blog_post_title' => 'blog_post_title'
@@ -181,6 +182,9 @@ return [
             'avatarul-tab' => 'Upload avatar',
             'avatar-ul-tab' => 'Upload avatar',
             'delete_avatar' => 'Delete avatar'
+        ],
+        'blog'=>[
+            'author'=>'Author'
         ]
     ],
     'tables' => [

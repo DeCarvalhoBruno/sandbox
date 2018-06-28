@@ -54,7 +54,7 @@ class User extends Controller
     public function edit($username, UserProvider $userProvider)
     {
         $f = app()->make(RawQueries::class);
-        $user = $userProvider->getOneByUsername($username,
+        $user = $userProvider->buildOneByUsername($username,
             [
                 'first_name',
                 'last_name',
@@ -99,13 +99,15 @@ class User extends Controller
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
      * @return \Illuminate\Http\Response
      */
-    public function search($search, UserProvider $userProvider)
+    public function search($search, $limit, UserProvider $userProvider)
     {
-        return response(
-            $userProvider->search(
-                preg_replace('/[^\w\s\-\']/', '', strip_tags($search)),
-                auth()->user()->getAttribute('entity_type_id')
-            )->get(), Response::HTTP_OK);
+            return response(
+                $userProvider->search(
+                    preg_replace('/[^\w\s\-\']/', '', strip_tags($search)),
+                    auth()->user()->getAttribute('entity_type_id'),
+                    intval($limit)
+                )->get(), Response::HTTP_OK);
+        return response('', Response::HTTP_OK);
     }
 
     /**
@@ -145,7 +147,7 @@ class User extends Controller
                 'full_name',
             ]),
             'permissions' => $f->getAllUserPermissions($entityTypeId),
-            'avatars'=>$userProvider->getAvatars($user->getKey())
+            'avatars' => $userProvider->getAvatars($user->getKey())
         ];
     }
 

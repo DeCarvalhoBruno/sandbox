@@ -59,12 +59,13 @@
 @import "elements/tables";
 @import "elements/images";
 @import "content";
-@import "elements/input-tag";
+@import "components/input-tag";
+@import "components/form";
 @import "widgets/callout";
-@import "vendor/dropzone";
-@import "vendor/wizard";
+@import "components/dropzone";
+@import "components/wizard";
 @import "vendor/cropper";
-@import "vendor/trumbowyg";
+@import "components/trumbowyg";
 
 //**********************************************
 

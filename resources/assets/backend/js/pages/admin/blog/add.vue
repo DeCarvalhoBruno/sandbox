@@ -1,12 +1,12 @@
 <template>
     <div class="container p-0 m-0">
         <div id="trumbowyg-icons" v-html="require('trumbowyg/dist/ui/icons.svg')"></div>
-        <form @submit.prevent="save">
+        <form @submit.prevent="save" id="form_edit_blog">
             <div class="row p-0 m-0 mb-1">
                 <div class="card col-lg">
                     <div class="container">
                         <div class="form-group row p-2">
-                            <div class="col-lg-5">
+                            <div class="col-lg-4 form-head-row">
                                 <span>{{$t('general.status')}}: </span>
                                 <template v-if="form_status_editing">
                                     <select v-model="form.blog_post_status"
@@ -22,16 +22,43 @@
                                     </button>
                                 </template>
                                 <template v-else>
-                                    <span @click="toggleEditing('form_status_editing')"
-                                          style="text-decoration: underline;color:blue;cursor:pointer">
-
-                                    {{ ($te(`constants.${form.blog_post_status}`))?$t(`constants.${form.blog_post_status}`):''}}
+                                    <span class="form-field-togglable"
+                                          @click="toggleEditing('form_status_editing')">
+                                    {{ ($te(`constants.${form.blog_post_status}`))?
+                                        $t(`constants.${form.blog_post_status}`):
+                                        ''}}
                                     </span>
                                 </template>
                             </div>
-                            <div class="col-lg-5">
+                            <div class="col-lg-4 form-head-row">
+                                <div v-if="form_user_editing" class="container m-0 p-0">
+                                    <div class="row">
+                                        <div class="m-0 p-0 col-lg d-inline-flex">
+                                            <div class="container d-inline-flex">
+                                                <input-tag :typeahead="true"
+                                                           :placeholder="$t('pages.members.member_search')"
+                                                           :searchUrl="'/ajax/admin/users/search'"
+                                                           @updateAddedItems="updateUsers"
+                                                           limit="2"/>
+                                                <button type="button"
+                                                        class="btn btn-default btn-small"
+                                                        @click="toggleEditing('form_user_editing')"
+                                                >{{$t('general.ok')}}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <template v-else>
+                                    <span>{{$t('pages.blog.author')}}: </span>
+                                    <span class="form-field-togglable"
+                                          @click="toggleEditing('form_user_editing')"
+                                    >
+{{form.blog_post_user}}
+                                    </span>
+                                </template>
                             </div>
-                            <div class="col-lg-2">
+                            <div class="col-lg-4 form-head-row">
                                 <button type="submit" class="btn btn-primary float-lg-right">Save</button>
                             </div>
                         </div>
@@ -108,6 +135,7 @@
   import { Form, HasError, AlertForm } from '~/components/form'
   // import Editor from '@tinymce/tinymce-vue';
   import VueClipboard from 'vue-clipboard2'
+  import InputTag from '~/components/InputTag'
 
   // VueClipboard.config.autoSetContainer = true // add this line
   Vue.use(VueClipboard)
@@ -120,12 +148,14 @@
       'v-button': Button,
       HasError,
       AlertForm,
-      Trumbowyg
+      Trumbowyg,
+      InputTag
       // Editor
     },
     data () {
       return {
         form_status_editing: false,
+        form_user_editing: false,
         modal: false,
         editorConfig: this.getConfig(),
         status_list: null,
@@ -135,7 +165,8 @@
         form: new Form({
           blog_post_content: '',
           blog_post_title: '',
-          blog_post_status: ''
+          blog_post_status: '',
+          blog_post_user: ''
         })
       }
     },
@@ -170,11 +201,16 @@
           // },
         }
       },
+      updateUsers (users) {
+        if (users.length > 0) {
+          this.form.blog_post_user = users[0].id
+        }
+      },
       toggleEditing (value) {
         this[value] = !this[value]
       },
       changedField (field) {
-          this.form.addChangedField(field)
+        this.form.addChangedField(field)
       },
       async save () {
         try {

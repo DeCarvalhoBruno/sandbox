@@ -1,0 +1,17 @@
+#form_edit_blog {
+
+  span.form-field-togglable {
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer
+  }
+
+  .form-head-row {
+    min-height: 2.5rem;
+
+    button {
+      max-height: 2rem;
+    }
+  }
+
+}

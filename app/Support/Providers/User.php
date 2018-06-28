@@ -78,7 +78,7 @@ class User extends Model implements UserProvider, UserInterface
      * @param array $data
      * @return \App\Models\User
      */
-    public function updateOneUser($model, $field, $value, $data)
+    public function updateOne($model, $field, $value, $data)
     {
         $user = $model->newQuery()->select([
             'person_id',
@@ -110,7 +110,7 @@ class User extends Model implements UserProvider, UserInterface
     public function updateOneById($id, $data)
     {
         $model = $this->createModel();
-        return $this->updateOneUser($model, $model->getKeyName(), $id, $data);
+        return $this->updateOne($model, $model->getKeyName(), $id, $data);
     }
 
     /**
@@ -120,7 +120,7 @@ class User extends Model implements UserProvider, UserInterface
      */
     public function updateOneByUsername($username, $data)
     {
-        return $this->updateOneUser($this->createModel(), 'username', $username, $data);
+        return $this->updateOne($this->createModel(), 'username', $username, $data);
     }
 
     /**
@@ -142,7 +142,7 @@ class User extends Model implements UserProvider, UserInterface
      * @param array $columns
      * @return \App\Models\User
      */
-    public function getOneByUsername($username, $columns = ['*'])
+    public function buildOneByUsername($username, $columns = ['*'])
     {
         return $this->createModel()->newQuery()
             ->select($columns)->where('username', $username);
@@ -249,9 +249,10 @@ class User extends Model implements UserProvider, UserInterface
     /**
      * @param string $search
      * @param int $userEntityId
+     * @param int $limit
      * @return mixed
      */
-    public function search($search, $userEntityId)
+    public function search($search, $userEntityId, $limit)
     {
         return $this->createModel()->newQuery()
             ->select(['full_name as text', 'username as id'])
@@ -260,7 +261,7 @@ class User extends Model implements UserProvider, UserInterface
             ->permissionStore()
             ->permissionMask($userEntityId)
             ->where('full_name', 'like', sprintf('%%%s%%', $search))
-            ->limit(5);
+            ->limit($limit);
     }
 
     public function getAvatars($userId)

@@ -241,7 +241,11 @@ abstract class Model
         $result = \DB::select(
             sprintf('SELECT count(%s) AS c FROM %s', $m->getKeyName(), $m->getTable()));
         return !empty($result) ? $result[0]->c : null;
+    }
 
+    public function getQualifiedKeyName()
+    {
+        return $this->createModel()->getQualifiedKeyName();
     }
 
 }

@@ -1,7 +1,9 @@
 <?php namespace App\Models\Blog;
 
 use App\Contracts\HasPermissions as HasPermissionsContract;
+use App\Models\User;
 use App\Traits\Enumerable;
+use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Presentable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +12,7 @@ use App\Traits\Models\HasPermissions;
 
 class BlogPost extends Model implements HasPermissionsContract, EnumerableContract
 {
-    use Presentable, Enumerable, HasPermissions;
+    use Presentable, Enumerable, HasPermissions, DoesSqlStuff;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;
@@ -26,7 +28,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
         'blog_post_slug',
         'blog_post_content',
         'blog_post_excerpt',
-        'blog_post_sticky'
+        'blog_post_is_sticky'
     ];
     protected $hidden = [
         'user_id',
@@ -78,6 +80,11 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
             '=',
             'blog_posts.blog_post_status_id'
         );
+    }
+
+    public function scopeUser(Builder $builder)
+    {
+        return $this->joinReverse($builder, User::class);
     }
 
 }

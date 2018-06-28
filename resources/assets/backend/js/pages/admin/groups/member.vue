@@ -57,19 +57,10 @@
                     {{$t('pages.members.add_members')}}
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="search-spinner-wrapper">
-                            <fa icon="cog" size="lg" :spin="addIsAnimated"/>
-                        </div>
-                        <div class="input-tag-container col-md-8">
-                            <input-tag :typeahead="true"
-                                       :placeholder="$t('pages.members.member_search')"
-                                       :searchUrl="'/ajax/admin/users/search/'"
-                                       @searching="addSearching"
-                                       @searched="addSearched"
-                                       @updateAddedItems="updateAddedUsersFromSearch"/>
-                        </div>
-                    </div>
+                        <input-tag :typeahead="true"
+                                   :placeholder="$t('pages.members.member_search')"
+                                   :searchUrl="'/ajax/admin/users/search'"
+                                   @updateAddedItems="updateAddedUsersFromSearch"/>
                 </div>
             </div>
             <div class="card mb-3">
@@ -77,18 +68,11 @@
                     {{$t('pages.members.remove_members')}}
                 </div>
                 <div class="card-body">
-                    <div class="row" v-if="userCount>userCountThreshold">
-                        <div class="search-spinner-wrapper">
-                            <fa icon="cog" size="lg" :spin="delIsAnimated"/>
-                        </div>
-                        <div class="input-tag-container col-md-8">
-                            <input-tag :typeahead="true"
-                                       :placeholder="$t('pages.members.member_search')"
-                                       :searchUrl="`/ajax/admin/members/${this.$route.params.group}/search/`"
-                                       @searching="delSearching"
-                                       @searched="delSearched"
-                                       @updateAddedItems="updateRemovedUsersFromSearch"/>
-                        </div>
+                    <div v-if="userCount>userCountThreshold">
+                        <input-tag :typeahead="true"
+                                   :placeholder="$t('pages.members.member_search')"
+                                   :searchUrl="`/ajax/admin/members/${this.$route.params.group}/search`"
+                                   @updateAddedItems="updateRemovedUsersFromSearch"/>
                     </div>
                     <div v-else-if="userCount>0">
                         <div class="container row">
@@ -122,9 +106,6 @@
     },
     data () {
       return {
-        addIsAnimated: false,
-        delIsAnimated: false,
-        removeIsAnimated: false,
         addedUsers: [],
         removedUsers: [],
         members: [],
@@ -137,18 +118,6 @@
       }
     },
     methods: {
-      addSearching () {
-        this.addIsAnimated = true
-      },
-      addSearched () {
-        this.addIsAnimated = false
-      },
-      delSearching () {
-        this.delIsAnimated = true
-      },
-      delSearched () {
-        this.delIsAnimated = false
-      },
       updateAddedUsersFromSearch (users) {
         this.addedUsers = users
         this.form.added = this.addedUsers

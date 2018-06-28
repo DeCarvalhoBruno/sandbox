@@ -32,7 +32,7 @@ class Admin
                 ->middleware('can:delete,App\Models\User');
             $r->post('users/batch/delete', 'User@batchDestroy')
                 ->middleware('can:delete,App\Models\User');
-            $r->get('users/search/{search}', 'User@search')
+            $r->get('users/search/{search}/{limit}', 'User@search')
                 ->middleware('can:view,App\Models\User');
 
             $r->get('groups', 'Group@index')

@@ -1,11 +1,11 @@
 <?php namespace App\Http\Controllers\Ajax\Admin;
 
+use App\Contracts\Models\Blog as BlogProvider;
 use App\Filters\Blog as BlogFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreateBlogPost;
-use App\Models\Blog\BlogPost;
 use App\Models\Blog\BlogPostStatus;
-use App\Contracts\Models\Blog as BlogProvider;
+use App\Support\Providers\User as UserProvider;
 
 class Blog extends Controller
 {
@@ -13,17 +13,17 @@ class Blog extends Controller
      * @param \App\Filters\Blog $filter
      * @return array
      */
-    public function index(BlogFilter $filter)
+    public function index(BlogFilter $filter, BlogProvider $blogRepo)
     {
         return [
-            'table' => \App\Models\Blog\BlogPost::query()
-                ->select([
-                    'blog_post_title as ' . trans('ajax.db_raw_inv.blog_post_title'),
-                    'blog_post_slug'
-                ])
-                ->filter($filter)->paginate(10),
+            'table' => $blogRepo->buildList([
+                'blog_post_title as ' . trans('ajax.db_raw_inv.blog_post_title'),
+                'username as ' . trans('ajax.db_raw_inv.username'),
+                'blog_post_slug'
+            ])->filter($filter)->paginate(10),
             'columns' => (new \App\Models\Group)->getColumnInfo([
-                trans('ajax.db_raw_inv.blog_post_title') => trans('ajax.db.blog_post_title')
+                trans('ajax.db_raw_inv.blog_post_title') => trans('ajax.db.blog_post_title'),
+                trans('ajax.db_raw_inv.username') => trans('ajax.db.username')
             ])
         ];
     }
@@ -32,7 +32,8 @@ class Blog extends Controller
     {
         return [
             'record' => [
-                'blog_post_status' => BlogPostStatus::getConstantByID(BlogPostStatus::BLOG_POST_STATUS_DRAFT)
+                'blog_post_status' => BlogPostStatus::getConstantByID(BlogPostStatus::BLOG_POST_STATUS_DRAFT),
+                'blog_post_user' => auth()->user()->getAttribute('username')
             ],
             'status_list' => BlogPostStatus::getConstants('BLOG'),
         ];
@@ -42,7 +43,7 @@ class Blog extends Controller
     {
         return [
             'record' =>
-                $blogRepo->getOneBySlug(
+                $blogRepo->buildOneBySlug(
                     $slug,
                     [
                         'blog_post_title',
@@ -54,10 +55,15 @@ class Blog extends Controller
         ];
     }
 
-    public function create(CreateBlogPost $request)
+    public function create(CreateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo)
     {
-        $post = new BlogPost($request->all());
-        $post->save();
+        $post = $blogRepo->createOne(
+            $request->all(),
+            $userRepo->buildOneByUsername(
+                $request->getUsername(),
+                [$userRepo->getQualifiedKeyName()]
+            )
+        );
         $params = [
             'slug' => $post->getAttribute('blog_post_slug'),
         ];
@@ -70,11 +76,9 @@ class Blog extends Controller
         ]);
     }
 
-    public function update($slug,CreateBlogPost $request,BlogProvider $blogRepo)
+    public function update($slug, CreateBlogPost $request, BlogProvider $blogRepo)
     {
-        $blogRepo->updateOne();
-        dd($request->all());
-
+        $blogRepo->updateOne($slug, $request->all());
     }
 
 }
