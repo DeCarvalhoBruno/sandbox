@@ -1,9 +1,6 @@
 <template>
     <div>
         <v-table :entity="'groups'" :rows="rows" :total="total">
-            <th slot="header-action">
-                {{$t('general.actions')}}
-            </th>
             <td slot="body-action" slot-scope="props">
                 <div class="inline">
                     <template v-if="props.row.group_name">

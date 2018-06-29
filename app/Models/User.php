@@ -65,6 +65,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
 
     public function getCreatedAtAttribute($value)
     {
+//        return Carbon::getLocale();
         return Carbon::createFromFormat('Y-m-d H:i:s', $value)->diffForHumans();
     }
 

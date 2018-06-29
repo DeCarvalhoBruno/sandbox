@@ -8,12 +8,12 @@
    'admin.groups.add' => 'admin/groupes/creation',
    'admin.groups.edit' => 'admin/groupes/:group',
    'admin.groups.members' => 'admin/groupes/:group/membres',
+   'admin.blog.index' => 'admin/blog',
+   'admin.blog.add' => 'admin/blog/article/creation',
+   'admin.blog.edit' => 'admin/blog/article/editer/:slug',
    'admin.settings' => '',
    'admin.settings.general' => 'admin/parametres/general',
    'admin.settings.profile' => 'admin/parametres/profil',
    'admin.settings.password' => 'admin/parametres/mot-de-passe',
    'admin.login' => 'admin/connexion',
-   'admin.password.request' => 'admin/mot-de-passe/reinitialiser',
-   'admin.password.reset' => 'admin/mot-de-passe/reinitialiser/:token',
-
 ];

@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-table :entity="'blog'" :rows="rows" :total="total">
+        <v-table :entity="'blog'" :rows="rows" :total="total" :is-multi-select="true"
+                 select-column-name="blog_post_title">
             <th slot="header-action">
                 {{$t('general.actions')}}
             </th>
@@ -11,7 +12,8 @@
                         name: 'admin.blog.edit',
                         params: { slug: props.row.blog_post_slug }
                         }">
-                            <button class="btn btn-sm btn-info">
+                            <button class="btn btn-sm btn-info"
+                                    :title="$t('tables.edit_item',{name:props.row[$t('db_raw_inv.blog_post_title')]})">
                                 <fa icon="pencil-alt">
                                 </fa>
                             </button>

@@ -9,6 +9,15 @@
                 <thead>
                 <tr>
                     <slot name="header-select-all">
+                        <th v-show="isMultiSelect">
+                            <div class="form-check">
+                                <input class="form-check-input position-static"
+                                       type="checkbox"
+                                       :aria-label="$t('general.select_all')"
+                                       :title="$t('general.select_all')"
+                                       @click="toggleSelectAll">
+                            </div>
+                        </th>
                     </slot>
                     <th v-for="(info,index) in columns"
                         :key="index"
@@ -23,13 +32,25 @@
                     </span>
                     </th>
                     <slot name="header-action">
+                        <th>
+                            {{$t('general.actions')}}
+                        </th>
                     </slot>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(row,rowIdx) in rows"
+                <tr v-for="(row,rowIdx) in tableRows"
                     :key="rowIdx">
                     <slot name="body-select-row" :row="row">
+                        <td v-show="isMultiSelect">
+                            <div class="form-check">
+                                <input class="form-check-input position-static"
+                                       type="checkbox"
+                                       :aria-label="$t('tables.select_item',{name:row[$t(`db_raw_inv.${selectColumnName}`)]})"
+                                       :title="$t('tables.select_item',{name:row[$t(`db_raw_inv.${selectColumnName}`)]})"
+                                       v-model="row.selected">
+                            </div>
+                        </td>
                     </slot>
                     <td v-for="(info,colIdx) in columns" :key="colIdx">
                         {{row[info.name]}}
@@ -49,7 +70,6 @@
                 </div>
             </div>
         </template>
-
     </div>
     </div>
 </template>
@@ -69,7 +89,8 @@
     },
     data: function () {
       return {
-        sortOrder: 'desc'
+        sortOrder: 'desc',
+        allSelected:false
       }
     },
     props: {
@@ -85,7 +106,14 @@
         type: Number,
         required: true
       },
-      isMultiSelect: false
+      isMultiSelect: {
+        type: Boolean,
+        default: false
+      },
+      selectColumnName: {
+        type: String,
+        default:''
+      }
     },
     computed: {
       ...mapGetters({
@@ -95,7 +123,10 @@
         to: 'table/to',
         lastPage: 'table/lastPage',
         perPage: 'table/perPage'
-      })
+      }),
+      tableRows(){
+        return this.rows
+      }
     },
     watch: {
       '$route' () {
@@ -107,6 +138,23 @@
       }
     },
     methods: {
+      toggleSelectAll () {
+        this.allSelected = !this.allSelected
+        this.tableRows.forEach(row => (row.selected = this.allSelected))
+      },
+      getSelectedRows (column = null) {
+        let selected = []
+        this.rows.forEach(row => {
+          if (row.selected) {
+            if (column) {
+              selected.push(row[column])
+            } else {
+              selected.push(row)
+            }
+          }
+        })
+        return selected
+      },
       sort (column) {
         if (!column.sortable) {
           return

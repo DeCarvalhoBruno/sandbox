@@ -19,7 +19,7 @@ class User extends Controller
     {
         $users = $userProvider
             ->select([
-                \DB::raw('"" as selected'),
+                \DB::raw('null as selected'),
                 'full_name as ' . trans('ajax.db_raw_inv.full_name'),
                 'email as ' . trans('ajax.db_raw_inv.email'),
                 'created_at as ' . trans('ajax.db_raw_inv.created_at'),

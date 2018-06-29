@@ -2,7 +2,6 @@
 return [
     'title' => [
         'login' => 'Log In',
-
     ],
     'breadcrumb' => [
         'admin-dashboard' => 'Home',
@@ -179,19 +178,18 @@ return [
         'settings' => [
             'language' => 'Language',
             'avatar-tab' => 'Avatar',
-            'avatarul-tab' => 'Upload avatar',
             'avatar-ul-tab' => 'Upload avatar',
             'delete_avatar' => 'Delete avatar'
         ],
-        'blog'=>[
-            'author'=>'Author'
+        'blog' => [
+            'author' => 'Author'
         ]
     ],
     'tables' => [
         'empty' => 'No data available.',
         'sort_ascending' => 'Sort in ascending order',
         'sort_descending' => 'Sort in descending order',
-        'select_item' => 'Select {name}',
+        'select_item' => 'Select {name} for batch processing',
         'edit_item' => 'Edit {name}',
         'delete_item' => 'Delete {name}',
         'grouped_actions' => 'Grouped actions',
@@ -235,18 +233,18 @@ return [
         'order' => 'order',
         'fullName' => 'name',
         'createdAt' => 'registration',
-        'day' => 'day',
-        'week' => 'week',
-        'month' => 'month',
-        'year' => 'year'
+        'day' => 'jour',
+        'week' => 'semaine',
+        'month' => 'mois',
+        'year' => 'annee'
     ],
     'locales' => [
-        'en' => 'English',
-        'fr' => 'French'
+        'en' => 'Anglais',
+        'fr' => 'Français'
     ],
     'units' => [
-        'MB' => 'MB'
+        'MB' => 'Mo'
     ],
-    'go_home' => 'Go Home',
-    'toggle_navigation' => 'Toggle navigation',
+    'go_home' => 'Retour à l\'accueil',
+    'toggle_navigation' => 'Réduire/Agrandir le menu',
 ];
