@@ -1,5 +1,5 @@
 <template>
-    <div id="main_wrapper">
+    <div id="app_backend_wrapper">
         <navbar/>
         <drawer :menu-items="MenuItems"/>
         <div class="content-wrapper">

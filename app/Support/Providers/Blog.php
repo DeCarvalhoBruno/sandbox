@@ -28,6 +28,7 @@ class Blog extends Model implements BlogInterface
         return $this->createModel()->newQuery()
             ->select($attributes)
             ->status()
+            ->user()
             ->where('blog_post_slug', '=', $slug);
     }
 

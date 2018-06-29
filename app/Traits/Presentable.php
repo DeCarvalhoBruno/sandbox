@@ -13,10 +13,11 @@ trait Presentable
     {
         $sortable = array_flip($this->sortable);
         $result = [];
-        foreach ($columns as $name => $label) {
+        foreach ($columns as $name => $info) {
             $result[$name] = [
                 'name' => $name,
-                'label' => $label,
+                'width' => (isset($info->width))?$info->width:'inherit',
+                'label' => $info->name,
                 'sortable' => isset($sortable[trans(sprintf('ajax.db_raw.%s', $name))])
             ];
         }

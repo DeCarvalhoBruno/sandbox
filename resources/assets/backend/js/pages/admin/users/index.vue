@@ -28,7 +28,7 @@
                             <input type="text" class="form-control"
                                    :placeholder="$t('pages.users.filter_full_name')"
                                    :aria-label="$t('pages.users.filter_full_name')"
-                                   v-model="fullNameFilter"
+                                   v-model="nameFilter"
                                    @keyup.enter="filterFullName">
                             <div class="input-group-append">
                                 <button class="btn btn-default btn-outline-dark"
@@ -55,7 +55,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="input-group">
-                            <select class="custom-select" id="inputGroupSelect02" v-model="createdAtFilter">
+                            <select class="custom-select" id="inputGroupSelect02" v-model="createdFilter">
                                 <option disabled value="">{{$t('pages.users.filter_created_at')}}</option>
                                 <option value="day">Registered today</option>
                                 <option value="week">Registered less than a week ago</option>
@@ -97,7 +97,7 @@
 
         </div>
         <div class="row">
-            <div class="card col-lg p-0 m-0">
+
                 <v-table :entity="'users'" :is-multi-select="true" :rows="rows" :total="total">
                     <th slot="header-select-all">
                         <div class="form-check">
@@ -140,7 +140,6 @@
                         </div>
                     </td>
                 </v-table>
-            </div>
         </div>
     </div>
 </template>
@@ -165,9 +164,9 @@
       return {
         allSelected: false,
         selectApply: '',
-        groupFilter: '',
-        createdAtFilter: '',
-        fullNameFilter: '',
+        groupFilter: null,
+        createdFilter:null,
+        nameFilter: null,
         filterButtons: {},
         selectionBuffer: {}
       }
@@ -181,18 +180,10 @@
     },
     watch: {
       groupFilter () {
-        if (this.groupFilter) {
-          let obj = Object.assign({}, this.$route.query)
-          obj[this.$t('filters.group')] = this.groupFilter
-          this.$router.push({query: obj})
-        }
+        this.applyFilter('group')
       },
-      createdAtFilter () {
-        if (this.createdAtFilter) {
-          let obj = Object.assign({}, this.$route.query)
-          obj[this.$t('filters.created')] = this.createdAtFilter
-          this.$router.push({query: obj})
-        }
+      createdFilter () {
+        this.applyFilter('created')
       },
       '$route' () {
         this.setFilterButtons()
@@ -203,26 +194,32 @@
       this.$root.$on('modal_confirmed', this.applyMethod)
     },
     methods: {
+      applyFilter(type){
+        let filter = this[`${type}Filter`]
+        if (filter) {
+          let obj = Object.assign({}, this.$route.query)
+          obj[this.$t(`filters.${type}`)] = filter
+          this.$router.push({query: obj})
+        }
+      },
       applyMethod (name) {
         this[name]()
         this.$store.commit('session/HIDE_MODAL')
       },
       setFilterButtons () {
-        this.fullNameFilter = this.$route.query[this.$t('filters.name')]
-        if (this.fullNameFilter) {
-          this.$set(this.filterButtons, this.$t('filters.name'), this.fullNameFilter)
+        this.setFilterButton('name')
+        this.setFilterButton('group')
+
+        this.createdFilter = this.$route.query[this.$t('filters.created')]||''
+        if (this.createdFilter!=='') {
+          this.$set(this.filterButtons, this.$t('filters.created'), this.$t('filters.' + this.createdFilter))
         }
-        this.groupFilter = this.$route.query[this.$t('filters.group')]
-        if (this.groupFilter) {
-          this.$set(this.filterButtons, this.$t('filters.group'), this.groupFilter)
-        } else {
-          this.groupFilter = ''
-        }
-        this.createdAtFilter = this.$route.query[this.$t('filters.created')]
-        if (this.createdAtFilter) {
-          this.$set(this.filterButtons, this.$t('filters.created'), this.$t('filters.' + this.createdAtFilter))
-        } else {
-          this.createdAtFilter = ''
+      },
+      setFilterButton(type){
+        let filterTranslation = this.$t(`filters.${type}`)
+        this[`${type}Filter`] = this.$route.query[filterTranslation]||''
+        if (this[`${type}Filter`]!=='') {
+          this.$set(this.filterButtons, filterTranslation, this[`${type}Filter`])
         }
       },
       resetFilters () {
@@ -301,7 +298,7 @@
       },
       filterFullName () {
         let obj = Object.assign({}, this.$route.query)
-        obj[this.$t('filters.name')] = this.fullNameFilter
+        obj[this.$t('filters.name')] = this.nameFilter
         this.$router.push({query: obj})
       }
     },

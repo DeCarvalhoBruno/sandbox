@@ -39,9 +39,15 @@ class User extends Controller
             'table' => $users->paginate(10),
             'groups' => $groups->pluck('group_name'),
             'columns' => $userProvider->createModel()->getColumnInfo([
-                trans('ajax.db_raw_inv.full_name') => trans('ajax.db.full_name'),
-                trans('ajax.db_raw_inv.email') => trans('ajax.general.email'),
-                trans('ajax.db_raw_inv.created_at') => trans('ajax.db.user_created_at')
+                trans('ajax.db_raw_inv.full_name') => (object)[
+                    'name' => trans('ajax.db.full_name'),
+                ],
+                trans('ajax.db_raw_inv.email') => (object)[
+                    'name' => trans('ajax.general.email'),
+                ],
+                trans('ajax.db_raw_inv.created_at') => (object)[
+                    'name' => trans('ajax.db.user_created_at'),
+                ]
             ])
         ];
     }
@@ -101,12 +107,12 @@ class User extends Controller
      */
     public function search($search, $limit, UserProvider $userProvider)
     {
-            return response(
-                $userProvider->search(
-                    preg_replace('/[^\w\s\-\']/', '', strip_tags($search)),
-                    auth()->user()->getAttribute('entity_type_id'),
-                    intval($limit)
-                )->get(), Response::HTTP_OK);
+        return response(
+            $userProvider->search(
+                preg_replace('/[^\w\s\-\']/', '', strip_tags($search)),
+                auth()->user()->getAttribute('entity_type_id'),
+                intval($limit)
+            )->get(), Response::HTTP_OK);
         return response('', Response::HTTP_OK);
     }
 

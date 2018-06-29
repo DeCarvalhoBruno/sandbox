@@ -1,20 +1,26 @@
 <template>
+    <div class="card col-lg p-0 m-0">
     <div class="table-container table-responsive">
         <template v-if="rows.length===0">
             <h3>{{$t('tables.empty')}}</h3>
         </template>
         <template v-else>
-            <table class="table table-bordered table-hover table-striped">
+            <table class="table table-hover table-striped">
                 <thead>
                 <tr>
                     <slot name="header-select-all">
                     </slot>
                     <th v-for="(info,index) in columns"
                         :key="index"
-                        @click="sort(info)">
-                        {{info.label}}<span v-if="info.sortable" :title="$t('tables.sort_'+getOrder(info.order))">
-                        <fa class="float-right"
-                            :icon="info.order===$t('filters.asc')?'angle-double-down':'angle-double-up'"/></span>
+                        @click="sort(info)"
+                        :style="{
+                            'width': info.hasOwnProperty('width')?info.width:'auto'
+                        }">
+                        {{info.label}}<span v-if=" info.sortable
+                    " :title="$t('tables.sort_'+getOrder(info.order))">
+                    <fa class="float-right"
+                        :icon="info.order===$t('filters.asc')?'angle-double-down':'angle-double-up'"/>
+                    </span>
                     </th>
                     <slot name="header-action">
                     </slot>
@@ -33,13 +39,18 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="paginator">
-                <b-pagination-nav v-if="lastPage>1" :link-gen="linkGen" :total-rows="total" :value="currentPage"
-                                  :per-page="perPage" :limit="perPage" :number-of-pages="lastPage">
-                </b-pagination-nav>
+            <div class="container">
+                <div class="row justify-content-md-center">
+                    <div class="paginator col-lg-6">
+                        <b-pagination-nav v-if="lastPage>1" :link-gen="linkGen" :total-rows="total" :value="currentPage"
+                                          :per-page="perPage" :limit="perPage" :number-of-pages="lastPage">
+                        </b-pagination-nav>
+                    </div>
+                </div>
             </div>
         </template>
 
+    </div>
     </div>
 </template>
 
@@ -83,7 +94,7 @@
         from: 'table/from',
         to: 'table/to',
         lastPage: 'table/lastPage',
-        perPage: 'table/perPage',
+        perPage: 'table/perPage'
       })
     },
     watch: {

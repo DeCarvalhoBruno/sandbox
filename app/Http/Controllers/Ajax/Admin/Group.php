@@ -18,10 +18,10 @@ class Group extends Controller
      * @param \App\Filters\Group $filter
      * @return array
      */
-    public function index(GroupFilter $filter)
+    public function index(GroupFilter $filter, GroupProvider $groupProvider)
     {
         return [
-            'table' => \App\Models\Group::query()
+            'table' => $groupProvider
                 ->select([
                     'groups.group_id',
                     'group_name as ' . trans('ajax.db_raw_inv.group_name'),
@@ -37,9 +37,13 @@ class Group extends Controller
                 ])
                 ->filter($filter)->paginate(10),
             'columns' => (new \App\Models\Group)->getColumnInfo([
-                trans('ajax.db_raw_inv.group_name') => trans('ajax.db.group_name'),
-                'member_count' => trans('ajax.db.member_count'),
-            ])
+                trans('ajax.db_raw_inv.group_name') => (object)[
+                    'name' => trans('ajax.db.group_name'),
+                    'width' => '80%'
+                ]
+            ]),
+            'member_count' => trans('ajax.db.member_count'),
+
         ];
 
     }

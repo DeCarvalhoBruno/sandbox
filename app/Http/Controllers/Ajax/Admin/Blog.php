@@ -22,8 +22,14 @@ class Blog extends Controller
                 'blog_post_slug'
             ])->filter($filter)->paginate(10),
             'columns' => (new \App\Models\Group)->getColumnInfo([
-                trans('ajax.db_raw_inv.blog_post_title') => trans('ajax.db.blog_post_title'),
-                trans('ajax.db_raw_inv.username') => trans('ajax.db.username')
+                trans('ajax.db_raw_inv.blog_post_title') => (object)[
+                    'name' =>trans('ajax.db.blog_post_title'),
+                    'width'=>'50%'
+                ],
+                trans('ajax.db_raw_inv.username') => (object)[
+                    'name' =>trans('ajax.db.username'),
+                    'width'=>'40%'
+                    ]
             ])
         ];
     }
@@ -49,7 +55,8 @@ class Blog extends Controller
                         'blog_post_title',
                         'blog_post_content',
                         'blog_post_excerpt',
-                        'blog_post_status_name as blog_post_status'
+                        'blog_post_status_name as blog_post_status',
+                        'users.username as blog_post_user'
                     ])->first(),
             'status_list' => BlogPostStatus::getConstants('BLOG'),
         ];

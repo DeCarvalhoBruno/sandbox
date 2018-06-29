@@ -82,6 +82,11 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
         );
     }
 
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
     public function scopeUser(Builder $builder)
     {
         return $this->joinReverse($builder, User::class);
