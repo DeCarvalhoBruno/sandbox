@@ -17,16 +17,16 @@ class Blog extends Controller
     {
         return [
             'table' => $blogRepo->buildList([
-                'blog_post_title as ' . trans('ajax.db_raw_inv.blog_post_title'),
-                'username as ' . trans('ajax.db_raw_inv.username'),
+                'blog_post_title',
+                'username',
                 'blog_post_slug'
             ])->filter($filter)->paginate(10),
-            'columns' => (new \App\Models\Group)->getColumnInfo([
-                trans('ajax.db_raw_inv.blog_post_title') => (object)[
+            'columns' => $blogRepo->createModel()->getColumnInfo([
+                'blog_post_title' => (object)[
                     'name' =>trans('ajax.db.blog_post_title'),
                     'width'=>'50%'
                 ],
-                trans('ajax.db_raw_inv.username') => (object)[
+                'username' => (object)[
                     'name' =>trans('ajax.db.username'),
                     'width'=>'40%'
                     ]

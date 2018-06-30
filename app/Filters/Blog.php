@@ -4,7 +4,7 @@ use Illuminate\Database\Query\Builder;
 
 class Blog extends Filters
 {
-    protected $filters = ['sortBy', 'order', 'name'];
+    protected $filters = ['sortBy', 'order', 'title'];
     protected $acceptedSortColumns = ['blog_post_title'];
 
     /**
@@ -30,10 +30,10 @@ class Blog extends Filters
      * @param string $name
      * @return \Illuminate\Database\Query\Builder
      */
-    public function name($name)
+    public function title($name)
     {
         return $this->builder->where(
-            trans(sprintf('ajax.db_raw.%s', 'blog_post_title')),
+            'blog_post_title',
             'like',
             sprintf('%%%s%%', $name));
     }

@@ -76,17 +76,54 @@ return [
     ],
     'db_raw' => [
         'full_name' => 'full_name',
+        'username' => 'username',
         'email' => 'email',
-        'group_name' => 'group_name',
-        'created_at' => 'created_at'
-    ],
-    'db_raw_inv' => [
-        'full_name' => 'full_name',
-        'email' => 'email',
-        'username'=>'username',
         'group_name' => 'group_name',
         'created_at' => 'created_at',
         'blog_post_title' => 'blog_post_title'
+    ],
+    'db_raw_inv' => [
+        'full_name' => 'full_name',
+        'username' => 'username',
+        'email' => 'email',
+        'group_name' => 'group_name',
+        'created_at' => 'created_at',
+        'blog_post_title' => 'blog_post_title'
+    ],
+    'filters' => [
+        'sortBy' => 'sortBy',
+        'order' => 'order',
+        'users_name' => 'name',
+        'users_group' => 'group',
+        'users_created' => 'created',
+        'blog_title' => 'title',
+        'asc' => 'asc',
+        'desc' => 'desc',
+        'day' => 'day',
+        'week' => 'week',
+        'month' => 'month',
+        'year' => 'year'
+    ],
+    'filter_labels' => [
+        'users_group' => 'Group:',
+        'users_name' => 'Full name:',
+        'blog_title' => 'Post title:',
+        'users_created' => 'Registration period:',
+        'created_today' => 'Registered today',
+        'created_week' => 'Less than a week ago',
+        'created_month' => 'Less than a month ago',
+        'created_year' => 'Less than a year ago',
+    ],
+    'filters_inv' => [
+        'registration' => 'createdAt',
+        'blog_post_title' => 'title',
+        'group' => 'group',
+        'name' => 'fullName',
+        'sortBy' => 'sortBy',
+        'title' => 'title',
+        'order' => 'order',
+        'fullName' => 'name',
+        'createdAt' => 'created',
     ],
     'constants' => [
         'BLOG_POST_STATUS_DRAFT' => 'Draft',
@@ -182,18 +219,20 @@ return [
             'delete_avatar' => 'Delete avatar'
         ],
         'blog' => [
-            'author' => 'Author'
+            'author' => 'Author',
+            'filter_title' => 'Filter by title',
         ]
     ],
     'tables' => [
         'empty' => 'No data available.',
-        'sort_ascending' => 'Sort in ascending order',
-        'sort_descending' => 'Sort in descending order',
+        'sort_asc' => 'Sort in ascending order',
+        'sort_desc' => 'Sort in descending order',
         'select_item' => 'Select {name} for batch processing',
         'edit_item' => 'Edit {name}',
         'delete_item' => 'Delete {name}',
         'grouped_actions' => 'Grouped actions',
         'option_del_user' => 'Delete user',
+        'option_del_blog' => 'Delete blog post',
         'btn_apply_title' => 'Apply action to all selected users'
     ],
     'dropzone' => [
@@ -210,41 +249,13 @@ return [
         'delete_media' => 'Delete media',
         'edit_media' => 'Edit media'
     ],
-    'filters' => [
-        'sortBy' => 'sortBy',
-        'order' => 'order',
-        'name' => 'name',
-        'group' => 'group',
-        'created' => 'registration',
-        'asc' => 'ascending',
-        'desc' => 'descending',
-        'ascending' => 'asc',
-        'descending' => 'desc',
-        'day' => 'Today',
-        'week' => '< 1 week',
-        'month' => '< 1 month',
-        'year' => '< 1 year'
-    ],
-    'filters_inv' => [
-        'registration' => 'createdAt',
-        'group' => 'group',
-        'name' => 'fullName',
-        'sortBy' => 'sortBy',
-        'order' => 'order',
-        'fullName' => 'name',
-        'createdAt' => 'registration',
-        'day' => 'jour',
-        'week' => 'semaine',
-        'month' => 'mois',
-        'year' => 'annee'
-    ],
     'locales' => [
-        'en' => 'Anglais',
-        'fr' => 'Français'
+        'en' => 'English',
+        'fr' => 'French'
     ],
     'units' => [
-        'MB' => 'Mo'
+        'MB' => 'MB'
     ],
-    'go_home' => 'Retour à l\'accueil',
-    'toggle_navigation' => 'Réduire/Agrandir le menu',
+    'go_home' => 'Go Home',
+    'toggle_navigation' => 'Toggle navigation',
 ];

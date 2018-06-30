@@ -24,7 +24,7 @@ class Group extends Controller
             'table' => $groupProvider
                 ->select([
                     'groups.group_id',
-                    'group_name as ' . trans('ajax.db_raw_inv.group_name'),
+                    'group_name',
                     'permission_mask',
                     \DB::raw('count(group_members.user_id) as member_count')
                 ])->leftGroupMember()->entityType()
@@ -37,7 +37,7 @@ class Group extends Controller
                 ])
                 ->filter($filter)->paginate(10),
             'columns' => (new \App\Models\Group)->getColumnInfo([
-                trans('ajax.db_raw_inv.group_name') => (object)[
+                'group_name' => (object)[
                     'name' => trans('ajax.db.group_name'),
                     'width' => '80%'
                 ]

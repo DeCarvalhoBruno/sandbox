@@ -160,7 +160,7 @@
           return
         }
         let obj = Object.assign({}, this.$route.query)
-        obj[this.$t('filters.sortBy')] = column.name
+        obj[this.$t('filters.sortBy')] = this.$t(`db_raw.${column.name}`)
         let orderTranslated = this.$t('filters.order')
         obj[orderTranslated] = this.toggleSortOrder()
         this.updateColumn({columnName: column.name, direction: obj[orderTranslated]})

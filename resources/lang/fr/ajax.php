@@ -59,7 +59,7 @@
     'db' => [
         'user' => 'Utilisateur|Utilisateurs',
         'group' => 'Groupe|Groupes',
-        'blog_post' => 'Article',
+        'blog_post' => 'Article|Articles',
         'username' => 'Nom d\'utilisateur',
         'first_name' => 'Prénom',
         'last_name' => 'Nom de famille',
@@ -75,17 +75,52 @@
     ],
     'db_raw' => [
         'full_name' => 'nom',
+        'username'=>'nom_utilisateur',
         'email' => 'mail',
-        'group_name' => 'nom_groupe',
+        'group_name' => 'groupe',
         'created_at' => 'inscription',
+        'blog_post_title' => 'titre',
     ],
     'db_raw_inv' => [
-        'full_name' => 'nom',
-        'email' => 'mail',
-        'username' => 'nom_utilisateur',
-        'group_name' => 'nom_groupe',
-        'created_at' => 'inscription',
-        'blog_post_title' => 'titre_article',
+        'nom' => 'full_name',
+        'nom_utilisateur'=>'username',
+        'mail' => 'email',
+        'groupe' => 'group_name',
+        'inscription' => 'created_at',
+        'titre' => 'blog_post_title',
+    ],
+    'filters' => [
+        'sortBy' => 'tri',
+        'order' => 'ordre',
+        'users_name' => 'nom',
+        'users_group' => 'groupe',
+        'users_created' => 'inscription',
+        'blog_title' => 'titre',
+        'asc' => 'asc',
+        'desc' => 'desc',
+        'day' => 'jour',
+        'week' => 'semaine',
+        'month' => 'mois',
+        'year' => 'annee'
+    ],
+    'filter_labels'=>[
+        'users_groupe'=>'Groupe :',
+        'users_nom'=>'Nom :',
+        'blog_titre' => 'Titre de l\'article :',
+        'users_inscription'=>'Date inscription, période :',
+        'created_today'=>'Inscrit aujourd\'hui',
+        'created_week'=>'Moins d\'une semaine',
+        'created_month'=>'Moins d\'un mois',
+        'created_year'=>'Moins d\'un an',
+    ],
+    'filters_inv' => [
+        'registration' => 'createdAt',
+        'group' => 'groupe',
+        'name' => 'nom',
+        'sortBy' => 'tri',
+        'order' => 'ordre',
+        'fullName' => 'nom',
+        'createdAt' => 'inscription',
     ],
     'constants' => [
         'BLOG_POST_STATUS_DRAFT' => 'Brouillon',
@@ -177,7 +212,8 @@
             'delete_avatar' => 'Suprrimer l\'avatar'
         ],
         'blog' => [
-            'author' => 'Auteur'
+            'author' => 'Auteur',
+            'filter_title' => 'Filtrer par titre',
         ]
     ],
     'tables' => [
@@ -189,6 +225,7 @@
         'delete_item' => 'Supprimer {name}',
         'grouped_actions' => 'Action groupées',
         'option_del_user' => 'Supprimer l\'utilisateur',
+        'option_del_blog' => 'Supprimer l\'article',
         'btn_apply_title' => 'Appliquer l\'action à tous les utilisateurs sélectionnés',
     ],
     'dropzone' => [
@@ -205,40 +242,14 @@
         'delete_media' => 'Supprimer le média',
         'edit_media' => 'Editer le média',
     ],
-    'filters' => [
-        'sortBy' => 'trier_par',
-        'order' => 'ordre',
-        'name' => 'nom',
-        'group' => 'groupe',
-        'created' => 'inscription',
-        'asc' => 'asc',
-        'desc' => 'desc',
-        'ascending' => 'croissant',
-        'descending' => 'décroissant',
-        'day' => 'Aujourd\'hui',
-        'week' => '< 1 semaine',
-        'month' => '< 1 mois',
-        'year' => '< 1 an',
-    ],
-    'filters_inv' => [
-        'inscription' => 'createdAt',
-        'groupe' => 'group',
-        'nom' => 'name',
-        'trier_par' => 'sortBy',
-        'ordre' => 'order',
-        'day' => 'day',
-        'week' => 'week',
-        'month' => 'month',
-        'year' => 'year'
-    ],
     'locales' => [
-        'en' => '',
-        'fr' => '',
+        'en' => 'Anglais',
+        'fr' => 'Français'
     ],
     'units' => [
-        'MB' => '',
+        'MB' => 'Mo'
     ],
-    'go_home' => 'accueil',
-    'toggle_navigation' => '',
+    'go_home' => 'Retour à l\'accueil',
+    'toggle_navigation' => 'Réduire/Agrandir le menu',
 
 ];

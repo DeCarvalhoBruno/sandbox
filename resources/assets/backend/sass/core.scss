@@ -104,7 +104,6 @@ body {
 /* Content */
 .content {
   min-height: 250px;
-  padding: 15px;
   @include container-fixed($grid-gutter-width);
 }
 

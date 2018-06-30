@@ -18,7 +18,7 @@ trait Presentable
                 'name' => $name,
                 'width' => (isset($info->width))?$info->width:'inherit',
                 'label' => $info->name,
-                'sortable' => isset($sortable[trans(sprintf('ajax.db_raw.%s', $name))])
+                'sortable' => isset($sortable[$name])
             ];
         }
         return $result;

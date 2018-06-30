@@ -34,6 +34,9 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
         'user_id',
         'blog_post_status_id'
     ];
+    protected $sortable = [
+      'blog_post_title'
+    ];
 
     public static function boot()
     {

@@ -2,7 +2,9 @@
     <div class="container">
         <div class="row">
             <div class="container">
-                <table-filter :filterButtons="filterButtons" @table-filter-removed="removeFilter"/>
+                <table-filter :filterButtons="filterButtons" :entity="this.entity"
+                              @filter-removed="removeFilter"
+                              @filter-reset="resetFilters"/>
                 <div class="row pb-1">
                     <div class="col-md-4">
                         <div class="input-group">
@@ -10,13 +12,13 @@
                                    :placeholder="$t('pages.users.filter_full_name')"
                                    :aria-label="$t('pages.users.filter_full_name')"
                                    v-model="nameFilter"
-                                   @keyup.enter="filterFullName">
+                                   @keyup.enter="fullNameFilter">
                             <div class="input-group-append">
-                                <button class="btn btn-default btn-outline-dark"
-                                        type="button" :title="$t('general.search')"
-                                        @click="filterFullName">
+                                <label class="input-group-text"
+                                        :title="$t('general.search')"
+                                        @click="fullNameFilter">
                                     <fa icon="user"/>
-                                </button>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -38,10 +40,10 @@
                         <div class="input-group">
                             <select class="custom-select" id="inputGroupSelect02" v-model="createdFilter">
                                 <option disabled value="">{{$t('pages.users.filter_created_at')}}</option>
-                                <option value="day">Registered today</option>
-                                <option value="week">Registered less than a week ago</option>
-                                <option value="month">Registered less than a month ago</option>
-                                <option value="year">Registered less than a year ago</option>
+                                <option :value="$t('filters.day')">{{$t('filter_labels.created_today')}}</option>
+                                <option :value="$t('filters.week')">{{$t('filter_labels.created_week')}}</option>
+                                <option :value="$t('filters.month')">{{$t('filter_labels.created_month')}}</option>
+                                <option :value="$t('filters.year')">{{$t('filter_labels.created_year')}}</option>
                             </select>
                             <div class="input-group-append">
                                 <label class="input-group-text"
@@ -77,7 +79,7 @@
             </div>
         </div>
         <div class="row">
-            <v-table ref="table" :entity="'users'" :is-multi-select="true" :rows="rows"
+            <v-table ref="table" :entity="this.entity" :is-multi-select="true" :rows="rows"
                      :total="total" select-column-name="full_name">
                 <td slot="body-action" slot-scope="props">
                     <div class="inline">
@@ -108,7 +110,7 @@
   import store from '~/store'
   import Table from '~/components/table/table'
   import TableFilter from '~/components/table/TableFilter'
-  import { mapGetters } from 'vuex'
+  import TableMixin from '~/mixins/tables'
   import axios from 'axios'
 
   Vue.use(Table)
@@ -129,16 +131,13 @@
         createdFilter: null,
         nameFilter: null,
         filterButtons: {},
-        selectionBuffer: {}
+        selectionBuffer: {},
+        entity:'users'
       }
     },
-    computed: {
-      ...mapGetters({
-        rows: 'table/rows',
-        total: 'table/total',
-        extras: 'table/extras'
-      })
-    },
+    mixins:[
+      TableMixin
+    ],
     watch: {
       groupFilter () {
         this.applyFilter('group')
@@ -146,45 +145,16 @@
       createdFilter () {
         this.applyFilter('created')
       },
-      '$route' () {
-        this.setFilterButtons()
-      }
     },
     created () {
       this.setFilterButtons()
       this.$root.$on('modal_confirmed', this.applyMethod)
     },
     methods: {
-      removeFilter (obj) {
-        this.filterButtons = obj
-      },
-      applyFilter (type) {
-        let filter = this[`${type}Filter`]
-        if (filter) {
-          let obj = Object.assign({}, this.$route.query)
-          obj[this.$t(`filters.${type}`)] = filter
-          this.$router.push({query: obj})
-        }
-      },
-      applyMethod (name) {
-        this[name]()
-        this.$store.commit('session/HIDE_MODAL')
-      },
       setFilterButtons () {
         this.setFilterButton('name')
         this.setFilterButton('group')
-
-        this.createdFilter = this.$route.query[this.$t('filters.created')] || ''
-        if (this.createdFilter !== '') {
-          this.$set(this.filterButtons, this.$t('filters.created'), this.$t(`filters.${this.createdFilter}`))
-        }
-      },
-      setFilterButton (type) {
-        let filterTranslation = this.$t(`filters.${type}`)
-        this[`${type}Filter`] = this.$route.query[filterTranslation] || ''
-        if (this[`${type}Filter`] !== '') {
-          this.$set(this.filterButtons, filterTranslation, this[`${type}Filter`])
-        }
+        this.setFilterButton('created')
       },
       deleteRowConfirm (data) {
         this.$store.dispatch('session/showModal', {
@@ -206,7 +176,7 @@
             this.$tc('message.user_delete_ok', 1, {name: this.selectionBuffer.full_name})
           )
           this.$store.dispatch('table/fetchData', {
-            entity: 'users',
+            entity: this.entity,
             queryString: this.$route.fullPath
           })
         } catch (e) {}
@@ -218,18 +188,16 @@
               await axios.post(`/ajax/admin/users/batch/delete`, {users: this.$refs.table.getSelectedRows('username')})
               this.$store.dispatch('session/setAlertMessageSuccess', this.$tc('message.user_delete_ok', 2))
               this.$store.dispatch('table/fetchData', {
-                entity: 'users',
+                entity: this.entity,
                 queryString: this.$route.fullPath
               })
             } catch (e) {}
             break
         }
       },
-      filterFullName () {
-        let obj = Object.assign({}, this.$route.query)
-        obj[this.$t('filters.name')] = this.nameFilter
-        this.$router.push({query: obj})
-      }
+      fullNameFilter () {
+        this.applyFilter('name')
+      },
     },
     beforeRouteEnter (to, from, next) {
       store.dispatch('table/fetchData', {

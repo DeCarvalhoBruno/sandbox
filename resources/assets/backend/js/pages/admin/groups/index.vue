@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-table :entity="'groups'" :rows="rows" :total="total">
+        <v-table :entity="this.entity" :rows="rows" :total="total">
             <td slot="body-action" slot-scope="props">
                 <div class="inline">
                     <template v-if="props.row.group_name">
@@ -50,6 +50,11 @@
     components: {
       'v-table': Table
     },
+    data: function () {
+      return {
+        entity: 'groups'
+      }
+    },
     computed: {
       ...mapGetters({
         rows: 'table/rows',
@@ -66,7 +71,7 @@
             this.$t('message.group_delete_ok', {group: data.group_name})
           )
           this.$store.dispatch('table/fetchData', {
-            entity: 'groups',
+            entity: this.entity,
             queryString: this.$route.fullPath
           })
         } catch (e) {}

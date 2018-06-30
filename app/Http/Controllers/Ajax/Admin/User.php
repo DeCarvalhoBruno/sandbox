@@ -20,9 +20,9 @@ class User extends Controller
         $users = $userProvider
             ->select([
                 \DB::raw('null as selected'),
-                'full_name as ' . trans('ajax.db_raw_inv.full_name'),
-                'email as ' . trans('ajax.db_raw_inv.email'),
-                'created_at as ' . trans('ajax.db_raw_inv.created_at'),
+                'full_name',
+                'email',
+                'created_at',
                 'permission_mask',
                 'username'
             ])->entityType()
@@ -30,6 +30,7 @@ class User extends Controller
             ->permissionStore()
             ->permissionMask(auth()->user()->getEntityType())
             ->activated()
+            ->where('username', '!=', $this->user->getAttribute('username'))
             ->filter($userFilter);
         $groups = (clone $users)->select('group_name')->groupBy('group_name');
         if (!$userFilter->hasFilter('group')) {
@@ -39,13 +40,13 @@ class User extends Controller
             'table' => $users->paginate(10),
             'groups' => $groups->pluck('group_name'),
             'columns' => $userProvider->createModel()->getColumnInfo([
-                trans('ajax.db_raw_inv.full_name') => (object)[
+                'full_name' => (object)[
                     'name' => trans('ajax.db.full_name'),
                 ],
-                trans('ajax.db_raw_inv.email') => (object)[
+                'email' => (object)[
                     'name' => trans('ajax.general.email'),
                 ],
-                trans('ajax.db_raw_inv.created_at') => (object)[
+                'created_at' => (object)[
                     'name' => trans('ajax.db.user_created_at'),
                 ]
             ])

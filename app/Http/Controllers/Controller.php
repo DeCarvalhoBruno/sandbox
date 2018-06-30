@@ -15,9 +15,15 @@ class Controller extends BaseController
      * @var \Illuminate\Http\Request
      */
     protected $request;
+    /**
+     * @var \App\Models\User
+     */
+    protected $user;
 
     public function __construct()
     {
+        auth()->setDefaultDriver('jwt');
+        $this->user = auth()->user();
         $this->request = app('request');
     }
 }
