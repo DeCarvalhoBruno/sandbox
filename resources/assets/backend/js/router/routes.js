@@ -21,6 +21,8 @@ const Blog = () => import('~/pages/admin/blog/index').then(
   m => m.default || m)
 const BlogAdd = () => import('~/pages/admin/blog/add').then(
   m => m.default || m)
+const BlogCategory = () => import('~/pages/admin/blog/category').then(
+  m => m.default || m)
 
 const Settings = () => import('~/pages/admin/settings/index').then(
   m => m.default || m)
@@ -90,6 +92,11 @@ let routes = [
     name: 'admin.blog.edit',
     meta: {parent: 'admin.blog.index'},
     component: BlogAdd
+  },
+  {
+    name: 'admin.blog.category',
+    meta: {parent: 'admin.blog.index'},
+    component: BlogCategory
   },
   {
     path: '',

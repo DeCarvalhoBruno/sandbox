@@ -12,6 +12,7 @@ return [
     'admin.blog.index' => 'admin/blog',
     'admin.blog.add' => 'admin/blog/post/add',
     'admin.blog.edit' => 'admin/blog/post/edit/:slug',
+    'admin.blog.category' => 'admin/blog/category',
     'admin.settings' => '',
     'admin.settings.general' => 'admin/settings/general',
     'admin.settings.profile' => 'admin/settings/profile',

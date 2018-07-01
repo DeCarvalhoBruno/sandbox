@@ -14,6 +14,7 @@ return [
         'admin-blog-index' => 'Blog Posts',
         'admin-blog-add' => 'Create',
         'admin-blog-edit' => 'Edit',
+        'admin-blog-category' => 'Categories',
         'admin-settings-password' => 'Your password',
         'admin-settings-profile' => 'Your profile',
         'admin-settings-general' => 'Your general settings',
@@ -25,7 +26,8 @@ return [
         'groups' => 'Groups',
         'blog' => 'Blog',
         'list' => 'List',
-        'add' => 'Add'
+        'add' => 'Add',
+        'category' => 'Categories'
     ],
     'general' => [
         'ok' => 'Ok',

@@ -71,9 +71,6 @@
                 </td>
             </v-table>
         </div>
-        <div class="row">
-            <tree></tree>
-        </div>
     </div>
 </template>
 
@@ -83,7 +80,6 @@
   import Table from '~/components/table/table'
   import TableFilter from '~/components/table/TableFilter'
   import TableMixin from '~/mixins/tables'
-  import Tree from '~/components/tree/Tree'
   import axios from 'axios'
 
   Vue.use(Table)
@@ -95,7 +91,6 @@
     components: {
       'v-table': Table,
       TableFilter,
-      Tree
     },
     data () {
       return {

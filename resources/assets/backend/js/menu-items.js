@@ -70,6 +70,14 @@ export default [
         router: {
           name: 'admin.blog.add'
         }
+      },
+      {
+        type: 'item',
+        icon: 'star',
+        name: 'sidebar.category',
+        router: {
+          name: 'admin.blog.category'
+        }
       }
     ]
   }

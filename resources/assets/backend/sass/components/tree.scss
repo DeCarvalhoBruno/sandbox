@@ -1,50 +1,45 @@
+$list_border_dotted: 1px dotted #000;
+
 .list-tree {
-  min-height: 20px;
-  padding: 19px;
-  margin-bottom: 20px;
-  background-color: #fbfbfb;
-  li {
-    list-style-type: none;
+  ul {
+    padding: 0;
     margin: 0;
-    padding: 10px 5px 0 5px;
+    list-style-type: none;
     position: relative;
   }
-  li::before, .list-tree li::after {
+  .li-indicator {
+    border: 2px solid grey;
+    color: grey;
+    cursor:pointer;
+  }
+  li {
+    list-style-type: none;
+    //border-left: $list_border_dotted;
+    margin-left: 2em;
+    padding:.75em 1em;
+    //margin:2em;
+  }
+  li .li-wrapper {
+    padding-left: .5em;
+    position: relative;
+  }
+  li .li-btn-group{
+    display:inline-block;
+    margin-left:.75em;
+  }
+  li .li-wrapper::before {
     content: '';
-    left: -20px;
     position: absolute;
-    right: auto;
-  }
-  li::before {
-    border-left: 1px solid #999;
-    bottom: 50px;
-    height: 100%;
     top: 0;
-    width: 1px;
+    left: -1em;
+    bottom: 50%;
+    width: 1em;
+    //border-left:$list_border_dotted;
+    border-bottom: $list_border_dotted;
+    //border-top: 0 none transparent;
+    //border-right: 0 none transparent;
   }
-  li::after {
-    border-top: 1px solid #999;
-    height: 20px;
-    top: 25px;
-    width: 25px;
-  }
-  li div {
-    display: inline-block;
-    padding: 3px 8px;
-    text-decoration: none;
-  }
-  li.parent_li > div {
-    cursor: pointer;
-  }
-  & > ul > li::before, .list-tree > ul > li::after {
-    border: 0;
-  }
-  li:last-child::before {
-    height: 30px;
-  }
-  li.parent_li > div:hover, .list-tree li.parent_li > div:hover + ul li div {
-    background: #eee;
-    //border: 1px solid #94a0b4;
-    color: #000;
+  ul > li:last-child {
+    border-left: $list_border_dotted;
   }
 }
