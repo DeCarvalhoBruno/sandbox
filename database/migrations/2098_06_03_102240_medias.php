@@ -149,8 +149,10 @@ class Medias extends Migration
         Schema::create('media_category_records', function (Blueprint $table) {
             $table->increments('media_category_record_id');
 
-            $table->unsignedInteger('media_record_target_id')->comment('Either a media_record id or a media_group_record_id');
-            $table->unsignedInteger('media_category_id')->default(\App\Models\Media\MediaCategory::MEDIA);
+            $table->unsignedInteger('media_record_target_id')->comment(
+                'Either a media_record id or a media_group_record_id');
+            $table->unsignedInteger('media_category_id')->default(
+                \App\Models\Media\MediaCategory::MEDIA);
 
             $table->foreign('media_category_id')
                 ->references('media_category_id')->on('media_categories')

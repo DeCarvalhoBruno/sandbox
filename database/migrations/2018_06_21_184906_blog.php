@@ -60,8 +60,10 @@ class Blog extends Migration
             $table->unsignedInteger('lft')->default(0);
             $table->unsignedInteger('rgt')->default(0);
             $table->string('blog_post_category_name', 75)->nullable();
+            $table->string('blog_post_category_codename', 32)->nullable();
 
             $table->index(array('lft', 'rgt', 'parent_id'));
+            $table->index(array('blog_post_category_codename'));
         });
 
         Schema::create('blog_post_tags', function (Blueprint $table) {
@@ -70,19 +72,34 @@ class Blog extends Migration
             $table->string('blog_post_tag_name', 75)->nullable();
         });
 
-        Schema::create('blog_post_tag_records', function (Blueprint $table) {
-            $table->increments('blog_post_tag_record_id');
+        Schema::create('blog_post_label_types', function (Blueprint $table) {
+            $table->increments('blog_post_label_type_id');
+
+            $table->string('blog_post_label_type_name', 75)->nullable();
+        });
+
+        Schema::create('blog_post_label_records', function (Blueprint $table) {
+            $table->increments('blog_post_label_record_id');
 
             $table->unsignedInteger('blog_post_id');
-            $table->unsignedInteger('blog_post_tag_id');
+            $table->unsignedInteger('blog_post_label_target_id');
+            $table->unsignedInteger('blog_post_label_type_id');
 
             $table->foreign('blog_post_id')
                 ->references('blog_post_id')->on('blog_posts')
                 ->onDelete('cascade');
-            $table->foreign('blog_post_tag_id')
-                ->references('blog_post_tag_id')->on('blog_post_tags')
+            $table->foreign('blog_post_label_type_id')
+                ->references('blog_post_label_type_id')->on('blog_post_label_types')
                 ->onDelete('cascade');
+            $table->index(['blog_post_id', 'blog_post_label_target_id', 'blog_post_label_type_id'],
+                'idx_blog_post_labels');
         });
+
+        $label_types = [
+            ['blog_post_label_type_name' => \App\Models\Blog\BlogPostLabelType::getConstantByID(\App\Models\Blog\BlogPostLabelType::BLOG_POST_TAG)],
+            ['blog_post_label_type_name' => \App\Models\Blog\BlogPostLabelType::getConstantByID(\App\Models\Blog\BlogPostLabelType::BLOG_POST_CATEGORY)],
+        ];
+        \App\Models\Blog\BlogPostLabelType::insert($label_types);
 
         $status = [
             [
@@ -103,7 +120,28 @@ class Blog extends Migration
         ];
         \App\Models\Blog\BlogPostStatus::insert($status);
 
+        \App\Models\Blog\BlogPostCategory::create([
+            'blog_post_category_name' => 'Default',
+            'blog_post_category_codename' => makeHexUuid(),
+        ]);
+        $this->createViews();
 
+
+    }
+
+    public function createViews()
+    {
+        \DB::unprepared('CREATE VIEW blog_post_category_tree AS
+        SELECT
+            node.blog_post_category_id,
+            node.blog_post_category_name as label,
+            (COUNT(parent.blog_post_category_id) - 1) AS lvl,
+            node.blog_post_category_codename as id
+          FROM blog_post_categories AS node, blog_post_categories AS parent
+          WHERE node.lft BETWEEN parent.lft AND parent.rgt
+          GROUP BY node.blog_post_category_codename,node.blog_post_category_id,node.blog_post_category_name
+          ORDER BY node.lft;
+        ');
     }
 
     /**

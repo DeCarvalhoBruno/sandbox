@@ -232,7 +232,6 @@
         this.status_list = data.status_list
         this.current_status = this.$t(`constants.${data.record.blog_post_status}`)
         this.saveMode = saveMode
-        // this.form.setTrackChanges(true)
       }
     },
     beforeRouteEnter (to, from, next) {

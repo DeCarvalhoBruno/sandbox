@@ -1,4 +1,4 @@
-<?php namespace App\Support\GroupHierarchy;
+<?php namespace App\Support\Trees;
 
 use App\Traits\Enumerable;
 
@@ -19,8 +19,6 @@ class GroupHierarchy
 
     private function makeTree($groups)
     {
-//        $groups = $this->getConstants();
-//        asort($groups, SORT_NUMERIC);
         $tree = new Group();
         $tmp = $tree;
         $currentIndex = 0;
@@ -35,11 +33,6 @@ class GroupHierarchy
         }
         return $tree;
     }
-
-//    public static function findGroupAtIndex($tree, $index){
-//        return
-//    }
-
 
 }
 
@@ -92,7 +85,7 @@ class Group
     }
 
     /**
-     * @param \App\Support\GroupHierarchy\Group $parent
+     * @param \App\Support\Trees\Group $parent
      */
     public function addParent(self $parent)
     {
@@ -100,7 +93,7 @@ class Group
     }
 
     /**
-     * @param \App\Support\GroupHierarchy\Group $sibling
+     * @param \App\Support\Trees\Group $sibling
      */
     public function addSibling(self $sibling)
     {
@@ -109,8 +102,8 @@ class Group
     }
 
     /**
-     * @param \App\Support\GroupHierarchy\Group $child
-     * @return \App\Support\GroupHierarchy\Group
+     * @param \App\Support\Trees\Group $child
+     * @return \App\Support\Trees\Group
      */
     public function addChild(self $child)
     {

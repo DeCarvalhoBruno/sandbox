@@ -28,6 +28,10 @@
                                 :title="`Add child to ${node.label}`">
                             <fa icon="pencil-alt"/>
                         </button>
+                        <button type="button" class="btn btn-circle btn-default" @click="deleteItem"
+                                :title="`Delete ${node.label}`">
+                            <fa icon="trash-alt"/>
+                        </button>
                     </div>
                 </template>
             </div>
@@ -75,10 +79,13 @@
     },
     methods: {
       addItem () {
-        this.emits([], {method: 'add', target: this.node.label})
+        this.emits([], this.makeDataObject('add'))
       },
       editItem () {
-        this.emits([], {method: 'edit', target: this.node.label})
+        this.emits([], this.makeDataObject('edit'))
+      },
+      deleteItem () {
+        this.emits([], this.makeDataObject('delete'))
       },
       updateItem () {
         this.emits([], {method: 'update', newValue: this.newValue, target: this.node.label})
@@ -86,17 +93,20 @@
       cancelItem () {
         switch (this.node.mode) {
           case 6:
-            this.emits([], {method: 'delete', target: this.node.label})
+            this.emits([], this.makeDataObject('delete'))
             break
           default:
-            this.emits([], {method: 'cancel', target: this.node.label})
+            this.emits([], this.makeDataObject('cancel'))
         }
       },
       toggleShow () {
-        this.emits([], {method: 'toggleShow', target: this.node.label})
+        this.emits([], this.makeDataObject('toggleShow'))
       },
       emits (nodeMap, data) {
         this.$emit('event', [this.node.label].concat(nodeMap), data)
+      },
+      makeDataObject (method) {
+        return {method: method, target: this.node.label}
       }
     }
   }

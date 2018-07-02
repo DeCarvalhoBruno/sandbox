@@ -8,5 +8,4 @@ class Frontend extends Controller
     {
 
     }
-
 }
