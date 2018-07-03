@@ -10,7 +10,7 @@ class BlogPostCategory extends Model
     protected $table = 'blog_post_categories';
     protected $primaryKey = 'blog_post_category_id';
     protected $fillable = ['blog_post_category_name', 'blog_post_category_codename'];
-    protected $guarded = ['parent_id', 'lft', 'rgt'];
+    protected $hidden = ['parent_id', 'lft', 'rgt'];
     public $timestamps = false;
 
 

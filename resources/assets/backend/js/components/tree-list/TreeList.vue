@@ -1,23 +1,48 @@
 <template>
-    <div class="list-tree">
-        <tree-list-item v-for="(node,idx) in treeData"
-                        :key="idx"
-                        :node="node"
-                        @event="handleEvent">
-        </tree-list-item>
+    <div class="list-tree container">
+        <div class="row mb-3">
+            <search :terms="searchTerms" @show="handleEvent"/>
+        </div>
+        <div class="row">
+            <button type="button" class="btn btn-primary" @click="addRoot">Add Root Category</button>
+            <tree-list-item v-for="(node,idx) in treeData"
+                            :key="idx"
+                            :node="node"
+                            @event="handleEvent">
+            </tree-list-item>
+        </div>
     </div>
 </template>
 <script>
   import TreeListItem from '~/components/tree-list/TreeListItem'
+  import Search from '~/components/tree-list/Search'
   import axios from 'axios'
 
   export default {
     name: 'tree-list',
     components: {
-      TreeListItem
+      TreeListItem,
+      Search
     },
     props: {
       data: {required: true}
+    },
+    data () {
+      return {
+        treeData: [],
+        searchInput: null
+      }
+    },
+    computed: {
+      searchTerms () {
+        // return a list of search terms for autocomplete
+        let result = []
+        for (let node of this.treeData) {
+          result = result.concat(this.buildSearchTerms(node))
+        }
+        console.log(result)
+        return result
+      }
     },
     watch: {
       data (incoming) {
@@ -25,6 +50,20 @@
       }
     },
     methods: {
+      buildSearchTerms (node) {
+        let result = [{label: node.label, path: []}]
+        for (let subNodes of node.children) {
+          result = result.concat(this.buildSearchTerms(subNodes))
+        }
+        // then add our name to the "path" of each child
+        for (let searchTerm of result) {
+          searchTerm.path = [node.label].concat(searchTerm.path)
+        }
+        return result
+      },
+      async addRoot () {
+        this.treeData.push({label: '', id: null, open: true, mode: 6, children: []})
+      },
       async handleEvent (nodeMap, data) {
         let td = []
         for (let node of this.treeData) {
@@ -35,46 +74,62 @@
         }
         this.treeData = td
       },
-      async handleThis (nodeMap, data, node) {
+      async handleThis (nodeMap, payload, node) {
+        let vm = this
+        let failed = false
         if (node.label !== nodeMap[0]) {
+          node.mode = 1
           return node
         }
 
-        if (data.method === 'show') {
+        if (payload.method === 'show') {
           node.open = true
         }
 
-        /*
-            Modes
-                Neutral:1
-                Edit:2
-                Add:6
-        */
-        if (node.label === data.target) {
-          switch (data.method) {
+        //Modes: Default:1, Edit:2, Add:6
+        if (node.label === payload.target) {
+          switch (payload.method) {
             case 'toggleShow':
               node.open = !node.open
               break
             case 'add':
               node.open = true
-              node.children.push({label: '', open: true, mode: 6, children: []})
+              node.children.push({label: '', id: node.id, open: true, mode: 6, children: []})
               break
             case 'edit':
               node.mode = 2
               break
             case 'update':
-              if (mode.mode === 6) {
-
+              if (node.mode === 6) {
+                await axios.post(
+                  `/ajax/admin/blog/categories/create`,
+                  {label: payload.newValue, id: node.id}
+                ).then(({data}) => {
+                  if (data.hasOwnProperty('id')) {
+                    node.id = data.id
+                  } else {
+                    vm.$emit('has-errored',
+                      `Creation of category "${payload.newValue}" failed. Please try again.`
+                    )
+                    failed = true
+                  }
+                })
               } else {
                 await axios.post(
                   `/ajax/admin/blog/categories/update/${node.id}`,
-                  {label: node.label}
+                  {label: payload.newValue}
                 )
               }
-              node.label = data.newValue
+              node.label = payload.newValue
               node.mode = 1
               break
+            case 'cancelCreation':
+              //If the user creates a node a changes their mind
+              return
             case 'delete':
+              axios.post(
+                `/ajax/admin/blog/categories/delete/${node.id}`
+              )
               //Not returning the node will effectively remove it from the tree.
               return
             case 'cancel':
@@ -84,129 +139,15 @@
         } else if (node.children.length) {
           let td = []
           for (let subNode of node.children) {
-            let n = await this.handleThis(nodeMap.slice(1), data, subNode)
+            let n = await this.handleThis(nodeMap.slice(1), payload, subNode)
             if (n) {
               td.push(n)
             }
           }
           node.children = td
         }
+        if (failed) return
         return node
-      },
-      async test (node) {
-
-      }
-    },
-    data () {
-      return {
-        treeData: Array
-        /*
-        Modes
-            Neutral:1
-            Edit:2
-            Add:6
-         */
-        // treeData: [
-        //   {
-        //     label: 'Vehicles',
-        //     open: true,
-        //     mode: 1,
-        //     children: [
-        //       {label: 'trucks', open: true, mode: 1, children: []},
-        //       {label: 'cars', open: true, mode: 1, children: []},
-        //       {
-        //         label: 'compact',
-        //         open: true,
-        //         mode: 1,
-        //         children: [
-        //           {
-        //             label: 'compact 1',
-        //             open: true,
-        //             mode: 1,
-        //             children: [
-        //               {label: 'compact 1.1', open: true, mode: 1, children: []},
-        //               {label: 'compact 1.2', open: true, mode: 1, children: []}
-        //             ]
-        //           },
-        //           {label: 'compact 2', open: true, mode: 1, children: []},
-        //           {label: 'compact 3', open: true, mode: 1, children: []},
-        //           {
-        //             label: 'compact 4',
-        //             open: true,
-        //             mode: 1,
-        //             children: [
-        //               {label: 'compact 4.1', open: true, mode: 1, children: []},
-        //               {label: 'compact 4.2', open: true, mode: 1, children: []}
-        //             ]
-        //           }
-        //         ]
-        //       }
-        //     ]
-        //   }
-        // ],
-        // treeData: [
-        //   {
-        //     'label': 'Europe',
-        //     'open': true,
-        //     'mode': 1,
-        //     'children': [
-        //       {
-        //         'label': 'France',
-        //         'open': true,
-        //         'mode': 1,
-        //         'children': [
-        //           {
-        //             'label': 'Ile de France',
-        //             'open': true,
-        //             'mode': 1,
-        //             'children': [
-        //               {'label': 'Paris', 'open': true, 'mode': 1, 'children': []},
-        //               {'label': 'Montreuil', 'open': true, 'mode': 1, 'children': []},
-        //               {'label': 'Boulogne-Billancourt', 'open': true, 'mode': 1, 'children': []}]
-        //           },
-        //           {
-        //             'label': 'Centre',
-        //             'open': true,
-        //             'mode': 1,
-        //             'children': [
-        //               {'label': 'Orleans', 'open': true, 'mode': 1, 'children': []},
-        //               {'label': 'Chateauneuf-Sur-Loire', 'open': true, 'mode': 1, 'children': []},
-        //               {'label': 'Sully-Sur-Loire', 'open': true, 'mode': 1, 'children': []}]
-        //           }]
-        //       },
-        //       {
-        //         'label': 'Germany',
-        //         'open': true,
-        //         'mode': 1,
-        //         'children': [
-        //           {
-        //             'label': 'Baden-Wurtenberg',
-        //             'open': true,
-        //             'mode': 1,
-        //             'children': [{'label': 'Munich', 'open': true, 'mode': 1, 'children': []}]
-        //           }]
-        //       }]
-        //   },
-        //   {
-        //     'label': 'North America',
-        //     'open': true,
-        //     'mode': 1,
-        //     'children': [
-        //       {
-        //         'label': 'United States',
-        //         'open': true,
-        //         'mode': 1,
-        //         'children': [
-        //           {
-        //             'label': 'Pennsylvania',
-        //             'open': true,
-        //             'mode': 1,
-        //             'children': [
-        //               {'label': 'Philadelphia', 'open': true, 'mode': 1, 'children': []},
-        //               {'label': 'Pittsburgh', 'open': true, 'mode': 1, 'children': []}]
-        //           }]
-        //       }]
-        //   }]
       }
     }
   }

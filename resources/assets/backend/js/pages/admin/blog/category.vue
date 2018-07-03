@@ -1,6 +1,11 @@
 <template>
-    <div>
-        <tree-list :data="data"></tree-list>
+    <div class="container p-0 m-0">
+        <div v-if="error" class="row">
+            <p class="text-danger">{{error}}</p>
+        </div>
+        <div class="row">
+            <tree-list :data="data" @has-errored="displayError"></tree-list>
+        </div>
     </div>
 </template>
 
@@ -17,10 +22,14 @@
     },
     data () {
       return {
-        data: Array
+        data: [],
+        error:''
       }
     },
     methods: {
+      displayError(error){
+        this.error=error
+      },
       getInfo (data) {
         this.data = data
       }

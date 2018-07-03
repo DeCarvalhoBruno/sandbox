@@ -1,6 +1,9 @@
 $list_border_dotted: 1px dotted #000;
 
 .list-tree {
+  &>.row {
+    display: block;
+  }
   ul {
     padding: 0;
     margin: 0;
@@ -12,16 +15,30 @@ $list_border_dotted: 1px dotted #000;
     color: grey;
     cursor:pointer;
   }
+
+  .li-label{
+    user-select: none;
+    cursor:default;
+  }
+
+  .li-input{
+    border:none;
+    border-bottom: 1px dashed #467471;
+    background: #F4F8FD;
+  }
+
   li {
     list-style-type: none;
     //border-left: $list_border_dotted;
     margin-left: 2em;
     padding:.75em 1em;
+    user-select: none;
     //margin:2em;
   }
   li .li-wrapper {
     padding-left: .5em;
     position: relative;
+    cursor:default;
   }
   li .li-btn-group{
     display:inline-block;

@@ -7,18 +7,29 @@
                     <fa class="li-indicator" v-else icon="plus"></fa>
                 </span>
                 <template v-if="(node.mode&2)!==0">
-                    <input v-focus type="text" v-model="newValue" @focus="$event.target.select()"
+                    <input class="li-input"
+                           v-focus type="text"
+                           v-model="newValue" @focus="$event.target.select()"
                            @keyup.enter="updateItem" autocomplete="false"
-                           placeholder="Category name" @blur="cancelItem"/>
-                    <button class="btn btn-sm" type="button" title="confirm" @click="updateItem">
-                        <fa icon="check"></fa>
-                    </button>
-                    <button class="btn btn-sm" type="button" title="cancel" @click="cancelItem">
-                        <fa icon="ban"></fa>
-                    </button>
+                           @keyup.escape="cancelItem"
+                           placeholder="Category name"/>
+
+                    <template v-if="!isUpdating">
+                        <button class="btn btn-sm" type="button"
+                                title="confirm" @click="updateItem">
+                            <fa icon="check"/>
+                        </button>
+                        <button class="btn btn-sm" type="button" title="cancel" @click="cancelItem">
+                            <fa icon="ban"/>
+                        </button>
+                    </template>
+                    <template v-else>
+                        <fa class="fa sync-icon" icon="sync" spin></fa>
+                    </template>
+
                 </template>
                 <template v-else>
-                    <span>{{node.label}}</span>
+                    <span class="li-label" @dblclick="toggleShow(node.label)">{{node.label}}</span>
                     <div class="li-btn-group">
                         <button type="button" class="btn btn-circle btn-default" @click="addItem"
                                 :title="`Add child to ${node.label}`">
@@ -69,9 +80,15 @@
         }
       }
     },
+    updated () {
+      if (this.node.mode === 1) {
+        this.isUpdating = false
+      }
+    },
     data: function () {
       return {
-        newValue: null
+        newValue: null,
+        isUpdating: false
       }
     },
     mounted () {
@@ -88,12 +105,14 @@
         this.emits([], this.makeDataObject('delete'))
       },
       updateItem () {
+        this.isUpdating = true
         this.emits([], {method: 'update', newValue: this.newValue, target: this.node.label})
       },
       cancelItem () {
+        this.newValue = this.node.label
         switch (this.node.mode) {
           case 6:
-            this.emits([], this.makeDataObject('delete'))
+            this.emits([], this.makeDataObject('cancelCreation'))
             break
           default:
             this.emits([], this.makeDataObject('cancel'))
