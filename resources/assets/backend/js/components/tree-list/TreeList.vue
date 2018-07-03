@@ -1,14 +1,27 @@
 <template>
-    <div class="list-tree container">
+    <div class="tree-list container">
         <div class="row mb-3">
-            <search :terms="searchTerms" @show="handleEvent"/>
+            <div class="col-lg">
+                <search :terms="searchTerms" @show="searchEvent"/>
+            </div>
         </div>
-        <div class="row">
-            <button type="button" class="btn btn-primary" @click="addRoot">Add Root Category</button>
+        <div class="row p-0 m-0">
+            <button v-if="editMode" type="button"
+                    class="btn btn-primary"
+                    @click="addRoot">Add Root Category
+            </button>
+            <button type="button"
+                    class="btn btn-primary"
+                    @click="toggleExpand">{{!treeExpanded?'Expand all':'Collapse all'}}
+            </button>
+        </div>
+        <div class="row p-0 mt-2 ml-1 d-block">
             <tree-list-item v-for="(node,idx) in treeData"
                             :key="idx"
                             :node="node"
-                            @event="handleEvent">
+                            @event="handleEvent"
+                            @category-selected="categorySelected"
+                            :edit-mode="editMode">
             </tree-list-item>
         </div>
     </div>
@@ -25,54 +38,82 @@
       Search
     },
     props: {
-      data: {required: true}
+      data: {required: true},
+      editMode: {default: true}
     },
     data () {
       return {
         treeData: [],
-        searchInput: null
-      }
-    },
-    computed: {
-      searchTerms () {
-        // return a list of search terms for autocomplete
-        let result = []
-        for (let node of this.treeData) {
-          result = result.concat(this.buildSearchTerms(node))
-        }
-        console.log(result)
-        return result
+        searchInput: null,
+        searchTerms: [],
+        buffer: [],
+        treeExpanded: false
       }
     },
     watch: {
       data (incoming) {
         this.treeData = incoming
+      },
+      treeData () {
+        this.searchTerms = []
+        for (let i in this.treeData) {
+          this.searchTerms = this.searchTerms.concat(this.buildSearchTerms(this.treeData[i]))
+        }
       }
     },
     methods: {
+      categorySelected (val, mode) {
+        this.$emit('tree-category-selected', val, mode)
+      },
+      async toggleExpand () {
+        this.treeExpanded = !this.treeExpanded
+        for (let node of this.searchTerms) {
+          node.data.method = this.treeExpanded ? 'open' : 'close'
+          await this.handleEvent(node.nodeMap, node.data)
+        }
+      },
       buildSearchTerms (node) {
-        let result = [{label: node.label, path: []}]
+        let result = [{data: {target: node.label}, nodeMap: []}]
         for (let subNodes of node.children) {
           result = result.concat(this.buildSearchTerms(subNodes))
         }
-        // then add our name to the "path" of each child
-        for (let searchTerm of result) {
-          searchTerm.path = [node.label].concat(searchTerm.path)
+
+        for (let term of result) {
+          term.nodeMap = [node.label].concat(term.nodeMap)
+          term.data.method = 'show'
         }
         return result
       },
-      async addRoot () {
+      addRoot () {
         this.treeData.push({label: '', id: null, open: true, mode: 6, children: []})
       },
-      async handleEvent (nodeMap, data) {
+      async handleEvent (nodeMap, payload) {
+        await this.checkBuffer()
         let td = []
         for (let node of this.treeData) {
-          let n = await this.handleThis(nodeMap, data, node)
+          let n = await this.handleThis(nodeMap, payload, node)
           if (n) {
             td.push(n)
           }
         }
         this.treeData = td
+      },
+      //Called in case we need to cancel out some action we did just before
+      //like remove search highlighting
+      async checkBuffer () {
+        if (this.buffer.length > 0) {
+          let tmp = this.buffer
+          this.buffer = []
+          await this.handleEvent(tmp[0], tmp[1])
+        }
+      },
+      async searchEvent (nodeMap, payload) {
+        await this.handleEvent(nodeMap, payload)
+
+        //We keep the search params in a buffer
+        //so we can undo the search highlight effect
+        payload.method = 'cancel'
+        this.buffer = [nodeMap, payload]
       },
       async handleThis (nodeMap, payload, node) {
         let vm = this
@@ -89,6 +130,15 @@
         //Modes: Default:1, Edit:2, Add:6
         if (node.label === payload.target) {
           switch (payload.method) {
+            case 'show':
+              node.mode = 5
+              break
+            case 'open':
+              node.open = true
+              break
+            case 'close':
+              node.open = false
+              break
             case 'toggleShow':
               node.open = !node.open
               break
@@ -133,6 +183,7 @@
               //Not returning the node will effectively remove it from the tree.
               return
             case 'cancel':
+            case 'reset':
               node.mode = 1
               break
           }

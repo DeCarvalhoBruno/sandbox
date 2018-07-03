@@ -1,5 +1,5 @@
 <template>
-    <div class="col-lg-4">
+    <div>
         <div class="input-group">
             <input type="text" class="form-control"
                    :placeholder="$t('pages.users.filter_full_name')"
@@ -16,10 +16,10 @@
             </div>
         </div>
         <ul v-if="isOpen && filteredOptions.length > 0" class="options-list">
-            <li v-for="(option,index) in filteredOptions"
+            <li v-for="(res,index) in filteredOptions"
                 :key="index"
-                @mousedown="search(option.path)">
-                {{option.name}}
+                @mousedown="search(res)">
+                {{res.data.target}}
             </li>
         </ul>
     </div>
@@ -28,16 +28,27 @@
 <script>
   export default {
     name: 'search',
-    props: ['terms'],
+    props: {
+      terms: {
+        required: true,
+        type: Array
+      }
+    },
     data () {
       return {
         searchTerm: '',
         isOpen: false
       }
     },
+    computed: {
+      filteredOptions () {
+        const re = new RegExp(this.searchTerm, 'i')
+        return this.terms.filter(item => item.data.target.match(re))
+      }
+    },
     methods: {
-      search (path) {
-        this.$emit('show', path)
+      search (payload) {
+        this.$emit('show', payload.nodeMap, payload.data)
       },
       onInput (value) {
         if (value.length > 0) {
@@ -45,12 +56,6 @@
         } else {
           this.isOpen = false
         }
-      }
-    },
-    computed: {
-      filteredOptions () {
-        const re = new RegExp(this.searchTerm, 'i')
-        return this.terms.filter(item => item.label.match(re))
       }
     }
   }

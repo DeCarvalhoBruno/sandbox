@@ -1,62 +1,83 @@
 $list_border_dotted: 1px dotted #000;
 
-.list-tree {
-  &>.row {
-    display: block;
-  }
-  ul {
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-    position: relative;
-  }
-  .li-indicator {
-    border: 2px solid grey;
-    color: grey;
-    cursor:pointer;
-  }
+.tree-list-container {
+  .tree-list {
+    & > .row {
+      display: block;
+    }
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
+      position: relative;
+    }
+    .li-indicator {
+      border: 2px solid grey;
+      color: grey;
+      cursor: pointer;
+    }
 
-  .li-label{
-    user-select: none;
-    cursor:default;
-  }
+    .li-label {
+      user-select: none;
+      cursor: default;
+      transition: background-color 1s ease-in-out;
+      &.li-label-searched {
+        background-color: #FFFF00;
+      }
+    }
 
-  .li-input{
-    border:none;
-    border-bottom: 1px dashed #467471;
-    background: #F4F8FD;
-  }
+    .li-input {
+      border: none;
+      border-bottom: 1px dashed #467471;
+      background: #F4F8FD;
+    }
 
-  li {
-    list-style-type: none;
-    //border-left: $list_border_dotted;
-    margin-left: 2em;
-    padding:.75em 1em;
-    user-select: none;
-    //margin:2em;
+    li {
+      list-style-type: none;
+      //border-left: $list_border_dotted;
+      margin-left: 2em;
+      padding: .75em 1em;
+      user-select: none;
+      //margin:2em;
+    }
+    li .li-wrapper {
+      padding-left: .5em;
+      position: relative;
+      cursor: default;
+    }
+    li .li-btn-group {
+      display: inline-block;
+      margin-left: .75em;
+    }
+    li .li-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -1em;
+      bottom: 50%;
+      width: 1em;
+      //border-left:$list_border_dotted;
+      border-bottom: $list_border_dotted;
+      //border-top: 0 none transparent;
+      //border-right: 0 none transparent;
+    }
+    ul > li:last-child {
+      border-left: $list_border_dotted;
+    }
   }
-  li .li-wrapper {
-    padding-left: .5em;
-    position: relative;
-    cursor:default;
-  }
-  li .li-btn-group{
-    display:inline-block;
-    margin-left:.75em;
-  }
-  li .li-wrapper::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -1em;
-    bottom: 50%;
-    width: 1em;
-    //border-left:$list_border_dotted;
-    border-bottom: $list_border_dotted;
-    //border-top: 0 none transparent;
-    //border-right: 0 none transparent;
-  }
-  ul > li:last-child {
-    border-left: $list_border_dotted;
+}
+.mini-tree-list-container{
+  .tree-list {
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
+      position: relative;
+    }
+
+    ul li {
+      padding-left:.5rem;
+    }
+
   }
 }

@@ -95,7 +95,7 @@
                 </div>
             </div>
             <div class="row p-0 m-0 mb-1">
-                <div class="card col-lg-8 p-0 m-0">
+                <div class="card col-lg-6 p-0 m-0">
                     <div class="card-header bg-transparent">Excerpt</div>
                     <div class="card-body">
                         <div class="form-group">
@@ -110,15 +110,26 @@
                         </div>
                     </div>
                 </div>
-                <div class="card col-lg-4 p-0 m-0">
-                    <div class="card-header bg-transparent">Featured image</div>
+                <div class="card col-lg-6 p-0 m-0">
+                    <div class="card-header bg-transparent">Categories</div>
                     <div class="card-body">
+                        <div class="mini-tree-list-container container">
+                            <div class="row">
+                                <tree-list :data="this.blog_post_categories" :edit-mode="false"
+                                           @tree-category-selected="categorySelected"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="row p-0 m-0 mb-1">
-                <div class="card col-lg p-0 m-0">
+                <div class="card col-lg-8 p-0 m-0">
                     <div class="card-header bg-transparent">Media</div>
+                    <div class="card-body">
+                    </div>
+                </div>
+                <div class="card col-lg-4 p-0 m-0">
+                    <div class="card-header bg-transparent">Featured image</div>
                     <div class="card-body">
                     </div>
                 </div>
@@ -133,12 +144,12 @@
   import Button from '~/components/Button'
   import Trumbowyg from '~/components/wysiwyg/Trumbowyg'
   import { Form, HasError, AlertForm } from '~/components/form'
-  // import Editor from '@tinymce/tinymce-vue';
-  import VueClipboard from 'vue-clipboard2'
+  import TreeList from '~/components/tree-list/TreeList'
   import InputTag from '~/components/InputTag'
+  // import VueClipboard from 'vue-clipboard2'
 
   // VueClipboard.config.autoSetContainer = true // add this line
-  Vue.use(VueClipboard)
+  // Vue.use(VueClipboard)
 
   export default {
     layout: 'basic',
@@ -149,8 +160,8 @@
       HasError,
       AlertForm,
       Trumbowyg,
-      InputTag
-      // Editor
+      InputTag,
+      TreeList
     },
     data () {
       return {
@@ -162,6 +173,8 @@
         current_status: '',
         blog_post_slug: null,
         saveMode: null,
+        blog_post_categories: [],
+        selectedCategories: [],
         form: new Form({
           blog_post_content: '',
           blog_post_title: '',
@@ -171,6 +184,17 @@
       }
     },
     methods: {
+      categorySelected (val, mode) {
+        if (mode === 'add') {
+          if (this.selectedCategories.indexOf(val) === -1) {
+            this.selectedCategories.push(val)
+          }
+        } else {
+          if (this.selectedCategories.indexOf(val) >-1) {
+
+          }
+        }
+      },
       getConfig () {
         let vm = this
         return {
@@ -178,7 +202,6 @@
           semantic: false,
           btns: [
             ['viewHTML'],
-            ['undo', 'redo'], // Only supported in Blink browsers
             ['formatting'],
             ['strong', 'em', 'del'],
             ['link'],
@@ -190,15 +213,6 @@
             ['fullscreen']
           ],
           plugins: {}
-          // btnsDef: {
-          //   image: {
-          //     fn: function() {
-          //
-          //       // vm.modal=true
-          //     },
-          //     ico: 'insert-image'
-          //   }
-          // },
         }
       },
       updateUsers (users) {
@@ -232,6 +246,7 @@
         this.status_list = data.status_list
         this.current_status = this.$t(`constants.${data.record.blog_post_status}`)
         this.saveMode = saveMode
+        this.blog_post_categories = data.blog_post_categories
       }
     },
     beforeRouteEnter (to, from, next) {

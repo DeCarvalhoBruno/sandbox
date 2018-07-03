@@ -1,5 +1,5 @@
 <template>
-    <div class="container p-0 m-0">
+    <div class="tree-list-container container p-0 m-0">
         <div v-if="error" class="row">
             <p class="text-danger">{{error}}</p>
         </div>
@@ -16,7 +16,7 @@
   export default {
     layout: 'basic',
     middleware: 'check-auth',
-    name: 'category',
+    name: 'blog-category',
     components: {
       TreeList
     },
