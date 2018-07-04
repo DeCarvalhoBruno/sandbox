@@ -1,6 +1,7 @@
 <?php namespace App\Support\Trees;
 
 use App\Models\Views\BlogPostCategoryTree;
+use App\Support\Providers\BlogCategory;
 
 class BlogPostCategory
 {
@@ -80,19 +81,34 @@ class BlogPostCategory
     }
 
     /**
+     * @param int $postId
      * @return array
      */
-    public static function getTree($postId = null)
+    public static function getTree()
+    {
+        return static::makeTree()->tree;
+    }
+
+    /**
+     * @param int $postId
+     * @return array|\stdClass
+     */
+    public static function getTreeWithSelected($postId = null)
+    {
+        return static::makeTree($postId);
+    }
+
+    /**
+     * @param int $postId
+     * @return array|\stdClass
+     */
+    private static function makeTree($postId = null)
     {
         $selectedCategories = [];
         $f = BlogPostCategoryTree::query()
             ->select(['label', 'lvl', 'id'])->get()->toArray();
         if (!is_null($postId)) {
-            $selectedCategories = array_flip(\App\Models\Blog\BlogPostCategory::query()
-                ->select(['blog_post_category_codename'])
-                ->labelType()
-                ->labelRecord(1)
-                ->get()->pluck('blog_post_category_codename')->toArray());
+            $selectedCategories = array_flip((new BlogCategory())->getSelected($postId));
         }
         $level = 0;
         $root = '';
@@ -121,11 +137,11 @@ class BlogPostCategory
                     break;
             }
         }
-        $root = [];
+        $tree = [];
         foreach ($l as $node) {
-            $root[] = $node[0]->toArray();
+            $tree[] = $node[0]->toArray();
         }
-        return $root;
+        return (object)['tree' => $tree, 'categories' => array_flip($selectedCategories)];
     }
 
     /**

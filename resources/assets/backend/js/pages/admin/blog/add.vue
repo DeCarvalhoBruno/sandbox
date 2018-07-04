@@ -35,11 +35,11 @@
                                     <div class="row">
                                         <div class="m-0 p-0 col-lg d-inline-flex">
                                             <div class="container d-inline-flex">
-                                                <input-tag :typeahead="true"
-                                                           :placeholder="$t('pages.members.member_search')"
-                                                           :searchUrl="'/ajax/admin/users/search'"
-                                                           @updateAddedItems="updateUsers"
-                                                           limit="2"/>
+                                                <input-tag-search :typeahead="true"
+                                                                  :placeholder="$t('pages.members.member_search')"
+                                                                  :searchUrl="'/ajax/admin/users/search'"
+                                                                  @updateAddedItems="updateUsers"
+                                                                  limit="2"/>
                                                 <button type="button"
                                                         class="btn btn-default btn-small"
                                                         @click="toggleEditing('form_user_editing')"
@@ -83,16 +83,30 @@
             <div class="row p-0 m-0 mb-1">
                 <div class="card col-lg p-0 m-0">
 
-                    <!--<editor v-model="form.editorInput" :init="editorConfig"></editor>-->
-                    <trumbowyg v-model="form.blog_post_content" :config="editorConfig"
-                               class="form-control"
-                               @input="changedField('blog_post_content')"
-                               name="content"></trumbowyg>
+                    <div class="row p-0 m-0">
+                        <!--<editor v-model="form.editorInput" :init="editorConfig"></editor>-->
+                        <trumbowyg v-model="form.blog_post_content" :config="editorConfig"
+                                   class="form-control"
+                                   @input="changedField('blog_post_content')"
+                                   name="content"></trumbowyg>
 
-                    <!--<input type="text" v-model="message">-->
-                    <!--<button type="button"-->
-                    <!--v-clipboard:copy="message">Copy!</button>-->
-
+                        <!--<input type="text" v-model="message">-->
+                        <!--<button type="button"-->
+                        <!--v-clipboard:copy="message">Copy!</button>-->
+                    </div>
+                    <div class="row p-0 m-0 input-tag-wrapper">
+                        <span class="badge badge-pill badge-light"
+                              v-for="(badge, index) in tagList"
+                              :key="index">
+                        <span v-html="badge"></span>
+                            <fa icon="times" class="close-button" @click.prevent="removeTag(index)"/>
+                        </span>
+                        <input type="text"
+                               ref="tag"
+                               v-model="tagInput"
+                               @keyup.enter="addTag"
+                               placeholder="Type enter to add tag"/>
+                    </div>
                 </div>
             </div>
             <div class="row p-0 m-0 mb-1">
@@ -146,7 +160,7 @@
   import Trumbowyg from '~/components/wysiwyg/Trumbowyg'
   import { Form, HasError, AlertForm } from '~/components/form'
   import TreeList from '~/components/tree-list/TreeList'
-  import InputTag from '~/components/InputTag'
+  import InputTagSearch from '~/components/InputTagSearch'
   // import VueClipboard from 'vue-clipboard2'
 
   // VueClipboard.config.autoSetContainer = true // add this line
@@ -161,7 +175,7 @@
       HasError,
       AlertForm,
       Trumbowyg,
-      InputTag,
+      InputTagSearch,
       TreeList
     },
     data () {
@@ -175,6 +189,8 @@
         blog_post_slug: null,
         saveMode: null,
         blog_post_categories: [],
+        tagList: [],
+        tagInput: '',
         form: new Form({
           blog_post_content: '',
           blog_post_title: '',
@@ -185,6 +201,15 @@
       }
     },
     methods: {
+      addTag () {
+        this.tagList.push(this.tagInput)
+        this.tagInput = ''
+        this.$refs.tag.focus()
+      },
+      removeTag (index) {
+        this.tagList.splice(index, 1)
+        this.$refs.tag.focus()
+      },
       categorySelected (val, mode) {
         if (mode === 'add') {
           if (this.form.categories.indexOf(val) === -1) {

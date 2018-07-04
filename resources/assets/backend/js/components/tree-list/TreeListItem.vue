@@ -85,15 +85,20 @@
     data: function () {
       return {
         newValue: null,
-        isUpdating: false,
+        isUpdating: false
       }
     },
     computed: {
       hasChildren () {
         return this.node.children.length > 0
       },
-      isChecked(){
-        return this.node.selected
+      isChecked: {
+        get () {
+          return this.node.selected
+        },
+        set (value) {
+          this.node.selected = value
+        }
       }
     },
     watch: {

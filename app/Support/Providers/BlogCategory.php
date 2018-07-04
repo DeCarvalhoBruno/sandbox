@@ -68,4 +68,37 @@ class BlogCategory extends Model implements BlogCategoryInterface
         }
     }
 
+    public function updatePost($new, $post)
+    {
+        $inStore = $this->getSelected($post->getKey());
+        $toBeRemoved = array_diff($inStore, $new);
+        if (!empty($toBeRemoved)) {
+            $entries = $this->getByCodename($toBeRemoved)->labelType()
+                ->select(['blog_post_label_types.blog_post_label_type_id'])
+                ->get()->pluck('blog_post_label_type_id')->toArray();
+            BlogPostLabelRecord::query()
+                ->whereIn('blog_post_label_type_id', $entries)
+                ->where('blog_post_id', $post->getKey())
+                ->delete();
+        }
+
+        $toBeAdded = array_diff($new, $inStore);
+        if (!empty($toBeAdded)) {
+            $this->attachToPost($toBeAdded, $post);
+        }
+    }
+
+    /**
+     * @param int $postId
+     * @return array
+     */
+    public function getSelected($postId)
+    {
+        return $this->createModel()->newQuery()
+            ->select(['blog_post_category_codename'])
+            ->labelType()
+            ->labelRecord($postId)
+            ->get()->pluck('blog_post_category_codename')->toArray();
+    }
+
 }

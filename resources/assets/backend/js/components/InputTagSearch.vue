@@ -1,5 +1,5 @@
 <template>
-        <div class="input-tag-wrapper">
+        <div class="input-tag-search-wrapper">
             <div class="search-spinner-wrapper">
                 <fa icon="cog" size="lg" :spin="loadIconIsAnimated"/>
             </div>
@@ -43,7 +43,7 @@
   import axios from 'axios'
 
   export default {
-    name: 'input-tag',
+    name: 'input-tag-search',
     props: {
       elementId: String,
       existingTags: {

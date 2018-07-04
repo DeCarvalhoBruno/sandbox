@@ -57,7 +57,7 @@
                     {{$t('pages.members.add_members')}}
                 </div>
                 <div class="card-body">
-                        <input-tag :typeahead="true"
+                        <input-tag-search :typeahead="true"
                                    :placeholder="$t('pages.members.member_search')"
                                    :searchUrl="'/ajax/admin/users/search'"
                                    @updateAddedItems="updateAddedUsersFromSearch"/>
@@ -69,7 +69,7 @@
                 </div>
                 <div class="card-body">
                     <div v-if="userCount>userCountThreshold">
-                        <input-tag :typeahead="true"
+                        <input-tag-search :typeahead="true"
                                    :placeholder="$t('pages.members.member_search')"
                                    :searchUrl="`/ajax/admin/members/${this.$route.params.group}/search`"
                                    @updateAddedItems="updateRemovedUsersFromSearch"/>
@@ -94,7 +94,7 @@
 </template>
 
 <script>
-  import InputTag from '~/components/InputTag'
+  import InputTagSearch from '~/components/InputTagSearch'
   import axios from 'axios'
 
   export default {
@@ -102,7 +102,7 @@
     layout: 'basic',
     middleware: 'check-auth',
     components: {
-      InputTag
+      InputTagSearch
     },
     data () {
       return {

@@ -53,12 +53,13 @@ class Blog extends Model implements BlogInterface
     /**
      * @param string $slug
      * @param array $data
-     * @return int
+     * @return \App\Models\Blog\BlogPost
      */
     public function updateOne($slug, $data)
     {
-        return $this->createModel()->newQuery()->where('blog_post_slug', '=', $slug)
-            ->update($this->filterFillables($data));
+        $builder = $this->createModel()->newQuery()->where('blog_post_slug', '=', $slug);
+        (clone($builder))->update($this->filterFillables($data));
+        return $builder->select(['blog_post_id'])->first();
     }
 
     /**

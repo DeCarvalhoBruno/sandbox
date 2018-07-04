@@ -61,16 +61,19 @@ class Blog extends Controller
         $record = $blogRepo->buildOneBySlug(
             $slug,
             [
+                'blog_post_id',
                 'blog_post_title',
                 'blog_post_content',
                 'blog_post_excerpt',
                 'blog_post_status_name as blog_post_status',
                 'users.username as blog_post_user'
             ])->first()->toArray();
-
+        $categories = \App\Support\Trees\BlogPostCategory::getTreeWithSelected($record['blog_post_id']);
+        $record['categories'] = $categories->categories;
         return [
-            'record' =>$record,
+            'record' => $record,
             'status_list' => BlogPostStatus::getConstants('BLOG'),
+            'blog_post_categories' => $categories->tree
         ];
     }
 
@@ -112,7 +115,8 @@ class Blog extends Controller
      */
     public function update($slug, CreateBlogPost $request, BlogProvider $blogRepo)
     {
-        $blogRepo->updateOne($slug, $request->all());
+        $post = $blogRepo->updateOne($slug, $request->all());
+        $blogRepo->category()->updatePost($request->getCategories(), $post);
     }
 
 }
