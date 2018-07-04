@@ -2,8 +2,8 @@
     <div>
         <div class="input-group">
             <input type="text" class="form-control"
-                   :placeholder="$t('pages.users.filter_full_name')"
-                   :aria-label="$t('pages.users.filter_full_name')"
+                   :placeholder="$t('pages.blog.filter_name')"
+                   :aria-label="$t('pages.blog.filter_name')"
                    v-model="searchTerm"
                    @input="onInput($event.target.value)"
                    @keyup.esc="isOpen = false"

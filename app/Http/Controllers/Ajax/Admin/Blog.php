@@ -11,6 +11,7 @@ class Blog extends Controller
 {
     /**
      * @param \App\Filters\Blog $filter
+     * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
      * @return array
      */
     public function index(BlogFilter $filter, BlogProvider $blogRepo)
@@ -23,46 +24,62 @@ class Blog extends Controller
             ])->filter($filter)->paginate(10),
             'columns' => $blogRepo->createModel()->getColumnInfo([
                 'blog_post_title' => (object)[
-                    'name' =>trans('ajax.db.blog_post_title'),
-                    'width'=>'50%'
+                    'name' => trans('ajax.db.blog_post_title'),
+                    'width' => '50%'
                 ],
                 'username' => (object)[
-                    'name' =>trans('ajax.db.username'),
-                    'width'=>'40%'
-                    ]
+                    'name' => trans('ajax.db.username'),
+                    'width' => '40%'
+                ]
             ])
         ];
     }
 
+    /**
+     * @return array
+     */
     public function add()
     {
         return [
             'record' => [
                 'blog_post_status' => BlogPostStatus::getConstantByID(BlogPostStatus::BLOG_POST_STATUS_DRAFT),
                 'blog_post_user' => auth()->user()->getAttribute('username'),
+                'categories' => []
             ],
             'status_list' => BlogPostStatus::getConstants('BLOG'),
-            'blog_post_categories'=>\App\Support\Trees\BlogPostCategory::getTree()
+            'blog_post_categories' => \App\Support\Trees\BlogPostCategory::getTree()
         ];
     }
 
+    /**
+     * @param $slug
+     * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
+     * @return array
+     */
     public function edit($slug, BlogProvider $blogRepo)
     {
+        $record = $blogRepo->buildOneBySlug(
+            $slug,
+            [
+                'blog_post_title',
+                'blog_post_content',
+                'blog_post_excerpt',
+                'blog_post_status_name as blog_post_status',
+                'users.username as blog_post_user'
+            ])->first()->toArray();
+
         return [
-            'record' =>
-                $blogRepo->buildOneBySlug(
-                    $slug,
-                    [
-                        'blog_post_title',
-                        'blog_post_content',
-                        'blog_post_excerpt',
-                        'blog_post_status_name as blog_post_status',
-                        'users.username as blog_post_user'
-                    ])->first(),
+            'record' =>$record,
             'status_list' => BlogPostStatus::getConstants('BLOG'),
         ];
     }
 
+    /**
+     * @param \App\Http\Requests\Admin\CreateBlogPost $request
+     * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
+     * @param \App\Support\Providers\User|\App\Support\Providers\User $userRepo
+     * @return array
+     */
     public function create(CreateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo)
     {
         $post = $blogRepo->createOne(
@@ -72,9 +89,13 @@ class Blog extends Controller
                 [$userRepo->getQualifiedKeyName()]
             )
         );
+
+        $blogRepo->category()->attachToPost($request->getCategories(), $post);
+
         $params = [
             'slug' => $post->getAttribute('blog_post_slug'),
         ];
+
         if ($post->getAttribute('blog_post_status_id') != BlogPostStatus::BLOG_POST_STATUS_PUBLISHED) {
             $params['preview'] = true;
         }
@@ -84,6 +105,11 @@ class Blog extends Controller
         ]);
     }
 
+    /**
+     * @param $slug
+     * @param \App\Http\Requests\Admin\CreateBlogPost $request
+     * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
+     */
     public function update($slug, CreateBlogPost $request, BlogProvider $blogRepo)
     {
         $blogRepo->updateOne($slug, $request->all());

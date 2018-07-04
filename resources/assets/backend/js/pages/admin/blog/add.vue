@@ -65,7 +65,8 @@
                         <div class="form-group row col-lg-10">
                             <div class="col-lg">
                                 <input v-model="form.blog_post_title" type="text" required autocomplete="off"
-                                       name="blog_post_title" id="blog_post_title" class="form-control"
+                                       name="blog_post_title" id="blog_post_title"
+                                       class="form-control" maxlength="255"
                                        :class="{ 'is-invalid': form.errors.has('blog_post_title') }"
                                        :placeholder="$t('db.blog_post_title')"
                                        aria-describedby="help_blog_post_title"
@@ -174,24 +175,25 @@
         blog_post_slug: null,
         saveMode: null,
         blog_post_categories: [],
-        selectedCategories: [],
         form: new Form({
           blog_post_content: '',
           blog_post_title: '',
           blog_post_status: '',
-          blog_post_user: ''
+          blog_post_user: '',
+          categories: []
         })
       }
     },
     methods: {
       categorySelected (val, mode) {
         if (mode === 'add') {
-          if (this.selectedCategories.indexOf(val) === -1) {
-            this.selectedCategories.push(val)
+          if (this.form.categories.indexOf(val) === -1) {
+            this.form.categories.push(val)
           }
         } else {
-          if (this.selectedCategories.indexOf(val) >-1) {
-
+          let i = this.form.categories.indexOf(val)
+          if (i > -1) {
+            this.form.categories.splice(i, 1)
           }
         }
       },

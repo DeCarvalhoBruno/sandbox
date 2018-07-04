@@ -30,7 +30,7 @@ class Login extends Controller
 
     public function activate($token, UserProvider $userRepo)
     {
-        if (strlen($token) == 32 && ctype_xdigit($token)) {
+        if (is_hex_uuid_string($token)) {
             $nbDeletedRecords = $userRepo->activate($token);
             if ($nbDeletedRecords === 1) {
                 return redirect(route_i18n('login'))->with('status', 'activated');

@@ -147,3 +147,9 @@ if (!function_exists('get_page_token')) {
         return substr(md5(app('router')->getCurrentRoute()->getName()),0,10);
     }
 }
+
+if (!function_exists('is_hex_uuid_string')) {
+    function is_hex_uuid_string($v){
+        return strlen($v) == 32 && ctype_xdigit($v);
+    }
+}

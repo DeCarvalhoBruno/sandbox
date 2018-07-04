@@ -2,11 +2,29 @@
 
 use App\Contracts\Models\Blog as BlogInterface;
 use App\Models\Blog\BlogPost;
+use App\Contracts\Models\BlogCategory as CategoryInterface;
 
 class Blog extends Model implements BlogInterface
 {
     protected $model = \App\Models\Blog\BlogPost::class;
+    /**
+     * @var \App\Contracts\Models\BlogCategory|\App\Support\Providers\BlogCategory
+     */
+    private $category;
 
+    public function __construct(CategoryInterface $c)
+    {
+        parent::__construct();
+        $this->category = $c;
+    }
+
+    /**
+     * @return \App\Contracts\Models\BlogCategory|\App\Support\Providers\BlogCategory
+     */
+    public function category()
+    {
+        return $this->category;
+    }
 
     /**
      * @param array $attributes

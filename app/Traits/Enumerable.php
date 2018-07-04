@@ -116,12 +116,15 @@ trait Enumerable
      * @param $name
      *
      * @return mixed
-     *
-     * @throws \ReflectionException
      */
     public static function getConstant($name)
     {
-        $id = (new \ReflectionClass(static::class))->getConstant(strtoupper($name));
+        try {
+            $reflect = new \ReflectionClass(static::class);
+        } catch (\ReflectionException $e) {
+        }
+
+        $id = $reflect->getConstant(strtoupper($name));
         if (!is_null($id)) {
             return $id;
         }

@@ -11,6 +11,7 @@ class CreateBlogPost extends FormRequest
     protected $activateTagStrippingFilter = false;
 
     private $username;
+    private $categories=[];
 
     public function rules()
     {
@@ -34,11 +35,21 @@ class CreateBlogPost extends FormRequest
         $this->username = $input['blog_post_user'];
         unset($input['blog_post_user']);
 
+        if (isset($input['categories'])) {
+            $this->categories = array_filter(
+                $input['categories'],
+                function ($val) {
+                    return is_hex_uuid_string($val);
+                }
+            );
+        unset($input['categories']);
+        }
+
         if (isset($input['blog_post_status'])) {
             $input['blog_post_status_id'] = BlogPostStatus::getConstant($input['blog_post_status']);
             unset($input['blog_post_status']);
-            $this->replace($input);
         }
+        $this->replace($input);
     }
 
     public function prepareForValidation()
@@ -56,6 +67,15 @@ class CreateBlogPost extends FormRequest
     {
         return $this->username;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
 
 
 

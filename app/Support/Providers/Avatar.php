@@ -12,7 +12,7 @@ class Avatar extends Model implements AvatarInterface
 
     public static function setAsUsed($uuid)
     {
-        if (strlen($uuid) == 32 && ctype_xdigit($uuid)) {
+        if (is_hex_uuid_string($uuid)) {
             return \DB::unprepared(sprintf('CALL sp_update_media_type_in_use("%s")', $uuid));
         }
         throw new \UnexpectedValueException('uuid is not valid');
@@ -20,7 +20,7 @@ class Avatar extends Model implements AvatarInterface
 
     public function delete($uuid)
     {
-        if (strlen($uuid) == 32 && ctype_xdigit($uuid)) {
+        if (is_hex_uuid_string($uuid)) {
             $media = $this->createModel()->newQuery()->select([
                 'media_types.media_type_id',
                 'media_uuid',

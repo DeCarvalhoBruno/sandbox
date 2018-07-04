@@ -223,6 +223,7 @@ return [
         'blog' => [
             'author' => 'Author',
             'filter_title' => 'Filter by title',
+            'filter_name' => 'Filter by name',
         ]
     ],
     'tables' => [

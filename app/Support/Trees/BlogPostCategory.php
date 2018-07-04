@@ -16,16 +16,22 @@ class BlogPostCategory
      * @var string
      */
     private $id;
+    /**
+     * @var bool
+     */
+    private $selected;
 
     /**
      *
      * @param string $label
      * @param string $id
+     * @param bool $selected
      */
-    public function __construct($label, $id)
+    public function __construct($label, $id, $selected = false)
     {
         $this->label = $label;
         $this->id = $id;
+        $this->selected = $selected;
     }
 
     /**
@@ -53,6 +59,7 @@ class BlogPostCategory
         return (object)[
             'label' => $node->getLabel(),
             'open' => ($level > 2 ? false : true),
+            'selected' => $node->isSelected(),
             'mode' => 1,
             'id' => $node->getId(),
             'children' => []
@@ -62,23 +69,31 @@ class BlogPostCategory
     /**
      * @param string $label
      * @param string $id
+     * @param bool $selected
      * @return \App\Support\Trees\BlogPostCategory
      */
-    public function addChild($label, $id)
+    public function addChild($label, $id, $selected)
     {
-        $new = new static($label, $id);
+        $new = new static($label, $id, $selected);
         array_push($this->children, $new);
         return $new;
-
     }
 
     /**
      * @return array
      */
-    public static function getTree()
+    public static function getTree($postId = null)
     {
+        $selectedCategories = [];
         $f = BlogPostCategoryTree::query()
             ->select(['label', 'lvl', 'id'])->get()->toArray();
+        if (!is_null($postId)) {
+            $selectedCategories = array_flip(\App\Models\Blog\BlogPostCategory::query()
+                ->select(['blog_post_category_codename'])
+                ->labelType()
+                ->labelRecord(1)
+                ->get()->pluck('blog_post_category_codename')->toArray());
+        }
         $level = 0;
         $root = '';
         $l = [];
@@ -86,21 +101,22 @@ class BlogPostCategory
             $lvl = $node['lvl'];
             $label = $node['label'];
             $id = $node['id'];
+            $selected = (!is_null($postId) && isset($selectedCategories[$node['id']])) ? true : false;
             switch (true) {
                 case ($lvl === 0):
                     $level = $lvl;
                     $root = $label;
-                    $l[$root][$level] = new static($root, $id);
+                    $l[$root][$level] = new static($root, $id, $selected);
                     break;
                 case ($lvl === $level):
-                    $l[$root][$lvl] = $l[$root][$lvl - 1]->addChild($label, $id);
+                    $l[$root][$lvl] = $l[$root][$lvl - 1]->addChild($label, $id, $selected);
                     break;
                 case ($lvl > $level):
-                    $l[$root][$lvl] = $l[$root][$level]->addChild($label, $id);
+                    $l[$root][$lvl] = $l[$root][$level]->addChild($label, $id, $selected);
                     $level = $lvl;
                     break;
                 case ($lvl < $level):
-                    $l[$root][$lvl] = $l[$root][$lvl - 1]->addChild($label, $id);
+                    $l[$root][$lvl] = $l[$root][$lvl - 1]->addChild($label, $id, $selected);
                     $level = $lvl;
                     break;
             }
@@ -135,5 +151,14 @@ class BlogPostCategory
     {
         return $this->id;
     }
+
+    /**
+     * @return bool
+     */
+    public function isSelected(): bool
+    {
+        return $this->selected;
+    }
+
 
 }

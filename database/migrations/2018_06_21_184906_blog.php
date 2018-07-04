@@ -53,36 +53,49 @@ class Blog extends Migration
                 ->references('user_id')->on('users');
         });
 
+        Schema::create('blog_post_labels', function (Blueprint $table) {
+            $table->increments('blog_post_label_type_id');
+
+            $table->string('blog_post_label_type_name', 75)->nullable();
+        });
+
+        Schema::create('blog_post_label_types', function (Blueprint $table) {
+            $table->increments('blog_post_label_type_id');
+        });
+
         Schema::create('blog_post_categories', function (Blueprint $table) {
             $table->increments('blog_post_category_id');
 
             $table->unsignedInteger('parent_id')->nullable();
             $table->unsignedInteger('lft')->default(0);
             $table->unsignedInteger('rgt')->default(0);
+            $table->unsignedInteger('blog_post_label_type_id');
             $table->string('blog_post_category_name', 75)->nullable();
             $table->string('blog_post_category_codename', 32)->nullable();
 
             $table->index(array('lft', 'rgt', 'parent_id'));
             $table->index(array('blog_post_category_codename'));
+
+            $table->foreign('blog_post_label_type_id')
+                ->references('blog_post_label_type_id')->on('blog_post_label_types')
+                ->onDelete('cascade');
         });
 
         Schema::create('blog_post_tags', function (Blueprint $table) {
             $table->increments('blog_post_tag_id');
 
+            $table->unsignedInteger('blog_post_label_type_id');
+            $table->foreign('blog_post_label_type_id')
+                ->references('blog_post_label_type_id')->on('blog_post_label_types')
+                ->onDelete('cascade');
+
             $table->string('blog_post_tag_name', 75)->nullable();
-        });
-
-        Schema::create('blog_post_label_types', function (Blueprint $table) {
-            $table->increments('blog_post_label_type_id');
-
-            $table->string('blog_post_label_type_name', 75)->nullable();
         });
 
         Schema::create('blog_post_label_records', function (Blueprint $table) {
             $table->increments('blog_post_label_record_id');
 
             $table->unsignedInteger('blog_post_id');
-            $table->unsignedInteger('blog_post_label_target_id');
             $table->unsignedInteger('blog_post_label_type_id');
 
             $table->foreign('blog_post_id')
@@ -91,15 +104,14 @@ class Blog extends Migration
             $table->foreign('blog_post_label_type_id')
                 ->references('blog_post_label_type_id')->on('blog_post_label_types')
                 ->onDelete('cascade');
-            $table->index(['blog_post_id', 'blog_post_label_target_id', 'blog_post_label_type_id'],
-                'idx_blog_post_labels');
+            $table->index(array('blog_post_id','blog_post_label_type_id'),'idx_blog_post_type');
         });
 
         $label_types = [
-            ['blog_post_label_type_name' => \App\Models\Blog\BlogPostLabelType::getConstantByID(\App\Models\Blog\BlogPostLabelType::BLOG_POST_TAG)],
-            ['blog_post_label_type_name' => \App\Models\Blog\BlogPostLabelType::getConstantByID(\App\Models\Blog\BlogPostLabelType::BLOG_POST_CATEGORY)],
+            ['blog_post_label_type_name' => \App\Models\Blog\BlogPostLabel::getConstantByID(\App\Models\Blog\BlogPostLabel::BLOG_POST_TAG)],
+            ['blog_post_label_type_name' => \App\Models\Blog\BlogPostLabel::getConstantByID(\App\Models\Blog\BlogPostLabel::BLOG_POST_CATEGORY)],
         ];
-        \App\Models\Blog\BlogPostLabelType::insert($label_types);
+        \App\Models\Blog\BlogPostLabel::insert($label_types);
 
         $status = [
             [
@@ -120,13 +132,14 @@ class Blog extends Migration
         ];
         \App\Models\Blog\BlogPostStatus::insert($status);
 
+        $newLabelType = \App\Models\Blog\BlogPostLabelType::create();
         \App\Models\Blog\BlogPostCategory::create([
             'blog_post_category_name' => 'Default',
             'blog_post_category_codename' => makeHexUuid(),
+            'blog_post_label_type_id' => $newLabelType->getKey()
+
         ]);
         $this->createViews();
-
-
     }
 
     public function createViews()

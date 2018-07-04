@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers\Ajax\Admin;
 
+use App\Contracts\Models\BlogCategory as BlogCategoryProvider;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 
@@ -10,27 +11,22 @@ class BlogPostCategory extends Controller
         return \App\Support\Trees\BlogPostCategory::getTree();
     }
 
-    public function create()
+    /**
+     * @param \App\Contracts\Models\BlogCategory|\App\Support\Providers\BlogCategory $catRepo
+     * @return \Illuminate\Http\Response|array
+     */
+    public function create(BlogCategoryProvider $catRepo)
     {
         $id = $this->request->get('id');
         $label = $this->request->get('label');
         if (is_null($label)) {
             return response('', Response::HTTP_NO_CONTENT);
         }
-        $newCat = new \App\Models\Blog\BlogPostCategory(
-            [
-                'blog_post_category_name' => $label,
-                'blog_post_category_codename' => makeHexUuid()
-            ]);
-        if (!is_null($id)) {
-            $parentCategory = $this->getCat($id);
-            if (!is_null($parentCategory)) {
-                $newCat->appendToNode($parentCategory);
-            } else {
-                return response('', Response::HTTP_NO_CONTENT);
-            }
+        $newCat = $catRepo->createOne($label, $id);
+        if (is_null($newCat)) {
+            return response(null, Response::HTTP_NO_CONTENT);
         }
-        $newCat->save();
+
         return ['id' => $newCat->getAttribute('blog_post_category_codename')];
 
     }
@@ -48,7 +44,7 @@ class BlogPostCategory extends Controller
 
     public function delete($id)
     {
-        if (strlen($id) == 32 && ctype_xdigit($id)) {
+        if (is_hex_uuid_string($id)) {
             $model = \App\Models\Blog\BlogPostCategory::query()
                 ->where('blog_post_category_codename', $id)->first();
             if (!is_null($model)) {
@@ -64,7 +60,7 @@ class BlogPostCategory extends Controller
      */
     private function getCat($id)
     {
-        if (strlen($id) == 32 && ctype_xdigit($id)) {
+        if (is_hex_uuid_string($id)) {
             return \App\Models\Blog\BlogPostCategory::query()
                 ->where('blog_post_category_codename', $id)->first();
         }

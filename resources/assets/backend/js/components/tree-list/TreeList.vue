@@ -85,7 +85,7 @@
         return result
       },
       addRoot () {
-        this.treeData.push({label: '', id: null, open: true, mode: 6, children: []})
+        this.treeData.push({label: '', id: null, open: true, selected:false, mode: 6, children: []})
       },
       async handleEvent (nodeMap, payload) {
         await this.checkBuffer()
@@ -144,7 +144,7 @@
               break
             case 'add':
               node.open = true
-              node.children.push({label: '', id: node.id, open: true, mode: 6, children: []})
+              node.children.push({label: '', id: node.id, open: true, selected:false, mode: 6, children: []})
               break
             case 'edit':
               node.mode = 2

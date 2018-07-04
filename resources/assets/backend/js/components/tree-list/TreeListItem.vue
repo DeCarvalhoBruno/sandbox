@@ -50,7 +50,7 @@
                 <template v-else>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox"
-                               :value="node.id" v-model="selectedCategory">
+                               v-model="isChecked">
                         <label class="li-label form-check-label" :class="{'li-label-searched':node.mode===5}"
                                @dblclick="toggleShow(node.label)">{{node.label}}</label>
                     </div>
@@ -86,16 +86,18 @@
       return {
         newValue: null,
         isUpdating: false,
-        selectedCategory: null
       }
     },
     computed: {
       hasChildren () {
         return this.node.children.length > 0
+      },
+      isChecked(){
+        return this.node.selected
       }
     },
     watch: {
-      selectedCategory (value) {
+      isChecked (value) {
         this.categorySelected(
           this.node.id,
           (value) ? 'add' : 'del'
