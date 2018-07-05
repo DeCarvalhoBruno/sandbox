@@ -44,6 +44,7 @@ class Blog extends Controller
             'record' => [
                 'blog_post_status' => BlogPostStatus::getConstantByID(BlogPostStatus::BLOG_POST_STATUS_DRAFT),
                 'blog_post_user' => auth()->user()->getAttribute('username'),
+                'blog_post_title' => 'sample',
                 'categories' => [],
                 'tags' => []
             ],

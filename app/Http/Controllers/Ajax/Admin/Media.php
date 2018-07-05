@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Ajax\Admin;
 
 use App\Contracts\Models\Media as MediaInterface;
+use App\Support\Media\UploadedImage;
 use App\Support\Providers\User as UserProvider;
 use App\Http\Controllers\Controller;
 use App\Models\Entity;
 use App\Models\Media\Media as MediaModel;
-use App\Support\Media\UploadedImage;
+use App\Support\Media\UploadedAvatar;
 use Illuminate\Http\Response;
 
 class Media extends Controller
@@ -43,16 +44,25 @@ class Media extends Controller
                 throw new \UnexpectedValueException('This media type does not match anything on disk');
             }
 
-            $media = new UploadedImage(
-                $file,
-                $input->target,
-                $input->type,
-                $input->media
-            );
-
             switch ($input->media) {
                 case "image_avatar":
+                    $media = new UploadedAvatar(
+                        $file,
+                        $input->target,
+                        $input->type,
+                        $input->media
+                    );
                     $media->saveTemporaryAvatar();
+                    break;
+                case "image":
+                    $media = new UploadedImage(
+                        $file,
+                        $input->target,
+                        $input->type,
+                        $input->media
+                    );
+                    $this->processImage($media);
+                    return response([1,2,3], Response::HTTP_OK);
                     break;
                 default:
                     break;
@@ -65,6 +75,15 @@ class Media extends Controller
             null
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
 
+    }
+
+    /**
+     * @param \App\Support\Media\UploadedImage $media
+     */
+    public function processImage($media)
+    {
+        $media->move();
+        $media->makeThumbnail();
     }
 
 

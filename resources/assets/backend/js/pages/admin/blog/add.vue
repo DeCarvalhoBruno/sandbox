@@ -1,5 +1,5 @@
 <template>
-    <div class="container p-0 m-0">
+    <div id="blog_post_container" class="container p-0 m-0">
         <div id="trumbowyg-icons" v-html="require('trumbowyg/dist/ui/icons.svg')"></div>
         <form @submit.prevent="save" id="form_edit_blog">
             <div class="row p-0 m-0 mb-1">
@@ -73,27 +73,13 @@
                                        :class="{ 'is-invalid': form.errors.has('blog_post_title') }"
                                        :placeholder="$t('db.blog_post_title')"
                                        aria-describedby="help_blog_post_title"
-                                       @input="changedField('blog_post_title')">
+                                       @input="titleChanged">
                                 <small class="text-muted" v-show="blog_post_slug">{{blog_post_slug}}</small>
                             </div>
                         </div>
                         <div class="form-group row col-lg p-0 m-0">
                             <!--<span>BLOG POST SLUG</span>-->
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row p-0 m-0 mb-1">
-                <div class="card col-lg-8 p-0 m-0">
-                    <div class="card-header bg-transparent">Media</div>
-                    <div class="card-body">
-
-                    </div>
-                </div>
-                <div class="card col-lg-4 p-0 m-0">
-                    <div class="card-header bg-transparent">Featured image</div>
-                    <div class="card-body">
-                        <button type="button" @click="modal_show=true">Add featured image</button>
                     </div>
                 </div>
             </div>
@@ -155,29 +141,23 @@
                     </div>
                 </div>
             </div>
+            <div class="row p-0 m-0 mb-1">
+                <div class="card col-lg p-0 m-0">
+                    <div class="card-header bg-transparent">Media</div>
+                    <div class="card-body">
+                        <image-uploader
+                                :target="blog_post_slug"
+                                type="blog_posts"
+                                media="image"
+                                :is-active="postHasTitle"
+                        >
+                        </image-uploader>
+                    </div>
+                </div>
+            </div>
         </form>
-        <b-modal v-model="modal_show">
-            <div slot="modal-header">
-                <blog-image-uploader :blog-post-slug="blog_post_slug"></blog-image-uploader>
-            </div>
-            <div class="d-block text-center">
-
-            </div>
-            <div slot="modal-footer">
-                <template v-if="true">
-                    <button type="button" class="btn"
-                            :class="modal.confirmBtnClass"
-                            @click="$root.$emit('modal_confirmed',modal.method)"
-                    >Apply
-                    </button>
-                    <button
-                            type="button"
-                            class="btn btn-secondary"
-                            @click="modal_show=false">{{$t('general.cancel')}}
-                    </button>
-                </template>
-            </div>
-        </b-modal>
+        <media-modal :show-modal="modal_show"
+                     @modal-close="modal_show=false"></media-modal>
     </div>
 </template>
 
@@ -189,8 +169,10 @@
   import { Form, HasError, AlertForm } from '~/components/form'
   import TreeList from '~/components/tree-list/TreeList'
   import InputTagSearch from '~/components/InputTagSearch'
-  import BlogImageUploader from '~/components/media/BlogImageUploader'
-  import { Modal } from 'bootstrap-vue/es/components'
+  import ImageUploader from '~/components/media/ImageUploader'
+
+  import MediaModal from '~/components/media/MediaModal'
+
   // import VueClipboard from 'vue-clipboard2'
 
   // VueClipboard.config.autoSetContainer = true // add this line
@@ -207,12 +189,12 @@
       Trumbowyg,
       InputTagSearch,
       TreeList,
-      BlogImageUploader,
-      Modal
+      MediaModal,
+      ImageUploader
     },
     data () {
       return {
-        modal_show:false,
+        modal_show: false,
         form_status_editing: false,
         form_user_editing: false,
         modal: false,
@@ -221,6 +203,7 @@
         current_status: '',
         blog_post_slug: null,
         saveMode: null,
+        postHasTitle: true,
         blog_post_categories: [],
         tagInput: '',
         form: new Form({
@@ -234,6 +217,14 @@
       }
     },
     methods: {
+      titleChanged () {
+        this.changedField('blog_post_title')
+        if (this.form.blog_post_title !== '') {
+          this.postHasTitle = true
+        } else {
+          this.postHasTitle = false
+        }
+      },
       addTag () {
         if (this.tagInput) {
           this.form.tags.push(this.tagInput)
@@ -310,6 +301,7 @@
       },
       getInfo (data, saveMode) {
         this.form = new Form(data.record)
+        this.postHasTitle = (this.form.hasOwnProperty('blog_post_title'))
         this.status_list = data.status_list
         this.current_status = this.$t(`constants.${data.record.blog_post_status}`)
         this.saveMode = saveMode

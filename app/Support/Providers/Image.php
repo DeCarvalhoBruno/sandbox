@@ -51,7 +51,7 @@ class Image extends Model implements ImageInterface
     }
 
     /**
-     * @param \App\Contracts\Image|\App\Support\Media\UploadedImage $media
+     * @param \App\Contracts\Image|\App\Support\Media\UploadedAvatar $media
      * @param int $entityTypeID
      * @return \App\Models\Media\MediaType
      * @throws \Exception
@@ -69,6 +69,7 @@ class Image extends Model implements ImageInterface
             'media_type_id' => $mediaType->getKey(),
             'media_extension' => $media->getFileExtension(),
             'media_filename' => $media->getFilename(),
+            'media_thumbnail' => $media->getThumbnailFilename()
         ]);
 
         $mediaRecord = MediaRecord::create([

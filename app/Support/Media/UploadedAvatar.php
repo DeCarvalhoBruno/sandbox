@@ -2,11 +2,9 @@
 
 use App\Contracts\Image;
 use App\Models\Entity;
-use App\Models\Media\Media;
-use App\Models\Media\MediaEntity;
 use Illuminate\Support\Collection;
 
-class UploadedImage implements Image
+class UploadedAvatar implements Image
 {
     /**
      * @var \Symfony\Component\HttpFoundation\File\UploadedFile
@@ -19,7 +17,6 @@ class UploadedImage implements Image
     private $targetSlug;
     private $uuid;
     private $targetType;
-    private $mediaType;
     private $thumbnailFilename;
 
     /**
@@ -37,13 +34,9 @@ class UploadedImage implements Image
         $this->fileExtension = $fileObject->getClientOriginalExtension();
         $this->hddFilename = sprintf('%s.%s', $this->uuid, $this->fileExtension);
 //        $this->hddPath = media_entity_root_path(Entity::getConstant($targetType), Media::getConstant($mediaType));
-        $this->hddPath = sprintf('%s/media/%s/%s/', public_path(), $targetType, $mediaType);
-        $this->targetType = Entity::getConstant($targetType);
-        $this->mediaType = Media::getConstant($mediaType);
+        $this->hddPath = sprintf('%s/media/tmp/', public_path());
         $this->fileObject = $fileObject;
-        $this->thumbnailFilename = ImageProcessor::makeFormatFilenameFromImageFilename(
-            $this->hddFilename
-        );
+        $this->targetType = Entity::getConstant($targetType);
     }
 
     public function move()
@@ -51,19 +44,24 @@ class UploadedImage implements Image
         $this->fileObject->move($this->hddPath, $this->hddFilename);
     }
 
-    public function makeThumbnail()
+    public function saveTemporaryAvatar()
     {
-
-        $imageFullPath = $this->hddPath . $this->hddFilename;
-        ImageProcessor::saveImg(
-            ImageProcessor::makeCroppedImage($imageFullPath),
-            media_entity_root_path(
+        $this->move();
+        if (\Cache::has('temporary_avatars')) {
+            $data = \Cache::get('temporary_avatars');
+        } else {
+            $data = new Collection();
+        }
+        $data->put($this->uuid,
+            new SimpleImage(
+                $this->filename,
+                $this->targetSlug,
                 $this->targetType,
-                $this->mediaType,
-                $this->thumbnailFilename
+                $this->fileExtension,
+                $this->uuid
             )
         );
-
+        \Cache::forever('temporary_avatars', $data);
     }
 
     public function processImage()

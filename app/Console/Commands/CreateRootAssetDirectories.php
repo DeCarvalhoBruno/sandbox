@@ -34,5 +34,11 @@ class CreateRootAssetDirectories extends Command
         if (! is_dir(base_path('public/media/users/image_avatar'))) {
             mkdir(base_path('public/media/users/image_avatar'), 0755, true);
         }
+        if (! is_dir(base_path('public/media/blog_posts/image'))) {
+            mkdir(base_path('public/media/blog_posts/image'), 0755, true);
+        }
+        if (! is_dir(base_path('public/media/blog_posts/image_featured'))) {
+            mkdir(base_path('public/media/blog_posts/image_featured'), 0755, true);
+        }
     }
 }

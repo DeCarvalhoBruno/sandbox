@@ -28,7 +28,7 @@ class ImageProcessor extends InterventionImage
      * @param int $formatId
      * @return \Intervention\Image\Image|string The resulting file's name or the image object
      */
-    public static function makeCroppedImage($path, $formatId)
+    public static function makeCroppedImage($path, $formatId=MediaImgFormat::THUMBNAIL)
     {
         return static::resizeToFormat(static::makeImg($path), $formatId);
     }
@@ -131,7 +131,7 @@ class ImageProcessor extends InterventionImage
     {
         $extensionPosition = strrpos($filename, ".");
 
-        return sprintf('%s_%s.%s', slugify(substr($filename, 0, $extensionPosition)),
+        return sprintf('%s_%s.%s', substr($filename, 0, $extensionPosition),
             MediaImgFormat::getFormatAcronyms($formatID),
             substr($filename, $extensionPosition + 1));
     }

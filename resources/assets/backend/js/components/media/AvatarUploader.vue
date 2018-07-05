@@ -3,7 +3,7 @@
         <div class="card w-100">
             <b-tabs card>
                 <b-tab :title="$t('pages.settings.avatar-tab')" @click="avatarTabClicked" active>
-                    <p v-show="avatars.lenth>1" class="font-italic">Click on an avatar to apply it.</p>
+                    <p v-show="avatars.length>1" class="font-italic">Click on an avatar to apply it.</p>
                     <div class="avatar-group" :class="{'avatar-loading':ajaxIsLoading}">
                         <fa v-show="ajaxIsLoading" class="fa-5x sync-icon" icon="sync" spin></fa>
                         <ul class="p-0">

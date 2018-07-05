@@ -2,4 +2,14 @@
   .card {
     box-shadow: 0 1px 6px 0 rgba(117, 117, 117, .15)
   }
+
+  #blog_post_container {
+    .modal-lg {
+      max-width: 80vw;
+    }
+
+    .modal-dialog {
+      margin: .5rem auto;
+    }
+  }
 }

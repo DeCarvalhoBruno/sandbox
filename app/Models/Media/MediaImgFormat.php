@@ -34,4 +34,19 @@ class MediaImgFormat extends Model
         }
     }
 
+    public static function getFormatAcronyms($formatID = null)
+    {
+        switch ($formatID) {
+            case static::ORIGINAL:
+                return '';
+            case static::THUMBNAIL:
+                return 'tb';
+            default:
+                return [
+                    static::ORIGINAL  => '',
+                    static::THUMBNAIL => 'tb',
+                ];
+        }
+    }
+
 }
