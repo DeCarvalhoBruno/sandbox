@@ -14,7 +14,8 @@ class BlogPostCategory extends Model
     protected $fillable = [
         'blog_post_category_name',
         'blog_post_category_codename',
-        'blog_post_label_type_id'
+        'blog_post_label_type_id',
+        'blog_post_category_slug'
     ];
     protected $hidden = ['parent_id', 'lft', 'rgt'];
     public $timestamps = false;
@@ -35,7 +36,7 @@ class BlogPostCategory extends Model
      * @param int $blogPostId
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    public function scopeLabelRecord(Builder $builder, $blogPostId = null)
+    public static function scopeLabelRecord(Builder $builder, $blogPostId = null)
     {
         return $builder->join('blog_post_label_records', function ($q) use ($blogPostId) {
             $q->on(

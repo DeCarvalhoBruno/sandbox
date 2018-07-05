@@ -10,8 +10,18 @@ class CreateBlogPost extends FormRequest
 {
     protected $activateTagStrippingFilter = false;
 
+    /**
+     * @var string
+     */
     private $username;
-    private $categories=[];
+    /**
+     * @var array
+     */
+    private $categories = [];
+    /**
+     * @var array
+     */
+    private $tags;
 
     public function rules()
     {
@@ -42,7 +52,12 @@ class CreateBlogPost extends FormRequest
                     return is_hex_uuid_string($val);
                 }
             );
-        unset($input['categories']);
+            unset($input['categories']);
+        }
+
+        if (isset($input['tags'])) {
+            $this->tags = array_unique($input['tags']);
+            unset($input['tags']);
         }
 
         if (isset($input['blog_post_status'])) {
@@ -71,11 +86,18 @@ class CreateBlogPost extends FormRequest
     /**
      * @return mixed
      */
-    public function getCategories()
+    public function getCategories(): array
     {
         return $this->categories;
     }
 
+    /**
+     * @return array
+     */
+    public function getTags(): array
+    {
+        return $this->tags;
+    }
 
 
 

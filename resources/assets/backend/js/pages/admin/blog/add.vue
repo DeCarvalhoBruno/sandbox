@@ -59,7 +59,10 @@
                                 </template>
                             </div>
                             <div class="col-lg-4 form-head-row">
-                                <button type="submit" class="btn btn-primary float-lg-right">Save</button>
+                                <button type="button"
+                                        class="btn btn-primary float-lg-right"
+                                        @click="save">Save
+                                </button>
                             </div>
                         </div>
                         <div class="form-group row col-lg-10">
@@ -81,6 +84,20 @@
                 </div>
             </div>
             <div class="row p-0 m-0 mb-1">
+                <div class="card col-lg-8 p-0 m-0">
+                    <div class="card-header bg-transparent">Media</div>
+                    <div class="card-body">
+
+                    </div>
+                </div>
+                <div class="card col-lg-4 p-0 m-0">
+                    <div class="card-header bg-transparent">Featured image</div>
+                    <div class="card-body">
+                        <button type="button" @click="modal_show=true">Add featured image</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row p-0 m-0 mb-1" v-show="false">
                 <div class="card col-lg p-0 m-0">
 
                     <div class="row p-0 m-0">
@@ -96,20 +113,21 @@
                     </div>
                     <div class="row p-0 m-0 input-tag-wrapper">
                         <span class="badge badge-pill badge-light"
-                              v-for="(badge, index) in tagList"
+                              v-for="(badge, index) in form.tags"
                               :key="index">
-                        <span v-html="badge"></span>
-                            <fa icon="times" class="close-button" @click.prevent="removeTag(index)"/>
+                        <span v-html="badge" @click.prevent="removeTag(index)"></span>
+                            <fa icon="tag" class="badge-tag-icon"/>
                         </span>
                         <input type="text"
                                ref="tag"
                                v-model="tagInput"
                                @keyup.enter="addTag"
-                               placeholder="Type enter to add tag"/>
+                               maxlength="35"
+                               placeholder="Type enter to add tag, click to remove"/>
                     </div>
                 </div>
             </div>
-            <div class="row p-0 m-0 mb-1">
+            <div class="row p-0 m-0 mb-1" v-show="false">
                 <div class="card col-lg-6 p-0 m-0">
                     <div class="card-header bg-transparent">Excerpt</div>
                     <div class="card-body">
@@ -137,19 +155,29 @@
                     </div>
                 </div>
             </div>
-            <div class="row p-0 m-0 mb-1">
-                <div class="card col-lg-8 p-0 m-0">
-                    <div class="card-header bg-transparent">Media</div>
-                    <div class="card-body">
-                    </div>
-                </div>
-                <div class="card col-lg-4 p-0 m-0">
-                    <div class="card-header bg-transparent">Featured image</div>
-                    <div class="card-body">
-                    </div>
-                </div>
-            </div>
         </form>
+        <b-modal v-model="modal_show">
+            <div slot="modal-header">
+                <blog-image-uploader :blog-post-slug="blog_post_slug"></blog-image-uploader>
+            </div>
+            <div class="d-block text-center">
+
+            </div>
+            <div slot="modal-footer">
+                <template v-if="true">
+                    <button type="button" class="btn"
+                            :class="modal.confirmBtnClass"
+                            @click="$root.$emit('modal_confirmed',modal.method)"
+                    >Apply
+                    </button>
+                    <button
+                            type="button"
+                            class="btn btn-secondary"
+                            @click="modal_show=false">{{$t('general.cancel')}}
+                    </button>
+                </template>
+            </div>
+        </b-modal>
     </div>
 </template>
 
@@ -161,6 +189,8 @@
   import { Form, HasError, AlertForm } from '~/components/form'
   import TreeList from '~/components/tree-list/TreeList'
   import InputTagSearch from '~/components/InputTagSearch'
+  import BlogImageUploader from '~/components/media/BlogImageUploader'
+  import { Modal } from 'bootstrap-vue/es/components'
   // import VueClipboard from 'vue-clipboard2'
 
   // VueClipboard.config.autoSetContainer = true // add this line
@@ -176,10 +206,13 @@
       AlertForm,
       Trumbowyg,
       InputTagSearch,
-      TreeList
+      TreeList,
+      BlogImageUploader,
+      Modal
     },
     data () {
       return {
+        modal_show:false,
         form_status_editing: false,
         form_user_editing: false,
         modal: false,
@@ -189,26 +222,30 @@
         blog_post_slug: null,
         saveMode: null,
         blog_post_categories: [],
-        tagList: [],
         tagInput: '',
         form: new Form({
           blog_post_content: '',
           blog_post_title: '',
           blog_post_status: '',
           blog_post_user: '',
-          categories: []
+          categories: [],
+          tags: []
         })
       }
     },
     methods: {
       addTag () {
-        this.tagList.push(this.tagInput)
-        this.tagInput = ''
-        this.$refs.tag.focus()
+        if (this.tagInput) {
+          this.form.tags.push(this.tagInput)
+          this.tagInput = ''
+          this.$refs.tag.focus()
+          this.changedField('tags')
+        }
       },
       removeTag (index) {
-        this.tagList.splice(index, 1)
+        this.form.tags.splice(index, 1)
         this.$refs.tag.focus()
+        this.changedField('tags')
       },
       categorySelected (val, mode) {
         if (mode === 'add') {
@@ -254,6 +291,9 @@
         this.form.addChangedField(field)
       },
       async save () {
+        if (!this.form.blog_post_title) {
+          return
+        }
         try {
           let suffix, saveMode
           let route = this.$route

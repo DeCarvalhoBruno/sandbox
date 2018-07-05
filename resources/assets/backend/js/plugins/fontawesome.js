@@ -35,7 +35,8 @@ import {
   faPlus,
   faPlusSquare,
   faBan,
-  faSearch
+  faSearch,
+  faTag
 } from '@fortawesome/fontawesome-free-solid/shakable.es'
 
 fontawesome.library.add(
@@ -43,5 +44,5 @@ fontawesome.library.add(
   faTrashAlt, faPencilAlt, faBars, faTachometerAlt, faStar, faKey, faAngleLeft,
   faArrowRight, faObjectGroup, faUsers, faCheck, faTimes, faExclamation,
   faCalendar, faCloudUploadAlt, faSyncAlt, faSync, faNewspaper, faMinus, faPlus,
-  faPlusSquare, faBan, faSearch
+  faPlusSquare, faBan, faSearch, faTag
 )

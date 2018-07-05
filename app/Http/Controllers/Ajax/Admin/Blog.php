@@ -44,7 +44,8 @@ class Blog extends Controller
             'record' => [
                 'blog_post_status' => BlogPostStatus::getConstantByID(BlogPostStatus::BLOG_POST_STATUS_DRAFT),
                 'blog_post_user' => auth()->user()->getAttribute('username'),
-                'categories' => []
+                'categories' => [],
+                'tags' => []
             ],
             'status_list' => BlogPostStatus::getConstants('BLOG'),
             'blog_post_categories' => \App\Support\Trees\BlogPostCategory::getTree()
@@ -67,13 +68,18 @@ class Blog extends Controller
                 'blog_post_excerpt',
                 'blog_post_status_name as blog_post_status',
                 'users.username as blog_post_user'
-            ])->first()->toArray();
-        $categories = \App\Support\Trees\BlogPostCategory::getTreeWithSelected($record['blog_post_id']);
-        $record['categories'] = $categories->categories;
+            ])->first();
+        if (is_null($record)) {
+            return null;
+        }
+        $blogPost = $record->toArray();
+        $categories = \App\Support\Trees\BlogPostCategory::getTreeWithSelected($blogPost['blog_post_id']);
+        $blogPost['categories'] = $categories->categories;
+        $blogPost['tags'] = $blogRepo->tag()->getByPost($blogPost['blog_post_id']);
         return [
-            'record' => $record,
+            'record' => $blogPost,
             'status_list' => BlogPostStatus::getConstants('BLOG'),
-            'blog_post_categories' => $categories->tree
+            'blog_post_categories' => $categories->tree,
         ];
     }
 
@@ -94,6 +100,7 @@ class Blog extends Controller
         );
 
         $blogRepo->category()->attachToPost($request->getCategories(), $post);
+        $blogRepo->tag()->attachToPost($request->getTags(), $post);
 
         $params = [
             'slug' => $post->getAttribute('blog_post_slug'),
@@ -117,6 +124,7 @@ class Blog extends Controller
     {
         $post = $blogRepo->updateOne($slug, $request->all());
         $blogRepo->category()->updatePost($request->getCategories(), $post);
+        $blogRepo->tag()->updatePost($request->getTags(), $post);
     }
 
 }

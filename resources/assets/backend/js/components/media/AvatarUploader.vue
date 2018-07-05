@@ -84,7 +84,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="row button-crop-wrapper" v-show="uploadSuccess">
+                                                            <div class="row button-crop-wrapper" v-show="file.status==='success'">
                                                                 <button type="button"
                                                                         class="btn btn-lg btn-primary action-next-step"
                                                                         @click="currentStep=1">

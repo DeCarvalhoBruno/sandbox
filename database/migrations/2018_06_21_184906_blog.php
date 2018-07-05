@@ -54,13 +54,20 @@ class Blog extends Migration
         });
 
         Schema::create('blog_post_labels', function (Blueprint $table) {
-            $table->increments('blog_post_label_type_id');
+            $table->increments('blog_post_label_id');
 
-            $table->string('blog_post_label_type_name', 75)->nullable();
+            $table->string('blog_post_label_name', 75)->nullable();
         });
 
         Schema::create('blog_post_label_types', function (Blueprint $table) {
             $table->increments('blog_post_label_type_id');
+
+            $table->unsignedInteger('blog_post_label_id')
+                ->default(\App\Models\Blog\BlogPostLabel::BLOG_POST_TAG);
+            $table->foreign('blog_post_label_id')
+                ->references('blog_post_label_id')->on('blog_post_labels')
+                ->onDelete('cascade');
+            $table->index(array('blog_post_label_type_id', 'blog_post_label_id'), 'idx_blog_post_labels');
         });
 
         Schema::create('blog_post_categories', function (Blueprint $table) {
@@ -71,6 +78,7 @@ class Blog extends Migration
             $table->unsignedInteger('rgt')->default(0);
             $table->unsignedInteger('blog_post_label_type_id');
             $table->string('blog_post_category_name', 75)->nullable();
+            $table->string('blog_post_category_slug', 75)->nullable();
             $table->string('blog_post_category_codename', 32)->nullable();
 
             $table->index(array('lft', 'rgt', 'parent_id'));
@@ -85,11 +93,13 @@ class Blog extends Migration
             $table->increments('blog_post_tag_id');
 
             $table->unsignedInteger('blog_post_label_type_id');
+            $table->string('blog_post_tag_name', 35)->nullable();
+            $table->string('blog_post_tag_slug', 35)->nullable();
+
             $table->foreign('blog_post_label_type_id')
                 ->references('blog_post_label_type_id')->on('blog_post_label_types')
                 ->onDelete('cascade');
-
-            $table->string('blog_post_tag_name', 75)->nullable();
+            $table->unique(array('blog_post_tag_name'));
         });
 
         Schema::create('blog_post_label_records', function (Blueprint $table) {
@@ -104,12 +114,12 @@ class Blog extends Migration
             $table->foreign('blog_post_label_type_id')
                 ->references('blog_post_label_type_id')->on('blog_post_label_types')
                 ->onDelete('cascade');
-            $table->index(array('blog_post_id','blog_post_label_type_id'),'idx_blog_post_type');
+            $table->index(array('blog_post_id', 'blog_post_label_type_id'), 'idx_blog_post_type');
         });
 
         $label_types = [
-            ['blog_post_label_type_name' => \App\Models\Blog\BlogPostLabel::getConstantByID(\App\Models\Blog\BlogPostLabel::BLOG_POST_TAG)],
-            ['blog_post_label_type_name' => \App\Models\Blog\BlogPostLabel::getConstantByID(\App\Models\Blog\BlogPostLabel::BLOG_POST_CATEGORY)],
+            ['blog_post_label_name' => \App\Models\Blog\BlogPostLabel::getConstantByID(\App\Models\Blog\BlogPostLabel::BLOG_POST_TAG)],
+            ['blog_post_label_name' => \App\Models\Blog\BlogPostLabel::getConstantByID(\App\Models\Blog\BlogPostLabel::BLOG_POST_CATEGORY)],
         ];
         \App\Models\Blog\BlogPostLabel::insert($label_types);
 
@@ -132,10 +142,13 @@ class Blog extends Migration
         ];
         \App\Models\Blog\BlogPostStatus::insert($status);
 
-        $newLabelType = \App\Models\Blog\BlogPostLabelType::create();
+        $newLabelType = \App\Models\Blog\BlogPostLabelType::create(
+            ['blog_post_label_id'=>\App\Models\Blog\BlogPostLabel::BLOG_POST_CATEGORY]
+        );
         \App\Models\Blog\BlogPostCategory::create([
             'blog_post_category_name' => 'Default',
             'blog_post_category_codename' => makeHexUuid(),
+            'blog_post_category_slug' => 'default',
             'blog_post_label_type_id' => $newLabelType->getKey()
 
         ]);

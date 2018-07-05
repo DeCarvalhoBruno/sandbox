@@ -1,6 +1,7 @@
 <?php namespace App\Support\Providers;
 
 use App\Contracts\Models\BlogCategory as BlogCategoryInterface;
+use App\Models\Blog\BlogPostLabel;
 use App\Models\Blog\BlogPostLabelRecord;
 use App\Models\Blog\BlogPostLabelType;
 
@@ -10,10 +11,13 @@ class BlogCategory extends Model implements BlogCategoryInterface
 
     public function createOne($label, $codename)
     {
-        $newLabelType = BlogPostLabelType::create();
+        $newLabelType = BlogPostLabelType::create(
+            ['blog_post_label_id'=>BlogPostLabel::BLOG_POST_CATEGORY]
+        );
         $newCat = $this->createModel(
             [
                 'blog_post_category_name' => $label,
+                'blog_post_category_slug' => str_slug($label,'-',app()->getLocale()),
                 'blog_post_category_codename' => makeHexUuid(),
                 'blog_post_label_type_id' => $newLabelType->getKey()
             ]);
@@ -51,27 +55,28 @@ class BlogCategory extends Model implements BlogCategoryInterface
      */
     public function attachToPost($categories, $post)
     {
-        if (!empty($categories)) {
-            $labelTypes = $this->getByCodename($categories)->labelType()
-                ->select(['blog_post_label_types.blog_post_label_type_id as id'])
-                ->get();
-            if (!is_null($labelTypes)) {
-                $records = [];
-                foreach ($labelTypes as $label) {
-                    $records[] = [
-                        $post->getKeyName() => $post->getKey(),
-                        'blog_post_label_type_id' => $label->getAttribute('id')
-                    ];
-                }
-                BlogPostLabelRecord::insert($records);
+        if (empty($categories)) {
+            return;
+        }
+        $labelTypes = $this->getByCodename($categories)->labelType()
+            ->select(['blog_post_label_types.blog_post_label_type_id as id'])
+            ->get();
+        if (!is_null($labelTypes)) {
+            $records = [];
+            foreach ($labelTypes as $label) {
+                $records[] = [
+                    $post->getKeyName() => $post->getKey(),
+                    'blog_post_label_type_id' => $label->getAttribute('id')
+                ];
             }
+            BlogPostLabelRecord::insert($records);
         }
     }
 
-    public function updatePost($new, $post)
+    public function updatePost($updated, $post)
     {
         $inStore = $this->getSelected($post->getKey());
-        $toBeRemoved = array_diff($inStore, $new);
+        $toBeRemoved = array_diff($inStore, $updated);
         if (!empty($toBeRemoved)) {
             $entries = $this->getByCodename($toBeRemoved)->labelType()
                 ->select(['blog_post_label_types.blog_post_label_type_id'])
@@ -82,7 +87,7 @@ class BlogCategory extends Model implements BlogCategoryInterface
                 ->delete();
         }
 
-        $toBeAdded = array_diff($new, $inStore);
+        $toBeAdded = array_diff($updated, $inStore);
         if (!empty($toBeAdded)) {
             $this->attachToPost($toBeAdded, $post);
         }

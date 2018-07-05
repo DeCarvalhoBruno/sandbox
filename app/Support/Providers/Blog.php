@@ -3,19 +3,31 @@
 use App\Contracts\Models\Blog as BlogInterface;
 use App\Models\Blog\BlogPost;
 use App\Contracts\Models\BlogCategory as CategoryInterface;
+use App\Contracts\Models\BlogTag as TagInterface;
 
 class Blog extends Model implements BlogInterface
 {
     protected $model = \App\Models\Blog\BlogPost::class;
+
     /**
      * @var \App\Contracts\Models\BlogCategory|\App\Support\Providers\BlogCategory
      */
     private $category;
+    /**
+     * @var \App\Contracts\Models\BlogTag|\App\Support\Providers\BlogTag
+     */
+    private $tag;
 
-    public function __construct(CategoryInterface $c)
+    /**
+     *
+     * @param \App\Contracts\Models\BlogCategory|\App\Support\Providers\BlogCategory $c
+     * @param \App\Contracts\Models\BlogTag|\App\Support\Providers\BlogTag $t
+     */
+    public function __construct(CategoryInterface $c, TagInterface $t)
     {
         parent::__construct();
         $this->category = $c;
+        $this->tag = $t;
     }
 
     /**
@@ -24,6 +36,14 @@ class Blog extends Model implements BlogInterface
     public function category()
     {
         return $this->category;
+    }
+
+    /**
+     * @return \App\Contracts\Models\BlogTag|\App\Support\Providers\BlogTag
+     */
+    public function tag()
+    {
+        return $this->tag;
     }
 
     /**

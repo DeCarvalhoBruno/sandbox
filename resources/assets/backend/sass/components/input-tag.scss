@@ -21,17 +21,19 @@
     border: none;
     color: #FFFFFF;
     padding: .3rem;
+    flex: 1;
   }
 
   .badge {
     padding: .8em;
     margin: .2em;
-    cursor:none;
+    cursor: default;
   }
 
-  .close-button {
-    cursor: pointer;
+  .badge-tag-icon{
+    margin-left:.3em;
   }
+
 }
 
 .input-tag-search-wrapper {

@@ -37,6 +37,7 @@ class BlogPostCategory extends Controller
         if (!is_null($cat)) {
             $label = $this->request->get('label');
             $cat->setAttribute('blog_post_category_name', $label);
+            $cat->setAttribute('blog_post_category_slug', str_slug($label,'-',app()->getLocale()));
             $cat->save();
         }
         return response(null, Response::HTTP_NO_CONTENT);
