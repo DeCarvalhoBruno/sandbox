@@ -150,17 +150,15 @@ class EntityType extends Model
      * @param int $entityID
      *
      * @return mixed
-     * @throws \ReflectionException
      */
     public function scopeEntityType(Builder $query, $entityID)
     {
-        $table = Entity::getConstantName($entityID);
         $class = Entity::getModelClassNamespace($entityID);
-        $primaryKey = (new $class)->getKeyName();
+        $primaryKey = (new $class)->getQualifiedKeyName();
 
         return $query->join(
             Entity::getConstantName($entityID),
-            sprintf('%s.%s', $table, $primaryKey), '=', 'entity_types.entity_type_target_id'
+            $primaryKey, '=', 'entity_types.entity_type_target_id'
         );
     }
 
@@ -168,6 +166,7 @@ class EntityType extends Model
      * @link https://laravel.com/docs/5.6/eloquent#query-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $entityId
+     * @param array $userIdList
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     public function scopeHighestGroup(Builder $builder, $entityId, $userIdList)

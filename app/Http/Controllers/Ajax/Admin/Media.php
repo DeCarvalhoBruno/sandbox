@@ -26,6 +26,7 @@ class Media extends Controller
 
     /**
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function add()
     {
@@ -62,7 +63,9 @@ class Media extends Controller
                         $input->media
                     );
                     $this->processImage($media);
-                    return response([1,2,3], Response::HTTP_OK);
+                    return response([
+                        'filename' => $media->getThumbnailFilename(),
+                    ], Response::HTTP_OK);
                     break;
                 default:
                     break;
@@ -79,14 +82,20 @@ class Media extends Controller
 
     /**
      * @param \App\Support\Media\UploadedImage $media
+     * @throws \Exception
      */
     public function processImage($media)
     {
         $media->move();
         $media->makeThumbnail();
+        $this->mediaRepo->image()->save($media);
     }
 
-
+    /**
+     * @param \App\Support\Providers\User $user
+     * @return \Illuminate\Http\Response
+     * @throws \Exception
+     */
     public function crop(UserProvider $user)
     {
         $input = (object)$this->request->only(['uuid', 'height', 'width', 'x', 'y']);

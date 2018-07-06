@@ -1,18 +1,20 @@
 <?php namespace App\Models\Blog;
 
+use App\Contracts\HasAnEntity;
 use App\Contracts\HasPermissions as HasPermissionsContract;
 use App\Models\User;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
+use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use App\Traits\Presentable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Contracts\Enumerable as EnumerableContract;
 use App\Traits\Models\HasPermissions;
 
-class BlogPost extends Model implements HasPermissionsContract, EnumerableContract
+class BlogPost extends Model implements HasPermissionsContract, EnumerableContract, HasAnEntity
 {
-    use Presentable, Enumerable, HasPermissions, DoesSqlStuff;
+    use Presentable, Enumerable, HasPermissions, DoesSqlStuff, HasAnEntityTrait;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;
@@ -37,6 +39,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     protected $sortable = [
       'blog_post_title'
     ];
+    public static $nameColumn = 'blog_post_slug';
 
     public static function boot()
     {

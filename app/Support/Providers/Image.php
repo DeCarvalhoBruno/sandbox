@@ -40,7 +40,7 @@ class Image extends Model implements ImageInterface
      * @return \App\Models\Media\MediaType
      * @throws \Exception
      */
-    public function saveAvatar(ImageContract $image)
+    public function save(ImageContract $image)
     {
         $targetEntityTypeId = EntityType::getEntityTypeID($image->getTargetType(), $image->getTargetSlug());
         if (!is_int($targetEntityTypeId)) {
@@ -48,6 +48,18 @@ class Image extends Model implements ImageInterface
         }
 
         return $this->createImage($image, $targetEntityTypeId);
+    }
+
+    /**
+     * @param \App\Contracts\Image $image
+     * @return \App\Models\Media\MediaType
+     * @throws \Exception
+     */
+    public function saveAvatar(ImageContract $image)
+    {
+        $mediaType = $this->save($image);
+        $this->avatar->setAsUsed($image->getUuid());
+        return $mediaType;
     }
 
     /**
@@ -63,6 +75,7 @@ class Image extends Model implements ImageInterface
         $mediaType = MediaType::create([
             'media_title' => $media->getTargetSlug(),
             'media_uuid' => $media->getUuid(),
+            'media_id' => $media->getMediaType()
         ]);
 
         MediaDigital::create([
@@ -74,7 +87,6 @@ class Image extends Model implements ImageInterface
 
         $mediaRecord = MediaRecord::create([
             'media_type_id' => $mediaType->getKey(),
-            'media_id' => \App\Models\Media\Media::IMAGE_AVATAR
         ]);
 
         $mediaCategoryRecord = MediaCategoryRecord::create([
@@ -87,7 +99,7 @@ class Image extends Model implements ImageInterface
         ]);
 
         \DB::commit();
-        $this->avatar->setAsUsed($media->getUuid());
+
 
         return $mediaType;
 

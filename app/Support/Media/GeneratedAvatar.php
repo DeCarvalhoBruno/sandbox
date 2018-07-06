@@ -12,6 +12,8 @@ class GeneratedAvatar implements Image
     private $path;
     private $uuid;
     private $targetType;
+    private $mediaType;
+    private $thumbnailFilename;
 
     /**
      *
@@ -28,6 +30,7 @@ class GeneratedAvatar implements Image
         $this->filename = sprintf('%s.%s',$this->uuid,$this->fileExtension);
         $this->path = media_entity_root_path($targetType, $mediaType);
         $this->targetType = $targetType;
+        $this->mediaType = $mediaType;
     }
 
     public function processAvatar()
@@ -58,6 +61,14 @@ class GeneratedAvatar implements Image
         return null;
     }
 
+    /**
+     * @return null|string
+     */
+    public function getThumbnailFilename(): ?string
+    {
+        return $this->thumbnailFilename;
+    }
+
     public function getHddFilename()
     {
         return $this->filename;
@@ -84,7 +95,12 @@ class GeneratedAvatar implements Image
         return $this->targetType;
     }
 
-
-
+    /**
+     * @return mixed
+     */
+    public function getMediaType()
+    {
+        return $this->mediaType;
+    }
 
 }

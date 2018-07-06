@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 class MediaRecord extends Model {
 
 	public $timestamps = false;
-	protected $fillable = ['media_type_id','media_id'];
+	protected $fillable = ['media_type_id'];
 	protected $primaryKey = 'media_record_id';
 	
 	/**

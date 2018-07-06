@@ -2,6 +2,7 @@
 
 use App\Contracts\Image;
 use App\Models\Entity;
+use App\Models\Media\Media;
 use Illuminate\Support\Collection;
 
 class UploadedAvatar implements Image
@@ -18,6 +19,7 @@ class UploadedAvatar implements Image
     private $uuid;
     private $targetType;
     private $thumbnailFilename;
+    private $mediaType;
 
     /**
      *
@@ -37,6 +39,7 @@ class UploadedAvatar implements Image
         $this->hddPath = sprintf('%s/media/tmp/', public_path());
         $this->fileObject = $fileObject;
         $this->targetType = Entity::getConstant($targetType);
+        $this->mediaType = Media::getConstant($mediaType);
     }
 
     public function move()
@@ -123,6 +126,18 @@ class UploadedAvatar implements Image
     {
         return $this->targetType;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMediaType()
+    {
+        return $this->mediaType;
+    }
+
+
+
+
 
 
 }

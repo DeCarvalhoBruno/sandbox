@@ -29,11 +29,16 @@ class Medias extends Migration
         Schema::create('media_types', function (Blueprint $table) {
             $table->increments('media_type_id');
 
+            $table->unsignedInteger('media_id');
+
             $table->string('media_title')->nullable();
             $table->text('media_description')->nullable();
             $table->string('media_uuid',32);
             $table->boolean('media_in_use')->default(true);
 
+            $table->foreign('media_id')
+                ->references('media_id')->on('media')
+                ->onDelete('cascade');
             $table->unique(['media_type_id', 'media_uuid'],'idx_media_type_uuid');
         });
 
@@ -68,13 +73,10 @@ class Medias extends Migration
             $table->increments('media_record_id');
 
             $table->unsignedInteger('media_type_id');
-            $table->unsignedInteger('media_id');
+
 
             $table->foreign('media_type_id')
                 ->references('media_type_id')->on('media_types')
-                ->onDelete('cascade');
-            $table->foreign('media_id')
-                ->references('media_id')->on('media')
                 ->onDelete('cascade');
         });
 

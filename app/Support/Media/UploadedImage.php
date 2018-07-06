@@ -126,5 +126,15 @@ class UploadedImage implements Image
         return $this->targetType;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getMediaType()
+    {
+        return $this->mediaType;
+    }
+
+
+
 
 }
