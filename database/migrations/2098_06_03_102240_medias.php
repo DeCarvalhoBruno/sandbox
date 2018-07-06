@@ -74,7 +74,6 @@ class Medias extends Migration
 
             $table->unsignedInteger('media_type_id');
 
-
             $table->foreign('media_type_id')
                 ->references('media_type_id')->on('media_types')
                 ->onDelete('cascade');
@@ -93,7 +92,8 @@ class Medias extends Migration
             $table->increments('media_img_format_type_id');
             $table->unsignedInteger('media_digital_id');
 
-            $table->unsignedInteger('media_img_format_id')->default(\App\Models\Media\MediaImgFormat::ORIGINAL);
+            $table->unsignedInteger('media_img_format_id')
+                ->default(\App\Models\Media\MediaImgFormat::ORIGINAL);
 
             $table->foreign('media_digital_id', 'fk_img_format_types')
                 ->references('media_digital_id')->on('media_digital')

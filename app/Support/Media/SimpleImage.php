@@ -3,15 +3,8 @@
 use App\Contracts\Image;
 use App\Models\Media\Media;
 
-class SimpleImage implements Image
+class SimpleImage extends ImageUpload implements Image
 {
-
-    private $targetSlug;
-    private $filename;
-    private $hddFilename;
-    private $uuid;
-    private $fileExtension;
-    private $targetType;
 
     /**
      *
@@ -27,7 +20,6 @@ class SimpleImage implements Image
         $this->hddFilename = sprintf('%s.%s', $uuid, $extension);
         $this->filename = $filename;
         $this->fileExtension = $extension;
-
         $this->uuid = $uuid;
         $this->targetType = $type;
     }
@@ -48,46 +40,5 @@ class SimpleImage implements Image
     }
 
 
-    public function getTargetSlug()
-    {
-        return $this->targetSlug;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getFilename(): ?string
-    {
-        return $this->filename;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHddFilename(): string
-    {
-        return $this->hddFilename;
-    }
-
-    public function getUuid()
-    {
-        return $this->uuid;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFileExtension()
-    {
-        return $this->fileExtension;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTargetType()
-    {
-        return $this->targetType;
-    }
 
 }

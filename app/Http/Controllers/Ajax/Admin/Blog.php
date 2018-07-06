@@ -5,7 +5,8 @@ use App\Filters\Blog as BlogFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreateBlogPost;
 use App\Models\Blog\BlogPostStatus;
-use App\Support\Providers\User as UserProvider;
+use App\Contracts\Models\User as UserProvider;
+use App\Contracts\Models\Media as MediaProvider;
 
 class Blog extends Controller
 {
@@ -44,7 +45,6 @@ class Blog extends Controller
             'record' => [
                 'blog_post_status' => BlogPostStatus::getConstantByID(BlogPostStatus::BLOG_POST_STATUS_DRAFT),
                 'blog_post_user' => auth()->user()->getAttribute('username'),
-                'blog_post_title' => 'sample',
                 'categories' => [],
                 'tags' => []
             ],
@@ -58,13 +58,14 @@ class Blog extends Controller
      * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
      * @return array
      */
-    public function edit($slug, BlogProvider $blogRepo)
+    public function edit($slug, BlogProvider $blogRepo, MediaProvider $mediaRepo)
     {
         $record = $blogRepo->buildOneBySlug(
             $slug,
             [
                 'blog_post_id',
                 'blog_post_title',
+                'blog_post_slug',
                 'blog_post_content',
                 'blog_post_excerpt',
                 'blog_post_status_name as blog_post_status',
@@ -81,13 +82,19 @@ class Blog extends Controller
             'record' => $blogPost,
             'status_list' => BlogPostStatus::getConstants('BLOG'),
             'blog_post_categories' => $categories->tree,
+            'blog_post_slug' => $this->getPostUrl($record),
+            'thumbnails'=>$mediaRepo->image()->getImages(
+                $record->getAttribute('entity_type_id'), [
+                'media_uuid as uuid',
+                'media_extension as ext'
+            ])
         ];
     }
 
     /**
      * @param \App\Http\Requests\Admin\CreateBlogPost $request
      * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
-     * @param \App\Support\Providers\User|\App\Support\Providers\User $userRepo
+     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
      * @return array
      */
     public function create(CreateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo)
@@ -103,17 +110,21 @@ class Blog extends Controller
         $blogRepo->category()->attachToPost($request->getCategories(), $post);
         $blogRepo->tag()->attachToPost($request->getTags(), $post);
 
+        return (
+        [
+            'blog_post_slug' => $this->getPostUrl($post)
+        ]);
+    }
+
+    private function getPostUrl($post)
+    {
         $params = [
             'slug' => $post->getAttribute('blog_post_slug'),
         ];
-
         if ($post->getAttribute('blog_post_status_id') != BlogPostStatus::BLOG_POST_STATUS_PUBLISHED) {
             $params['preview'] = true;
         }
-        return (
-        [
-            'blog_post_slug' => route_i18n('blog', $params)
-        ]);
+        return route_i18n('blog', $params);
     }
 
     /**

@@ -84,7 +84,8 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="row button-crop-wrapper" v-show="file.status==='success'">
+                                                            <div class="row button-crop-wrapper"
+                                                                 v-show="file.status==='success'">
                                                                 <button type="button"
                                                                         class="btn btn-lg btn-primary action-next-step"
                                                                         @click="currentStep=1">
@@ -96,7 +97,9 @@
                                                 </div>
                                                 <div class="row mt-1">
                                                     <div class="col">
-                                                        <span class="dropzone-error clearfix text-danger" v-html="error"></span>
+                                                        <span
+                                                                class="dropzone-error clearfix text-danger"
+                                                                v-html="error"></span>
                                                     </div>
                                                 </div>
                                             </div>

@@ -2,6 +2,25 @@
     <div>
         <b-tabs card>
             <b-tab title="Available">
+                <ul class="p-0">
+                    <li class="avatar-container"
+                        v-for="(image,index) in thumbnails"
+                        :key="index">
+                        <div class="avatar">
+                            <div class="avatar-inner">
+                                <img :src="`/media/users/image/${image.uuid}.${image.ext}`">
+                            </div>
+                        </div>
+
+                        <div class="avatar-controls">
+                            <button type="button" class="btn btn-sm"
+                                    :title="$t('pages.settings.delete_avatar')"
+                                    >
+                                <fa icon="trash-alt"/>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
             </b-tab>
             <b-tab title="Upload new media" :active="this.isActive" :disabled="!this.isActive">
 

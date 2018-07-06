@@ -29,7 +29,7 @@ class MediaEntity extends Model
 
     public static function buildImages($columns = '*', $entityTypeId = null)
     {
-        return (new static())->newQuery()->select($columns)
+        return static::query()->select($columns)
             ->entityType($entityTypeId)->mediaCategoryRecord()
             ->mediaRecord()->mediaType()->mediaDigital();
     }

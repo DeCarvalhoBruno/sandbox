@@ -37,35 +37,36 @@ class Image extends Model implements ImageInterface
 
     /**
      * @param \App\Contracts\Image $image
-     * @return \App\Models\Media\MediaType
-     * @throws \Exception
-     */
-    public function save(ImageContract $image)
-    {
-        $targetEntityTypeId = EntityType::getEntityTypeID($image->getTargetType(), $image->getTargetSlug());
-        if (!is_int($targetEntityTypeId)) {
-            throw new \UnexpectedValueException('Entity could not be found for image saving');
-        }
-
-        return $this->createImage($image, $targetEntityTypeId);
-    }
-
-    /**
-     * @param \App\Contracts\Image $image
-     * @return \App\Models\Media\MediaType
+     * @return int
      * @throws \Exception
      */
     public function saveAvatar(ImageContract $image)
     {
-        $mediaType = $this->save($image);
+        $targetEntityTypeId = $this->save($image);
         $this->avatar->setAsUsed($image->getUuid());
-        return $mediaType;
+        return $targetEntityTypeId;
+    }
+
+    private function getTargetEntity(ImageContract $image)
+    {
+        return EntityType::getEntityTypeID($image->getTargetType(), $image->getTargetSlug());
+    }
+
+    /**
+     * @param \App\Contracts\Image $image
+     * @return array|int
+     * @throws \Exception
+     */
+    public function save(ImageContract $image)
+    {
+        $targetEntityTypeId = $this->getTargetEntity($image);
+        $this->createImage($image, $targetEntityTypeId);
+        return $targetEntityTypeId;
     }
 
     /**
      * @param \App\Contracts\Image|\App\Support\Media\UploadedAvatar $media
      * @param int $entityTypeID
-     * @return \App\Models\Media\MediaType
      * @throws \Exception
      */
     public function createImage($media, $entityTypeID)
@@ -99,10 +100,16 @@ class Image extends Model implements ImageInterface
         ]);
 
         \DB::commit();
+    }
 
-
-        return $mediaType;
-
+    /**
+     * @param int $entityTypeId
+     * @param array $columns
+     * @return \App\Models\Media\MediaEntity
+     */
+    public function getImages($entityTypeId, $columns = ['*'])
+    {
+        return MediaEntity::buildImages($columns, $entityTypeId)->get()->toArray();
     }
 
 

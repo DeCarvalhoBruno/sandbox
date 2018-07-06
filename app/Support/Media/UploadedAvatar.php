@@ -5,21 +5,8 @@ use App\Models\Entity;
 use App\Models\Media\Media;
 use Illuminate\Support\Collection;
 
-class UploadedAvatar implements Image
+class UploadedAvatar extends ImageUpload implements Image
 {
-    /**
-     * @var \Symfony\Component\HttpFoundation\File\UploadedFile
-     */
-    private $fileObject;
-    private $filename;
-    private $fileExtension;
-    private $hddFilename;
-    private $hddPath;
-    private $targetSlug;
-    private $uuid;
-    private $targetType;
-    private $thumbnailFilename;
-    private $mediaType;
 
     /**
      *
@@ -72,72 +59,6 @@ class UploadedAvatar implements Image
         //$image = Image::makeCroppedImage($this->fileObject->getRealPath(),MediaTypeImgFormat::THUMBNAIL);
         //Image::saveImg($image,$this->newFullPath);
     }
-
-    /**
-     * Get the name of the resource after which this media is named.
-     * I.e John Doe's avatar picture 'target name' is his username, john_doe
-     */
-    public function getTargetSlug()
-    {
-        return $this->targetSlug;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getFilename(): ?string
-    {
-        return $this->filename;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getThumbnailFilename(): ?string
-    {
-        return $this->thumbnailFilename;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHddFilename(): string
-    {
-        return $this->hddFilename;
-    }
-
-    public function getUuid()
-    {
-        return $this->uuid;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFileExtension()
-    {
-        return $this->fileExtension;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTargetType()
-    {
-        return $this->targetType;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMediaType()
-    {
-        return $this->mediaType;
-    }
-
-
-
-
 
 
 }

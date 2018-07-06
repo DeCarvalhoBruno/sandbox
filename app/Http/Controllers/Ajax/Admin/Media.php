@@ -62,10 +62,10 @@ class Media extends Controller
                         $input->type,
                         $input->media
                     );
-                    $this->processImage($media);
-                    return response([
-                        'filename' => $media->getThumbnailFilename(),
-                    ], Response::HTTP_OK);
+                    return response(
+                        $this->processImage($media),
+                        Response::HTTP_OK
+                    );
                     break;
                 default:
                     break;
@@ -82,13 +82,19 @@ class Media extends Controller
 
     /**
      * @param \App\Support\Media\UploadedImage $media
+     * @return \App\Models\Media\MediaEntity
      * @throws \Exception
      */
-    public function processImage($media)
+    private function processImage($media)
     {
         $media->move();
         $media->makeThumbnail();
-        $this->mediaRepo->image()->save($media);
+        $targetEntityTypeId = $this->mediaRepo->image()->save($media);
+        return $this->mediaRepo->image()->getImages(
+            $targetEntityTypeId, [
+            'media_uuid as uuid',
+            'media_extension as ext'
+        ]);
     }
 
     /**

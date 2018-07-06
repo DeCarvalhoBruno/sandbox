@@ -72,8 +72,7 @@
                                        class="form-control" maxlength="255"
                                        :class="{ 'is-invalid': form.errors.has('blog_post_title') }"
                                        :placeholder="$t('db.blog_post_title')"
-                                       aria-describedby="help_blog_post_title"
-                                       @input="titleChanged">
+                                       aria-describedby="help_blog_post_title">
                                 <small class="text-muted" v-show="blog_post_slug">{{blog_post_slug}}</small>
                             </div>
                         </div>
@@ -146,10 +145,10 @@
                     <div class="card-header bg-transparent">Media</div>
                     <div class="card-body">
                         <image-uploader
-                                :target="blog_post_slug"
+                                :target="form.blog_post_slug"
                                 type="blog_posts"
                                 media="image"
-                                :is-active="postHasTitle"
+                                :is-active="this.saveMode==='edit'"
                         >
                         </image-uploader>
                     </div>
@@ -203,7 +202,6 @@
         current_status: '',
         blog_post_slug: null,
         saveMode: null,
-        postHasTitle: true,
         blog_post_categories: [],
         tagInput: '',
         form: new Form({
@@ -217,14 +215,6 @@
       }
     },
     methods: {
-      titleChanged () {
-        this.changedField('blog_post_title')
-        if (this.form.blog_post_title !== '') {
-          this.postHasTitle = true
-        } else {
-          this.postHasTitle = false
-        }
-      },
       addTag () {
         if (this.tagInput) {
           this.form.tags.push(this.tagInput)
@@ -301,8 +291,8 @@
       },
       getInfo (data, saveMode) {
         this.form = new Form(data.record)
-        this.postHasTitle = (this.form.hasOwnProperty('blog_post_title'))
         this.status_list = data.status_list
+        this.blog_post_slug = data.blog_post_slug
         this.current_status = this.$t(`constants.${data.record.blog_post_status}`)
         this.saveMode = saveMode
         this.blog_post_categories = data.blog_post_categories

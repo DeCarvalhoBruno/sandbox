@@ -1,16 +1,17 @@
 <?php namespace App\Models\Blog;
 
+use App\Contracts\Enumerable as EnumerableContract;
 use App\Contracts\HasAnEntity;
 use App\Contracts\HasPermissions as HasPermissionsContract;
+use App\Models\Entity;
 use App\Models\User;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
+use App\Traits\Models\HasPermissions;
 use App\Traits\Presentable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use App\Contracts\Enumerable as EnumerableContract;
-use App\Traits\Models\HasPermissions;
 
 class BlogPost extends Model implements HasPermissionsContract, EnumerableContract, HasAnEntity
 {
@@ -96,6 +97,24 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     public function scopeUser(Builder $builder)
     {
         return $this->joinReverse($builder, User::class);
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param int|null $blogPostId
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeEntityType(Builder $builder, $blogPostId = null)
+    {
+        return $builder->join('entity_types', function ($q) use ($blogPostId) {
+            $q->on('entity_types.entity_type_target_id', '=', 'blog_posts.blog_post_id')
+                ->where('entity_types.entity_id', '=', Entity::BLOG_POSTS);
+            if (!is_null($blogPostId)) {
+                $q->where('entity_types.entity_type_target_id',
+                    '=', $blogPostId);
+            }
+        });
     }
 
 }
