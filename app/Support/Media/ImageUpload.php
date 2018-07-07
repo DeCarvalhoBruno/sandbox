@@ -82,5 +82,4 @@ class ImageUpload
         return $this->mediaType;
     }
 
-
 }

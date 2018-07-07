@@ -94,6 +94,7 @@ class Media extends Controller
             $media->getUuid(),
             $media->getTargetType(),
             $media->getMediaType(),
+            $media->getFileExtension(),
             MediaImgFormat::PAGE
         );
         $targetEntityTypeId = $this->mediaRepo->image()->save($media);

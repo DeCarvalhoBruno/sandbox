@@ -80,7 +80,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row p-0 m-0 mb-1" v-show="false">
+            <div class="row p-0 m-0 mb-1">
                 <div class="card col-lg p-0 m-0">
 
                     <div class="row p-0 m-0">
@@ -110,7 +110,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row p-0 m-0 mb-1" v-show="false">
+            <div class="row p-0 m-0 mb-1">
                 <div class="card col-lg-6 p-0 m-0">
                     <div class="card-header bg-transparent">Excerpt</div>
                     <div class="card-body">
@@ -148,9 +148,7 @@
                                 media="image"
                                 :is-active="this.saveMode==='edit'"
                                 :thumbnails-parent="thumbnails"
-                                @images-updated="updateThumbnails"
-                        >
-                        </image-uploader>
+                                @images-updated="updateThumbnails"/>
                     </div>
                 </div>
             </div>

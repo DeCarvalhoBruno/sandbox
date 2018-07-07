@@ -52,7 +52,7 @@ class Blog extends Controller
             ],
             'status_list' => BlogPostStatus::getConstants('BLOG'),
             'blog_post_categories' => \App\Support\Trees\BlogPostCategory::getTree(),
-            'thumbnails'=>[]
+            'thumbnails' => []
         ];
     }
 
@@ -155,12 +155,16 @@ class Blog extends Controller
     public function setFeaturedImage($slug, $uuid, MediaProvider $mediaRepo)
     {
         $mediaRepo->image()->setAsUsed($uuid);
-        $mediaRepo->image()->cropImageToFormat(
-            $uuid,
-            Entity::BLOG_POSTS,
-            \App\Models\Media\Media::IMAGE,
-            MediaImgFormat::FEATURED
-        );
+        $media = $mediaRepo->image()->getOne($uuid, ['media_extension']);
+        if (!is_null($media)) {
+            $mediaRepo->image()->cropImageToFormat(
+                $uuid,
+                Entity::BLOG_POSTS,
+                \App\Models\Media\Media::IMAGE,
+                $media->getAttribute('media_extension'),
+                MediaImgFormat::FEATURED
+            );
+        }
 
         return $mediaRepo->image()->getImagesFromSlug($slug);
     }

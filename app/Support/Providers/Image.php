@@ -187,9 +187,8 @@ class Image extends Model implements ImageInterface
         }
     }
 
-    public function cropImageToFormat($uuid, $entityId, $imageType, $format = MediaImgFormat::THUMBNAIL)
+    public function cropImageToFormat($uuid, $entityId, $imageType, $fileExtension, $format = MediaImgFormat::THUMBNAIL)
     {
-        $media = $this->getOne($uuid, ['media_extension']);
         ImageProcessor::saveImg(
             ImageProcessor::makeCroppedImage(
                 media_entity_root_path(
@@ -197,7 +196,7 @@ class Image extends Model implements ImageInterface
                     $imageType,
                     ImageProcessor::makeFormatFilename(
                         $uuid,
-                        $media->getAttribute('media_extension')
+                        $fileExtension
                     )
                 ),
                 $format
@@ -205,11 +204,8 @@ class Image extends Model implements ImageInterface
             media_entity_root_path(
                 $entityId,
                 $imageType,
-                ImageProcessor::makeFormatFilename($uuid, $media->getAttribute('media_extension'), $format)
+                ImageProcessor::makeFormatFilename($uuid, $fileExtension, $format)
             )
         );
-
     }
-
-
 }

@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-tabs card>
-            <b-tab :title="$t('pages.blog.tab_available')">
+            <b-tab :title="$t('pages.blog.tab_available')" @click="resetUploadsList">
                 <p v-if="thumbnails.length>0" class="font-italic">{{$t('pages.blog.click_featured')}}</p>
                 <div class="thumbnail-group" :class="{'thumbnail-loading':ajaxIsLoading}">
                     <fa v-show="ajaxIsLoading" class="fa-5x sync-icon" icon="sync" spin></fa>
@@ -141,6 +141,9 @@
       }
     },
     methods: {
+      resetUploadsList(){
+        this.$refs.dropzone.removeAllFiles()
+      },
       deleteImage (uuid, alreadyUsed) {
         if (!alreadyUsed) {
           this.ajaxIsLoading = true
