@@ -20,8 +20,12 @@
 }
 
 @keyframes spinAround {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(359deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
 }
 
 .btn-circle {
@@ -50,4 +54,13 @@
   border-radius: 35px;
   font-size: 24px;
   line-height: 1.33;
+}
+
+.btn-add {
+  color: #fff;
+  background-color: #007b00;
+
+  &:hover {
+    background-color: #005e00;
+  }
 }

@@ -1,29 +1,33 @@
 <template>
     <div>
         <b-tabs card>
-            <b-tab title="Available">
-                <ul class="p-0">
-                    <li class="avatar-container"
-                        v-for="(image,index) in thumbnails"
-                        :key="index">
-                        <div class="avatar">
-                            <div class="avatar-inner">
-                                <img :src="`/media/users/image/${image.uuid}.${image.ext}`">
+            <b-tab :title="$t('pages.blog.tab_available')">
+                <p v-if="thumbnails.length>0" class="font-italic">{{$t('pages.blog.click_featured')}}</p>
+                <div class="thumbnail-group" :class="{'thumbnail-loading':ajaxIsLoading}">
+                    <fa v-show="ajaxIsLoading" class="fa-5x sync-icon" icon="sync" spin></fa>
+                    <ul class="p-0">
+                        <li class="thumbnail-container"
+                            v-for="(image,index) in thumbnails"
+                            :key="index">
+                            <div class="thumbnail-selectable" :class="{'selected':image.used}"
+                                 @click="setImageAsUsed(image.uuid,image.used)">
+                                <div class="thumbnail-inner">
+                                    <img :src="getImageUrl(image.uuid, image.ext)">
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="avatar-controls">
-                            <button type="button" class="btn btn-sm"
-                                    :title="$t('pages.settings.delete_avatar')"
-                                    >
-                                <fa icon="trash-alt"/>
-                            </button>
-                        </div>
-                    </li>
-                </ul>
+                            <div class="thumbnail-controls">
+                                <button type="button" class="btn btn-sm"
+                                        :class="{'btn-danger':!image.used,'disabled':image.used}"
+                                        :title="$t('pages.blog.delete_image')"
+                                        @click="deleteImage(image.uuid,image.used)">
+                                    <fa icon="trash-alt"/>
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </b-tab>
-            <b-tab title="Upload new media" :active="this.isActive" :disabled="!this.isActive">
-
+            <b-tab :title="$t('pages.blog.tab_upload')" :active="isActive" :disabled="!isActive">
                 <dropzone class="dropzone"
                           tag="section"
                           v-bind="dropzoneOptions"
@@ -74,10 +78,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="row preview-row" v-if="file.status==='success'">
-                                                    <p>Upload is complete.</p>
+                                                    <p>{{$t('pages.blog.image_uploaded')}}</p>
                                                 </div>
                                                 <div v-else class="row blinker blinker-red">
-                                                    <p>Processing in progress...</p>
+                                                    <p>{{$t('pages.settings.image_uploading')}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -102,6 +106,7 @@
   import Vue from 'vue'
   import { Tabs } from 'bootstrap-vue/es/components'
   import { VueTransmit } from 'vue-transmit'
+  import axios from 'axios'
 
   Vue.use(Tabs)
 
@@ -115,32 +120,56 @@
       target: {required: true},
       type: {required: true},
       media: {required: true},
-      isActive:{default:true}
+      isActive: {default: true},
+      thumbnailsParent: {required: true}
+    },
+    watch: {
+      thumbnailsParent () {
+        this.thumbnails = this.thumbnailsParent
+      }
     },
     data () {
       return {
         maxFilesize: 2,
         error: null,
-        thumbnails:[],
+        ajaxIsLoading: false,
+        thumbnails: [],
         dropzoneOptions: {
-          // createImageThumbnails:false,
-          // thumbnailWidth:3000,
-          // thumbnailHeight:3000,
-          // autoProcessQueue:false,
           acceptedFileTypes: ['image/jpg', 'image/jpeg', 'image/png'],
           clickable: false
         }
       }
     },
     methods: {
+      deleteImage (uuid, alreadyUsed) {
+        if (!alreadyUsed) {
+          this.ajaxIsLoading = true
+          axios.delete(`/ajax/admin/blog/post/edit/${this.target}/image/${uuid}`).then(({data}) => {
+            this.$emit('images-updated', data)
+            this.ajaxIsLoading = false
+          })
+        }
+      },
+      setImageAsUsed (uuid, alreadyUsed) {
+        if (!alreadyUsed) {
+          this.ajaxIsLoading = true
+          axios.patch(`/ajax/admin/blog/post/edit/${this.target}/image/${uuid}`).then(({data}) => {
+            this.$emit('images-updated', data)
+            this.ajaxIsLoading = false
+          })
+        }
+      },
+      getImageUrl (uuid, ext) {
+        return `/media/${this.type}/${this.media}/${uuid}_tb.${ext}`
+      },
       triggerBrowse () {
-        if(!this.isActive){
+        if (!this.isActive) {
           return
         }
         let vm = this
         this.$refs.dropzone.triggerBrowseFiles()
         this.$refs.dropzone.$on('success', function (file, response) {
-            vm.thumbnails=response
+          vm.$emit('images-updated', response)
         })
         this.$refs.dropzone.$on('error', function (file, error) {
           vm.error = error

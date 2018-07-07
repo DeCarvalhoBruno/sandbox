@@ -1,9 +1,9 @@
-.avatar-group {
+.thumbnail-group {
   position: relative;
   display: block;
   text-align: center;
 
-  &.avatar-loading:before {
+  &.thumbnail-loading:before {
     position: absolute;
     background-color: #fff;
     opacity: .7;
@@ -15,7 +15,7 @@
     content: ' ';
   }
 
-  li.avatar-container {
+  li.thumbnail-container {
     position: relative;
     list-style-type: none;
     display: inline-block;
@@ -26,7 +26,7 @@
       margin-top: 15px;
     }
 
-    .avatar {
+    .thumbnail-selectable {
       width: 144px;
       height: 144px;
       border-radius: 3px;
@@ -43,7 +43,7 @@
         transition: background-color ease-in-out 0.2s;
         cursor: pointer;
       }
-      & > .avatar-inner {
+      & > .thumbnail-inner {
         position: relative;
         top: 7px;
         left: 5px;
@@ -58,7 +58,7 @@
         }
       }
     }
-    &>.avatar-controls {
+    &>.thumbnail-controls {
       margin-top: 5px;
     }
   }

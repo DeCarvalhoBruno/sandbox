@@ -1,12 +1,14 @@
 <?php namespace App\Http\Controllers\Ajax\Admin;
 
 use App\Contracts\Models\Blog as BlogProvider;
+use App\Contracts\Models\Media as MediaProvider;
+use App\Contracts\Models\User as UserProvider;
 use App\Filters\Blog as BlogFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreateBlogPost;
 use App\Models\Blog\BlogPostStatus;
-use App\Contracts\Models\User as UserProvider;
-use App\Contracts\Models\Media as MediaProvider;
+use App\Models\Entity;
+use App\Models\Media\MediaImgFormat;
 
 class Blog extends Controller
 {
@@ -46,16 +48,18 @@ class Blog extends Controller
                 'blog_post_status' => BlogPostStatus::getConstantByID(BlogPostStatus::BLOG_POST_STATUS_DRAFT),
                 'blog_post_user' => auth()->user()->getAttribute('username'),
                 'categories' => [],
-                'tags' => []
+                'tags' => [],
             ],
             'status_list' => BlogPostStatus::getConstants('BLOG'),
-            'blog_post_categories' => \App\Support\Trees\BlogPostCategory::getTree()
+            'blog_post_categories' => \App\Support\Trees\BlogPostCategory::getTree(),
+            'thumbnails'=>[]
         ];
     }
 
     /**
      * @param $slug
      * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
+     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
      * @return array
      */
     public function edit($slug, BlogProvider $blogRepo, MediaProvider $mediaRepo)
@@ -69,7 +73,8 @@ class Blog extends Controller
                 'blog_post_content',
                 'blog_post_excerpt',
                 'blog_post_status_name as blog_post_status',
-                'users.username as blog_post_user'
+                'users.username as blog_post_user',
+                'entity_type_id'
             ])->first();
         if (is_null($record)) {
             return null;
@@ -78,14 +83,16 @@ class Blog extends Controller
         $categories = \App\Support\Trees\BlogPostCategory::getTreeWithSelected($blogPost['blog_post_id']);
         $blogPost['categories'] = $categories->categories;
         $blogPost['tags'] = $blogRepo->tag()->getByPost($blogPost['blog_post_id']);
+        unset($blogPost['entity_type_id'], $blogPost['blog_post_id']);
         return [
             'record' => $blogPost,
             'status_list' => BlogPostStatus::getConstants('BLOG'),
             'blog_post_categories' => $categories->tree,
             'blog_post_slug' => $this->getPostUrl($record),
-            'thumbnails'=>$mediaRepo->image()->getImages(
+            'thumbnails' => $mediaRepo->image()->getImages(
                 $record->getAttribute('entity_type_id'), [
                 'media_uuid as uuid',
+                'media_in_use as used',
                 'media_extension as ext'
             ])
         ];
@@ -137,6 +144,40 @@ class Blog extends Controller
         $post = $blogRepo->updateOne($slug, $request->all());
         $blogRepo->category()->updatePost($request->getCategories(), $post);
         $blogRepo->tag()->updatePost($request->getTags(), $post);
+    }
+
+    /**
+     * @param $slug
+     * @param $uuid
+     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
+     * @return mixed
+     */
+    public function setFeaturedImage($slug, $uuid, MediaProvider $mediaRepo)
+    {
+        $mediaRepo->image()->setAsUsed($uuid);
+        $mediaRepo->image()->cropImageToFormat(
+            $uuid,
+            Entity::BLOG_POSTS,
+            \App\Models\Media\Media::IMAGE,
+            MediaImgFormat::FEATURED
+        );
+
+        return $mediaRepo->image()->getImagesFromSlug($slug);
+    }
+
+    /**
+     * @param string $slug
+     * @param string $uuid
+     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
+     * @return mixed
+     */
+    public function deleteImage($slug, $uuid, MediaProvider $mediaRepo)
+    {
+        $mediaRepo->image()->delete(
+            $uuid,
+            Entity::BLOG_POSTS,
+            \App\Models\Media\Media::IMAGE);
+        return $mediaRepo->image()->getImagesFromSlug($slug);
     }
 
 }

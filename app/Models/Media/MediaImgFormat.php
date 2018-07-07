@@ -10,6 +10,8 @@ class MediaImgFormat extends Model
 
     const ORIGINAL = 1;
     const THUMBNAIL = 2;
+    const FEATURED = 3;
+    const PAGE = 4;
     public $timestamps = false;
 
     protected $primaryKey = 'media_img_format_id';
@@ -25,11 +27,23 @@ class MediaImgFormat extends Model
             case static::ORIGINAL:
                 return (object)['width' => '0', 'height' => '0'];
             case static::THUMBNAIL:
-                return (object)['width' => ImageProcessor::$thumbnailWidth, 'height' => ImageProcessor::$thumbnailHeight];
+                return (object)[
+                    'width' => ImageProcessor::$thumbnailWidth,
+                    'height' => ImageProcessor::$thumbnailHeight
+                ];
+            case static::FEATURED:
+                return (object)['width' => 500, 'height' => 300];
+            case static::PAGE:
+                return (object)['width' => 720, 'height' => 540];
             default:
                 return [
-                    static::ORIGINAL  => (object)['width' => '0', 'height' => '0'],
-                    static::THUMBNAIL => (object)['width' => ImageProcessor::$thumbnailWidth, 'height' => ImageProcessor::$thumbnailHeight],
+                    static::ORIGINAL => (object)['width' => '0', 'height' => '0'],
+                    static::THUMBNAIL => (object)[
+                        'width' => ImageProcessor::$thumbnailWidth,
+                        'height' => ImageProcessor::$thumbnailHeight
+                    ],
+                    static::FEATURED => (object)['width' => 500, 'height' => 300],
+                    static::PAGE => (object)['width' => 720, 'height' => 540],
                 ];
         }
     }
@@ -41,10 +55,16 @@ class MediaImgFormat extends Model
                 return '';
             case static::THUMBNAIL:
                 return 'tb';
+            case static::FEATURED:
+                return 'ft';
+            case static::PAGE:
+                return 'pg';
             default:
                 return [
-                    static::ORIGINAL  => '',
+                    static::ORIGINAL => '',
                     static::THUMBNAIL => 'tb',
+                    static::FEATURED => 'ft',
+                    static::PAGE => 'pg',
                 ];
         }
     }

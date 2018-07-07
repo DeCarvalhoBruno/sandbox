@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ajax\Admin;
 
 use App\Contracts\Models\Media as MediaInterface;
+use App\Models\Media\MediaImgFormat;
 use App\Support\Media\UploadedImage;
 use App\Support\Providers\User as UserProvider;
 use App\Http\Controllers\Controller;
@@ -89,10 +90,17 @@ class Media extends Controller
     {
         $media->move();
         $media->makeThumbnail();
+        $this->mediaRepo->image()->cropImageToFormat(
+            $media->getUuid(),
+            $media->getTargetType(),
+            $media->getMediaType(),
+            MediaImgFormat::PAGE
+        );
         $targetEntityTypeId = $this->mediaRepo->image()->save($media);
         return $this->mediaRepo->image()->getImages(
             $targetEntityTypeId, [
             'media_uuid as uuid',
+            'media_in_use as used',
             'media_extension as ext'
         ]);
     }

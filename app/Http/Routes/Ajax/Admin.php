@@ -68,9 +68,16 @@ class Admin
             $r->post('blog/post/create', 'Blog@create')
                 ->middleware('can:add,App\Models\Blog\BlogPost');
             $r->get('blog/post/edit/{slug}', 'Blog@edit')
-                ->middleware('can:add,App\Models\Blog\BlogPost');
+                ->middleware('can:edit,App\Models\Blog\BlogPost');
             $r->post('blog/post/edit/{slug}', 'Blog@update')
-                ->middleware('can:add,App\Models\Blog\BlogPost');
+                ->middleware('can:edit,App\Models\Blog\BlogPost');
+
+            $r->patch('blog/post/edit/{slug}/image/{uuid}', 'Blog@setFeaturedImage')
+                ->middleware('can:edit,App\Models\Blog\BlogPost');
+            $r->delete('blog/post/edit/{slug}/image/{uuid}', 'Blog@deleteImage')
+                ->middleware('can:edit,App\Models\Blog\BlogPost');
+            $r->patch('blog/post/edit/{slug}/image/{uuid}', 'Blog@setFeaturedImage')
+                ->middleware('can:edit,App\Models\Blog\BlogPost');
 
             $r->patch('settings/profile', 'Settings\Profile@update');
             $r->patch('settings/password', 'Settings\Password@update');

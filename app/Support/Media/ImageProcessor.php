@@ -28,7 +28,7 @@ class ImageProcessor extends InterventionImage
      * @param int $formatId
      * @return \Intervention\Image\Image|string The resulting file's name or the image object
      */
-    public static function makeCroppedImage($path, $formatId=MediaImgFormat::THUMBNAIL)
+    public static function makeCroppedImage($path, $formatId = MediaImgFormat::THUMBNAIL)
     {
         return static::resizeToFormat(static::makeImg($path), $formatId);
     }
@@ -41,7 +41,7 @@ class ImageProcessor extends InterventionImage
      */
     private static function resizeToFormat(
         $image,
-        $formatId=MediaImgFormat::THUMBNAIL
+        $formatId = MediaImgFormat::THUMBNAIL
     ) {
         $format = MediaImgFormat::getFormatDimensions($formatId);
 
@@ -94,7 +94,7 @@ class ImageProcessor extends InterventionImage
      */
     public static function adjustImage($path, \stdClass $imageAlterations, $save = true)
     {
-        $image        = static::makeImg($path);
+        $image = static::makeImg($path);
         $imageChanged = false;
 
         //If height or width is different from original
@@ -134,6 +134,26 @@ class ImageProcessor extends InterventionImage
         return sprintf('%s_%s.%s', substr($filename, 0, $extensionPosition),
             MediaImgFormat::getFormatAcronyms($formatID),
             substr($filename, $extensionPosition + 1));
+    }
+
+    /**
+     * @param string $filename
+     * @param string $extension
+     * @param int $formatID
+     *
+     * @return string
+     */
+    public static function makeFormatFilename($filename, $extension, $formatID = MediaImgFormat::ORIGINAL)
+    {
+        $suffix = '';
+        if ($formatID != MediaImgFormat::ORIGINAL) {
+            $suffix .= sprintf('_%s', MediaImgFormat::getFormatAcronyms($formatID));
+        }
+        return sprintf('%s%s.%s',
+            $filename,
+            $suffix,
+            $extension
+        );
     }
 
 }

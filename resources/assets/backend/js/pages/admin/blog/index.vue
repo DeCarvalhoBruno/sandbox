@@ -2,6 +2,13 @@
     <div class="container">
         <div class="row">
             <div class="container">
+                <div class="row mb-3">
+                    <router-link :to="{
+                            name: 'admin.blog.add',
+                            }">
+                        <button class="btn btn-add" type="button">{{$t('pages.blog.add_post')}}</button>
+                    </router-link>
+                </div>
                 <table-filter :filterButtons="filterButtons" :entity="this.entity"
                               @filter-removed="removeFilter"
                               @filter-reset="resetFilters"/>

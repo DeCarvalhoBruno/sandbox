@@ -53,9 +53,7 @@
                                     <span>{{$t('pages.blog.author')}}: </span>
                                     <span class="form-field-togglable"
                                           @click="toggleEditing('form_user_editing')"
-                                    >
-{{form.blog_post_user}}
-                                    </span>
+                                    >{{form.blog_post_user}}</span>
                                 </template>
                             </div>
                             <div class="col-lg-4 form-head-row">
@@ -149,6 +147,8 @@
                                 type="blog_posts"
                                 media="image"
                                 :is-active="this.saveMode==='edit'"
+                                :thumbnails-parent="thumbnails"
+                                @images-updated="updateThumbnails"
                         >
                         </image-uploader>
                     </div>
@@ -204,6 +204,7 @@
         saveMode: null,
         blog_post_categories: [],
         tagInput: '',
+        thumbnails: [],
         form: new Form({
           blog_post_content: '',
           blog_post_title: '',
@@ -215,6 +216,9 @@
       }
     },
     methods: {
+      updateThumbnails (data) {
+        this.thumbnails = data
+      },
       addTag () {
         if (this.tagInput) {
           this.form.tags.push(this.tagInput)
@@ -296,6 +300,7 @@
         this.current_status = this.$t(`constants.${data.record.blog_post_status}`)
         this.saveMode = saveMode
         this.blog_post_categories = data.blog_post_categories
+        this.thumbnails = data.thumbnails
       }
     },
     beforeRouteEnter (to, from, next) {

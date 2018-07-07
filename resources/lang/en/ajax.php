@@ -218,12 +218,23 @@ return [
             'language' => 'Language',
             'avatar-tab' => 'Avatar',
             'avatar-ul-tab' => 'Upload avatar',
-            'delete_avatar' => 'Delete avatar'
+            'delete_avatar' => 'Delete avatar',
+            'click_default' => 'Click on an avatar to make it the default.',
+            'image_uploading' => 'Processing in progress...',
+            'image_proceed' => 'Proceed to cropping',
+            'image_uploaded' => 'The avatar has been processed, you can return to the avatar tab.'
         ],
         'blog' => [
+            'tab_available' => 'Available',
+            'tab_upload' => 'Upload',
             'author' => 'Author',
             'filter_title' => 'Filter by title',
             'filter_name' => 'Filter by name',
+            'delete_image' => 'Delete avatar',
+            'click_featured' => 'Click on an image to make it the featured image for this post.',
+            'image_uploaded' => 'Upload is complete.',
+            'add_post' => 'Add post'
+
         ]
     ],
     'tables' => [

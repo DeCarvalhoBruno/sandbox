@@ -67,17 +67,6 @@ abstract class Model
     }
 
     /**
-     * @param $id
-     * @param array $columns
-     *
-     * @return \Illuminate\Database\Eloquent\Model
-     */
-    public function getOne($id, $columns = ['*'])
-    {
-        return $this->createModel()->find($id, $columns);
-    }
-
-    /**
      * @param int $id
      *
      * @return \Illuminate\Database\Eloquent\Builder

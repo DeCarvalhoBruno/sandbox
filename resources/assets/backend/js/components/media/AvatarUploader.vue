@@ -3,21 +3,21 @@
         <div class="card w-100">
             <b-tabs card>
                 <b-tab :title="$t('pages.settings.avatar-tab')" @click="avatarTabClicked" active>
-                    <p v-show="avatars.length>1" class="font-italic">Click on an avatar to apply it.</p>
-                    <div class="avatar-group" :class="{'avatar-loading':ajaxIsLoading}">
+                    <p v-show="avatars.length>1" class="font-italic">{{$t('pages.settings.click_default')}}</p>
+                    <div class="thumbnail-group" :class="{'thumbnail-loading':ajaxIsLoading}">
                         <fa v-show="ajaxIsLoading" class="fa-5x sync-icon" icon="sync" spin></fa>
                         <ul class="p-0">
-                            <li class="avatar-container"
+                            <li class="thumbnail-container"
                                 v-for="(avatar,index) in avatars"
                                 :key="index">
-                                <div class="avatar" :class="{'selected':avatar.used}"
+                                <div class="thumbnail-selectable" :class="{'selected':avatar.used}"
                                      @click="setAvatarAsUsed(avatar.uuid,avatar.used)">
-                                    <div class="avatar-inner">
+                                    <div class="thumbnail-inner">
                                         <img :src="`/media/users/image_avatar/${avatar.uuid}.${avatar.ext}`">
                                     </div>
                                 </div>
 
-                                <div class="avatar-controls">
+                                <div class="thumbnail-controls">
                                     <button type="button" class="btn btn-sm"
                                             :class="{'btn-danger':!avatar.used,'disabled':avatar.used}"
                                             :title="$t('pages.settings.delete_avatar')"
@@ -89,7 +89,7 @@
                                                                 <button type="button"
                                                                         class="btn btn-lg btn-primary action-next-step"
                                                                         @click="currentStep=1">
-                                                                    Proceed to cropping
+                                                                    {{$t('pages.settings.image_proceed')}}
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -121,10 +121,8 @@
                                 </div>
                                 <div class="row justify-content-lg-center mt-3">
                                     <div class="col col-lg-6 text-center">
-                                        <p class="blinker blinker-red" v-if="ajaxIsLoading">Processing in
-                                            progress...</p>
-                                        <p v-else>The avatar has been processed, you can return to the avatar
-                                            tab.</p>
+                                        <p class="blinker blinker-red" v-if="ajaxIsLoading">{{$t('pages.blog.image_uploading')}}</p>
+                                        <p v-else>{{$t('pages.settings.image_uploaded')}}</p>
                                     </div>
                                 </div>
                             </div>
