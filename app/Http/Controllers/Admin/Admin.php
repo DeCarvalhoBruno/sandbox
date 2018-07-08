@@ -8,9 +8,4 @@ class Admin extends Controller
         return view('admin.default');
     }
 
-    public function test()
-    {
-        return view('admin.default');
-    }
-
 }

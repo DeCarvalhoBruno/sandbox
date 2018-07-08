@@ -1,9 +1,8 @@
 <?php namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Auth\Login;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 
-class Auth extends Login
+class Auth
 {
     use ThrottlesLogins;
     /**

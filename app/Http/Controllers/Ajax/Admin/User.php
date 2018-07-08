@@ -7,7 +7,7 @@ use App\Contracts\Models\Permission as PermissionProvider;
 use App\Contracts\RawQueries;
 use App\Events\PermissionEntityUpdated;
 use App\Filters\User as UserFilter;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Controller;
 use App\Http\Requests\Admin\UpdateUser;
 use App\Models\Entity;
 use Illuminate\Http\Request;
@@ -28,7 +28,7 @@ class User extends Controller
             ])->entityType()
             ->permissionRecord()
             ->permissionStore()
-            ->permissionMask(auth()->user()->getEntityType())
+            ->permissionMask($this->user->getEntityType())
             ->activated()
             ->where('username', '!=', $this->user->getAttribute('username'))
             ->filter($userFilter);
@@ -111,7 +111,7 @@ class User extends Controller
         return response(
             $userProvider->search(
                 preg_replace('/[^\w\s\-\']/', '', strip_tags($search)),
-                auth()->user()->getAttribute('entity_type_id'),
+                $this->user->getAttribute('entity_type_id'),
                 intval($limit)
             )->get(), Response::HTTP_OK);
         return response('', Response::HTTP_OK);
@@ -142,11 +142,10 @@ class User extends Controller
     public function session(UserProvider $userProvider)
     {
         $f = app()->make(RawQueries::class);
-        $user = auth()->user();
-        $entityTypeId = $user->getAttribute('entity_type_id');
+        $entityTypeId = $this->user->getAttribute('entity_type_id');
 
         return [
-            'user' => $user->only([
+            'user' => $this->user->only([
                 'first_name',
                 'last_name',
                 'email',
@@ -154,7 +153,7 @@ class User extends Controller
                 'full_name',
             ]),
             'permissions' => $f->getAllUserPermissions($entityTypeId),
-            'avatars' => $userProvider->getAvatars($user->getKey())
+            'avatars' => $userProvider->getAvatars($this->user->getKey())
         ];
     }
 

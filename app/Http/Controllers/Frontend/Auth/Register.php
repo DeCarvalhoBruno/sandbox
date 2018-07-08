@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Frontend\Auth;
 
 use App\Events\UserRegistered;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Frontend\Controller;
 use App\Http\Requests\Frontend\CreateUser;
 use App\Support\Providers\User as UserProvider;
 

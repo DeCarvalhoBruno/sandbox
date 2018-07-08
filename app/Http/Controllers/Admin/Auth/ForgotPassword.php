@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers\Admin\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Controller;
 use Illuminate\Http\Request;
 
 class ForgotPassword extends Controller

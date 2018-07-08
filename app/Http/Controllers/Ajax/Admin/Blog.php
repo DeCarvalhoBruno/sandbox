@@ -4,7 +4,7 @@ use App\Contracts\Models\Blog as BlogProvider;
 use App\Contracts\Models\Media as MediaProvider;
 use App\Contracts\Models\User as UserProvider;
 use App\Filters\Blog as BlogFilter;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Controller;
 use App\Http\Requests\Admin\CreateBlogPost;
 use App\Models\Blog\BlogPostStatus;
 use App\Models\Entity;
@@ -46,7 +46,7 @@ class Blog extends Controller
         return [
             'record' => [
                 'blog_post_status' => BlogPostStatus::getConstantByID(BlogPostStatus::BLOG_POST_STATUS_DRAFT),
-                'blog_post_user' => auth()->user()->getAttribute('username'),
+                'blog_post_user' => $this->user->getAttribute('username'),
                 'categories' => [],
                 'tags' => [],
             ],

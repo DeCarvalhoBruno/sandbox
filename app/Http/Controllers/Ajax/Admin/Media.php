@@ -6,7 +6,7 @@ use App\Contracts\Models\Media as MediaInterface;
 use App\Models\Media\MediaImgFormat;
 use App\Support\Media\UploadedImage;
 use App\Support\Providers\User as UserProvider;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Controller;
 use App\Models\Entity;
 use App\Models\Media\Media as MediaModel;
 use App\Support\Media\UploadedAvatar;
@@ -123,7 +123,7 @@ class Media extends Controller
         $avatarInfo->cropAvatar($input);
         $this->mediaRepo->image()->saveAvatar($avatarInfo);
 
-        return response($user->getAvatars(auth()->user()->getKey()), Response::HTTP_OK);
+        return response($user->getAvatars($this->user->getKey()), Response::HTTP_OK);
 
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Ajax\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Controller;
 use App\Http\Requests\Admin\UpdateMember;
 use App\Support\Providers\Group as GroupProvider;
 use Illuminate\Http\Response;

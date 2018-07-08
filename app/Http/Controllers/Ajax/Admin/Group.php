@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Ajax\Admin;
 
 use App\Events\PermissionEntityUpdated;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Controller;
 use App\Filters\Group as GroupFilter;
 use App\Contracts\Models\Group as GroupProvider;
 use App\Http\Requests\Admin\CreateGroup;
@@ -30,7 +30,7 @@ class Group extends Controller
                 ])->leftGroupMember()->entityType()
                 ->permissionRecord()
                 ->permissionStore()
-                ->permissionMask(auth()->user()->getAttribute('entity_type_id'))->groupBy([
+                ->permissionMask($this->user->getAttribute('entity_type_id'))->groupBy([
                     'groups.group_id',
                     'group_name',
                     'permission_mask',

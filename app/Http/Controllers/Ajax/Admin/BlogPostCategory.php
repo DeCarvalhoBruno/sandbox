@@ -1,7 +1,7 @@
 <?php namespace App\Http\Controllers\Ajax\Admin;
 
 use App\Contracts\Models\BlogCategory as BlogCategoryProvider;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Controller;
 use Illuminate\Http\Response;
 
 class BlogPostCategory extends Controller

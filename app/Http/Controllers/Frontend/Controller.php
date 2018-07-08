@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Frontend;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
@@ -22,7 +22,6 @@ class Controller extends BaseController
 
     public function __construct()
     {
-        auth()->setDefaultDriver('jwt');
         $this->user = auth()->user();
         $this->request = app('request');
     }

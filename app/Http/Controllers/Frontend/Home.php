@@ -1,13 +1,12 @@
 <?php namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Frontend\Controller;
 
 class Home extends Controller
 {
 
     public function index()
     {
-//        dd(auth()->guard());
         return view('website.home');
     }
 

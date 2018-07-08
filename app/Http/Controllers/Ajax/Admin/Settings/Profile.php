@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Ajax\Admin\Settings;
 
-use App\Http\Controllers\Controller;
+use App\Contracts\Models\Media as MediaProvider;
+use App\Http\Controllers\Admin\Controller;
 use App\Http\Requests\Admin\UpdateUser;
 use App\Models\Entity;
-use App\Support\Providers\Avatar;
 use App\Support\Providers\User as UserProvider;
-use App\Contracts\Models\Media as MediaProvider;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -23,7 +22,7 @@ class Profile extends Controller
     public function update(UpdateUser $request, UserProvider $user)
     {
         $savedUser = $user->updateOneByUsername(
-            auth()->user()->getAttribute('username'),
+            $this->user->getAttribute('username'),
             $request->all()
         );
         return response($savedUser, Response::HTTP_OK);
@@ -69,7 +68,7 @@ class Profile extends Controller
 
     private function getAvatars(UserProvider $user)
     {
-        return $user->getAvatars(auth()->user()->getKey());
+        return $user->getAvatars($this->user->getKey());
     }
 
 }

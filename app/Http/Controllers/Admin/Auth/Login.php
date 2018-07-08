@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers\Admin\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -37,7 +37,7 @@ class Login extends Controller
         $token = (string)$this->guard()->getToken();
         $expiration = $this->guard()->getPayload()->get('exp');
         return [
-            'user' => auth()->user()->only(['username', 'first_name', 'last_name']),
+            'user' => $this->user->only(['username', 'first_name', 'last_name']),
             'token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $expiration - time(),
