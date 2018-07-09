@@ -13,8 +13,7 @@
                         :badge="item.badge"
                         :items="item.items"
                         :router="item.router"
-                        :link="item.link"
-                >
+                        :link="item.link">
                 </drawer-item>
             </ul>
         </section>

@@ -1,6 +1,5 @@
 <template>
     <form @submit.prevent="update" @keydown="form.onKeydown($event)">
-        <!--<alert-form :form="form" :message="$t('message.password_updated')"/>-->
         <div class="form-group row">
             <label class="col-md-3 col-form-label text-md-right">{{ $t('pages.auth.new_password') }}</label>
             <div class="col-md-7">

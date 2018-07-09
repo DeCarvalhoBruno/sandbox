@@ -19,7 +19,8 @@
             <div v-if="user" class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <span><a class="nav-link sidebar-toggle" data-toggle="push-menu" role="button"><fa icon="bars"/></a></span>
+                        <span><a class="nav-link sidebar-toggle"
+                                 data-toggle="push-menu" role="button"><fa icon="bars"/></a></span>
                     </li>
                 </ul>
 

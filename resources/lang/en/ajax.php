@@ -49,6 +49,7 @@ return [
         'actions' => 'Actions',
         'email' => 'E-mail',
         'back' => 'Back',
+        'next' => 'Next',
         'permission' => 'Permission|Permissions',
         'toggle' => 'Toggle On/Off',
         'select_all' => 'Select all',
@@ -57,7 +58,9 @@ return [
         'reset_filters' => 'Reset Filters',
         'delete' => 'Delete',
         'reload' => 'Reload',
-        'status' => 'Status'
+        'status' => 'Status',
+        'expand_all' => 'Expand all',
+        'collapse all' => 'Collapse all',
     ],
     'db' => [
         'user' => 'User|Users',
@@ -224,7 +227,15 @@ return [
             'image_proceed' => 'Proceed to cropping',
             'image_uploaded' => 'The avatar has been processed, you can return to the avatar tab.'
         ],
+        'media' => [
+            'cropper_resize_image' => 'Resize image',
+            'cropper_zoom' => 'Use mouse wheel to zoom in/out',
+            'cropper_preview' => 'Preview result',
+            'cropper_crop_upload' => 'Crop & Upload',
+        ],
         'blog' => [
+            'categories' => 'Categories',
+            'media' => 'Media',
             'tab_available' => 'Available',
             'tab_upload' => 'Upload',
             'author' => 'Author',
@@ -233,8 +244,11 @@ return [
             'delete_image' => 'Delete avatar',
             'click_featured' => 'Click on an image to make it the featured image for this post.',
             'image_uploaded' => 'Upload is complete.',
-            'add_post' => 'Add post'
-
+            'add_post' => 'Add post',
+            'add_root_button' => 'Add root category',
+            'add_tag_pholder' => 'Type enter to add tag, click to remove',
+            'blog_post_excerpt' => 'Excerpt',
+            'excerpt_label' => 'This user-defined summary of the post can be displayed on the front page.'
         ]
     ],
     'tables' => [

@@ -25,7 +25,7 @@
                         <a v-if="backEnabled" class="wizard_back float-left"
                            @click="goBack()">
                             <i class="vgw-icon vgw-prev"></i>
-                            <span>Back</span>
+                            <span>{{$t('general.back')}}</span>
                         </a>
                     </div>
                     <!--<div class="col">-->
@@ -35,13 +35,13 @@
                         <a v-if="currentStep != steps.length - 1" class="wizard_next float-right"
                            :class="{'disabled': options[currentStep].nextDisabled}"
                            @click="goNext()">
-                            <span>Next</span>
+                            <span>{{$t('general.next')}}</span>
                             <i class="vgw-icon vgw-next"></i>
                         </a>
                         <a v-if="currentStep == steps.length - 1" class="wizard_next float-right final-step"
                            :class="{'disabled': options[currentStep].nextDisabled}"
                            @click="goNext()">
-                            Save
+                            {{$t('general.save')}}
                         </a>
                     </div>
                 </div>

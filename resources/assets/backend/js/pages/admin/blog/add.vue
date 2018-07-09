@@ -59,7 +59,7 @@
                             <div class="col-lg-4 form-head-row">
                                 <button type="button"
                                         class="btn btn-primary float-lg-right"
-                                        @click="save">Save
+                                        @click="save">{{$t('general.save')}}
                                 </button>
                             </div>
                         </div>
@@ -75,14 +75,12 @@
                             </div>
                         </div>
                         <div class="form-group row col-lg p-0 m-0">
-                            <!--<span>BLOG POST SLUG</span>-->
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row p-0 m-0 mb-1">
                 <div class="card col-lg p-0 m-0">
-
                     <div class="row p-0 m-0">
                         <!--<editor v-model="form.editorInput" :init="editorConfig"></editor>-->
                         <trumbowyg v-model="form.blog_post_content" :config="editorConfig"
@@ -106,13 +104,13 @@
                                v-model="tagInput"
                                @keyup.enter="addTag"
                                maxlength="35"
-                               placeholder="Type enter to add tag, click to remove"/>
+                               :placeholder="$t('pages.blog.add_tag_pholder')"/>
                     </div>
                 </div>
             </div>
             <div class="row p-0 m-0 mb-1">
                 <div class="card col-lg-6 p-0 m-0">
-                    <div class="card-header bg-transparent">Excerpt</div>
+                    <div class="card-header bg-transparent">{{$t('pages.blog.blog_post_excerpt')}}</div>
                     <div class="card-body">
                         <div class="form-group">
                             <label for="blog_post_excerpt"></label>
@@ -121,17 +119,19 @@
                                       placeholder="Post Excerpt"
                                       @input="changedField('blog_post_excerpt')"></textarea>
                             <small id="help_new_group_name" class="text-muted">
-                                This user-defined summary of the post can be displayed on the frontpage.
+                                $t('pages.blog.excerpt_label')
                             </small>
                         </div>
                     </div>
                 </div>
                 <div class="card col-lg-6 p-0 m-0">
-                    <div class="card-header bg-transparent">Categories</div>
+                    <div class="card-header bg-transparent">{{$t('pages.blog.categories')}}</div>
                     <div class="card-body">
                         <div class="mini-tree-list-container container">
                             <div class="row">
-                                <tree-list :data="this.blog_post_categories" :edit-mode="false"
+                                <tree-list :data="this.blog_post_categories"
+                                           :edit-mode="false"
+                                           :add-root-button-label="$t('pages.blog.add_root_button')"
                                            @tree-category-selected="categorySelected"/>
                             </div>
                         </div>
@@ -140,7 +140,7 @@
             </div>
             <div class="row p-0 m-0 mb-1">
                 <div class="card col-lg p-0 m-0">
-                    <div class="card-header bg-transparent">Media</div>
+                    <div class="card-header bg-transparent">{{$t('pages.blog.media')}}</div>
                     <div class="card-body">
                         <image-uploader
                                 :target="form.blog_post_slug"

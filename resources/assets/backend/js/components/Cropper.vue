@@ -2,7 +2,7 @@
     <div class="media-resize">
         <div class="resize-instructions container">
             <div class="row">
-                <h5 class="text-center">Redimensionnez l'image</h5>
+                <h5 class="text-center">{{$t('media.cropper_resize_image')}}</h5>
                 <div class="container p-0">
                     <div class="cropper row">
                         <img ref="img" class="cropper-img" :src="src"/>
@@ -16,12 +16,10 @@
                                             class="btn btn-primary cropper-reset" @click="resetCropper()">
                                         <fa icon="sync-alt"/>
                                     </button>
-                                    <span class="small pull-right">Use mouse wheel to zoom in/out</span>
+                                    <span class="small pull-right">{{$t('media.cropper_zoom')}}</span>
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                     <div class="row">
                         <div class="row">
@@ -31,7 +29,7 @@
                 </div>
             </div>
             <div class="row">
-                <h5 class="text-center">Prévisualisez le résultat</h5>
+                <h5 class="text-center">{{$t('media.cropper_preview')}}</h5>
                 <div class="col-xs-12 container-fluid">
                     <div class="cropper-preview-wrapper">
                         <div class="cropper-preview">
@@ -44,7 +42,7 @@
                     <div class="row">
                         <div class="col align-self-center">
                             <button class="btn btn-primary btn-crop" @click="crop()" type="button">
-                                Crop & Upload
+                                {{$t('media.cropper_crop_upload')}}
                             </button>
                         </div>
                     </div>
@@ -81,8 +79,6 @@
 
         ready: function () {
           vm.setCropboxDimensions()
-
-
         }
       })
     },
@@ -92,9 +88,6 @@
         this.setCropboxDimensions()
       },
       setCropboxDimensions () {
-        // let data = this.cropper.getCropBoxData()
-        // data.width = this.cropWidth
-        // data.height = this.cropHeight
         this.cropper.setAspectRatio(1)
       },
       crop(){
@@ -102,7 +95,6 @@
           'cropper_cropped',
           this.cropper.getData(true),
           this.cropper.getCroppedCanvas({imageSmoothingQuality:'high',width:128,height:128}),
-          // this.filename
         )
       }
     }

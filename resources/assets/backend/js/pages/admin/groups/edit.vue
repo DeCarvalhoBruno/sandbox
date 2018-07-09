@@ -42,7 +42,8 @@
                         </div>
                         <hr>
                         <div>
-                            <div class="card mb-2" v-for="(permissionSet,entity) in permissions.default" :key="entity">
+                            <div class="card mb-2" v-for="(permissionSet,entity) in permissions.default"
+                                 :key="entity">
                                 <div class="card-header">{{entity}}</div>
                                 <div class="card-body">
                                     <table class="table table-sm">

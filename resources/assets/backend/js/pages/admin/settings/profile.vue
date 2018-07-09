@@ -55,7 +55,6 @@
             </div>
         </div>
         <avatar-uploader :user="user" :avatars-parent="avatars"/>
-
         <div class="form-group row">
             <div class="col-md-9 ml-md-auto">
                 <v-button :loading="form.busy">{{ $t('general.update') }}</v-button>

@@ -61,8 +61,7 @@
                                                         :maskval="maskValue"
                                                         :entity="entity"
                                                         :enabled="hasPermission(permissions.computed,entity,type)"
-                                                        :hasPermission="hasPermission(permissions.computed,entity,type)"
-                                                >
+                                                        :hasPermission="hasPermission(permissions.computed,entity,type)">
                                                 </button-circle>
                                             </td>
                                         </tr>

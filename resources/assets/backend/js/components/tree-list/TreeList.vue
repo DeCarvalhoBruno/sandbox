@@ -8,11 +8,11 @@
         <div class="row p-0 m-0">
             <button v-if="editMode" type="button"
                     class="btn btn-primary"
-                    @click="addRoot">Add Root Category
+                    @click="addRoot">{{addRootButtonLabel}}
             </button>
             <button type="button"
                     class="btn btn-primary"
-                    @click="toggleExpand">{{!treeExpanded?'Expand all':'Collapse all'}}
+                    @click="toggleExpand">{{!treeExpanded?$t('general.expand_all'):$t('general.collapse_all')}}
             </button>
         </div>
         <div class="row p-0 mt-2 ml-1 d-block">
@@ -39,7 +39,8 @@
     },
     props: {
       data: {required: true},
-      editMode: {default: true}
+      editMode: {default: true},
+      addRootButtonLabel:{required: true}
     },
     data () {
       return {

@@ -1,16 +1,13 @@
 <template>
     <form @submit.prevent="update" @keydown="form.onKeydown($event)">
-        <!--<alert-form :form="form" :message="$t('message.password_updated')"/>-->
         <div class="form-group row">
             <label class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.language') }}</label>
             <div class="col-md-7">
                 <select class="custom-select" v-model="form.locale">
-                    <!--<option disabled value="">{{$t('pages.users.filter_group')}}</option>-->
                     <option v-for="(locale,idx) in locales" :key="idx" :value="locale">{{$t('locales.'+locale)}}
                     </option>
                 </select>
             </div>
-
         </div>
         <div class="form-group row">
             <div class="col-md-9 ml-md-auto">

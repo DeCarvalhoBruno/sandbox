@@ -4,7 +4,9 @@
             <p class="text-danger">{{error}}</p>
         </div>
         <div class="row">
-            <tree-list :data="data" @has-errored="displayError"></tree-list>
+            <tree-list :add-root-button-label="$t('pages.blog.add_root_button')"
+                       :data="data"
+                       @has-errored="displayError"></tree-list>
         </div>
     </div>
 </template>
