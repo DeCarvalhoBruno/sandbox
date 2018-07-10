@@ -3,11 +3,12 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
 class GroupTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseMigrations,WithoutMiddleware;
 
     public function test_show()
     {

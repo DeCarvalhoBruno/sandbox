@@ -62,7 +62,6 @@ class Admin
             $r->post('blog/categories/update/{id}', 'BlogPostCategory@update');
             $r->post('blog/categories/delete/{id}', 'BlogPostCategory@delete');
 
-
             $r->get('blog/post/create', 'Blog@add')
                 ->middleware('can:add,App\Models\Blog\BlogPost');
             $r->post('blog/post/create', 'Blog@create')

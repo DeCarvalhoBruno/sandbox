@@ -33,13 +33,13 @@ class Medias extends Migration
 
             $table->string('media_title')->nullable();
             $table->text('media_description')->nullable();
-            $table->string('media_uuid',32);
+            $table->string('media_uuid', 32);
             $table->boolean('media_in_use')->default(true);
 
             $table->foreign('media_id')
                 ->references('media_id')->on('media')
                 ->onDelete('cascade');
-            $table->unique(['media_type_id', 'media_uuid'],'idx_media_type_uuid');
+            $table->unique(['media_type_id', 'media_uuid'], 'idx_media_type_uuid');
         });
 
         Schema::create('media_digital', function (Blueprint $table) {
@@ -194,10 +194,12 @@ class Medias extends Migration
         $this->addMediaGroups();
         $this->addMedia();
         $this->imageFormats();
-        $this->mediaInUseProcedure();
+        if (App::environment() !== 'testing') {
+            $this->mediaInUseProcedure();
+        }
     }
 
-   private function addMedia()
+    private function addMedia()
     {
         $nameColumn = 'media_name';
         $mediaIdColumn = 'media_id';

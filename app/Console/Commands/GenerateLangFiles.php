@@ -154,45 +154,29 @@ class GenerateLangFiles extends Command
         }
     }
 
-    private function compareNCopy($baseArray, $comparedArray)
+    private function compareNCopy($old, $new)
     {
-        $result = array();
-        foreach ($baseArray as $baseKey => $baseValue) {
-            if (!isset($comparedArray[$baseKey])) {
-                $result[$baseKey] = '';
-            } else {
-                if (!is_array($baseValue)) {
-                    $result[$baseKey] = $comparedArray[$baseKey];
+        $result = [];
+        foreach ($old as $k => $v) {
+            if (!isset($new[$k])) {
+                if (!is_array($v)) {
+                    $result[$k] = '__'.$v;
                 } else {
-                    $baseArray = array_diff_key($baseValue, $comparedArray[$baseKey]);
-                    if (!empty($baseArray)) {
-                        $ar = [];
-                        foreach ($baseValue as $subBaseKey => $subBaseValue) {
-                            if (is_array($subBaseValue)) {
-                                if (isset($comparedArray[$baseKey][$subBaseKey])) {
-                                    $tmp[$subBaseKey] = $this->compareNCopy($subBaseValue,
-                                        $comparedArray[$baseKey][$subBaseKey]);
-                                } else {
-                                    $tmp = array_combine(array_keys($subBaseValue),
-                                        array_fill(0, count($subBaseValue), ''));
-                                }
-                                $ar = $tmp;
-                            } else {
-                                if (isset($comparedArray[$subBaseKey])) {
-                                    $ar[$subBaseKey] = $comparedArray[$subBaseKey];
-                                } else {
-                                    $ar[$subBaseKey] = '';
-                                }
-                            }
-                        }
-                        $result[$baseKey] = $ar;
+                    $result[$k] = $this->compareNCopy($v, []);
+                }
+            } else {
+                if (!is_array($v)) {
+                    $result[$k] = $new[$k];
+                } else {
+                    $z = array_diff_key($new[$k], $v);
+                    if (!empty($z)) {
+                        $result[$k] = array_merge($z, $this->compareNCopy($v, $new[$k]));
                     } else {
-                        $result[$baseKey] = $comparedArray[$baseKey];
+                        $result[$k] = $this->compareNCopy($v, $new[$k]);
                     }
                 }
             }
         }
-
         return $result;
     }
 

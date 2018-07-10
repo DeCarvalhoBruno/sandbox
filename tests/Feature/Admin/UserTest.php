@@ -4,11 +4,12 @@ namespace Tests\Feature\Admin;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
 class UserTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseMigrations, WithoutMiddleware;
 
     public function test_show()
     {
@@ -26,15 +27,6 @@ class UserTest extends TestCase
         $this->assertArraySubset(['first_name', 'last_name', 'email', 'username'], array_keys($json['user']));
     }
 
-    public function test_without_authentication()
-    {
-        $user = $this->createUser();
-
-        $this->getJson('/ajax/admin/users/' . $user->username)->assertStatus(401);
-
-        $this->patchJson("/ajax/admin/users/{$user->username}")->assertStatus(401);
-    }
-
     public function test_update_normal()
     {
         $user = $this->signIn()->createUser();
@@ -43,8 +35,8 @@ class UserTest extends TestCase
             [
                 'first_name' => 'Bobby',
                 'last_name' => 'Wagner',
-                'username' => 'b_wagner',
-                'email' => 'user@example.com',
+                'new_username' => 'b_wagner',
+                'new_email' => 'user@example.com',
                 'permissions' => []
             ])->assertStatus(204);
 
@@ -70,6 +62,32 @@ class UserTest extends TestCase
         $this->assertArrayHasKey('new_username', $json['errors']);
     }
 
+    public function test_delete_one_user()
+    {
+        $user = $this->signIn()->createUser();
+        $response = $this->delete(
+            "/ajax/admin/users/{$user->username}"
+        )->assertStatus(204);
+        
+    }
+
+    public function test_delete_batch_users()
+    {
+        $user = $this->signIn()->createUser(3);
+        $this->assertCount(
+            6,
+            \App\Models\User::all());
+        $users =array_map(function($v){return $v->username;},$user);
+
+        $this->postJson(
+            "/ajax/admin/users/batch/delete",['users'=>$users]
+        )->assertStatus(204);
+        $this->assertCount(
+            3,
+            \App\Models\User::all());
+
+    }
+
     private function validation_testing_setup($formParams)
     {
         $this->withExceptionHandling();
@@ -82,4 +100,5 @@ class UserTest extends TestCase
         $response->assertStatus(422);
         return $response;
     }
+    
 }

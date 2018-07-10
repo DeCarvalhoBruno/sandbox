@@ -120,15 +120,9 @@ END
 CREATE TRIGGER t_users_update_activated AFTER DELETE ON user_activations
   FOR EACH ROW
   BEGIN
-    declare var_user_id INT DEFAULT 0;
-    select user_id
-    into var_user_id
-    from users
-    where user_id = old.user_id;
-
     update users
     set activated = 1
-    where user_id = var_user_id;
+    where user_id = old.user_id;
 END;
 '
         );

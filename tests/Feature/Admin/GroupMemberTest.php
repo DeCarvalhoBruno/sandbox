@@ -2,14 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Http\Controllers\Ajax\Admin\GroupMember;
-use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
 class GroupMemberTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseMigrations, WithoutMiddleware;
 
     public function test_insertion()
     {
@@ -21,11 +20,15 @@ class GroupMemberTest extends TestCase
         $user = $this->createUser();
         $data = ['added' => [['id' => $user->username]]];
 
-        $this->assertCount(3, \App\Models\GroupMember::query()->where('group_id', $group->group_id)->get());
+        $this->assertCount(
+            3,
+            \App\Models\GroupMember::query()->where('group_id', $group->group_id)->get());
 
         $response = $this->patchJson("/ajax/admin/members/{$group->group_name}", $data);
 
-        $this->assertCount(4, \App\Models\GroupMember::query()->where('group_id', $group->group_id)->get());
+        $this->assertCount(
+            4,
+            \App\Models\GroupMember::query()->where('group_id', $group->group_id)->get());
         $response->assertStatus(204);
     }
 
@@ -38,11 +41,18 @@ class GroupMemberTest extends TestCase
 
         $data = ['removed' => [['id' => $users[2]->username]]];
 
-        $this->assertCount(3, \App\Models\GroupMember::query()->where('group_id', $group->group_id)->get());
+        $this->assertCount(
+            3,
+            \App\Models\GroupMember::query()->where('group_id', $group->group_id)->get());
 
-        $response = $this->patchJson("/ajax/admin/members/{$group->group_name}", $data);
+        $response = $this->patchJson(
+            "/ajax/admin/members/{$group->group_name}",
+            $data
+        );
 
-        $this->assertCount(2, \App\Models\GroupMember::query()->where('group_id', $group->group_id)->get());
+        $this->assertCount(
+            2,
+            \App\Models\GroupMember::query()->where('group_id', $group->group_id)->get());
         $response->assertStatus(204);
     }
 }
