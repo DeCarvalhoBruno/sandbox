@@ -1,5 +1,6 @@
 <?php namespace App\Emails;
 
+use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Queue\SerializesModels;
 
 class Email
@@ -13,6 +14,7 @@ class Email
     protected $from;
     protected $fromName;
     protected $testing;
+    protected $vars;
 
 
     /**
@@ -46,6 +48,14 @@ class Email
     protected function sendmail()
     {
         $currentInstance = $this;
+
+        if (\Config::get('mail.driver') == 'mailgun') {
+            $transport = new MailgunTransport(new GuzzleClient(), \Config::get('services.mailgun.secret'),
+                $this->domain, $this->vars);
+            $mailer    = new \Swift_Mailer($transport);
+
+            \Mail::setSwiftMailer($mailer);
+        }
 
         \Mail::send($this->viewName, $this->view, function ($message) use ($currentInstance) {
             return call_user_func([$currentInstance, 'message'], $message);
