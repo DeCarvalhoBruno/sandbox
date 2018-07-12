@@ -138,7 +138,8 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
                         [
                             'user' => $this,
                             'token' => $token
-                        ])
+                        ]),
+                    SendMail::DRIVER_SMTP
                 )
             );
 
@@ -227,7 +228,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
         });
     }
 
-    public static function queryHighestRankedGroup($userIdList=null)
+    public static function queryHighestRankedGroup($userIdList = null)
     {
         $query = (new static)->newBaseQueryBuilder()
             ->select(['users.user_id', \DB::raw('min(groups.group_mask) as gmask')])

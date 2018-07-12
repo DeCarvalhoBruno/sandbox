@@ -32,9 +32,21 @@ class Email
         $this->testing  = $testing;
     }
 
-    /**
-     * @return mixed
-     */
+    public function sendMailgun()
+    {
+        $this->prepareViewData();
+        $this->setDomain();
+
+        if (\Config::get('mail.driver') == 'mailgun') {
+            $transport = new MailgunTransport(new GuzzleClient(), \Config::get('services.mailgun.secret'),
+                $this->domain, $this->vars);
+            $mailer    = new \Swift_Mailer($transport);
+
+            \Mail::setSwiftMailer($mailer);
+        }
+        $this->sendmail();
+    }
+
     public function send()
     {
         $this->prepareViewData();
@@ -48,14 +60,6 @@ class Email
     protected function sendmail()
     {
         $currentInstance = $this;
-
-        if (\Config::get('mail.driver') == 'mailgun') {
-            $transport = new MailgunTransport(new GuzzleClient(), \Config::get('services.mailgun.secret'),
-                $this->domain, $this->vars);
-            $mailer    = new \Swift_Mailer($transport);
-
-            \Mail::setSwiftMailer($mailer);
-        }
 
         \Mail::send($this->viewName, $this->view, function ($message) use ($currentInstance) {
             return call_user_func([$currentInstance, 'message'], $message);
