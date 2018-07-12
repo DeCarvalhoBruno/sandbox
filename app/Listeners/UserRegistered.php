@@ -2,6 +2,7 @@
 
 use App\Emails\User\Welcome as WelcomeEmail;
 use App\Events\UserRegistered as UserRegisteredEvent;
+use App\Jobs\SendMail;
 
 class UserRegistered extends Listener
 {
@@ -14,11 +15,12 @@ class UserRegistered extends Listener
     public function handle(UserRegisteredEvent $event)
     {
         $this->dispatch(
-            new \App\Jobs\SendMail(
+            new SendMail(
                 new WelcomeEmail([
                     'user' => $event->getUser(),
                     'activation_token' => $event->getToken()
-                ])
+                ]),
+                SendMail::DRIVER_SMTP
             )
         );
     }
