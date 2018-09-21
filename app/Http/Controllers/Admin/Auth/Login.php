@@ -37,11 +37,25 @@ class Login extends Controller
         $token = (string)$this->guard()->getToken();
         $expiration = $this->guard()->getPayload()->get('exp');
         return [
-            'user' => $this->user->only(['username', 'first_name', 'last_name']),
+            'user' => auth()->user()->only(['username', 'first_name', 'last_name']),
             'token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $expiration - time(),
         ];
+    }
+
+    /**
+     * Validate the user login request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     */
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+        ]);
     }
 
     /**

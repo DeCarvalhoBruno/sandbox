@@ -54,7 +54,7 @@ class Image extends Model implements ImageInterface
     public function saveAvatar(ImageContract $image)
     {
         $targetEntityTypeId = $this->save($image);
-        $this->avatar->setAsUsed($image->getUuid());
+        $this->setAsUsed($image->getUuid());
         return $targetEntityTypeId;
     }
 
