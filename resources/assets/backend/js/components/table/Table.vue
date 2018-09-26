@@ -60,7 +60,7 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="container">
+            <div id="paginator_container" class="container mt-4">
                 <div class="row justify-content-md-center">
                     <div class="paginator col-lg-6">
                         <b-pagination-nav v-if="lastPage>1" :link-gen="linkGen" :total-rows="total" :value="currentPage"

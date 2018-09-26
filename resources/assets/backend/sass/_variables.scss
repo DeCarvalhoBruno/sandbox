@@ -34,7 +34,7 @@ $line-height-computed: floor(($font-size-base-px * $line-height-base));
 // Navbar
 $navbar-default-bg: #fff;
 $backend-navbar-width: 15%;
-$navbar-height: 70px;
+$navbar-height: 50px;
 $navbar-padding-vertical: (($navbar-height - $line-height-computed) / 2);
 $grid-gutter-width: 30px;
 $navbar-padding-horizontal: floor(($grid-gutter-width / 2));

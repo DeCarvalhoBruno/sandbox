@@ -108,12 +108,12 @@
       background-color: inherit;
     }
     > a > .pull-right-container {
-      //display: block!important;
+      display: block!important;
       position: relative !important;
       float: right;
       width: auto !important;
       left: 200px - 20px !important;
-      top: -22px !important;
+      top: -30px !important;
       z-index: 900;
       > .label:not(:first-of-type) {
         display: none;
@@ -161,5 +161,6 @@
     right: 10px;
     top: 50%;
     margin-top: -7px;
+    z-index:50;
   }
 }

@@ -23,21 +23,27 @@
                                  data-toggle="push-menu" role="button"><fa icon="bars"/></a></span>
                     </li>
                 </ul>
-
-                <b-dropdown right :text="user.username" variant="dark" class="navbar-nav ml-auto">
-                    <b-dropdown-item>
-                        <router-link :to="{ name: 'admin.settings.profile' }">
+                <ul class="navbar-nav nav justify-content-end">
+                    <div class="btn-nav-group">
+                        <div class="btn-nav">
+                            <router-link :to="{ name: 'admin.settings.profile' }"
+                                         :title="$t('general.settings')">
+                                <fa icon="envelope" fixed-width size="lg"/>
+                            </router-link>
+                        </div>
+                    </div>
+                    <b-dropdown right :text="user.username" variant="dark">
+                        <b-dropdown-item router-tag="a" :to="{ name: 'admin.settings.profile' }">
                             <fa icon="cog" fixed-width/>
                             {{ $t('general.settings') }}
-                        </router-link>
-
-                    </b-dropdown-item>
-                    <b-dropdown-divider/>
-                    <b-dropdown-item-button @click="logout">
-                        <fa icon="sign-out-alt" fixed-width/>
-                        {{ $t('general.logout') }}
-                    </b-dropdown-item-button>
-                </b-dropdown>
+                        </b-dropdown-item>
+                        <b-dropdown-divider/>
+                        <b-dropdown-item-button @click="logout">
+                            <fa icon="sign-out-alt" fixed-width/>
+                            {{ $t('general.logout') }}
+                        </b-dropdown-item-button>
+                    </b-dropdown>
+                </ul>
             </div>
         </nav>
     </header>
@@ -46,23 +52,22 @@
 <script>
   import Vue from 'vue'
   import { mapGetters } from 'vuex'
-  import { Dropdown } from 'bootstrap-vue/es/components'
+  import { Dropdown, Link } from 'bootstrap-vue/es/components'
 
   Vue.use(Dropdown)
 
   export default {
-    data: () => ({
-      appName: window.config.appName
-    }),
-
-    components: {
-      Dropdown
+    data: function () {
+      return {
+        appName: window.config.appName
+      }
     },
-
+    components: {
+      Dropdown, Link
+    },
     computed: mapGetters({
       user: 'auth/user'
     }),
-
     methods: {
       async logout () {
         // Log out the user.
