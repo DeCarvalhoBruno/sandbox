@@ -24,7 +24,7 @@
       'users' => 'Utilisateurs',
       'groups' => 'Groupes',
       'blog' => 'Blog',
-      'list' => 'Lister',
+      'list' => 'Liste',
       'add' => 'Ajouter',
       'category' => '__Categories',
    ],

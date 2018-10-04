@@ -1,22 +1,19 @@
 {
     "private": true,
     "scripts": {
-        "dev": "npm run development",
-        "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.backend.mix",
+        "poly": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=webpack.extras.js",
+        "gulp": "cross-env NODE_ENV=development node_modules/gulp/bin/gulp.js",
+        "dev": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.backend.mix",
         "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.backend.mix",
         "watch-poll": "npm run watch -- --watch-poll",
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.backend.mix",
-        "prod": "npm run production",
-        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.backend.mix",
-        "dev-frontend": "npm run development-frontend",
-        "development-frontend": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.frontend.mix",
-        "watch-frontend": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.frontend.mix",
-        "watch-poll-frontend": "npm run watch -- --watch-poll",
-        "hot-frontend": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.frontend.mix",
-        "prod-frontend": "npm run production-frontend",
-        "production-frontend": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.frontend.mix",
-        "poly": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=webpack.extras.js",
-        "gulp": "cross-env NODE_ENV=development node_modules/gulp/bin/gulp.js"
+        "prod": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.backend.mix",
+        "dev-blade": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.frontend.blade.mix",
+        "watch-blade": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.frontend.blade.mix",
+        "prod-blade": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.frontend.blade.mix",
+        "dev-spa": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.frontend.spa.mix",
+        "watch-spa": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.frontend.spa.mix",
+        "prod-spa": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.frontend.blade.mix"
     },
     "dependencies": {
         "@fortawesome/fontawesome": "^1.1.3",

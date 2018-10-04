@@ -13,7 +13,7 @@ class Admin extends Routes
         unset($availableLocales[app()->getLocale()]);
         foreach ($availableLocales as $k => $v) {
             $router->group([
-                'prefix' => sprintf('/%s/admin', $k),
+                'prefix' => '/admin',
             ], call_user_func('static::defaultRouteGroup', $k));
         }
     }

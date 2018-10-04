@@ -17,5 +17,4 @@
    'admin.settings.profile' => 'admin/parametres/profil',
    'admin.settings.password' => 'admin/parametres/mot-de-passe',
    'admin.login' => 'admin/connexion',
-
 ];

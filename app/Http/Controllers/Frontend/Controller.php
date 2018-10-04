@@ -22,6 +22,7 @@ class Controller extends BaseController
 
     public function __construct()
     {
+        auth()->setDefaultDriver('web');
         $this->user = auth()->user();
         $this->request = app('request');
     }

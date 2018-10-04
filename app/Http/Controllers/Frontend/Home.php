@@ -7,7 +7,7 @@ class Home extends Controller
 
     public function index()
     {
-        return view('website.home');
+        return view('frontend.home');
     }
 
 }

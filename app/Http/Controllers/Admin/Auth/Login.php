@@ -9,11 +9,11 @@ class Login extends Controller
 {
     use AuthenticatesUsers;
 
-    public function __construct()
-    {
-        auth()->setDefaultDriver('jwt');
-    }
-
+//    public function __construct()
+//    {
+//        auth()->setDefaultDriver('jwt');
+//    }
+//
     protected function guard()
     {
         return \Auth::guard('jwt');

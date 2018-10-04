@@ -13,7 +13,7 @@ class Login extends Controller
     public function index()
     {
         $status = \Session::get('status');
-        return view('website.auth.login',compact('status'));
+        return view('frontend.auth.login',compact('status'));
     }
 
     public function sendLoginResponse($request)
@@ -36,7 +36,7 @@ class Login extends Controller
                 return redirect(route_i18n('login'))->with('status', 'activated');
             }
         }
-        return view('website.auth.activation_error');
+        return view('frontend.auth.activation_error');
     }
 
 }

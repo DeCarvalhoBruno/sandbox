@@ -132,13 +132,13 @@ let routes = [
 ]
 
 let locale = store.getters['lang/locale']
-let isDefaultLocale = (
-  locale === store.getters['lang/fallback']
-)
+// let isDefaultLocale = (
+//   locale === store.getters['lang/fallback']
+// )
 let prefix = ''
-if (!isDefaultLocale) {
-  prefix += '/' + locale
-}
+// if (!isDefaultLocale) {
+//   prefix += '/' + locale
+// }
 routes = translateRoute(routes, locale, prefix)
 
 function translateRoute (routes, locale, prefix) {
@@ -150,7 +150,7 @@ function translateRoute (routes, locale, prefix) {
       routes[i].children = translateRoute(routes[i].children, locale, prefix)
     }
   }
+
   return routes
 }
-
 export default routes
