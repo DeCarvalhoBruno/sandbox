@@ -6,18 +6,20 @@ class Frontend extends Routes
 {
     public function bind(Router $router)
     {
-        $router->group([
-            'prefix' => '/',
-            'middleware' => ['web'],
-            'namespace' => 'App\Http\Controllers\Frontend',
-        ], call_user_func('static::defaultRouteGroup', null));
+//        $router->group([
+//            'prefix' => '/',
+//            'middleware' => ['web'],
+//            'namespace' => 'App\Http\Controllers\Frontend',
+//        ], call_user_func('static::defaultRouteGroup', null));
         $availableLocales = config('app.locales');
         unset($availableLocales[app()->getLocale()]);
-//        foreach ($availableLocales as $k => $v) {
-//            $router->group([
-//                'prefix' => sprintf('/%s', $k),
-//            ], call_user_func('static::defaultRouteGroup', $k));
-//        }
+        foreach ($availableLocales as $k => $v) {
+            $router->group([
+                'prefix' => sprintf('/%s', $k),
+                'middleware' => ['web'],
+                'namespace' => 'App\Http\Controllers\Frontend',
+            ], call_user_func('static::defaultRouteGroup', $k));
+        }
     }
 
     public static function defaultRouteGroup($locale)
@@ -29,10 +31,6 @@ class Frontend extends Routes
             $r->group([
             ], call_user_func('static::auth', $locale));
 
-//            $r->group([
-//                'middleware' => ['web'],
-//                'namespace' => 'App\Http\Controllers\Admin',
-//            ], call_user_func('static::guestRoutes'));
         };
     }
 
