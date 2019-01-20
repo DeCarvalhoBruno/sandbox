@@ -70,11 +70,11 @@
                                                             </div>
                                                             <div class="col preview-actions">
                                                                 <div class="row preview-row">
-                                                                    <p class="size">
-                                                                        {{(file.size/1024/1024).toPrecision(3)}}&nbsp;{{$t('units.MB')}}</p>
+                                                                    <p class="size"
+                                                                    >{{(file.size/1024/1024).toPrecision(3)}}&nbsp;{{$t('units.MB')}}</p>
                                                                 </div>
                                                                 <div class="row preview-row">
-                                                                    <div id="dropzone_progress" class="progress">
+                                                                    <div id="dropzone_progress" class="progress" v-show="file.upload.progress<100">
                                                                         <div class="progress-bar progress-bar-striped progress-bar-animated"
                                                                              role="progressbar"
                                                                              :style="`width: ${file.upload.progress}%`"
@@ -83,25 +83,26 @@
                                                                              aria-valuemax="100"></div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="row button-crop-wrapper"
-                                                                 v-show="file.status==='success'">
-                                                                <button type="button"
-                                                                        class="btn btn-lg btn-primary action-next-step"
-                                                                        @click="currentStep=1">
-                                                                    {{$t('pages.settings.image_proceed')}}
-                                                                </button>
+                                                                <transition name="fade">
+                                                                <div class="row preview-row"
+                                                                     v-show="file.status==='success'">
+                                                                    <button type="button"
+                                                                            class="btn btn-lg btn-primary text-center"
+                                                                            @click="currentStep=1">{{$t('pages.settings.image_proceed')}}</button>
+                                                                </div>
+                                                                </transition>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row mt-1">
-                                                    <div class="col">
+                                                    <div class="container position-relative mb-2 font-weight-bold">
+                                                        <div class="col" v-show="file.status==='error'">
                                                         <span
                                                                 class="dropzone-error clearfix text-danger"
                                                                 v-html="error"></span>
+                                                        </div>
                                                     </div>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </template>
@@ -121,7 +122,7 @@
                                 </div>
                                 <div class="row justify-content-lg-center mt-3">
                                     <div class="col col-lg-6 text-center">
-                                        <p class="blinker blinker-red" v-if="ajaxIsLoading">{{$t('pages.blog.image_uploading')}}</p>
+                                        <p class="blinker blinker-red" v-if="ajaxIsLoading">{{$t('pages.settings.image_uploading')}}</p>
                                         <p v-else>{{$t('pages.settings.image_uploaded')}}</p>
                                     </div>
                                 </div>
@@ -193,6 +194,7 @@
           // thumbnailWidth:3000,
           // thumbnailHeight:3000,
           // autoProcessQueue:false,
+          maxFilesize:2,
           acceptedFileTypes: ['image/jpg', 'image/jpeg', 'image/png'],
           clickable: false
         },
@@ -206,9 +208,6 @@
         vm.croppedImageData.dataURI = croppedCanvas.toDataURL()
         vm.currentStep = 2
         vm.ajaxIsLoading = true
-
-        //{ x: 521.5, y: 149, width: 1192, height: 1192, rotate: 0, scaleX: 1, scaleY: 1 }
-
         axios.post('/ajax/admin/media/crop',
           {uuid: vm.croppedImageData.filename, height: cp.height, width: cp.width, x: cp.x, y: cp.y})
           .then(({data}) => {
@@ -242,8 +241,8 @@
           vm.minCropBoxWidth = 128
           vm.uploadSuccess=true
         })
-        this.$refs.dropzone.$on('error', function (file, error) {
-          vm.error = error
+        this.$refs.dropzone.$on('error', function (file, error, xhr) {
+          vm.error = xhr.response.msg
         })
       },
       deleteAvatar (uuid, alreadyUsed) {

@@ -12,7 +12,16 @@ class ImageUpload
     protected $fileExtension;
     protected $path;
     protected $uuid;
+    /**
+     * @var The type of user/feature the media is pertaining to, i.e. a user or a blog post
+     * as defined in the Entity model
+     * @var \App\Models\Entity
+     */
     protected $targetType;
+    /**
+     * @var The type of media as defined in the media model class constants
+     * @see \App\Models\Media\Media
+     */
     protected $mediaType;
     protected $thumbnailFilename;
     protected $hddFilename;
@@ -50,7 +59,7 @@ class ImageUpload
 
     public function getHddFilename()
     {
-        return $this->filename;
+        return $this->hddFilename;
     }
 
     public function getUuid()

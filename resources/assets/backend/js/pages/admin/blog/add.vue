@@ -82,7 +82,6 @@
             <div class="row p-0 m-0 mb-1">
                 <div class="card col-lg p-0 m-0">
                     <div class="row p-0 m-0">
-                        <!--<editor v-model="form.editorInput" :init="editorConfig"></editor>-->
                         <trumbowyg v-model="form.blog_post_content" :config="editorConfig"
                                    class="form-control"
                                    @input="changedField('blog_post_content')"
@@ -118,9 +117,8 @@
                                       id="blog_post_excerpt" rows="5" v-model="form.blog_post_excerpt"
                                       placeholder="Post Excerpt"
                                       @input="changedField('blog_post_excerpt')"></textarea>
-                            <small id="help_new_group_name" class="text-muted">
-                                $t('pages.blog.excerpt_label')
-                            </small>
+                            <small id="help_new_group_name" class="text-muted"
+                                >{{$t('pages.blog.excerpt_label')}}</small>
                         </div>
                     </div>
                 </div>
@@ -245,7 +243,6 @@
       getConfig () {
         let vm = this
         return {
-          imageWidthModalEdit: true,
           semantic: false,
           btns: [
             ['viewHTML'],

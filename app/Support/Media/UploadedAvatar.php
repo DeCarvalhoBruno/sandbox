@@ -47,11 +47,12 @@ class UploadedAvatar extends ImageUpload implements Image
                 $this->filename,
                 $this->targetSlug,
                 $this->targetType,
+                $this->mediaType,
                 $this->fileExtension,
                 $this->uuid
             )
         );
-        \Cache::forever('temporary_avatars', $data);
+        \Cache::put('temporary_avatars', $data, 120);
     }
 
     public function processImage()

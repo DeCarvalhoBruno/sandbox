@@ -11,12 +11,10 @@
                         <div class="container p-0">
                             <div class="row">
                                 <div class="col align-self-center">
-
                                     <button type="button" :title="$t('general.reload')"
                                             class="btn btn-primary cropper-reset" @click="resetCropper()">
                                         <fa icon="sync-alt"/>
                                     </button>
-                                    <span class="small pull-right">{{$t('media.cropper_zoom')}}</span>
                                 </div>
                             </div>
                         </div>
@@ -37,12 +35,15 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row mt-5">
                 <div class="container">
                     <div class="row">
                         <div class="col align-self-center">
-                            <button class="btn btn-primary btn-crop" @click="crop()" type="button">
-                                {{$t('media.cropper_crop_upload')}}
+                            <button class="btn btn-primary" @click="crop()" type="button"
+                            >{{$t('media.cropper_crop_upload')}}
+                            </button>
+                            <button class="btn btn-primary btn-light" @click="cancel()" type="button"
+                            >{{$t('general.cancel')}}
                             </button>
                         </div>
                     </div>
@@ -96,7 +97,13 @@
           this.cropper.getData(true),
           this.cropper.getCroppedCanvas({imageSmoothingQuality:'high',width:128,height:128}),
         )
-      }
+      },
+      cancel(){
+        this.$root.$emit(
+          'wizard_step_reset',
+        )
+      },
+
     }
   }
 </script>

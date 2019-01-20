@@ -11,10 +11,11 @@ class SimpleImage extends ImageUpload implements Image
      * @param $filename
      * @param $target
      * @param $type
+     * @param $mediaType
      * @param $extension
      * @param $uuid
      */
-    public function __construct($filename, $target, $type, $extension, $uuid)
+    public function __construct($filename, $target, $type, $mediaType, $extension, $uuid)
     {
         $this->targetSlug = $target;
         $this->hddFilename = sprintf('%s.%s', $uuid, $extension);
@@ -22,6 +23,7 @@ class SimpleImage extends ImageUpload implements Image
         $this->fileExtension = $extension;
         $this->uuid = $uuid;
         $this->targetType = $type;
+        $this->mediaType = $mediaType;
     }
 
 

@@ -22,16 +22,24 @@
     color: #FFFFFF;
     padding: .3rem;
     flex: 1;
+
+    &:focus, &:active{
+      outline:none;
+    }
   }
 
   .badge {
     padding: .8em;
     margin: .2em;
     cursor: default;
+
+    &:first-child {
+      margin-left: .5em;
+    }
   }
 
-  .badge-tag-icon{
-    margin-left:.3em;
+  .badge-tag-icon {
+    margin-left: .3em;
   }
 
 }
@@ -84,6 +92,7 @@
   .button-badge-close:before {
     transform: rotate(45deg);
   }
+
   .button-badge-close:after {
     transform: rotate(-45deg);
   }

@@ -46,6 +46,7 @@ class Media extends Controller
                 throw new \UnexpectedValueException('This media type does not match anything on disk');
             }
 
+            try{
             switch ($input->media) {
                 case "image_avatar":
                     $media = new UploadedAvatar(
@@ -70,6 +71,11 @@ class Media extends Controller
                     break;
                 default:
                     break;
+            }
+            }catch(\Exception $e){
+                return response([
+                    'msg'=>trans('error.media.type_size')
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
             return response([
                 'filename' => $media->getHddFilename(),
@@ -119,7 +125,6 @@ class Media extends Controller
          * @var \App\Support\Media\SimpleImage $avatarInfo
          */
         $avatarInfo = \Cache::get('temporary_avatars')->pull(substr($input->uuid, 0, 32));
-
         $avatarInfo->cropAvatar($input);
         $this->mediaRepo->image()->saveAvatar($avatarInfo);
 

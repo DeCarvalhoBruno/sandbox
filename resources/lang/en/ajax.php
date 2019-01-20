@@ -227,12 +227,6 @@ return [
             'image_proceed' => 'Proceed to cropping',
             'image_uploaded' => 'The avatar has been processed, you can return to the avatar tab.'
         ],
-        'media' => [
-            'cropper_resize_image' => 'Resize image',
-            'cropper_zoom' => 'Use mouse wheel to zoom in/out',
-            'cropper_preview' => 'Preview result',
-            'cropper_crop_upload' => 'Crop & Upload',
-        ],
         'blog' => [
             'categories' => 'Categories',
             'media' => 'Media',
@@ -276,6 +270,11 @@ return [
         'max_files_exceeded' => 'The maximum number of files was reached.',
         'delete_media' => 'Delete media',
         'edit_media' => 'Edit media'
+    ],
+    'media' => [
+        'cropper_resize_image' => 'Use handles to resize image',
+        'cropper_preview' => 'Cropped preview',
+        'cropper_crop_upload' => 'Crop & Upload',
     ],
     'locales' => [
         'en' => 'English',
