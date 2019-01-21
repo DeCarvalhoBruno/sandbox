@@ -74,7 +74,8 @@
                                                                     >{{(file.size/1024/1024).toPrecision(3)}}&nbsp;{{$t('units.MB')}}</p>
                                                                 </div>
                                                                 <div class="row preview-row">
-                                                                    <div id="dropzone_progress" class="progress" v-show="file.upload.progress<100">
+                                                                    <div id="dropzone_progress" class="progress"
+                                                                         v-show="file.upload.progress<100">
                                                                         <div class="progress-bar progress-bar-striped progress-bar-animated"
                                                                              role="progressbar"
                                                                              :style="`width: ${file.upload.progress}%`"
@@ -84,12 +85,14 @@
                                                                     </div>
                                                                 </div>
                                                                 <transition name="fade">
-                                                                <div class="row preview-row"
-                                                                     v-show="file.status==='success'">
-                                                                    <button type="button"
-                                                                            class="btn btn-lg btn-primary text-center"
-                                                                            @click="currentStep=1">{{$t('pages.settings.image_proceed')}}</button>
-                                                                </div>
+                                                                    <div class="row preview-row"
+                                                                         v-show="file.status==='success'">
+                                                                        <button type="button"
+                                                                                class="btn btn-lg btn-primary text-center"
+                                                                                @click="currentStep=1">
+                                                                            {{$t('pages.settings.image_proceed')}}
+                                                                        </button>
+                                                                    </div>
                                                                 </transition>
                                                             </div>
                                                         </div>
@@ -102,7 +105,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </template>
@@ -122,7 +124,9 @@
                                 </div>
                                 <div class="row justify-content-lg-center mt-3">
                                     <div class="col col-lg-6 text-center">
-                                        <p class="blinker blinker-red" v-if="ajaxIsLoading">{{$t('pages.settings.image_uploading')}}</p>
+                                        <p class="blinker blinker-red" v-if="ajaxIsLoading"
+                                        >{{$t('pages.settings.image_uploading')}}
+                                        </p>
                                         <p v-else>{{$t('pages.settings.image_uploaded')}}</p>
                                     </div>
                                 </div>
@@ -188,18 +192,14 @@
         uploadedImageFilename: null,
         maxFilesize: 2,
         croppedImageData: Object,
-        error:'',
+        error: '',
         dropzoneOptions: {
-          // createImageThumbnails:false,
-          // thumbnailWidth:3000,
-          // thumbnailHeight:3000,
-          // autoProcessQueue:false,
-          maxFilesize:2,
+          maxFilesize: 2,
           acceptedFileTypes: ['image/jpg', 'image/jpeg', 'image/png'],
           clickable: false
         },
         avatarSubmitted: false,
-        uploadSuccess:false
+        uploadSuccess: false
       }
     },
     mounted () {
@@ -232,17 +232,21 @@
       },
       triggerBrowse () {
         let vm = this
-        this.uploadSuccess=false
+        this.uploadSuccess = false
         this.$refs.dropzone.triggerBrowseFiles()
         this.$refs.dropzone.$on('success', function (file, response) {
           vm.cropper_src = `/media/tmp/${response.filename}`
           vm.croppedImageData.filename = response.filename
           vm.minCropBoxHeight = 128
           vm.minCropBoxWidth = 128
-          vm.uploadSuccess=true
+          vm.uploadSuccess = true
         })
         this.$refs.dropzone.$on('error', function (file, error, xhr) {
-          vm.error = xhr.response.msg
+          if (typeof xhr.response.msg != 'undefined') {
+            vm.error = xhr.response.msg
+          } else {
+            vm.error = error
+          }
         })
       },
       deleteAvatar (uuid, alreadyUsed) {

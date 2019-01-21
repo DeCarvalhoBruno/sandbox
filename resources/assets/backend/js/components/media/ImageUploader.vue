@@ -80,16 +80,18 @@
                                                 <div class="row preview-row" v-if="file.status==='success'">
                                                     <p>{{$t('pages.blog.image_uploaded')}}</p>
                                                 </div>
-                                                <div v-else class="row blinker blinker-red">
+                                                <div v-else-if="file.status!=='error'" class="row blinker blinker-red">
                                                     <p>{{$t('pages.settings.image_uploading')}}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row mt-1">
-                                    <div class="col">
-                                        <span class="dropzone-error clearfix text-danger" v-html="error"></span>
+                                    <div class="container position-relative mb-2 font-weight-bold">
+                                        <div class="col" v-show="file.status==='error'">
+                                                        <span
+                                                                class="dropzone-error clearfix text-danger"
+                                                                v-html="error"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -141,7 +143,7 @@
       }
     },
     methods: {
-      resetUploadsList(){
+      resetUploadsList () {
         this.$refs.dropzone.removeAllFiles()
       },
       deleteImage (uuid, alreadyUsed) {
@@ -174,8 +176,12 @@
         this.$refs.dropzone.$on('success', function (file, response) {
           vm.$emit('images-updated', response)
         })
-        this.$refs.dropzone.$on('error', function (file, error) {
-          vm.error = error
+        this.$refs.dropzone.$on('error', function (file, error, xhr) {
+          if (typeof xhr.response.msg != 'undefined') {
+            vm.error = xhr.response.msg
+          } else {
+            vm.error = error
+          }
         })
       }
     }
