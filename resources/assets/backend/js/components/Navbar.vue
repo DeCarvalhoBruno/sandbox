@@ -14,13 +14,13 @@
             <button v-if="user" class="navbar-toggler" type="button" data-toggle="push-menu"
                     data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <fa icon="bars"/>
+                <fa icon="bars"></fa>
             </button>
             <div v-if="user" class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
                         <span><a class="nav-link sidebar-toggle"
-                                 data-toggle="push-menu" role="button"><fa icon="bars"/></a></span>
+                                 data-toggle="push-menu" role="button"><fa icon="bars"></fa></a></span>
                     </li>
                 </ul>
                 <ul class="navbar-nav nav justify-content-end">
@@ -28,13 +28,13 @@
                         <div class="btn-nav">
                             <router-link :to="{ name: 'admin.settings.profile' }"
                                          :title="$t('general.settings')">
-                                <fa icon="envelope" fixed-width size="lg"/>
+                                <fa icon="envelope" fixed-width size="lg"></fa>
                             </router-link>
                         </div>
                     </div>
                     <b-dropdown right :text="user.username" variant="dark">
                         <b-dropdown-item router-tag="a" :to="{ name: 'admin.settings.profile' }">
-                            <fa icon="cog" fixed-width/>
+                            <fa icon="cog" fixed-width></fa>
                             {{ $t('general.settings') }}
                         </b-dropdown-item>
                         <b-dropdown-divider/>

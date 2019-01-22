@@ -2,7 +2,10 @@
     <div>
         <b-tabs card>
             <b-tab :title="$t('pages.blog.tab_available')" @click="resetUploadsList">
-                <p v-if="thumbnails.length>0" class="font-italic">{{$t('pages.blog.click_featured')}}</p>
+                <template v-if="thumbnails.length>0">
+                    <p class="font-italic">{{$t('pages.blog.click_featured')}}</p>
+                    <p class="font-italic">{{$t('pages.blog.dblclick_featured')}}</p>
+                </template>
                 <div class="thumbnail-group" :class="{'thumbnail-loading':ajaxIsLoading}">
                     <fa v-show="ajaxIsLoading" class="fa-5x sync-icon" icon="sync" spin></fa>
                     <ul class="p-0">
@@ -20,7 +23,7 @@
                                         :class="{'btn-danger':!image.used,'disabled':image.used}"
                                         :title="$t('pages.blog.delete_image')"
                                         @click="deleteImage(image.uuid,image.used)">
-                                    <fa icon="trash-alt"/>
+                                    <fa icon="trash-alt"></fa>
                                 </button>
                             </div>
                         </li>
@@ -46,7 +49,7 @@
                             {{maxFilesize}}{{$t('units.MB')}}</p>
                         <p class="dropfile-instructions">{{ $t('dropzone.accepted_formats')}} JPG,
                             PNG</p>
-                        <fa class="fa-4x" icon="cloud-upload-alt"/>
+                        <fa class="fa-4x" icon="cloud-upload-alt"></fa>
                     </div>
                     <!-- Scoped slot -->
                     <template slot="files" slot-scope="props">
@@ -57,9 +60,11 @@
                                     <div class="container position-relative">
                                         <div class="row">
                                             <div class="col">
-                                                <div class="preview"><img v-show="file.dataUrl"
-                                                                          :src="file.dataUrl"
-                                                                          :alt="file.name"/></div>
+                                                <div class="preview">
+                                                    <img v-show="file.dataUrl"
+                                                         :src="file.dataUrl"
+                                                         :alt="file.name"/>
+                                                </div>
                                                 <p class="name">{{file.name}}</p>
                                             </div>
                                             <div class="col preview-actions">

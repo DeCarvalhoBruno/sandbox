@@ -18,10 +18,10 @@
                         <template v-if="!isUpdating">
                             <button class="btn btn-sm" type="button"
                                     title="confirm" @click="updateItem">
-                                <fa icon="check"/>
+                                <fa icon="check"></fa>
                             </button>
                             <button class="btn btn-sm" type="button" title="cancel" @click="cancelItem">
-                                <fa icon="ban"/>
+                                <fa icon="ban"></fa>
                             </button>
                         </template>
                         <template v-else>
@@ -34,15 +34,15 @@
                         <div class="li-btn-group">
                             <button type="button" class="btn btn-circle btn-default" @click="addItem"
                                     :title="`Add child to ${node.label}`">
-                                <fa icon="plus"/>
+                                <fa icon="plus"></fa>
                             </button>
                             <button type="button" class="btn btn-circle btn-default" @click="editItem"
                                     :title="`Add child to ${node.label}`">
-                                <fa icon="pencil-alt"/>
+                                <fa icon="pencil-alt"></fa>
                             </button>
                             <button type="button" class="btn btn-circle btn-default" @click="deleteItem"
                                     :title="`Delete ${node.label}`">
-                                <fa icon="trash-alt"/>
+                                <fa icon="trash-alt"></fa>
                             </button>
                         </div>
                     </template>

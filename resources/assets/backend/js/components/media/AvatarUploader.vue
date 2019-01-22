@@ -22,7 +22,7 @@
                                             :class="{'btn-danger':!avatar.used,'disabled':avatar.used}"
                                             :title="$t('pages.settings.delete_avatar')"
                                             @click="deleteAvatar(avatar.uuid,avatar.used)">
-                                        <fa icon="trash-alt"/>
+                                        <fa icon="trash-alt"></fa>
                                     </button>
                                 </div>
                             </li>
@@ -52,7 +52,7 @@
                                             {{maxFilesize}}{{$t('units.MB')}}</p>
                                         <p class="dropfile-instructions">{{ $t('dropzone.accepted_formats')}} JPG,
                                             PNG</p>
-                                        <fa class="fa-4x" icon="cloud-upload-alt"/>
+                                        <fa class="fa-4x" icon="cloud-upload-alt"></fa>
                                     </div>
                                     <!-- Scoped slot -->
                                     <template slot="files" slot-scope="props">

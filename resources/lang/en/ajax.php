@@ -237,12 +237,14 @@ return [
             'filter_name' => 'Filter by name',
             'delete_image' => 'Delete avatar',
             'click_featured' => 'Click on an image to make it the featured image for this post.',
+            'dblclick_featured' => 'Double click on an image to edit it.',
             'image_uploaded' => 'Upload is complete.',
             'add_post' => 'Add post',
             'add_root_button' => 'Add root category',
             'add_tag_pholder' => 'Type enter to add tag, click to remove',
             'blog_post_excerpt' => 'Excerpt',
-            'excerpt_label' => 'This user-defined summary of the post can be displayed on the front page.'
+            'excerpt_label' => 'This user-defined summary of the post can be displayed on the front page.',
+            'save_success'=>'The blog post was updated.'
         ]
     ],
     'tables' => [

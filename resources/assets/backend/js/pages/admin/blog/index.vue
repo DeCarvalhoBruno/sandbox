@@ -24,7 +24,7 @@
                                 <label class="input-group-text"
                                        :title="$t('general.search')"
                                        @click="filterBlogTitle">
-                                    <fa icon="newspaper"/>
+                                    <fa icon="newspaper"></fa>
                                 </label>
                             </div>
                         </div>

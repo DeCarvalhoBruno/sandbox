@@ -17,7 +17,7 @@
                                 <label class="input-group-text"
                                         :title="$t('general.search')"
                                         @click="fullNameFilter">
-                                    <fa icon="user"/>
+                                    <fa icon="user"></fa>
                                 </label>
                             </div>
                         </div>
@@ -31,7 +31,7 @@
                             <div class="input-group-append">
                                 <label class="input-group-text"
                                        :title="$t('general.search')">
-                                    <fa icon="users"/>
+                                    <fa icon="users"></fa>
                                 </label>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                             <div class="input-group-append">
                                 <label class="input-group-text"
                                        :title="$t('general.search')">
-                                    <fa icon="calendar"/>
+                                    <fa icon="calendar"></fa>
                                 </label>
                             </div>
                         </div>

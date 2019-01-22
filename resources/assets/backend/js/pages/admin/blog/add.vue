@@ -96,7 +96,7 @@
                               v-for="(badge, index) in form.tags"
                               :key="index">
                         <span v-html="badge" @click.prevent="removeTag(index)"></span>
-                            <fa icon="tag" class="badge-tag-icon"/>
+                            <fa icon="tag" class="badge-tag-icon"></fa>
                         </span>
                         <input type="text"
                                ref="tag"
@@ -136,7 +136,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row p-0 m-0 mb-1">
+            <div class="row p-0 m-0">
                 <div class="card col-lg p-0 m-0">
                     <div class="card-header bg-transparent">{{$t('pages.blog.media')}}</div>
                     <div class="card-body">
@@ -150,6 +150,10 @@
                     </div>
                 </div>
             </div>
+            <div class="row p-0 mt-5 mb-5">
+                <div class="row p-0 mt-5 mb-5">
+                </div>
+            </div>
         </form>
         <media-modal :show-modal="modal_show"
                      @modal-close="modal_show=false"></media-modal>
@@ -157,7 +161,6 @@
 </template>
 
 <script>
-  import Vue from 'vue'
   import axios from 'axios'
   import Button from '~/components/Button'
   import Trumbowyg from '~/components/wysiwyg/Trumbowyg'
@@ -167,9 +170,12 @@
   import ImageUploader from '~/components/media/ImageUploader'
 
   import MediaModal from '~/components/media/MediaModal'
+  // import swal from 'sweetalert2'
+  import swal from '~/mixins/sweet-alert'
+
 
   // import VueClipboard from 'vue-clipboard2'
-
+  //import Vue from 'vue'
   // VueClipboard.config.autoSetContainer = true // add this line
   // Vue.use(VueClipboard)
 
@@ -187,6 +193,9 @@
       MediaModal,
       ImageUploader
     },
+    mixins:[
+      swal
+    ],
     data () {
       return {
         modal_show: false,
@@ -286,6 +295,8 @@
           const {data} = await this.form.post(`/ajax/admin/blog/post/${suffix}`)
           this.blog_post_slug = data.blog_post_slug
           this.saveMode = 'edit'
+          this.swalNotification('success',this.$t('pages.blog.save_success'))
+
         } catch (e) {}
       },
       getInfo (data, saveMode) {

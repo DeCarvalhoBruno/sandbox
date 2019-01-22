@@ -63,7 +63,7 @@
                 <b-tab :title="$tc('general.permission',2)">
                     <div class="container">
                         <div class="callout callout-warning">
-                            <p><span class="callout-tag callout-tag-warning"><fa icon="exclamation"/></span>
+                            <p><span class="callout-tag callout-tag-warning"><fa icon="exclamation"></fa></span>
                                 &nbsp;{{$t('pages.users.warning1')}}
                             </p>
                             <p>

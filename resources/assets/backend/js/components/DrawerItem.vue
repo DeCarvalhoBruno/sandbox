@@ -2,7 +2,7 @@
     <router-link tag="li" v-if="router && router.name" :to="router">
         <a href="#">
             <template v-if="icon!==''">
-                <fa :icon="icon"/>
+                <fa :icon="icon"></fa>
             </template>
             <span>{{ $t(name) }}</span>
             <span class="pull-right-container" v-show="badge">
@@ -16,14 +16,14 @@
         {{ isHeader ? $t(name) : '' }}
         <a href="#" v-if="!isHeader">
             <template v-if="icon!==''">
-                <fa :icon="icon"/>
+                <fa :icon="icon"></fa>
             </template>
             <span>{{ $t(name) }}</span>
             <span class="pull-right-container">
                 <small v-if="badge && badge.data" class="label pull-right"
                        :class="[badge.type==='String'?'bg-green':'label-primary']">{{ badge.data }}
                 </small>
-                <fa v-else icon="angle-left"/>
+                <fa v-else icon="angle-left"></fa>
             </span>
         </a>
         <ul class="treeview-menu" v-if="items.length > 0">
@@ -31,19 +31,19 @@
                          v-if="item.type=='item'" :active-class="'current-view'">
                 <a v-if="item.router && item.router.name">
                     <template v-if="item.icon!==''">
-                        <fa :icon="item.icon"/>
+                        <fa :icon="item.icon"></fa>
                     </template>{{ $t(item.name) }}
                 </a>
                 <a v-else>
                     <template v-if="item.icon!==''">
-                        <fa :icon="item.icon"/>
+                        <fa :icon="item.icon"></fa>
                     </template>{{ $t(item.name) }}
                 </a>
             </router-link>
             <li class="treeview" v-else>
                 <a href="#">
                     <template v-if="item.icon!==''">
-                        <fa :icon="item.icon"/>
+                        <fa :icon="item.icon"></fa>
                     </template>{{ $t(item.name) }}
                 </a>
                 <ul class="treeview-menu">

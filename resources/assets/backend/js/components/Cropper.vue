@@ -13,7 +13,7 @@
                                 <div class="col align-self-center">
                                     <button type="button" :title="$t('general.reload')"
                                             class="btn btn-primary cropper-reset" @click="resetCropper()">
-                                        <fa icon="sync-alt"/>
+                                        <fa icon="sync-alt"></fa>
                                     </button>
                                 </div>
                             </div>

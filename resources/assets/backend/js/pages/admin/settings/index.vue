@@ -6,7 +6,7 @@
                     <b-nav vertical pills>
                         <b-nav-item v-for="(tab,idx) in tabs" :key="idx">
                             <router-link :to="{ name: tab.route }" class="nav-link" active-class="active">
-                                <fa :icon="tab.icon" fixed-width/>
+                                <fa :icon="tab.icon" fixed-width></fa>
                                 {{ tab.name }}
                             </router-link>
                         </b-nav-item>

@@ -28,7 +28,7 @@
                         {{info.label}}<span v-if=" info.sortable
                     " :title="$t('tables.sort_'+getOrder(info.order))">
                     <fa class="float-right"
-                        :icon="info.order===$t('filters.asc')?'angle-double-down':'angle-double-up'"/>
+                        :icon="info.order===$t('filters.asc')?'angle-double-down':'angle-double-up'"></fa>
                     </span>
                     </th>
                     <slot name="header-action">
