@@ -86,7 +86,7 @@ class Image extends Model implements ImageInterface
         \DB::beginTransaction();
         //For now the title of the image is the entity's slug, so we have an idea of which is which in mysql
         $mediaType = MediaType::create([
-            'media_title' => $media->getTargetSlug(),
+            'media_title' => $media->getFilename(),
             'media_uuid' => $media->getUuid(),
             'media_id' => $media->getMediaType(),
             'media_in_use' => $setAsUsed
@@ -121,17 +121,26 @@ class Image extends Model implements ImageInterface
      */
     public function getImages($entityTypeId, $columns = ['*'])
     {
-        return MediaEntity::buildImages($columns, $entityTypeId)->get()->toArray();
+        return MediaEntity::buildImages($columns, $entityTypeId)->get();
     }
 
     public function getImagesFromSlug(
         $slug,
-        $columns = [
-            'media_uuid as uuid',
-            'media_in_use as used',
-            'media_extension as ext'
-        ]
+        $columns = []
     ) {
+        if (empty($columns)) {
+            $columns = [
+                'media_uuid as uuid',
+                'media_in_use as used',
+                'media_extension as ext',
+                \DB::raw(
+                    sprintf(
+                        '"%s" as suffix',
+                        MediaImgFormat::getFormatAcronyms(MediaImgFormat::THUMBNAIL)
+                    )
+                )
+            ];
+        }
         return $this->getImages(EntityType::getEntityTypeID(Entity::BLOG_POSTS, $slug), $columns);
     }
 

@@ -13,7 +13,7 @@
                                        :class="{ 'is-invalid': form.errors.has('new_group_name') }"
                                        :placeholder="$t('db.new_group_name')"
                                        aria-describedby="help_new_group_name">
-                                <has-error :form="form" field="new_group_name"/>
+                                <has-error :form="form" field="new_group_name"></has-error>
                                 <small id="help_new_group_name" class="text-muted">
                                     {{$t('form.description.new_group_name',[form.group_name])}}
                                 </small>
@@ -27,7 +27,7 @@
                                        :class="{ 'is-invalid': form.errors.has('group_mask') }"
                                        :placeholder="$t('db.group_mask')"
                                        aria-describedby="help_group_mask">
-                                <has-error :form="form" field="group_mask"/>
+                                <has-error :form="form" field="group_mask"></has-error>
                                 <small id="help_group_mask" class="text-muted">{{$t('form.description.group_mask')}}
                                 </small>
                             </div>

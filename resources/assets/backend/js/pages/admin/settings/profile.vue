@@ -8,7 +8,7 @@
                        :class="{ 'is-invalid': form.errors.has('new_username') }"
                        :placeholder="$t('db.new_username')"
                        aria-describedby="help_new_username">
-                <has-error :form="form" field="new_username"/>
+                <has-error :form="form" field="new_username"></has-error>
                 <small id="help_new_username" class="text-muted">
                     {{$t('form.description.new_username',[form.username])}}
                 </small>
@@ -22,7 +22,7 @@
                        :class="{ 'is-invalid': form.errors.has('first_name') }"
                        :placeholder="$t('db.first_name')"
                        aria-describedby="help_first_name">
-                <has-error :form="form" field="first_name"/>
+                <has-error :form="form" field="first_name"></has-error>
                 <small id="help_first_name" class="text-muted">{{$t('form.description.first_name')}}
                 </small>
             </div>
@@ -35,7 +35,7 @@
                        :class="{ 'is-invalid': form.errors.has('last_name') }"
                        :placeholder="$t('db.last_name')"
                        aria-describedby="help_last_name">
-                <has-error :form="form" field="last_name"/>
+                <has-error :form="form" field="last_name"></has-error>
                 <small id="help_last_name" class="text-muted">{{$t('form.description.last_name')}}
                 </small>
             </div>
@@ -48,7 +48,7 @@
                        :class="{ 'is-invalid': form.errors.has('new_email') }"
                        :placeholder="$t('db.new_email')"
                        aria-describedby="help_new_email">
-                <has-error :form="form" field="new_email"/>
+                <has-error :form="form" field="new_email"></has-error>
                 <small id="help_new_email" class="text-muted">
                     {{$t('form.description.new_email',[form.email])}}
                 </small>

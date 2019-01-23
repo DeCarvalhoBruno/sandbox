@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class MediaType extends Model
 {

@@ -1,6 +1,4 @@
 <?php
-use Illuminate\Support\Str;
-use Illuminate\Support\HtmlString;
 
 if (!function_exists('media_entity_path')) {
     /**
@@ -151,5 +149,18 @@ if (!function_exists('get_page_token')) {
 if (!function_exists('is_hex_uuid_string')) {
     function is_hex_uuid_string($v){
         return strlen($v) == 32 && ctype_xdigit($v);
+    }
+}
+
+if (!function_exists('get_locale_presentable_date_format')) {
+    function get_locale_date_format(){
+        switch ( app()->getLocale() ) {
+            case 'fr':
+                return 'm F Y -  h:m';
+            break;
+            default:
+                return 'F jS, Y - h:m';
+            break;
+        }
     }
 }

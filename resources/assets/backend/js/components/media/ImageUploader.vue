@@ -4,7 +4,6 @@
             <b-tab :title="$t('pages.blog.tab_available')" @click="resetUploadsList">
                 <template v-if="thumbnails.length>0">
                     <p class="font-italic">{{$t('pages.blog.click_featured')}}</p>
-                    <p class="font-italic">{{$t('pages.blog.dblclick_featured')}}</p>
                 </template>
                 <div class="thumbnail-group" :class="{'thumbnail-loading':ajaxIsLoading}">
                     <fa v-show="ajaxIsLoading" class="fa-5x sync-icon" icon="sync" spin></fa>
@@ -35,7 +34,7 @@
                     </ul>
                 </div>
             </b-tab>
-            <b-tab :title="$t('pages.blog.tab_upload')" :active="isActive" :disabled="!isActive">
+            <b-tab :title="$t('pages.blog.tab_upload')" :disabled="!isActive">
                 <dropzone class="dropzone"
                           tag="section"
                           v-bind="dropzoneOptions"

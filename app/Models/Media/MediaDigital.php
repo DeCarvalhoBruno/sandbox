@@ -13,6 +13,11 @@ class MediaDigital extends Model
     protected $fillable = ['media_type_id', 'media_filename', 'media_extension', 'media_alt'];
     protected $hidden = ['media_digital_id','media_type_id'];
 
+    public function getCreatedAtAttribute($value)
+    {
+        return \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(get_locale_date_format());
+    }
+
     /**
      * @link https://laravel.com/docs/5.6/eloquent#query-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder

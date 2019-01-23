@@ -62,6 +62,7 @@ return [
         'status' => 'Status',
         'expand_all' => 'Expand all',
         'collapse all' => 'Collapse all',
+        'uploaded_on' => 'Uploaded on'
     ],
     'db' => [
         'user' => 'User|Users',
@@ -78,7 +79,8 @@ return [
         'new_group_name' => 'New group name',
         'group_mask' => 'Group mask',
         'member_count' => 'Number of members',
-        'blog_post_title' => 'Post title'
+        'blog_post_title' => 'Post title',
+        'media_title' => 'Title'
     ],
     'db_raw' => [
         'full_name' => 'full_name',
@@ -145,7 +147,8 @@ return [
             'new_username' => '"{0}" is the current username.',
             'group_name' => 'The group name can only contain alphanumeric characters and underscores.',
             'new_group_name' => '"{0}" is the current group name. The group name can only contain alphanumeric characters and underscores.',
-            'group_mask' => 'Determines the group\'s position in its hierarchy. The lower the mask, the higher the group status.'
+            'group_mask' => 'Determines the group\'s position in its hierarchy. The lower the mask, the higher the group status.',
+            'media_title' => 'Title of the media'
         ],
     ],
     'modal' => [
@@ -238,7 +241,6 @@ return [
             'filter_name' => 'Filter by name',
             'delete_image' => 'Delete avatar',
             'click_featured' => 'Click on an image to make it the featured image for this post.',
-            'dblclick_featured' => 'Double click on an image to edit it.',
             'image_uploaded' => 'Upload is complete.',
             'add_post' => 'Add post',
             'add_root_button' => 'Add root category',

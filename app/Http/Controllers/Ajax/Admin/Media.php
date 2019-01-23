@@ -43,7 +43,6 @@ class Media extends Controller
      */
     public function add()
     {
-//        dd($r->all());
         $input = (object)$this->request->only(['type', 'target', 'media', 'group', 'category', 'file']);
 
         $file = $this->request->file('file');
@@ -77,7 +76,18 @@ class Media extends Controller
                             $input->media
                         );
                         return response(
-                            $this->processImage($media),
+                            $this->mediaRepo->image()->getImages(
+                                $this->processImage($media), [
+                                'media_uuid as uuid',
+                                'media_in_use as used',
+                                'media_extension as ext',
+                                \DB::raw(
+                                    sprintf(
+                                        '"%s" as suffix',
+                                        MediaImgFormat::getFormatAcronyms(MediaImgFormat::THUMBNAIL)
+                                    )
+                                )
+                            ])->toArray(),
                             Response::HTTP_OK
                         );
                         break;
@@ -101,7 +111,7 @@ class Media extends Controller
 
     /**
      * @param \App\Support\Media\UploadedImage $media
-     * @return \App\Models\Media\MediaEntity
+     * @return int
      * @throws \Exception
      */
     private function processImage($media)
@@ -115,13 +125,7 @@ class Media extends Controller
             $media->getFileExtension(),
             MediaImgFormat::PAGE
         );
-        $targetEntityTypeId = $this->mediaRepo->image()->save($media);
-        return $this->mediaRepo->image()->getImages(
-            $targetEntityTypeId, [
-            'media_uuid as uuid',
-            'media_in_use as used',
-            'media_extension as ext'
-        ]);
+        return $this->mediaRepo->image()->save($media);
     }
 
     /**

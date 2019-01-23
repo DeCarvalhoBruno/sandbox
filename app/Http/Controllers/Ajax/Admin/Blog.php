@@ -173,7 +173,7 @@ class Blog extends Controller
             );
         }
 
-        return $mediaRepo->image()->getImagesFromSlug($slug);
+        return $mediaRepo->image()->getImagesFromSlug($slug)->toArray();
     }
 
     /**
@@ -188,7 +188,7 @@ class Blog extends Controller
             $uuid,
             Entity::BLOG_POSTS,
             \App\Models\Media\Media::IMAGE);
-        return $mediaRepo->image()->getImagesFromSlug($slug);
+        return $mediaRepo->image()->getImagesFromSlug($slug)->toArray();
     }
 
 }

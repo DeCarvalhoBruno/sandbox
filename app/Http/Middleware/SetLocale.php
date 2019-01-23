@@ -58,9 +58,7 @@ class SetLocale
 
         $locale = $request->server('HTTP_ACCEPT_LANGUAGE');
         Carbon::setLocale($locale);
-        $locale = substr($locale, 0, strpos($locale, ',') ?: strlen($locale));
-
-
+//        $locale = substr($locale, 0, strpos($locale, ',') ?: strlen($locale));
     }
 
 }
