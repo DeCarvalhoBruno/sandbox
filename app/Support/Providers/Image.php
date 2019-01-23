@@ -96,7 +96,6 @@ class Image extends Model implements ImageInterface
             'media_type_id' => $mediaType->getKey(),
             'media_extension' => $media->getFileExtension(),
             'media_filename' => $media->getFilename(),
-            'media_thumbnail' => $media->getThumbnailFilename()
         ]);
 
         $mediaRecord = MediaRecord::create([

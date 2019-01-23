@@ -93,7 +93,14 @@ class Blog extends Controller
                 $record->getAttribute('entity_type_id'), [
                 'media_uuid as uuid',
                 'media_in_use as used',
-                'media_extension as ext'
+                'media_extension as ext',
+                \DB::raw(
+                    sprintf(
+                        '"%s" as suffix',
+                        MediaImgFormat::getFormatAcronyms(MediaImgFormat::THUMBNAIL)
+                    )
+                ),
+
             ])
         ];
     }

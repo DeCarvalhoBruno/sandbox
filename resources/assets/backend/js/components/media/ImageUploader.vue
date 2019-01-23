@@ -15,15 +15,20 @@
                             <div class="thumbnail-selectable" :class="{'selected':image.used}"
                                  @click="setImageAsUsed(image.uuid,image.used)">
                                 <div class="thumbnail-inner">
-                                    <img :src="getImageUrl(image.uuid, image.ext)">
+                                    <img :src="getImageUrl(image.uuid, image.suffix, image.ext)">
                                 </div>
                             </div>
                             <div class="thumbnail-controls">
                                 <button type="button" class="btn btn-sm"
-                                        :class="{'btn-danger':!image.used,'disabled':image.used}"
+                                        :class="{'btn-danger':!image.used,'disabled':image.used, 'btn-dark':image.used}"
                                         :title="$t('pages.blog.delete_image')"
                                         @click="deleteImage(image.uuid,image.used)">
                                     <fa icon="trash-alt"></fa>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-info"
+                                        :title="$t('pages.blog.edit_image')"
+                                        @click="goToEditImagePage(image.uuid)">
+                                    <fa icon="pencil-alt"></fa>
                                 </button>
                             </div>
                         </li>
@@ -51,7 +56,6 @@
                             PNG</p>
                         <fa class="fa-4x" icon="cloud-upload-alt"></fa>
                     </div>
-                    <!-- Scoped slot -->
                     <template slot="files" slot-scope="props">
                         <div v-for="(file, i) in props.files" :key="file.id"
                              :class="{'mt-5': i === 0}">
@@ -148,6 +152,7 @@
       }
     },
     methods: {
+
       resetUploadsList () {
         this.$refs.dropzone.removeAllFiles()
       },
@@ -169,8 +174,11 @@
           })
         }
       },
-      getImageUrl (uuid, ext) {
-        return `/media/${this.type}/${this.media}/${uuid}_tb.${ext}`
+      goToEditImagePage (uuid) {
+        this.$router.push({name: 'admin.media.edit', params: {media: uuid}})
+      },
+      getImageUrl (uuid, suffix, ext) {
+        return `/media/${this.type}/${this.media}/${uuid}_${suffix}.${ext}`
       },
       triggerBrowse () {
         if (!this.isActive) {

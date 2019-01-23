@@ -18,7 +18,8 @@ Mix.listen('configReady', function (config) {
   }
 })
 
-mix.copy('resources/assets/_fonts/aladin-v6-latin-regular.ttf', `${path.resolve(__dirname, 'public')}/fonts`)
+mix.copy('resources/assets/_fonts/aladin-v6-latin-regular.ttf',
+  `${path.resolve(__dirname, 'public')}/fonts`)
 mix.js('resources/assets/backend/js/app.js', 'js/app.js')
   .sass('resources/assets/backend/sass/app.scss', 'css/app.css')
   .sourceMaps()
@@ -52,6 +53,7 @@ if (mix.inProduction()) {
 }
 mix.browserSync({
   proxy: 'laravel.local/admin/login',
+  browser: 'chrome',
   files: [
     `public/${folderName}/**/*`,
     'app/**/*',
@@ -60,15 +62,17 @@ mix.browserSync({
 })
 mix.webpackConfig({
   module: {
-    rules: [{
-      test: /\.svg$/,
-      use: [{
-        loader: 'html-loader',
-        options: {
-          minimize: true
-        }
+    rules: [
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'html-loader',
+            options: {
+              minimize: true
+            }
+          }]
       }]
-    }]
   },
   plugins: [
     new CleanWebpackPlugin([
@@ -99,6 +103,6 @@ mix.webpackConfig({
   },
   output: {
     chunkFilename: 'js/[name].[chunkhash].js',
-    publicPath: `/${folderName}/`,
+    publicPath: `/${folderName}/`
   }
 })

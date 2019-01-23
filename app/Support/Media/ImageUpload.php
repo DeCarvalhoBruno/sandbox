@@ -49,14 +49,6 @@ class ImageUpload
         return $this->filename;
     }
 
-    /**
-     * @return null|string
-     */
-    public function getThumbnailFilename(): ?string
-    {
-        return $this->thumbnailFilename;
-    }
-
     public function getHddFilename()
     {
         return $this->hddFilename;

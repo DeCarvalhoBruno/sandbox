@@ -87,6 +87,7 @@ class Admin
             $r->delete('settings/avatar/{uuid}', 'Settings\Profile@deleteAvatar');
             $r->get('settings/avatar', 'Settings\Profile@avatar');
 
+            $r->get('media/{media}', 'Media@edit');
             $r->post('media/add', 'Media@add')
                 ->middleware('can:edit,App\Models\User');
             $r->post('media/crop', 'Media@crop')

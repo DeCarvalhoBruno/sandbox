@@ -284,18 +284,20 @@
           return
         }
         try {
-          let suffix, saveMode
+          let suffix, saveMode,msg
           let route = this.$route
           if ((route.name.lastIndexOf('add') > 0)) {
             saveMode = suffix = 'create'
+            msg = this.$t('pages.blog.add_success')
           } else {
             saveMode = 'edit'
             suffix = `${saveMode}/${route.params.slug}`
+            msg = this.$t('pages.blog.save_success')
           }
           const {data} = await this.form.post(`/ajax/admin/blog/post/${suffix}`)
           this.blog_post_slug = data.blog_post_slug
           this.saveMode = 'edit'
-          this.swalNotification('success',this.$t('pages.blog.save_success'))
+          this.swalNotification('success',msg)
 
         } catch (e) {}
       },

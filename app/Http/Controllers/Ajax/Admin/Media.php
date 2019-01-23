@@ -19,10 +19,22 @@ class Media extends Controller
      */
     private $mediaRepo;
 
+    /**
+     *
+     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
+     */
     public function __construct(MediaInterface $mediaRepo)
     {
         parent::__construct();
         $this->mediaRepo = $mediaRepo;
+    }
+
+    public function edit($uuid)
+    {
+        $media = $this->mediaRepo->image()->getOne($uuid);
+        return [
+            'media' => $media
+        ];
     }
 
     /**
@@ -46,35 +58,35 @@ class Media extends Controller
                 throw new \UnexpectedValueException('This media type does not match anything on disk');
             }
 
-            try{
-            switch ($input->media) {
-                case "image_avatar":
-                    $media = new UploadedAvatar(
-                        $file,
-                        $input->target,
-                        $input->type,
-                        $input->media
-                    );
-                    $media->saveTemporaryAvatar();
-                    break;
-                case "image":
-                    $media = new UploadedImage(
-                        $file,
-                        $input->target,
-                        $input->type,
-                        $input->media
-                    );
-                    return response(
-                        $this->processImage($media),
-                        Response::HTTP_OK
-                    );
-                    break;
-                default:
-                    break;
-            }
-            }catch(\Exception $e){
+            try {
+                switch ($input->media) {
+                    case "image_avatar":
+                        $media = new UploadedAvatar(
+                            $file,
+                            $input->target,
+                            $input->type,
+                            $input->media
+                        );
+                        $media->saveTemporaryAvatar();
+                        break;
+                    case "image":
+                        $media = new UploadedImage(
+                            $file,
+                            $input->target,
+                            $input->type,
+                            $input->media
+                        );
+                        return response(
+                            $this->processImage($media),
+                            Response::HTTP_OK
+                        );
+                        break;
+                    default:
+                        break;
+                }
+            } catch (\Exception $e) {
                 return response([
-                    'msg'=>trans('error.media.type_size')
+                    'msg' => trans('error.media.type_size')
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
             return response([

@@ -14,7 +14,6 @@
         "mailgun/mailgun-php": "^2.5",
         "mews/purifier": "^2.1",
         "php-http/guzzle6-adapter": "^1.1",
-        "predis/predis": "^1.1",
         "ramsey/uuid": "^3.7",
         "tymon/jwt-auth": "^1.0.0-rc.3"
     },

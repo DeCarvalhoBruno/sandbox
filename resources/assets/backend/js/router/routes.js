@@ -33,6 +33,9 @@ const SettingsProfile = () => import('~/pages/admin/settings/profile').then(
 const SettingsPassword = () => import('~/pages/admin/settings/password').then(
   m => m.default || m)
 
+const MediaEdit = () => import('~/pages/admin/media/edit').then(
+  m => m.default || m)
+
 import routesI18n from '~/lang/routes'
 import store from '~/store'
 
@@ -97,6 +100,11 @@ let routes = [
     name: 'admin.blog.category',
     meta: {parent: 'admin.blog.index'},
     component: BlogCategory
+  },
+  {
+    name: 'admin.media.edit',
+    meta: {parent: 'admin.dashboard'},
+    component: MediaEdit
   },
   {
     path: '',

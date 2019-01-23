@@ -4,8 +4,8 @@
   }
 }
 
-#backend .swal2-popup.swal2-toast{
-  padding:1.5em;
+#backend .swal2-popup.swal2-toast {
+  padding: 1.5em;
 }
 
 #group_members_list > .card, .list-group-item {
@@ -36,18 +36,20 @@
   .button-list-close:before {
     transform: rotate(45deg);
   }
+
   .button-list-close:after {
     transform: rotate(-45deg);
   }
 }
 
 #filters_list {
-  .btn{
+  .btn {
     white-space: normal;
   }
+
   .button-list-close {
     font-size: 1.4em;
-    padding-left:1rem;
+    padding-left: 1rem;
     color: #003cc2;
   }
 }

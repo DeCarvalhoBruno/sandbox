@@ -15,6 +15,7 @@ return [
         'admin-blog-add' => 'Create',
         'admin-blog-edit' => 'Edit',
         'admin-blog-category' => 'Categories',
+        'admin-media-edit' => 'Edit Image',
         'admin-settings-password' => 'Your password',
         'admin-settings-profile' => 'Your profile',
         'admin-settings-general' => 'Your general settings',
@@ -244,7 +245,9 @@ return [
             'add_tag_pholder' => 'Type enter to add tag, click to remove',
             'blog_post_excerpt' => 'Excerpt',
             'excerpt_label' => 'This user-defined summary of the post can be displayed on the front page.',
-            'save_success'=>'The blog post was updated.'
+            'add_success' => 'The blog post was created.',
+            'save_success' => 'The blog post was updated.',
+            'edit_image' => 'Edit image'
         ]
     ],
     'tables' => [
