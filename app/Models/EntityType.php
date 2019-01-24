@@ -91,6 +91,25 @@ class EntityType extends Model
     }
 
     /**
+     * For when we have an entity type ID and we want to build a query from the entity
+     * but don't know what kind of entity it is.
+     *
+     * @param $entityTypeID
+     * @return mixed|null
+     */
+    public static function buildQueryFromUnknownEntity($entityTypeID)
+    {
+        $et = new self();
+        $entityId = $et->newQuery()->select('entity_id')
+            ->where($et->getKeyName(), $entityTypeID)->get()->pluck('entity_id')->first();
+        if (!is_null($entityId)) {
+            return (object)['query'=>self::buildQueryFromEntity($entityId, $entityTypeID),'entity'=>$entityId];
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * @param $entityID
      * @param $targetID
      * @return mixed

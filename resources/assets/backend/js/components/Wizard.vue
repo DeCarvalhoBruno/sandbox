@@ -28,9 +28,6 @@
                             <span>{{$t('general.back')}}</span>
                         </a>
                     </div>
-                    <!--<div class="col">-->
-                    <!--<span class="wizard-step-number">{{currentStep}}/{{steps.length}}</span>-->
-                    <!--</div>-->
                     <div class="col">
                         <a v-if="currentStep != steps.length - 1" class="wizard_next float-right"
                            :class="{'disabled': options[currentStep].nextDisabled}"

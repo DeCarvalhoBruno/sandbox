@@ -51,6 +51,9 @@ return [
         'email' => 'E-mail',
         'back' => 'Back',
         'next' => 'Next',
+        'prev' => 'Previous',
+        'first' => 'First',
+        'last' => 'Last',
         'permission' => 'Permission|Permissions',
         'toggle' => 'Toggle On/Off',
         'select_all' => 'Select all',
@@ -62,7 +65,9 @@ return [
         'status' => 'Status',
         'expand_all' => 'Expand all',
         'collapse all' => 'Collapse all',
-        'uploaded_on' => 'Uploaded on'
+        'uploaded_on' => 'Uploaded on',
+        'media' => 'Media',
+        'crop' => 'Crop'
     ],
     'db' => [
         'user' => 'User|Users',
@@ -80,7 +85,10 @@ return [
         'group_mask' => 'Group mask',
         'member_count' => 'Number of members',
         'blog_post_title' => 'Post title',
-        'media_title' => 'Title'
+        'media_title' => 'Title',
+        'media_alt' => 'Alt text',
+        'media_description' => 'Description',
+        'media_caption' => 'Caption'
     ],
     'db_raw' => [
         'full_name' => 'full_name',
@@ -148,7 +156,10 @@ return [
             'group_name' => 'The group name can only contain alphanumeric characters and underscores.',
             'new_group_name' => '"{0}" is the current group name. The group name can only contain alphanumeric characters and underscores.',
             'group_mask' => 'Determines the group\'s position in its hierarchy. The lower the mask, the higher the group status.',
-            'media_title' => 'Title of the media'
+            'media_title' => 'Title of the media',
+            'media_alt' => 'A text alternative to the image for screen readers or when the image does not load.',
+            'media_description' => 'For internal purposes, to help with tracking in searches.',
+            'media_caption' => 'May be displayed below the image for commentary/description purposes.'
         ],
     ],
     'modal' => [

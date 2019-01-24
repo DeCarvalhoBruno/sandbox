@@ -1,11 +1,19 @@
 <template>
-    <b-card no-body>
+    <b-card no-body ref="cropperContainer">
         <form @submit.prevent="save" @keydown="form.onKeydown($event)">
             <b-tabs card>
-                <b-tab :title="form.media_title" active>
+                <b-tab :title="$t('general.media')" active>
                     <div class="col-md-8 offset-md-2">
-                         <div class="form-group row">
-                            <label for="created_at" class="col-md-3 col-form-label">{{$t('general.uploaded_on')}}</label>
+                        <div class="form-group row">
+                            <div class="col-md-9 offset-md-3">
+                                <div class="col-md-6 offset-md-3">
+                                    <img :src="getImageUrl(form.media_uuid, form.suffix, form.media_extension)"></img>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="created_at"
+                                   class="col-md-3 col-form-label">{{$t('general.uploaded_on')}}</label>
                             <div class="col-md-9">
                                 <input v-model="form.created_at" type="text"
                                        id="created_at" class="form-control"
@@ -26,34 +34,99 @@
                                 </small>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="media_alt" class="col-md-3 col-form-label">{{$t('db.media_alt')}}</label>
+                            <div class="col-md-9">
+                                <input v-model="form.media_alt" type="text"
+                                       name="media_alt" id="media_alt" class="form-control"
+                                       :class="{ 'is-invalid': form.errors.has('media_alt') }"
+                                       :placeholder="$t('db.media_alt')"
+                                       aria-describedby="help_media_alt">
+                                <has-error :form="form" field="media_alt"></has-error>
+                                <small id="help_media_alt"
+                                       class="text-muted">{{$t('form.description.media_alt',[form.media_alt])}}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="media_description" class="col-md-3 col-form-label">{{$t('db.media_description')}}</label>
+                            <div class="col-md-9">
+                                <textarea v-model="form.media_description"
+                                          name="media_description" id="media_description"
+                                          class="form-control txtarea-noresize"
+                                          :class="{ 'is-invalid': form.errors.has('media_description') }"
+                                          :placeholder="$t('db.media_description')"
+                                          aria-describedby="help_media_description"
+                                          rows="4"></textarea>
+                                <has-error :form="form" field="media_description"></has-error>
+                                <small id="help_media_description"
+                                       class="text-muted">
+                                    {{$t('form.description.media_description',[form.media_description])}}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="media_caption"
+                                   class="col-md-3 col-form-label">{{$t('db.media_caption')}}</label>
+                            <div class="col-md-9">
+                                <textarea v-model="form.media_caption"
+                                          name="media_caption" id="media_caption" class="form-control txtarea-noresize"
+                                          :class="{ 'is-invalid': form.errors.has('media_caption') }"
+                                          :placeholder="$t('db.media_caption')"
+                                          aria-describedby="help_media_caption"
+                                          rows="4"></textarea>
+                                <has-error :form="form" field="media_caption"></has-error>
+                                <small id="help_media_caption"
+                                       class="text-muted">{{$t('form.description.media_caption',[form.media_caption])}}
+                                </small>
+                            </div>
+                        </div>
                     </div>
-                    <div class="row justify-content-center">
-                        <div class="col-md-6 offset-md-3 mb-4">
+                    <div class="row justify-content-center mb-4 mt-2">
+                        <div>
                             <v-button class="align-content-center"
                                       :loading="form.busy">{{ $t('general.update') }}
                             </v-button>
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    @click="$router.push({
+                                    name:intended.route,
+                                    params:{slug:intended.slug}
+                                    })">{{$t('general.cancel')}}
+                            </button>
                         </div>
                     </div>
+                    <div class="row justify-content-center">
+                        <div>
+                            <record-paginator :nav="nav" :is-loading="ajaxIsLoading"></record-paginator>
+                        </div>
+                    </div>
+                </b-tab>
+                <b-tab :title="$t('general.crop')" @click="cropperActive=true">
+                    <cropper :cropper-active="cropperActive" :container-width="containerWidth" :src="getImageUrl(form.media_uuid, null, form.media_extension)">
+                        <div slot="cropper-actions" class="col align-self-center">
+                            <button class="btn btn-primary" @click="crop()" type="button"
+                            >{{$t('media.cropper_crop_upload')}}
+                            </button>
+                            <button class="btn btn-primary btn-light" @click="cancel()" type="button"
+                            >{{$t('general.cancel')}}
+                            </button>
+                        </div>
+                    </cropper>
                 </b-tab>
             </b-tabs>
         </form>
     </b-card>
 </template>
-
-
 <script>
-    /*
-    media_alt: null
-    media_caption: null
-    media_description: null
-    media_extension: "jpg"
-    media_filename: "meeting-room-730679.jpg"
- */
   import Vue from 'vue'
   import Button from '~/components/Button'
   import axios from 'axios'
+  import Cropper from '~/components/Cropper'
   import { Form, HasError, AlertForm } from '~/components/form'
   import { Card, Tabs } from 'bootstrap-vue/es/components'
+  import RecordPaginator from '~/components/RecordPaginator'
+  import media from '~/mixins/media'
 
   Vue.use(Card)
   Vue.use(Tabs)
@@ -65,18 +138,45 @@
     components: {
       'v-button': Button,
       HasError,
-      Form
+      Form,
+      RecordPaginator,
+      Cropper
     },
+    mixins: [
+      media
+    ],
     data () {
       return {
         form: new Form(),
-        mediaInfo: {}
-
+        mediaInfo: {},
+        nav: {},
+        intended: {},
+        type: null,
+        media: null,
+        ajaxIsLoading: false,
+        containerWidth:0,
+        cropperActive:false
+      }
+    },
+    mounted(){
+      this.containerWidth = this.$refs.cropperContainer.clientWidth
+    },
+    watch: {
+      '$route' () {
+        this.ajaxIsLoading = true
+        axios.get(`/ajax/admin/media/${this.$router.currentRoute.params.media}`).then(({data}) => {
+          this.getInfo(data)
+          this.ajaxIsLoading = false
+        })
       }
     },
     methods: {
       getInfo (data) {
         this.form = new Form(data.media)
+        this.media = this.form.media
+        this.type = this.form.type
+        this.nav = data.nav
+        this.intended = data.intended
       }
     },
     beforeRouteEnter (to, from, next) {

@@ -1,6 +1,6 @@
 <template>
     <div class="form-group row">
-        <div class="card w-100">
+        <div class="card w-100" ref="cropperContainer">
             <b-tabs card>
                 <b-tab :title="$t('pages.settings.avatar-tab')" @click="avatarTabClicked" active>
                     <p v-show="avatars.length>1" class="font-italic">{{$t('pages.settings.click_default')}}</p>
@@ -112,8 +112,19 @@
                             </keep-alive>
                         </div>
                         <div slot="s2">
-                            <cropper :src="cropper_src" :crop-height="minCropBoxHeight"
-                                     :crop-width="minCropBoxWidth" :filename="uploadedImageFilename"></cropper>
+                            <cropper :src="cropper_src"
+                                     :container-width="containerWidth"
+                                     :crop-height="minCropBoxHeight"
+                                     :crop-width="minCropBoxWidth">
+                                <div slot="cropper-actions" class="col align-self-center">
+                                    <button class="btn btn-primary" @click="crop()" type="button"
+                                    >{{$t('media.cropper_crop_upload')}}
+                                    </button>
+                                    <button class="btn btn-primary btn-light" @click="cancel()" type="button"
+                                    >{{$t('general.cancel')}}
+                                    </button>
+                                </div>
+                            </cropper>
                         </div>
                         <div slot="s3">
                             <div class="container p-0 mt-2">
@@ -189,7 +200,6 @@
         imageToUpload: null,
         currentStep: 0,
         ajaxIsLoading: false,
-        uploadedImageFilename: null,
         maxFilesize: 2,
         croppedImageData: Object,
         error: '',
@@ -199,10 +209,12 @@
           clickable: false
         },
         avatarSubmitted: false,
-        uploadSuccess: false
+        uploadSuccess: false,
+        containerWidth:0
       }
     },
     mounted () {
+      this.containerWidth = this.$refs.cropperContainer.clientWidth
       let vm = this
       this.$root.$on('cropper_cropped', function (cp, croppedCanvas) {
         vm.croppedImageData.dataURI = croppedCanvas.toDataURL()
@@ -267,6 +279,10 @@
           })
         }
       }
+    },
+    beforeDestroy: function () {
+      this.$root.$off('cropper_cropped')
+      this.$root.$off('wizard_step_reset')
     }
   }
 </script>

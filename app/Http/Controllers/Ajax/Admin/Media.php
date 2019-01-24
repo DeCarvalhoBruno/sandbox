@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ajax\Admin;
 
 use App\Contracts\Models\Media as MediaInterface;
+use App\Models\EntityType;
 use App\Models\Media\MediaImgFormat;
 use App\Support\Media\UploadedImage;
 use App\Support\Providers\User as UserProvider;
@@ -31,9 +32,43 @@ class Media extends Controller
 
     public function edit($uuid)
     {
-        $media = $this->mediaRepo->image()->getOne($uuid);
+        $media = $this->mediaRepo->image()->getOne($uuid,
+            ['media_uuid', 'media_title', 'media_alt', 'created_at', 'media_description', 'media_caption', 'media_id', 'media_extension']
+        )->toArray();
+        $data = $this->mediaRepo->image()->getSiblings($uuid, ['media_uuid', 'entity_type_id'])->get();
+        $navData = $data->pluck('media_uuid')->all();
+        $fromEntity = $data->pluck('entity_type_id')->first();
+        $entityInfo = EntityType::buildQueryFromUnknownEntity($fromEntity);
+        $intended = $type = null;
+        if (!is_null($entityInfo)) {
+            $intendedSlug = $entityInfo->query->select('blog_post_slug')->pluck('blog_post_slug')->first();
+            $entity = $entityInfo->entity;
+            switch ($entity) {
+                case Entity::BLOG_POSTS:
+                    $intended = (object)['route' => 'admin.blog.edit', 'slug' => $intendedSlug];
+                    $type = Entity::getConstantName(Entity::BLOG_POSTS);
+                    break;
+            }
+//            $mediaSrc = (object)['media' => MediaModel::getConstantName($media['media_id']), 'type' => $type];
+            $media['media'] = MediaModel::getConstantName($media['media_id']);
+            $media['type'] = $type;
+            $media['suffix'] = MediaImgFormat::getFormatAcronyms(MediaImgFormat::THUMBNAIL);
+        }
+
+        $index = array_search($uuid, $navData);
+        $total = count($navData);
+        $nav = array(
+            'total' => $total,
+            'idx' => ($index + 1),
+            'first' => $navData[0],
+            'last' => $navData[($total - 1)],
+            'prev' => ($navData[$index - 1] ?? null),
+            'next' => ($navData[$index + 1] ?? null)
+        );
         return [
-            'media' => $media
+            'media' => $media,
+            'nav' => $nav,
+            'intended' => $intended,
         ];
     }
 

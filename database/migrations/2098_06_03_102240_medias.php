@@ -49,7 +49,6 @@ class Medias extends Migration
             $table->string('media_filename')->nullable();
             $table->string('media_extension', 10)->nullable();
             $table->string('media_alt')->nullable();
-            $table->text('media_description')->nullable();
             $table->text('media_caption')->nullable();
             $table->timestamps();
 

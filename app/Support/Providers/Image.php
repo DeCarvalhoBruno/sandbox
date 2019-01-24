@@ -11,6 +11,7 @@ use App\Models\Media\MediaEntity;
 use App\Models\Media\MediaImgFormat;
 use App\Models\Media\MediaRecord;
 use App\Models\Media\MediaType;
+use App\Models\Views\EntitiesWithMedia;
 use App\Support\Media\ImageProcessor;
 
 /**
@@ -215,5 +216,18 @@ class Image extends Model implements ImageInterface
                 ImageProcessor::makeFormatFilename($uuid, $fileExtension, $format)
             )
         );
+    }
+
+    /**
+     *  Get images that are attached to the same entity, i.e. all images that are used in a blog post.
+     *
+     * @param $uuid
+     * @param array $columns
+     * @return \App\Models\Views\EntitiesWithMedia
+     */
+    public function getSiblings($uuid, $columns = ['*'])
+    {
+        return EntitiesWithMedia::getSiblings($uuid, $columns);
+
     }
 }

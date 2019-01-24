@@ -329,12 +329,8 @@
   visibility: visible;
   display: block;
   margin: 0 auto !important;
-  /*min-width:300px;*/
-  /*max-width: 550px;*/
-  /*min-height: 250px;*/
-  /*max-height: 350px;*/
-  width: 500px;
-  height: 300px;
+  //width: 500px;
+  //height: 300px;
 }
 
 .cropper-preview, .cropper-preview-wrapper {
@@ -342,16 +338,16 @@
   display: inline-block;
   margin: 0 auto !important;
   width: 300px;
-  height: 200px;
-  max-width: 300px !important;
-  max-height: 200px !important;
+  height: 300px;
+  max-width: 600px !important;
+  max-height: 300px !important;
   overflow: hidden;
 }
 
 .cropper-preview img {
   overflow: hidden;
-  max-width: 300px !important;
-  max-height: 200px !important;
+  max-width: 600px !important;
+  max-height: 300px !important;
 }
 
 .cropper-img {

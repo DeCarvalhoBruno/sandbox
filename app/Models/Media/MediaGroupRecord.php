@@ -1,6 +1,5 @@
 <?php namespace App\Models\Media;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class MediaGroupRecord extends Model {

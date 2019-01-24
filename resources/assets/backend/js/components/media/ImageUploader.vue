@@ -117,6 +117,7 @@
   import { Tabs } from 'bootstrap-vue/es/components'
   import { VueTransmit } from 'vue-transmit'
   import axios from 'axios'
+  import media from '~/mixins/media'
 
   Vue.use(Tabs)
 
@@ -126,6 +127,9 @@
       'dropzone': VueTransmit,
       Tabs
     },
+    mixins: [
+      media
+    ],
     props: {
       target: {required: true},
       type: {required: true},
@@ -151,7 +155,6 @@
       }
     },
     methods: {
-
       resetUploadsList () {
         this.$refs.dropzone.removeAllFiles()
       },
@@ -175,9 +178,6 @@
       },
       goToEditImagePage (uuid) {
         this.$router.push({name: 'admin.media.edit', params: {media: uuid}})
-      },
-      getImageUrl (uuid, suffix, ext) {
-        return `/media/${this.type}/${this.media}/${uuid}_${suffix}.${ext}`
       },
       triggerBrowse () {
         if (!this.isActive) {

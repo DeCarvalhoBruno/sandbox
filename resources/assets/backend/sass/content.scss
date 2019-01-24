@@ -8,6 +8,10 @@
   padding: 1.5em;
 }
 
+.txtarea-noresize {
+  resize: none;
+}
+
 #group_members_list > .card, .list-group-item {
   .button-list-close {
     cursor: pointer;

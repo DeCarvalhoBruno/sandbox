@@ -71,9 +71,11 @@ trait Enumerable
     }
 
     /**
-     * @param mixed $name
+     * Get the name of a constant by passing its number,
+     * i.e. what is the constant whose value is 64?
      *
-     * @return null
+     * @param mixed $name
+     * @return string|null The actual name of the constant as is in the code, uppercase.
      */
     public static function getConstantNameByID($name)
     {
@@ -86,7 +88,6 @@ trait Enumerable
 
     /**
      * @param int $id
-     *
      * @return boolean
      */
     public static function getConstantByID($id)
@@ -99,9 +100,12 @@ trait Enumerable
     }
 
     /**
+     * Get the name of a constant by passing its number,
+     * i.e. what is the constant whose value is 64?
+     *
      * @param mixed $id
      *
-     * @return string
+     * @return string The lower case string
      */
     public static function getConstantName($id)
     {

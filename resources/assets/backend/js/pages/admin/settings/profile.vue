@@ -125,6 +125,9 @@
       axios.get(`/ajax/admin/users/session`).then(({data}) => {
         next(vm => vm.getInfo(data))
       })
+    },
+    beforeDestroy(){
+      this.$root.$off('avatars_updated')
     }
   }
 </script>
