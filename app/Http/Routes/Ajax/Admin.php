@@ -88,6 +88,7 @@ class Admin
             $r->get('settings/avatar', 'Settings\Profile@avatar');
 
             $r->get('media/{media}', 'Media@edit');
+            $r->patch('media/{media}', 'Media@update');
             $r->post('media/add', 'Media@add')
                 ->middleware('can:edit,App\Models\User');
             $r->post('media/crop', 'Media@crop')

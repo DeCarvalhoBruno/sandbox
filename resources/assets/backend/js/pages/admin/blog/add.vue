@@ -172,6 +172,7 @@
   import MediaModal from '~/components/media/MediaModal'
   // import swal from 'sweetalert2'
   import swal from '~/mixins/sweet-alert'
+  import form from '~/mixins/form'
 
 
   // import VueClipboard from 'vue-clipboard2'
@@ -194,7 +195,8 @@
       ImageUploader
     },
     mixins:[
-      swal
+      swal,
+      form
     ],
     data () {
       return {
@@ -275,9 +277,6 @@
       },
       toggleEditing (value) {
         this[value] = !this[value]
-      },
-      changedField (field) {
-        this.form.addChangedField(field)
       },
       async save () {
         if (!this.form.blog_post_title) {

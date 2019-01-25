@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ajax\Admin;
 
 use App\Contracts\Models\Media as MediaInterface;
+use App\Http\Requests\Admin\UpdateMedia;
 use App\Models\EntityType;
 use App\Models\Media\MediaImgFormat;
 use App\Support\Media\UploadedImage;
@@ -70,6 +71,12 @@ class Media extends Controller
             'nav' => $nav,
             'intended' => $intended,
         ];
+    }
+
+    public function update($uuid, UpdateMedia $request)
+    {
+        dd($request->all());
+
     }
 
     /**

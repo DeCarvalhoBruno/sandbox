@@ -27,7 +27,9 @@
                                        name="media_title" id="media_title" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('media_title') }"
                                        :placeholder="$t('db.media_title')"
-                                       aria-describedby="help_media_title">
+                                       aria-describedby="help_media_title"
+                                       autocomplete="off"
+                                       @change="changedField('media_title')">
                                 <has-error :form="form" field="media_title"></has-error>
                                 <small id="help_media_title"
                                        class="text-muted">{{$t('form.description.media_title',[form.media_title])}}
@@ -41,7 +43,8 @@
                                        name="media_alt" id="media_alt" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('media_alt') }"
                                        :placeholder="$t('db.media_alt')"
-                                       aria-describedby="help_media_alt">
+                                       aria-describedby="help_media_alt" autocomplete="off"
+                                       @change="changedField('media_alt')">
                                 <has-error :form="form" field="media_alt"></has-error>
                                 <small id="help_media_alt"
                                        class="text-muted">{{$t('form.description.media_alt',[form.media_alt])}}
@@ -57,7 +60,8 @@
                                           :class="{ 'is-invalid': form.errors.has('media_description') }"
                                           :placeholder="$t('db.media_description')"
                                           aria-describedby="help_media_description"
-                                          rows="4"></textarea>
+                                          rows="4"
+                                          @change="changedField('media_description')"></textarea>
                                 <has-error :form="form" field="media_description"></has-error>
                                 <small id="help_media_description"
                                        class="text-muted">
@@ -74,7 +78,8 @@
                                           :class="{ 'is-invalid': form.errors.has('media_caption') }"
                                           :placeholder="$t('db.media_caption')"
                                           aria-describedby="help_media_caption"
-                                          rows="4"></textarea>
+                                          rows="4"
+                                          @change="changedField('media_caption')"></textarea>
                                 <has-error :form="form" field="media_caption"></has-error>
                                 <small id="help_media_caption"
                                        class="text-muted">{{$t('form.description.media_caption',[form.media_caption])}}
@@ -103,7 +108,8 @@
                     </div>
                 </b-tab>
                 <b-tab :title="$t('general.crop')" @click="cropperActive=true">
-                    <cropper :cropper-active="cropperActive" :container-width="containerWidth" :src="getImageUrl(form.media_uuid, null, form.media_extension)">
+                    <cropper :cropper-active="cropperActive" :container-width="containerWidth"
+                             :src="getImageUrl(form.media_uuid, null, form.media_extension)">
                         <div slot="cropper-actions" class="col align-self-center">
                             <button class="btn btn-primary" @click="crop()" type="button"
                             >{{$t('media.cropper_crop_upload')}}
@@ -127,6 +133,7 @@
   import { Card, Tabs } from 'bootstrap-vue/es/components'
   import RecordPaginator from '~/components/RecordPaginator'
   import media from '~/mixins/media'
+  import form from '~/mixins/form'
 
   Vue.use(Card)
   Vue.use(Tabs)
@@ -143,7 +150,8 @@
       Cropper
     },
     mixins: [
-      media
+      media,
+      form
     ],
     data () {
       return {
@@ -154,11 +162,11 @@
         type: null,
         media: null,
         ajaxIsLoading: false,
-        containerWidth:0,
-        cropperActive:false
+        containerWidth: 0,
+        cropperActive: false
       }
     },
-    mounted(){
+    mounted () {
       this.containerWidth = this.$refs.cropperContainer.clientWidth
     },
     watch: {
@@ -171,6 +179,14 @@
       }
     },
     methods: {
+      async save () {
+        try {
+          this.form.setTrackChanges(true)
+          const {data} = await this.form.patch(`/ajax/admin/media/${this.form.media_uuid}`)
+          // this.$router.push({name: this.intended.route, params: {slug: this.intended.slug}})
+          // this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.user_update_ok'))
+        } catch (e) {}
+      },
       getInfo (data) {
         this.form = new Form(data.media)
         this.media = this.form.media
