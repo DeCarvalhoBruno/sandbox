@@ -51,6 +51,10 @@ class Product
      * @var array
      */
     private $packaging;
+    /**
+     * @var Image
+     */
+    private $image;
 
     /**
      * @param int $novaGroup
@@ -67,6 +71,23 @@ class Product
     {
         $this->nutrientLevels = $nutrientLevels;
     }
+
+    /**
+     * @param $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+    }
+
+    /**
+     * @return Image
+     */
+    public function getImage(): Image
+    {
+        return $this->image;
+    }
+
 
     /**
      * @return string
@@ -99,7 +120,7 @@ class Product
     public function setCategories(array $categories)
     {
         foreach ($categories as $category) {
-            if (!isset($this->categoryIndex[$category[1]])) {
+            if (!isset($this->categoryIndex[$category[1]]) && !empty($this->categoryIndex[$category[1]])) {
                 $this->categoryIndex[$category[1]] = true;
                 $this->categories[] = new ProductCategory($category[1], $category[0]);
             }
@@ -143,7 +164,7 @@ class Product
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }

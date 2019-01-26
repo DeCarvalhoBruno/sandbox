@@ -1,13 +1,14 @@
 <?php
 require_once '../helpers/helpers.php';
-//ini_set('max_execution_time', '60');
+ini_set('max_execution_time', '8000');
 require_once 'ProductRepo.php';
 
 $startExecTime = microtime(true);
 $startMemory = memory_get_usage();
 
-organizeData(organizeEmbCodes());
 
+$data = organizeData(organizeEmbCodes());
+$f = $data->getProducts();
 
 function organizeData($codes)
 {
@@ -21,10 +22,15 @@ function organizeData($codes)
     $productRepo->setEmbCodeList($codes);
     while (($data = fgetcsv($handle, 8192, $sep)) != false) {
         $product = new Product();
+        $tag = $id = '';
+
         while (list($key, $item) = each($data)) {
             switch ($header[$key]) {
+                case '_id':
+                    $id = $item;
+                    break;
                 case 'product_name':
-                    $product->setName($item);
+                    $product->setName(ucfirst(trim($item)));
                     break;
                 case 'brands':
                     $product->setBrands($productRepo->addBrands($item));
@@ -61,19 +67,48 @@ function organizeData($codes)
                 case 'packaging':
                     $product->setPackaging($productRepo->addPackaging($item));
                     break;
+                case 'codes_tags':
+                    $tag = $item;
+                case 'images':
+                    $imageData = explode(';', $item);
+                    if (count($imageData) === 4) {
+                        $product->setImage($productRepo->processImage($id, $tag, $imageData));
+                    } else {
+                        $product->setImage(null);
+                    }
+                    break;
+
             }
 //            $filteredData[$header[$key]][] = $item;
         }
         $product->unsetCategoryIndex();
         $productRepo->add($product);
         $i++;
-        if ($i == 10) {
+        if ($i == 50) {
             break;
+//            fclose($handle);
+//            dd($productRepo->getProducts());
+//        if ($i % 10000 === 0) {
+//            writeProducts($i, $productRepo);
         }
     }
     fclose($handle);
 
-    dd($productRepo->getProducts());
+
+//    writeProducts($i, $productRepo);
+
+//    $handle = @fopen('data.txt', "w");
+//    fwrite($handle, serialize($productRepo->getProducts()));
+////    dd($productRepo->getProducts());
+//    fclose($handle);
+    return $productRepo;
+}
+
+function writeProducts($i, ProductRepo $productRepo)
+{
+    $handle2 = @fopen(sprintf('data%s.txt', $i), "w");
+    fwrite($handle2, serialize($productRepo->flushProducts()));
+    fclose($handle2);
 }
 
 function organizeEmbCodes()

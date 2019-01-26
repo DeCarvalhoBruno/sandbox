@@ -39,7 +39,7 @@ class ProductCategory
         if(preg_match('/(en|fr)/',$language)){
             $this->language = $language;
         }else{
-            throw new \Exception('language not recognized');
+            $this->language = 'fr';
         }
     }
 

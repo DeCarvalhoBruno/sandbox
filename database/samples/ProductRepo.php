@@ -5,6 +5,7 @@ require_once 'ProductCategory.php';
 require_once 'Packager.php';
 require_once 'Ingredient.php';
 require_once 'Nutriment.php';
+require_once 'Image.php';
 
 class ProductRepo
 {
@@ -43,14 +44,20 @@ class ProductRepo
 
     public function add(Product $product)
     {
-        if (!isset($this->productIndex[$product->getName()])) {
-            $this->productIndex[$product->getName()] = $product;
-        }
+        $this->productIndex[$product->getName()] = $product;
     }
 
     public function getProducts()
     {
         return array_values($this->productIndex);
+    }
+
+    public function flushProducts()
+    {
+        $f = array_values($this->productIndex);
+        unset($this->productIndex);
+        $this->productIndex = [];
+        return $f;
     }
 
     public function addBrands(string $brands): array
@@ -182,20 +189,81 @@ class ProductRepo
         $productNutriments = explode(';', $nutriments);
         foreach ($productNutriments as $nutriment) {
             $label = explode('|', $nutriment);
-            $this->nutrimentsIndex[$label[0]] = true;
-            $nutrimentList[]=new Nutriment($label[0],$label[1]);
+            if (!is_null($label[0]) && !is_null($label[1])) {
+                $this->nutrimentsIndex[$label[0]] = true;
+                $nutrimentList[] = new Nutriment($label[0], $label[1]);
+            }
         }
         return $nutrimentList;
     }
 
     public function addPackaging($packaging)
     {
-        $packageList=[];
-        $packages = explode(',',$packaging);
-        foreach($packages as $package){
-            $this->packagesIndex[$package]=true;
-            $packageList[]=$package;
+        $packageList = [];
+        $packages = explode(',', $packaging);
+        foreach ($packages as $package) {
+            $this->packagesIndex[$package] = true;
+            $packageList[] = $package;
         }
         return $packageList;
     }
+
+    public function processImage($fullId, $tag, $image)
+    {
+        switch ($tag) {
+            case "code-2":
+                $id = $fullId;
+                break;
+            case "code-4":
+                $id = $fullId;
+                break;
+            case "code-5":
+                $id = $fullId;
+                break;
+            case "code-6":
+                $id = $fullId;
+                break;
+            case "code-8":
+                $id = $fullId;
+                break;
+            case "code-9":
+                $id = sprintf(
+                    '%s/%s/%s/',
+                    substr($fullId, 0, 3),
+                    substr($fullId, 3, 3),
+                    substr($fullId, -3)
+                );
+                break;
+            case "code-12":
+                $id = sprintf(
+                    '%s/%s/%s/%s',
+                    substr($fullId, 0, 3),
+                    substr($fullId, 3, 3),
+                    substr($fullId, 6, 3),
+                    substr($fullId, -3)
+                );
+                break;
+            case "code-13":
+                $id = sprintf(
+                    '%s/%s/%s/%s',
+                    substr($fullId, 0, 3),
+                    substr($fullId, 3, 3),
+                    substr($fullId, 6, 3),
+                    substr($fullId, -4)
+                );
+                break;
+            case "code-14":
+                $id = sprintf(
+                    '%s/%s/%s/%s',
+                    substr($fullId, 0, 3),
+                    substr($fullId, 3, 3),
+                    substr($fullId, 6, 3),
+                    substr($fullId, -5)
+                );
+                break;
+        }
+        return new Image($id, $image[0], $image[2], $image[3], $image[1]);
+
+    }
+
 }
