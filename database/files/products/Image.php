@@ -40,7 +40,9 @@ class Image
         $this->rev = $rev;
     }
 
+    public function __get($name)
+    {
+        return $this->{$name};
 
-
-
+    }
 }

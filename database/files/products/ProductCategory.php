@@ -3,6 +3,10 @@
 class ProductCategory
 {
     /**
+     * @var int
+     */
+    private $id;
+    /**
      * @var string
      */
     private $name;
@@ -13,12 +17,13 @@ class ProductCategory
 
     /**
      *
+     * @param int $id
      * @param string $name
      * @param string $language
-     * @throws \Exception
      */
-    public function __construct(string $name, string $language = 'fr')
+    public function __construct(int $id, string $name, string $language = 'fr')
     {
+        $this->id = $id;
         $this->name = $name;
         $this->setLanguage($language);
     }
@@ -36,11 +41,16 @@ class ProductCategory
      */
     public function setLanguage(string $language)
     {
-        if(preg_match('/(en|fr)/',$language)){
+        if (preg_match('/(en|fr)/', $language)) {
             $this->language = $language;
-        }else{
+        } else {
             $this->language = 'fr';
         }
+    }
+
+    public function __get($name)
+    {
+        return $this->{$name};
     }
 
 

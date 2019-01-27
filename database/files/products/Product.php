@@ -112,7 +112,7 @@ class Product
     /**
      * @param Packager $embCode
      */
-    public function setEmbCode(Packager $embCode)
+    public function setEmbCode($embCode)
     {
         $this->embCode = $embCode;
     }
@@ -127,14 +127,13 @@ class Product
 
     /**
      * @param array $categories
-     * @throws \Exception
      */
     public function setCategories(array $categories)
     {
         foreach ($categories as $category) {
-            if (!isset($this->categoryIndex[$category[1]]) && !empty($category[1])) {
-                $this->categoryIndex[$category[1]] = true;
-                $this->categories[] = new ProductCategory($category[1], $category[0]);
+            if (!isset($this->categoryIndex[$category->name]) && !is_null($category->name)) {
+                $this->categoryIndex[$category->name] = true;
+                $this->categories[] = $category;
             }
         }
     }
@@ -168,9 +167,7 @@ class Product
      */
     public function setBrands(array $brands)
     {
-        foreach ($brands as $brand) {
-            $this->brands[] = new Brand($brand);
-        }
+        $this->brands = $brands;
     }
 
     /**
@@ -220,6 +217,12 @@ class Product
     public function setPackaging(array $packaging)
     {
         $this->packaging = $packaging;
+    }
+
+    public function __get($name)
+    {
+        return $this->{$name};
+
     }
 
 

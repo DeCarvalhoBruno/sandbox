@@ -5,6 +5,10 @@ class Ingredient
     /**
      * @var int
      */
+    private $id;
+    /**
+     * @var int
+     */
     private $rank;
     /**
      * @var string
@@ -17,12 +21,14 @@ class Ingredient
 
     /**
      *
+     * @param int $id
      * @param int $rank
      * @param string $name
      * @param string $language
      */
-    public function __construct(int $rank = 0, string $name = null, string $language = null)
+    public function __construct(int $id = 0, int $rank = 0, string $name = null, string $language = null)
     {
+        $this->id = $id;
         $this->rank = $rank;
         $this->name = $name;
         $this->language = $language;
@@ -60,6 +66,16 @@ class Ingredient
     public function hasName()
     {
         return (!is_null($this->name));
+    }
+
+    public function __get($name)
+    {
+        return $this->{$name};
+    }
+
+    public function __set($name, $value)
+    {
+        $this->{$name} = $value;
     }
 
 }

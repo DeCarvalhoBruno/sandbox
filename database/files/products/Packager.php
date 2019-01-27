@@ -3,6 +3,10 @@
 class Packager
 {
     /**
+     * @var string
+     */
+    private $name;
+    /**
      * Approval number
      *
      * @var string
@@ -40,10 +44,16 @@ class Packager
      * @var string
      */
     private $species;
+    /**
+     * @var
+     */
+    private $id;
 
     /**
      *
      * @param string $code
+     * @param int $id
+     * @param string $name
      * @param string $siret
      * @param string $address
      * @param string $postcode
@@ -54,6 +64,8 @@ class Packager
      */
     public function __construct(
         string $code,
+        int $id,
+        string $name=null,
         string $siret = null,
         string $address = null,
         string $postcode = null,
@@ -62,6 +74,7 @@ class Packager
         string $activity = null,
         string $species = null
     ) {
+        $this->name = $name;
         $this->code = $code;
         if (preg_match('/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/', $code)) {
             $this->emb = sprintf('FR %s EC', $code);
@@ -75,6 +88,7 @@ class Packager
         $this->category = $category;
         $this->activity = $activity;
         $this->species = $species;
+        $this->id = $id;
     }
 
     /**
@@ -85,5 +99,9 @@ class Packager
         return $this->emb;
     }
 
+    public function __get($name)
+    {
+        return $this->{$name};
+    }
 
 }

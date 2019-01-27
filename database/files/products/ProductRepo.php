@@ -6,9 +6,14 @@ require_once 'Packager.php';
 require_once 'Ingredient.php';
 require_once 'Nutriment.php';
 require_once 'Image.php';
+require_once 'Nutrient.php';
+require_once 'Package.php';
+require_once 'DBEntries.php';
 
 class ProductRepo
 {
+    const LANGUAGE_ID_ENGLISH = 1;
+    const LANGUAGE_ID_FRENCH = 44;
     /**
      * @var array
      */
@@ -18,9 +23,17 @@ class ProductRepo
      */
     private $brandIndex = [];
     /**
+     * @var int
+     */
+    private $brandId = 1;
+    /**
      * @var array
      */
     private $categoryIndex = [];
+    /**
+     * @var int
+     */
+    private $categoryId = 1;
     /**
      * @var array
      */
@@ -30,21 +43,38 @@ class ProductRepo
      */
     private $ingredientsIndex = [];
     /**
+     * @var int
+     */
+    private $ingredientId = 1;
+    /**
      * @var array
      */
     private $nutrientLevelsIndex = [];
+    /**
+     * @var int
+     */
+    private $nutrientLevelId = 1;
     /**
      * @var array
      */
     private $nutrimentsIndex = [];
     /**
+     * @var int
+     */
+    private $nutrimentId = 1;
+    /**
      * @var array
      */
     private $packagesIndex = [];
+    /**
+     * @var int
+     */
+    private $packageId = 1;
+
 
     public function add(Product $product)
     {
-        $this->productIndex[$product->getName()] = $product;
+        $this->productIndex[] = $product;
     }
 
     public function getProducts()
@@ -54,7 +84,7 @@ class ProductRepo
 
     public function flushProducts()
     {
-        $f = array_values($this->productIndex);
+        $f = $this->productIndex;
         unset($this->productIndex);
         $this->productIndex = [];
         return $f;
@@ -62,27 +92,30 @@ class ProductRepo
 
     public function addBrands(string $brands): array
     {
+        $id = 1;
         $tmp = explode(',', $brands);
         $result = [];
         foreach ($tmp as $brand) {
-            $index = slugify($brand);
-            if (!isset($this->brandIndex[$index])) {
-                $this->brandIndex[$index] = $brand;
-                $result[] = $brand;
-            } else {
-                $result[] = $this->brandIndex[$index];
+            if (strlen($brand) < 50) {
+                $index = slugify(trim($brand));
+                if (!isset($this->brandIndex[$index])) {
+                    $this->brandIndex[$index] = new Brand($this->brandId, ucfirst($brand));
+                    $this->brandId++;
+                }
+                if (!isset($result[$index])) {
+                    $result[$index] = $this->brandIndex[$index];
+                }
             }
         }
-        return $result;
+        return array_values($result);
     }
 
-    public function addEmbCodes(string $embCode): Packager
+    public function addEmbCodes(string $embCode)
     {
-        if (!isset($this->embCodeIndex[$embCode])) {
-            return new Packager(strtoupper($embCode));
-        } else {
+        if (isset($this->embCodeIndex[$embCode])) {
             return $this->embCodeIndex[$embCode];
         }
+        return null;
     }
 
     public function addCategories($categories, $delimiter = ',')
@@ -93,28 +126,34 @@ class ProductRepo
         foreach ($tmp as $category) {
             $lang = explode(':', $category);
             if (isset($lang[1])) {
-                $lg = $lang[0];
+                $lg = trim($lang[0]);
                 if ($lg == 'en') {
                     $cat = ucwords(str_replace('-', ' ', $lang[1]));
                 } else {
                     $cat = $lang[1];
                 }
             } else {
-                $cat = $lang[0];
+                $cat = trim($lang[0]);
                 $lg = 'fr';
             }
-            if (!isset($this->categoryIndex[$lg])) {
-                $this->categoryIndex[$lg] = array();
-            }
-            $index = slugify($cat);
-            if (!isset($this->categoryIndex[$lg][$index])) {
-                $this->categoryIndex[$lg][$index] = $cat;
-                $result[] = [$lg, $cat];
-            } else {
-                $result[] = [$lg, $this->categoryIndex[$lg][$index]];
+            switch ($lg) {
+                case "en":
+                case "fr":
+                    if (strlen($cat) < 60) {
+                        if (!isset($this->categoryIndex[$lg])) {
+                            $this->categoryIndex[$lg] = array();
+                        }
+                        $index = slugify($cat);
+                        if (!isset($this->categoryIndex[$lg][$index])) {
+                            $this->categoryIndex[$lg][$index] = new ProductCategory($this->categoryId, $cat, $lg);
+                            $this->categoryId++;
+                        }
+                        $result[] = $this->categoryIndex[$lg][$index];
+                    }
+                    break;
             }
         }
-        return $result;
+        return array_values($result);
     }
 
     public function setEmbCodeList($codes)
@@ -151,14 +190,28 @@ class ProductRepo
                         break;
                 }
             }
-            $this->ingredientsIndex[$ingredientObj->getTag()] = $ingredientObj;
-            $productIngredients[] = $ingredientObj;
+            $label = slugify($ingredientObj->name);
+            if (!isset($this->ingredientsIndex[$label])) {
+                $this->ingredientsIndex[$label] = $ingredientObj;
+                $this->ingredientsIndex[$label]->id = $this->ingredientId;
+                $this->ingredientId++;
+            }
+            if (!isset($productIngredients[$label])) {
+                $productIngredients[$label] = $this->ingredientsIndex[$label];
+            }
+
             if ($ingredientObj2->hasName()) {
-                $this->ingredientsIndex[$ingredientObj2->getTag()] = $ingredientObj2;
-                $productIngredients[] = $ingredientObj2;
+                $label = slugify($ingredientObj2->name);
+                $this->ingredientsIndex[$label] = $ingredientObj2;
+                $this->ingredientsIndex[$label]->id = $this->ingredientId;
+                $this->ingredientId++;
+
+                if (!isset($productIngredients[$label])) {
+                    $productIngredients[$label] = $this->ingredientsIndex[$label];
+                }
             }
         }
-        return $productIngredients;
+        return array_values($productIngredients);
 
     }
 
@@ -171,12 +224,18 @@ class ProductRepo
         $nutrients = explode(';', $nutrientLevels);
         foreach ($nutrients as $nutrient) {
             $label = explode(':', $nutrient);
-            if ($label[0] == 'en') {
-                $productNutrients[] = $label[1];
-                $this->nutrientLevelsIndex[$label[1]] = true;
+            if ($label[0] == 'en' && strpos($label[1], 'quantity') !== false) {
+                $labelSlug = slugify($label[1]);
+                if (!isset($this->nutrientLevelsIndex[$labelSlug])) {
+                    $this->nutrientLevelsIndex[$labelSlug] = new Nutrient($this->nutrientLevelId, $label[1]);
+                    $this->nutrientLevelId++;
+                }
+                if (!isset($productNutrients[$labelSlug])) {
+                    $productNutrients[$labelSlug] = $this->nutrientLevelsIndex[$labelSlug];
+                }
             }
         }
-        return $productNutrients;
+        return array_values($productNutrients);
     }
 
     public function addNutriments($nutriments)
@@ -190,8 +249,13 @@ class ProductRepo
         foreach ($productNutriments as $nutriment) {
             $label = explode('|', $nutriment);
             if (!is_null($label[0]) && !is_null($label[1])) {
-                $this->nutrimentsIndex[$label[0]] = true;
-                $nutrimentList[] = new Nutriment($label[0], $label[1]);
+                $lab = slugify(trim($label[0]));
+                if (!isset($this->nutrimentsIndex[$lab])) {
+                    $this->nutrimentsIndex[$lab] = new Nutriment($this->nutrimentId, ucFirst(trim($label[0])),
+                        $label[1]);
+                    $this->nutrimentId++;
+                }
+                $nutrimentList[] = $this->nutrimentsIndex[$lab];
             }
         }
         return $nutrimentList;
@@ -202,10 +266,16 @@ class ProductRepo
         $packageList = [];
         $packages = explode(',', $packaging);
         foreach ($packages as $package) {
-            $this->packagesIndex[$package] = true;
-            $packageList[] = $package;
+            $label = slugify(trim($package));
+            if (!isset($this->packagesIndex[$label])) {
+                $this->packagesIndex[$label] = new Package($this->packageId, ucfirst(trim($package)));
+                $this->packageId++;
+            }
+            if (!isset($packageList[$label])) {
+                $packageList[$label] = $this->packagesIndex[$label];
+            }
         }
-        return $packageList;
+        return array_values($packageList);
     }
 
     public function processImage($fullId, $tag, $image)
@@ -266,6 +336,17 @@ class ProductRepo
         }
         return new Image($id, $image[0], $image[2], $image[3], $image[1]);
 
+    }
+
+    public function __get($name)
+    {
+        return $this->{$name};
+
+    }
+
+    public function __unset($name)
+    {
+        unset($this->{$name});
     }
 
 }
