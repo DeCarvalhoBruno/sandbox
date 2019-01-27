@@ -261,6 +261,8 @@ class ProductRepo
                     substr($fullId, -5)
                 );
                 break;
+            default:
+                return null;
         }
         return new Image($id, $image[0], $image[2], $image[3], $image[1]);
 

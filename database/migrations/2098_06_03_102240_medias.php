@@ -55,6 +55,7 @@ class Medias extends Migration
             $table->foreign('media_type_id')
                 ->references('media_type_id')->on('media_types')
                 ->onDelete('cascade');
+            $table->unique(['media_digital_id', 'media_type_id'], 'idx_media_digital_type_id');
         });
 
         Schema::create('media_img', function (Blueprint $table) {
@@ -67,6 +68,7 @@ class Medias extends Migration
             $table->foreign('media_digital_id')
                 ->references('media_digital_id')->on('media_digital')
                 ->onDelete('cascade');
+            $table->unique(['media_img_id', 'media_digital_id'], 'idx_media_img_digital_id');
         });
 
         Schema::create('media_records', function (Blueprint $table) {
@@ -77,6 +79,7 @@ class Medias extends Migration
             $table->foreign('media_type_id')
                 ->references('media_type_id')->on('media_types')
                 ->onDelete('cascade');
+            $table->unique(['media_record_id', 'media_type_id'], 'idx_media_record_type_id');
         });
 
         Schema::create('media_img_formats', function (Blueprint $table) {
@@ -101,6 +104,7 @@ class Medias extends Migration
             $table->foreign('media_img_format_id', 'fk_img_formats')
                 ->references('media_img_format_id')->on('media_img_formats')
                 ->onDelete('cascade');
+            $table->unique(['media_img_format_type_id', 'media_digital_id'], 'idx_media_format_digital_id');
         });
 
         Schema::create('media_groups', function (Blueprint $table) {
@@ -161,6 +165,7 @@ class Medias extends Migration
                 ->onDelete('cascade');
             $table->unique(['media_category_record_id', 'media_record_target_id', 'media_category_id'],
                 'idx_media_category_record');
+            $table->unique(['media_category_record_id', 'media_category_id'], 'idx_media_category_record_id');
         });
 
         Schema::create('media_entities', function (Blueprint $table) {

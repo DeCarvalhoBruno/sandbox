@@ -8,6 +8,10 @@ class Product
      */
     private $name;
     /**
+     * @var string
+     */
+    private $identifier;
+    /**
      * @var array
      */
     private $brands;
@@ -55,6 +59,14 @@ class Product
      * @var Image
      */
     private $image;
+
+    /**
+     * @param string $identifier
+     */
+    public function setIdentifier(string $identifier)
+    {
+        $this->identifier = $identifier;
+    }
 
     /**
      * @param int $novaGroup
@@ -120,7 +132,7 @@ class Product
     public function setCategories(array $categories)
     {
         foreach ($categories as $category) {
-            if (!isset($this->categoryIndex[$category[1]]) && !empty($this->categoryIndex[$category[1]])) {
+            if (!isset($this->categoryIndex[$category[1]]) && !empty($category[1])) {
                 $this->categoryIndex[$category[1]] = true;
                 $this->categories[] = new ProductCategory($category[1], $category[0]);
             }
@@ -195,7 +207,11 @@ class Product
      */
     public function setNutritionGrade(string $nutritionGrade)
     {
-        $this->nutritionGrade = $nutritionGrade;
+        if (empty($nutritionGrade)) {
+            $this->nutritionGrade = null;
+        } else {
+            $this->nutritionGrade = $nutritionGrade;
+        }
     }
 
     /**

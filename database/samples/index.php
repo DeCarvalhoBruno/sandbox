@@ -6,11 +6,43 @@ require_once 'ProductRepo.php';
 $startExecTime = microtime(true);
 $startMemory = memory_get_usage();
 
+$data = organizeData(organizeEmbCodes(), true, 10);
+test($data);
 
-$data = organizeData(organizeEmbCodes());
-$f = $data->getProducts();
+//readData();
 
-function organizeData($codes)
+function readData()
+{
+    $size = filesize('data1.txt');
+    $handle = @fopen('data1.txt', "r");
+    $phpData = unserialize(fread($handle, ($size + 128)));
+    fclose($handle);
+//    dd(count(unserialize($s)));
+    $i = 1;
+
+    foreach ($phpData as $data) {
+
+        dd($data);
+        if ($i == 20) {
+            break;
+        }
+        $i++;
+
+    }
+}
+
+function test($data)
+{
+    $f = $data->getProducts();
+    dd($f);
+    foreach ($f as $d) {
+        if ($d->getImage()) {
+            dd($d);
+        }
+    }
+}
+
+function organizeData($codes, $test = true, $amountOfRecordsProcessed = 10)
 {
     $filteredData = [];
     $i = 1;
@@ -20,7 +52,7 @@ function organizeData($codes)
     $header = fgetcsv($handle, 1024, $sep);
     $productRepo = new ProductRepo();
     $productRepo->setEmbCodeList($codes);
-    while (($data = fgetcsv($handle, 8192, $sep)) != false) {
+    while (($data = fgetcsv($handle, 16382, $sep)) != false) {
         $product = new Product();
         $tag = $id = '';
 
@@ -28,6 +60,7 @@ function organizeData($codes)
             switch ($header[$key]) {
                 case '_id':
                     $id = $item;
+                    $product->setIdentifier($id);
                     break;
                 case 'product_name':
                     $product->setName(ucfirst(trim($item)));
@@ -69,6 +102,7 @@ function organizeData($codes)
                     break;
                 case 'codes_tags':
                     $tag = $item;
+                    break;
                 case 'images':
                     $imageData = explode(';', $item);
                     if (count($imageData) === 4) {
@@ -84,29 +118,29 @@ function organizeData($codes)
         $product->unsetCategoryIndex();
         $productRepo->add($product);
         $i++;
-        if ($i == 50) {
-            break;
-//            fclose($handle);
-//            dd($productRepo->getProducts());
-//        if ($i % 10000 === 0) {
-//            writeProducts($i, $productRepo);
+
+        if ($test) {
+            if ($i == $amountOfRecordsProcessed) {
+                break;
+            }
+        } else {
+            if ($i % 10000 === 0) {
+                writeProducts($i, $productRepo);
+            }
         }
     }
     fclose($handle);
 
+    if (!$test) {
+        writeProducts($i, $productRepo);
+    }
 
-//    writeProducts($i, $productRepo);
-
-//    $handle = @fopen('data.txt', "w");
-//    fwrite($handle, serialize($productRepo->getProducts()));
-////    dd($productRepo->getProducts());
-//    fclose($handle);
     return $productRepo;
 }
 
 function writeProducts($i, ProductRepo $productRepo)
 {
-    $handle2 = @fopen(sprintf('data%s.txt', $i), "w");
+    $handle2 = @fopen(sprintf('data%s.txt', round($i / 10000)), "w");
     fwrite($handle2, serialize($productRepo->flushProducts()));
     fclose($handle2);
 }
@@ -164,3 +198,6 @@ function getEmbCodesFromFiles()
     }
     fclose($handle2);
 }
+
+execution_time($startExecTime);
+execution_memory($startMemory);

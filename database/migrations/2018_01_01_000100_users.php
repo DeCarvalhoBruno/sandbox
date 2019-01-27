@@ -22,6 +22,8 @@ class Users extends Migration
             $table->boolean('activated')->default(false);
             $table->rememberToken()->nullable();
             $table->index('remember_token','idx_users_remember_token');
+            $table->unique(['user_id','email'],'idx_user_id_email');
+            $table->unique(['user_id','username'],'idx_user_id_username');
         });
 
         Schema::create('user_activations', function (Blueprint $table) {

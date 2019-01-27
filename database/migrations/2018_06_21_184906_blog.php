@@ -35,6 +35,7 @@ class Blog extends Migration
 
             $table->foreign('user_id')
                 ->references('user_id')->on('users');
+            $table->unique(['blog_post_id','blog_post_slug'],'idx_blog_post_id_slug');
         });
 
         Schema::create('blog_post_version', function (Blueprint $table) {
