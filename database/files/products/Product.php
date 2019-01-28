@@ -183,7 +183,7 @@ class Product
      */
     public function setName(string $name)
     {
-        $this->name = ucfirst($name);
+        $this->name = $name;
     }
 
     public function __set($name, $value)

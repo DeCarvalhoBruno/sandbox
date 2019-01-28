@@ -30,7 +30,8 @@ class DBEntries
         $this->products[] = [
             'product_name' => $product->name,
             'product_identifier' => $product->identifier,
-            'product_packager' => $emb
+            'product_packager_id' => $emb,
+            'created_at' => date('Y-m-d H:i:s')
         ];
     }
 
@@ -73,8 +74,8 @@ class DBEntries
             'product_packager_address' => $packager->address,
             'product_packager_postcode' => $packager->postcode,
             'product_packager_town' => $packager->town,
-            'product_packager_category' => $packager->category,
-            'product_packager_activity' => $packager->activity,
+            'product_packager_category' => (empty($packager->category)) ? null : (implode(', ', $packager->category)),
+            'product_packager_activity' => (empty($packager->activity)) ? null : (implode(', ', $packager->activity)),
             'product_packager_species' => $packager->species,
         ];
     }
@@ -179,11 +180,15 @@ class DBEntries
         if (is_null($productNutriments)) {
             return;
         }
+        $uniqueNuts = [];
         foreach ($productNutriments as $productNutriment) {
-            $this->productNutrimentRecords[] = [
-                'product_id' => $productId,
-                'product_nutriment_id' => $productNutriment->id,
-            ];
+            if (!isset($uniqueNuts[$productNutriment->id])) {
+                $uniqueNuts[$productNutriment->id] = true;
+                $this->productNutrimentRecords[] = [
+                    'product_id' => $productId,
+                    'product_nutriment_id' => $productNutriment->id,
+                ];
+            }
         }
     }
 

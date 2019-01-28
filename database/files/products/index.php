@@ -5,11 +5,11 @@ require_once 'ProductRepo.php';
 
 $startExecTime = microtime(true);
 $startMemory = memory_get_usage();
+//organizeData(organizeEmbCodes(), true, false, 1000);
 
-organizeData(organizeEmbCodes(), false, true, 10);
-//processDataForDB();
-//readData();
-
+//organizeData(organizeEmbCodes(), false, true, 10);
+processDataForDB();
+readData();
 
 function test($data)
 {
@@ -31,24 +31,28 @@ function readData()
         die(sprintf("%s could not be read.", $origDir));
     }
     $productId = 1;
+    //We wanna insert products in the database before the rest because of the integrity checks.
+    $productsArray = [];
     while (($file = readdir($dir)) !== false) {
         $fullPath = $origDir . '/' . $file;
         if (is_file($fullPath) && strpos($file, 'product_data') !== false) {
             $size = filesize($fullPath);
             $handle = fopen($fullPath, "r");
             $products = unserialize(fread($handle, ($size + 128)));
-            $productId = writeSQLEntries($productId, $products);
-            unset($products);
+            $data = writeSQLEntries($productId, $products);
+            $productId = $data->productId;
+            $productsArray = array_merge($data->products_list, $productsArray);
             fclose($handle);
         }
     }
     closedir($dir);
+    writeData(1, $productsArray, 'products');
 }
 
 function processDataForDB()
 {
-    $size = filesize('data/non_product_values0.txt');
-    $handle = fopen('data/non_product_values0.txt', "r");
+    $size = filesize('data/non_product_values_000.txt');
+    $handle = fopen('data/non_product_values_000.txt', "r");
     /**
      * @var $productRepo \ProductRepo
      */
@@ -99,12 +103,10 @@ function processDataForDB()
 //    dd($dbEntries->productNutrimentRecords);
 
     writeData(0, $dbEntries, 'query_init');
-
-
     unset($dbEntries, $productRepo);
 }
 
-function writeSQLEntries(int $productId, array $products, $test = false)
+function writeSQLEntries(int $productId, array $products)
 {
     $dbEntries = new DBEntries();
     foreach ($products as $key => $product) {
@@ -116,14 +118,12 @@ function writeSQLEntries(int $productId, array $products, $test = false)
         $dbEntries->addProductNutrientLevelRecords($productId, $product->nutrientLevels);
         $dbEntries->addProductPackageRecords($productId, $product->packaging);
         $dbEntries->addProductNutrimentRecords($productId, $product->nutriments);
-
         $productId++;
     }
-    unset($products);
-    if (!$test) {
-        writeData($productId, $dbEntries, 'query_arrays');
-    }
-    return $productId;
+    $productList = $dbEntries->products;
+    unset($dbEntries->products);
+    writeData($productId, $dbEntries, 'product_dependents');
+    return (object)['productId' => $productId, 'products_list' => $productList];
 }
 
 function organizeData($codes, $test = true, $writeData = true, $amountOfRecordsProcessed = 10)
@@ -136,17 +136,25 @@ function organizeData($codes, $test = true, $writeData = true, $amountOfRecordsP
     $productRepo->setEmbCodeList($codes);
     unset($codes);
     while (($data = fgetcsv($handle, 8196, $sep)) != false) {
-        $product = new Product();
-        $tag = $id = '';
+//        $product = new Product();
+//        $tag = $id = '';
+        $tag = '';
 
         while (list($key, $item) = each($data)) {
             switch ($header[$key]) {
                 case '_id':
-                    $id = $item;
-                    $product->setIdentifier($id);
+                    $id = trim(str_replace(['_', '-', ' '], '', $item));
+                    if (preg_match('/^[0-9]+$/', $id)) {
+                        $product = new Product();
+                        $product->setIdentifier($id);
+                    } else {
+                        continue 2;
+                    }
                     break;
                 case 'product_name':
-                    $product->setName(ucfirst(trim($item)));
+                    if (!is_null($item) && !empty($item) && strlen($item) < 150) {
+                        $product->setName(ucfirst(trim($item)));
+                    }
                     break;
                 case 'brands':
                     $product->setBrands($productRepo->addBrands($item));
@@ -163,13 +171,15 @@ function organizeData($codes, $test = true, $writeData = true, $amountOfRecordsP
                     }
                     break;
                 case 'ingredients_text':
-                    $product->setIngredientsText($item);
+                    $product->setIngredientsText(ucfirst(trim($item)));
                     break;
                 case 'ingredients':
                     $product->setIngredients($productRepo->addIngredients($item));
                     break;
                 case 'nova_group':
-                    $product->setNovaGroup(intval($item));
+                    if (strlen($item) == 1) {
+                        $product->setNovaGroup(intval($item));
+                    }
                     break;
                 case 'nutrient_levels_tags':
                     $product->setNutrientLevels($productRepo->addNutrientLevels($item));
@@ -199,8 +209,11 @@ function organizeData($codes, $test = true, $writeData = true, $amountOfRecordsP
         }
         $product->unsetCategoryIndex();
 
-        $productRepo->add($product);
-        $i++;
+        $productName = $product->name;
+        if (isset($productName) && !empty($productName)) {
+            $productRepo->add($product);
+            $i++;
+        }
 
         if ($test) {
             if ($i == $amountOfRecordsProcessed) {
@@ -224,7 +237,8 @@ function organizeData($codes, $test = true, $writeData = true, $amountOfRecordsP
 
 function writeData($i, $values, $filename = 'product_data')
 {
-    $handle2 = @fopen(sprintf('data/%s%s.txt', $filename, round($i / 5000)), "w");
+    $fileNumber = (string)round($i / 5000);
+    $handle2 = @fopen(sprintf('data/%s_%s.txt', $filename, str_pad($fileNumber, 3, '0', STR_PAD_LEFT)), "w");
     fwrite($handle2, serialize($values));
     fclose($handle2);
 }
@@ -233,7 +247,7 @@ function organizeEmbCodes()
 {
     $codes = [];
     $sep = chr(9);
-    $handle = @fopen('codes.csv', "r");
+    $handle = @fopen('_codes.csv', "r");
     fgetcsv($handle, 1024, $sep);
     $i = 1;
     $header = array_flip([
@@ -249,19 +263,25 @@ function organizeEmbCodes()
         'species'
     ]);
     while (($data = fgetcsv($handle, 8192, $sep)) != false) {
-        $codes[str_replace('_', '-', slugify(sprintf('FR %s EC', $data[$header['emb']])))] = new Packager(
-            $data[$header['emb']],
-            $i,
-            $data[$header['name']],
-            $data[$header['siret']],
-            $data[$header['address']],
-            $data[$header['postcode']],
-            $data[$header['town']],
-            $data[$header['category']],
-            $data[$header['activity']],
-            $data[$header['species']]
-        );
-        $i++;
+        $embID = str_replace('_', '-', slugify(sprintf('FR %s EC', $data[$header['emb']])));
+        if (!isset($codes[$embID])) {
+            $codes[$embID] = new Packager(
+                $data[$header['emb']],
+                $i,
+                $data[$header['name']],
+                $data[$header['siret']],
+                $data[$header['address']],
+                $data[$header['postcode']],
+                $data[$header['town']],
+                [$data[$header['category']]],
+                [$data[$header['activity']]],
+                $data[$header['species']]
+            );
+            $i++;
+        } else {
+            $codes[$embID]->updateCategory($data[$header['category']]);
+            $codes[$embID]->updateActivity($data[$header['activity']]);
+        }
     }
     fclose($handle);
 //    dd(array_shift(array_chunk($codes,100)));
@@ -298,7 +318,7 @@ function getEmbCodesFromFiles()
 
 function extractLanguages()
 {
-    $languageCSV = \League\Csv\Reader::createFromPath('data/languages.tsv', 'r');
+    $languageCSV = \League\Csv\Reader::createFromPath('_languages.tsv', 'r');
     //Tab as delimiter
     $languageCSV->setDelimiter(chr(9));
     $languageDBColumns = [

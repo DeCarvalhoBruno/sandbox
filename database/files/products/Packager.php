@@ -33,13 +33,13 @@ class Packager
      */
     private $town;
     /**
-     * @var string
+     * @var array
      */
-    private $category;
+    private $category = [];
     /**
-     * @var string
+     * @var array
      */
-    private $activity;
+    private $activity = [];
     /**
      * @var string
      */
@@ -58,20 +58,20 @@ class Packager
      * @param string $address
      * @param string $postcode
      * @param string $town
-     * @param string $category
-     * @param string $activity
+     * @param array $category
+     * @param array $activity
      * @param string $species
      */
     public function __construct(
         string $code,
         int $id,
-        string $name=null,
+        string $name = null,
         string $siret = null,
         string $address = null,
         string $postcode = null,
         string $town = null,
-        string $category = null,
-        string $activity = null,
+        array $category = [],
+        array $activity = [],
         string $species = null
     ) {
         $this->name = $name;
@@ -102,6 +102,20 @@ class Packager
     public function __get($name)
     {
         return $this->{$name};
+    }
+
+    public function updateCategory($s)
+    {
+        if (!empty($s) && !is_null($s)) {
+            $this->category[] = $s;
+        }
+    }
+
+    public function updateActivity($s)
+    {
+        if (!empty($s) && !is_null($s)) {
+            $this->activity[] = $s;
+        }
     }
 
 }

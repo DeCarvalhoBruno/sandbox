@@ -31,7 +31,7 @@ class Products extends Migration
             $table->unsignedInteger('product_packager_id');
 
             $table->string('product_name', 150);
-            $table->string('product_identifier', 20)->nullable();
+            $table->string('product_identifier', 50)->nullable();
 
             $table->timestamps();
 
@@ -144,7 +144,7 @@ class Products extends Migration
             $table->string('product_nutrient_level_name', 100);
         });
 
-        Schema::create('product_nutrient_level_record', function (Blueprint $table) {
+        Schema::create('product_nutrient_level_records', function (Blueprint $table) {
             $table->increments('product_nutrient_level_record_id');
 
             $table->unsignedInteger('product_id');
