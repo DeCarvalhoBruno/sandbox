@@ -88,7 +88,8 @@ class Blog extends Controller
             'record' => $blogPost,
             'status_list' => BlogPostStatus::getConstants('BLOG'),
             'blog_post_categories' => $categories->tree,
-            'blog_post_slug' => $this->getPostUrl($record),
+            'url' => $this->getPostUrl($record),
+            'blog_post_slug'=>$record->getAttribute('blog_post_slug'),
             'thumbnails' => $mediaRepo->image()->getImages(
                 $record->getAttribute('entity_type_id'), [
                 'media_uuid as uuid',
@@ -126,7 +127,8 @@ class Blog extends Controller
 
         return (
         [
-            'blog_post_slug' => $this->getPostUrl($post)
+            'url' => $this->getPostUrl($post),
+            'blog_post_slug' => $post->getAttribute('blog_post_slug'),
         ]);
     }
 

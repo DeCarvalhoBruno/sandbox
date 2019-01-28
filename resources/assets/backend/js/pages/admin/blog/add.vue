@@ -71,7 +71,7 @@
                                        :class="{ 'is-invalid': form.errors.has('blog_post_title') }"
                                        :placeholder="$t('db.blog_post_title')"
                                        aria-describedby="help_blog_post_title">
-                                <small class="text-muted" v-show="blog_post_slug">{{blog_post_slug}}</small>
+                                <small class="text-muted" v-show="url">{{url}}</small>
                             </div>
                         </div>
                         <div class="form-group row col-lg p-0 m-0">
@@ -118,7 +118,8 @@
                                       placeholder="Post Excerpt"
                                       @input="changedField('blog_post_excerpt')"></textarea>
                             <small id="help_new_group_name" class="text-muted"
-                                >{{$t('pages.blog.excerpt_label')}}</small>
+                            >{{$t('pages.blog.excerpt_label')}}
+                            </small>
                         </div>
                     </div>
                 </div>
@@ -174,7 +175,6 @@
   import swal from '~/mixins/sweet-alert'
   import form from '~/mixins/form'
 
-
   // import VueClipboard from 'vue-clipboard2'
   //import Vue from 'vue'
   // VueClipboard.config.autoSetContainer = true // add this line
@@ -194,7 +194,7 @@
       MediaModal,
       ImageUploader
     },
-    mixins:[
+    mixins: [
       swal,
       form
     ],
@@ -207,7 +207,7 @@
         editorConfig: this.getConfig(),
         status_list: null,
         current_status: '',
-        blog_post_slug: null,
+        url: null,
         saveMode: null,
         blog_post_categories: [],
         tagInput: '',
@@ -283,7 +283,7 @@
           return
         }
         try {
-          let suffix, saveMode,msg
+          let suffix, saveMode, msg
           let route = this.$route
           if ((route.name.lastIndexOf('add') > 0)) {
             saveMode = suffix = 'create'
@@ -293,17 +293,21 @@
             suffix = `${saveMode}/${route.params.slug}`
             msg = this.$t('pages.blog.save_success')
           }
-          const {data} = await this.form.post(`/ajax/admin/blog/post/${suffix}`)
-          this.blog_post_slug = data.blog_post_slug
+          let {data} = await this.form.post(`/ajax/admin/blog/post/${suffix}`)
+          this.url = data.url
+          if (saveMode === 'create') {
+            this.form.addField('blog_post_slug', data.blog_post_slug)
+          } else {
+            this.form.blog_post_slug = data.blog_post_slug
+          }
           this.saveMode = 'edit'
-          this.swalNotification('success',msg)
-
+          this.swalNotification('success', msg)
         } catch (e) {}
       },
       getInfo (data, saveMode) {
         this.form = new Form(data.record)
         this.status_list = data.status_list
-        this.blog_post_slug = data.blog_post_slug
+        this.url = data.url
         this.current_status = this.$t(`constants.${data.record.blog_post_status}`)
         this.saveMode = saveMode
         this.blog_post_categories = data.blog_post_categories
