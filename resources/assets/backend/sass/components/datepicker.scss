@@ -1,0 +1,76 @@
+$datepicker-border-radius: 5px;
+
+.vdp-datepicker {
+  .day__month_btn.up, .cell.day-header {
+    font-weight: bold;
+  }
+
+  &.calendar-open-left {
+    .vdp-datepicker__calendar {
+      right: 0;
+    }
+  }
+
+  .vdp-datepicker__calendar {
+    .cell {
+      &:not(.blank):not(.disabled).day,
+      &:not(.blank):not(.disabled).month,
+      &:not(.blank):not(.disabled).year {
+        &:hover {
+          border: 1px solid transparent;
+          background-color: #d4d4d4;
+          border-radius: $datepicker-border-radius;
+        }
+
+        &.selected:hover {
+          background: $brand-primary;
+        }
+      }
+
+      &.selected {
+        background-color: $brand-primary;
+        color: #fff;
+        border-radius: $datepicker-border-radius;
+
+        &:hover {
+          background-color: $brand-primary;
+
+        }
+      }
+
+      &.highlighted {
+        background-color: $brand-primary;
+        color: #fff;
+        border-radius: $datepicker-border-radius;
+      }
+
+    }
+  }
+
+  /*
+  .cell
+          display inline-block
+          padding 0 5px
+          width (100/7)%
+          height 40px
+          line-height 40px
+          text-align center
+          vertical-align middle
+          border 1px solid transparent
+          &:not(.blank):not(.disabled).day
+          &:not(.blank):not(.disabled).month
+          &:not(.blank):not(.disabled).year
+              cursor pointer
+              &:hover
+                  border 1px solid #4bd
+          &.selected
+              background #4bd
+              &:hover
+                  background #4bd
+              &.highlighted
+                  background #4bd
+   */
+  input {
+    border: none;
+  }
+}

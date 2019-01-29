@@ -31,6 +31,7 @@ class Blog extends Migration
             $table->text('blog_post_content')->nullable();
             $table->text('blog_post_excerpt')->nullable();
             $table->boolean('blog_post_is_sticky')->default(false);
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')

@@ -1,36 +1,41 @@
 <template>
     <div id="blog_post_container" class="container p-0 m-0">
         <div id="trumbowyg-icons" v-html="require('trumbowyg/dist/ui/icons.svg')"></div>
-        <form @submit.prevent="save" id="form_edit_blog">
+        <form @submit.prevent="save" id="form_edit_blog" ref="form_this">
             <div class="row p-0 m-0 mb-1">
                 <div class="card col-lg">
                     <div class="container">
-                        <div class="form-group row p-2">
-                            <div class="col-lg-4 form-head-row">
-                                <span>{{$t('general.status')}}: </span>
+                        <div id="head_row" class="form-group row">
+                            <div class="col-lg-4" id="head_col_draft">
                                 <template v-if="form_status_editing">
                                     <select v-model="form.blog_post_status"
-                                            @change="changedField('blog_post_status')">
-                                        <option v-for="(idx,status) in status_list" :key="idx" :value="status">
-                                            {{$t(`constants.${status}`)}}
+                                            @change="changedField('blog_post_status')"
+                                            class="custom-control custom-select">
+                                        <option v-for="(idx,status) in status_list" :key="idx" :value="status"
+                                        >{{$t(`constants.${status}`)}}
                                         </option>
                                     </select>
                                     <button type="button"
-                                            class="btn btn-default btn-small"
-                                            @click="toggleEditing('form_status_editing')"
-                                    >{{$t('general.ok')}}
+                                            class="btn btn-success btn-small"
+                                            @click="toggleEditing('form_status_editing')">
+                                        <fa icon="check"></fa>
+                                    </button>
+                                    <button type="button"
+                                            class="btn btn-light btn-small"
+                                            @click="toggleEditing('form_status_editing')">
+                                        <fa icon="ban"></fa>
                                     </button>
                                 </template>
                                 <template v-else>
+                                    <span>{{$t('general.status')}}: </span>
                                     <span class="form-field-togglable"
-                                          @click="toggleEditing('form_status_editing')">
-                                    {{ ($te(`constants.${form.blog_post_status}`))?
+                                          @click="toggleEditing('form_status_editing')"
+                                    >{{ ($te(`constants.${form.blog_post_status}`))?
                                         $t(`constants.${form.blog_post_status}`):
-                                        ''}}
-                                    </span>
+                                        ''}}</span>
                                 </template>
                             </div>
-                            <div class="col-lg-4 form-head-row">
+                            <div class="col-lg-6">
                                 <div v-if="form_user_editing" class="container m-0 p-0">
                                     <div class="row">
                                         <div class="m-0 p-0 col-lg d-inline-flex">
@@ -41,9 +46,14 @@
                                                                   @updateAddedItems="updateUsers"
                                                                   limit="2"/>
                                                 <button type="button"
-                                                        class="btn btn-default btn-small"
-                                                        @click="toggleEditing('form_user_editing')"
-                                                >{{$t('general.ok')}}
+                                                        class="btn btn-success btn-small"
+                                                        @click="toggleEditing('form_user_editing')">
+                                                    <fa icon="check"></fa>
+                                                </button>
+                                                <button type="button"
+                                                        class="btn btn-light btn-small"
+                                                        @click="toggleEditing('form_user_editing')">
+                                                    <fa icon="ban"></fa>
                                                 </button>
                                             </div>
                                         </div>
@@ -56,15 +66,15 @@
                                     >{{form.blog_post_user}}</span>
                                 </template>
                             </div>
-                            <div class="col-lg-4 form-head-row">
+                            <div class="col-lg-2">
                                 <button type="button"
                                         class="btn btn-primary float-lg-right"
                                         @click="save">{{$t('general.save')}}
                                 </button>
                             </div>
                         </div>
-                        <div class="form-group row col-lg-10">
-                            <div class="col-lg">
+                        <div class="form-group row col-lg">
+                            <div class="col-lg-9">
                                 <input v-model="form.blog_post_title" type="text" required autocomplete="off"
                                        name="blog_post_title" id="blog_post_title"
                                        class="form-control" maxlength="255"
@@ -73,9 +83,20 @@
                                        aria-describedby="help_blog_post_title">
                                 <small class="text-muted" v-show="url">{{url}}</small>
                             </div>
+                            <div class="form-group row col-lg-3 p-0 m-0">
+                                <datepicker class="calendar-open-left"
+                                            v-model="form.published_at"
+                                            name="published_at"
+                                            :language="language"
+                                            :monday-first="true"
+                                            :typeable="true"
+                                            :format="$store.getters['lang/dateFormat']"
+                                ></datepicker>
+                            </div>
                         </div>
-                        <div class="form-group row col-lg p-0 m-0">
-                        </div>
+                        <!--<div class="form-group row col-lg">-->
+                        <!--<datepicker :inline="true"></datepicker>-->
+                        <!--</div>-->
                     </div>
                 </div>
             </div>
@@ -169,9 +190,10 @@
   import TreeList from '~/components/tree-list/TreeList'
   import InputTagSearch from '~/components/InputTagSearch'
   import ImageUploader from '~/components/media/ImageUploader'
+  import Datepicker from 'vuejs-datepicker'
+  import { en, fr } from 'vuejs-datepicker/dist/locale'
 
   import MediaModal from '~/components/media/MediaModal'
-  // import swal from 'sweetalert2'
   import swal from '~/mixins/sweet-alert'
   import form from '~/mixins/form'
 
@@ -192,7 +214,8 @@
       InputTagSearch,
       TreeList,
       MediaModal,
-      ImageUploader
+      ImageUploader,
+      Datepicker
     },
     mixins: [
       swal,
@@ -212,6 +235,7 @@
         blog_post_categories: [],
         tagInput: '',
         thumbnails: [],
+        language: fr,
         form: new Form({
           blog_post_content: '',
           blog_post_title: '',
@@ -312,6 +336,7 @@
         this.saveMode = saveMode
         this.blog_post_categories = data.blog_post_categories
         this.thumbnails = data.thumbnails
+        this.form.published_at = new Date(2016, 6, 9)
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -326,6 +351,15 @@
       let url = `/ajax/admin/blog/post/${suffix}`
       axios.get(url).then(({data}) => {
         next(vm => vm.getInfo(data, saveMode))
+      })
+    },
+    beforeRouteLeave (to, from, next) {
+      this.swalSaveWarning().then((result) => {
+        if (result.value) {
+          next()
+        } else {
+          next(false)
+        }
       })
     }
   }

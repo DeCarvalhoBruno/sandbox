@@ -23,8 +23,8 @@
     padding: .3rem;
     flex: 1;
 
-    &:focus, &:active{
-      outline:none;
+    &:focus, &:active {
+      outline: none;
     }
   }
 
@@ -47,21 +47,27 @@
 .input-tag-search-wrapper {
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
 
   .input-tag-container {
-    width: 85%;
+    width: 90%;
   }
 
   .input-tag {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    height: inherit;
   }
 
   .input-tag input {
     flex: 1;
     background: transparent;
     border: none;
+
+    &:focus, &:active {
+      outline: none;
+    }
   }
 
   .input-tag span {
