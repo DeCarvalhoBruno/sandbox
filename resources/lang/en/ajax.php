@@ -88,7 +88,7 @@ return [
         'media_title' => 'Title',
         'media_alt' => 'Alt text',
         'media_description' => 'Description',
-        'media_caption' => 'Caption'
+        'media_caption' => 'Caption',
     ],
     'db_raw' => [
         'full_name' => 'full_name',
@@ -260,7 +260,8 @@ return [
             'excerpt_label' => 'This user-defined summary of the post can be displayed on the front page.',
             'add_success' => 'The blog post was created.',
             'save_success' => 'The blog post was updated.',
-            'edit_image' => 'Edit image'
+            'edit_image' => 'Edit image',
+            'published_at'=>'Published on:'
         ]
     ],
     'tables' => [

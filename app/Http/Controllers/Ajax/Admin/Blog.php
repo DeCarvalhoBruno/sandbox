@@ -72,6 +72,7 @@ class Blog extends Controller
                 'blog_post_slug',
                 'blog_post_content',
                 'blog_post_excerpt',
+                'published_at',
                 'blog_post_status_name as blog_post_status',
                 'users.username as blog_post_user',
                 'entity_type_id'

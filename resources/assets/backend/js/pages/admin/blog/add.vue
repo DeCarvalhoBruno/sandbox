@@ -2,11 +2,28 @@
     <div id="blog_post_container" class="container p-0 m-0">
         <div id="trumbowyg-icons" v-html="require('trumbowyg/dist/ui/icons.svg')"></div>
         <form @submit.prevent="save" id="form_edit_blog" ref="form_this">
-            <div class="row p-0 m-0 mb-1">
+            <div class="row p-0 m-0 mt-1">
                 <div class="card col-lg">
                     <div class="container">
+                        <div class="form-group row col-lg mt-1">
+                            <div class="col-lg-10">
+                                <input v-model="form.blog_post_title" type="text" required autocomplete="off"
+                                       name="blog_post_title" id="blog_post_title"
+                                       class="form-control" maxlength="255"
+                                       :class="{ 'is-invalid': form.errors.has('blog_post_title') }"
+                                       :placeholder="$t('db.blog_post_title')"
+                                       aria-describedby="help_blog_post_title">
+                                <small class="text-muted" v-show="url">{{url}}</small>
+                            </div>
+                            <div class="col-lg-2">
+                                <button type="button"
+                                        class="btn btn-primary float-lg-right"
+                                        @click="save">{{$t('general.save')}}
+                                </button>
+                            </div>
+                        </div>
                         <div id="head_row" class="form-group row">
-                            <div class="col-lg-4" id="head_col_draft">
+                            <div class="col-lg-6" id="head_col_draft">
                                 <template v-if="form_status_editing">
                                     <select v-model="form.blog_post_status"
                                             @change="changedField('blog_post_status')"
@@ -35,7 +52,7 @@
                                         ''}}</span>
                                 </template>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-6 justify-content-center">
                                 <div v-if="form_user_editing" class="container m-0 p-0">
                                     <div class="row">
                                         <div class="m-0 p-0 col-lg d-inline-flex">
@@ -66,37 +83,42 @@
                                     >{{form.blog_post_user}}</span>
                                 </template>
                             </div>
-                            <div class="col-lg-2">
-                                <button type="button"
-                                        class="btn btn-primary float-lg-right"
-                                        @click="save">{{$t('general.save')}}
-                                </button>
-                            </div>
                         </div>
                         <div class="form-group row col-lg">
-                            <div class="col-lg-9">
-                                <input v-model="form.blog_post_title" type="text" required autocomplete="off"
-                                       name="blog_post_title" id="blog_post_title"
-                                       class="form-control" maxlength="255"
-                                       :class="{ 'is-invalid': form.errors.has('blog_post_title') }"
-                                       :placeholder="$t('db.blog_post_title')"
-                                       aria-describedby="help_blog_post_title">
-                                <small class="text-muted" v-show="url">{{url}}</small>
-                            </div>
-                            <div class="form-group row col-lg-3 p-0 m-0">
-                                <datepicker class="calendar-open-left"
-                                            v-model="form.published_at"
-                                            name="published_at"
-                                            :language="language"
-                                            :monday-first="true"
-                                            :typeable="true"
-                                            :format="$store.getters['lang/dateFormat']"
-                                ></datepicker>
+                            <div class="row col-lg">
+                                <template v-if="form_publish_date_editing">
+                                    <datepicker
+                                            ref="datePicker"
+                                            v-model="current_publish_date"
+                                            :name="'published_at'"
+                                            :show-clear-button="false"
+                                            @closed="changePublishDate"
+                                    >
+                                    </datepicker>
+                                    <div class="form-inline">
+                                        <input class="form-control" style="width:3rem;height:2rem"
+                                               :value="this.form.published_at.getDay()"
+                                        >:<input class="form-control form-inline" style="width:3rem;height:2rem">
+                                    </div>
+                                    <button type="button"
+                                            class="btn btn-success btn-small"
+                                            @click="toggleEditing('form_publish_date_editing')">
+                                        <fa icon="check"></fa>
+                                    </button>
+                                    <button type="button"
+                                            class="btn btn-light btn-small"
+                                            @click="toggleEditing('form_publish_date_editing')">
+                                        <fa icon="ban"></fa>
+                                    </button>
+                                </template>
+                                <template v-else>
+                                    <span style="font-size:90%;height:2rem">{{$t('pages.blog.published_at')}}<span
+                                            class="font-weight-bold font-italic"
+                                            style="color:blue;border-bottom:1px dotted blue;cursor:pointer"
+                                            @click="toggleEditing('form_publish_date_editing')">{{formattedPublishedAt}}</span></span>
+                                </template>
                             </div>
                         </div>
-                        <!--<div class="form-group row col-lg">-->
-                        <!--<datepicker :inline="true"></datepicker>-->
-                        <!--</div>-->
                     </div>
                 </div>
             </div>
@@ -184,14 +206,15 @@
 
 <script>
   import axios from 'axios'
+  import dayjs from 'dayjs'
+  import fr from 'dayjs/locale/fr'
   import Button from '~/components/Button'
   import Trumbowyg from '~/components/wysiwyg/Trumbowyg'
   import { Form, HasError, AlertForm } from '~/components/form'
   import TreeList from '~/components/tree-list/TreeList'
   import InputTagSearch from '~/components/InputTagSearch'
+  import Datepicker from '~/components/Datepicker'
   import ImageUploader from '~/components/media/ImageUploader'
-  import Datepicker from 'vuejs-datepicker'
-  import { en, fr } from 'vuejs-datepicker/dist/locale'
 
   import MediaModal from '~/components/media/MediaModal'
   import swal from '~/mixins/sweet-alert'
@@ -226,16 +249,17 @@
         modal_show: false,
         form_status_editing: false,
         form_user_editing: false,
+        form_publish_date_editing: false,
         modal: false,
         editorConfig: this.getConfig(),
         status_list: null,
         current_status: '',
+        current_publish_date: null,
         url: null,
         saveMode: null,
         blog_post_categories: [],
         tagInput: '',
         thumbnails: [],
-        language: fr,
         form: new Form({
           blog_post_content: '',
           blog_post_title: '',
@@ -244,6 +268,20 @@
           categories: [],
           tags: []
         })
+      }
+    },
+    computed: {
+      formattedPublishedAt () {
+        // return dayjs
+        // return dayjs(this.form.publishedAt).locale('en').format('YYYY-MM-DD')
+        // return dayjs(this.form.publishedAt).locale('en').format('MMMM DD, YYYY @ HH:mm')
+        return dayjs(this.current_publish_date).locale('fr').format(' DD MMMM YYYY @ HH:mm')
+        // form_publish_date_editing
+      }
+    },
+    watch: {
+      current_publish_date (value) {
+        this.form.published_at = value
       }
     },
     methods: {
@@ -257,6 +295,9 @@
           this.$refs.tag.focus()
           this.changedField('tags')
         }
+      },
+      changePublishDate (value) {
+        this.current_publish_date = value
       },
       removeTag (index) {
         this.form.tags.splice(index, 1)
@@ -330,13 +371,16 @@
       },
       getInfo (data, saveMode) {
         this.form = new Form(data.record)
+        if (saveMode === 'create') {
+          this.form.addField('published_at', new Date())
+        }
+        this.current_publish_date = this.form.published_at
         this.status_list = data.status_list
         this.url = data.url
         this.current_status = this.$t(`constants.${data.record.blog_post_status}`)
         this.saveMode = saveMode
         this.blog_post_categories = data.blog_post_categories
         this.thumbnails = data.thumbnails
-        this.form.published_at = new Date(2016, 6, 9)
       }
     },
     beforeRouteEnter (to, from, next) {
