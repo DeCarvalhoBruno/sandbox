@@ -16,10 +16,10 @@
                                 <small class="text-muted" v-show="url">{{url}}</small>
                             </div>
                             <div class="col-lg-2">
-                                <button type="button"
-                                        class="btn btn-primary float-lg-right"
-                                        @click="save">{{$t('general.save')}}
-                                </button>
+                                <v-button type="button" :loading="form.busy"
+                                          class="btn btn-primary float-lg-right"
+                                          @click="save">{{$t('general.save')}}
+                                </v-button>
                             </div>
                         </div>
                         <div id="head_row" class="form-group row">
@@ -128,8 +128,8 @@
                 <div class="card col-lg p-0 m-0">
                     <div class="row p-0 m-0">
                         <trumbowyg v-model="form.blog_post_content" :config="editorConfig"
+                                   ref="inputBlogPostContent"
                                    class="form-control"
-                                   @input="changedField('blog_post_content')"
                                    name="content"></trumbowyg>
 
                         <!--<input type="text" v-model="message">-->
@@ -201,8 +201,6 @@
                 </div>
             </div>
         </form>
-        <media-modal :show-modal="modal_show"
-                     @modal-close="modal_show=false"></media-modal>
     </div>
 </template>
 
@@ -218,14 +216,13 @@
   import Datepicker from '~/components/Datepicker'
   import ImageUploader from '~/components/media/ImageUploader'
 
-  import MediaModal from '~/components/media/MediaModal'
   import swal from '~/mixins/sweet-alert'
   import form from '~/mixins/form'
 
-  // import VueClipboard from 'vue-clipboard2'
-  //import Vue from 'vue'
-  // VueClipboard.config.autoSetContainer = true // add this line
-  // Vue.use(VueClipboard)
+  import VueClipboard from 'vue-clipboard2'
+  import Vue from 'vue'
+  // VueClipboard.config.autoSetContainer = true
+  Vue.use(VueClipboard)
 
   export default {
     layout: 'basic',
@@ -238,7 +235,6 @@
       Trumbowyg,
       InputTagSearch,
       TreeList,
-      MediaModal,
       ImageUploader,
       Datepicker
     },
@@ -284,7 +280,25 @@
         this.form.published_at = value
       }
     },
+    mounted(){
+      let vm = this
+      //We have to set a listener like this because the input event is emitted because the input field
+      //might be populated with text that is not user input and trigger the changedField method prematurely
+      this.$refs.inputBlogPostContent.$on('tbw-init',()=>{
+        vm.$refs.inputBlogPostContent.$on('input',()=>{
+          vm.changedField('blog_post_content')
+        })
+      })
+      window.addEventListener("beforeunload", this.checkBeforeUnload);
+    },
     methods: {
+      checkBeforeUnload(event) {
+        if (this.form.hasDetectedChanges()) {
+          var confirmationMessage = "_";
+          event.returnValue = confirmationMessage;
+          return confirmationMessage;
+        }
+      },
       format (value, format) {
         return dayjs(value).format(format)
       },
@@ -323,12 +337,14 @@
         if (mode === 'add') {
           if (this.form.categories.indexOf(val) === -1) {
             this.form.categories.push(val)
+            this.changedField('categories')
           }
         } else {
           let i = this.form.categories.indexOf(val)
           if (i > -1) {
             this.form.categories.splice(i, 1)
           }
+
         }
       },
       getConfig () {
@@ -363,36 +379,35 @@
           return
         }
         try {
-          let suffix, saveMode, msg
+          let suffix, msg
           let route = this.$route
           if ((route.name.lastIndexOf('add') > 0)) {
-            saveMode = suffix = 'create'
+            this.saveMode = suffix = 'create'
             msg = this.$t('pages.blog.add_success')
           } else {
-            saveMode = 'edit'
-            suffix = `${saveMode}/${route.params.slug}`
+            this.saveMode = 'edit'
+            suffix = `${this.saveMode}/${route.params.slug}`
             msg = this.$t('pages.blog.save_success')
           }
           this.form.published_at = dayjs(this.form.published_at).format('YYYYMMDDHHmm')
           let {data} = await this.form.post(`/ajax/admin/blog/post/${suffix}`)
           this.url = data.url
-          if (saveMode === 'create') {
+          if (this.saveMode === 'create') {
             this.form.addField('blog_post_slug', data.blog_post_slug)
+            this.$router.push({name: 'admin.blog.edit', params: {slug: data.blog_post_slug}})
           } else {
             this.form.blog_post_slug = data.blog_post_slug
           }
-          this.saveMode = 'edit'
-
           this.swalNotification('success', msg)
-          this.$router.push({name:'admin.blog.edit',params:{slug:data.blog_post_slug}})
         } catch (e) {}
       },
       getInfo (data, saveMode) {
         this.form = new Form(data.record)
         if (saveMode === 'create') {
           this.form.addField('published_at', new Date())
+        } else {
+          this.current_publish_date = dayjs(this.form.published_at).toDate()
         }
-        this.current_publish_date = this.form.published_at
         this.status_list = data.status_list
         this.url = data.url
         this.current_status = this.$t(`constants.${data.record.blog_post_status}`)
@@ -416,13 +431,17 @@
       })
     },
     beforeRouteLeave (to, from, next) {
-      this.swalSaveWarning().then((result) => {
-        if (result.value) {
-          next()
-        } else {
-          next(false)
-        }
-      })
+      if (this.form.hasDetectedChanges()) {
+        this.swalSaveWarning().then((result) => {
+          if (result.value) {
+            next()
+          } else {
+            next(false)
+          }
+        })
+      } else {
+        next()
+      }
     }
   }
 </script>

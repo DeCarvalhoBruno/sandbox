@@ -261,7 +261,7 @@ return [
             'add_success' => 'The blog post was created.',
             'save_success' => 'The blog post was updated.',
             'edit_image' => 'Edit image',
-            'published_at'=>'Publishing date:'
+            'published_at' => 'Publishing date:'
         ]
     ],
     'tables' => [
@@ -294,6 +294,7 @@ return [
         'cropper_resize_image' => 'Use handles to resize image',
         'cropper_preview' => 'Cropped preview',
         'cropper_crop_upload' => 'Crop & Upload',
+        'image_url_copy' => 'Copy image url to clipboard'
     ],
     'locales' => [
         'en' => 'English',

@@ -1,7 +1,7 @@
 export default {
   name: 'media',
   methods: {
-    getImageUrl (uuid, suffix, ext) {
+    getImageUrl (uuid, suffix, ext, fullUrl = false) {
       if (typeof uuid === 'undefined') {
         return null
       }
@@ -11,7 +11,7 @@ export default {
       } else {
         string += `.${ext}`
       }
-      return string
+      return (fullUrl) ? window.location.origin + string : string
     }
   }
 }

@@ -29,6 +29,8 @@
                                         @click="goToEditImagePage(image.uuid)">
                                     <fa icon="pencil-alt"></fa>
                                 </button>
+                                <button type="button" class="btn btn-sm btn-info" :title="$t('media.image_url_copy')"
+                                        v-clipboard:copy="getImageUrl(image.uuid, 'tb', image.ext, true)"><fa icon="paste"></fa></button>
                             </div>
                         </li>
                     </ul>
@@ -195,7 +197,7 @@
             vm.error = error
           }
         })
-      }
+      },
     }
   }
 </script>
