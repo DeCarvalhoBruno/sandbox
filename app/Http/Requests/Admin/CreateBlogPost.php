@@ -28,6 +28,7 @@ class CreateBlogPost extends FormRequest
         return [
             'blog_post_title' => 'max:255',
             'blog_post_status' => 'status',
+            'published_at'=>'date_format:YmdHi'
         ];
     }
 
@@ -64,6 +65,10 @@ class CreateBlogPost extends FormRequest
             $input['blog_post_status_id'] = BlogPostStatus::getConstant($input['blog_post_status']);
             unset($input['blog_post_status']);
         }
+
+        //Taking in a date format which we set manually in javascript to avoid weirdness with locale based date formats
+        $input['published_at'] = date_create_from_format('YmdHi', $input['published_at']);
+
         $this->replace($input);
     }
 
@@ -98,7 +103,6 @@ class CreateBlogPost extends FormRequest
     {
         return $this->tags;
     }
-
 
 
 }

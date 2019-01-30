@@ -6,8 +6,8 @@ const locales = {
   'fr': 'fr'
 }
 const dateFormat = {
-  'en': 'yyyy-MM-dd',
-  'fr': 'dd-MM-yyyy'
+  'en': {date: 'yyyy-MM-dd', dateTime: 'MMMM DD, YYYY @ HH:mm'},
+  'fr': {date: 'dd-MM-yyyy', dateTime: 'DD MMMM YYYY @ HH:mm'}
 }
 
 const {locale} = window.config
@@ -17,7 +17,8 @@ export const state = {
   locale: Cookies.get('locale') || locale,
   locales: locales,
   fallback: 'en',
-  dateFormat: dateFormat[locale]
+  dateFormat: dateFormat[locale]['date'],
+  dateTimeFormat: dateFormat[locale]['dateTime']
 }
 
 // getters
@@ -25,14 +26,16 @@ export const getters = {
   locale: state => state.locale,
   locales: state => state.locales,
   fallback: state => state.fallback,
-  dateFormat: state => state.dateFormat
+  dateFormat: state => state.dateFormat,
+  dateTimeFormat: state => state.dateTimeFormat
 }
 
 // mutations
 export const mutations = {
   [types.SET_LOCALE] (state, {locale}) {
     state.locale = locale
-    state.dateFormat = dateFormat[locale]
+    state.dateFormat = dateFormat[locale]['date']
+    state.dateFormat = dateFormat[locale]['dateTime']
   }
 }
 

@@ -84,9 +84,9 @@
                                 </template>
                             </div>
                         </div>
-                        <div class="form-group row col-lg">
-                            <div class="row col-lg">
-                                <template v-if="form_publish_date_editing">
+                        <div class="form-group row col-lg mb-3 pl-2" style="min-height:2.5rem">
+                            <div class="col-lg align-items-center">
+                                <div class="row col" v-if="form_publish_date_editing">
                                     <datepicker
                                             ref="datePicker"
                                             v-model="current_publish_date"
@@ -96,13 +96,16 @@
                                     >
                                     </datepicker>
                                     <div class="form-inline">
-                                        <input class="form-control" style="width:3rem;height:2rem"
-                                               :value="this.form.published_at.getDay()"
-                                        >:<input class="form-control form-inline" style="width:3rem;height:2rem">
+                                        <input class="form-control input-hour-minute"
+                                               :value="format(current_publish_date,'HH')"
+                                               ref="inputHours"
+                                        >:<input class="form-control input-hour-minute"
+                                                 ref="inputMinutes"
+                                                 :value="format(current_publish_date,'mm')">
                                     </div>
                                     <button type="button"
                                             class="btn btn-success btn-small"
-                                            @click="toggleEditing('form_publish_date_editing')">
+                                            @click="validateAndGo">
                                         <fa icon="check"></fa>
                                     </button>
                                     <button type="button"
@@ -110,13 +113,12 @@
                                             @click="toggleEditing('form_publish_date_editing')">
                                         <fa icon="ban"></fa>
                                     </button>
-                                </template>
-                                <template v-else>
-                                    <span style="font-size:90%;height:2rem">{{$t('pages.blog.published_at')}}<span
-                                            class="font-weight-bold font-italic"
-                                            style="color:blue;border-bottom:1px dotted blue;cursor:pointer"
-                                            @click="toggleEditing('form_publish_date_editing')">{{formattedPublishedAt}}</span></span>
-                                </template>
+                                </div>
+                                <div class="col pl-0" v-else>
+                                        <span id="span-published-at">{{$t('pages.blog.published_at')}}&nbsp;<span
+                                                id="span-nice-datetime"
+                                                @click="toggleEditing('form_publish_date_editing')">{{formattedPublishedAt}}</span></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -272,11 +274,9 @@
     },
     computed: {
       formattedPublishedAt () {
-        // return dayjs
-        // return dayjs(this.form.publishedAt).locale('en').format('YYYY-MM-DD')
-        // return dayjs(this.form.publishedAt).locale('en').format('MMMM DD, YYYY @ HH:mm')
-        return dayjs(this.current_publish_date).locale('fr').format(' DD MMMM YYYY @ HH:mm')
-        // form_publish_date_editing
+        return dayjs(this.current_publish_date)
+          .locale(this.$store.getters['lang/locale'])
+          .format(this.$store.getters['lang/dateTimeFormat'])
       }
     },
     watch: {
@@ -285,6 +285,18 @@
       }
     },
     methods: {
+      format (value, format) {
+        return dayjs(value).format(format)
+      },
+      validateAndGo () {
+        let currentDate = dayjs(this.current_publish_date).format('YYYY-MM-DD')
+        let dateTime = dayjs(currentDate + ' ' + this.$refs.inputHours.value + ':' + this.$refs.inputMinutes.value)
+
+        if (dateTime.isValid()) {
+          this.current_publish_date = dateTime.toDate()
+          this.toggleEditing('form_publish_date_editing')
+        }
+      },
       updateThumbnails (data) {
         this.thumbnails = data
       },
@@ -297,7 +309,10 @@
         }
       },
       changePublishDate (value) {
-        this.current_publish_date = value
+        this.current_publish_date = dayjs(
+          dayjs(value).format('YYYY-MM-DD') + ' ' +
+          this.$refs.inputHours.value + ':' +
+          this.$refs.inputMinutes.value).toDate()
       },
       removeTag (index) {
         this.form.tags.splice(index, 1)
@@ -358,6 +373,7 @@
             suffix = `${saveMode}/${route.params.slug}`
             msg = this.$t('pages.blog.save_success')
           }
+          this.form.published_at = dayjs(this.form.published_at).format('YYYYMMDDHHmm')
           let {data} = await this.form.post(`/ajax/admin/blog/post/${suffix}`)
           this.url = data.url
           if (saveMode === 'create') {
@@ -366,7 +382,9 @@
             this.form.blog_post_slug = data.blog_post_slug
           }
           this.saveMode = 'edit'
+
           this.swalNotification('success', msg)
+          this.$router.push({name:'admin.blog.edit',params:{slug:data.blog_post_slug}})
         } catch (e) {}
       },
       getInfo (data, saveMode) {

@@ -8,6 +8,16 @@ $datepicker-border-radius: 5px;
   &.calendar-open-left {
     .vdp-datepicker__calendar {
       right: 0;
+
+      &:before {
+        left: auto;
+        right: 35px;
+      }
+
+      &:after {
+        left: auto;
+        right: 36px;
+      }
     }
   }
 
@@ -29,8 +39,9 @@ $datepicker-border-radius: 5px;
       border-right: 7px solid transparent;
       content: "";
       display: inline-block;
-      left: auto;
-      right: 35px;
+      left: 35px;
+      right: auto;
+
       position: absolute;
       top: -6px;
       z-index: 99;
@@ -42,8 +53,9 @@ $datepicker-border-radius: 5px;
       border-right: 6px solid transparent;
       content: "";
       display: inline-block;
-      left: auto;
-      right: 36px;
+
+      left: 36px;
+      right: auto;
       position: absolute;
       top: -5px;
       z-index: 99;
@@ -84,9 +96,11 @@ $datepicker-border-radius: 5px;
   }
 
   input {
-    border: none;
+    border:none;
     height: 2rem;
-    width:auto;
+    width:7rem;
+    cursor: pointer;
+    color: $brand-primary;
 
     &:focus, &:active {
       border: none;

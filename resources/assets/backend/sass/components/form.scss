@@ -1,5 +1,4 @@
 #form_edit_blog {
-
   span.form-field-togglable {
     border-bottom: 1px dotted blue;
     color: blue;
@@ -14,7 +13,7 @@
     #head_col_draft {
       .custom-select {
         width: auto;
-        margin:0 .25rem;
+        margin: 0 .25rem;
       }
     }
 
@@ -22,5 +21,22 @@
       max-height: 2rem;
     }
   }
+
+  .input-hour-minute {
+    width: 3rem;
+    height: 2rem;
+    margin: 0 .3rem
+  }
+
+  #span-published-at {
+    height: 2.15rem;
+
+    #span-nice-datetime {
+      color: blue;
+      border-bottom: 1px dotted blue;
+      cursor: pointer
+    }
+  }
+
 
 }

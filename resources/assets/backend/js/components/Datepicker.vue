@@ -5,6 +5,7 @@
                   :name="name"
                   :language="language[$store.getters['lang/locale']]"
                   :monday-first="true"
+                  :typeable="typeable"
                   :clear-button="showClearButton"
                   :format="$store.getters['lang/dateFormat']" @closed="closed">
         <!--<div slot="beforeCalendarHeader" class="calender-header">-->
@@ -41,19 +42,23 @@
         type: String
       },
       value: {
-        type: Date,
+        type: Date
       },
-      openLeft:{
-        type:Boolean,
-        default:false
+      openLeft: {
+        type: Boolean,
+        default: false
+      },
+      typeable: {
+        type: Boolean,
+        default: false
       }
     },
-    methods:{
-      closed(){
-        this.$emit('closed',this.dateValue)
+    methods: {
+      closed () {
+        this.$emit('closed', this.dateValue)
       }
     },
-    mounted(){
+    mounted () {
       this.dateValue = this.value
       this.$refs.datePicker.showCalendar()
       this.$refs.datePicker.$el.querySelector('input').focus()
@@ -70,7 +75,7 @@
     watch: {
       value (value) {
         this.dateValue = value
-      },
+      }
     }
   }
 </script>

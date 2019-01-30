@@ -261,7 +261,7 @@ return [
             'add_success' => 'The blog post was created.',
             'save_success' => 'The blog post was updated.',
             'edit_image' => 'Edit image',
-            'published_at'=>'Published on:'
+            'published_at'=>'Publishing date:'
         ]
     ],
     'tables' => [
