@@ -44,7 +44,6 @@ class Form {
   }
 
   hasDetectedChanges () {
-    console.log(Object.keys(this.changedFields))
     return (Object.keys(this.changedFields).length > 0)
   }
 

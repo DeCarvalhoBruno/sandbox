@@ -15,8 +15,8 @@
                                    @keyup.enter="fullNameFilter">
                             <div class="input-group-append">
                                 <label class="input-group-text"
-                                        :title="$t('general.search')"
-                                        @click="fullNameFilter">
+                                       :title="$t('general.search')"
+                                       @click="fullNameFilter">
                                     <fa icon="user"></fa>
                                 </label>
                             </div>
@@ -112,6 +112,7 @@
   import TableFilter from '~/components/table/TableFilter'
   import TableMixin from '~/mixins/tables'
   import axios from 'axios'
+  import { deepCopy } from '../../../components/form/util'
 
   Vue.use(Table)
 
@@ -132,25 +133,32 @@
         nameFilter: null,
         filterButtons: {},
         selectionBuffer: {},
-        entity:'users'
+        entity: 'users'
       }
     },
-    mixins:[
+    mixins: [
       TableMixin
     ],
     watch: {
+      '$route' () {
+        this.setIntendedRoute()
+      },
       groupFilter () {
         this.applyFilter('group')
       },
       createdFilter () {
         this.applyFilter('created')
-      },
+      }
     },
     created () {
       this.setFilterButtons()
+        this.setIntendedRoute()
       this.$root.$on('modal_confirmed', this.applyMethod)
     },
     methods: {
+      setIntendedRoute(){
+        return this.$store.dispatch('session/setIntendedUrl', {url: this.$router.currentRoute})
+      },
       setFilterButtons () {
         this.setFilterButton('name')
         this.setFilterButton('group')
@@ -197,7 +205,7 @@
       },
       fullNameFilter () {
         this.applyFilter('name')
-      },
+      }
     },
     beforeRouteEnter (to, from, next) {
       store.dispatch('table/fetchData', {

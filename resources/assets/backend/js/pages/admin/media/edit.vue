@@ -103,7 +103,11 @@
                     </div>
                     <div class="row justify-content-center">
                         <div>
-                            <record-paginator :nav="nav" :is-loading="ajaxIsLoading"></record-paginator>
+                            <record-paginator
+                                    :nav="nav"
+                                    :is-loading="ajaxIsLoading"
+                                    route-name="admin.media.edit"
+                                    route-param-name="media"></record-paginator>
                         </div>
                     </div>
                 </b-tab>

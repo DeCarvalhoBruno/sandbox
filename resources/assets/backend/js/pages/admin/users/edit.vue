@@ -7,7 +7,7 @@
                         <div class="form-group row">
                             <label for="new_username" class="col-md-3 col-form-label">{{$t('db.new_username')}}</label>
                             <div class="col-md-9">
-                                <input v-model="form.new_username" type="text"
+                                <input v-model="form.new_username" type="text" autocomplete="off"
                                        name="new_username" id="new_username" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('new_username') }"
                                        :placeholder="$t('db.new_username')"
@@ -21,7 +21,7 @@
                         <div class="form-group row">
                             <label for="first_name" class="col-md-3 col-form-label">{{$t('db.first_name')}}</label>
                             <div class="col-md-9">
-                                <input v-model="form.first_name" type="text"
+                                <input v-model="form.first_name" type="text" autocomplete="off"
                                        name="first_name" id="first_name" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('first_name') }"
                                        :placeholder="$t('db.first_name')"
@@ -34,7 +34,7 @@
                         <div class="form-group row">
                             <label for="last_name" class="col-md-3 col-form-label">{{$t('db.last_name')}}</label>
                             <div class="col-md-9">
-                                <input v-model="form.last_name" type="text"
+                                <input v-model="form.last_name" type="text" autocomplete="off"
                                        name="last_name" id="last_name" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('last_name') }"
                                        :placeholder="$t('db.last_name')"
@@ -47,7 +47,7 @@
                         <div class="form-group row">
                             <label for="new_email" class="col-md-3 col-form-label">{{$t('db.new_email')}}</label>
                             <div class="col-md-9">
-                                <input v-model="form.new_email" type="text"
+                                <input v-model="form.new_email" type="text" autocomplete="off"
                                        name="new_email" id="new_email" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('new_email') }"
                                        :placeholder="$t('db.new_email')"
@@ -90,8 +90,7 @@
                                                         :maskval="maskValue"
                                                         :entity="entity"
                                                         :enabled="hasPermission(permissions.computed,entity,type)"
-                                                        :hasPermission="hasPermission(permissions.computed,entity,type)"
-                                                />
+                                                        :hasPermission="hasPermission(permissions.computed,entity,type)"/>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -100,16 +99,30 @@
                             </div>
                         </div>
                     </div>
-                    </b-tab>
-                </b-tabs>
+                </b-tab>
+            </b-tabs>
             <div class="row justify-content-center">
                 <div class="col-md-6 offset-md-3 mb-4">
                     <v-button class="align-content-center" :loading="form.busy">
                         {{ $t('general.update') }}
                     </v-button>
+                    <button v-if="intended!==null"
+                            type="button"
+                            class="btn btn-secondary"
+                            @click="redirect()">{{$t('general.cancel')}}
+                    </button>
                 </div>
             </div>
         </form>
+        <div v-if="Object.keys(nav).length>0" class="row justify-content-center">
+            <div>
+                <record-paginator
+                        :nav="nav"
+                        :is-loading="ajaxIsLoading"
+                        route-name="admin.users.edit"
+                        route-param-name="user"></record-paginator>
+            </div>
+        </div>
     </b-card>
 </template>
 
@@ -121,7 +134,9 @@
   import { Form, HasError, AlertForm } from '~/components/form'
   import { Card, Tabs } from 'bootstrap-vue/es/components'
   import ButtonCircle from '~/components/ButtonCircle'
+  import RecordPaginator from '~/components/RecordPaginator'
   import axios from 'axios'
+  import { deepCopy } from '~/components/form/util'
 
   Vue.use(Card)
   Vue.use(Tabs)
@@ -137,25 +152,47 @@
       AlertForm,
       Card,
       Tabs,
-      ButtonCircle
+      ButtonCircle,
+      RecordPaginator
     },
     data () {
       return {
         form: new Form(),
-        username: this.$router.currentRoute.params.user,
-        permissions: {}
+        permissions: {},
+        nav: {},
+        ajaxIsLoading: false,
+        intended: null
       }
     },
     mixins: [PermissionMixin],
+    watch: {
+      '$route' () {
+        this.ajaxIsLoading = true
+        axios.get(`/ajax/admin/users/${this.$router.currentRoute.params.user}`).then(({data}) => {
+          this.getInfo(data)
+          this.ajaxIsLoading = false
+        })
+      }
+    },
     methods: {
-      getInfo (data) {
+      redirect () {
+        this.$router.push(this.intended)
+      },
+      getInfo (data, fromRouteInfo) {
         this.form = new Form(data.user)
         this.permissions = data.permissions
+        this.nav = data.nav
+        let intended = this.$store.getters['session/intendedUrl']
+        if (intended === null) {
+          this.intended = this.$router.resolve({name: 'admin.users.index'}).resolved
+        } else {
+          this.intended = deepCopy(this.$store.getters['session/intendedUrl'])
+        }
       },
       async save () {
         try {
           this.form.addField('permissions', this.getPermissions(this.$refs.buttonCircle))
-          const {data} = await this.form.patch(`/ajax/admin/users/${this.username}`)
+          const {data} = await this.form.patch(`/ajax/admin/users/${this.$router.currentRoute.params.user}`)
           this.$router.push({name: 'admin.users.index'})
           this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.user_update_ok'))
         } catch (e) {}

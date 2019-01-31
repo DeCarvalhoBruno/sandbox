@@ -2,9 +2,7 @@
     <div id="app">
         <loading ref="loading"/>
         <transition name="page" mode="out-in">
-            <component v-if="layout" :is="layout">
-
-            </component>
+            <component v-if="layout" :is="layout"></component>
         </transition>
     </div>
 </template>
@@ -26,30 +24,23 @@
 
   export default {
     el: '#app',
-
     components: {
       Loading,
     },
-
     data: () => ({
       layout: null,
       defaultLayout: 'default',
     }),
-
     metaInfo () {
       const {appName} = window.config
-
       return {
         title: appName,
-        titleTemplate: `%s · ${appName}`
-
+        titleTemplate: `%s · ${appName}`,
       }
     },
-
     mounted () {
       this.$loading = this.$refs.loading
     },
-
     methods: {
       /**
        * Set the application layout.

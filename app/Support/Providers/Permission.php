@@ -75,7 +75,7 @@ class Permission extends Model implements PermissionInterface
                     'ajax.db.%s',
                     Entity::getModelPresentableName($result->entity_id)
                 ), 2)] =
-            Entity::createModel($result->entity_id, [], HasPermissions::class)
+                Entity::createModel($result->entity_id, [], HasPermissions::class)
                     ->getReadablePermissions($result->permission_mask, true);
         }
         //We're supposed to get an array with computed and default permissions but some users

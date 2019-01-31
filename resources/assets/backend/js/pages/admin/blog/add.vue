@@ -219,11 +219,6 @@
   import swal from '~/mixins/sweet-alert'
   import form from '~/mixins/form'
 
-  import VueClipboard from 'vue-clipboard2'
-  import Vue from 'vue'
-  // VueClipboard.config.autoSetContainer = true
-  Vue.use(VueClipboard)
-
   export default {
     layout: 'basic',
     middleware: 'check-auth',

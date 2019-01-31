@@ -50,7 +50,6 @@ class Media extends Controller
                     $type = Entity::getConstantName(Entity::BLOG_POSTS);
                     break;
             }
-//            $mediaSrc = (object)['media' => MediaModel::getConstantName($media['media_id']), 'type' => $type];
             $media['media'] = MediaModel::getConstantName($media['media_id']);
             $media['type'] = $type;
             $media['suffix'] = MediaImgFormat::getFormatAcronyms(MediaImgFormat::THUMBNAIL);

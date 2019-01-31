@@ -120,7 +120,9 @@
   import { VueTransmit } from 'vue-transmit'
   import axios from 'axios'
   import media from '~/mixins/media'
+  import VueClipboard from 'vue-clipboard2'
 
+  Vue.use(VueClipboard)
   Vue.use(Tabs)
 
   export default {

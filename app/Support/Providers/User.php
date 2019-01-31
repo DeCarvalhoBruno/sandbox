@@ -82,12 +82,18 @@ class User extends Model implements UserProvider, UserInterface
     {
         $user = $model->newQuery()->select([
             'person_id',
+            'entity_type_id'
         ])->where($field, $value)->entityType()->first();
-        $this->person->createModel()->where('person_id',
-            $user->person_id)->update($this->person->filterFillables($data));
 
-        $model->newQueryWithoutScopes()->where($field, $value)
-            ->update($this->filterFillables($data));
+        $this->person->createModel()
+            ->where('person_id', $user->person_id)
+            ->update($this->person->filterFillables($data));
+
+        $filteredData = $this->filterFillables($data);
+        if (!empty($filteredData)) {
+            $model->newQueryWithoutScopes()->where($field, $value)
+                ->update($filteredData);
+        }
 
         if (isset($data[$field])) {
             return $model->newQuery()->select([
@@ -125,6 +131,7 @@ class User extends Model implements UserProvider, UserInterface
 
     /**
      * @param string|array $username
+     * @throws \Exception
      */
     public function deleteByUsername($username)
     {

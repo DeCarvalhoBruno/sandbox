@@ -15,8 +15,14 @@ use Illuminate\Http\Response;
 
 class User extends Controller
 {
-    public function index(UserProvider $userProvider, UserFilter $userFilter)
+    /**
+     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
+     * @param \App\Filters\User $userFilter
+     * @return array
+     */
+    public function index(UserProvider $userProvider, UserFilter $userFilter, Request $request)
     {
+        $userProvider->setStoredFilter($this->user->getKey(), $userFilter);
         $users = $userProvider
             ->select([
                 \DB::raw('null as selected'),
@@ -37,7 +43,7 @@ class User extends Controller
             $groups->groupMember();
         }
         return [
-            'table' => $users->paginate(10),
+            'table' => $users->paginate(25),
             'groups' => $groups->pluck('group_name'),
             'columns' => $userProvider->createModel()->getColumnInfo([
                 'full_name' => (object)[
@@ -60,7 +66,33 @@ class User extends Controller
      */
     public function edit($username, UserProvider $userProvider)
     {
-        $f = app()->make(RawQueries::class);
+        $filter = $userProvider->getStoredFilter($this->user->getKey(), Entity::USERS);
+        $nav = [];
+        if (!is_null($filter)) {
+            $userSiblings = $userProvider->select(
+                [
+                    'username',
+                ])->entityType()
+                ->permissionRecord()
+                ->permissionStore()
+                ->permissionMask($this->user->getEntityType())
+                ->activated()
+                ->where('username', '!=', $this->user->getAttribute('username'))
+                ->filter($filter)
+                ->pluck('username')->all();
+
+            $total = count($userSiblings);
+            $index = array_search($username, $userSiblings);
+            $nav = array(
+                'total' => $total,
+                'idx' => ($index + 1),
+                'first' => $userSiblings[0],
+                'last' => $userSiblings[($total - 1)],
+                'prev' => ($userSiblings[$index - 1] ?? null),
+                'next' => ($userSiblings[$index + 1] ?? null)
+            );
+        }
+
         $user = $userProvider->buildOneByUsername($username,
             [
                 'first_name',
@@ -72,9 +104,12 @@ class User extends Controller
             ])->entityType()->first()->toArray();
         $entityTypeId = $user['entity_type_id'];
         unset($user['entity_type_id']);
+
         return [
             'user' => $user,
-            'permissions' => $f->getAllUserPermissions($entityTypeId)
+            'permissions' => $userProvider->getAllUserPermissions($entityTypeId),
+            'nav' => $nav,
+            'intended'=>null
         ];
     }
 

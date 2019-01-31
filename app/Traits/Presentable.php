@@ -16,7 +16,7 @@ trait Presentable
         foreach ($columns as $name => $info) {
             $result[$name] = [
                 'name' => $name,
-                'width' => (isset($info->width))?$info->width:'inherit',
+                'width' => (isset($info->width)) ? $info->width : 'inherit',
                 'label' => $info->name,
                 'sortable' => isset($sortable[$name])
             ];

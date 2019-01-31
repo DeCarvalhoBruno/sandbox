@@ -21,7 +21,7 @@ class Entity extends Model
      * @var array Used in case a specific model isn't in \App\Models
      */
     public static $classMap = [
-        'BlogPost'=>'Blog\BlogPost'
+        'BlogPost' => 'Blog\BlogPost'
     ];
 
     /**
@@ -54,9 +54,10 @@ class Entity extends Model
      * Useful for instantiating a model.
      *
      * @param int $entityID
+     * @param bool $prefixWithBackslash
      * @return string
      */
-    public static function getModelClassNamespace($entityID)
+    public static function getModelClassNamespace($entityID, $prefixWithBackslash = true)
     {
         try {
             $className = static::getModelClass($entityID);
@@ -65,11 +66,11 @@ class Entity extends Model
                     static::$classMap[$className] :
                     $className);
             if (class_exists($classNamespace)) {
-                return $classNamespace;
+                return ($prefixWithBackslash) ? $classNamespace : substr($classNamespace, 1);
             }
             throw new \UnexpectedValueException(sprintf('Class %s does not exist. (%s)', $className, $entityID));
         } catch (\ReflectionException $re) {
-            throw new \UnexpectedValueException('Reflection failed .'.$re->getMessage());
+            throw new \UnexpectedValueException('Reflection failed .' . $re->getMessage());
         }
     }
 

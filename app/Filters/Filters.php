@@ -3,7 +3,7 @@
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
-abstract class Filters
+class Filters
 {
     /**
      * @var array
@@ -18,23 +18,30 @@ abstract class Filters
     /**
      * @var array
      */
-    private $parsedFilters;
+    private $parsedFilters = [];
 
     /**
      * @var array
      */
-    protected $acceptedSortColumns;
+    protected $acceptedSortColumns = [];
     /**
      * @var array
      */
     protected $filtersMap;
+    /**
+     * @var String
+     */
+    protected $filtersFor;
 
 
     /**
      * @param \Illuminate\Http\Request $request
      */
-    public function __construct(Request $request)
+    public function __construct(Request $request = null)
     {
+        if (is_null($request)) {
+            return;
+        }
         $this->parsedFilters = array_filter($request->only($this->getFilters()));
         $this->acceptedSortColumns = array_flip($this->acceptedSortColumns);
     }
@@ -43,7 +50,7 @@ abstract class Filters
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function apply($builder):Builder
+    public function apply($builder): Builder
     {
         $this->builder = $builder;
         foreach ($this->parsedFilters as $filter => $value) {
@@ -93,5 +100,17 @@ abstract class Filters
     public function hasFilter($value)
     {
         return isset($this->parsedFilters[$this->translateFilter($value)]);
+    }
+
+    public function hasFilters(){
+        return (!empty($this->parsedFilters));
+    }
+
+    /**
+     * @return String
+     */
+    public function getFiltersFor()
+    {
+        return $this->filtersFor;
     }
 }

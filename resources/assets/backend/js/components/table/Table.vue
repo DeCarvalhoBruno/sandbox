@@ -1,76 +1,77 @@
 <template>
     <div class="card col-lg p-0 m-0">
-    <div class="table-container table-responsive">
-        <template v-if="rows.length===0">
-            <h3>{{$t('tables.empty')}}</h3>
-        </template>
-        <template v-else>
-            <table class="table table-hover table-striped">
-                <thead>
-                <tr>
-                    <slot name="header-select-all">
-                        <th v-show="isMultiSelect">
-                            <div class="form-check">
-                                <input class="form-check-input position-static"
-                                       type="checkbox"
-                                       :aria-label="$t('general.select_all')"
-                                       :title="$t('general.select_all')"
-                                       @click="toggleSelectAll">
-                            </div>
-                        </th>
-                    </slot>
-                    <th v-for="(info,index) in columns"
-                        :key="index"
-                        @click="sort(info)"
-                        :style="{
+        <div class="table-container table-responsive">
+            <template v-if="rows.length===0">
+                <h3>{{$t('tables.empty')}}</h3>
+            </template>
+            <template v-else>
+                <table class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <slot name="header-select-all">
+                            <th v-show="isMultiSelect">
+                                <div class="form-check">
+                                    <input class="form-check-input position-static"
+                                           type="checkbox"
+                                           :aria-label="$t('general.select_all')"
+                                           :title="$t('general.select_all')"
+                                           @click="toggleSelectAll">
+                                </div>
+                            </th>
+                        </slot>
+                        <th v-for="(info,index) in columns"
+                            :key="index"
+                            @click="sort(info)"
+                            :style="{
                             'width': info.hasOwnProperty('width')?info.width:'auto'
                         }">
-                        {{info.label}}<span v-if=" info.sortable
+                            {{info.label}}<span v-if=" info.sortable
                     " :title="$t('tables.sort_'+getOrder(info.order))">
                     <fa class="float-right"
                         :icon="info.order===$t('filters.asc')?'angle-double-down':'angle-double-up'"></fa>
                     </span>
-                    </th>
-                    <slot name="header-action">
-                        <th>
-                            {{$t('general.actions')}}
                         </th>
-                    </slot>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(row,rowIdx) in tableRows"
-                    :key="rowIdx">
-                    <slot name="body-select-row" :row="row">
-                        <td v-show="isMultiSelect">
-                            <div class="form-check">
-                                <input class="form-check-input position-static"
-                                       type="checkbox"
-                                       :aria-label="$t('tables.select_item',{name:row[$t(`db_raw_inv.${selectColumnName}`)]})"
-                                       :title="$t('tables.select_item',{name:row[$t(`db_raw_inv.${selectColumnName}`)]})"
-                                       v-model="row.selected">
-                            </div>
+                        <slot name="header-action">
+                            <th>
+                                {{$t('general.actions')}}
+                            </th>
+                        </slot>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(row,rowIdx) in tableRows"
+                        :key="rowIdx">
+                        <slot name="body-select-row" :row="row">
+                            <td v-show="isMultiSelect">
+                                <div class="form-check">
+                                    <input class="form-check-input position-static"
+                                           type="checkbox"
+                                           :aria-label="$t('tables.select_item',{name:row[$t(`db_raw_inv.${selectColumnName}`)]})"
+                                           :title="$t('tables.select_item',{name:row[$t(`db_raw_inv.${selectColumnName}`)]})"
+                                           v-model="row.selected">
+                                </div>
+                            </td>
+                        </slot>
+                        <td v-for="(info,colIdx) in columns" :key="colIdx">
+                            {{row[info.name]}}
                         </td>
-                    </slot>
-                    <td v-for="(info,colIdx) in columns" :key="colIdx">
-                        {{row[info.name]}}
-                    </td>
-                    <slot name="body-action" :row="row">
-                    </slot>
-                </tr>
-                </tbody>
-            </table>
-            <div id="paginator_container" class="container mt-4">
-                <div class="row justify-content-md-center">
-                    <div class="paginator col-lg-6">
-                        <b-pagination-nav v-if="lastPage>1" :link-gen="linkGen" :total-rows="total" :value="currentPage"
-                                          :per-page="perPage" :limit="perPage" :number-of-pages="lastPage">
-                        </b-pagination-nav>
+                        <slot name="body-action" :row="row">
+                        </slot>
+                    </tr>
+                    </tbody>
+                </table>
+                <div id="paginator_container" class="container mt-4">
+                    <div class="row justify-content-md-center">
+                        <div class="paginator col-lg-6">
+                            <b-pagination-nav v-if="lastPage>1" :link-gen="linkGen" :total-rows="total"
+                                              :value="currentPage"
+                                              :per-page="perPage" :limit="10" :number-of-pages="lastPage">
+                            </b-pagination-nav>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </template>
-    </div>
+            </template>
+        </div>
     </div>
 </template>
 
@@ -90,7 +91,7 @@
     data: function () {
       return {
         sortOrder: 'desc',
-        allSelected:false
+        allSelected: false
       }
     },
     props: {
@@ -112,7 +113,7 @@
       },
       selectColumnName: {
         type: String,
-        default:''
+        default: ''
       }
     },
     computed: {
@@ -124,7 +125,7 @@
         lastPage: 'table/lastPage',
         perPage: 'table/perPage'
       }),
-      tableRows(){
+      tableRows () {
         return this.rows
       }
     },

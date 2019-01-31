@@ -1,6 +1,8 @@
 <?php namespace App\Support\Providers;
 
 use App\Contracts\HasAnEntity;
+use App\Contracts\RawQueries;
+use App\Models\Entity;
 
 abstract class Model
 {
@@ -235,6 +237,46 @@ abstract class Model
     public function getQualifiedKeyName()
     {
         return $this->createModel()->getQualifiedKeyName();
+    }
+
+    /**
+     * @param $userID
+     * @param \App\Filters\Filters $filter
+     */
+    public function setStoredFilter($userID, $filter)
+    {
+        if ($filter->hasFilters()) {
+            \Cache::put($this->getStoredFilterKey($userID), $filter, 30);
+        }else{
+            \Cache::forget($this->getStoredFilterKey($userID));
+        }
+    }
+
+    /**
+     * @param $userID
+     * @param $entityID
+     * @return \App\Filters\Filters|\null
+     */
+    public function getStoredFilter($userID, $entityID)
+    {
+        $filterID = $this->getStoredFilterKey($userID);
+        if (\Cache::has($filterID)) {
+            $filter = \Cache::get($filterID);
+            if (Entity::getModelClassNamespace($entityID, false) === $filter->getFiltersFor()) {
+                return $filter;
+            }
+        }
+        return null;
+    }
+
+    private function getStoredFilterKey($userID)
+    {
+        return sprintf('backend_filter_%s', $userID);
+    }
+
+    public function getAllUserPermissions($entityTypeID)
+    {
+        return (app()->make(RawQueries::class))->getAllUserPermissions($entityTypeID);
     }
 
 }

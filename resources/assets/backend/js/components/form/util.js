@@ -19,7 +19,7 @@ export function deepCopy (obj) {
 }
 
 /**
- * Determinte if the given object has any files.
+ * Determine if the given object has any files.
  *
  * @param  {Object} obj
  * @return {Boolean}

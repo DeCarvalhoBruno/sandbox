@@ -10,6 +10,7 @@ class EntityType extends Model
     public static $simpleEntityColumn = 'entity_type_target_id';
     protected $primaryKey = 'entity_type_id';
     protected $fillable = ['entity_id', 'entity_type_target_id', 'entity_type_id'];
+    //We hard code database ids here so we don't have to make the query. Those IDs will never change so we can do this.
     const ROOT_ENTITY_TYPE_ID = 2;
     const ROOT_GROUP_ENTITY_TYPE_ID = 3;
 
@@ -93,9 +94,13 @@ class EntityType extends Model
     /**
      * For when we have an entity type ID and we want to build a query from the entity
      * but don't know what kind of entity it is.
+     * Example: I know this media is attached to something and I want to get this something's slug
+     * so I can generate a link to it. I need to make a query like 'find the entity this media is attached to
+     * and give me its slug'
      *
-     * @param $entityTypeID
+     * @param int $entityTypeID
      * @return mixed|null
+     * @see \App\Models\EntityType
      */
     public static function buildQueryFromUnknownEntity($entityTypeID)
     {
