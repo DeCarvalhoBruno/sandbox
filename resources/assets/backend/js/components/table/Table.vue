@@ -1,7 +1,7 @@
 <template>
     <div class="card col-lg p-0 m-0">
         <div class="table-container table-responsive">
-            <template v-if="rows.length===0">
+            <template v-if="table.length===0">
                 <h3>{{$t('tables.empty')}}</h3>
             </template>
             <template v-else>
@@ -19,17 +19,15 @@
                                 </div>
                             </th>
                         </slot>
-                        <th v-for="(info,index) in columns"
+                        <th v-for="(info, index) in table.columns"
                             :key="index"
                             @click="sort(info)"
                             :style="{
-                            'width': info.hasOwnProperty('width')?info.width:'auto'
-                        }">
-                            {{info.label}}<span v-if=" info.sortable
-                    " :title="$t('tables.sort_'+getOrder(info.order))">
-                    <fa class="float-right"
-                        :icon="info.order===$t('filters.asc')?'angle-double-down':'angle-double-up'"></fa>
-                    </span>
+                            'width': info.hasOwnProperty('width')?info.width:'auto'}">{{info.label}}<span
+                                v-if="info.sortable"
+                                :title="$t('tables.sort_'+getOrder(info.order))"><fa
+                                class="float-right"
+                                :icon="info.order===$t('filters.asc')?'angle-double-down':'angle-double-up'"></fa></span>
                         </th>
                         <slot name="header-action">
                             <th>
@@ -39,7 +37,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(row,rowIdx) in tableRows"
+                    <tr v-for="(row,rowIdx) in table.rows"
                         :key="rowIdx">
                         <slot name="body-select-row" :row="row">
                             <td v-show="isMultiSelect">
@@ -52,7 +50,7 @@
                                 </div>
                             </td>
                         </slot>
-                        <td v-for="(info,colIdx) in columns" :key="colIdx">
+                        <td v-for="(info,colIdx) in table.columns" :key="colIdx">
                             {{row[info.name]}}
                         </td>
                         <slot name="body-action" :row="row">
@@ -63,9 +61,9 @@
                 <div id="paginator_container" class="container mt-4">
                     <div class="row justify-content-md-center">
                         <div class="paginator col-lg-6">
-                            <b-pagination-nav v-if="lastPage>1" :link-gen="linkGen" :total-rows="total"
-                                              :value="currentPage"
-                                              :per-page="perPage" :limit="10" :number-of-pages="lastPage">
+                            <b-pagination-nav v-if="table.lastPage>1" :link-gen="linkGen" :total-rows="table.total"
+                                              :value="table.currentPage"
+                                              :per-page="table.perPage" :limit="10" :number-of-pages="table.lastPage">
                             </b-pagination-nav>
                         </div>
                     </div>
@@ -77,9 +75,9 @@
 
 <script>
   import Vue from 'vue'
-
-  import { mapGetters } from 'vuex'
+  import axios from 'axios'
   import { PaginationNav } from 'bootstrap-vue/es/components'
+  import TableMixin from '~/mixins/tables'
 
   Vue.use(PaginationNav)
 
@@ -88,10 +86,23 @@
     components: {
       PaginationNav
     },
+    mixins: [
+      TableMixin
+    ],
     data: function () {
       return {
         sortOrder: 'desc',
-        allSelected: false
+        allSelected: false,
+        columns:[],
+        table: {
+          rows: [],
+          currentPage: 1,
+          from: 0,
+          lastPage: 0,
+          perPage: 0,
+          to: 0,
+          total: 0,
+        }
       }
     },
     props: {
@@ -99,12 +110,8 @@
         type: String,
         required: true
       },
-      rows: {
-        type: Array,
-        required: true
-      },
-      total: {
-        type: Number,
+      data: {
+        type: Object,
         required: true
       },
       isMultiSelect: {
@@ -116,36 +123,20 @@
         default: ''
       }
     },
-    computed: {
-      ...mapGetters({
-        columns: 'table/columns',
-        currentPage: 'table/currentPage',
-        from: 'table/from',
-        to: 'table/to',
-        lastPage: 'table/lastPage',
-        perPage: 'table/perPage'
-      }),
-      tableRows () {
-        return this.rows
-      }
-    },
     watch: {
-      '$route' () {
-        this.$store.dispatch('table/fetchData', {
-          entity: this.entity,
-          queryString: this.$route.fullPath,
-          refresh: true
-        })
-      }
+      data () {
+        console.log('data updated')
+        this.table = this.data
+      },
     },
     methods: {
       toggleSelectAll () {
         this.allSelected = !this.allSelected
-        this.tableRows.forEach(row => (row.selected = this.allSelected))
+        this.table.rows.forEach(row => (row.selected = this.allSelected))
       },
       getSelectedRows (column = null) {
         let selected = []
-        this.rows.forEach(row => {
+        this.table.rows.forEach(row => {
           if (row.selected) {
             if (column) {
               selected.push(row[column])
@@ -185,7 +176,11 @@
         let asc = this.$t('filters.asc')
         let desc = this.$t('filters.desc')
         return val === asc ? desc : asc
+      },
+      getQueryString (string) {
+        let qS = string.match(/\/[^?]+(.*)/)
+        return (qS[1]) ? qS[1] : ''
       }
-    }
+    },
   }
 </script>

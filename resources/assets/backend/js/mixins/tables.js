@@ -1,5 +1,3 @@
-import { mapGetters } from 'vuex'
-
 export default {
   name: 'table-mixin',
   watch: {
@@ -7,12 +5,8 @@ export default {
       this.setFilterButtons()
     }
   },
-  computed: {
-    ...mapGetters({
-      rows: 'table/rows',
-      total: 'table/total',
-      extras: 'table/extras'
-    })
+  data: function () {
+    return {}
   },
   methods: {
     removeFilter (obj) {
@@ -31,7 +25,7 @@ export default {
     },
     applyMethod (name) {
       this[name]()
-      this.$store.commit('session/HIDE_MODAL')
+      // this.$store.commit('session/HIDE_MODAL')
     },
     setFilterButton (type) {
       let filterTranslation = this.$t(`filters.${this.entity}_${type}`)
@@ -40,5 +34,32 @@ export default {
         this.$set(this.filterButtons, filterTranslation, this[`${type}Filter`])
       }
     },
+    getInfo (data, refresh) {
+      // if (refresh === true) {
+      //   this.data = {
+      //     rows: data.table.data,
+      //     currentPage: data.table.current_page,
+      //     from: data.table.from,
+      //     lastPage: data.table.last_page,
+      //     perPage: data.table.per_page,
+      //     to: data.table.to,
+      //     total: data.table.total
+      //   }
+      //   // commit(types.UPDATE_TABLE_DATA, data)
+      // } else {
+      this.data = {
+        rows: data.table.data,
+        columns: data.columns,
+        groups: data.groups,
+        currentPage: data.table.current_page,
+        from: data.table.from,
+        lastPage: data.table.last_page,
+        perPage: data.table.per_page,
+        to: data.table.to,
+        total: data.table.total,
+        extras: {groups: data.groups}
+      }
+      // }
+    }
   }
 }
