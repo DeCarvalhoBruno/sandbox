@@ -77,7 +77,6 @@
   import Vue from 'vue'
   import axios from 'axios'
   import { PaginationNav } from 'bootstrap-vue/es/components'
-  import TableMixin from '~/mixins/tables'
 
   Vue.use(PaginationNav)
 
@@ -86,23 +85,20 @@
     components: {
       PaginationNav
     },
-    mixins: [
-      TableMixin
-    ],
     data: function () {
       return {
         sortOrder: 'desc',
         allSelected: false,
         columns:[],
-        table: {
-          rows: [],
-          currentPage: 1,
-          from: 0,
-          lastPage: 0,
-          perPage: 0,
-          to: 0,
-          total: 0,
-        }
+        // table: {
+        //   rows: [],
+        //   currentPage: 1,
+        //   from: 0,
+        //   lastPage: 0,
+        //   perPage: 0,
+        //   to: 0,
+        //   total: 0,
+        // }
       }
     },
     props: {
@@ -123,11 +119,15 @@
         default: ''
       }
     },
-    watch: {
-      data () {
-        console.log('data updated')
-        this.table = this.data
-      },
+    // watch: {
+    //   data () {
+    //     this.table = this.data
+    //   },
+    // },
+    computed:{
+      table(){
+        return this.data
+      }
     },
     methods: {
       toggleSelectAll () {

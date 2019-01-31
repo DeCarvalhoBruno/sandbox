@@ -80,7 +80,7 @@
         </div>
         <div class="row">
             <v-table ref="table"
-                     :entity="entity" :data="randomVar"
+                     :entity="entity" :data="computedTable"
                      :is-multi-select="true"
                      select-column-name="full_name">
                 <td slot="body-action" slot-scope="props">
@@ -109,7 +109,6 @@
 
 <script>
   import Vue from 'vue'
-  import store from '~/store'
   import Table from '~/components/table/table'
   import TableFilter from '~/components/table/TableFilter'
   import TableMixin from '~/mixins/tables'
@@ -135,43 +134,24 @@
         filterButtons: {},
         selectionBuffer: {},
         entity: 'users',
-        columns: {},
         data: {
           total: 0,
           groups: [],
         },
-        randomVar:{}
       }
     },
     mixins: [
       TableMixin
     ],
     watch: {
-      '$route' () {
-        let vm = this
-        axios.get(`/ajax${this.$route.fullPath}`).then(({data}) => {
-          vm.getInfo(data, true)
-        })
-        this.setIntendedRoute()
-      },
       groupFilter () {
         this.applyFilter('group')
       },
       createdFilter () {
         this.applyFilter('created')
       },
-      data () {
-        this.randomVar = this.data
-      }
-    },
-    created () {
-      this.setFilterButtons()
-      this.setIntendedRoute()
     },
     methods: {
-      setIntendedRoute () {
-        return this.$store.dispatch('session/setIntendedUrl', {url: this.$router.currentRoute})
-      },
       setFilterButtons () {
         this.setFilterButton('name')
         this.setFilterButton('group')
@@ -219,11 +199,6 @@
       fullNameFilter () {
         this.applyFilter('name')
       }
-    },
-    beforeRouteEnter (to, from, next) {
-      axios.get(`/ajax${to.fullPath}`).then(({data}) => {
-        next(vm => vm.getInfo(data, false))
-      })
     }
   }
 </script>

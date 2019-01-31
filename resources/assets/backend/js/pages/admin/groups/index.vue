@@ -1,6 +1,8 @@
 <template>
     <div>
-        <v-table :entity="this.entity" :rows="rows" :total="total">
+        <v-table :entity="entity" :data="computedTable"
+                 :is-multi-select="true"
+                 select-column-name="group_name">
             <td slot="body-action" slot-scope="props">
                 <div class="inline">
                     <template v-if="props.row.group_name">
@@ -36,11 +38,9 @@
 
 <script>
   import Vue from 'vue'
-  import store from '~/store'
   import Table from '~/components/table/table'
-  import { mapGetters } from 'vuex'
   import axios from 'axios'
-
+  import TableMixin from '~/mixins/tables'
   Vue.use(Table)
 
   export default {
@@ -52,16 +52,15 @@
     },
     data: function () {
       return {
-        entity: 'groups'
+        entity: 'groups',
+        data: {
+          total: 0,
+        },
       }
     },
-    computed: {
-      ...mapGetters({
-        rows: 'table/rows',
-        total: 'table/total',
-        extras: 'table/extras'
-      })
-    },
+    mixins: [
+      TableMixin
+    ],
     methods: {
       async deleteRow (data) {
         try {
@@ -77,11 +76,5 @@
         } catch (e) {}
       }
     },
-    beforeRouteEnter (to, from, next) {
-      store.dispatch('table/fetchData', {
-        entity: 'groups',
-        queryString: to.fullPath
-      }).then(res => next())
-    }
   }
 </script>

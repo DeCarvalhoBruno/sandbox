@@ -49,14 +49,14 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <span class="float-right mt-3">{{total}}&nbsp;{{$tc('db.blog_post',total)}}</span>
+                        <span class="float-right mt-3">{{data.total}}&nbsp;{{$tc('db.blog_post',data.total)}}</span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <v-table :entity="this.entity" :rows="rows" :total="total" :is-multi-select="true"
-                     select-column-name="blog_post_title">
+            <v-table :entity="entity" :data="computedTable"
+                     :is-multi-select="true" select-column-name="blog_post_title">
                 <th slot="header-action">
                     {{$t('general.actions')}}
                 </th>
@@ -65,12 +65,13 @@
                         <template v-if="props.row.blog_post_slug">
                             <router-link :to="{
                             name: 'admin.blog.edit',
-                            params: { slug: props.row.blog_post_slug }
-                            }">
-                                <button class="btn btn-sm btn-info"
-                                        :title="$t('tables.edit_item',{name:props.row[$t('db_raw_inv.blog_post_title')]})">
-                                    <fa icon="pencil-alt">
-                                    </fa>
+                            params: { slug: props.row.blog_post_slug }}">
+                                <button
+                                        class="btn btn-sm btn-info"
+                                        :title="$t(
+                                        'tables.edit_item',{
+                                        name:props.row[$t('db_raw_inv.blog_post_title')]
+                                        })"><fa icon="pencil-alt"></fa>
                                 </button>
                             </router-link>
                         </template>
@@ -83,7 +84,6 @@
 
 <script>
   import Vue from 'vue'
-  import store from '~/store'
   import Table from '~/components/table/table'
   import TableFilter from '~/components/table/TableFilter'
   import TableMixin from '~/mixins/tables'
@@ -97,7 +97,7 @@
     name: 'blog',
     components: {
       'v-table': Table,
-      TableFilter,
+      TableFilter
     },
     data () {
       return {
@@ -106,15 +106,17 @@
         titleFilter: null,
         filterButtons: {},
         selectionBuffer: {},
-        entity: 'blog'
+        entity: 'blog',
+        data: {
+          total: 0
+        }
       }
     },
     mixins: [
       TableMixin
     ],
     created () {
-      this.setFilterButtons()
-      this.$root.$on('modal_confirmed', this.applyMethod)
+      // this.$root.$on('modal_confirmed', this.applyMethod)
     },
     methods: {
       setFilterButtons () {
@@ -137,12 +139,6 @@
       filterBlogTitle () {
         this.applyFilter('title')
       }
-    },
-    beforeRouteEnter (to, from, next) {
-      store.dispatch('table/fetchData', {
-        entity: 'blog',
-        queryString: to.fullPath
-      }).then(res => next())
     }
   }
 </script>

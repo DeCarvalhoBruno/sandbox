@@ -1,14 +1,36 @@
+import axios from 'axios'
+
 export default {
   name: 'table-mixin',
-  watch: {
-    '$route' () {
-      this.setFilterButtons()
-    }
-  },
   data: function () {
     return {}
   },
+  computed: {
+    computedTable () {
+      return this.data
+    }
+  },
+  watch: {
+    '$route' () {
+      this.setFilterButtons()
+      this.setIntendedRoute()
+      let vm = this
+      axios.get(`/ajax${this.$route.fullPath}`).then(({data}) => {
+        vm.getInfo(data, true)
+      })
+    }
+  },
+  created () {
+    this.setFilterButtons()
+    this.setIntendedRoute()
+  },
   methods: {
+    setFilterButtons () {
+    },
+    setIntendedRoute () {
+      return this.$store.dispatch('session/setIntendedUrl',
+        {url: this.$router.currentRoute})
+    },
     removeFilter (obj) {
       this.filterButtons = obj
     },
@@ -35,18 +57,6 @@ export default {
       }
     },
     getInfo (data, refresh) {
-      // if (refresh === true) {
-      //   this.data = {
-      //     rows: data.table.data,
-      //     currentPage: data.table.current_page,
-      //     from: data.table.from,
-      //     lastPage: data.table.last_page,
-      //     perPage: data.table.per_page,
-      //     to: data.table.to,
-      //     total: data.table.total
-      //   }
-      //   // commit(types.UPDATE_TABLE_DATA, data)
-      // } else {
       this.data = {
         rows: data.table.data,
         columns: data.columns,
@@ -56,10 +66,13 @@ export default {
         lastPage: data.table.last_page,
         perPage: data.table.per_page,
         to: data.table.to,
-        total: data.table.total,
-        extras: {groups: data.groups}
+        total: data.table.total
       }
-      // }
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    axios.get(`/ajax${to.fullPath}`).then(({data}) => {
+      next(vm => vm.getInfo(data, false))
+    })
   }
 }

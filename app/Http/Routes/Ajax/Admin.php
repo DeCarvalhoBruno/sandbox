@@ -55,7 +55,7 @@ class Admin
             $r->patch('members/{group}', 'GroupMember@update')
                 ->middleware('can:view,App\Models\Group');
 
-            $r->get('blog', 'Blog@index')
+            $r->get('blog/posts', 'Blog@index')
                 ->middleware('can:view,App\Models\Blog\BlogPost');
             $r->get('blog/categories', 'BlogPostCategory@index');
             $r->post('blog/categories/create', 'BlogPostCategory@create');
