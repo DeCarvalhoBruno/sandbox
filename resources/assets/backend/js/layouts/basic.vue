@@ -52,19 +52,14 @@
     data: function () {
       return {
         MenuItems,
-        dismissSecs: 10,
-        dismissCountDown: 0,
         breadCrumbs: []
       }
     },
     watch: {
       '$route' () {
         this.breadCrumbs = this.makeBreadcrumbs(this.$router.currentRoute).reverse()
-        this.dismissCountDown = this.dismissSecs
+        this.$store.dispatch('session/checkFlashMessage')
       }
-    },
-    mounted () {
-      this.dismissCountDown = this.dismissSecs
     },
     methods: {
       hasBreadCrumbs () {

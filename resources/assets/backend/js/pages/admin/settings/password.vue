@@ -53,7 +53,7 @@
       async update () {
         await this.form.patch('/ajax/admin/settings/password')
         this.form.reset()
-        this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.password_updated'))
+        this.swalNotification('success', this.$t('message.password_updated'))
       }
     }
   }

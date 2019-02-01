@@ -14,18 +14,29 @@ export default {
         type: type,
         title: title,
         showConfirmButton: false,
-        timer: 3000
+        timer: 4000
       })
     },
     swalSaveWarning () {
       return swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: 'Some work was left unsaved.',
+        text: 'Please confirm you\'d like to leave the page without saving.',
         type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Leave without saving'
+      })
+    },
+    swalDeleteWarning (title, text, confirmationButtonText) {
+      return swal.fire({
+        title: title,
+        text: text,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: confirmationButtonText
       })
     }
   }

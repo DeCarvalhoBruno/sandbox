@@ -210,7 +210,7 @@
   import fr from 'dayjs/locale/fr'
   import Button from '~/components/Button'
   import Trumbowyg from '~/components/wysiwyg/Trumbowyg'
-  import { Form, HasError, AlertForm } from '~/components/form'
+  import { Form, HasError } from '~/components/form'
   import TreeList from '~/components/tree-list/TreeList'
   import InputTagSearch from '~/components/InputTagSearch'
   import Datepicker from '~/components/Datepicker'
@@ -226,7 +226,6 @@
     components: {
       'v-button': Button,
       HasError,
-      AlertForm,
       Trumbowyg,
       InputTagSearch,
       TreeList,

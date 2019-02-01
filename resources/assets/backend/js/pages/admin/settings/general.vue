@@ -53,7 +53,6 @@
           if (locale !== this.$store.getters['lang/fallback']) {
             prefix += '/' + locale
           }
-          // window.history.pushState('', '', prefix + '/' + routesI18n[locale]['admin.settings.general'])
           window.history.pushState('', '', '/' + routesI18n[locale]['admin.settings.general'])
           this.$router.go(1)
           this.$router.go()

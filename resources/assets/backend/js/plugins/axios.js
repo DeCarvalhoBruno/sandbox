@@ -30,7 +30,7 @@ axios.interceptors.response.use(response => response, error => {
   }
 
   if (status >= 500) {
-    swal({
+    swal.fire({
       type: 'error',
       title: i18n.t('modal.error.h'),
       text: text,
@@ -40,7 +40,7 @@ axios.interceptors.response.use(response => response, error => {
   }
 
   if (status === 401 && store.getters['auth/check']) {
-    swal({
+    swal.fire({
       type: 'warning',
       title: i18n.t('modal.token_expired.h'),
       text: i18n.t('modal.token_expired.t'),
@@ -54,7 +54,7 @@ axios.interceptors.response.use(response => response, error => {
   }
 
   if (status === 403) {
-    swal({
+    swal.fire({
       type: 'error',
       title: i18n.t('modal.unauthorized.h'),
       text: i18n.t('modal.unauthorized.t'),

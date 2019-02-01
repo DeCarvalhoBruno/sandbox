@@ -177,23 +177,27 @@ return [
         ],
         'user_delete' => [
             'h' => 'Confirm user deletion',
-            't' => 'Do you really want to delete user {name}?'
+            't' => 'Do you really want to delete user {name}?|Do you really want to delete those {number} users?'
+        ],
+        'group_delete' => [
+            'h' => 'Confirm group deletion',
+            't' => 'Do you really want to delete group {name}?'
         ]
     ],
     'error' => [
         'page_not_found' => 'Page Not Found',
         'passwords_dont_match' => 'The passwords must be identical.',
         'form' => 'Errors were found on this form.'
-
     ],
     'message' => [
         'profile_updated' => 'Your profile has been updated!',
         'password_updated' => 'Your password has been updated!',
-        'user_update_ok' => 'The user was updated. It may take a few seconds for permissions to update.',
+        'user_update_ok' => 'The user was updated.',
         'user_delete_ok' => 'User {name} was deleted.|The users were deleted.',
-        'group_update_ok' => 'The group was updated. It may take a few seconds for permissions to update.',
+        'group_update_ok' => 'The group was updated.',
         'group_delete_ok' => 'Group {group} was deleted.',
-        'group_create_ok' => 'The group was created.'
+        'group_create_ok' => 'The group was created.',
+        'media_update_ok' => 'Group members were updated.'
     ],
     'pages' => [
         'auth' => [

@@ -32,7 +32,8 @@ import {
   faSearch,
   faTag,
   faEnvelope,
-  faPaste
+  faPaste,
+  faSort
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -41,7 +42,7 @@ library.add(
   faTrashAlt, faPencilAlt, faBars, faTachometerAlt, faStar, faKey, faAngleLeft,
   faArrowRight, faObjectGroup, faUsers, faCheck, faTimes, faExclamation,
   faCalendar, faCloudUploadAlt, faSyncAlt, faSync, faNewspaper, faMinus, faPlus,
-  faPlusSquare, faBan, faSearch, faTag, faEnvelope, faPaste
+  faPlusSquare, faBan, faSearch, faTag, faEnvelope, faPaste, faSort
 )
 
 Vue.component('fa', FontAwesomeIcon)

@@ -45,6 +45,7 @@
         "vuex-router-sync": "^5.0.0"
     },
     "devDependencies": {
+        "promise-polyfill": "^8.1.0",
         "admin-lte": "^2.4.2",
         "babel-eslint": "^8.2.1",
         "babel-plugin-syntax-dynamic-import": "^7.0.0-beta.3",
@@ -53,7 +54,7 @@
         "clean-webpack-plugin": "^0.1.18",
         "cross-env": "^5.1",
         "dynamic-polyfill": "^1.0.1",
-        "es6-promise": "^4.2.4",
+        "es6-promise": "^4.2.5",
         "eslint": "^4.15.0",
         "eslint-plugin-vue-libs": "^2.1.0",
         "exports-loader": "^0.7.0",

@@ -129,9 +129,12 @@
       async save () {
         try {
           this.form.addField('permissions', this.getPermissions(this.$refs.buttonCircle))
-          const {data} = await this.form.patch(`/ajax/admin/groups/${this.group}`)
+          await this.form.patch(`/ajax/admin/groups/${this.group}`)
+          this.$store.dispatch(
+            'session/setFlashMessage',
+            {msg: {type: 'success', text: this.$t('message.group_update_ok')}}
+          )
           this.$router.push({name: 'admin.groups.index'})
-          this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.group_update_ok'))
         } catch (e) {}
       }
     },

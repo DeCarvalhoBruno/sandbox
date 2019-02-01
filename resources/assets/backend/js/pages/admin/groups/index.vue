@@ -63,17 +63,17 @@
     ],
     methods: {
       async deleteRow (data) {
-        try {
-          await axios.delete(`/ajax/admin/groups/${data.group_name}`)
-          this.$store.dispatch(
-            'session/setAlertMessageSuccess',
-            this.$t('message.group_delete_ok', {group: data.group_name})
-          )
-          this.$store.dispatch('table/fetchData', {
-            entity: this.entity,
-            queryString: this.$route.fullPath
-          })
-        } catch (e) {}
+        this.swalDeleteWarning(
+          this.$t('modal.group_delete.h'),
+          this.$tc('modal.group_delete.t', 1, {name: data.group_name}),
+          this.$t('general.delete')
+        ).then(async (result) => {
+          if (result.value) {
+            await axios.delete(`/ajax/admin/groups/${data.group_name}`)
+            this.refreshTableData()
+            this.swalNotification('success', this.$tc('message.group_delete_ok', 1, {name: data.group_name}))
+          }
+        })
       }
     },
   }

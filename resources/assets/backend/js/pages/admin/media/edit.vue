@@ -186,9 +186,12 @@
       async save () {
         try {
           this.form.setTrackChanges(true)
-          const {data} = await this.form.patch(`/ajax/admin/media/${this.form.media_uuid}`)
-          // this.$router.push({name: this.intended.route, params: {slug: this.intended.slug}})
-          // this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.user_update_ok'))
+          await this.form.patch(`/ajax/admin/media/${this.form.media_uuid}`)
+          this.$store.dispatch(
+            'session/setFlashMessage',
+            {msg: {type: 'success', text: this.$t('message.media_update_ok')}}
+          )
+          this.$router.push({name: this.intended.route, params: {slug: this.intended.slug}})
         } catch (e) {}
       },
       getInfo (data) {

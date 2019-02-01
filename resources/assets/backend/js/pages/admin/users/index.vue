@@ -96,7 +96,7 @@
                         </template>
                         <button type="button" class="btn btn-sm btn-danger"
                                 :title="$t('tables.delete_item',{name:props.row[$t('db_raw_inv.full_name')]})"
-                                @click="deleteRowConfirm(props.row)">
+                                @click="deleteRow(props.row)">
                             <fa icon="trash-alt">
                             </fa>
                         </button>
@@ -112,6 +112,7 @@
   import Table from '~/components/table/table'
   import TableFilter from '~/components/table/TableFilter'
   import TableMixin from '~/mixins/tables'
+  import Swal from '~/mixins/sweet-alert'
   import axios from 'axios'
 
   Vue.use(Table)
@@ -132,16 +133,16 @@
         createdFilter: null,
         nameFilter: null,
         filterButtons: {},
-        selectionBuffer: {},
         entity: 'users',
         data: {
           total: 0,
-          groups: [],
-        },
+          groups: []
+        }
       }
     },
     mixins: [
-      TableMixin
+      TableMixin,
+      Swal
     ],
     watch: {
       groupFilter () {
@@ -149,7 +150,7 @@
       },
       createdFilter () {
         this.applyFilter('created')
-      },
+      }
     },
     methods: {
       setFilterButtons () {
@@ -157,42 +158,34 @@
         this.setFilterButton('group')
         this.setFilterButton('created')
       },
-      deleteRowConfirm (data) {
-        // this.$store.dispatch('session/showModal', {
-        //   data: {
-        //     method: 'deleteRow',
-        //     title: this.$t('modal.user_delete.h'),
-        //     confirmBtnClass: 'btn-danger',
-        //     confirmBtnText: this.$t('general.delete'),
-        //     text: '<h3>' + this.$t('modal.user_delete.t', {name: data.full_name}) + '</h3>'
-        //   }
-        // })
-        this.selectionBuffer = data
-      },
-      async deleteRow () {
-        try {
-          await axios.delete(`/ajax/admin/users/${this.selectionBuffer.username}`)
-          // this.$store.dispatch(
-          //   'session/setAlertMessageSuccess',
-          //   this.$tc('message.user_delete_ok', 1, {name: this.selectionBuffer.full_name})
-          // )
-          // this.$store.dispatch('table/fetchData', {
-          //   entity: this.entity,
-          //   queryString: this.$route.fullPath
-          // })
-        } catch (e) {}
+      async deleteRow (data) {
+        this.swalDeleteWarning(
+          this.$t('modal.user_delete.h'),
+          this.$tc('modal.user_delete.t', 1, {name: data.full_name}),
+          this.$t('general.delete')
+        ).then(async (result) => {
+          if (result.value) {
+            await axios.delete(`/ajax/admin/users/${data.username}`)
+            this.refreshTableData()
+            this.swalNotification('success', this.$tc('message.user_delete_ok', 1, {name: data.full_name}))
+          }
+        })
       },
       async applyToSelected () {
+        let users = this.$refs.table.getSelectedRows('username')
         switch (this.selectApply) {
           case 'del':
-            try {
-              await axios.post(`/ajax/admin/users/batch/delete`, {users: this.$refs.table.getSelectedRows('username')})
-              this.$store.dispatch('session/setAlertMessageSuccess', this.$tc('message.user_delete_ok', 2))
-              this.$store.dispatch('table/fetchData', {
-                entity: this.entity,
-                queryString: this.$route.fullPath
-              })
-            } catch (e) {}
+            this.swalDeleteWarning(
+              this.$t('modal.user_delete.h'),
+              this.$tc('modal.user_delete.t', 2, {number: users.length}),
+              this.$t('general.delete')
+            ).then(async (result) => {
+              if (result.value) {
+                await axios.post('/ajax/admin/users/batch/delete', {users: users})
+                this.refreshTableData()
+                this.swalNotification('success', this.$tc('message.user_delete_ok', 2))
+              }
+            })
             break
         }
       },

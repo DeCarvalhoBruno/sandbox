@@ -55,7 +55,8 @@
             </div>
         </div>
         <div class="row">
-            <v-table :entity="entity" :data="computedTable"
+            <v-table ref="table"
+                     :entity="entity" :data="computedTable"
                      :is-multi-select="true" select-column-name="blog_post_title">
                 <th slot="header-action">
                     {{$t('general.actions')}}
@@ -115,24 +116,25 @@
     mixins: [
       TableMixin
     ],
-    created () {
-      // this.$root.$on('modal_confirmed', this.applyMethod)
-    },
     methods: {
       setFilterButtons () {
         this.setFilterButton('title')
       },
       async applyToSelected () {
+        let posts = this.$refs.table.getSelectedRows('blog_post_slug')
         switch (this.selectApply) {
           case 'del':
-            try {
-              await axios.post(`/ajax/admin/users/batch/delete`, {users: this.$refs.table.getSelectedRows('username')})
-              this.$store.dispatch('session/setAlertMessageSuccess', this.$tc('message.user_delete_ok', 2))
-              this.$store.dispatch('table/fetchData', {
-                entity: this.entity,
-                queryString: this.$route.fullPath
-              })
-            } catch (e) {}
+            this.swalDeleteWarning(
+              this.$t('modal.user_delete.h'),
+              this.$tc('modal.user_delete.t', 2, {number: posts.length}),
+              this.$t('general.delete')
+            ).then(async (result) => {
+              if (result.value) {
+                await axios.post('/ajax/admin/users/batch/delete', {posts: users})
+                this.refreshTableData()
+                this.swalNotification('success', this.$tc('message.user_delete_ok', 2))
+              }
+            })
             break
         }
       },

@@ -45,6 +45,7 @@ class User extends Controller
         return [
             'table' => $users->paginate(25),
             'groups' => $groups->pluck('group_name'),
+            'sorted' => $userFilter->hasFilter('sortBy'),
             'columns' => $userProvider->createModel()->getColumnInfo([
                 'full_name' => (object)[
                     'name' => trans('ajax.db.full_name'),
@@ -109,7 +110,7 @@ class User extends Controller
             'user' => $user,
             'permissions' => $userProvider->getAllUserPermissions($entityTypeId),
             'nav' => $nav,
-            'intended'=>null
+            'intended' => null
         ];
     }
 
@@ -156,6 +157,7 @@ class User extends Controller
      * @param string $username
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function destroy($username, UserProvider $userProvider)
     {
@@ -167,6 +169,7 @@ class User extends Controller
      * @param \Illuminate\Http\Request $request
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function batchDestroy(Request $request, UserProvider $userProvider)
     {

@@ -114,8 +114,8 @@
     data () {
       return {
         form: new Form({
-          group_name:'',
-          group_mask:''
+          group_name: '',
+          group_mask: ''
         }),
         permissions: {}
       }
@@ -128,9 +128,12 @@
       async save () {
         try {
           this.form.addField('permissions', this.getPermissions(this.$refs.buttonCircle))
-          const {data} = await this.form.post(`/ajax/admin/groups`)
+          await this.form.post(`/ajax/admin/groups`)
+          this.$store.dispatch(
+            'session/setFlashMessage',
+            {msg: {type: 'success', text: this.$t('message.group_create_ok')}}
+          )
           this.$router.push({name: 'admin.groups.index'})
-          this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.group_create_ok'))
         } catch (e) {}
       }
     },

@@ -27,7 +27,7 @@
                                 v-if="info.sortable"
                                 :title="$t('tables.sort_'+getOrder(info.order))"><fa
                                 class="float-right"
-                                :icon="info.order===$t('filters.asc')?'angle-double-down':'angle-double-up'"></fa></span>
+                                :icon="(!table.sorted)?'sort':(info.order===$t('filters.asc')?'angle-double-down':'angle-double-up')"></fa></span>
                         </th>
                         <slot name="header-action">
                             <th>
@@ -75,7 +75,6 @@
 
 <script>
   import Vue from 'vue'
-  import axios from 'axios'
   import { PaginationNav } from 'bootstrap-vue/es/components'
 
   Vue.use(PaginationNav)
@@ -89,16 +88,6 @@
       return {
         sortOrder: 'desc',
         allSelected: false,
-        columns:[],
-        // table: {
-        //   rows: [],
-        //   currentPage: 1,
-        //   from: 0,
-        //   lastPage: 0,
-        //   perPage: 0,
-        //   to: 0,
-        //   total: 0,
-        // }
       }
     },
     props: {
@@ -119,13 +108,8 @@
         default: ''
       }
     },
-    // watch: {
-    //   data () {
-    //     this.table = this.data
-    //   },
-    // },
-    computed:{
-      table(){
+    computed: {
+      table () {
         return this.data
       }
     },
@@ -170,7 +154,7 @@
         return obj
       },
       updateColumn (obj) {
-        this.$store.commit('table/UPDATE_TABLE_COLUMN', obj)
+        this.table.columns[obj.columnName].order = obj.direction
       },
       getOrder (val) {
         let asc = this.$t('filters.asc')
@@ -181,6 +165,6 @@
         let qS = string.match(/\/[^?]+(.*)/)
         return (qS[1]) ? qS[1] : ''
       }
-    },
+    }
   }
 </script>

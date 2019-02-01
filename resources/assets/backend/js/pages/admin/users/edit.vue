@@ -178,7 +178,7 @@
       redirect () {
         this.$router.push(this.intended)
       },
-      getInfo (data, fromRouteInfo) {
+      getInfo (data) {
         this.form = new Form(data.user)
         this.permissions = data.permissions
         this.nav = data.nav
@@ -192,9 +192,9 @@
       async save () {
         try {
           this.form.addField('permissions', this.getPermissions(this.$refs.buttonCircle))
-          const {data} = await this.form.patch(`/ajax/admin/users/${this.$router.currentRoute.params.user}`)
+          await this.form.patch(`/ajax/admin/users/${this.$router.currentRoute.params.user}`)
+          this.$store.dispatch('session/setFlashMessage', {msg:{type:'success',text:this.$t('message.user_update_ok')}})
           this.$router.push({name: 'admin.users.index'})
-          this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.user_update_ok'))
         } catch (e) {}
       }
     },

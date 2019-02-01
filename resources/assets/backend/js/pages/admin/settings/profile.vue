@@ -112,7 +112,7 @@
         this.form.keys().forEach(key => {
           this.form[key] = this.userInfo[key]
         })
-        this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.profile_updated'))
+        this.swalNotification('success', this.$t('message.profile_updated'))
       },
       getInfo (data) {
         this.form = new Form(data.user)

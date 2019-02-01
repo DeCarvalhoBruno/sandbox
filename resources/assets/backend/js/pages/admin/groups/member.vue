@@ -2,7 +2,6 @@
     <div class="card">
         <div class="card-body">
             <div class="card-title">
-
                 <form @submit.prevent="update">
                     <input type="hidden" name="added_users" v-model="form.added">
                     <input type="hidden" name="removed_users" v-model="form.removed">
@@ -57,10 +56,10 @@
                     {{$t('pages.members.add_members')}}
                 </div>
                 <div class="card-body">
-                        <input-tag-search :typeahead="true"
-                                   :placeholder="$t('pages.members.member_search')"
-                                   :searchUrl="'/ajax/admin/users/search'"
-                                   @updateAddedItems="updateAddedUsersFromSearch"/>
+                    <input-tag-search :typeahead="true"
+                                      :placeholder="$t('pages.members.member_search')"
+                                      :searchUrl="'/ajax/admin/users/search'"
+                                      @updateAddedItems="updateAddedUsersFromSearch"/>
                 </div>
             </div>
             <div class="card mb-3">
@@ -70,9 +69,9 @@
                 <div class="card-body">
                     <div v-if="userCount>userCountThreshold">
                         <input-tag-search :typeahead="true"
-                                   :placeholder="$t('pages.members.member_search')"
-                                   :searchUrl="`/ajax/admin/members/${this.$route.params.group}/search`"
-                                   @updateAddedItems="updateRemovedUsersFromSearch"/>
+                                          :placeholder="$t('pages.members.member_search')"
+                                          :searchUrl="`/ajax/admin/members/${this.$route.params.group}/search`"
+                                          @updateAddedItems="updateRemovedUsersFromSearch"/>
                     </div>
                     <div v-else-if="userCount>0">
                         <div class="container row">
@@ -144,7 +143,10 @@
       },
       update (e) {
         axios.patch(`/ajax/admin/members/${this.$route.params.group}`, this.form).then(() => {
-          this.$store.dispatch('session/setAlertMessageSuccess', this.$t('message.group_update_ok'))
+          this.$store.dispatch(
+            'session/setFlashMessage',
+            {msg: {type: 'success', text: this.$t('message.group_update_ok')}}
+          )
           this.$router.push({name: 'admin.groups.index'})
         })
 

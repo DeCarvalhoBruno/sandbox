@@ -14,10 +14,7 @@ export default {
     '$route' () {
       this.setFilterButtons()
       this.setIntendedRoute()
-      let vm = this
-      axios.get(`/ajax${this.$route.fullPath}`).then(({data}) => {
-        vm.getInfo(data, true)
-      })
+      this.refreshTableData()
     }
   },
   created () {
@@ -25,6 +22,12 @@ export default {
     this.setIntendedRoute()
   },
   methods: {
+    refreshTableData () {
+      let vm = this
+      axios.get(`/ajax${this.$route.fullPath}`).then(({data}) => {
+        vm.getInfo(data, true)
+      })
+    },
     setFilterButtons () {
     },
     setIntendedRoute () {
@@ -47,7 +50,6 @@ export default {
     },
     applyMethod (name) {
       this[name]()
-      // this.$store.commit('session/HIDE_MODAL')
     },
     setFilterButton (type) {
       let filterTranslation = this.$t(`filters.${this.entity}_${type}`)
@@ -66,7 +68,8 @@ export default {
         lastPage: data.table.last_page,
         perPage: data.table.per_page,
         to: data.table.to,
-        total: data.table.total
+        total: data.table.total,
+        sorted: data.sorted
       }
     }
   },

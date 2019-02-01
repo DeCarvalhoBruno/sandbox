@@ -87,6 +87,7 @@ mix.webpackConfig({
       '$': 'jquery',
       jQuery: 'jquery',
       Popper: 'popper'
+      // Promise: ['es6-promise', 'Promise']
     })
   ],
   // externals: {
