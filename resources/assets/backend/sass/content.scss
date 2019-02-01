@@ -55,6 +55,11 @@
     font-size: 1.4em;
     padding-left: 1rem;
     color: #003cc2;
+
+    &:focus{
+      border:none;
+      outline:none;
+    }
   }
 }
 

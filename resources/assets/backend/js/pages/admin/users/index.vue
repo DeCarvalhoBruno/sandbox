@@ -15,7 +15,7 @@
                                    @keyup.enter="fullNameFilter">
                             <div class="input-group-append">
                                 <label class="input-group-text"
-                                       :title="$t('general.search')"
+                                       :title="$t('pages.users.filter_full_name')"
                                        @click="fullNameFilter">
                                     <fa icon="user"></fa>
                                 </label>
@@ -30,7 +30,7 @@
                             </select>
                             <div class="input-group-append">
                                 <label class="input-group-text"
-                                       :title="$t('general.search')">
+                                       :title="$t('pages.users.filter_group')">
                                     <fa icon="users"></fa>
                                 </label>
                             </div>
@@ -47,7 +47,7 @@
                             </select>
                             <div class="input-group-append">
                                 <label class="input-group-text"
-                                       :title="$t('general.search')">
+                                       :title="$t('pages.users.filter_created_at')">
                                     <fa icon="calendar"></fa>
                                 </label>
                             </div>

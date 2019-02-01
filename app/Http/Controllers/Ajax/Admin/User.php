@@ -20,7 +20,7 @@ class User extends Controller
      * @param \App\Filters\User $userFilter
      * @return array
      */
-    public function index(UserProvider $userProvider, UserFilter $userFilter, Request $request)
+    public function index(UserProvider $userProvider, UserFilter $userFilter)
     {
         $userProvider->setStoredFilter($this->user->getKey(), $userFilter);
         $users = $userProvider
@@ -45,7 +45,7 @@ class User extends Controller
         return [
             'table' => $users->paginate(25),
             'groups' => $groups->pluck('group_name'),
-            'sorted' => $userFilter->hasFilter('sortBy'),
+            'sorted' => $userFilter->getFilter('sortBy'),
             'columns' => $userProvider->createModel()->getColumnInfo([
                 'full_name' => (object)[
                     'name' => trans('ajax.db.full_name'),
@@ -56,7 +56,7 @@ class User extends Controller
                 'created_at' => (object)[
                     'name' => trans('ajax.db.user_created_at'),
                 ]
-            ])
+            ], $userFilter->getFilter('sortBy'), $userFilter->getFilter('order'))
         ];
     }
 

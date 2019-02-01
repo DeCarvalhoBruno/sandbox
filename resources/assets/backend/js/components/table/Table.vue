@@ -27,7 +27,7 @@
                                 v-if="info.sortable"
                                 :title="$t('tables.sort_'+getOrder(info.order))"><fa
                                 class="float-right"
-                                :icon="(!table.sorted)?'sort':(info.order===$t('filters.asc')?'angle-double-down':'angle-double-up')"></fa></span>
+                                :icon="getColumnHeaderIcon(info)"></fa></span>
                         </th>
                         <slot name="header-action">
                             <th>
@@ -139,8 +139,10 @@
         obj[this.$t('filters.sortBy')] = this.$t(`db_raw.${column.name}`)
         let orderTranslated = this.$t('filters.order')
         obj[orderTranslated] = this.toggleSortOrder()
-        this.updateColumn({columnName: column.name, direction: obj[orderTranslated]})
         this.$router.push({query: obj})
+      },
+      getColumnHeaderIcon (info) {
+        return (!info.hasOwnProperty('order'))?'sort':(info.order==='asc')?'angle-double-up':'angle-double-down'
       },
       toggleSortOrder () {
         this.sortOrder = this.getOrder(this.sortOrder)
@@ -153,18 +155,12 @@
         obj.query.page = pageNum
         return obj
       },
-      updateColumn (obj) {
-        this.table.columns[obj.columnName].order = obj.direction
-      },
       getOrder (val) {
         let asc = this.$t('filters.asc')
         let desc = this.$t('filters.desc')
         return val === asc ? desc : asc
       },
-      getQueryString (string) {
-        let qS = string.match(/\/[^?]+(.*)/)
-        return (qS[1]) ? qS[1] : ''
-      }
+
     }
   }
 </script>

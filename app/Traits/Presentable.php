@@ -7,9 +7,11 @@ trait Presentable
 {
     /**
      * @param $columns
+     * @param $sortBy
+     * @param $order
      * @return array
      */
-    public function getColumnInfo($columns): array
+    public function getColumnInfo($columns, $sortBy, $order): array
     {
         $sortable = array_flip($this->sortable);
         $result = [];
@@ -20,6 +22,9 @@ trait Presentable
                 'label' => $info->name,
                 'sortable' => isset($sortable[$name])
             ];
+            if ($name === $sortBy) {
+                $result[$name]['order'] = $order;
+            }
         }
         return $result;
     }
