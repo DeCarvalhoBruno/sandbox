@@ -218,6 +218,7 @@
 
   import swal from '~/mixins/sweet-alert'
   import form from '~/mixins/form'
+  import { deepCopy } from '../../../components/form/util'
 
   export default {
     layout: 'basic',
@@ -384,7 +385,10 @@
             msg = this.$t('pages.blog.save_success')
           }
           this.form.published_at = dayjs(this.form.published_at).format('YYYYMMDDHHmm')
+          let formBeforeSave = deepCopy(this.form)
           let {data} = await this.form.post(`/ajax/admin/blog/post/${suffix}`)
+          this.form = new Form(formBeforeSave)
+          this.form.resetChangedFields();
           this.url = data.url
           if (this.saveMode === 'create') {
             this.form.addField('blog_post_slug', data.blog_post_slug)

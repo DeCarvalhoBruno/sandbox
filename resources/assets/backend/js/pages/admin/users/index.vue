@@ -89,16 +89,14 @@
                             <router-link :to="{ name: 'admin.users.edit', params: { user: props.row.username } }">
                                 <button type="button" class="btn btn-sm btn-info"
                                         :title="$t('tables.edit_item',{name:props.row[$t('db_raw_inv.full_name')]})">
-                                    <fa icon="pencil-alt">
-                                    </fa>
+                                    <fa icon="pencil-alt"></fa>
                                 </button>
                             </router-link>
                         </template>
                         <button type="button" class="btn btn-sm btn-danger"
                                 :title="$t('tables.delete_item',{name:props.row[$t('db_raw_inv.full_name')]})"
-                                @click="deleteRow(props.row)">
-                            <fa icon="trash-alt">
-                            </fa>
+                                @click="deleteRow(props.row,'user','username','full_name','/ajax/admin/users')">
+                            <fa icon="trash-alt"></fa>
                         </button>
                     </div>
                 </td>
@@ -141,8 +139,8 @@
       }
     },
     mixins: [
-      TableMixin,
-      Swal
+      Swal,
+      TableMixin
     ],
     watch: {
       groupFilter () {
@@ -158,35 +156,24 @@
         this.setFilterButton('group')
         this.setFilterButton('created')
       },
-      async deleteRow (data) {
-        this.swalDeleteWarning(
-          this.$t('modal.user_delete.h'),
-          this.$tc('modal.user_delete.t', 1, {name: data.full_name}),
-          this.$t('general.delete')
-        ).then(async (result) => {
-          if (result.value) {
-            await axios.delete(`/ajax/admin/users/${data.username}`)
-            this.refreshTableData()
-            this.swalNotification('success', this.$tc('message.user_delete_ok', 1, {name: data.full_name}))
-          }
-        })
-      },
       async applyToSelected () {
         let users = this.$refs.table.getSelectedRows('username')
-        switch (this.selectApply) {
-          case 'del':
-            this.swalDeleteWarning(
-              this.$t('modal.user_delete.h'),
-              this.$tc('modal.user_delete.t', 2, {number: users.length}),
-              this.$t('general.delete')
-            ).then(async (result) => {
-              if (result.value) {
-                await axios.post('/ajax/admin/users/batch/delete', {users: users})
-                this.refreshTableData()
-                this.swalNotification('success', this.$tc('message.user_delete_ok', 2))
-              }
-            })
-            break
+        if (users.length > 0) {
+          switch (this.selectApply) {
+            case 'del':
+              this.swalDeleteWarning(
+                this.$t('modal.user_delete.h'),
+                this.$tc('modal.user_delete.t', 2, {number: users.length}),
+                this.$t('general.delete')
+              ).then(async (result) => {
+                if (result.value) {
+                  await axios.post('/ajax/admin/users/batch/delete', {users: users})
+                  this.refreshTableData()
+                  this.swalNotification('success', this.$tc('message.user_delete_ok', 2))
+                }
+              })
+              break
+          }
         }
       },
       fullNameFilter () {

@@ -81,38 +81,39 @@ class Image extends Model implements ImageInterface
      * @param int $entityTypeID
      * @param bool $setAsUsed
      * @throws \Exception
+     * @throws \Throwable
      */
     public function createImage($media, $entityTypeID, $setAsUsed = true)
     {
-        \DB::beginTransaction();
-        //For now the title of the image is the entity's slug, so we have an idea of which is which in mysql
-        $mediaType = MediaType::create([
-            'media_title' => $media->getFilename(),
-            'media_uuid' => $media->getUuid(),
-            'media_id' => $media->getMediaType(),
-            'media_in_use' => $setAsUsed
-        ]);
+        \DB::transaction(function () use ($media, $entityTypeID, $setAsUsed ) {
+            //For now the title of the image is the entity's slug, so we have an idea of which is which in mysql
+            $mediaType = MediaType::create([
+                'media_title' => $media->getFilename(),
+                'media_uuid' => $media->getUuid(),
+                'media_id' => $media->getMediaType(),
+                'media_in_use' => $setAsUsed
+            ]);
 
-        MediaDigital::create([
-            'media_type_id' => $mediaType->getKey(),
-            'media_extension' => $media->getFileExtension(),
-            'media_filename' => $media->getFilename(),
-        ]);
+            MediaDigital::create([
+                'media_type_id' => $mediaType->getKey(),
+                'media_extension' => $media->getFileExtension(),
+                'media_filename' => $media->getFilename(),
+            ]);
 
-        $mediaRecord = MediaRecord::create([
-            'media_type_id' => $mediaType->getKey(),
-        ]);
+            $mediaRecord = MediaRecord::create([
+                'media_type_id' => $mediaType->getKey(),
+            ]);
 
-        $mediaCategoryRecord = MediaCategoryRecord::create([
-            'media_record_target_id' => $mediaRecord->getKey(),
-        ]);
+            $mediaCategoryRecord = MediaCategoryRecord::create([
+                'media_record_target_id' => $mediaRecord->getKey(),
+            ]);
 
-        MediaEntity::create([
-            'entity_type_id' => $entityTypeID,
-            'media_category_record_id' => $mediaCategoryRecord->getKey(),
-        ]);
+            MediaEntity::create([
+                'entity_type_id' => $entityTypeID,
+                'media_category_record_id' => $mediaCategoryRecord->getKey(),
+            ]);
 
-        \DB::commit();
+        });
     }
 
     /**
@@ -125,10 +126,8 @@ class Image extends Model implements ImageInterface
         return MediaEntity::buildImages($columns, $entityTypeId)->get();
     }
 
-    public function getImagesFromSlug(
-        $slug,
-        $columns = []
-    ) {
+    public function getImagesFromSlug($slug, $entityId = Entity::BLOG_POSTS, $columns = ['*'])
+    {
         if (empty($columns)) {
             $columns = [
                 'media_uuid as uuid',
@@ -142,7 +141,7 @@ class Image extends Model implements ImageInterface
                 )
             ];
         }
-        return $this->getImages(EntityType::getEntityTypeID(Entity::BLOG_POSTS, $slug), $columns);
+        return $this->getImages(EntityType::getEntityTypeID($entityId, $slug), $columns);
     }
 
     public static function setAsUsed($uuid)
@@ -153,29 +152,44 @@ class Image extends Model implements ImageInterface
         throw new \UnexpectedValueException('uuid is not valid');
     }
 
-    public function delete($uuid, $entityId, $imageType)
+    /**
+     * @param string|array $uuid
+     * @param int $entityId
+     * @param int $mediaType
+     * @throws \Exception
+     */
+    public function delete($uuid, $entityId, $mediaType = \App\Models\Media\Media::IMAGE)
     {
-        if (is_hex_uuid_string($uuid)) {
-            /** @var \App\Models\Media\MediaType $media */
-            $media = MediaType::query()->select([
+        /** @var \App\Models\Media\MediaType $media */
+        $builder = MediaType::query()
+            ->select([
                 'media_types.media_type_id',
                 'media_uuid',
                 'media_extension'
-            ])->where('media_uuid', '=', $uuid)
-                ->mediaDigital()
-                ->first();
-            if (!is_null($media)) {
+            ])->mediaDigital();
+        $media = null;
+        if (is_string($uuid)) {
+            if (is_hex_uuid_string($uuid)) {
+                $media = $builder->where('media_uuid', '=', $uuid)
+                    ->get();
+            }
+        } elseif (is_array($uuid)) {
+            $media = $builder->whereIn('media_uuid', $uuid)
+                ->get();
+        } else {
+            throw new \UnexpectedValueException('uuid is not valid');
+        }
+        if (!is_null($media)) {
+            foreach ($media as $record) {
                 $this->deleteFiles(
                     $entityId,
-                    $imageType,
-                    $uuid,
-                    $media->getAttribute('media_extension')
+                    $mediaType,
+                    $record->getAttribute('media_uuid'),
+                    $record->getAttribute('media_extension')
                 );
-                return $media->delete();
+                $record->delete();
             }
-            throw new \UnexpectedValueException('Media was not found');
         }
-        throw new \UnexpectedValueException('uuid is not valid');
     }
 
     public function deleteFiles($entityId, $imageType, $uuid, $fileExtension)

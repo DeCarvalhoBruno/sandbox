@@ -59,9 +59,6 @@ let routes = [
     component: UserEdit
   },
   {
-    name: 'admin.users.delete'
-  },
-  {
     name: 'admin.groups.index',
     meta: {parent: 'admin.dashboard'},
     component: Groups

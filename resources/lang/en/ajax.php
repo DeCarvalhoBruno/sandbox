@@ -182,6 +182,10 @@ return [
         'group_delete' => [
             'h' => 'Confirm group deletion',
             't' => 'Do you really want to delete group {name}?'
+        ],
+        'blog_post_delete' => [
+            'h' => 'Confirm blog deletion',
+            't' => 'Do you really want to delete blog post {name}?|Do you really want to delete those {number} blog posts?'
         ]
     ],
     'error' => [
@@ -196,8 +200,9 @@ return [
         'user_delete_ok' => 'User {name} was deleted.|The users were deleted.',
         'group_update_ok' => 'The group was updated.',
         'group_delete_ok' => 'Group {group} was deleted.',
+        'blog_post_delete_ok' => 'Blog post {name} was deleted.',
         'group_create_ok' => 'The group was created.',
-        'media_update_ok' => 'Group members were updated.'
+        'media_update_ok' => 'The media was updated.'
     ],
     'pages' => [
         'auth' => [

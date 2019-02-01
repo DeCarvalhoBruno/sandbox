@@ -41,7 +41,7 @@ class Group extends Controller
                     'name' => trans('ajax.db.group_name'),
                     'width' => '80%'
                 ]
-            ]),
+            ],$filter),
             'member_count' => trans('ajax.db.member_count'),
 
         ];

@@ -70,6 +70,8 @@ class Admin
                 ->middleware('can:edit,App\Models\Blog\BlogPost');
             $r->post('blog/post/edit/{slug}', 'Blog@update')
                 ->middleware('can:edit,App\Models\Blog\BlogPost');
+            $r->delete('blog/post/{slug}', 'Blog@destroy');
+            $r->post('blog/post/batch/delete', 'Blog@batchDestroy');
 
             $r->patch('blog/post/edit/{slug}/image/{uuid}', 'Blog@setFeaturedImage')
                 ->middleware('can:edit,App\Models\Blog\BlogPost');

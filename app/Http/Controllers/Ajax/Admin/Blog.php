@@ -9,6 +9,8 @@ use App\Http\Requests\Admin\CreateBlogPost;
 use App\Models\Blog\BlogPostStatus;
 use App\Models\Entity;
 use App\Models\Media\MediaImgFormat;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class Blog extends Controller
 {
@@ -32,9 +34,9 @@ class Blog extends Controller
                 ],
                 'username' => (object)[
                     'name' => trans('ajax.db.username'),
-                    'width' => '40%'
+                    'width' => '30%'
                 ]
-            ])
+            ], $filter)
         ];
     }
 
@@ -78,7 +80,7 @@ class Blog extends Controller
                 'entity_type_id'
             ])->first();
         if (is_null($record)) {
-            return null;
+            return response(trans('error.http.500.blog_post_not_found'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         $blogPost = $record->toArray();
         $categories = \App\Support\Trees\BlogPostCategory::getTreeWithSelected($blogPost['blog_post_id']);
@@ -90,7 +92,7 @@ class Blog extends Controller
             'status_list' => BlogPostStatus::getConstants('BLOG'),
             'blog_post_categories' => $categories->tree,
             'url' => $this->getPostUrl($record),
-            'blog_post_slug'=>$record->getAttribute('blog_post_slug'),
+            'blog_post_slug' => $record->getAttribute('blog_post_slug'),
             'thumbnails' => $mediaRepo->image()->getImages(
                 $record->getAttribute('entity_type_id'), [
                 'media_uuid as uuid',
@@ -158,6 +160,49 @@ class Blog extends Controller
 
     /**
      * @param $slug
+     * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
+     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function destroy($slug, BlogProvider $blogRepo, MediaProvider $mediaRepo)
+    {
+        try {
+            $mediaUuids = $mediaRepo->image()
+                ->getImagesFromSlug(
+                    $slug,
+                    Entity::BLOG_POSTS,
+                    ['media_uuid']
+                )->pluck('media_uuid')->all();
+            \DB::transaction(function () use ($slug, $blogRepo, $mediaRepo, $mediaUuids) {
+                $mediaRepo->image()->delete($mediaUuids, Entity::BLOG_POSTS);
+                $blogRepo->deleteBySlug($slug);
+            });
+        } catch (\Exception $e) {
+            return response(trans('error.http.500.general_error'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
+     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function batchDestroy(BlogProvider $blogRepo, MediaProvider $mediaRepo, Request $request)
+    {
+        $postSlugs = $request->only('posts');
+        $blogRepo->deleteBySlug($request->only('posts'));
+        $mediaRepo->image()->getImagesFromSlug($postSlugs);
+
+        return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @param $slug
      * @param $uuid
      * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
      * @return mixed
@@ -176,7 +221,7 @@ class Blog extends Controller
             );
         }
 
-        return $mediaRepo->image()->getImagesFromSlug($slug)->toArray();
+        return $mediaRepo->image()->getImagesFromSlug($slug, Entity::BLOG_POSTS)->toArray();
     }
 
     /**
@@ -189,9 +234,8 @@ class Blog extends Controller
     {
         $mediaRepo->image()->delete(
             $uuid,
-            Entity::BLOG_POSTS,
-            \App\Models\Media\Media::IMAGE);
-        return $mediaRepo->image()->getImagesFromSlug($slug)->toArray();
+            Entity::BLOG_POSTS);
+        return $mediaRepo->image()->getImagesFromSlug($slug, Entity::BLOG_POSTS)->toArray();
     }
 
 }

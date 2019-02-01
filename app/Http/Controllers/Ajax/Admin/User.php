@@ -56,7 +56,7 @@ class User extends Controller
                 'created_at' => (object)[
                     'name' => trans('ajax.db.user_created_at'),
                 ]
-            ], $userFilter->getFilter('sortBy'), $userFilter->getFilter('order'))
+            ], $userFilter)
         ];
     }
 
@@ -102,12 +102,15 @@ class User extends Controller
                 'username',
                 'full_name',
                 'entity_type_id'
-            ])->entityType()->first()->toArray();
+            ])->entityType()->first();
+        if (is_null($user)) {
+            return response(trans('error.http.500.user_not_found'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
         $entityTypeId = $user['entity_type_id'];
         unset($user['entity_type_id']);
 
         return [
-            'user' => $user,
+            'user' => $user->toArray(),
             'permissions' => $userProvider->getAllUserPermissions($entityTypeId),
             'nav' => $nav,
             'intended' => null
@@ -150,7 +153,6 @@ class User extends Controller
                 $this->user->getAttribute('entity_type_id'),
                 intval($limit)
             )->get(), Response::HTTP_OK);
-        return response('', Response::HTTP_OK);
     }
 
     /**

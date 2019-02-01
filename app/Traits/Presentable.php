@@ -7,11 +7,10 @@ trait Presentable
 {
     /**
      * @param $columns
-     * @param $sortBy
-     * @param $order
+     * @param $filter \App\Filters\Filters
      * @return array
      */
-    public function getColumnInfo($columns, $sortBy, $order): array
+    public function getColumnInfo($columns, $filter): array
     {
         $sortable = array_flip($this->sortable);
         $result = [];
@@ -22,8 +21,8 @@ trait Presentable
                 'label' => $info->name,
                 'sortable' => isset($sortable[$name])
             ];
-            if ($name === $sortBy) {
-                $result[$name]['order'] = $order;
+            if ($name === $filter->getFilter(trans('ajax.filters.sortBy'))) {
+                $result[$name]['order'] = $filter->getFilter(trans('ajax.filters.order'));
             }
         }
         return $result;

@@ -71,6 +71,25 @@ export default {
         total: data.table.total,
         sorted: data.sorted
       }
+    },
+    async deleteRow (data, entity, slug, fullName, routeName) {
+      this.swalDeleteWarning(
+        this.$t(`modal.${entity}_delete.h`),
+        this.$tc(`modal.${entity}_delete.t`, 1, {name: data[fullName]}),
+        this.$t('general.delete')
+      ).then(async (result) => {
+        if (result.value) {
+          await axios.delete(`${routeName}/${data[slug]}`)
+          this.refreshTableData()
+          this.swalNotification(
+            'success',
+            this.$tc(
+              `message.${entity}_delete_ok`,
+              1,
+              {name: data[fullName]})
+          )
+        }
+      })
     }
   },
   beforeRouteEnter (to, from, next) {

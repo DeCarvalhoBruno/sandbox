@@ -3,7 +3,6 @@
    'admin.dashboard' => 'admin/tableau-de-bord',
    'admin.users.index' => 'admin/utilisateurs',
    'admin.users.edit' => 'admin/utilisateurs/:user',
-   'admin.users.delete' => 'admin/utilisateurs/:user/supprimer',
    'admin.groups.index' => 'admin/groupes',
    'admin.groups.add' => 'admin/groupes/creation',
    'admin.groups.edit' => 'admin/groupes/:group',

@@ -43,6 +43,13 @@ class Form {
     }
   }
 
+  /**
+   * Resets the object that holds fields that have received user input
+   */
+  resetChangedFields () {
+    this.changedFields = {}
+  }
+
   hasDetectedChanges () {
     return (Object.keys(this.changedFields).length > 0)
   }

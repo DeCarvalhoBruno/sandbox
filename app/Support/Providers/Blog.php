@@ -84,6 +84,18 @@ class Blog extends Model implements BlogInterface
     }
 
     /**
+     * @param int|array $slug
+     */
+    public function deleteBySlug($slug)
+    {
+        if (is_string($slug)) {
+            $this->createModel()->newQuery()->where('blog_post_slug', '=', $slug)->delete();
+        } else {
+            $this->createModel()->newQuery()->whereIn('blog_post_slug', $slug)->delete();
+        }
+    }
+
+    /**
      * @param array $data
      * @param \App\Models\User $user
      * @return \App\Models\Blog\BlogPost

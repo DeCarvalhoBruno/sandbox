@@ -72,9 +72,21 @@
                                         :title="$t(
                                         'tables.edit_item',{
                                         name:props.row[$t('db_raw_inv.blog_post_title')]
-                                        })"><fa icon="pencil-alt"></fa>
+                                        })">
+                                    <fa icon="pencil-alt"></fa>
                                 </button>
                             </router-link>
+                            <button type="button" class="btn btn-sm btn-danger"
+                                    :title="$t('tables.delete_item',{name:props.row[$t('db_raw_inv.blog_post_title')]})"
+                                    @click="deleteRow(
+                                        props.row,
+                                        'blog_post',
+                                        'blog_post_slug',
+                                        'blog_post_title',
+                                        '/ajax/admin/blog/post'
+                                    )">
+                                <fa icon="trash-alt"></fa>
+                            </button>
                         </template>
                     </div>
                 </td>
@@ -85,6 +97,7 @@
 
 <script>
   import Vue from 'vue'
+  import Swal from '~/mixins/sweet-alert'
   import Table from '~/components/table/table'
   import TableFilter from '~/components/table/TableFilter'
   import TableMixin from '~/mixins/tables'
@@ -114,7 +127,8 @@
       }
     },
     mixins: [
-      TableMixin
+      TableMixin,
+      Swal
     ],
     methods: {
       setFilterButtons () {
@@ -122,20 +136,22 @@
       },
       async applyToSelected () {
         let posts = this.$refs.table.getSelectedRows('blog_post_slug')
-        switch (this.selectApply) {
-          case 'del':
-            this.swalDeleteWarning(
-              this.$t('modal.user_delete.h'),
-              this.$tc('modal.user_delete.t', 2, {number: posts.length}),
-              this.$t('general.delete')
-            ).then(async (result) => {
-              if (result.value) {
-                await axios.post('/ajax/admin/users/batch/delete', {posts: users})
-                this.refreshTableData()
-                this.swalNotification('success', this.$tc('message.user_delete_ok', 2))
-              }
-            })
-            break
+        if (posts.length > 0) {
+          switch (this.selectApply) {
+            case 'del':
+              this.swalDeleteWarning(
+                this.$t('modal.blog_delete.h'),
+                this.$tc('modal.blog_delete.t', 2, {number: posts.length}),
+                this.$t('general.delete')
+              ).then(async (result) => {
+                if (result.value) {
+                  await axios.post('/ajax/admin/blog/post/batch/delete', {posts: posts})
+                  this.refreshTableData()
+                  this.swalNotification('success', this.$tc('message.blog_delete_ok', 2))
+                }
+              })
+              break
+          }
         }
       },
       filterBlogTitle () {

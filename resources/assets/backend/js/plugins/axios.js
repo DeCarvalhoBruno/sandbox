@@ -24,7 +24,7 @@ axios.interceptors.response.use(response => response, error => {
 
   let text
   if (error.response.data && error.response.data.length > 0) {
-    text = error.response.data[0]
+    text = error.response.data
   } else {
     text = i18n.t('modal.error.t')
   }

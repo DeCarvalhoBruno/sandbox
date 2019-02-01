@@ -12,14 +12,15 @@ class UpdatePermissions extends Job
      * Execute the job.
      *
      * @return void
+     * @throws \Throwable
      */
     public function handle()
     {
         try {
-            \DB::beginTransaction();
-            PermissionStore::query()->delete();
-            Permission::assignToAll();
-            \DB::commit();
+            \DB::transaction(function () {
+                PermissionStore::query()->delete();
+                Permission::assignToAll();
+            });
         } catch (\Exception $e) {
             \Log::critical($e->getMessage(), ['trace' => $e->getTraceAsString()]);
         }
