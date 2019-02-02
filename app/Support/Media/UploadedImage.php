@@ -20,8 +20,7 @@ class UploadedImage extends ImageUpload implements Image
         $this->uuid = makeHexUuid();
         $this->fileExtension = $fileObject->getClientOriginalExtension();
         $this->hddFilename = sprintf('%s.%s', $this->uuid, $this->fileExtension);
-//        $this->hddPath = media_entity_root_path(Entity::getConstant($targetType), Media::getConstant($mediaType));
-        $this->hddPath = sprintf('%s/media/%s/%s/', public_path(), $targetType, $mediaType);
+        $this->hddPath = media_entity_root_path($targetType, $mediaType);
         $this->targetType = Entity::getConstant($targetType);
         $this->mediaType = Media::getConstant($mediaType);
         $this->fileObject = $fileObject;

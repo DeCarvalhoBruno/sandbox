@@ -67,7 +67,8 @@ return [
         'collapse all' => 'Collapse all',
         'uploaded_on' => 'Uploaded on',
         'media' => 'Media',
-        'crop' => 'Crop'
+        'crop' => 'Crop',
+        'close' => 'Close'
     ],
     'db' => [
         'user' => 'User|Users',

@@ -72,6 +72,23 @@ class Blog extends Model implements BlogInterface
     }
 
     /**
+     * @param array $data
+     * @param \App\Models\User $user
+     * @return \App\Models\Blog\BlogPost
+     */
+    public function createOne($data, $user)
+    {
+        $userModel = $user->first();
+        if (is_null($userModel)) {
+            throw new \UnexpectedValueException('User account for blog post creation not found.');
+        }
+        $data['user_id'] = $userModel->getKey();
+        $post = new BlogPost($data);
+        $post->save();
+        return $post;
+    }
+
+    /**
      * @param string $slug
      * @param array $data
      * @return \App\Models\Blog\BlogPost
@@ -93,23 +110,6 @@ class Blog extends Model implements BlogInterface
         } else {
             $this->createModel()->newQuery()->whereIn('blog_post_slug', $slug)->delete();
         }
-    }
-
-    /**
-     * @param array $data
-     * @param \App\Models\User $user
-     * @return \App\Models\Blog\BlogPost
-     */
-    public function createOne($data, $user)
-    {
-        $userModel = $user->first();
-        if (is_null($userModel)) {
-            throw new \UnexpectedValueException('User account for blog post creation not found.');
-        }
-        $data['user_id'] = $userModel->getKey();
-        $post = new BlogPost($data);
-        $post->save();
-        return $post;
     }
 
 }

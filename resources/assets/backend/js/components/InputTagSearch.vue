@@ -17,9 +17,9 @@
                            ref="search"
                            @focus="dataPlaceholder=''"
                            @blur="dataPlaceholder=placeholder"
-                           @keypress.enter.prevent="tagFromInput"
-                           @keypress.backspace="removeLastTag"
-                           @keypress.esc="ignoreSearchResults"
+                           @keyup.enter.prevent="tagFromInput"
+                           @keyup.esc="ignoreSearchResults"
+                           @keyup.delete="removeLastTag"
                            @keyup="searchTag"
                            @value="tags">
                     <input type="hidden" :name="elementId" :id="elementId" v-model="hiddenInput">
@@ -81,7 +81,9 @@
         loadIconIsAnimated: false
       }
     },
-
+    mounted(){
+      this.$refs.search.focus()
+    },
     created () {
       if (this.oldTags && this.oldTags.length) {
         let oldTags = Array.isArray(this.oldTags)
@@ -96,7 +98,6 @@
         }
       }
     },
-
     watch: {
       tags () {
         // Updating the hidden input
@@ -104,7 +105,6 @@
         this.$emit('updateAddedItems', this.tagBag)
       }
     },
-
     methods: {
       tagFromInput (e) {
         // If we're choosing a tag from the search results
@@ -114,25 +114,21 @@
           this.input = ''
         }
       },
-
       tagFromSearch (tag) {
         this.searchResults = []
         this.input = ''
         this.$refs.search.focus()
         this.addTag(tag.id, tag.text)
       },
-
       makeSlug (value) {
         return value.toLowerCase().replace(/\s/g, '-')
       },
-
       addTag (id, text) {
         // Attach the tag if it hasn't been attached yet
         let searchSlug = this.makeSlug(id)
         let found = this.tags.find((text) => {
           return searchSlug == this.makeSlug(text)
         })
-
         if (!found) {
           this.tagBadges.push(text.replace(/\s/g, '&nbsp;'))
           this.tags.push(id)
@@ -147,14 +143,12 @@
           this.searchTag(e.target.value)
         }
       },
-
       removeTag (index) {
         this.tags.splice(index, 1)
         this.tagBadges.splice(index, 1)
         this.tagBag.splice(index, 1)
         this.$refs.search.focus()
       },
-
       async searchTag (e, value) {
         let input = (typeof value === 'undefined') ? this.input.trim() : value
         if (this.typeahead === true) {
@@ -178,29 +172,24 @@
                 }
               }
             }
-
             this.oldInput = input
           }
         }
       },
-
       async searchTerm (term) {
         let {data} = await axios.get(`${this.searchUrl}/${term}/${this.limit}`)
         return data
       },
-
       nextSearchResult () {
         if (this.searchSelection + 1 <= this.searchResults.length - 1) {
           this.searchSelection++
         }
       },
-
       prevSearchResult () {
         if (this.searchSelection > 0) {
           this.searchSelection--
         }
       },
-
       ignoreSearchResults () {
         this.searchResults = []
         this.searchSelection = 0

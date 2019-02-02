@@ -39,18 +39,45 @@ class Image extends Model implements ImageInterface
         return $this->avatar;
     }
 
+    /**
+     * @param string $uuid
+     * @param array $columns
+     * @return mixed
+     */
     public function getOne($uuid, $columns = ['*'])
     {
         return $this->createModel()->newQuery()
             ->select($columns)
             ->mediaType()->where('media_uuid', '=', $uuid)->first();
+    }
 
+    public function updateOne($uuid, $data)
+    {
+        $mediaTypeModel = new MediaType();
+
+        $media = $mediaTypeModel->newQuery()->select(['media_type_id'])
+            ->where('media_uuid', '=', $uuid)->first();
+        if (is_null($media)) {
+            return;
+        }
+        $fillables = $this->filterFillables($data, $mediaTypeModel);
+        if (!empty($fillables)) {
+            $media->update($fillables);
+        }
+
+        $model = $this->createModel();
+        $fillables = $this->filterFillables($data, $model);
+        if (!empty($fillables)) {
+            $model->newQuery()->where('media_type_id', '=', $media->getKey())
+                ->update($fillables);
+        }
     }
 
     /**
      * @param \App\Contracts\Image $image
      * @return int
      * @throws \Exception
+     * @throws \Throwable
      */
     public function saveAvatar(ImageContract $image)
     {
@@ -68,6 +95,7 @@ class Image extends Model implements ImageInterface
      * @param \App\Contracts\Image $image
      * @return array|int
      * @throws \Exception
+     * @throws \Throwable
      */
     public function save(ImageContract $image)
     {
@@ -85,7 +113,7 @@ class Image extends Model implements ImageInterface
      */
     public function createImage($media, $entityTypeID, $setAsUsed = true)
     {
-        \DB::transaction(function () use ($media, $entityTypeID, $setAsUsed ) {
+        \DB::transaction(function () use ($media, $entityTypeID, $setAsUsed) {
             //For now the title of the image is the entity's slug, so we have an idea of which is which in mysql
             $mediaType = MediaType::create([
                 'media_title' => $media->getFilename(),

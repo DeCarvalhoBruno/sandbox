@@ -156,7 +156,6 @@
   import Cropper from '~/components/Cropper'
   import axios from 'axios'
 
-  import { Form, HasError, AlertForm } from '~/components/form'
   import { Tabs } from 'bootstrap-vue/es/components'
 
   Vue.use(Tabs)

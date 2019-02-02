@@ -193,11 +193,15 @@ abstract class Model
      * fillable property
      *
      * @param array $data
+     * @param \Illuminate\Database\Eloquent\Model|null $model
      * @return array
      */
-    public function filterFillables($data)
+    public function filterFillables($data, $model = null)
     {
-        $fillables = array_flip($this->createModel()->getFillable());
+        if (is_null($model)) {
+            $model = $this->createModel();
+        }
+        $fillables = array_flip($model->getFillable());
 
         return array_filter($data, function ($key) use ($fillables) {
             return isset($fillables[$key]);
@@ -234,6 +238,11 @@ abstract class Model
         return !empty($result) ? $result[0]->c : null;
     }
 
+    public function getKeyName()
+    {
+        return $this->createModel()->getKeyName();
+    }
+
     public function getQualifiedKeyName()
     {
         return $this->createModel()->getQualifiedKeyName();
@@ -247,7 +256,7 @@ abstract class Model
     {
         if ($filter->hasFilters()) {
             \Cache::put($this->getStoredFilterKey($userID), $filter, 30);
-        }else{
+        } else {
             \Cache::forget($this->getStoredFilterKey($userID));
         }
     }

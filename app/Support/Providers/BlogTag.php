@@ -84,7 +84,11 @@ class BlogTag extends Model implements BlogTagInterface
         }
     }
 
-    public function updatePost($updated, $post)
+    /**
+     * @param array $updated
+     * @param \App\Models\Blog\BlogPost $post
+     */
+    public function updatePost(array $updated, $post)
     {
         $inStore = $this->getByPost($post->getKey());
         $toBeRemoved = array_diff($inStore, $updated);
@@ -102,8 +106,6 @@ class BlogTag extends Model implements BlogTagInterface
         if (!empty($toBeAdded)) {
             $this->attachToPost($toBeAdded, $post);
         }
-
-
     }
 
     public function getUnknownTags($names)

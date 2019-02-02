@@ -3,7 +3,7 @@
         <div class="form-group row">
             <label class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.language') }}</label>
             <div class="col-md-7">
-                <select class="custom-select" v-model="form.locale">
+                <select class="custom-select" v-model="form.fields.locale">
                     <option v-for="(locale,idx) in locales" :key="idx" :value="locale">{{$t('locales.'+locale)}}
                     </option>
                 </select>
@@ -20,15 +20,13 @@
 <script>
   import { mapGetters } from 'vuex'
   import Button from '~/components/Button'
-  import { Form, HasError, AlertForm } from '~/components/form'
+  import { Form } from '~/components/form'
   import routesI18n from '~/lang/routes'
 
   export default {
     scrollToTop: false,
     components: {
       'v-button': Button,
-      HasError,
-      AlertForm
     },
     computed: mapGetters({
       locale: 'lang/locale',
@@ -46,7 +44,7 @@
     },
     methods: {
       update () {
-        let locale = this.form.locale
+        let locale = this.form.fields.locale
         if (locale !== this.locale) {
           this.$store.dispatch('lang/setLocale', {locale})
           let prefix = ''

@@ -73,7 +73,12 @@ class BlogCategory extends Model implements BlogCategoryInterface
         }
     }
 
-    public function updatePost($updated, $post)
+    /**
+     * @param array $updated
+     * @param \Illuminate\Database\Eloquent\Model $post
+     * @return void
+     */
+    public function updatePost(array $updated, $post)
     {
         $inStore = $this->getSelected($post->getKey());
         $toBeRemoved = array_diff($inStore, $updated);

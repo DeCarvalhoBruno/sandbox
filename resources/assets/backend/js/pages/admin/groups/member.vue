@@ -3,8 +3,8 @@
         <div class="card-body">
             <div class="card-title">
                 <form @submit.prevent="update">
-                    <input type="hidden" name="added_users" v-model="form.added">
-                    <input type="hidden" name="removed_users" v-model="form.removed">
+                    <input type="hidden" name="added_users" v-model="form.fields.added">
+                    <input type="hidden" name="removed_users" v-model="form.fields.removed">
                     <button class="btn btn-primary float-right"
                             :disabled="removedUsers.length===0&&addedUsers.length===0">
                         {{$t('general.save_changes')}}
@@ -95,6 +95,7 @@
 <script>
   import InputTagSearch from '~/components/InputTagSearch'
   import axios from 'axios'
+  import { Form, HasError, AlertForm } from '~/components/form'
 
   export default {
     name: 'member',
@@ -110,20 +111,20 @@
         members: [],
         userCount: 0,
         userCountThreshold: 25,
-        form: {
+        form: new Form({
           removed: [],
           added: []
-        }
+        })
       }
     },
     methods: {
       updateAddedUsersFromSearch (users) {
         this.addedUsers = users
-        this.form.added = this.addedUsers
+        this.form.fields.added = this.addedUsers
       },
       updateRemovedUsersFromSearch (users) {
         this.removedUsers = users
-        this.form.removed = this.removedUsers
+        this.form.fields.removed = this.removedUsers
       },
       getInfo (data) {
         this.userCount = data.count
@@ -134,12 +135,12 @@
       addToRemoveUsersList (elem, index) {
         this.members.splice(index, 1)
         this.removedUsers.push(elem)
-        this.form.removed = this.removedUsers
+        this.form.fields.removed = this.removedUsers
       },
       returnToUsersList (elem, index) {
         this.removedUsers.splice(index, 1)
         this.members.unshift(elem)
-        this.form.removed = this.removedUsers
+        this.form.fields.removed = this.removedUsers
       },
       update (e) {
         axios.patch(`/ajax/admin/members/${this.$route.params.group}`, this.form).then(() => {

@@ -7,7 +7,7 @@
                     <div class="container">
                         <div class="form-group row col-lg mt-1">
                             <div class="col-lg-10">
-                                <input v-model="form.blog_post_title" type="text" required autocomplete="off"
+                                <input v-model="form.fields.blog_post_title" type="text" required autocomplete="off"
                                        name="blog_post_title" id="blog_post_title"
                                        class="form-control" maxlength="255"
                                        :class="{ 'is-invalid': form.errors.has('blog_post_title') }"
@@ -25,7 +25,7 @@
                         <div id="head_row" class="form-group row">
                             <div class="col-lg-6" id="head_col_draft">
                                 <template v-if="form_status_editing">
-                                    <select v-model="form.blog_post_status"
+                                    <select v-model="form.fields.blog_post_status"
                                             @change="changedField('blog_post_status')"
                                             class="custom-control custom-select">
                                         <option v-for="(idx,status) in status_list" :key="idx" :value="status"
@@ -47,8 +47,8 @@
                                     <span>{{$t('general.status')}}: </span>
                                     <span class="form-field-togglable"
                                           @click="toggleEditing('form_status_editing')"
-                                    >{{ ($te(`constants.${form.blog_post_status}`))?
-                                        $t(`constants.${form.blog_post_status}`):
+                                    >{{ ($te(`constants.${form.fields.blog_post_status}`))?
+                                        $t(`constants.${form.fields.blog_post_status}`):
                                         ''}}</span>
                                 </template>
                             </div>
@@ -80,7 +80,7 @@
                                     <span>{{$t('pages.blog.author')}}: </span>
                                     <span class="form-field-togglable"
                                           @click="toggleEditing('form_user_editing')"
-                                    >{{form.blog_post_user}}</span>
+                                    >{{form.fields.blog_post_user}}</span>
                                 </template>
                             </div>
                         </div>
@@ -127,7 +127,7 @@
             <div class="row p-0 m-0 mb-1">
                 <div class="card col-lg p-0 m-0">
                     <div class="row p-0 m-0">
-                        <trumbowyg v-model="form.blog_post_content" :config="editorConfig"
+                        <trumbowyg v-model="form.fields.blog_post_content" :config="editorConfig"
                                    ref="inputBlogPostContent"
                                    class="form-control"
                                    name="content"></trumbowyg>
@@ -138,7 +138,7 @@
                     </div>
                     <div class="row p-0 m-0 input-tag-wrapper">
                         <span class="badge badge-pill badge-light"
-                              v-for="(badge, index) in form.tags"
+                              v-for="(badge, index) in form.fields.tags"
                               :key="index">
                         <span v-html="badge" @click.prevent="removeTag(index)"></span>
                             <fa icon="tag" class="badge-tag-icon"></fa>
@@ -159,7 +159,7 @@
                         <div class="form-group">
                             <label for="blog_post_excerpt"></label>
                             <textarea class="form-control" name="blog_post_excerpt"
-                                      id="blog_post_excerpt" rows="5" v-model="form.blog_post_excerpt"
+                                      id="blog_post_excerpt" rows="5" v-model="form.fields.blog_post_excerpt"
                                       placeholder="Post Excerpt"
                                       @input="changedField('blog_post_excerpt')"></textarea>
                             <small id="help_new_group_name" class="text-muted"
@@ -187,7 +187,7 @@
                     <div class="card-header bg-transparent">{{$t('pages.blog.media')}}</div>
                     <div class="card-body">
                         <image-uploader
-                                :target="form.blog_post_slug"
+                                :target="form.fields.blog_post_slug"
                                 type="blog_posts"
                                 media="image"
                                 :is-active="this.saveMode==='edit'"
@@ -210,7 +210,7 @@
   import fr from 'dayjs/locale/fr'
   import Button from '~/components/Button'
   import Trumbowyg from '~/components/wysiwyg/Trumbowyg'
-  import { Form, HasError } from '~/components/form'
+  import { Form, HasError, AlertForm } from '~/components/form'
   import TreeList from '~/components/tree-list/TreeList'
   import InputTagSearch from '~/components/InputTagSearch'
   import Datepicker from '~/components/Datepicker'
@@ -247,7 +247,7 @@
         editorConfig: this.getConfig(),
         status_list: null,
         current_status: '',
-        current_publish_date: null,
+        current_publish_date: new Date(),
         url: null,
         saveMode: null,
         blog_post_categories: [],
@@ -272,26 +272,29 @@
     },
     watch: {
       current_publish_date (value) {
-        this.form.published_at = value
+        this.form.fields.published_at = value
       }
     },
-    mounted(){
+    mounted () {
       let vm = this
       //We have to set a listener like this because the input event is emitted because the input field
       //might be populated with text that is not user input and trigger the changedField method prematurely
-      this.$refs.inputBlogPostContent.$on('tbw-init',()=>{
-        vm.$refs.inputBlogPostContent.$on('input',()=>{
+      this.$refs.inputBlogPostContent.$on('tbw-init', () => {
+        vm.$refs.inputBlogPostContent.$on('input', () => {
           vm.changedField('blog_post_content')
         })
       })
-      window.addEventListener("beforeunload", this.checkBeforeUnload);
+      window.addEventListener('beforeunload', this.checkBeforeUnload)
+    },
+    beforeDestroy () {
+      window.removeEventListener('beforeunload', this.checkBeforeUnload)
     },
     methods: {
-      checkBeforeUnload(event) {
+      checkBeforeUnload (event) {
         if (this.form.hasDetectedChanges()) {
-          var confirmationMessage = "_";
-          event.returnValue = confirmationMessage;
-          return confirmationMessage;
+          var confirmationMessage = '_'
+          event.returnValue = confirmationMessage
+          return confirmationMessage
         }
       },
       format (value, format) {
@@ -311,7 +314,7 @@
       },
       addTag () {
         if (this.tagInput) {
-          this.form.tags.push(this.tagInput)
+          this.form.fields.tags.push(this.tagInput)
           this.tagInput = ''
           this.$refs.tag.focus()
           this.changedField('tags')
@@ -324,26 +327,25 @@
           this.$refs.inputMinutes.value).toDate()
       },
       removeTag (index) {
-        this.form.tags.splice(index, 1)
+        this.form.fields.tags.splice(index, 1)
         this.$refs.tag.focus()
         this.changedField('tags')
       },
       categorySelected (val, mode) {
         if (mode === 'add') {
-          if (this.form.categories.indexOf(val) === -1) {
-            this.form.categories.push(val)
+          if (this.form.fields.categories.indexOf(val) === -1) {
+            this.form.fields.categories.push(val)
             this.changedField('categories')
           }
         } else {
-          let i = this.form.categories.indexOf(val)
+          let i = this.form.fields.categories.indexOf(val)
           if (i > -1) {
-            this.form.categories.splice(i, 1)
+            this.form.fields.categories.splice(i, 1)
           }
 
         }
       },
       getConfig () {
-        let vm = this
         return {
           semantic: false,
           btns: [
@@ -363,48 +365,48 @@
       },
       updateUsers (users) {
         if (users.length > 0) {
-          this.form.blog_post_user = users[0].id
+          this.form.fields.blog_post_user = users[0].id
+          this.changedField('blog_post_user')
         }
       },
       toggleEditing (value) {
         this[value] = !this[value]
       },
       async save () {
-        if (!this.form.blog_post_title) {
+        if (!this.form.fields.blog_post_title) {
           return
         }
-        try {
-          let suffix, msg
-          let route = this.$route
-          if ((route.name.lastIndexOf('add') > 0)) {
-            this.saveMode = suffix = 'create'
-            msg = this.$t('pages.blog.add_success')
-          } else {
-            this.saveMode = 'edit'
-            suffix = `${this.saveMode}/${route.params.slug}`
-            msg = this.$t('pages.blog.save_success')
-          }
-          this.form.published_at = dayjs(this.form.published_at).format('YYYYMMDDHHmm')
-          let formBeforeSave = deepCopy(this.form)
-          let {data} = await this.form.post(`/ajax/admin/blog/post/${suffix}`)
-          this.form = new Form(formBeforeSave)
-          this.form.resetChangedFields();
-          this.url = data.url
-          if (this.saveMode === 'create') {
-            this.form.addField('blog_post_slug', data.blog_post_slug)
-            this.$router.push({name: 'admin.blog.edit', params: {slug: data.blog_post_slug}})
-          } else {
-            this.form.blog_post_slug = data.blog_post_slug
-          }
-          this.swalNotification('success', msg)
-        } catch (e) {}
+        let suffix, msg
+        let route = this.$route
+        if ((route.name.lastIndexOf('add') > 0)) {
+          this.saveMode = suffix = 'create'
+          msg = this.$t('pages.blog.add_success')
+        } else {
+          this.saveMode = 'edit'
+          suffix = `${this.saveMode}/${route.params.slug}`
+          msg = this.$t('pages.blog.save_success')
+        }
+        this.form.fields.published_at = dayjs(this.form.fields.published_at).format('YYYYMMDDHHmm')
+        let formBeforeSave = this.form.getFormData()
+        let {data} = await this.form.post(`/ajax/admin/blog/post/${suffix}`)
+        this.form = new Form(formBeforeSave, true)
+        this.form.resetChangedFields()
+        this.url = data.url
+        if (this.saveMode === 'create') {
+          this.form.addField('blog_post_slug', data.blog_post_slug)
+          this.$router.replace({name: 'admin.blog.edit', params: {slug: data.blog_post_slug}})
+        } else {
+          this.form.fields.blog_post_slug = data.blog_post_slug
+        }
+        this.swalNotification('success', msg)
       },
       getInfo (data, saveMode) {
         this.form = new Form(data.record)
         if (saveMode === 'create') {
           this.form.addField('published_at', new Date())
         } else {
-          this.current_publish_date = dayjs(this.form.published_at).toDate()
+          this.form.setTrackChanges(true)
+          this.current_publish_date = dayjs(this.form.fields.published_at).toDate()
         }
         this.status_list = data.status_list
         this.url = data.url

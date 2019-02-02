@@ -2,27 +2,28 @@
     <b-card no-body>
         <form @submit.prevent="save">
             <b-tabs card>
+            <alert-form :form="form" :dismiss-label="$t('general.close')"></alert-form>
                 <b-tab :title="$t('breadcrumb.admin-groups-add')">
                     <div class="col-md-8 offset-md-2">
                         <div class="form-group row">
                             <label for="group_name"
                                    class="col-md-3 col-form-label">{{$t('db.group_name')}}</label>
                             <div class="col-md-9">
-                                <input v-model="form.group_name" type="text"
+                                <input v-model="form.fields.group_name" type="text"
                                        name="group_name" id="group_name" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('group_name') }"
                                        :placeholder="$t('db.group_name')"
                                        aria-describedby="help_group_name">
                                 <has-error :form="form" field="group_name"></has-error>
                                 <small id="help_group_name" class="text-muted">
-                                    {{$t('form.description.group_name',[form.group_name])}}
+                                    {{$t('form.description.group_name',[form.fields.group_name])}}
                                 </small>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="group_mask" class="col-md-3 col-form-label">{{$t('db.group_mask')}}</label>
                             <div class="col-md-9">
-                                <input v-model="form.group_mask" type="text"
+                                <input v-model="form.fields.group_mask" type="text"
                                        name="group_mask" id="group_mask" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('group_mask') }"
                                        :placeholder="$t('db.group_mask')"

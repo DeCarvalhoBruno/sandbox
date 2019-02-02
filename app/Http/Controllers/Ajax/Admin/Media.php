@@ -34,22 +34,32 @@ class Media extends Controller
     public function edit($uuid)
     {
         $media = $this->mediaRepo->image()->getOne($uuid,
-            ['media_uuid', 'media_title', 'media_alt', 'created_at', 'media_description', 'media_caption', 'media_id', 'media_extension']
+            [
+                'media_uuid',
+                'media_title',
+                'media_alt',
+                'created_at',
+                'media_description',
+                'media_caption',
+                'media_id',
+                'media_extension'
+            ]
         )->toArray();
         $data = $this->mediaRepo->image()->getSiblings($uuid, ['media_uuid', 'entity_type_id'])->get();
         $navData = $data->pluck('media_uuid')->all();
         $fromEntity = $data->pluck('entity_type_id')->first();
         $entityInfo = EntityType::buildQueryFromUnknownEntity($fromEntity);
-        $intended = $type = null;
+//        $intended = $type = null;
+        $type = null;
         if (!is_null($entityInfo)) {
-            $intendedSlug = $entityInfo->query->select('blog_post_slug')->pluck('blog_post_slug')->first();
-            $entity = $entityInfo->entity;
-            switch ($entity) {
-                case Entity::BLOG_POSTS:
-                    $intended = (object)['route' => 'admin.blog.edit', 'slug' => $intendedSlug];
-                    $type = Entity::getConstantName(Entity::BLOG_POSTS);
-                    break;
-            }
+//            $intendedSlug = $entityInfo->query->select('blog_post_slug')->pluck('blog_post_slug')->first();
+//            $entity = $entityInfo->entity;
+//            switch ($entity) {
+//                case Entity::BLOG_POSTS:
+//                    $intended = (object)['route' => 'admin.blog.edit', 'slug' => $intendedSlug];
+//                    $type = Entity::getConstantName(Entity::BLOG_POSTS);
+//                    break;
+//            }
             $media['media'] = MediaModel::getConstantName($media['media_id']);
             $media['type'] = $type;
             $media['suffix'] = MediaImgFormat::getFormatAcronyms(MediaImgFormat::THUMBNAIL);
@@ -60,27 +70,38 @@ class Media extends Controller
         $nav = array(
             'total' => $total,
             'idx' => ($index + 1),
-            'first' => $navData[0],
+            'first' => isset($navData[0]) ? $navData[0] : null,
             'last' => $navData[($total - 1)],
-            'prev' => ($navData[$index - 1] ?? null),
-            'next' => ($navData[$index + 1] ?? null)
+            'prev' => isset($navData[$index - 1]) ? ($navData[$index - 1] ?? null) : null,
+            'next' => isset($navData[$index + 1]) ? ($navData[$index + 1] ?? null) : null
         );
         return [
             'media' => $media,
             'nav' => $nav,
-            'intended' => $intended,
+//            'intended' => $intended,
         ];
     }
 
-    public function update($uuid, UpdateMedia $request)
+    /**
+     *
+     * @param string $uuid
+     * @param \App\Http\Requests\Admin\UpdateMedia $request
+     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
+     */
+    public function update($uuid, UpdateMedia $request, MediaInterface $mediaRepo)
     {
-        dd($request->all());
+        if (is_hex_uuid_string($uuid)) {
+            $mediaRepo->image()->updateOne($uuid,$request->all());
+
+        }
+        //
 
     }
 
     /**
      * @return \Illuminate\Http\Response
      * @throws \Exception
+     * @throws \Throwable
      */
     public function add()
     {
@@ -154,6 +175,7 @@ class Media extends Controller
      * @param \App\Support\Media\UploadedImage $media
      * @return int
      * @throws \Exception
+     * @throws \Throwable
      */
     private function processImage($media)
     {
@@ -173,6 +195,7 @@ class Media extends Controller
      * @param \App\Support\Providers\User $user
      * @return \Illuminate\Http\Response
      * @throws \Exception
+     * @throws \Throwable
      */
     public function crop(UserProvider $user)
     {

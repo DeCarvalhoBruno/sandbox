@@ -1,23 +1,24 @@
 <template>
     <form @submit.prevent="update" @keydown="form.onKeydown($event)">
+        <alert-form :form="form" :dismiss-label="$t('general.close')"></alert-form>
         <div class="form-group row">
             <label for="new_username" class="col-md-3 col-form-label">{{$t('db.new_username')}}</label>
             <div class="col-md-9">
-                <input v-model="form.new_username" type="text"
+                <input v-model="form.fields.new_username" type="text" autocomplete="off"
                        name="new_username" id="new_username" class="form-control"
                        :class="{ 'is-invalid': form.errors.has('new_username') }"
                        :placeholder="$t('db.new_username')"
                        aria-describedby="help_new_username">
                 <has-error :form="form" field="new_username"></has-error>
                 <small id="help_new_username" class="text-muted">
-                    {{$t('form.description.new_username',[form.username])}}
+                    {{$t('form.description.new_username',[form.fields.username])}}
                 </small>
             </div>
         </div>
         <div class="form-group row">
             <label for="first_name" class="col-md-3 col-form-label">{{$t('db.first_name')}}</label>
             <div class="col-md-9">
-                <input v-model="form.first_name" type="text"
+                <input v-model="form.fields.first_name" type="text" autocomplete="off"
                        name="first_name" id="first_name" class="form-control"
                        :class="{ 'is-invalid': form.errors.has('first_name') }"
                        :placeholder="$t('db.first_name')"
@@ -30,7 +31,7 @@
         <div class="form-group row">
             <label for="last_name" class="col-md-3 col-form-label">{{$t('db.last_name')}}</label>
             <div class="col-md-9">
-                <input v-model="form.last_name" type="text"
+                <input v-model="form.fields.last_name" type="text" autocomplete="off"
                        name="last_name" id="last_name" class="form-control"
                        :class="{ 'is-invalid': form.errors.has('last_name') }"
                        :placeholder="$t('db.last_name')"
@@ -43,23 +44,25 @@
         <div class="form-group row">
             <label for="new_email" class="col-md-3 col-form-label">{{$t('db.new_email')}}</label>
             <div class="col-md-9">
-                <input v-model="form.new_email" type="text"
+                <input v-model="form.fields.new_email" type="text"
                        name="new_email" id="new_email" class="form-control"
                        :class="{ 'is-invalid': form.errors.has('new_email') }"
                        :placeholder="$t('db.new_email')"
                        aria-describedby="help_new_email">
                 <has-error :form="form" field="new_email"></has-error>
                 <small id="help_new_email" class="text-muted">
-                    {{$t('form.description.new_email',[form.email])}}
+                    {{$t('form.description.new_email',[form.fields.email])}}
                 </small>
             </div>
         </div>
-        <avatar-uploader :user="user" :avatars-parent="avatars"/>
         <div class="form-group row">
-            <div class="col-md-9 ml-md-auto">
-                <v-button :loading="form.busy">{{ $t('general.update') }}</v-button>
+            <div class="container col-lg-6 justify-content-center">
+                <div class="col-lg text-center">
+                    <v-button :loading="form.busy">{{ $t('general.update') }}</v-button>
+                </div>
             </div>
         </div>
+        <avatar-uploader :user="user" :avatars-parent="avatars"/>
     </form>
 </template>
 

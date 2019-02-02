@@ -24,6 +24,7 @@ $datepicker-border-radius: 5px;
   .vdp-datepicker__calendar {
     box-shadow: 0 3px 30px rgba(25, 30, 35, .1);
     border: 1px solid #e2e4e7;
+    border-radius:$datepicker-border-radius;
     top: 2.3rem;
     padding: 4px;
 

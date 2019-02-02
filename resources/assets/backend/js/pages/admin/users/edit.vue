@@ -2,26 +2,30 @@
     <b-card no-body>
         <form @submit.prevent="save" @keydown="form.onKeydown($event)">
             <b-tabs card>
-                <b-tab :title="form.full_name" active>
+                <b-tab :title="form.fields.full_name" active>
+                    <alert-form :form="form" :fade="true" :dismiss-label="$t('general.close')"></alert-form>
                     <div class="col-md-8 offset-md-2">
                         <div class="form-group row">
-                            <label for="new_username" class="col-md-3 col-form-label">{{$t('db.new_username')}}</label>
+                            <label for="new_username"
+                                   class="col-md-3 col-form-label"
+                                   :class="{ 'is-invalid': form.errors.has('new_username') }"
+                            >{{$t('db.new_username')}}</label>
                             <div class="col-md-9">
-                                <input v-model="form.new_username" type="text" autocomplete="off"
+                                <input v-model="form.fields.new_username" type="text" autocomplete="off"
                                        name="new_username" id="new_username" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('new_username') }"
                                        :placeholder="$t('db.new_username')"
                                        aria-describedby="help_new_username">
                                 <has-error :form="form" field="new_username"></has-error>
                                 <small id="help_new_username" class="text-muted">
-                                    {{$t('form.description.new_username',[form.username])}}
+                                    {{$t('form.description.new_username',[form.fields.username])}}
                                 </small>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="first_name" class="col-md-3 col-form-label">{{$t('db.first_name')}}</label>
                             <div class="col-md-9">
-                                <input v-model="form.first_name" type="text" autocomplete="off"
+                                <input v-model="form.fields.first_name" type="text" autocomplete="off"
                                        name="first_name" id="first_name" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('first_name') }"
                                        :placeholder="$t('db.first_name')"
@@ -34,7 +38,7 @@
                         <div class="form-group row">
                             <label for="last_name" class="col-md-3 col-form-label">{{$t('db.last_name')}}</label>
                             <div class="col-md-9">
-                                <input v-model="form.last_name" type="text" autocomplete="off"
+                                <input v-model="form.fields.last_name" type="text" autocomplete="off"
                                        name="last_name" id="last_name" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('last_name') }"
                                        :placeholder="$t('db.last_name')"
@@ -47,14 +51,14 @@
                         <div class="form-group row">
                             <label for="new_email" class="col-md-3 col-form-label">{{$t('db.new_email')}}</label>
                             <div class="col-md-9">
-                                <input v-model="form.new_email" type="text" autocomplete="off"
+                                <input v-model="form.fields.new_email" type="text" autocomplete="off"
                                        name="new_email" id="new_email" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('new_email') }"
                                        :placeholder="$t('db.new_email')"
                                        aria-describedby="help_new_email">
                                 <has-error :form="form" field="new_email"></has-error>
                                 <small id="help_new_email" class="text-muted">
-                                    {{$t('form.description.new_email',[form.email])}}
+                                    {{$t('form.description.new_email',[form.fields.email])}}
                                 </small>
                             </div>
                         </div>
@@ -193,7 +197,8 @@
         try {
           this.form.addField('permissions', this.getPermissions(this.$refs.buttonCircle))
           await this.form.patch(`/ajax/admin/users/${this.$router.currentRoute.params.user}`)
-          this.$store.dispatch('session/setFlashMessage', {msg:{type:'success',text:this.$t('message.user_update_ok')}})
+          this.$store.dispatch('session/setFlashMessage',
+            {msg: {type: 'success', text: this.$t('message.user_update_ok')}})
           this.$router.push({name: 'admin.users.index'})
         } catch (e) {}
       }

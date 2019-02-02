@@ -21,14 +21,14 @@ class CreateBlogPost extends FormRequest
     /**
      * @var array
      */
-    private $tags;
+    private $tags=[];
 
     public function rules()
     {
         return [
             'blog_post_title' => 'max:255',
             'blog_post_status' => 'status',
-            'published_at'=>'date_format:YmdHi'
+            'published_at' => 'date_format:YmdHi'
         ];
     }
 
@@ -43,8 +43,11 @@ class CreateBlogPost extends FormRequest
     public function afterValidation()
     {
         $input = $this->input();
-        $this->username = $input['blog_post_user'];
-        unset($input['blog_post_user']);
+
+        if (isset($input['blog_post_user'])) {
+            $this->username = $input['blog_post_user'];
+            unset($input['blog_post_user']);
+        }
 
         if (isset($input['categories'])) {
             $this->categories = array_filter(
@@ -66,8 +69,11 @@ class CreateBlogPost extends FormRequest
             unset($input['blog_post_status']);
         }
 
-        //Taking in a date format which we set manually in javascript to avoid weirdness with locale based date formats
-        $input['published_at'] = date_create_from_format('YmdHi', $input['published_at']);
+        if (isset($input['blog_post_user'])) {
+            //Taking in a date format which we set manually in javascript.
+            // This ensures we get a consistent format we can convert easily as opposed to locale based date formats
+            $input['published_at'] = date_create_from_format('YmdHi', $input['published_at']);
+        }
 
         $this->replace($input);
     }
@@ -102,6 +108,11 @@ class CreateBlogPost extends FormRequest
     public function getTags(): array
     {
         return $this->tags;
+    }
+
+    public function setUserId($id)
+    {
+        $this->merge(['user_id'=>$id]);
     }
 
 

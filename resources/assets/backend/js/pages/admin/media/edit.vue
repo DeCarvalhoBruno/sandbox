@@ -15,15 +15,14 @@
                             <label for="created_at"
                                    class="col-md-3 col-form-label">{{$t('general.uploaded_on')}}</label>
                             <div class="col-md-9">
-                                <input v-model="form.created_at" type="text"
-                                       id="created_at" class="form-control"
-                                       :class="{ 'is-invalid': form.errors.has('created_at') }" disabled>
+                                <input v-model="form.fields.created_at" type="text"
+                                       id="created_at" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="media_title" class="col-md-3 col-form-label">{{$t('db.media_title')}}</label>
                             <div class="col-md-9">
-                                <input v-model="form.media_title" type="text"
+                                <input v-model="form.fields.media_title" type="text"
                                        name="media_title" id="media_title" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('media_title') }"
                                        :placeholder="$t('db.media_title')"
@@ -39,7 +38,7 @@
                         <div class="form-group row">
                             <label for="media_alt" class="col-md-3 col-form-label">{{$t('db.media_alt')}}</label>
                             <div class="col-md-9">
-                                <input v-model="form.media_alt" type="text"
+                                <input v-model="form.fields.media_alt" type="text"
                                        name="media_alt" id="media_alt" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('media_alt') }"
                                        :placeholder="$t('db.media_alt')"
@@ -54,7 +53,7 @@
                         <div class="form-group row">
                             <label for="media_description" class="col-md-3 col-form-label">{{$t('db.media_description')}}</label>
                             <div class="col-md-9">
-                                <textarea v-model="form.media_description"
+                                <textarea v-model="form.fields.media_description"
                                           name="media_description" id="media_description"
                                           class="form-control txtarea-noresize"
                                           :class="{ 'is-invalid': form.errors.has('media_description') }"
@@ -73,7 +72,7 @@
                             <label for="media_caption"
                                    class="col-md-3 col-form-label">{{$t('db.media_caption')}}</label>
                             <div class="col-md-9">
-                                <textarea v-model="form.media_caption"
+                                <textarea v-model="form.fields.media_caption"
                                           name="media_caption" id="media_caption" class="form-control txtarea-noresize"
                                           :class="{ 'is-invalid': form.errors.has('media_caption') }"
                                           :placeholder="$t('db.media_caption')"
@@ -94,10 +93,7 @@
                             </v-button>
                             <button type="button"
                                     class="btn btn-secondary"
-                                    @click="$router.push({
-                                    name:intended.route,
-                                    params:{slug:intended.slug}
-                                    })">{{$t('general.cancel')}}
+                                    @click="$router.go(-1)">{{$t('general.cancel')}}
                             </button>
                         </div>
                     </div>
@@ -162,7 +158,6 @@
         form: new Form(),
         mediaInfo: {},
         nav: {},
-        intended: {},
         type: null,
         media: null,
         ajaxIsLoading: false,
@@ -184,22 +179,18 @@
     },
     methods: {
       async save () {
-        try {
-          this.form.setTrackChanges(true)
-          await this.form.patch(`/ajax/admin/media/${this.form.media_uuid}`)
-          this.$store.dispatch(
-            'session/setFlashMessage',
-            {msg: {type: 'success', text: this.$t('message.media_update_ok')}}
-          )
-          this.$router.push({name: this.intended.route, params: {slug: this.intended.slug}})
-        } catch (e) {}
+          await this.form.patch(`/ajax/admin/media/${this.form.fields.media_uuid}`)
+          // this.$store.dispatch(
+          //   'session/setFlashMessage',
+          //   {msg: {type: 'success', text: this.$t('message.media_update_ok')}}
+          // )
+          // this.$router.go(-1)
       },
       getInfo (data) {
-        this.form = new Form(data.media)
-        this.media = this.form.media
-        this.type = this.form.type
+        this.form = new Form(data.media, true)
+        this.media = this.form.fields.media
+        this.type = this.form.fields.type
         this.nav = data.nav
-        this.intended = data.intended
       }
     },
     beforeRouteEnter (to, from, next) {

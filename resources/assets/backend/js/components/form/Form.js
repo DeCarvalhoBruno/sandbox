@@ -7,36 +7,68 @@ class Form {
    * Create a new form instance.
    *
    * @param {Object} data
+   * @param {Boolean} trackChanges
    */
-  constructor (data = null) {
+  constructor (data = null, trackChanges = false) {
     this.busy = false
     this.successful = false
     this.errors = new Errors()
+    this.fields = {}
     this.changedFields = {}
-    this.trackChanges = false
+    this.trackChanges = trackChanges
     if (data != null) {
       this.originalData = deepCopy(data)
-      Object.assign(this, data)
+      Object.assign(this.fields, data)
     }
   }
 
+  /**
+   * Fill the form fields with passed data
+   *
+   * @param data
+   */
   fill (data) {
     Object.keys(data).forEach(key => {
-      this[key] = data[key]
+      this.fields[key] = data[key]
     })
   }
 
+  /**
+   * Add a new field to the form
+   * @param {String} name
+   * @param {String} value
+   */
   addField (name, value) {
-    this[name] = value
+    this.fields[name] = value
   }
 
-  getField ($name) {
-    if (this.hasOwnProperty($name)) {
-      return this[$name]
+  /**
+   * Get the value of a particular field
+   *
+   * @param {String} name
+   * @returns {*}
+   */
+  getField (name) {
+    if (this.fields.hasOwnProperty(name)) {
+      return this.fields[name]
     }
     return null
   }
 
+  /**
+   * Get all available fields in the form
+   *
+   * @returns {{}}
+   */
+  getFormData () {
+    return this.fields
+  }
+
+  /**
+   * Add a field in the form that has been modified by the user
+   * (a field marked for save)
+   * @param field
+   */
   addChangedField (field) {
     if (!this.changedFields.hasOwnProperty(field)) {
       this.changedFields[field] = true
@@ -50,10 +82,21 @@ class Form {
     this.changedFields = {}
   }
 
+  /**
+   * Has there been any user interaction with the form that changed it?
+   *
+   * @returns {boolean}
+   */
   hasDetectedChanges () {
     return (Object.keys(this.changedFields).length > 0)
   }
 
+  /**
+   * Set the trackChanges booolean for when we want to save the form
+   * only when fields changed
+   *
+   * @param value
+   */
   setTrackChanges (value) {
     this.trackChanges = value
   }
@@ -66,14 +109,14 @@ class Form {
   data () {
     const data = {}
     if (this.trackChanges) {
-      this.keys().forEach(key => {
+      Object.keys(this.fields).forEach(key => {
         if (this.changedFields.hasOwnProperty(key)) {
-          data[key] = this[key]
+          data[key] = this.fields[key]
         }
       })
     } else {
-      this.keys().forEach(key => {
-        data[key] = this[key]
+      Object.keys(this.fields).forEach(key => {
+        data[key] = this.fields[key]
       })
     }
     return data
@@ -85,8 +128,7 @@ class Form {
    * @return {Array}
    */
   keys () {
-    return Object.keys(this)
-      .filter(key => !Form.ignore.includes(key))
+    return Object.keys(this.fields)
   }
 
   /**
@@ -118,11 +160,11 @@ class Form {
    * Reset the form fields.
    */
   reset () {
-    Object.keys(this)
-      .filter(key => !Form.ignore.includes(key))
+    Object.keys(this.fields)
       .forEach(key => {
-        this[key] = deepCopy(this.originalData[key])
+        this.fields[key] = deepCopy(this.originalData[key])
       })
+    this.changedFields = {}
   }
 
   /**

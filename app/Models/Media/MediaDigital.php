@@ -10,9 +10,13 @@ class MediaDigital extends Model
 
     protected $table = 'media_digital';
     protected $primaryKey = 'media_digital_id';
-    protected $fillable = ['media_type_id', 'media_filename', 'media_extension', 'media_alt'];
-    protected $hidden = ['media_digital_id','media_type_id'];
+    protected $fillable = ['media_type_id', 'media_filename', 'media_extension', 'media_alt', 'media_caption'];
+    protected $hidden = ['media_digital_id', 'media_type_id'];
 
+    /**
+     * @param string $value
+     * @return string
+     */
     public function getCreatedAtAttribute($value)
     {
         return \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(get_locale_date_format());
@@ -25,7 +29,7 @@ class MediaDigital extends Model
      */
     public function scopeMediaType(Builder $builder)
     {
-        return $this->joinReverse($builder,MediaType::class);
+        return $this->joinReverse($builder, MediaType::class);
     }
 
 }

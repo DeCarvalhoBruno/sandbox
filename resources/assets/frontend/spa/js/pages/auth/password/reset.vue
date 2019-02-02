@@ -9,7 +9,7 @@
           <div class="form-group row">
             <label class="col-md-3 col-form-label text-md-right">{{ $t('email') }}</label>
             <div class="col-md-7">
-              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control" type="email" name="email" readonly>
+              <input v-model="form.fields.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control" type="email" name="email" readonly>
               <has-error :form="form" field="email"></has-error>
             </div>
           </div>
@@ -18,7 +18,7 @@
           <div class="form-group row">
             <label class="col-md-3 col-form-label text-md-right">{{ $t('password') }}</label>
             <div class="col-md-7">
-              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" class="form-control" type="password" name="password">
+              <input v-model="form.fields.password" :class="{ 'is-invalid': form.errors.has('password') }" class="form-control" type="password" name="password">
               <has-error :form="form" field="password"></has-error>
             </div>
           </div>
@@ -27,7 +27,7 @@
           <div class="form-group row">
             <label class="col-md-3 col-form-label text-md-right">{{ $t('confirm_password') }}</label>
             <div class="col-md-7">
-              <input v-model="form.password_confirmation" :class="{ 'is-invalid': form.errors.has('password_confirmation') }" class="form-control" type="password" name="password_confirmation">
+              <input v-model="form.fields.password_confirmation" :class="{ 'is-invalid': form.errors.has('password_confirmation') }" class="form-control" type="password" name="password_confirmation">
               <has-error :form="form" field="password_confirmation"></has-error>
             </div>
           </div>
@@ -67,8 +67,8 @@ export default {
   }),
 
   created () {
-    this.form.email = this.$route.query.email
-    this.form.token = this.$route.params.token
+    this.form.fields.email = this.$route.query.email
+    this.form.fields.token = this.$route.params.token
   },
 
   methods: {

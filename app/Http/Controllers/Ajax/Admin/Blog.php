@@ -150,9 +150,21 @@ class Blog extends Controller
      * @param $slug
      * @param \App\Http\Requests\Admin\CreateBlogPost $request
      * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
+     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
      */
-    public function update($slug, CreateBlogPost $request, BlogProvider $blogRepo)
+    public function update($slug, CreateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo)
     {
+        $user = $request->getUsername();
+
+        if (!is_null($user)) {
+            $query = $userRepo->buildOneByUsername(
+                $user,
+                [$userRepo->getQualifiedKeyName()]
+            )->get();
+            if (!is_null($query)) {
+                $request->setUserId($query->pluck($userRepo->getKeyName())->first());
+            }
+        }
         $post = $blogRepo->updateOne($slug, $request->all());
         $blogRepo->category()->updatePost($request->getCategories(), $post);
         $blogRepo->tag()->updatePost($request->getTags(), $post);

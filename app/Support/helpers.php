@@ -87,7 +87,8 @@ if (!function_exists('makeHexHashedUuid')) {
      */
     function makeHexHashedUuid()
     {
-        return \Ramsey\Uuid\Uuid::uuid5(\Ramsey\Uuid\Uuid::NAMESPACE_DNS,\Ramsey\Uuid\Uuid::uuid4()->toString())->getHex();
+        return \Ramsey\Uuid\Uuid::uuid5(\Ramsey\Uuid\Uuid::NAMESPACE_DNS,
+            \Ramsey\Uuid\Uuid::uuid4()->toString())->getHex();
     }
 }
 
@@ -141,26 +142,29 @@ if (!function_exists('route_i18n')) {
 }
 
 if (!function_exists('get_page_token')) {
-    function get_page_token(){
-        return substr(md5(app('router')->getCurrentRoute()->getName()),0,10);
+    function get_page_token()
+    {
+        return substr(md5(app('router')->getCurrentRoute()->getName()), 0, 10);
     }
 }
 
 if (!function_exists('is_hex_uuid_string')) {
-    function is_hex_uuid_string($v){
-        return strlen($v) == 32 && ctype_xdigit($v);
+    function is_hex_uuid_string($v)
+    {
+        return is_string($v) && strlen($v) == 32 && ctype_xdigit($v);
     }
 }
 
 if (!function_exists('get_locale_presentable_date_format')) {
-    function get_locale_date_format(){
-        switch ( app()->getLocale() ) {
+    function get_locale_date_format()
+    {
+        switch (app()->getLocale()) {
             case 'fr':
-                return 'm F Y -  h:m';
-            break;
+                return 'm F Y @  h:m';
+                break;
             default:
-                return 'F jS, Y - h:m';
-            break;
+                return 'F jS, Y @ h:m';
+                break;
         }
     }
 }
