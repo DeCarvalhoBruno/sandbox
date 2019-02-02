@@ -70,11 +70,7 @@ class Permission extends Model implements PermissionInterface
         $permission = [];
         foreach ($results as $result) {
             $type = ($result->entity_type_id == EntityType::ROOT_GROUP_ENTITY_TYPE_ID) ? 'default' : 'computed';
-            $permission[$type][trans_choice(
-                sprintf(
-                    'ajax.db.%s',
-                    Entity::getModelPresentableName($result->entity_id)
-                ), 2)] =
+            $permission[$type][Entity::getConstantName($result->entity_id)] =
                 Entity::createModel($result->entity_id, [], HasPermissions::class)
                     ->getReadablePermissions($result->permission_mask, true);
         }

@@ -1,7 +1,6 @@
 <?php namespace App\Models;
 
 use App\Traits\Models\DoesSqlStuff;
-use App\Traits\Models\HasAnEntity;
 use Illuminate\Database\Eloquent\Model;
 
 class Permission extends Model

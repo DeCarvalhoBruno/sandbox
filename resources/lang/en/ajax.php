@@ -11,10 +11,10 @@ return [
         'admin-groups-edit' => 'Edit',
         'admin-groups-add' => 'New Group',
         'admin-groups-members' => 'Edit Members',
-        'admin-blog-index' => 'Blog Posts',
-        'admin-blog-add' => 'Create',
-        'admin-blog-edit' => 'Edit',
-        'admin-blog-category' => 'Categories',
+        'admin-blog_posts-index' => 'Blog Posts',
+        'admin-blog_posts-add' => 'Create',
+        'admin-blog_posts-edit' => 'Edit',
+        'admin-blog_posts-category' => 'Categories',
         'admin-media-edit' => 'Edit Image',
         'admin-settings-password' => 'Your password',
         'admin-settings-profile' => 'Your profile',
@@ -71,9 +71,9 @@ return [
         'close' => 'Close'
     ],
     'db' => [
-        'user' => 'User|Users',
-        'group' => 'Group|Groups',
-        'blog_post' => 'Blog Post|Blog Posts',
+        'users' => 'User|Users',
+        'groups' => 'Group|Groups',
+        'blog_posts' => 'Blog Post|Blog Posts',
         'username' => 'User name',
         'first_name' => 'First name',
         'last_name' => 'Last name',
@@ -113,7 +113,7 @@ return [
         'users_name' => 'name',
         'users_group' => 'group',
         'users_created' => 'created',
-        'blog_title' => 'title',
+        'blog_posts_title' => 'title',
         'asc' => 'asc',
         'desc' => 'desc',
         'day' => 'day',
@@ -124,7 +124,7 @@ return [
     'filter_labels' => [
         'users_group' => 'Group:',
         'users_name' => 'Full name:',
-        'blog_title' => 'Post title:',
+        'blog_posts_title' => 'Post title:',
         'users_created' => 'Registration period:',
         'created_today' => 'Registered today',
         'created_week' => 'Less than a week ago',
@@ -272,6 +272,11 @@ return [
             'save_success' => 'The blog post was updated.',
             'edit_image' => 'Edit image',
             'published_at' => 'Publishing date:'
+        ],
+        'blog_categories' => [
+            'add_child_node' => 'Add a child element to "{name}"',
+            'edit_node' => 'Edit node "{name}"',
+            'delete_node' => 'Delete node "{name}"',
         ]
     ],
     'tables' => [

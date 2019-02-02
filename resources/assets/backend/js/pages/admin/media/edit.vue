@@ -132,8 +132,8 @@
   import { Form, HasError, AlertForm } from '~/components/form'
   import { Card, Tabs } from 'bootstrap-vue/es/components'
   import RecordPaginator from '~/components/RecordPaginator'
-  import media from '~/mixins/media'
-  import form from '~/mixins/form'
+  import MediaMixin from '~/mixins/media'
+  import FormMixin from '~/mixins/form'
 
   Vue.use(Card)
   Vue.use(Tabs)
@@ -150,8 +150,8 @@
       Cropper
     },
     mixins: [
-      media,
-      form
+      MediaMixin,
+      FormMixin
     ],
     data () {
       return {

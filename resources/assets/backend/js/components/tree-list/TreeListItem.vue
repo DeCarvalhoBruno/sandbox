@@ -1,49 +1,54 @@
 <template>
     <ul>
         <li>
-            <div class="li-wrapper">
+            <div class="li-wrapper" :class="[hasChildren?'':'childless']">
                 <span v-if="hasChildren" @click="toggleShow(node.label)">
                     <fa class="li-indicator" v-if="node.open" icon="minus"></fa>
                     <fa class="li-indicator" v-else icon="plus"></fa>
                 </span>
                 <template v-if="editMode">
                     <template v-if="(node.mode&2)!==0">
-                        <input class="li-input"
-                               v-focus type="text"
-                               v-model="newValue" @focus="$event.target.select()"
-                               @keyup.enter="updateItem" autocomplete="false"
-                               @keyup.escape="cancelItem"
-                               placeholder="Category name"/>
-
-                        <template v-if="!isUpdating">
-                            <button class="btn btn-sm" type="button"
-                                    title="confirm" @click="updateItem">
-                                <fa icon="check"></fa>
-                            </button>
-                            <button class="btn btn-sm" type="button" title="cancel" @click="cancelItem">
-                                <fa icon="ban"></fa>
-                            </button>
-                        </template>
-                        <template v-else>
-                            <fa class="fa sync-icon" icon="sync" spin></fa>
-                        </template>
+                        <div class="li-input-wrapper">
+                            <input class="li-input"
+                                   v-focus type="text"
+                                   v-model="newValue" @focus="$event.target.select()"
+                                   @keyup.enter="updateItem" autocomplete="false"
+                                   @keyup.escape="cancelItem"
+                                   placeholder="Category name"/>
+                            <div class="li-btn-group">
+                                <template v-if="!isUpdating">
+                                    <button class="btn btn-sm" type="button"
+                                            title="confirm" @click="updateItem">
+                                        <fa icon="check"></fa>
+                                    </button>
+                                    <button class="btn btn-sm" type="button" title="cancel" @click="cancelItem">
+                                        <fa icon="ban"></fa>
+                                    </button>
+                                </template>
+                                <template v-else>
+                                    <fa class="fa sync-icon" icon="sync" spin></fa>
+                                </template>
+                            </div>
+                        </div>
                     </template>
                     <template v-else>
-                    <span class="li-label" :class="{'li-label-searched':node.mode===5}"
-                          @dblclick="toggleShow(node.label)">{{node.label}}</span>
-                        <div class="li-btn-group">
-                            <button type="button" class="btn btn-circle btn-default" @click="addItem"
-                                    :title="`Add child to ${node.label}`">
-                                <fa icon="plus"></fa>
-                            </button>
-                            <button type="button" class="btn btn-circle btn-default" @click="editItem"
-                                    :title="`Add child to ${node.label}`">
-                                <fa icon="pencil-alt"></fa>
-                            </button>
-                            <button type="button" class="btn btn-circle btn-default" @click="deleteItem"
-                                    :title="`Delete ${node.label}`">
-                                <fa icon="trash-alt"></fa>
-                            </button>
+                        <div class="li-btn-group-wrapper">
+                            <span class="li-label" :class="{'li-label-searched':node.mode===5}"
+                                  @dblclick="toggleShow(node.label)">{{node.label}}</span>
+                            <div class="li-btn-group">
+                                <button type="button" class="btn btn-sm btn-default" @click="addItem"
+                                        :title="$t('pages.blog_categories.add_child_node',{name:node.label})">
+                                    <fa icon="plus"></fa>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-default" @click="editItem"
+                                        :title="$t('pages.blog_categories.edit_node',{name:node.label})">
+                                    <fa icon="pencil-alt"></fa>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-default" @click="deleteItem"
+                                        :title="$t('pages.blog_categories.delete_node',{name:node.label})">
+                                    <fa icon="trash-alt"></fa>
+                                </button>
+                            </div>
                         </div>
                     </template>
                 </template>

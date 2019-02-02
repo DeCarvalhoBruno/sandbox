@@ -31,9 +31,14 @@ class BlogPostCategory extends Controller
 
     }
 
-    public function update($id)
+    /**
+     * @param int $id
+     * @param \App\Contracts\Models\BlogCategory|\App\Support\Providers\BlogCategory $catRepo
+     * @return \Illuminate\Http\Response|array
+     */
+    public function update($id, BlogCategoryProvider $catRepo)
     {
-        $cat = $this->getCat($id);
+        $cat = $catRepo->getCat($id);
         if (!is_null($cat)) {
             $label = $this->request->get('label');
             $cat->setAttribute('blog_post_category_name', $label);
@@ -54,18 +59,4 @@ class BlogPostCategory extends Controller
         }
         return response(null, Response::HTTP_NO_CONTENT);
     }
-
-    /**
-     * @param string $id
-     * @return \App\Models\Blog\BlogPostCategory|null
-     */
-    private function getCat($id)
-    {
-        if (is_hex_uuid_string($id)) {
-            return \App\Models\Blog\BlogPostCategory::query()
-                ->where('blog_post_category_codename', $id)->first();
-        }
-        return null;
-    }
-
 }

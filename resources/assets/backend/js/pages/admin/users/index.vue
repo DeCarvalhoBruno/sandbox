@@ -73,7 +73,7 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <span class="float-right mt-3">{{data.total}}&nbsp;{{$tc('db.user',data.total)}}</span>
+                        <span class="float-right mt-3">{{data.total}}&nbsp;{{$tc(`db.${entity}`,data.total)}}</span>
                     </div>
                 </div>
             </div>

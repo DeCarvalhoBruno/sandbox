@@ -15,7 +15,7 @@
                     @click="toggleExpand">{{!treeExpanded?$t('general.expand_all'):$t('general.collapse_all')}}
             </button>
         </div>
-        <div class="row p-0 mt-2 ml-1 d-block">
+        <div class="row p-0 mt-3 ml-1 tree-container">
             <tree-list-item v-for="(node,idx) in treeData"
                             :key="idx"
                             :node="node"

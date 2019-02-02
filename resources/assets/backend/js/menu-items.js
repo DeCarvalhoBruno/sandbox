@@ -60,7 +60,7 @@ export default [
         icon: 'star',
         name: 'sidebar.list',
         router: {
-          name: 'admin.blog.index'
+          name: 'admin.blog_posts.index'
         }
       },
       {
@@ -68,7 +68,7 @@ export default [
         icon: 'star',
         name: 'sidebar.add',
         router: {
-          name: 'admin.blog.add'
+          name: 'admin.blog_posts.add'
         }
       },
       {
@@ -76,7 +76,7 @@ export default [
         icon: 'star',
         name: 'sidebar.category',
         router: {
-          name: 'admin.blog.category'
+          name: 'admin.blog_posts.category'
         }
       }
     ]

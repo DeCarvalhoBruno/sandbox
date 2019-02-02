@@ -21,22 +21,30 @@ axios.interceptors.request.use(request => {
 // Response interceptor
 axios.interceptors.response.use(response => response, error => {
   const {status} = error.response
-
+  let hasResponse = false
   let text
   if (error.response.data && error.response.data.length > 0) {
     text = error.response.data
+    hasResponse = true
   } else {
     text = i18n.t('modal.error.t')
   }
 
   if (status >= 500) {
-    swal.fire({
+    let settings = {
       type: 'error',
       title: i18n.t('modal.error.h'),
       text: text,
       reverseButtons: true,
       confirmButtonText: i18n.t('general.ok')
-    })
+    }
+    if (hasResponse) {
+      swal.fire(settings).then(() => {
+        router.go(-1)
+      })
+    } else {
+      swal.fire(settings)
+    }
   }
 
   if (status === 401 && store.getters['auth/check']) {

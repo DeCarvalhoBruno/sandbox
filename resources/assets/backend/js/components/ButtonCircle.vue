@@ -23,6 +23,7 @@
     methods: {
       toggle (e) {
         this.buttonEnabled = !this.buttonEnabled
+        this.$emit('clicked')
       }
     },
     render (h) {

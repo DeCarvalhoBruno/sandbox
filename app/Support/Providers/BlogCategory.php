@@ -111,4 +111,17 @@ class BlogCategory extends Model implements BlogCategoryInterface
             ->get()->pluck('blog_post_category_codename')->toArray();
     }
 
+    /**
+     * @param string $id
+     * @return \App\Models\Blog\BlogPostCategory|null
+     */
+    public function getCat($id)
+    {
+        if (is_hex_uuid_string($id)) {
+            return $this->createModel()
+                ->where('blog_post_category_codename', $id)->first();
+        }
+        return null;
+    }
+
 }

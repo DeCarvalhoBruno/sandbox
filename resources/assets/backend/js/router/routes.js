@@ -79,23 +79,23 @@ let routes = [
     component: GroupMember
   },
   {
-    name: 'admin.blog.index',
+    name: 'admin.blog_posts.index',
     meta: {parent: 'admin.dashboard'},
     component: Blog
   },
   {
-    name: 'admin.blog.add',
-    meta: {parent: 'admin.blog.index'},
+    name: 'admin.blog_posts.add',
+    meta: {parent: 'admin.blog_posts.index'},
     component: BlogAdd
   },
   {
-    name: 'admin.blog.edit',
-    meta: {parent: 'admin.blog.index'},
+    name: 'admin.blog_posts.edit',
+    meta: {parent: 'admin.blog_posts.index'},
     component: BlogAdd
   },
   {
-    name: 'admin.blog.category',
-    meta: {parent: 'admin.blog.index'},
+    name: 'admin.blog_posts.category',
+    meta: {parent: 'admin.blog_posts.index'},
     component: BlogCategory
   },
   {

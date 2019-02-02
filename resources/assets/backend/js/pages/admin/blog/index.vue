@@ -4,7 +4,7 @@
             <div class="container">
                 <div class="row mb-3">
                     <router-link :to="{
-                            name: 'admin.blog.add',
+                            name: 'admin.blog_posts.add',
                             }">
                         <button class="btn btn-add" type="button">{{$t('pages.blog.add_post')}}</button>
                     </router-link>
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <span class="float-right mt-3">{{data.total}}&nbsp;{{$tc('db.blog_post',data.total)}}</span>
+                        <span class="float-right mt-3">{{data.total}}&nbsp;{{$tc(`db.${entity}`,data.total)}}</span>
                     </div>
                 </div>
             </div>
@@ -65,7 +65,7 @@
                     <div class="inline">
                         <template v-if="props.row.blog_post_slug">
                             <router-link :to="{
-                            name: 'admin.blog.edit',
+                            name: 'admin.blog_posts.edit',
                             params: { slug: props.row.blog_post_slug }}">
                                 <button
                                         class="btn btn-sm btn-info"
@@ -120,7 +120,7 @@
         titleFilter: null,
         filterButtons: {},
         selectionBuffer: {},
-        entity: 'blog',
+        entity: 'blog_posts',
         data: {
           total: 0
         }

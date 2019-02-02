@@ -15,7 +15,8 @@
                                        name="new_username" id="new_username" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('new_username') }"
                                        :placeholder="$t('db.new_username')"
-                                       aria-describedby="help_new_username">
+                                       aria-describedby="help_new_username"
+                                       @change="changedField('new_username')">
                                 <has-error :form="form" field="new_username"></has-error>
                                 <small id="help_new_username" class="text-muted">
                                     {{$t('form.description.new_username',[form.fields.username])}}
@@ -29,7 +30,8 @@
                                        name="first_name" id="first_name" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('first_name') }"
                                        :placeholder="$t('db.first_name')"
-                                       aria-describedby="help_first_name">
+                                       aria-describedby="help_first_name"
+                                       @change="changedField('first_name')">
                                 <has-error :form="form" field="first_name"></has-error>
                                 <small id="help_first_name" class="text-muted">{{$t('form.description.first_name')}}
                                 </small>
@@ -42,7 +44,8 @@
                                        name="last_name" id="last_name" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('last_name') }"
                                        :placeholder="$t('db.last_name')"
-                                       aria-describedby="help_last_name">
+                                       aria-describedby="help_last_name"
+                                       @change="changedField('last_name')">
                                 <has-error :form="form" field="last_name"></has-error>
                                 <small id="help_last_name" class="text-muted">{{$t('form.description.last_name')}}
                                 </small>
@@ -55,7 +58,8 @@
                                        name="new_email" id="new_email" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('new_email') }"
                                        :placeholder="$t('db.new_email')"
-                                       aria-describedby="help_new_email">
+                                       aria-describedby="help_new_email"
+                                       @change="changedField('new_email')">
                                 <has-error :form="form" field="new_email"></has-error>
                                 <small id="help_new_email" class="text-muted">
                                     {{$t('form.description.new_email',[form.fields.email])}}
@@ -76,7 +80,7 @@
                         </div>
                         <div>
                             <div class="card mb-2" v-for="(permissionSet,entity) in permissions.default" :key="entity">
-                                <div class="card-header">{{entity}}</div>
+                                <div class="card-header">{{$tc(`db.${entity}`,2)}}</div>
                                 <div class="card-body">
                                     <table class="table table-sm">
                                         <thead>
@@ -94,7 +98,8 @@
                                                         :maskval="maskValue"
                                                         :entity="entity"
                                                         :enabled="hasPermission(permissions.computed,entity,type)"
-                                                        :hasPermission="hasPermission(permissions.computed,entity,type)"/>
+                                                        :hasPermission="hasPermission(permissions.computed,entity,type)"
+                                                        @clicked="changedField('permissions')"/>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -135,6 +140,7 @@
   import Button from '~/components/Button'
   import Checkbox from '~/components/Checkbox'
   import PermissionMixin from '~/mixins/permissions'
+  import FormMixin from '~/mixins/form'
   import { Form, HasError, AlertForm } from '~/components/form'
   import { Card, Tabs } from 'bootstrap-vue/es/components'
   import ButtonCircle from '~/components/ButtonCircle'
@@ -168,7 +174,10 @@
         intended: null
       }
     },
-    mixins: [PermissionMixin],
+    mixins: [
+      PermissionMixin,
+      FormMixin
+    ],
     watch: {
       '$route' () {
         this.ajaxIsLoading = true
@@ -183,7 +192,7 @@
         this.$router.push(this.intended)
       },
       getInfo (data) {
-        this.form = new Form(data.user)
+        this.form = new Form(data.user, true)
         this.permissions = data.permissions
         this.nav = data.nav
         let intended = this.$store.getters['session/intendedUrl']

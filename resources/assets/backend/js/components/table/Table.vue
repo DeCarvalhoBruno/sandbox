@@ -1,7 +1,7 @@
 <template>
     <div class="card col-lg p-0 m-0">
         <div class="table-container table-responsive">
-            <template v-if="table.length===0">
+            <template v-if="table.total===0">
                 <h3>{{$t('tables.empty')}}</h3>
             </template>
             <template v-else>

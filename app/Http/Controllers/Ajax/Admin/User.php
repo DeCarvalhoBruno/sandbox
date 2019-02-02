@@ -108,7 +108,6 @@ class User extends Controller
         }
         $entityTypeId = $user['entity_type_id'];
         unset($user['entity_type_id']);
-
         return [
             'user' => $user->toArray(),
             'permissions' => $userProvider->getAllUserPermissions($entityTypeId),

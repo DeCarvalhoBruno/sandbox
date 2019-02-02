@@ -1,14 +1,18 @@
 <template>
-    <div class="tree-list-container container p-0 m-0">
-        <div v-if="error" class="row">
-            <p class="text-danger">{{error}}</p>
-        </div>
-        <div class="row">
-            <tree-list :add-root-button-label="$t('pages.blog.add_root_button')"
-                       :data="data"
-                       @has-errored="displayError"></tree-list>
-        </div>
-    </div>
+<div class="card">
+  <div class="card-body">
+      <div class="tree-list-container container p-0 m-0">
+          <div v-if="error" class="row">
+              <p class="text-danger">{{error}}</p>
+          </div>
+          <div class="row">
+              <tree-list :add-root-button-label="$t('pages.blog.add_root_button')"
+                         :data="data"
+                         @has-errored="displayError"></tree-list>
+          </div>
+      </div>
+  </div>
+</div>
 </template>
 
 <script>

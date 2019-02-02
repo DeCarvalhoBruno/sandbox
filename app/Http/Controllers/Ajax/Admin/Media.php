@@ -33,7 +33,7 @@ class Media extends Controller
 
     public function edit($uuid)
     {
-        $media = $this->mediaRepo->image()->getOne($uuid,
+        $query = $this->mediaRepo->image()->getOne($uuid,
             [
                 'media_uuid',
                 'media_title',
@@ -44,22 +44,18 @@ class Media extends Controller
                 'media_id',
                 'media_extension'
             ]
-        )->toArray();
+        );
+        if (is_null($query)) {
+            return response(trans('error.http.500.general_retrieval_error'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        $media = $query->toArray();
+
         $data = $this->mediaRepo->image()->getSiblings($uuid, ['media_uuid', 'entity_type_id'])->get();
         $navData = $data->pluck('media_uuid')->all();
         $fromEntity = $data->pluck('entity_type_id')->first();
         $entityInfo = EntityType::buildQueryFromUnknownEntity($fromEntity);
-//        $intended = $type = null;
         $type = null;
         if (!is_null($entityInfo)) {
-//            $intendedSlug = $entityInfo->query->select('blog_post_slug')->pluck('blog_post_slug')->first();
-//            $entity = $entityInfo->entity;
-//            switch ($entity) {
-//                case Entity::BLOG_POSTS:
-//                    $intended = (object)['route' => 'admin.blog.edit', 'slug' => $intendedSlug];
-//                    $type = Entity::getConstantName(Entity::BLOG_POSTS);
-//                    break;
-//            }
             $media['media'] = MediaModel::getConstantName($media['media_id']);
             $media['type'] = $type;
             $media['suffix'] = MediaImgFormat::getFormatAcronyms(MediaImgFormat::THUMBNAIL);
@@ -78,7 +74,6 @@ class Media extends Controller
         return [
             'media' => $media,
             'nav' => $nav,
-//            'intended' => $intended,
         ];
     }
 
@@ -91,7 +86,7 @@ class Media extends Controller
     public function update($uuid, UpdateMedia $request, MediaInterface $mediaRepo)
     {
         if (is_hex_uuid_string($uuid)) {
-            $mediaRepo->image()->updateOne($uuid,$request->all());
+            $mediaRepo->image()->updateOne($uuid, $request->all());
 
         }
         //

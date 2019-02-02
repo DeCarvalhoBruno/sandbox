@@ -12,7 +12,8 @@
                                        class="form-control" maxlength="255"
                                        :class="{ 'is-invalid': form.errors.has('blog_post_title') }"
                                        :placeholder="$t('db.blog_post_title')"
-                                       aria-describedby="help_blog_post_title">
+                                       aria-describedby="help_blog_post_title"
+                                       @change="changedField('blog_post_title')">
                                 <small class="text-muted" v-show="url">{{url}}</small>
                             </div>
                             <div class="col-lg-2">
