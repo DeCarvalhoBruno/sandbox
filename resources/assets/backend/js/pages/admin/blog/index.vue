@@ -2,15 +2,6 @@
     <div class="container">
         <div class="card filter-wrapper">
             <div class="container">
-                <div class="row mb-3">
-                    <div class="col lg-2 pt-2">
-                    <router-link :to="{
-                            name: 'admin.blog_posts.add',
-                            }">
-                        <button class="btn btn-add" type="button">{{$t('pages.blog.add_post')}}</button>
-                    </router-link>
-                    </div>
-                </div>
                 <table-filter :filterButtons="filterButtons" :entity="this.entity"
                               @filter-removed="removeFilter"
                               @filter-reset="resetFilters"></table-filter>
@@ -47,6 +38,10 @@
                                         @click="applyToSelected">
                                     {{$t('general.apply')}}
                                 </button>
+                                <router-link :to="{name: 'admin.blog_posts.add'}">
+                                    <button class="btn btn-add"
+                                            type="button">{{$t('pages.blog.add_post')}}</button>
+                                </router-link>
                             </div>
                         </div>
                     </div>
@@ -142,14 +137,14 @@
           switch (this.selectApply) {
             case 'del':
               this.swalDeleteWarning(
-                this.$t('modal.blog_delete.h'),
-                this.$tc('modal.blog_delete.t', 2, {number: posts.length}),
+                this.$t('modal.blog_post_delete.h'),
+                this.$tc('modal.blog_post_delete.t', 2, {number: posts.length}),
                 this.$t('general.delete')
               ).then(async (result) => {
                 if (result.value) {
                   await axios.post('/ajax/admin/blog/post/batch/delete', {posts: posts})
                   this.refreshTableData()
-                  this.swalNotification('success', this.$tc('message.blog_delete_ok', 2))
+                  this.swalNotification('success', this.$tc('message.blog_post_delete_ok', 2))
                 }
               })
               break

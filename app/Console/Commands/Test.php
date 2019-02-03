@@ -1,6 +1,5 @@
 <?php namespace App\Console\Commands;
 
-use App\Models\Blog\BlogPostCategory;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
@@ -28,6 +27,5 @@ class Test extends Command
      */
     public function handle()
     {
-        BlogPostCategory::fixTree();
     }
 }

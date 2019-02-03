@@ -96,6 +96,8 @@ class Admin
             $r->post('media/crop', 'Media@crop')
                 ->middleware('can:edit,App\Models\User');
 
+            $r->get('dashboard', 'Dashboard@index');
+
         };
     }
 }

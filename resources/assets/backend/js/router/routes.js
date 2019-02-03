@@ -136,7 +136,7 @@ let routes = [
   }
 ]
 
-let locale = store.getters['lang/locale']
+let locale = store.getters['prefs/locale']
 // let isDefaultLocale = (
 //   locale === store.getters['lang/fallback']
 // )

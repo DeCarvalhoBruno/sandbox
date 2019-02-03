@@ -113,6 +113,11 @@
         return this.data
       }
     },
+    updated(){
+      //Triggering a jquery fix defined in plugins/jquery/Layout that fixes the height of the sidebar
+      //to match the size of this table, which can get pretty large
+      $('body').trigger('sidebar-fix')
+    },
     methods: {
       toggleSelectAll () {
         this.allSelected = !this.allSelected

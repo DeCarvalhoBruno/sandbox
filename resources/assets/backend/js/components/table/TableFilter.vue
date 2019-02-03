@@ -5,9 +5,9 @@
                 {{$t('general.reset_filters')}}
             </button>
         </div>
-        <div id="filters_list" class="col-lg-10 pt-2">
+        <div id="filters-list" class="col-lg-10 pt-2">
             <span
-                    class="btn btn-default btn-outline-warning ml-2"
+                    class="btn btn-default ml-2"
                     v-for="(button,idx) in filters"
                     :key="idx"
                     v-model="filters"
@@ -15,8 +15,8 @@
             >{{$t(`filter_labels.${entity}_${idx}`)}} {{button}}<button
                     type="button"
                     class="close button-list-close"
-                    aria-label="Close"
-            ><span aria-hidden="true">&times;</span></button>
+                    aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
             </span>
         </div>
     </div>

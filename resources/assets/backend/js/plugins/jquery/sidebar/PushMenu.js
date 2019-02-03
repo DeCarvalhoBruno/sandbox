@@ -12,30 +12,31 @@
   var DataKey = 'lte.pushmenu'
 
   var Default = {
-    collapseScreenSize   : 767,
-    expandOnHover        : false,
-    expandTransitionDelay: 200
+    collapseScreenSize: 767,
+    expandOnHover: false,
+    expandTransitionDelay: 200,
+    collapsedOnInit: false
   }
 
   var Selector = {
-    collapsed     : '.sidebar-collapse',
-    open          : '.sidebar-open',
-    mainSidebar   : '.main-sidebar',
+    collapsed: '.sidebar-collapse',
+    open: '.sidebar-open',
+    mainSidebar: '.main-sidebar',
     contentWrapper: '.content-wrapper',
-    button        : '[data-toggle="push-menu"]',
-    mini          : '.sidebar-mini',
-    expanded      : '.sidebar-expanded-on-hover',
+    button: '[data-toggle="push-menu"]',
+    mini: '.sidebar-mini',
+    expanded: '.sidebar-expanded-on-hover'
   }
 
   var ClassName = {
-    collapsed    : 'sidebar-collapse',
-    open         : 'sidebar-open',
-    mini         : 'sidebar-mini',
-    expanded     : 'sidebar-expanded-on-hover',
+    collapsed: 'sidebar-collapse',
+    open: 'sidebar-open',
+    mini: 'sidebar-mini',
+    expanded: 'sidebar-expanded-on-hover'
   }
 
   var Event = {
-    expanded : 'expanded.pushMenu',
+    expanded: 'expanded.pushMenu',
     collapsed: 'collapsed.pushMenu'
   }
 
@@ -47,9 +48,15 @@
   }
 
   PushMenu.prototype.init = function () {
+
+    if (this.options.collapsedOnInit) {
+      this.collapse()
+    }
+
     $(Selector.contentWrapper).click(function () {
       // Enable hide menu when clicking on the content-wrapper on small screens
-      if ($(window).width() <= this.options.collapseScreenSize && $('body').hasClass(ClassName.open)) {
+      if ($(window).width() <= this.options.collapseScreenSize &&
+        $('body').hasClass(ClassName.open)) {
         this.close()
       }
     }.bind(this))
@@ -57,7 +64,7 @@
 
   PushMenu.prototype.toggle = function () {
     var windowWidth = $(window).width()
-    var isOpen      = !$('body').hasClass(ClassName.collapsed)
+    var isOpen = !$('body').hasClass(ClassName.collapsed)
 
     if (windowWidth <= this.options.collapseScreenSize) {
       isOpen = $('body').hasClass(ClassName.open)
@@ -76,8 +83,7 @@
     if (windowWidth > this.options.collapseScreenSize) {
       $('body').removeClass(ClassName.collapsed)
         .trigger($.Event(Event.expanded))
-    }
-    else {
+    } else {
       $('body').addClass(ClassName.open)
         .trigger($.Event(Event.expanded))
     }
@@ -110,13 +116,14 @@
 
   // PushMenu Plugin Definition
   // ==========================
-  function Plugin(option) {
+  function Plugin (option) {
     return this.each(function () {
       var $this = $(this)
-      var data  = $this.data(DataKey)
+      var data = $this.data(DataKey)
 
       if (!data) {
-        var options = $.extend({}, Default, $this.data(), typeof option == 'object' && option)
+        var options = $.extend({}, Default, $this.data(),
+          typeof option == 'object' && option)
         $this.data(DataKey, (data = new PushMenu(options)))
       }
 
@@ -126,7 +133,7 @@
 
   var old = $.fn.pushMenu
 
-  $.fn.pushMenu             = Plugin
+  $.fn.pushMenu = Plugin
   $.fn.pushMenu.Constructor = PushMenu
 
   // No Conflict Mode
@@ -142,7 +149,7 @@
     e.preventDefault()
     Plugin.call($(this), 'toggle')
   })
-  $(window).on('load', function () {
-    Plugin.call($(Selector.button))
-  })
+  // $(window).on('load', function () {
+  //   Plugin.call($(Selector.button),{haha:'blue'})
+  // })
 }(jQuery)

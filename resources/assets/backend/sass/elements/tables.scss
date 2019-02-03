@@ -1,4 +1,7 @@
 #app_backend_wrapper {
+  .table {
+    margin-bottom: 2rem;
+  }
   .table td {
     border:none;
   }
@@ -7,6 +10,6 @@
   }
 
   .table-container>h3{
-    padding:2em 5em;
+    padding:2rem 5rem;
   }
 }

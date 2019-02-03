@@ -1,7 +1,3 @@
-
-// Body
-$body-bg: #f5f8fa;
-
 // Typography
 $font-family-sans-serif: "Roboto", sans-serif;
 $font-size-base: 0.9rem;
@@ -99,8 +95,8 @@ $link-color: $light-blue;
 $link-hover-color: lighten($link-color, 15%);
 
 // Body background (Affects main content background only)
-$body-bg: #F4F8FD; // DEPRECATED
-$content-bg: #F4F8FD;
+//$body-bg: #1f4; // DEPRECATED
+//$content-bg: #F4F8FD;
 
 // Dark sidebar
 $sidebar-dark-bg: #222d32;

@@ -11,7 +11,7 @@ axios.interceptors.request.use(request => {
     request.headers.common['Authorization'] = `Bearer ${token}`
   }
 
-  const locale = store.getters['lang/locale']
+  const locale = store.getters['prefs/locale']
   if (locale) {
     request.headers.common['Accept-Language'] = locale
   }
@@ -38,38 +38,33 @@ axios.interceptors.response.use(response => response, error => {
       reverseButtons: true,
       confirmButtonText: i18n.t('general.ok')
     }
-    if (hasResponse) {
-      swal.fire(settings).then(() => {
-        router.go(-1)
+    swal.fire(settings)
+  }
+
+    if (status === 401 && store.getters['auth/check']) {
+      swal.fire({
+        type: 'warning',
+        title: i18n.t('modal.token_expired.h'),
+        text: i18n.t('modal.token_expired.t'),
+        reverseButtons: true,
+        confirmButtonText: i18n.t('general.ok'),
+        cancelButtonText: i18n.t('general.cancel')
+      }).then(async () => {
+        await store.dispatch('auth/revokeUser')
+        router.push({name: 'admin.login'})
       })
-    } else {
-      swal.fire(settings)
     }
-  }
 
-  if (status === 401 && store.getters['auth/check']) {
-    swal.fire({
-      type: 'warning',
-      title: i18n.t('modal.token_expired.h'),
-      text: i18n.t('modal.token_expired.t'),
-      reverseButtons: true,
-      confirmButtonText: i18n.t('general.ok'),
-      cancelButtonText: i18n.t('general.cancel')
-    }).then(async () => {
-      await store.dispatch('auth/revokeUser')
-      router.push({name: 'admin.login'})
-    })
-  }
+    if (status === 403) {
+      swal.fire({
+        type: 'error',
+        title: i18n.t('modal.unauthorized.h'),
+        text: i18n.t('modal.unauthorized.t'),
+        reverseButtons: true,
+        confirmButtonText: i18n.t('general.ok')
+      })
+    }
 
-  if (status === 403) {
-    swal.fire({
-      type: 'error',
-      title: i18n.t('modal.unauthorized.h'),
-      text: i18n.t('modal.unauthorized.t'),
-      reverseButtons: true,
-      confirmButtonText: i18n.t('general.ok')
-    })
+    return Promise.reject(error)
   }
-
-  return Promise.reject(error)
-})
+)

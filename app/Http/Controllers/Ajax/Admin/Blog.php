@@ -23,6 +23,7 @@ class Blog extends Controller
     {
         return [
             'table' => $blogRepo->buildList([
+                \DB::raw('null as selected'),
                 'blog_post_title',
                 'username',
                 'blog_post_slug'
@@ -203,14 +204,29 @@ class Blog extends Controller
      * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Throwable
      */
     public function batchDestroy(BlogProvider $blogRepo, MediaProvider $mediaRepo, Request $request)
     {
-        $postSlugs = $request->only('posts');
-        $blogRepo->deleteBySlug($request->only('posts'));
-        $mediaRepo->image()->getImagesFromSlug($postSlugs);
-
-        return response(null, Response::HTTP_NO_CONTENT);
+        $input = $request->only('posts');
+        if (isset($input['posts'])) {
+            $postSlugs = $input['posts'];
+            $mediaUuids = [];
+            foreach ($postSlugs as $slug) {
+                $uuids = $mediaRepo->image()->getImagesFromSlug($slug, Entity::BLOG_POSTS, ['media_uuid'])
+                    ->pluck('media_uuid')->all();
+                dump($uuids);
+                if (!empty($uuids) && !is_null($uuids)) {
+                    $mediaUuids = array_merge($mediaUuids, $uuids);
+                }
+            }
+            \DB::transaction(function () use ($postSlugs, $mediaUuids, $blogRepo, $mediaRepo) {
+                $mediaRepo->image()->delete($mediaUuids, Entity::BLOG_POSTS);
+                $blogRepo->deleteBySlug($postSlugs);
+            });
+            return response(null, Response::HTTP_NO_CONTENT);
+        }
+        return response(trans('error.http.500.general_error'), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**

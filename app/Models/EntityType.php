@@ -34,7 +34,7 @@ class EntityType extends Model
         if (is_array($filter)) {
             return $baseBuilder->pluck('entity_type_id')->all();
         }
-        return $baseBuilder->value('entity_type_id');
+        return $baseBuilder->pluck('entity_type_id')->first();
     }
 
     /**

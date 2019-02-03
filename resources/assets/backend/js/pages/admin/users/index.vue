@@ -4,7 +4,7 @@
             <div class="container">
                 <table-filter :filterButtons="filterButtons" :entity="entity"
                               @filter-removed="removeFilter"
-                              @filter-reset="resetFilters"/>
+                              @filter-reset="resetFilters"><div slot="action-buttons"></div></table-filter>
                 <div class="row pb-1">
                     <div class="col-md-4">
                         <div class="input-group">

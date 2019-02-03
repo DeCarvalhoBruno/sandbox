@@ -1,7 +1,7 @@
 <template>
     <div id="app_backend_wrapper">
-        <navbar/>
-        <drawer :menu-items="MenuItems"/>
+        <navbar></navbar>
+        <drawer :menu-items="MenuItems"></drawer>
         <div class="content-wrapper">
             <section class="content-header">
                 <div id="breadcrumb-container" class="container">

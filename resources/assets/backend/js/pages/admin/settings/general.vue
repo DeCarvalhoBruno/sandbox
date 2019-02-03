@@ -29,8 +29,8 @@
       'v-button': Button,
     },
     computed: mapGetters({
-      locale: 'lang/locale',
-      locales: 'lang/locales'
+      locale: 'prefs/locale',
+      locales: 'prefs/locales'
     }),
     metaInfo () {
       return {title: this.$t('general.settings')}
@@ -38,7 +38,7 @@
     data: function () {
       return {
         form: new Form({
-          locale: this.$store.getters['lang/locale']
+          locale: this.$store.getters['prefs/locale']
         })
       }
     },
@@ -46,9 +46,9 @@
       update () {
         let locale = this.form.fields.locale
         if (locale !== this.locale) {
-          this.$store.dispatch('lang/setLocale', {locale})
+          this.$store.dispatch('prefs/setLocale', {locale})
           let prefix = ''
-          if (locale !== this.$store.getters['lang/fallback']) {
+          if (locale !== this.$store.getters['prefs/fallback']) {
             prefix += '/' + locale
           }
           window.history.pushState('', '', '/' + routesI18n[locale]['admin.settings.general'])

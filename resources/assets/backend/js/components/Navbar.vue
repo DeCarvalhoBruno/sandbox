@@ -11,7 +11,7 @@
         </div>
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark main-header navbar-static-top">
-            <button v-if="user" class="navbar-toggler" type="button" data-toggle="push-menu"
+            <button v-if="user" class="navbar-toggler" type="button"
                     data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <fa icon="bars"></fa>
@@ -19,7 +19,7 @@
             <div v-if="user" class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <span><a class="nav-link sidebar-toggle"
+                        <span><a class="nav-link sidebar-toggle"  id="button-sidebar-trigger"
                                  data-toggle="push-menu" role="button"><fa icon="bars"></fa></a></span>
                     </li>
                 </ul>

@@ -5,6 +5,7 @@
 html,
 body {
   height: 100%;
+  background: #edf3fc !important;
 }
 
 body {
@@ -55,7 +56,6 @@ body {
 
 .content-wrapper {
   min-height: 100%;
-  background-color: $content-bg;
   z-index: 3;
 }
 

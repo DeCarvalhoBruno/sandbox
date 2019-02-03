@@ -18,7 +18,8 @@
 
   var Selector = {
     wrapper: '.wrapper',
-    contentWrapper: '.content-wrapper',
+    contentWrapper: '#content-wrapper',
+    content: '#app',
     mainHeader: '.main-header',
     sidebar: '.sidebar',
     sidebarMenu: '.sidebar-menu',
@@ -74,16 +75,21 @@
 
   Layout.prototype.fix = function () {
     // Get window height and the wrapper height
-    var neg = $(Selector.mainHeader).outerHeight()
+    // var neg = $(Selector.mainHeader).outerHeight()
+    var neg = 0
     var windowHeight = $(window).height()
+    var contentHeight = $(Selector.content).height()
     var sidebarHeight = $(Selector.sidebar).height() || 0
 
+    var winner = (windowHeight > contentHeight) ? windowHeight : contentHeight
     // Set the min-height of the content and sidebar based on
     // the height of the document.
-    if (windowHeight >= sidebarHeight) {
-      $(Selector.contentWrapper).css('min-height', windowHeight - neg)
+    if (winner >= sidebarHeight) {
+      $(Selector.contentWrapper).css('min-height', winner - neg)
+      $('#slider').css('min-height', winner - neg)
     } else {
       $(Selector.contentWrapper).css('min-height', sidebarHeight)
+      $('#slider').css('min-height', sidebarHeight - neg)
     }
   }
 
@@ -125,5 +131,8 @@
   // ===============
   $(window).on('load', function () {
     Plugin.call($('body'))
+  })
+  $('body').on('sidebar-fix', function () {
+    Plugin.call($(this), 'fix')
   })
 }(jQuery)

@@ -27,7 +27,7 @@ class MediaEntity extends Model
         \DB::unprepared(sprintf('CALL sp_update_media_entity_in_use(%s)', $mediaEntityId));
     }
 
-    public static function buildImages($columns = '*', $entityTypeId = null)
+    public static function buildImages($columns = ['*'], $entityTypeId = null)
     {
         return static::query()->select($columns)
             ->entityType($entityTypeId)->mediaCategoryRecord()
