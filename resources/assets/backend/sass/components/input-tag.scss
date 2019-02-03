@@ -103,9 +103,29 @@
     transform: rotate(-45deg);
   }
 
-  .search-results-area > span {
-    cursor: pointer;
-    //margin-right: 0.3rem;
+  .search-results-area {
+    position: relative;
+    z-index: 1;
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
+      position: absolute;
+      top:0;
+      left:0;
+      width: 100%;
+      z-index:5;
+      background-color: #fff;
+    }
+
+    li{
+      margin:0 .15em;
+    }
+
+    & > span {
+      cursor: pointer;
+      //margin-right: 0.3rem;
+    }
   }
 }
 

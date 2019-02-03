@@ -121,8 +121,8 @@ class BlogPostCategory
             switch (true) {
                 case ($lvl === 0):
                     $level = $lvl;
-                    $root = $label;
-                    $l[$root][$level] = new static($root, $id, $selected);
+                    $root = $id;
+                    $l[$root][$level] = new static($label, $id, $selected);
                     break;
                 case ($lvl === $level):
                     $l[$root][$lvl] = $l[$root][$lvl - 1]->addChild($label, $id, $selected);

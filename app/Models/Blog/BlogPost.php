@@ -76,7 +76,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -91,7 +91,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -101,7 +101,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int|null $blogPostId
      * @return \Illuminate\Database\Eloquent\Builder $builder

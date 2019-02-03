@@ -147,7 +147,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
      *
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      *
      * @return \Illuminate\Database\Eloquent\Builder $query
      */
@@ -167,7 +167,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int|null $userId
      * @return \Illuminate\Database\Eloquent\Builder $builder
@@ -185,7 +185,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $entityId
      * @return \Illuminate\Database\Eloquent\Builder $builder
@@ -199,7 +199,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -213,7 +213,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $userId
      * @return \Illuminate\Database\Eloquent\Builder $builder
@@ -242,7 +242,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param string $groupName
      * @return \Illuminate\Database\Eloquent\Builder $builder
@@ -262,7 +262,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -276,7 +276,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -286,7 +286,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */

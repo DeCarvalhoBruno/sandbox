@@ -35,7 +35,7 @@ class MediaEntity extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $entityTypeId
      * @return \Illuminate\Database\Eloquent\Builder $builder
@@ -51,7 +51,7 @@ class MediaEntity extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $mediaCategoryId
      * @return \Illuminate\Database\Eloquent\Builder $builder
@@ -65,7 +65,7 @@ class MediaEntity extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -76,7 +76,7 @@ class MediaEntity extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -87,7 +87,7 @@ class MediaEntity extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */

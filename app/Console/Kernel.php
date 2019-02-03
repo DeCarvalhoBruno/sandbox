@@ -16,7 +16,8 @@ class Kernel extends ConsoleKernel
         Commands\GenerateLangFiles::class,
         Commands\MakeRequest::class,
         Commands\CreateRootAssetDirectories::class,
-        Commands\SendTestEmail::class
+        Commands\SendTestEmail::class,
+        Commands\Test::class
     ];
 
     /**

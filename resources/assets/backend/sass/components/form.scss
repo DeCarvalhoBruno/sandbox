@@ -5,12 +5,13 @@
     cursor: pointer
   }
 
-  #head_row {
-    min-height: 5rem;
+  #head-row {
+    min-height: 2.75rem;
     padding: .5rem .5rem 0;
     margin-bottom: 0;
 
-    #head_col_draft {
+
+    #head-col-draft {
       .custom-select {
         width: auto;
         margin: 0 .25rem;

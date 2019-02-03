@@ -50,12 +50,7 @@ class CreateBlogPost extends FormRequest
         }
 
         if (isset($input['categories'])) {
-            $this->categories = array_filter(
-                $input['categories'],
-                function ($val) {
-                    return is_hex_uuid_string($val);
-                }
-            );
+            $this->categories = $input['categories'];
             unset($input['categories']);
         }
 
@@ -69,7 +64,7 @@ class CreateBlogPost extends FormRequest
             unset($input['blog_post_status']);
         }
 
-        if (isset($input['blog_post_user'])) {
+        if (isset($input['published_at'])) {
             //Taking in a date format which we set manually in javascript.
             // This ensures we get a consistent format we can convert easily as opposed to locale based date formats
             $input['published_at'] = date_create_from_format('YmdHi', $input['published_at']);

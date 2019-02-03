@@ -23,7 +23,7 @@ class MediaDigital extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */

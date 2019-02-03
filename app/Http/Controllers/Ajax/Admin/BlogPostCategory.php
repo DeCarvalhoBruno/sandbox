@@ -17,17 +17,17 @@ class BlogPostCategory extends Controller
      */
     public function create(BlogCategoryProvider $catRepo)
     {
-        $id = $this->request->get('id');
+        $parent = $this->request->get('parent');
         $label = $this->request->get('label');
         if (is_null($label)) {
             return response('', Response::HTTP_NO_CONTENT);
         }
-        $newCat = $catRepo->createOne($label, $id);
+        $newCat = $catRepo->createOne($label, $parent);
         if (is_null($newCat)) {
             return response(null, Response::HTTP_NO_CONTENT);
         }
 
-        return ['id' => $newCat->getAttribute('blog_post_category_codename')];
+        return ['id' => $newCat->getAttribute('blog_post_category_slug')];
 
     }
 
@@ -42,7 +42,7 @@ class BlogPostCategory extends Controller
         if (!is_null($cat)) {
             $label = $this->request->get('label');
             $cat->setAttribute('blog_post_category_name', $label);
-            $cat->setAttribute('blog_post_category_slug', str_slug($label,'-',app()->getLocale()));
+            $cat->setAttribute('blog_post_category_slug', str_slug($label, '-', app()->getLocale()));
             $cat->save();
         }
         return response(null, Response::HTTP_NO_CONTENT);
@@ -50,12 +50,10 @@ class BlogPostCategory extends Controller
 
     public function delete($id)
     {
-        if (is_hex_uuid_string($id)) {
-            $model = \App\Models\Blog\BlogPostCategory::query()
-                ->where('blog_post_category_codename', $id)->first();
-            if (!is_null($model)) {
-                $model->delete();
-            }
+        $model = \App\Models\Blog\BlogPostCategory::query()
+            ->where('blog_post_category_slug', $id)->first();
+        if (!is_null($model)) {
+            $model->delete();
         }
         return response(null, Response::HTTP_NO_CONTENT);
     }

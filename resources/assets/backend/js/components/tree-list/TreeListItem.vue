@@ -10,14 +10,14 @@
                     <template v-if="(node.mode&2)!==0">
                         <div class="li-input-wrapper">
                             <input class="li-input"
-                                   v-focus type="text"
+                                   type="text"
                                    v-model="newValue" @focus="$event.target.select()"
                                    @keyup.enter="updateItem" autocomplete="false"
                                    @keyup.escape="cancelItem"
-                                   placeholder="Category name"/>
-                            <div class="li-btn-group">
+                                   placeholder="Category name" v-focus/>
+                            <div class="li-btn-group" :class="[isUpdating?'updating':'']">
                                 <template v-if="!isUpdating">
-                                    <button class="btn btn-sm" type="button"
+                                    <button class="btn btn-sm" type="button" :disabled="!newValue" :aria-disabled="!newValue"
                                             title="confirm" @click="updateItem">
                                         <fa icon="check"></fa>
                                     </button>
@@ -32,9 +32,8 @@
                         </div>
                     </template>
                     <template v-else>
-                        <div class="li-btn-group-wrapper">
-                            <span class="li-label" :class="{'li-label-searched':node.mode===5}"
-                                  @dblclick="toggleShow(node.label)">{{node.label}}</span>
+                        <div class="li-btn-group-wrapper" :class="{'tree-searched':node.mode===5}" @dblclick="toggleShow(node.label)">
+                            <span class="li-label">{{node.label}}</span>
                             <div class="li-btn-group">
                                 <button type="button" class="btn btn-sm btn-default" @click="addItem"
                                         :title="$t('pages.blog_categories.add_child_node',{name:node.label})">
@@ -70,15 +69,6 @@
     </ul>
 </template>
 <script>
-  // import Vue from 'vue'
-  // import VShowSlide from '~/directives/VShowSlide'
-  //
-  // Vue.use(new VShowSlide(), {
-  //   customEasing: {
-  //     exampleEasing: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'
-  //   }
-  // })
-
   export default {
     name: 'tree-list-item',
     props: {
@@ -132,7 +122,7 @@
     },
     methods: {
       emits (nodeMap, data) {
-        this.$emit('event', [this.node.label].concat(nodeMap), data)
+        this.$emit('event', [this.node.id].concat(nodeMap), data)
       },
       categorySelected (value, mode) {
         this.$emit('category-selected', value, mode)
@@ -147,11 +137,15 @@
         this.emits([], this.makeDataObject('delete'))
       },
       updateItem () {
-        this.isUpdating = true
-        this.emits([], {method: 'update', newValue: this.newValue, target: this.node.label})
+        if (this.newValue.length)  {
+          this.isUpdating = true
+          this.emits([], {method: 'update', newValue: this.newValue, target: {id:this.node.id,label:this.node.label}})
+        }else{
+          this.cancelItem()
+        }
       },
       cancelItem () {
-        this.newValue = this.node.label
+        // this.newValue = this.node.label
         switch (this.node.mode) {
           case 6:
             this.emits([], this.makeDataObject('cancelCreation'))
@@ -164,7 +158,7 @@
         this.emits([], this.makeDataObject('toggleShow'))
       },
       makeDataObject (method) {
-        return {method: method, target: this.node.label}
+        return {method: method, target: {id:this.node.id,label:this.node.label}}
       }
     }
   }

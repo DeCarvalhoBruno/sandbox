@@ -36,7 +36,7 @@ class Blog extends Migration
 
             $table->foreign('user_id')
                 ->references('user_id')->on('users');
-            $table->unique(['blog_post_id','blog_post_slug'],'idx_blog_post_id_slug');
+            $table->unique(['blog_post_slug'],'idx_blog_post_id_slug');
         });
 
         Schema::create('blog_post_version', function (Blueprint $table) {
@@ -81,10 +81,12 @@ class Blog extends Migration
             $table->unsignedInteger('blog_post_label_type_id');
             $table->string('blog_post_category_name', 75)->nullable();
             $table->string('blog_post_category_slug', 75)->nullable();
-            $table->string('blog_post_category_codename', 32)->nullable();
+//            $table->string('blog_post_category_codename', 32)->nullable();
+
+            $table->timestamps();
 
             $table->index(array('lft', 'rgt', 'parent_id'));
-            $table->index(array('blog_post_category_codename'));
+            $table->unique(array('blog_post_category_slug'));
 
             $table->foreign('blog_post_label_type_id')
                 ->references('blog_post_label_type_id')->on('blog_post_label_types')
@@ -149,10 +151,7 @@ class Blog extends Migration
         );
         \App\Models\Blog\BlogPostCategory::create([
             'blog_post_category_name' => 'Default',
-            'blog_post_category_codename' => makeHexUuid(),
-            'blog_post_category_slug' => 'default',
             'blog_post_label_type_id' => $newLabelType->getKey()
-
         ]);
         $this->createViews();
     }
@@ -164,10 +163,10 @@ class Blog extends Migration
             node.blog_post_category_id,
             node.blog_post_category_name as label,
             (COUNT(parent.blog_post_category_id) - 1) AS lvl,
-            node.blog_post_category_codename as id
+            node.blog_post_category_slug as id
           FROM blog_post_categories AS node, blog_post_categories AS parent
           WHERE node.lft BETWEEN parent.lft AND parent.rgt
-          GROUP BY node.blog_post_category_codename,node.blog_post_category_id,node.blog_post_category_name
+          GROUP BY node.blog_post_category_slug,node.blog_post_category_id,node.blog_post_category_name
           ORDER BY node.lft;
         ');
     }

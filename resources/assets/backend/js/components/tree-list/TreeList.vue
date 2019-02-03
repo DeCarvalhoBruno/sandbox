@@ -12,7 +12,7 @@
             </button>
             <button type="button"
                     class="btn btn-primary"
-                    @click="toggleExpand">{{!treeExpanded?$t('general.expand_all'):$t('general.collapse_all')}}
+                    @click="toggleExpand">{{treeExpanded?$t('general.expand_all'):$t('general.collapse_all')}}
             </button>
         </div>
         <div class="row p-0 mt-3 ml-1 tree-container">
@@ -40,7 +40,7 @@
     props: {
       data: {required: true},
       editMode: {default: true},
-      addRootButtonLabel:{required: true}
+      addRootButtonLabel: {required: true}
     },
     data () {
       return {
@@ -69,24 +69,24 @@
       async toggleExpand () {
         this.treeExpanded = !this.treeExpanded
         for (let node of this.searchTerms) {
-          node.data.method = this.treeExpanded ? 'open' : 'close'
+          node.data.method = this.treeExpanded ? 'close' : 'open'
           await this.handleEvent(node.nodeMap, node.data)
         }
       },
       buildSearchTerms (node) {
-        let result = [{data: {target: node.label}, nodeMap: []}]
+        let result = [{data: {target: {id: node.id, label: node.label}}, nodeMap: []}]
         for (let subNodes of node.children) {
           result = result.concat(this.buildSearchTerms(subNodes))
         }
 
         for (let term of result) {
-          term.nodeMap = [node.label].concat(term.nodeMap)
+          term.nodeMap = [node.id].concat(term.nodeMap)
           term.data.method = 'show'
         }
         return result
       },
       addRoot () {
-        this.treeData.push({label: '', id: null, open: true, selected:false, mode: 6, children: []})
+        this.treeData.push({label: '', id: null, open: true, selected: false, mode: 6, children: [], parent: ''})
       },
       async handleEvent (nodeMap, payload) {
         await this.checkBuffer()
@@ -119,17 +119,16 @@
       async handleThis (nodeMap, payload, node) {
         let vm = this
         let failed = false
-        if (node.label !== nodeMap[0]) {
+        if (node.id !== nodeMap[0]) {
           node.mode = 1
           return node
         }
-
         if (payload.method === 'show') {
           node.open = true
         }
 
         //Modes: Default:1, Edit:2, Add:6
-        if (node.label === payload.target) {
+        if (node.id === payload.target.id) {
           switch (payload.method) {
             case 'show':
               node.mode = 5
@@ -145,7 +144,8 @@
               break
             case 'add':
               node.open = true
-              node.children.push({label: '', id: node.id, open: true, selected:false, mode: 6, children: []})
+              node.children.push(
+                {label: '', id: '', open: true, selected: false, mode: 6, children: [], parent: node.id})
               break
             case 'edit':
               node.mode = 2
@@ -154,10 +154,11 @@
               if (node.mode === 6) {
                 await axios.post(
                   `/ajax/admin/blog/categories/create`,
-                  {label: payload.newValue, id: node.id}
+                  {label: payload.newValue, parent: node.parent}
                 ).then(({data}) => {
                   if (data.hasOwnProperty('id')) {
                     node.id = data.id
+                    delete node.parent
                   } else {
                     vm.$emit('has-errored',
                       `Creation of category "${payload.newValue}" failed. Please try again.`
@@ -178,14 +179,16 @@
               //If the user creates a node a changes their mind
               return
             case 'delete':
-              axios.post(
-                `/ajax/admin/blog/categories/delete/${node.id}`
-              )
+              if (node.id.length) {
+                axios.post(
+                  `/ajax/admin/blog/categories/delete/${node.id}`
+                )
+              }
               //Not returning the node will effectively remove it from the tree.
               return
             case 'cancel':
             case 'reset':
-              node.mode = 1
+                node.mode = 1
               break
           }
         } else if (node.children.length) {

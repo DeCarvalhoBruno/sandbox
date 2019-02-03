@@ -23,8 +23,8 @@
                                 </v-button>
                             </div>
                         </div>
-                        <div id="head_row" class="form-group row">
-                            <div class="col-lg-6" id="head_col_draft">
+                        <div id="head-row" class="form-group row">
+                            <div class="col-lg-6" id="head-col-draft">
                                 <template v-if="form_status_editing">
                                     <select v-model="form.fields.blog_post_status"
                                             @change="changedField('blog_post_status')"
@@ -395,7 +395,7 @@
         this.url = data.url
         if (this.saveMode === 'create') {
           this.form.addField('blog_post_slug', data.blog_post_slug)
-          this.$router.replace({name: 'admin.blog.edit', params: {slug: data.blog_post_slug}})
+          this.$router.replace({name: 'admin.blog_posts.edit', params: {slug: data.blog_post_slug}})
         } else {
           this.form.fields.blog_post_slug = data.blog_post_slug
         }

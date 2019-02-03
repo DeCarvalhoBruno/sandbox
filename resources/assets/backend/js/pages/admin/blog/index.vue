@@ -1,17 +1,19 @@
 <template>
     <div class="container">
-        <div class="row">
+        <div class="card filter-wrapper">
             <div class="container">
                 <div class="row mb-3">
+                    <div class="col lg-2 pt-2">
                     <router-link :to="{
                             name: 'admin.blog_posts.add',
                             }">
                         <button class="btn btn-add" type="button">{{$t('pages.blog.add_post')}}</button>
                     </router-link>
+                    </div>
                 </div>
                 <table-filter :filterButtons="filterButtons" :entity="this.entity"
                               @filter-removed="removeFilter"
-                              @filter-reset="resetFilters"/>
+                              @filter-reset="resetFilters"></table-filter>
                 <div class="row pb-1">
                     <div class="col-md-4">
                         <div class="input-group">

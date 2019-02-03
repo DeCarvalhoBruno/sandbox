@@ -4,7 +4,7 @@
         <drawer :menu-items="MenuItems"/>
         <div class="content-wrapper">
             <section class="content-header">
-                <div id="top_link_container" class="container">
+                <div id="breadcrumb-container" class="container">
                     <div class="row">
                         <div class="link-back" v-if="hasBreadCrumbs()">
                             <a @click="$router.go(-1)"><&nbsp;{{$t('general.back')}}</a>
@@ -23,7 +23,6 @@
                         </ol>
                     </div>
                 </div>
-                <hr>
             </section>
             <section class="content">
                 <transition name="page" mode="out-in">

@@ -64,7 +64,7 @@ return [
         'reload' => 'Reload',
         'status' => 'Status',
         'expand_all' => 'Expand all',
-        'collapse all' => 'Collapse all',
+        'collapse_all' => 'Collapse all',
         'uploaded_on' => 'Uploaded on',
         'media' => 'Media',
         'crop' => 'Crop',

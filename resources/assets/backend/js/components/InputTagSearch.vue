@@ -1,42 +1,43 @@
 <template>
-        <div class="input-tag-search-wrapper">
-            <div class="search-spinner-wrapper">
-                <fa icon="cog" size="lg" :spin="loadIconIsAnimated"></fa>
-            </div>
-            <div class="input-tag-container">
-                <div class="form-control input-tag">
+    <div class="input-tag-search-wrapper">
+        <div class="search-spinner-wrapper">
+            <fa icon="cog" size="lg" :spin="loadIconIsAnimated"></fa>
+        </div>
+        <div class="input-tag-container">
+            <div class="form-control input-tag">
                     <span class="badge badge-pill badge-light"
                           v-for="(badge, index) in tagBadges"
                           :key="index">
                         <span v-html="badge"></span>
                         <i href="#" class="button-badge-close" @click.prevent="removeTag(index)"></i>
                     </span>
-                    <input type="text"
-                           :placeholder="dataPlaceholder"
-                           v-model="input"
-                           ref="search"
-                           @focus="dataPlaceholder=''"
-                           @blur="dataPlaceholder=placeholder"
-                           @keyup.enter.prevent="tagFromInput"
-                           @keyup.esc="ignoreSearchResults"
-                           @keyup.delete="removeLastTag"
-                           @keyup="searchTag"
-                           @value="tags">
-                    <input type="hidden" :name="elementId" :id="elementId" v-model="hiddenInput">
-                </div>
-                <p v-show="searchResults.length" class="search-results-area">
-            <span v-for="(tag, index) in searchResults"
-                  :key="index"
-                  v-text="tag.text"
-                  @click="tagFromSearch(tag)"
-                  class="badge"
-                  v-bind:class="{
-                    'badge-primary': index == searchSelection,
-                    'badge-dark': index != searchSelection
-                }"></span>
-                </p>
+                <input type="text"
+                       :placeholder="dataPlaceholder"
+                       v-model="input"
+                       ref="search"
+                       @focus="dataPlaceholder=''"
+                       @blur="dataPlaceholder=placeholder"
+                       @keyup.enter.prevent="tagFromInput"
+                       @keyup.esc="ignoreSearchResults"
+                       @keyup.delete="removeLastTag"
+                       @keyup="searchTag"
+                       @value="tags">
+                <input type="hidden" :name="elementId" :id="elementId" v-model="hiddenInput">
+            </div>
+            <div v-show="searchResults.length" class="search-results-area">
+                <ul>
+                    <li v-for="(tag, index) in searchResults"
+                        :key="index"
+                        v-text="tag.text"
+                        @click="tagFromSearch(tag)"
+                        class="badge"
+                        :class="{
+                            'badge-primary': index == searchSelection,
+                            'badge-dark': index != searchSelection}"></li>
+                </ul>
             </div>
         </div>
+    </div>
 </template>
 
 <script>
@@ -81,7 +82,7 @@
         loadIconIsAnimated: false
       }
     },
-    mounted(){
+    mounted () {
       this.$refs.search.focus()
     },
     created () {

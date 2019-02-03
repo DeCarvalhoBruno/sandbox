@@ -14,9 +14,11 @@
     border: none;
     min-height: $navbar-height;
     border-radius: 0;
+
     .layout-top-nav & {
       margin-left: 0;
     }
+
     .dropdown-menu {
       margin-top: 5px;
       border-radius: 0;
@@ -33,6 +35,7 @@
         position: absolute;
         top: -6px;
       }
+
       &.dropdown-menu-right:after {
         border-bottom: 6px solid #FFF;
         border-left: 6px solid transparent;
@@ -55,99 +58,115 @@
       font-size: 0.9rem;
       padding: 0.375rem 0.75rem;
 
-    a {
+      a {
+        color: #fff;
+      }
+
+      &:hover {
+        background-color: lighten($sidebar-dark-bg, 20%);
+      }
+    }
+  }
+
+  //Navbar toggle button
+  .sidebar-toggle {
+    float: left;
+    background-color: transparent;
+    background-image: none;
+
+    &:hover {
       color: #fff;
     }
-    &:hover {
-      background-color: lighten($sidebar-dark-bg, 20%);
+
+    &:focus,
+    &:active {
+      background: transparent;
     }
   }
-}
 
-//Navbar toggle button
-.sidebar-toggle {
-  float: left;
-  background-color: transparent;
-  background-image: none;
-
-  &:hover {
-    color: #fff;
-  }
-  &:focus,
-  &:active {
-    background: transparent;
-  }
-}
-
-.sidebar-toggle .icon-bar {
-  display: none;
-}
-
-//Navbar User Menu
-.navbar .nav > li.user > a {
-  > .fa,
-  > .glyphicon,
-  > .ion {
-    margin-right: 5px;
-  }
-}
-
-//Labels in navbar
-.navbar .nav > li > a > .label {
-  position: absolute;
-  top: 9px;
-  right: 7px;
-  text-align: center;
-  font-size: 9px;
-  padding: 2px 3px;
-  line-height: .9;
-}
-
-.logo {
-  display: block;
-  float: left;
-  font-size: 20px;
-  line-height: $navbar-height;
-  height: 100%;
-  text-align: center;
-  width: $sidebar-width;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  padding: 0 15px;
-  font-weight: 300;
-  overflow: hidden;
-  //Add support to sidebar mini by allowing the user to create
-  //2 logo designs. mini and lg
-  .logo-lg {
-    //should be visibile when sidebar isn't collapsed
-    display: block;
-  }
-  .logo-mini {
+  .sidebar-toggle .icon-bar {
     display: none;
   }
+
+  //Navbar User Menu
+  .navbar .nav > li.user > a {
+    > .fa,
+    > .glyphicon,
+    > .ion {
+      margin-right: 5px;
+    }
+  }
+
+  //Labels in navbar
+  .navbar .nav > li > a > .label {
+    position: absolute;
+    top: 9px;
+    right: 7px;
+    text-align: center;
+    font-size: 9px;
+    padding: 2px 3px;
+    line-height: .9;
+  }
+
+  .logo {
+    display: block;
+    float: left;
+    font-size: 20px;
+    line-height: $navbar-height;
+    height: 100%;
+    text-align: center;
+    width: $sidebar-width;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    padding: 0 15px;
+    font-weight: 300;
+    overflow: hidden;
+    //Add support to sidebar mini by allowing the user to create
+    //2 logo designs. mini and lg
+    .logo-lg {
+      //should be visibile when sidebar isn't collapsed
+      display: block;
+    }
+
+    .logo-mini {
+      display: none;
+    }
+  }
+
+  //Navbar Brand. Alternative logo with layout-top-nav
+  .navbar-brand {
+    color: #fff;
+  }
+
+  #logo_wrapper {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    min-height: $navbar-height;
+    height: $navbar-height;
+    left: 0;
+    float: left;
+  }
+
 }
 
-//Navbar Brand. Alternative logo with layout-top-nav
-.navbar-brand {
-  color: #fff;
-}
+.content-header {
+  background-color: #fff;
+  min-height: 3.5rem;
+  margin-bottom: 1em;
+  box-shadow: 1px 1px 3px 1px #d2d2d2;
+  user-select: none;
 
-#logo_wrapper {
-  position: relative;
-  margin: 0;
-  padding: 0;
-  top: 0;
-  min-height: $navbar-height;
-  height: $navbar-height;
-  left: 0;
-  float: left;
-}
-
+  &:focus {
+    outline: none;
+  }
 }
 
 // Content Header
-#top_link_container {
+#breadcrumb-container {
   position: relative;
   padding: 15px 15px 0 15px;
+
   > .row {
     min-height: 1.7rem;
   }
@@ -172,21 +191,26 @@
     top: 15px;
     right: 10px;
     @include border-radius(2px);
+
     > li > a, > li > span {
       color: #444;
       text-decoration: none;
       display: inline-block;
       padding: 0 .7rem;
     }
+
     > li > a:hover {
       color: #969696;
     }
+
     > li > span:hover {
       cursor: default;
     }
+
     > li + li:before {
       content: '>\00a0';
     }
+
     > li + li {
       margin-left: .3rem;
     }
@@ -201,6 +225,7 @@
       float: none;
       background: $gray-lte;
       padding-left: 10px;
+
       li:before {
         color: darken($gray-lte, 20%);
       }
@@ -238,14 +263,17 @@
 @media (max-width: $screen-header-collapse) {
   .main-header {
     position: relative;
+
     .logo,
     .navbar {
       width: 100%;
       float: none;
     }
+
     .navbar {
       margin: 0;
     }
+
     .navbar-custom-menu {
       float: right;
     }

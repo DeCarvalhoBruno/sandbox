@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="row">
+        <div class="card filter-wrapper">
             <div class="container">
                 <table-filter :filterButtons="filterButtons" :entity="entity"
                               @filter-removed="removeFilter"

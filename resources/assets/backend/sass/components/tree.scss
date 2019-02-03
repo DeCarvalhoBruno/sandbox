@@ -1,21 +1,10 @@
 $list_border_dotted: 1px solid #000;
 
 .tree-container {
+  position: relative;
+  z-index: 0;
   display: block;
   margin: 1rem 0 0 .25rem;
-
-  & > ul {
-    //&::before {
-    //  content: '';
-    //  position: absolute;
-    //  top: 0;
-    //  left: 4em;
-    //  bottom: 2em;
-    //  width: 1.5em;
-    //  z-index: 0;
-    //  border-left: $list_border_dotted;
-    //}
-  }
 }
 
 .tree-list-container {
@@ -29,7 +18,6 @@ $list_border_dotted: 1px solid #000;
       margin: 0;
       list-style-type: none;
       position: relative;
-      left: -8px;
     }
 
     .li-indicator {
@@ -48,10 +36,6 @@ $list_border_dotted: 1px solid #000;
       user-select: none;
       cursor: default;
       transition: background-color 1s ease-in-out;
-
-      &.li-label-searched {
-        background-color: #FFFF00;
-      }
     }
 
     .li-input-wrapper {
@@ -81,26 +65,9 @@ $list_border_dotted: 1px solid #000;
         padding-left: .5em;
         position: relative;
         cursor: default;
-        z-index: 1;
 
         &.childless {
           margin-left: 1.25em;
-
-          &::before {
-            left: -2.25em;
-            width: 2.75em;
-          }
-        }
-
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -1em;
-          bottom: 50%;
-          width: 1.5em;
-          z-index: 0;
-          border-bottom: $list_border_dotted;
         }
 
         .li-btn-group-wrapper {
@@ -109,6 +76,13 @@ $list_border_dotted: 1px solid #000;
           border-radius: 10px;
           background-color: lighten($primary, 5%);
           color: white;
+          box-shadow: 1px 1px 10px 0 #939aa8;
+
+          &.tree-searched {
+            background-color: yellow;
+            color: black;
+
+          }
         }
 
         .li-btn-group {
@@ -117,6 +91,15 @@ $list_border_dotted: 1px solid #000;
           padding: 0 .2em;
           border-radius: 10px;
           background-color: #ff9c33;
+          color: #000;
+
+          &.updating {
+            border-radius: 5px;
+            padding: .2em;
+            margin-right: .1em;
+            background-color: transparent;
+            color: #fff;
+          }
 
           button {
             &:hover {
@@ -130,23 +113,6 @@ $list_border_dotted: 1px solid #000;
         }
       }
     }
-
-    ul > li:last-child {
-      border-left: $list_border_dotted;
-      //position:relative;
-      z-index: 2;
-
-      &::before {
-        content: '';
-        position: absolute;
-        top: -1em;
-        left: 2em;
-        height: 2em;
-        width: 1em;
-        z-index: 0;
-        border-left: 1px solid #000;
-      }
-    }
   }
 }
 
@@ -154,7 +120,7 @@ $list_border_dotted: 1px solid #000;
   .tree-list {
     ul {
       padding: 0;
-      margin: 0;
+      margin: 0 0 0 .5em;
       list-style-type: none;
       position: relative;
     }
@@ -164,4 +130,38 @@ $list_border_dotted: 1px solid #000;
     }
 
   }
+}
+
+.tree-search-wrapper {
+  position: relative;
+  z-index: 1;
+
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    position: relative;
+
+
+    &.options-list {
+      position: absolute;
+      background: #fff;
+      top: 2.5em;
+      left: 0;
+      width: 100%;
+      border: 1px solid #d0d0d0;
+      border-radius: 0 0 2px 2px;
+      margin-top: -2px;
+      margin-left: -1px;
+      margin-right: -1px;
+      z-index: 25;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      li:hover{
+        background: #dcdcdc;
+        cursor:pointer;
+      }
+    }
+  }
+
+
 }

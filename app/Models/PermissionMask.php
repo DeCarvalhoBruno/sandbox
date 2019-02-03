@@ -10,7 +10,7 @@ class PermissionMask extends Model
     protected $fillable = ['permission_store_id', 'permission_holder_id', 'permission_mask', 'permission_is_default'];
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param $userEntityId
      * @param bool $permissionIsDefault
@@ -26,7 +26,7 @@ class PermissionMask extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param $entityId
      * @return \Illuminate\Database\Eloquent\Builder $builder
@@ -40,7 +40,7 @@ class PermissionMask extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -52,7 +52,7 @@ class PermissionMask extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.6/eloquent#query-scopes
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param $username
      * @return \Illuminate\Database\Eloquent\Builder $builder

@@ -9,20 +9,18 @@ class BlogCategory extends Model implements BlogCategoryInterface
 {
     protected $model = \App\Models\Blog\BlogPostCategory::class;
 
-    public function createOne($label, $codename)
+    public function createOne($label, $parentSlug)
     {
         $newLabelType = BlogPostLabelType::create(
-            ['blog_post_label_id'=>BlogPostLabel::BLOG_POST_CATEGORY]
+            ['blog_post_label_id' => BlogPostLabel::BLOG_POST_CATEGORY]
         );
         $newCat = $this->createModel(
             [
                 'blog_post_category_name' => $label,
-                'blog_post_category_slug' => str_slug($label,'-',app()->getLocale()),
-                'blog_post_category_codename' => makeHexUuid(),
                 'blog_post_label_type_id' => $newLabelType->getKey()
             ]);
-        if (!is_null($codename)) {
-            $parentCategory = $this->getCat($codename);
+        if (!is_null($parentSlug)) {
+            $parentCategory = $this->getCat($parentSlug);
             if (!is_null($parentCategory)) {
                 $newCat->appendToNode($parentCategory);
             } else {
@@ -41,9 +39,9 @@ class BlogCategory extends Model implements BlogCategoryInterface
     {
         $builder = $this->createModel()->newQuery();
         if (is_array($codename)) {
-            $builder->whereIn('blog_post_category_codename', $codename);
+            $builder->whereIn('blog_post_category_slug', $codename);
         } else {
-            $builder->where('blog_post_category_codename', '=', $codename);
+            $builder->where('blog_post_category_slug', '=', $codename);
         }
         return $builder;
     }
@@ -105,10 +103,10 @@ class BlogCategory extends Model implements BlogCategoryInterface
     public function getSelected($postId)
     {
         return $this->createModel()->newQuery()
-            ->select(['blog_post_category_codename'])
+            ->select(['blog_post_category_slug'])
             ->labelType()
             ->labelRecord($postId)
-            ->get()->pluck('blog_post_category_codename')->toArray();
+            ->get()->pluck('blog_post_category_slug')->toArray();
     }
 
     /**
@@ -117,11 +115,8 @@ class BlogCategory extends Model implements BlogCategoryInterface
      */
     public function getCat($id)
     {
-        if (is_hex_uuid_string($id)) {
-            return $this->createModel()
-                ->where('blog_post_category_codename', $id)->first();
-        }
-        return null;
+        return $this->createModel()
+            ->where('blog_post_category_slug', $id)->first();
     }
 
 }

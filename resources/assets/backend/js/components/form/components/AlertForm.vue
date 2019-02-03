@@ -65,7 +65,6 @@
     },
     watch: {
       show () {
-        console.log('show changed')
         this.showChanged()
       }
     },

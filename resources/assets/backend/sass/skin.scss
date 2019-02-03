@@ -36,11 +36,6 @@
     }
   }
 
-  //Content Header
-  .content-header {
-    background: transparent;
-  }
-
   //Create the sidebar skin
   @include skin-dark-sidebar($light-blue);
 }

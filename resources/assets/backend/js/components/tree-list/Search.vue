@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <div class="input-group">
+    <div class="tree-search-wrapper">
+        <div class="input-group input-wrapper">
             <input type="text" class="form-control"
                    :placeholder="$t('pages.blog.filter_name')"
                    :aria-label="$t('pages.blog.filter_name')"
@@ -19,7 +19,7 @@
             <li v-for="(res,index) in filteredOptions"
                 :key="index"
                 @mousedown="search(res)">
-                {{res.data.target}}
+                {{res.data.target.label}}
             </li>
         </ul>
     </div>
@@ -43,7 +43,7 @@
     computed: {
       filteredOptions () {
         const re = new RegExp(this.searchTerm, 'i')
-        return this.terms.filter(item => item.data.target.match(re))
+        return this.terms.filter(item => item.data.target.label.match(re))
       }
     },
     methods: {
