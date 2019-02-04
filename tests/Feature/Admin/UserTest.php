@@ -16,15 +16,11 @@ class UserTest extends TestCase
         $this->signIn();
         $user = $this->createUser();
 
-//        $mock = \Mockery::mock('Illuminate\Contracts\Auth\Access\Gate');
-//        $mock->shouldReceive('authorize')->with('can:view,App\Models\User')->once()->andReturn(true);
-//        $this->app->instance('Illuminate\Contracts\Auth\Access\Gate', $mock);
-
         $response = $this->getJson('/ajax/admin/users/' . $user->username);
 
         $response->assertStatus(200);
         $json = $response->json();
-        $this->assertArraySubset(['first_name', 'last_name', 'email', 'username'], array_keys($json['user']));
+        $this->assertEquals(['first_name', 'last_name', 'email', 'username','full_name'], array_keys($json['user']));
     }
 
     public function test_update_normal()
@@ -65,7 +61,7 @@ class UserTest extends TestCase
     public function test_delete_one_user()
     {
         $user = $this->signIn()->createUser();
-        $response = $this->delete(
+        $this->delete(
             "/ajax/admin/users/{$user->username}"
         )->assertStatus(204);
         

@@ -24,6 +24,10 @@ return [
         'email_body' => 'Please provide your e-mail below. We\'ll send you a link by e-mail allowing you to set a new password.',
         'reset_title' => 'Your password has been reset!',
         'reset_body' => 'You can login using your new password.',
-        ]
+    ],
+    'content' => [
+        'email' => 'E-Mail Address',
+        'send_link' => 'Send Password Reset Link'
+    ]
 
 ];

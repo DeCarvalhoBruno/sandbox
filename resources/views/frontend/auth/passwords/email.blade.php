@@ -25,7 +25,7 @@
                             {!! csrf_field() !!}
 
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label text-lg-right">E-Mail Address</label>
+                                <label class="col-lg-4 col-form-label text-lg-right">{{ trans('auth.content.email') }}</label>
 
                                 <div class="col-lg-6">
                                     <input type="email"
@@ -41,9 +41,8 @@
 
                             <div class="form-group row">
                                 <div class="col-lg-6 offset-lg-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        Send Password Reset Link
-                                    </button>
+                                    <button type="submit"
+                                            class="btn btn-primary">{{ trans('auth.content.send_link') }}</button>
                                 </div>
                             </div>
                         </form>

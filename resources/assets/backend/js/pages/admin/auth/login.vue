@@ -36,9 +36,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-md-7 offset-md-3 d-flex">
-                                <v-button :loading="form.busy">
-                                    {{ $t('general.login') }}
-                                </v-button>
+                                <v-button :loading="form.busy">{{ $t('general.login') }}</v-button>
                             </div>
                         </div>
                     </form>
