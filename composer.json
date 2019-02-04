@@ -27,6 +27,7 @@
         "nunomaduro/collision": "~1.1",
         "php-ds/php-ds": "^1.2",
         "phpunit/phpunit": "~7.0",
+        "rap2hpoutre/laravel-log-viewer": "^1.0",
         "symfony/thanks": "^1.0"
     },
     "autoload": {

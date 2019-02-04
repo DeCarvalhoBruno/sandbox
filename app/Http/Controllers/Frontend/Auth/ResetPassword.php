@@ -29,14 +29,15 @@ class ResetPassword extends Controller
      *
      * If no token is present, display the link request form.
      *
-     * @param  \Illuminate\Http\Request $request
      * @param  string|null $token
+     * @param  string $email
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function showResetForm(Request $request, $token = null)
+    public function showResetForm($token, $email,Request $request)
     {
         return view('frontend.auth.passwords.reset')->with(
-            ['token' => $token, 'email' => urldecode($request->get('email'))]
+            ['token' => $token, 'email' => urldecode($email)]
         );
     }
 
@@ -72,13 +73,13 @@ class ResetPassword extends Controller
     /**
      * Reset the given user's password.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function reset(Request $request)
     {
         $this->validate($request, $this->rules(), $this->validationErrorMessages());
-
         // Here we will attempt to reset the user's password. If it is successful we
         // will update the password on an actual user model and persist it to the
         // database. Otherwise we will parse the error and return the response.

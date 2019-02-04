@@ -1,17 +1,13 @@
 <template>
     <div class="row">
-        <div class="col-lg-8 m-auto">
+        <div class="col-lg-5 m-auto">
             <div class="card">
-                <div class="card-header">
-                    {{ $t('general.login') }}
-                </div>
-
-                <div class="card-body">
+                <div class="card-body p-5">
                     <alert-form :form="form" :show-errors="false"/>
                     <form @submit.prevent="login" @keydown="form.onKeydown($event)">
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label text-md-right">{{ $t('general.email') }}</label>
-                            <div class="col-md-7">
+                            <div class="col-md-9">
                                 <input v-model="form.fields.email" type="email" name="email" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('email') }">
                                 <has-error :form="form" field="email"></has-error>
@@ -19,7 +15,7 @@
                         </div>
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label text-md-right">{{ $t('general.password') }}</label>
-                            <div class="col-md-7">
+                            <div class="col-md-9">
                                 <input v-model="form.fields.password" type="password" name="password" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('password') }">
                                 <has-error :form="form" field="password"></has-error>
@@ -27,7 +23,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-md-3"></div>
-                            <div class="col-md-7 d-flex">
+                            <div class="col-md-9 d-flex">
                                 <checkbox v-model="remember" name="remember">
                                     {{ $t('pages.auth.remember_me') }}
                                 </checkbox>

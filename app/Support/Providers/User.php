@@ -171,6 +171,11 @@ class User extends Model implements UserProvider, UserInterface
             ->first();
     }
 
+    public function sendResetLink($email)
+    {
+        dd($email);
+    }
+
     /**
      * Retrieve a user by their unique identifier and "remember me" token.
      *

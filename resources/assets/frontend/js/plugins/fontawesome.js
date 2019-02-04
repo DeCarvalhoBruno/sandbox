@@ -1,13 +1,15 @@
-import fontawesome from '@fortawesome/fontawesome'
-
-// import { } from '@fortawesome/fontawesome-free-regular/shakable.es'
-
+import Vue from 'vue'
+import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faUser,
   faCircle,
   faInfo
-} from '@fortawesome/fontawesome-free-solid/shakable.es'
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-fontawesome.library.add(
+library.add(
   faUser, faCircle, faInfo
 )
+
+Vue.component('fa', FontAwesomeIcon)
+

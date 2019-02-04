@@ -8,43 +8,28 @@ class Admin extends Routes
     {
         $router->group([
             'prefix' => '/admin',
-        ], call_user_func('static::defaultRouteGroup', null));
-        $availableLocales = config('app.locales');
-        unset($availableLocales[app()->getLocale()]);
-        foreach ($availableLocales as $k => $v) {
-            $router->group([
-                'prefix' => '/admin',
-            ], call_user_func('static::defaultRouteGroup', $k));
-        }
+                'namespace' => 'App\Http\Controllers\Admin',
+        ], call_user_func('static::defaultRouteGroup'));
     }
 
-    public static function defaultRouteGroup($locale)
+    public static function defaultRouteGroup()
     {
-        return function (Router $r) use ($locale) {
+        return function (Router $r) {
+            $r->group([], call_user_func('static::guest'));
             $r->group([
-                'namespace' => 'App\Http\Controllers\Admin',
-            ], call_user_func('static::guest', $locale));
-            $r->group([
-                'namespace' => 'App\Http\Controllers\Admin',
                 'middleware' => ['auth.admin','admin'],
             ], call_user_func('static::auth'));
             $r->group([
-                'namespace' => 'App\Http\Controllers\Admin',
                 'middleware' => ['admin'],
             ], call_user_func('static::handledBySPA'));
         };
     }
 
-    public static function guest($locale)
+    public static function guest()
     {
-        return function (Router $r) use ($locale) {
+        return function (Router $r) {
             $r->get('', 'Admin@index');
-            $r->post('login', 'Auth\Login@login')->name(self::i18nRouteNames($locale, 'admin.login'));
-
-            $r->post('password/email', 'Auth\ForgotPassword@sendResetLinkEmail')->name(self::i18nRouteNames($locale,
-                'admin.password.email-reset'));
-            $r->post('password/reset', 'Auth\ResetPassword@reset')->name(self::i18nRouteNames($locale,
-                'admin.password.reset'));
+            $r->post('login', 'Auth\Login@login')->name('admin.login');
         };
     }
 

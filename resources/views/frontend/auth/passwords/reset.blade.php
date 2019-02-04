@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">Reset Password</div>
                 <div class="card-body">
-                    <form role="form" method="POST" action="{{ url('/password/reset') }}">
+                    <form role="form" method="POST" action="{{ route('password.reset.do') }}">
                         {!! csrf_field() !!}
 
                         <input type="hidden" name="token" value="{{ $token }}">
@@ -20,7 +20,7 @@
                                         type="email"
                                         class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
                                         name="email"
-                                        value="{{ $email or old('email') }}"
+                                        value="{{ $email }}"
                                 >
                                 @if ($errors->has('email'))
                                     <div class="invalid-feedback">

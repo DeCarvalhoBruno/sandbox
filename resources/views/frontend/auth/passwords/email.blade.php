@@ -21,7 +21,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <form role="form" method="POST" action="{{ url('/password/email') }}">
+                        <form role="form" method="POST" action="{{ route('password.email') }}">
                             {!! csrf_field() !!}
 
                             <div class="form-group row">

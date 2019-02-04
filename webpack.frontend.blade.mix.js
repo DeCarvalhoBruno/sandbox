@@ -6,8 +6,8 @@ const webpack = require('webpack')
 const folderName = '6aa0e'
 const publicPath = `public/${folderName}`
 
-mix.js('resources/assets/frontend/blade/js/app.js', 'js/app.js')
-  .sass('resources/assets/frontend/blade/sass/app.scss', 'css/app.css')
+mix.js('resources/assets/frontend/js/app.js', 'js/app.js')
+  .sass('resources/assets/frontend/sass/app.scss', 'css/app.css')
   .sourceMaps()
   .disableNotifications()
   .setPublicPath(path.normalize(publicPath))
@@ -71,7 +71,7 @@ mix.webpackConfig({
   resolve: {
     extensions: ['.js', '.json', '.vue'],
     alias: {
-      '~': path.join(__dirname, './resources/assets/frontend/blade/js'),
+      '~': path.join(__dirname, './resources/assets/frontend/js'),
       'jquery': 'jquery/dist/jquery.min.js'
     }
   },

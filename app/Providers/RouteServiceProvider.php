@@ -19,7 +19,6 @@ class RouteServiceProvider extends ServiceProvider
         \App\Http\Routes\Ajax\Admin::class,
         \App\Http\Routes\Admin::class,
         \App\Http\Routes\Frontend::class,
-//        \App\Http\Routes\FrontendSpa::class
     ];
 
     /**
@@ -42,6 +41,11 @@ class RouteServiceProvider extends ServiceProvider
         $router = $this->app->make(Router::class);
         foreach ($this->routeSets as $binder) {
             $this->app->make($binder)->bind($router);
+        }
+        if (env('APP_ENV')==='local') {
+            $router->group(['namespace' => '\Rap2hpoutre\LaravelLogViewer'], function () use ($router) {
+                $router->get('logs', 'LogViewerController@index');
+            });
         }
     }
 }

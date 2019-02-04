@@ -10,10 +10,7 @@
         "prod": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.backend.mix",
         "dev-blade": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.frontend.blade.mix",
         "watch-blade": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.frontend.blade.mix",
-        "prod-blade": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.frontend.blade.mix",
-        "dev-spa": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.frontend.spa.mix",
-        "watch-spa": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.frontend.spa.mix",
-        "prod-spa": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.frontend.blade.mix"
+        "prod-blade": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=webpack.frontend.blade.mix"
     },
     "dependencies": {
         "@fortawesome/fontawesome": "^1.1.8",
