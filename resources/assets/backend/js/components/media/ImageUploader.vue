@@ -154,7 +154,9 @@
         thumbnails: [],
         dropzoneOptions: {
           acceptedFileTypes: ['image/jpg', 'image/jpeg', 'image/png'],
-          clickable: false
+          clickable: false,
+          maxConcurrentUploads: 1,
+          maxFiles: 5
         }
       }
     },

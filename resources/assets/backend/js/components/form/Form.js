@@ -82,6 +82,10 @@ class Form {
     this.changedFields = {}
   }
 
+  getChangedFields () {
+    return this.changedFields
+  }
+
   /**
    * Has there been any user interaction with the form that changed it?
    *

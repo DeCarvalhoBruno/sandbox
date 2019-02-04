@@ -267,8 +267,8 @@
     computed: {
       formattedPublishedAt () {
         return dayjs(this.current_publish_date)
-          .locale(this.$store.getters['lang/locale'])
-          .format(this.$store.getters['lang/dateTimeFormat'])
+          .locale(this.$store.getters['prefs/locale'])
+          .format(this.$store.getters['prefs/dateTimeFormat'])
       }
     },
     watch: {
@@ -285,18 +285,16 @@
           vm.changedField('blog_post_content')
         })
       })
-      window.addEventListener('beforeunload', this.checkBeforeUnload)
+      window.addEventListener('beforeunload', this.checkBeforeUnload, {once: true})
     },
     beforeDestroy () {
       window.removeEventListener('beforeunload', this.checkBeforeUnload)
     },
     methods: {
       checkBeforeUnload (event) {
-        if (this.form.hasDetectedChanges()) {
-          var confirmationMessage = '_'
-          event.returnValue = confirmationMessage
-          return confirmationMessage
-        }
+        let confirmationMessage = '_'
+        event.returnValue = confirmationMessage
+        return confirmationMessage
       },
       format (value, format) {
         return dayjs(value).format(format)
@@ -308,6 +306,7 @@
         if (dateTime.isValid()) {
           this.current_publish_date = dateTime.toDate()
           this.toggleEditing('form_publish_date_editing')
+          this.changedField('published_at')
         }
       },
       updateThumbnails (data) {
@@ -326,6 +325,7 @@
           dayjs(value).format('YYYY-MM-DD') + ' ' +
           this.$refs.inputHours.value + ':' +
           this.$refs.inputMinutes.value).toDate()
+        this.changedField('published_at')
       },
       removeTag (index) {
         this.form.fields.tags.splice(index, 1)
@@ -391,7 +391,6 @@
         let formBeforeSave = this.form.getFormData()
         let {data} = await this.form.post(`/ajax/admin/blog/post/${suffix}`)
         this.form = new Form(formBeforeSave, true)
-        this.form.resetChangedFields()
         this.url = data.url
         if (this.saveMode === 'create') {
           this.form.addField('blog_post_slug', data.blog_post_slug)
@@ -399,6 +398,7 @@
         } else {
           this.form.fields.blog_post_slug = data.blog_post_slug
         }
+        this.form.resetChangedFields()
         this.swalNotification('success', msg)
       },
       getInfo (data, saveMode) {
@@ -433,6 +433,7 @@
     },
     beforeRouteLeave (to, from, next) {
       if (this.form.hasDetectedChanges()) {
+      // console.log(this.form.hasDetectedChanges(),this.form.getChangedFields())
         this.swalSaveWarning().then((result) => {
           if (result.value) {
             next()

@@ -31,7 +31,7 @@
                 </b-tab>
                 <b-tab :title="$t('pages.settings.avatar-ul-tab')" :disabled="avatars.length>6">
                     <wizard ref="wizard" :steps="steps" has-step-buttons="false"
-                            :current-step-parent="currentStep">
+                            :current-step-parent="currentStep-1">
                         <div slot="s1">
                             <keep-alive>
                                 <dropzone class="dropzone"
@@ -49,7 +49,7 @@
                                     <div class="dz-container" @click="triggerBrowse">
                                         <h4 class="dropfile-instructions">{{ $t('dropzone.choose_file')}}</h4>
                                         <p class="dropfile-instructions">{{ $t('dropzone.max_size')}}
-                                            {{maxFilesize}}{{$t('units.MB')}}</p>
+                                            {{dropzoneOptions.maxFilesize}}{{$t('units.MB')}}</p>
                                         <p class="dropfile-instructions">{{ $t('dropzone.accepted_formats')}} JPG,
                                             PNG</p>
                                         <fa class="fa-4x" icon="cloud-upload-alt"></fa>
@@ -89,7 +89,7 @@
                                                                          v-show="file.status==='success'">
                                                                         <button type="button"
                                                                                 class="btn btn-lg btn-primary text-center"
-                                                                                @click="currentStep=1">
+                                                                                @click="currentStep=2">
                                                                             {{$t('pages.settings.image_proceed')}}
                                                                         </button>
                                                                     </div>
@@ -112,10 +112,12 @@
                             </keep-alive>
                         </div>
                         <div slot="s2">
-                            <cropper :src="cropper_src"
+                            <cropper ref="cropper"
+                                     :src="cropperOptions.src"
                                      :container-width="containerWidth"
-                                     :crop-height="minCropBoxHeight"
-                                     :crop-width="minCropBoxWidth">
+                                     :crop-height="cropperOptions.minCropBoxHeight"
+                                     :crop-width="cropperOptions.minCropBoxWidth"
+                                     :cropped="cropWasTriggered" @cropper-mounted="addCropperListeners">
                                 <div slot="cropper-actions" class="col align-self-center">
                                     <button class="btn btn-primary" @click="crop()" type="button"
                                     >{{$t('media.cropper_crop_upload')}}
@@ -130,7 +132,7 @@
                             <div class="container p-0 mt-2">
                                 <div class="row justify-content-lg-center">
                                     <div class="col col-lg-6 text-center">
-                                        <img :src="croppedImageData.dataURI"/>
+                                        <img :src="cropperOptions.croppedImageData.dataURI"/>
                                     </div>
                                 </div>
                                 <div class="row justify-content-lg-center mt-3">
@@ -155,7 +157,6 @@
   import Wizard from '~/components/Wizard'
   import Cropper from '~/components/Cropper'
   import axios from 'axios'
-
   import { Tabs } from 'bootstrap-vue/es/components'
 
   Vue.use(Tabs)
@@ -193,68 +194,80 @@
             slot: 's3'
           }
         ],
-        cropper_src: null,
-        minCropBoxHeight: 0,
-        minCropBoxWidth: 0,
-        imageToUpload: null,
-        currentStep: 0,
+        cropperOptions: {
+          src: '',
+          croppedImageData: {
+            dataURI: null,
+            filename: null
+          },
+          minCropBoxHeight: 0,
+          minCropBoxWidth: 0,
+          uploadSuccess: false
+        },
+        currentStep: 1,
         ajaxIsLoading: false,
-        maxFilesize: 2,
-        croppedImageData: Object,
         error: '',
         dropzoneOptions: {
           maxFilesize: 2,
           acceptedFileTypes: ['image/jpg', 'image/jpeg', 'image/png'],
-          clickable: false
+          clickable: false,
+          maxConcurrentUploads: 1,
+          maxFiles: 10
         },
-        avatarSubmitted: false,
-        uploadSuccess: false,
-        containerWidth:0
+        containerWidth: 0,
+        cropWasTriggered: false
       }
     },
     mounted () {
       this.containerWidth = this.$refs.cropperContainer.clientWidth
       let vm = this
-      this.$root.$on('cropper_cropped', function (cp, croppedCanvas) {
-        vm.croppedImageData.dataURI = croppedCanvas.toDataURL()
-        vm.currentStep = 2
-        vm.ajaxIsLoading = true
-        axios.post('/ajax/admin/media/crop',
-          {uuid: vm.croppedImageData.filename, height: cp.height, width: cp.width, x: cp.x, y: cp.y})
-          .then(({data}) => {
-            vm.$root.$emit('avatars_updated', data)
-            vm.ajaxIsLoading = false
-          })
-          .catch(e => {
-            vm.ajaxIsLoading = false
-          })
-      })
-      this.$root.$on('wizard_step_reset', function () {
-        vm.currentStep = 0
+      this.$refs.wizard.$on('wizard_step_reset', function () {
+        vm.currentStep = 1
       })
     },
     methods: {
+      addCropperListeners () {
+        let vm = this
+        this.$refs.cropper.$on('cropper_cropped', function (cp, croppedCanvas) {
+          vm.cropperOptions.croppedImageData.dataURI = croppedCanvas.toDataURL()
+          vm.currentStep = 3
+          vm.ajaxIsLoading = true
+          axios.post('/ajax/admin/media/crop',
+            {uuid: vm.cropperOptions.croppedImageData.filename, height: cp.height, width: cp.width, x: cp.x, y: cp.y})
+            .then(({data}) => {
+              vm.$emit('avatars_updated', data)
+              vm.ajaxIsLoading = false
+            })
+            .catch(e => {
+              vm.ajaxIsLoading = false
+            })
+        })
+      },
       avatarTabClicked () {
         //After a successful avatar upload, currentStep=2
         // the user can click on the avatar tab in which case we need to reset current step
         // so a new avatar can be uploaded
-        if (this.currentStep === 2)
-          this.currentStep = 0
+        if (this.currentStep === 3)
+          this.currentStep = 1
       },
       triggerBrowse () {
         let vm = this
-        this.uploadSuccess = false
+        this.cropperOptions.uploadSuccess = false
         this.$refs.dropzone.triggerBrowseFiles()
         this.$refs.dropzone.$on('success', function (file, response) {
-          vm.cropper_src = `/media/tmp/${response.filename}`
-          vm.croppedImageData.filename = response.filename
-          vm.minCropBoxHeight = 128
-          vm.minCropBoxWidth = 128
-          vm.uploadSuccess = true
+          vm.cropperOptions.src = `/media/tmp/${response.filename}`
+          vm.cropperOptions.croppedImageData.filename = response.filename
+          vm.cropperOptions.minCropBoxHeight = 128
+          vm.cropperOptions.minCropBoxWidth = 128
+          vm.cropperOptions.uploadSuccess = true
         })
         this.$refs.dropzone.$on('error', function (file, error, xhr) {
-          if (typeof xhr.response.msg != 'undefined') {
-            vm.error = xhr.response.msg
+          if (typeof xhr != 'undefined') {
+            if (typeof xhr.response.msg != 'undefined') {
+              vm.error = xhr.response.msg
+            } else {
+              vm.error = error
+            }
           } else {
             vm.error = error
           }
@@ -264,7 +277,7 @@
         if (!alreadyUsed) {
           this.ajaxIsLoading = true
           axios.delete(`/ajax/admin/settings/avatar/${uuid}`).then(({data}) => {
-            this.$root.$emit('avatars_updated', data)
+            this.$emit('avatars_updated', data)
             this.ajaxIsLoading = false
           })
         }
@@ -273,15 +286,18 @@
         if (!alreadyUsed) {
           this.ajaxIsLoading = true
           axios.patch('/ajax/admin/settings/avatar', {uuid: uuid}).then(({data}) => {
-            this.$root.$emit('avatars_updated', data)
+            this.$emit('avatars_updated', data)
             this.ajaxIsLoading = false
           })
         }
+      },
+      crop () {
+        this.cropWasTriggered = true
+      },
+      cancel () {
+        this.currentStep = 1
+        this.cropWasTriggered = false
       }
     },
-    beforeDestroy: function () {
-      this.$root.$off('cropper_cropped')
-      this.$root.$off('wizard_step_reset')
-    }
   }
 </script>

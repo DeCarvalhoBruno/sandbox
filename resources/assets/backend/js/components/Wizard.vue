@@ -68,7 +68,7 @@
       },
       currentStep () {
         if (this.currentStep === 0) {
-          this.$root.$emit('wizard_step_reset')
+          this.$emit('wizard_step_reset')
         }
       }
     },

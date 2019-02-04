@@ -3,7 +3,7 @@
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
-class Test extends Command
+class TestStuff extends Command
 {
     use DispatchesJobs;
     /**

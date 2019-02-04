@@ -17,7 +17,8 @@ class Kernel extends ConsoleKernel
         Commands\MakeRequest::class,
         Commands\CreateRootAssetDirectories::class,
         Commands\SendTestEmail::class,
-        Commands\Test::class
+        Commands\TestStuff::class,
+        Commands\Maintenance::class
     ];
 
     /**

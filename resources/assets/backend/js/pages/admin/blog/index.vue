@@ -38,15 +38,20 @@
                                         @click="applyToSelected">
                                     {{$t('general.apply')}}
                                 </button>
-                                <router-link :to="{name: 'admin.blog_posts.add'}">
-                                    <button class="btn btn-add"
-                                            type="button">{{$t('pages.blog.add_post')}}</button>
-                                </router-link>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <span class="float-right mt-3">{{data.total}}&nbsp;{{$tc(`db.${entity}`,data.total)}}</span>
+                        <div class="float-right row align-items-center">
+                            <div class="col">
+                                <span class="mr-2" v-if="data.total">{{data.total}}&nbsp;{{$tc(`db.${entity}`,data.total)}}</span>
+                                <router-link :to="{name: 'admin.blog_posts.add'}">
+                                    <button class="btn btn-add"
+                                            type="button">{{$t('pages.blog.add_post')}}
+                                    </button>
+                                </router-link>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

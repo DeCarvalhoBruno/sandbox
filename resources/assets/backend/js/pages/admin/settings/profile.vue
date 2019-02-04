@@ -62,7 +62,7 @@
                 </div>
             </div>
         </div>
-        <avatar-uploader :user="user" :avatars-parent="avatars"/>
+        <avatar-uploader ref="avatarUploader" :user="user" :avatars-parent="avatars"/>
     </form>
 </template>
 
@@ -104,7 +104,7 @@
       })
     },
     mounted () {
-      this.$root.$on('avatars_updated', avatars => {
+      this.$refs.avatarUploader.$on('avatars_updated', avatars => {
         this.avatars = avatars
       })
     },
@@ -129,8 +129,5 @@
         next(vm => vm.getInfo(data))
       })
     },
-    beforeDestroy(){
-      this.$root.$off('avatars_updated')
-    }
   }
 </script>

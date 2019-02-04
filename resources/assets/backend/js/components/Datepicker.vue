@@ -3,11 +3,11 @@
                   ref="datePicker"
                   v-model="dateValue"
                   :name="name"
-                  :language="language[$store.getters['lang/locale']]"
+                  :language="language[$store.getters['prefs/locale']]"
                   :monday-first="true"
                   :typeable="typeable"
                   :clear-button="showClearButton"
-                  :format="$store.getters['lang/dateFormat']" @closed="closed">
+                  :format="$store.getters['prefs/dateFormat']" @closed="closed">
         <!--<div slot="beforeCalendarHeader" class="calender-header">-->
         <!--<div class="container">-->
         <!--<div class="col-lg-12">-->

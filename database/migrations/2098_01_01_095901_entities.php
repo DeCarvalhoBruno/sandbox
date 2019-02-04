@@ -180,10 +180,10 @@ class Entities extends Migration
     {
         \DB::unprepared('
         create view entity_count as
-          SELECT users as tbl,count(user_id) as cnt
+          SELECT "users" as tbl,count(user_id) as cnt
           from users
                 union
-          SELECT `groups` as tbl, count(group_id) as cnt
+          SELECT "groups" as tbl, count(group_id) as cnt
           from `groups`
   ');
         

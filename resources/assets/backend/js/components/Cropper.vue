@@ -57,7 +57,8 @@
       containerWidth: {required: true, type: Number},
       cropHeight: {type: Number, default: 0},
       cropWidth: {type: Number, default: 0},
-      cropperActive:false
+      cropperActive: false,
+      cropped: {required: false, type: Boolean, default: false}
     },
     data () {
       return {
@@ -65,8 +66,17 @@
       }
     },
     watch: {
-      cropperActive(){
+      cropperActive () {
         this.makeCropper()
+      },
+      cropped () {
+        if (this.cropped) {
+          this.$emit(
+            'cropper_cropped',
+            this.cropper.getData(true),
+            this.cropper.getCroppedCanvas({imageSmoothingQuality: 'high', width: 128, height: 128})
+          )
+        }
       },
       src () {
         this.$refs.img.setAttribute('src', this.src)
@@ -76,6 +86,7 @@
       if (typeof this.src === 'string') {
         this.$refs.img.setAttribute('src', this.src)
         this.makeCropper()
+        this.$emit('cropper-mounted')
       }
     },
     updated () {
@@ -90,14 +101,13 @@
           preview: '.cropper-preview',
           dragMode: 'move',
           viewMode: 1,
-          minCanvasWidth:containerWidth-50,
-          minCanvasHeight:containerHeight-50,
+          minCanvasWidth: containerWidth - 50,
+          minCanvasHeight: containerHeight - 50,
           minContainerWidth: containerWidth,
           minContainerHeight: containerHeight,
           cropBoxResizable: true,
           zoomable: true,
           ready: function () {
-
             vm.setCropboxDimensions()
           }
         })
@@ -108,18 +118,6 @@
       },
       setCropboxDimensions () {
         this.cropper.setAspectRatio(1)
-      },
-      crop () {
-        this.$root.$emit(
-          'cropper_cropped',
-          this.cropper.getData(true),
-          this.cropper.getCroppedCanvas({imageSmoothingQuality: 'high', width: 128, height: 128})
-        )
-      },
-      cancel () {
-        this.$root.$emit(
-          'wizard_step_reset'
-        )
       }
     }
   }
