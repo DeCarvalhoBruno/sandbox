@@ -29,7 +29,7 @@ export default [
   },
   {
     type: 'tree',
-    icon: 'object-group',
+    icon: 'users',
     name: 'sidebar.groups',
     items: [
       {
@@ -52,7 +52,7 @@ export default [
   },
   {
     type: 'tree',
-    icon: 'user',
+    icon: 'newspaper',
     name: 'sidebar.blog',
     items: [
       {
@@ -80,5 +80,13 @@ export default [
         }
       }
     ]
+  },
+  {
+    type: 'tree',
+    icon: 'image',
+    name: 'sidebar.media',
+    router: {
+      name: 'admin.medias.index'
+    }
   }
 ]

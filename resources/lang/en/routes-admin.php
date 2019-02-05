@@ -19,4 +19,5 @@ return [
     'admin.blog_posts.delete' => 'admin/blog/post/:slug',
     'admin.blog_posts.category' => 'admin/blog/category',
     'admin.blog_posts.add' => 'admin/blog/post/add',
+    'admin.medias.index' => 'admin/media'
 ];

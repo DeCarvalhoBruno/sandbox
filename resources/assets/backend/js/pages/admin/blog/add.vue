@@ -415,7 +415,10 @@
         this.saveMode = saveMode
         this.blog_post_categories = data.blog_post_categories
         this.thumbnails = data.thumbnails
-      }
+      },
+    },
+    metaInfo () {
+      return {title: this.$t('title.blog_add')}
     },
     beforeRouteEnter (to, from, next) {
       let suffix, saveMode

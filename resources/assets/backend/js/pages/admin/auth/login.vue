@@ -8,7 +8,8 @@
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label text-md-right">{{ $t('general.email') }}</label>
                             <div class="col-md-9">
-                                <input v-model="form.fields.email" type="email" name="email" class="form-control"
+                                <input v-model="form.fields.email" type="email" name="email"
+                                       class="form-control" autocomplete="username"
                                        :class="{ 'is-invalid': form.errors.has('email') }">
                                 <has-error :form="form" field="email"></has-error>
                             </div>
@@ -16,7 +17,8 @@
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label text-md-right">{{ $t('general.password') }}</label>
                             <div class="col-md-9">
-                                <input v-model="form.fields.password" type="password" name="password" class="form-control"
+                                <input v-model="form.fields.password" type="password" name="password"
+                                       class="form-control" autocomplete="current-password"
                                        :class="{ 'is-invalid': form.errors.has('password') }">
                                 <has-error :form="form" field="password"></has-error>
                             </div>
@@ -83,7 +85,10 @@
 
         }
         this.$router.push({name: 'admin.dashboard'})
-      }
+      },
+      metaInfo () {
+        return {title: this.$t('title.log_in')}
+      },
     }
   }
 </script>

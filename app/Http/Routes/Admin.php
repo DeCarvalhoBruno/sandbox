@@ -29,7 +29,12 @@ class Admin extends Routes
     {
         return function (Router $r) {
             $r->get('', 'Admin@index');
-            $r->post('login', 'Auth\Login@login')->name('admin.login');
+            $availableLocales = config('app.locales');
+            unset($availableLocales[app()->getLocale()]);
+            $availableLocales[''] = '';
+            foreach($availableLocales as $locale =>$v){
+                $r->post(trans('routes.admin_login', [], $locale), 'Auth\Login@login')->name(self::i18nRouteNames($locale, 'admin.login'));
+            }
         };
     }
 

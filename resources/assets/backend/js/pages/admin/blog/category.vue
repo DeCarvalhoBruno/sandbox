@@ -38,7 +38,10 @@
       },
       getInfo (data) {
         this.data = data
-      }
+      },
+    },
+    metaInfo () {
+      return {title: this.$t('title.blog_category')}
     },
     beforeRouteEnter (to, from, next) {
       axios.get('/ajax/admin/blog/categories').then(({data}) => {

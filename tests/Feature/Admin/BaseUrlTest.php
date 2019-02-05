@@ -13,7 +13,7 @@ class BaseUrlTest extends TestCase
      */
     public function testLoginUrl()
     {
-        $response = $this->get('/admin/login');
+        $response = $this->get(route_i18n('login'));
 
         $response->assertStatus(200);
     }

@@ -74,9 +74,15 @@ $list_border_dotted: 1px solid #000;
           padding: 5px;
           display: inline-block;
           border-radius: 10px;
-          background-color: lighten($primary, 5%);
+          background-color: darken($primary, 5%);
           color: white;
           box-shadow: 1px 1px 10px 0 #939aa8;
+          transition: background-color 0.8s;
+
+          &:hover {
+            background-color: lighten($primary,5%);
+            transition: background-color 0.8s;
+          }
 
           &.tree-searched {
             background-color: yellow;

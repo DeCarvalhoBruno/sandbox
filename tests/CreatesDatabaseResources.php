@@ -8,10 +8,6 @@ trait CreatesDatabaseResources
     {
         return factory('App\\Models\\' . $class, $times)->create($attributes);
     }
-//    protected function createSimple($class, $attributes = [])
-//    {
-//        return factory('App\\Models\\' . $class)->create($attributes);
-//    }
 
     protected function make($class, $attributes = [], $times = null)
     {

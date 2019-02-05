@@ -44,6 +44,13 @@ abstract class Permission
         $this->entityId = $entityId;
     }
 
+    /**
+     * When we assign permissions, either the entity (i.e. users, groups, etc.) has a specific class
+     * within this namespace to handle their permissions, or, if there's nothing specific about permissions
+     * for this entity we use a generic class.
+     * For example, users have a specific class because we have to know which users have permissions over others,
+     * same thing for groups. For blog posts however, permissions are more straightforward, there are no specifics.
+     */
     public static function assignToAll()
     {
         foreach (self::$permissionBoundEntities as $entity) {

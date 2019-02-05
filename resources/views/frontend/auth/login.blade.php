@@ -33,6 +33,7 @@
                                                         class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
                                                         name="email"
                                                         value="{{ old('email') }}"
+                                                        autocomplete="username"
                                                         required
                                                         autofocus
                                                 >
@@ -55,6 +56,7 @@
                                                         type="password"
                                                         class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"
                                                         name="password"
+                                                        autocomplete="current-password"
                                                         required
                                                 >
 

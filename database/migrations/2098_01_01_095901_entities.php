@@ -179,12 +179,18 @@ class Entities extends Migration
     public function createViews()
     {
         \DB::unprepared('
-        create view entity_count as
-          SELECT "users" as tbl,count(user_id) as cnt
-          from users
-                union
-          SELECT "groups" as tbl, count(group_id) as cnt
-          from `groups`
+            CREATE VIEW entity_count AS
+            select "users" as tbl,count(user_id) as cnt
+            from users
+            UNION
+            select "groups" as tbl, count(group_id) as cnt
+            from `groups`
+            UNION
+            select "blog_posts" as tbl, count(blog_post_id) as cnt
+            from `blog_posts`
+            UNION
+            select "medias" as tbl, count(media_type_id) as cnt
+            from `media_types`
   ');
         
     }

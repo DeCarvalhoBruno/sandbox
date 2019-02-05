@@ -138,6 +138,9 @@
         } catch (e) {}
       }
     },
+    metaInfo () {
+      return {title: this.$t('title.group_add')}
+    },
     beforeRouteEnter (to, from, next) {
       axios.get(`/ajax/admin/groups/create`).then(({data}) => {
         next(vm => vm.getInfo(data))

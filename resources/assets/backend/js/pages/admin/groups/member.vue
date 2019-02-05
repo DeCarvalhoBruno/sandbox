@@ -18,7 +18,7 @@
                     {{$t('pages.members.edit_preview')}}
                 </div>
                 <div class="card-body">
-                    <div class="row" v-if="removedUsers.length>0||addedUsers.length>0">
+                    <div class="row ml-1" v-if="removedUsers.length>0||addedUsers.length>0">
                         <div class="col-md">
                             <div class="row">
                                 <p>{{$t('pages.members.user_add_tag')}}</p>
@@ -39,10 +39,14 @@
                             </div>
                             <ul v-if="removedUsers.length>0" class="list-group col-md-6">
                                 <li v-for="(removedUser,idx) in removedUsers" :key="idx"
-                                    class="list-group-item list-group-item-action list-group-item-danger">
-                                    {{removedUser.text}}
-                                    <i v-if="userCount<=userCountThreshold" href="#" class="button-list-close"
-                                       @click="returnToUsersList(removedUser,idx)"></i>
+                                    class="list-group-item list-group-item-action list-group-item-danger member-tag-wrapper">
+                                    <div>
+                                        <div class="member-tag-text">{{removedUser.text}}</div>
+                                        <div class="member-tag-btn">
+                                            <i v-if="userCount<=userCountThreshold" href="#" class="button-list-close"
+                                               @click="returnToUsersList(removedUser,idx)"></i>
+                                        </div>
+                                    </div>
                                 </li>
                             </ul>
                             <p v-else>{{$t('pages.members.user_no_remove')}}</p>
@@ -55,7 +59,7 @@
                 <div class="card-header">
                     {{$t('pages.members.add_members')}}
                 </div>
-                <div class="card-body">
+                <div class="card-body mb-2">
                     <input-tag-search :typeahead="true"
                                       :placeholder="$t('pages.members.member_search')"
                                       :searchUrl="'/ajax/admin/users/search'"
@@ -66,7 +70,7 @@
                 <div class="card-header">
                     {{$t('pages.members.remove_members')}}
                 </div>
-                <div class="card-body">
+                <div class="card-body mb-2">
                     <div v-if="userCount>userCountThreshold">
                         <input-tag-search :typeahead="true"
                                           :placeholder="$t('pages.members.member_search')"
@@ -77,11 +81,17 @@
                         <div class="container row">
                             <p>{{$t('pages.members.current_members')}}</p>
                         </div>
-                        <div id="group_members_list" class="container row">
-                            <div v-for="(member,idx) in members" :key="idx" class="card col-md-3">
-                                <p>{{member.text}}
-                                    <i href="#" class="button-list-close" @click="addToRemoveUsersList(member,idx)"></i>
-                                </p>
+                        <div id="group-members-list" class="container row">
+                            <div v-for="(member,idx) in members" :key="idx" class="col-md-3">
+                                <div class="list-group-item list-group-item-action list-group-item-primary member-tag-wrapper">
+                                    <div>
+                                        <div class="member-tag-text">{{member.text}}</div>
+                                        <div class="member-tag-btn"><i
+                                                href="#" class="button-list-close"
+                                                @click="addToRemoveUsersList(member,idx)"></i>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -95,7 +105,7 @@
 <script>
   import InputTagSearch from '~/components/InputTagSearch'
   import axios from 'axios'
-  import { Form, HasError, AlertForm } from '~/components/form'
+  import { Form, HasError } from '~/components/form'
 
   export default {
     name: 'member',
@@ -143,15 +153,17 @@
         this.form.fields.removed = this.removedUsers
       },
       update (e) {
-        axios.patch(`/ajax/admin/members/${this.$route.params.group}`, this.form).then(() => {
+        this.form.patch(`/ajax/admin/members/${this.$route.params.group}`).then(() => {
           this.$store.dispatch(
             'session/setFlashMessage',
             {msg: {type: 'success', text: this.$t('message.group_update_ok')}}
           )
           this.$router.push({name: 'admin.groups.index'})
         })
-
       }
+    },
+    metaInfo () {
+      return {title: this.$t('title.members')}
     },
     beforeRouteEnter (to, from, next) {
       axios.get(`/ajax/admin/members/${to.params.group}`).then(({data}) => {

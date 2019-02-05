@@ -178,6 +178,10 @@ class User extends Controller
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * @param \App\Contracts\Models\User $userProvider|\App\Support\Providers\User $userProvider
+     * @return array
+     */
     public function session(UserProvider $userProvider)
     {
         $f = app()->make(RawQueries::class);

@@ -22,7 +22,7 @@ class BasicTest extends DuskTestCase
     public function test_see_login()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/admin/login')
+            $browser->visit(route_i18n('admin.login'))
                 ->assertPresent('input[type="email"]')
                 ->assertPresent('input[type="password"]');
 
@@ -33,7 +33,7 @@ class BasicTest extends DuskTestCase
     {
         $u = $this->createManualUser();
         $this->browse(function ($browser) use ($u) {
-            $browser->visit('/admin/login')
+            $browser->visit(route_i18n('admin.login'))
                 ->type('email', $u->email)
                 ->type('password', 'secret')
                 ->press('Log In')

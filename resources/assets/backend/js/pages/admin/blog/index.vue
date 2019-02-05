@@ -158,7 +158,10 @@
       },
       filterBlogTitle () {
         this.applyFilter('title')
-      }
+      },
+    },
+    metaInfo () {
+      return {title: this.$t('title.blog_index')}
     }
   }
 </script>

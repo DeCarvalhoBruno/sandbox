@@ -7,7 +7,7 @@
                 <div id="user_register_container" class="card">
                     <div class="card-header">Register</div>
                     <div class="card-body">
-                        <form role="form" method="POST" action="{{ route_i18n('register.post') }}">
+                        <form role="form" method="POST" action="{{ route_i18n('register.do') }}">
                             {!! csrf_field() !!}
 
                             <div class="form-group row">

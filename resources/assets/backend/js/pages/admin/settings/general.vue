@@ -33,7 +33,7 @@
       locales: 'prefs/locales'
     }),
     metaInfo () {
-      return {title: this.$t('general.settings')}
+      return {title: this.$t('title.settings')}
     },
     data: function () {
       return {
@@ -55,7 +55,6 @@
           this.$router.go(1)
           this.$router.go()
         }
-
       }
     }
   }

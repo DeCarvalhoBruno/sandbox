@@ -197,7 +197,7 @@
         this.nav = data.nav
         let intended = this.$store.getters['session/intendedUrl']
         if (intended === null) {
-          this.intended = this.$router.resolve({name: 'admin.users.index'}).resolved
+          this.intended = deepCopy(this.$router.resolve({name: 'admin.users.index'}).resolved)
         } else {
           this.intended = deepCopy(this.$store.getters['session/intendedUrl'])
         }
@@ -216,6 +216,9 @@
       axios.get(`/ajax/admin/users/${to.params.user}`).then(({data}) => {
         next(vm => vm.getInfo(data))
       })
+    },
+    metaInfo () {
+      return {title: this.$t('title.user_edit')}
     }
   }
 </script>

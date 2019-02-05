@@ -2,6 +2,20 @@
 return [
     'title' => [
         'login' => 'Log In',
+        'blog_index' => 'Listing blog posts',
+        'blog_add' => 'Managing a blog entry',
+        'blog_category' => 'Managing blog categories',
+        'group_add' => 'Adding a group',
+        'group_edit' => 'Editing a group',
+        'group_index' => 'Listing groups',
+        'members' => 'Managing group members',
+        'media_edit' => 'Editing a media',
+        'settings' => 'Settings - General',
+        'settings_password' => 'Settings - Change my password',
+        'settings_profile' => 'Settings - Modify my profile',
+        'user_edit' => 'Editing a user',
+        'user_index' => 'Listing users',
+        'dashboard' => 'Dashboard'
     ],
     'breadcrumb' => [
         'admin-dashboard' => 'Home',
@@ -28,7 +42,8 @@ return [
         'blog' => 'Blog',
         'list' => 'List',
         'add' => 'Add',
-        'category' => 'Categories'
+        'category' => 'Categories',
+        'media' => 'Media'
     ],
     'general' => [
         'ok' => 'Ok',
@@ -90,6 +105,7 @@ return [
         'media_alt' => 'Alt text',
         'media_description' => 'Description',
         'media_caption' => 'Caption',
+        'medias' => 'Media'
     ],
     'db_raw' => [
         'full_name' => 'full_name',

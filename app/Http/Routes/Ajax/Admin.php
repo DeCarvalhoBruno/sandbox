@@ -48,7 +48,7 @@ class Admin
             $r->delete('groups/{group}', 'Group@destroy')
                 ->middleware('can:delete,App\Models\Group');
 
-            $r->get('members/{group}/search/{search}', 'GroupMember@search')
+            $r->get('members/{group}/search/{search}/{limit}', 'GroupMember@search')
                 ->middleware('can:view,App\Models\Group');
             $r->get('members/{group}', 'GroupMember@index')
                 ->middleware('can:view,App\Models\Group');

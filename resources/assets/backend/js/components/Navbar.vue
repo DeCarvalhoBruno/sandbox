@@ -33,15 +33,11 @@
                         </div>
                     </div>
                     <b-dropdown right :text="user.username" variant="dark">
-                        <b-dropdown-item router-tag="a" :to="{ name: 'admin.settings.profile' }">
-                            <fa icon="cog" fixed-width></fa>
-                            {{ $t('general.settings') }}
-                        </b-dropdown-item>
+                        <b-dropdown-item router-tag="a" :to="{ name: 'admin.settings.profile' }"
+                        ><fa icon="cog" fixed-width></fa>{{ $t('general.settings') }}</b-dropdown-item>
                         <b-dropdown-divider/>
-                        <b-dropdown-item-button @click="logout">
-                            <fa icon="sign-out-alt" fixed-width/>
-                            {{ $t('general.logout') }}
-                        </b-dropdown-item-button>
+                        <b-dropdown-item-button
+                                @click="logout"><fa icon="sign-out-alt" fixed-width/>{{ $t('general.logout') }}</b-dropdown-item-button>
                     </b-dropdown>
                 </ul>
             </div>

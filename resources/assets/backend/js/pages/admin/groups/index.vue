@@ -1,7 +1,6 @@
 <template>
     <div>
         <v-table :entity="entity" :data="computedTable"
-                 :is-multi-select="true"
                  select-column-name="group_name">
             <td slot="body-action" slot-scope="props">
                 <div class="inline">
@@ -41,6 +40,7 @@
   import Table from '~/components/table/table'
   import axios from 'axios'
   import TableMixin from '~/mixins/tables'
+
   Vue.use(Table)
 
   export default {
@@ -54,8 +54,8 @@
       return {
         entity: 'groups',
         data: {
-          total: 0,
-        },
+          total: 0
+        }
       }
     },
     mixins: [
@@ -76,5 +76,8 @@
         })
       }
     },
+    metaInfo () {
+      return {title: this.$t('title.group_index')}
+    }
   }
 </script>

@@ -138,6 +138,9 @@
         } catch (e) {}
       }
     },
+    metaInfo () {
+      return {title: this.$t('title.group_edit')}
+    },
     beforeRouteEnter (to, from, next) {
       axios.get(`/ajax/admin/groups/${to.params.group}`).then(({data}) => {
         next(vm => vm.getInfo(data))

@@ -111,8 +111,8 @@ class Group extends Model implements GroupInterface
     public function searchMembers($groupName, $search, $limit = 10)
     {
         return $this->createModel()->newQuery()->select(['full_name as text', 'username as id'])
-            ->groupMember()->user()->where('group_name', '=', $groupName)
-            ->where('full_name', 'like', sprintf('%%%s%%', $search))
+            ->groupMember()->user()->where('group_name', '=', strip_tags($groupName))
+            ->where('full_name', 'like', sprintf('%%%s%%', strip_tags($search)))
             ->limit($limit)->get();
     }
 

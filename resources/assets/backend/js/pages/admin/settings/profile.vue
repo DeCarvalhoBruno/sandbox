@@ -82,9 +82,6 @@
       AlertForm,
       AvatarUploader
     },
-    metaInfo () {
-      return {title: this.$t('general.settings')}
-    },
     data () {
       return {
         form: new Form({
@@ -129,5 +126,8 @@
         next(vm => vm.getInfo(data))
       })
     },
+    metaInfo () {
+      return {title: this.$t('title.settings_profile')}
+    }
   }
 </script>

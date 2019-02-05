@@ -1,5 +1,6 @@
 <?php
 return [
+    'admin_login'=>'login',
     'login' => 'login',
     'activate' => 'register/activate/{token}',
     'register' => 'register',
