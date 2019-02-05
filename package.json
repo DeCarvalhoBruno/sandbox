@@ -29,7 +29,7 @@
         "socket.io-client": "^2.2.0",
         "sweetalert2": "^8.0.1",
         "trumbowyg": "^2.13.0",
-        "vue": "^2.5.22",
+        "vue": "^2.6.2",
         "vue-clipboard2": "^0.2.1",
         "vue-i18n": "^8.7.0",
         "vue-meta": "^1.5.8",
@@ -62,8 +62,7 @@
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.16.1",
         "sass-loader": "^7.1.0",
-        "vue-template-compiler": "^2.5.22",
-        "vue2-admin-lte": "^0.4.3",
+        "vue-template-compiler": "^2.6.2",
         "webpack-bundle-analyzer": "^2.9.2",
         "webpack-uglify-js-plugin": "^1.1.9"
     }

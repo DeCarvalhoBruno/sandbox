@@ -81,7 +81,6 @@ class Blog extends Migration
             $table->unsignedInteger('blog_post_label_type_id');
             $table->string('blog_post_category_name', 75)->nullable();
             $table->string('blog_post_category_slug', 75)->nullable();
-//            $table->string('blog_post_category_codename', 32)->nullable();
 
             $table->timestamps();
 

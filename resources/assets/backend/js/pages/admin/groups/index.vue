@@ -2,35 +2,37 @@
     <div>
         <v-table :entity="entity" :data="computedTable"
                  select-column-name="group_name">
-            <td slot="body-action" slot-scope="props">
-                <div class="inline">
-                    <template v-if="props.row.group_name">
-                        <router-link :to="{
-                        name: 'admin.groups.edit',
-                        params: { group: props.row.group_name }
-                        }">
-                            <button class="btn btn-sm btn-info">
-                                <fa icon="pencil-alt">
-                                </fa>
-                            </button>
-                        </router-link>
-                    </template>
-                    <button class="btn btn-sm btn-danger"
-                            @click="deleteRow(props.row)">
-                        <fa icon="trash-alt">
-                        </fa>
-                    </button>
-                    <template v-if="props.row.group_name">
-                        <router-link
-                                :to="{ name: 'admin.groups.members', params: { group: props.row.group_name }}">
-                            <button class="btn btn-sm btn-success">
-                                <fa icon="users">
-                                </fa>
-                            </button>
-                        </router-link>
-                    </template>
-                </div>
-            </td>
+            <template #body-action="props">
+                <td>
+                    <div class="inline">
+                        <template v-if="props.row.group_name">
+                            <router-link :to="{
+                                        name: 'admin.groups.edit',
+                                        params: { group: props.row.group_name }
+                                        }">
+                                <button class="btn btn-sm btn-info">
+                                    <fa icon="pencil-alt">
+                                    </fa>
+                                </button>
+                            </router-link>
+                        </template>
+                        <button class="btn btn-sm btn-danger"
+                                @click="deleteRow(props.row)">
+                            <fa icon="trash-alt">
+                            </fa>
+                        </button>
+                        <template v-if="props.row.group_name">
+                            <router-link
+                                    :to="{ name: 'admin.groups.members', params: { group: props.row.group_name }}">
+                                <button class="btn btn-sm btn-success">
+                                    <fa icon="users">
+                                    </fa>
+                                </button>
+                            </router-link>
+                        </template>
+                    </div>
+                </td>
+            </template>
         </v-table>
     </div>
 </template>

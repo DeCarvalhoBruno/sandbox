@@ -208,7 +208,8 @@ return [
     'error' => [
         'page_not_found' => 'Page Not Found',
         'passwords_dont_match' => 'The passwords must be identical.',
-        'form' => 'Errors were found on this form.'
+        'form' => 'Errors were found on this form.',
+        'add_category'=>'Creation of category "{cat}" failed. Please try again.'
     ],
     'message' => [
         'profile_updated' => 'Your profile has been updated!',

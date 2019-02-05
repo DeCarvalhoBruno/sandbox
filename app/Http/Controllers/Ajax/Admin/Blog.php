@@ -118,16 +118,20 @@ class Blog extends Controller
      */
     public function create(CreateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo)
     {
-        $post = $blogRepo->createOne(
-            $request->all(),
-            $userRepo->buildOneByUsername(
-                $request->getUsername(),
-                [$userRepo->getQualifiedKeyName()]
-            )
-        );
+        try {
+            $post = $blogRepo->createOne(
+                $request->all(),
+                $userRepo->buildOneByUsername(
+                    $request->getUsername(),
+                    [$userRepo->getQualifiedKeyName()]
+                )
+            );
 
-        $blogRepo->category()->attachToPost($request->getCategories(), $post);
-        $blogRepo->tag()->attachToPost($request->getTags(), $post);
+            $blogRepo->category()->attachToPost($request->getCategories(), $post);
+            $blogRepo->tag()->attachToPost($request->getTags(), $post);
+        } catch (\Exception $e) {
+            return response(null, Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
         return (
         [
@@ -188,15 +192,15 @@ class Blog extends Controller
                     Entity::BLOG_POSTS,
                     ['media_uuid']
                 )->pluck('media_uuid')->all();
-            \DB::transaction(function () use ($slug, $blogRepo, $mediaRepo, $mediaUuids) {
+            $deleteResult = \DB::transaction(function () use ($slug, $blogRepo, $mediaRepo, $mediaUuids) {
                 $mediaRepo->image()->delete($mediaUuids, Entity::BLOG_POSTS);
-                $blogRepo->deleteBySlug($slug);
+                return $blogRepo->deleteBySlug($slug);
             });
         } catch (\Exception $e) {
             return response(trans('error.http.500.general_error'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return response($deleteResult, Response::HTTP_OK);
     }
 
     /**

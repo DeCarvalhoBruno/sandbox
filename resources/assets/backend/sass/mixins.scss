@@ -144,6 +144,10 @@
     > li {
       > a {
         color: $sidebar-dark-submenu-color;
+
+        svg {
+          margin-right: 0.4rem;
+        }
       }
       &.active > a, > a:hover, &.current-view > a, > a:hover  {
         color: $sidebar-dark-submenu-hover-color;

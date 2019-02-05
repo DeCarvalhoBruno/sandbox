@@ -5,7 +5,6 @@
                 <table-filter :filterButtons="filterButtons" :entity="entity"
                               @filter-removed="removeFilter"
                               @filter-reset="resetFilters">
-                    <div slot="action-buttons"></div>
                 </table-filter>
                 <div class="row pb-1">
                     <div class="col-md-4">
@@ -85,23 +84,25 @@
                      :entity="entity" :data="computedTable"
                      :is-multi-select="true"
                      select-column-name="full_name">
-                <td slot="body-action" slot-scope="props">
-                    <div class="inline">
-                        <template v-if="props.row.username">
-                            <router-link :to="{ name: 'admin.users.edit', params: { user: props.row.username } }">
-                                <button type="button" class="btn btn-sm btn-info"
-                                        :title="$t('tables.edit_item',{name:props.row[$t('db_raw_inv.full_name')]})">
-                                    <fa icon="pencil-alt"></fa>
-                                </button>
-                            </router-link>
-                        </template>
-                        <button type="button" class="btn btn-sm btn-danger"
-                                :title="$t('tables.delete_item',{name:props.row[$t('db_raw_inv.full_name')]})"
-                                @click="deleteRow(props.row,'user','username','full_name','/ajax/admin/users')">
-                            <fa icon="trash-alt"></fa>
-                        </button>
-                    </div>
-                </td>
+                <template #body-action="props">
+                    <td>
+                        <div class="inline">
+                            <template v-if="props.row.username">
+                                <router-link :to="{ name: 'admin.users.edit', params: { user: props.row.username } }">
+                                    <button type="button" class="btn btn-sm btn-info"
+                                            :title="$t('tables.edit_item',{name:props.row[$t('db_raw_inv.full_name')]})">
+                                        <fa icon="pencil-alt"></fa>
+                                    </button>
+                                </router-link>
+                            </template>
+                            <button type="button" class="btn btn-sm btn-danger"
+                                    :title="$t('tables.delete_item',{name:props.row[$t('db_raw_inv.full_name')]})"
+                                    @click="deleteRow(props.row,'user','username','full_name','/ajax/admin/users')">
+                                <fa icon="trash-alt"></fa>
+                            </button>
+                        </div>
+                    </td>
+                </template>
             </v-table>
         </div>
     </div>

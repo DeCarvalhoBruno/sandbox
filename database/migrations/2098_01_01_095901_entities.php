@@ -37,8 +37,9 @@ class Entities extends Migration
         $this->createEntities();
         $this->createTriggers();
         $this->createGroups();
-        $this->createViews();
-
+        if (App::environment() !== 'testing') {
+            $this->createViews();
+        }
     }
 
     private static function createGroups()

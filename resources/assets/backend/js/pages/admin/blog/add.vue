@@ -177,7 +177,7 @@
                                 <tree-list :data="this.blog_post_categories"
                                            :edit-mode="false"
                                            :add-root-button-label="$t('pages.blog.add_root_button')"
-                                           @tree-category-selected="categorySelected"/>
+                                           @tree-selected="categorySelected"/>
                             </div>
                         </div>
                     </div>

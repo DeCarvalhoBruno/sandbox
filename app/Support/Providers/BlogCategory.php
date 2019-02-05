@@ -19,7 +19,7 @@ class BlogCategory extends Model implements BlogCategoryInterface
                 'blog_post_category_name' => $label,
                 'blog_post_label_type_id' => $newLabelType->getKey()
             ]);
-        if (!is_null($parentSlug)) {
+        if (!is_null($parentSlug) && !empty($parentSlug)) {
             $parentCategory = $this->getCat($parentSlug);
             if (!is_null($parentCategory)) {
                 $newCat->appendToNode($parentCategory);

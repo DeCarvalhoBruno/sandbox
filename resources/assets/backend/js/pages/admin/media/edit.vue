@@ -110,14 +110,16 @@
                 <b-tab :title="$t('general.crop')" @click="cropperActive=true">
                     <cropper :cropper-active="cropperActive" :container-width="containerWidth"
                              :src="getImageUrl(form.media_uuid, null, form.media_extension)">
-                        <div slot="cropper-actions" class="col align-self-center">
-                            <button class="btn btn-primary" @click="crop()" type="button"
-                            >{{$t('media.cropper_crop_upload')}}
-                            </button>
-                            <button class="btn btn-primary btn-light" @click="cancel()" type="button"
-                            >{{$t('general.cancel')}}
-                            </button>
-                        </div>
+                        <template #cropper-actions>
+                            <div class="col align-self-center">
+                                <button class="btn btn-primary" @click="crop()" type="button"
+                                >{{$t('media.cropper_crop_upload')}}
+                                </button>
+                                <button class="btn btn-primary btn-light" @click="cancel()" type="button"
+                                >{{$t('general.cancel')}}
+                                </button>
+                            </div>
+                        </template>
                     </cropper>
                 </b-tab>
             </b-tabs>

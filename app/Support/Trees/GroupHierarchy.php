@@ -39,15 +39,15 @@ class GroupHierarchy
 class Group
 {
     /**
-     * @var self[]
+     * @var Group[]
      */
     private $children = [];
     /**
-     * @var self[]
+     * @var Group[]
      */
     private $siblings = [];
     /**
-     * @var self
+     * @var Group
      */
     private $parent = null;
     /**
@@ -71,6 +71,10 @@ class Group
         $this->index = $index;
     }
 
+    /**
+     * @param $index
+     * @return \App\Support\Trees\Group|bool
+     */
     public function findAtIndex($index)
     {
         if (isset($this->siblings[$index])) {
@@ -87,7 +91,7 @@ class Group
     /**
      * @param \App\Support\Trees\Group $parent
      */
-    public function addParent(self $parent)
+    public function addParent(Group $parent)
     {
         $this->parent = $parent;
     }
@@ -95,7 +99,7 @@ class Group
     /**
      * @param \App\Support\Trees\Group $sibling
      */
-    public function addSibling(self $sibling)
+    public function addSibling(Group $sibling)
     {
         $sibling->addParent($this->parent);
         $this->siblings[$sibling->getIndex()] = $sibling;
@@ -105,7 +109,7 @@ class Group
      * @param \App\Support\Trees\Group $child
      * @return \App\Support\Trees\Group
      */
-    public function addChild(self $child)
+    public function addChild(Group $child):Group
     {
         $this->children[$child->getIndex()] = $child;
         $child->addParent($this);

@@ -60,38 +60,40 @@
             <v-table ref="table"
                      :entity="entity" :data="computedTable"
                      :is-multi-select="true" select-column-name="blog_post_title">
-                <th slot="header-action">
-                    {{$t('general.actions')}}
-                </th>
-                <td slot="body-action" slot-scope="props">
-                    <div class="inline">
-                        <template v-if="props.row.blog_post_slug">
-                            <router-link :to="{
-                            name: 'admin.blog_posts.edit',
-                            params: { slug: props.row.blog_post_slug }}">
-                                <button
-                                        class="btn btn-sm btn-info"
-                                        :title="$t(
-                                        'tables.edit_item',{
-                                        name:props.row[$t('db_raw_inv.blog_post_title')]
-                                        })">
-                                    <fa icon="pencil-alt"></fa>
+                <template #header-action>
+                    <th>{{$t('general.actions')}}</th>
+                </template>
+                <template #body-action="props">
+                    <td>
+                        <div class="inline">
+                            <template v-if="props.row.blog_post_slug">
+                                <router-link :to="{
+                                                name: 'admin.blog_posts.edit',
+                                                params: { slug: props.row.blog_post_slug }}">
+                                    <button
+                                            class="btn btn-sm btn-info"
+                                            :title="$t(
+                                                            'tables.edit_item',{
+                                                            name:props.row[$t('db_raw_inv.blog_post_title')]
+                                                            })">
+                                        <fa icon="pencil-alt"></fa>
+                                    </button>
+                                </router-link>
+                                <button type="button" class="btn btn-sm btn-danger"
+                                        :title="$t('tables.delete_item',{name:props.row[$t('db_raw_inv.blog_post_title')]})"
+                                        @click="deleteRow(
+                                                            props.row,
+                                                            'blog_post',
+                                                            'blog_post_slug',
+                                                            'blog_post_title',
+                                                            '/ajax/admin/blog/post'
+                                                        )">
+                                    <fa icon="trash-alt"></fa>
                                 </button>
-                            </router-link>
-                            <button type="button" class="btn btn-sm btn-danger"
-                                    :title="$t('tables.delete_item',{name:props.row[$t('db_raw_inv.blog_post_title')]})"
-                                    @click="deleteRow(
-                                        props.row,
-                                        'blog_post',
-                                        'blog_post_slug',
-                                        'blog_post_title',
-                                        '/ajax/admin/blog/post'
-                                    )">
-                                <fa icon="trash-alt"></fa>
-                            </button>
-                        </template>
-                    </div>
-                </td>
+                            </template>
+                        </div>
+                    </td>
+                </template>
             </v-table>
         </div>
     </div>

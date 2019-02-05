@@ -32,8 +32,7 @@
                 <a v-if="item.router && item.router.name">
                     <template v-if="item.icon!==''">
                         <fa :icon="item.icon"></fa>
-                    </template>{{ $t(item.name) }}
-                </a>
+                    </template>{{ $t(item.name) }}</a>
                 <a v-else>
                     <template v-if="item.icon!==''">
                         <fa :icon="item.icon"></fa>

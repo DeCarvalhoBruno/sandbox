@@ -57,7 +57,7 @@
                             PNG</p>
                         <fa class="fa-4x" icon="cloud-upload-alt"></fa>
                     </div>
-                    <template slot="files" slot-scope="props">
+                    <template #files="props">
                         <div v-for="(file, i) in props.files" :key="file.id"
                              :class="{'mt-5': i === 0}">
                             <div class="table files previews-container">

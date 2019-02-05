@@ -16,13 +16,15 @@
             </button>
         </div>
         <div class="row p-0 mt-3 ml-1 tree-container">
-            <tree-list-item v-for="(node,idx) in treeData"
-                            :key="idx"
-                            :node="node"
-                            @event="handleEvent"
-                            @category-selected="categorySelected"
-                            :edit-mode="editMode">
-            </tree-list-item>
+            <transition-group name="fade" tag="ul">
+                <tree-list-item v-for="(node,idx) in treeData"
+                                :key="'v'+idx"
+                                :node="node"
+                                @event="handleEvent"
+                                @category-selected="categorySelected"
+                                :edit-mode="editMode">
+                </tree-list-item>
+            </transition-group>
         </div>
     </div>
 </template>
@@ -40,7 +42,10 @@
     props: {
       data: {required: true},
       editMode: {default: true},
-      addRootButtonLabel: {required: true}
+      addRootButtonLabel: {required: true},
+      addCallback: {require: true, type: Function},
+      editCallback: {require: true, type: Function},
+      deleteCallback: {require: true, type: Function}
     },
     data () {
       return {
@@ -64,7 +69,7 @@
     },
     methods: {
       categorySelected (val, mode) {
-        this.$emit('tree-category-selected', val, mode)
+        this.$emit('tree-selected', val, mode)
       },
       async toggleExpand () {
         this.treeExpanded = !this.treeExpanded
@@ -151,26 +156,20 @@
               node.mode = 2
               break
             case 'update':
+              let response
               if (node.mode === 6) {
-                await axios.post(
-                  `/ajax/admin/blog/categories/create`,
-                  {label: payload.newValue, parent: node.parent}
-                ).then(({data}) => {
-                  if (data.hasOwnProperty('id')) {
-                    node.id = data.id
-                    delete node.parent
-                  } else {
-                    vm.$emit('has-errored',
-                      `Creation of category "${payload.newValue}" failed. Please try again.`
-                    )
-                    failed = true
-                  }
-                })
+                response = await this.addCallback(node, payload.newValue)
+                //In case of failure, we don't bother keeping the node
+                if (response === false) {
+                  return
+                } else {
+                  node = response
+                }
               } else {
-                await axios.post(
-                  `/ajax/admin/blog/categories/update/${node.id}`,
-                  {label: payload.newValue}
-                )
+                response = await this.editCallback(node, payload.newValue)
+                if (response === false) {
+                  node.mode = 1
+                }
               }
               node.label = payload.newValue
               node.mode = 1
@@ -180,15 +179,13 @@
               return
             case 'delete':
               if (node.id.length) {
-                axios.post(
-                  `/ajax/admin/blog/categories/delete/${node.id}`
-                )
+                await this.deleteCallback(node.id)
               }
               //Not returning the node will effectively remove it from the tree.
               return
             case 'cancel':
             case 'reset':
-                node.mode = 1
+              node.mode = 1
               break
           }
         } else if (node.children.length) {
@@ -201,7 +198,6 @@
           }
           node.children = td
         }
-        if (failed) return
         return node
       }
     }

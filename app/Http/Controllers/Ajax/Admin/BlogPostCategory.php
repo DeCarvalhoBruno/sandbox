@@ -20,7 +20,7 @@ class BlogPostCategory extends Controller
         $parent = $this->request->get('parent');
         $label = $this->request->get('label');
         if (is_null($label)) {
-            return response('', Response::HTTP_NO_CONTENT);
+            return response(null, Response::HTTP_NO_CONTENT);
         }
         $newCat = $catRepo->createOne($label, $parent);
         if (is_null($newCat)) {
@@ -28,7 +28,6 @@ class BlogPostCategory extends Controller
         }
 
         return ['id' => $newCat->getAttribute('blog_post_category_slug')];
-
     }
 
     /**

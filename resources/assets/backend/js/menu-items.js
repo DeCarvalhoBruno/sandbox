@@ -19,7 +19,7 @@ export default [
     items: [
       {
         type: 'item',
-        icon: 'star',
+        icon: 'list-ol',
         name: 'sidebar.list',
         router: {
           name: 'admin.users.index'
@@ -34,7 +34,7 @@ export default [
     items: [
       {
         type: 'item',
-        icon: '',
+        icon: 'list-ol',
         name: 'sidebar.list',
         router: {
           name: 'admin.groups.index'
@@ -42,7 +42,7 @@ export default [
       },
       {
         type: 'item',
-        icon: '',
+        icon: 'plus-square',
         name: 'sidebar.add',
         router: {
           name: 'admin.groups.add'
@@ -57,7 +57,7 @@ export default [
     items: [
       {
         type: 'item',
-        icon: 'star',
+        icon: 'list-ol',
         name: 'sidebar.list',
         router: {
           name: 'admin.blog_posts.index'
@@ -65,7 +65,7 @@ export default [
       },
       {
         type: 'item',
-        icon: 'star',
+        icon: 'plus-square',
         name: 'sidebar.add',
         router: {
           name: 'admin.blog_posts.add'
@@ -73,7 +73,7 @@ export default [
       },
       {
         type: 'item',
-        icon: 'star',
+        icon: 'sitemap',
         name: 'sidebar.category',
         router: {
           name: 'admin.blog_posts.category'
