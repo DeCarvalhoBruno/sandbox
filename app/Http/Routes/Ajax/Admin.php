@@ -77,17 +77,12 @@ class Admin
                 ->middleware('can:edit,App\Models\Blog\BlogPost');
             $r->delete('blog/post/edit/{slug}/image/{uuid}', 'Blog@deleteImage')
                 ->middleware('can:edit,App\Models\Blog\BlogPost');
-            $r->patch('blog/post/edit/{slug}/image/{uuid}', 'Blog@setFeaturedImage')
-                ->middleware('can:edit,App\Models\Blog\BlogPost');
-
-            $r->patch('settings/profile', 'Settings\Profile@update');
-            $r->patch('settings/password', 'Settings\Password@update');
 
             $r->patch('settings/password', 'Settings\Password@update');
             $r->patch('settings/profile', 'Settings\Profile@update');
+            $r->get('settings/avatar', 'Settings\Profile@avatar');
             $r->patch('settings/avatar', 'Settings\Profile@setAvatar');
             $r->delete('settings/avatar/{uuid}', 'Settings\Profile@deleteAvatar');
-            $r->get('settings/avatar', 'Settings\Profile@avatar');
 
             $r->get('media/{media}', 'Media@edit');
             $r->patch('media/{media}', 'Media@update');

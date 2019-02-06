@@ -319,7 +319,7 @@
                                 <div
                                         style="font-family:Helvetica, Arial, sans-serif;font-size:12px;font-style:italic;line-height:10px;text-align:center;color:#707070;"
                                 >
-                                    {!! trans('email.origin', ['name'=>$user_name, 'email'=>$email]) !!}
+                                    {!! trans('email.origin', ['name'=>$user_name, 'email'=>$email,'app_name'=>config('app.name')]) !!}
 
                                 </div>
 

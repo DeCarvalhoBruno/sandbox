@@ -252,7 +252,6 @@ class Blog extends Controller
                 MediaImgFormat::FEATURED
             );
         }
-
         return $mediaRepo->image()->getImagesFromSlug($slug, Entity::BLOG_POSTS)->toArray();
     }
 
@@ -261,6 +260,7 @@ class Blog extends Controller
      * @param string $uuid
      * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
      * @return mixed
+     * @throws \Exception
      */
     public function deleteImage($slug, $uuid, MediaProvider $mediaRepo)
     {

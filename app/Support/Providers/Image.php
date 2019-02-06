@@ -82,7 +82,9 @@ class Image extends Model implements ImageInterface
     public function saveAvatar(ImageContract $image)
     {
         $targetEntityTypeId = $this->save($image);
-        $this->setAsUsed($image->getUuid());
+        if (env('APP_ENV') !== 'testing') {
+            $this->setAsUsed($image->getUuid());
+        }
         return $targetEntityTypeId;
     }
 
@@ -100,6 +102,9 @@ class Image extends Model implements ImageInterface
     public function save(ImageContract $image)
     {
         $targetEntityTypeId = $this->getTargetEntity($image);
+        if (is_null($targetEntityTypeId)) {
+            throw new \UnexpectedValueException(trans('error.media.entity_not_found'));
+        }
         $this->createImage($image, $targetEntityTypeId, false);
         return $targetEntityTypeId;
     }
@@ -140,7 +145,6 @@ class Image extends Model implements ImageInterface
                 'entity_type_id' => $entityTypeID,
                 'media_category_record_id' => $mediaCategoryRecord->getKey(),
             ]);
-
         });
     }
 
@@ -156,7 +160,7 @@ class Image extends Model implements ImageInterface
 
     public function getImagesFromSlug($slug, $entityId = Entity::BLOG_POSTS, $columns = ['*'])
     {
-        if (empty($columns)) {
+        if ($columns[0] == '*') {
             $columns = [
                 'media_uuid as uuid',
                 'media_in_use as used',

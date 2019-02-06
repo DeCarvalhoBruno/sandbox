@@ -10,10 +10,10 @@ class Welcome extends Email
     {
         $this->view = [
             'title' => trans('email.welcome.title'),
-            'subject' => trans('email.welcome.subject'),
+            'subject' => trans('email.welcome.subject', ['app_name' => config('app.name')]),
             'email' => $this->data->user->getAttribute('email'),
             'user_name' => $this->data->user->getFullname(),
-            'activation_token'=>$this->data->activation_token
+            'activation_token' => $this->data->activation_token
         ];
     }
 

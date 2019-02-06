@@ -8,6 +8,8 @@ class MediaDigital extends Model
 {
     use DoesSqlStuff;
 
+    const MEDIA_DIGITAL_MAX_FILESIZE = 2;
+
     protected $table = 'media_digital';
     protected $primaryKey = 'media_digital_id';
     protected $fillable = ['media_type_id', 'media_filename', 'media_extension', 'media_alt', 'media_caption'];

@@ -313,6 +313,7 @@ return [
         'max_size' => 'Maximum size:',
         'accepted_formats' => 'Accepted file formats: ',
         'file_too_big' => 'File is too big ({{filesize}} MB, maximum allowed: {{maxFilesize}} MB).',
+        'file_too_big_laravel' => 'File is too big (:filesize MB, maximum allowed: :maxFilesize MB).',
         'invalid_type' => 'This file type is not allowed.',
         'response_error' => 'Server responded with code {{statusCode}}.',
         'cancel_upload' => 'Cancel upload',

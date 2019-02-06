@@ -182,11 +182,11 @@
     methods: {
       async save () {
           await this.form.patch(`/ajax/admin/media/${this.form.fields.media_uuid}`)
-          // this.$store.dispatch(
-          //   'session/setFlashMessage',
-          //   {msg: {type: 'success', text: this.$t('message.media_update_ok')}}
-          // )
-          // this.$router.go(-1)
+          this.$store.dispatch(
+            'session/setFlashMessage',
+            {msg: {type: 'success', text: this.$t('message.media_update_ok')}}
+          )
+          this.$router.go(-1)
       },
       getInfo (data) {
         this.form = new Form(data.media, true)

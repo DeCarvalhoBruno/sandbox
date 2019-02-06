@@ -3,11 +3,18 @@
 namespace Tests\Feature;
 
 use App\Models\Blog\BlogPost;
-use App\Models\Blog\BlogPostCategory;
 use App\Models\Blog\BlogPostLabelRecord;
 use App\Models\Blog\BlogPostTag;
+use App\Models\Entity;
+use App\Support\Providers\Avatar;
+use App\Support\Providers\File;
+use App\Support\Providers\Image;
+use App\Support\Providers\Media;
+use App\Support\Providers\Text;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class BlogPostTest extends TestCase
@@ -89,7 +96,7 @@ class BlogPostTest extends TestCase
                 'tags' => ['dededed', 'deefegg'],
                 'categories' => ['default']
             ]);
-        $this->assertEquals(BlogPost::query()->first()->getAttribute('blog_post_title'),$string );
+        $this->assertEquals(BlogPost::query()->first()->getAttribute('blog_post_title'), $string);
         $this->assertEquals(BlogPostTag::query()->get()->count(), 2);
         $this->assertEquals(BlogPostLabelRecord::query()->get()->count(), 3);
         $response->assertStatus(200);
@@ -117,6 +124,152 @@ class BlogPostTest extends TestCase
         $response->assertStatus(200);
         $this->assertEquals("1", $response->getContent());
         $this->assertEquals(BlogPost::query()->get()->count(), 0);
+    }
+
+    public function test_upload_image()
+    {
+        $u = $this->signIn()->createUser();
+        $postTitle = 'This is the title of my post';
+        $this->postJson(
+            "/ajax/admin/blog/post/create",
+            [
+                'blog_post_status' => "BLOG_POST_STATUS_DRAFT",
+                'blog_post_title' => $postTitle,
+                'blog_post_user' => $u->getAttribute('user_name'),
+                'published_at' => "201902051959",
+            ]);
+
+        $imageTitle = 'mean_mug';
+        $imageExtension = 'jpg';
+        $imageFilename = sprintf('%s.%s', $imageTitle, $imageExtension);
+        Storage::fake($imageFilename);
+
+        $file = UploadedFile::fake()->image($imageFilename, 1224, 864)->size(16);
+
+        $response = $this->postJson(
+            "/ajax/admin/media/add",
+            [
+                'type' => "blog_posts",
+                'target' => slugify($postTitle),
+                'media' => 'image',
+                'file' => $file
+            ]
+        );
+        $responseArray = $response->json();
+        $this->assertArrayHasKey('uuid', $responseArray[0]);
+        $imageUuid = $responseArray[0]['uuid'];
+        (new Media(new File(new Image(new Avatar()), new Text())))->image()
+            ->getImagesFromSlug(
+                slugify($postTitle),
+                Entity::BLOG_POSTS,
+                ['media_uuid']
+            )->pluck('media_uuid')->all();
+        $this->assertEquals($imageUuid, $responseArray[0]['uuid']);
+    }
+
+    public function test_upload_image_too_big()
+    {
+        $u = $this->signIn()->createUser();
+        $postTitle = 'This is the title of my post';
+        $this->postJson(
+            "/ajax/admin/blog/post/create",
+            [
+                'blog_post_status' => "BLOG_POST_STATUS_DRAFT",
+                'blog_post_title' => $postTitle,
+                'blog_post_user' => $u->getAttribute('user_name'),
+                'published_at' => "201902051959",
+            ]);
+
+        $imageTitle = 'mean_mug';
+        $imageExtension = 'jpg';
+        $imageFilename = sprintf('%s.%s', $imageTitle, $imageExtension);
+        Storage::fake($imageFilename);
+
+        $file = UploadedFile::fake()->image($imageFilename, 1224, 864)->size(2000);
+
+        $response = $this->postJson(
+            "/ajax/admin/media/add",
+            [
+                'type' => "blog_posts",
+                'target' => slugify($postTitle),
+                'media' => 'image',
+                'file' => $file
+            ]
+        );
+        $response->assertStatus(500);
+    }
+
+    public function test_upload_image_without_file()
+    {
+        $u = $this->signIn()->createUser();
+        $postTitle = 'This is the title of my post';
+        $this->postJson(
+            "/ajax/admin/blog/post/create",
+            [
+                'blog_post_status' => "BLOG_POST_STATUS_DRAFT",
+                'blog_post_title' => $postTitle,
+                'blog_post_user' => $u->getAttribute('user_name'),
+                'published_at' => "201902051959",
+            ]);
+
+        $imageTitle = 'mean_mug';
+        $imageExtension = 'jpg';
+        $imageFilename = sprintf('%s.%s', $imageTitle, $imageExtension);
+        Storage::fake($imageFilename);
+
+        $file = UploadedFile::fake()->image($imageFilename, 1224, 864)->size(16);
+
+        $response = $this->postJson(
+            "/ajax/admin/media/add",
+            [
+                'type' => "blog_posts",
+                'target' => slugify($postTitle),
+                'media' => 'image',
+            ]
+        );
+        $response->assertStatus(500);
+    }
+
+    public function test_delete_image()
+    {
+        $u = $this->signIn()->createUser();
+        $postTitle = 'This is the title of my post';
+        $this->postJson(
+            "/ajax/admin/blog/post/create",
+            [
+                'blog_post_status' => "BLOG_POST_STATUS_DRAFT",
+                'blog_post_title' => $postTitle,
+                'blog_post_user' => $u->getAttribute('user_name'),
+                'published_at' => "201902051959",
+            ]);
+
+        $imageTitle = 'mean_mug';
+        $imageExtension = 'jpg';
+        $imageFilename = sprintf('%s.%s', $imageTitle, $imageExtension);
+        Storage::fake($imageFilename);
+
+        $file = UploadedFile::fake()->image($imageFilename, 1224, 864)->size(16);
+
+        $response = $this->postJson(
+            "/ajax/admin/media/add",
+            [
+                'type' => "blog_posts",
+                'target' => slugify($postTitle),
+                'media' => 'image',
+                'file' => $file
+            ]
+        );
+        $responseArray = $response->json();
+        $imageUuid = $responseArray[0]['uuid'];
+        $response = $this->deleteJson(
+            sprintf(
+                '/ajax/admin/blog/post/edit/%s/image/%s',
+                slugify($postTitle),
+                $imageUuid
+            )
+        );
+        $response->assertStatus(200);
+        $this->assertEquals($response->json(),[]);
     }
 
 }

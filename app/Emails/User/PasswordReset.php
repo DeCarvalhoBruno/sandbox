@@ -10,7 +10,7 @@ class PasswordReset extends Email
     {
         $this->view = [
             'title' => trans('email.password_reset.title'),
-            'subject' => trans('email.password_reset.subject'),
+            'subject' => trans('email.password_reset.subject', ['app_name' => config('app.name')]),
             'email' => $this->data->user->getAttribute('email'),
             'user_name' => $this->data->user->getFullname(),
             'token' => $this->data->token

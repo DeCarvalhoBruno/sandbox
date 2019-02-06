@@ -54,6 +54,7 @@ class Profile extends Controller
      * @param \App\Support\Providers\User $user
      * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function deleteAvatar($uuid, UserProvider $user, MediaProvider $mediaRepo)
     {
