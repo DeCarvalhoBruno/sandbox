@@ -80,10 +80,7 @@ class User extends Model implements UserProvider, UserInterface
      */
     public function updateOne($model, $field, $value, $data)
     {
-        $user = $model->newQuery()->select([
-            'person_id',
-            'entity_type_id'
-        ])->where($field, $value)->entityType()->first();
+        $user = $model->newQuery()->where($field, $value)->entityType()->first();
 
         $this->person->createModel()
             ->where('person_id', $user->person_id)
@@ -96,15 +93,10 @@ class User extends Model implements UserProvider, UserInterface
         }
 
         if (isset($data[$field])) {
-            return $model->newQuery()->select([
-                'entity_type_id',
-                'people.first_name',
-                'people.last_name',
-                'users.username',
-                'users.email'
-            ])->where($field, $data[$field])->entityType()->first();
+            return $model->newQuery()->where($field, $data[$field])
+                ->entityType()->first();
         } else {
-            return $user;
+            return $model->newQuery()->where($field, $value)->entityType()->first();
         }
     }
 
@@ -169,11 +161,6 @@ class User extends Model implements UserProvider, UserInterface
         return $model->newQuery()->entityType()
             ->where($model->getIdentifier($identifier), $identifier)
             ->first();
-    }
-
-    public function sendResetLink($email)
-    {
-        dd($email);
     }
 
     /**

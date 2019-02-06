@@ -104,9 +104,15 @@
       }
     },
     methods: {
+      /**
+       * We can only change steps to get back to the first stage.
+       *
+       * @param index
+       */
       changeStep (index) {
         if (index == 0 && this.currentStep !== index) {
           this.currentStep = index
+          this.$emit('wizard-reset')
         }
       },
       goNext () {

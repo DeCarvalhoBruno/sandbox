@@ -38,6 +38,16 @@ export default {
         cancelButtonColor: '#d33',
         confirmButtonText: confirmationButtonText
       })
+    },
+    swalEdumacationInfo (title, text, confirmationButtonText) {
+      return swal.fire({
+        title: title,
+        text: text,
+        type: 'info',
+        showCancelButton: false,
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: confirmationButtonText
+      })
     }
   }
 }

@@ -9,11 +9,6 @@ class Login extends Controller
 {
     use AuthenticatesUsers;
 
-//    public function __construct()
-//    {
-//        auth()->setDefaultDriver('jwt');
-//    }
-//
     protected function guard()
     {
         return \Auth::guard('jwt');
@@ -67,6 +62,4 @@ class Login extends Controller
         $this->guard()->logout();
         return response(null, Response::HTTP_NO_CONTENT);
     }
-
-
 }

@@ -9,11 +9,15 @@ return [
             'blog_post_not_found' => 'We could not find a blog post by that name.'
         ]
     ],
+    'form' => [
+        'identical_passwords' => 'The password you entered is identical to your previous password! Please enter a different password.',
+        'wrong_password' => 'The password you entered does not match what we have on record.'
+    ],
     'media' => [
         'no_file' => 'No file to process.',
         'type_size' => 'The file could not be processed. Make sure to check accepted file types and maximum sizes.',
         'wrong_type' => 'The target for this media was not recognized.',
-        'entity_not_found'=>'The entity for which the media was uploaded could not be found.',
+        'entity_not_found' => 'The entity for which the media was uploaded could not be found.',
         'entity_type' => 'The ":type" image entity type does not match anything on record.',
         'media_type' => 'The media type ":type" does not match anything on disk.'
     ]

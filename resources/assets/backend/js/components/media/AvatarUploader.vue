@@ -2,7 +2,7 @@
     <div class="form-group row">
         <div class="card w-100" ref="cropperContainer">
             <b-tabs card>
-                <b-tab :title="$t('pages.settings.avatar-tab')" @click="avatarTabClicked" active>
+                <b-tab :title="$t('pages.settings.avatar-tab')" @click="resetComponentFlags" active>
                     <p v-show="avatars.length>1" class="font-italic">{{$t('pages.settings.click_default')}}</p>
                     <div class="thumbnail-group" :class="{'thumbnail-loading':ajaxIsLoading}">
                         <fa v-show="ajaxIsLoading" class="fa-5x sync-icon" icon="sync" spin></fa>
@@ -31,85 +31,84 @@
                 </b-tab>
                 <b-tab :title="$t('pages.settings.avatar-ul-tab')" :disabled="avatars.length>6">
                     <wizard ref="wizard" :steps="steps" has-step-buttons="false"
-                            :current-step-parent="currentStep-1">
+                            :current-step-parent="currentStep-1"
+                            @wizard-reset="resetComponentFlags">
                         <template #s1>
                             <div>
-                                <keep-alive>
-                                    <dropzone class="dropzone"
-                                              tag="section"
-                                              v-bind="dropzoneOptions"
-                                              :adapter-options="{
-                                                                      url: '/ajax/admin/media/add',
-                                                                        params:{
-                                                                            type:'users',
-                                                                            target:user.username,
-                                                                            media:'image_avatar'
-                                                                        }
-                                                                        }"
-                                              ref="dropzone">
-                                        <div class="dz-container" @click="triggerBrowse">
-                                            <h4 class="dropfile-instructions">{{ $t('dropzone.choose_file')}}</h4>
-                                            <p class="dropfile-instructions">{{ $t('dropzone.max_size')}}
-                                                {{dropzoneOptions.maxFilesize}}{{$t('units.MB')}}</p>
-                                            <p class="dropfile-instructions">{{ $t('dropzone.accepted_formats')}} JPG,
-                                                PNG</p>
-                                            <fa class="fa-4x" icon="cloud-upload-alt"></fa>
-                                        </div>
-                                        <template #files="props">
-                                            <div v-for="(file, i) in props.files" :key="file.id"
-                                                 :class="{'mt-5': i === 0}">
-                                                <div class="table files previews-container">
-                                                    <div class="file-row template">
-                                                        <div class="container position-relative">
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="preview"><img v-show="file.dataUrl"
-                                                                                              :src="file.dataUrl"
-                                                                                              :alt="file.name"/></div>
-                                                                    <p class="name">{{file.name}}</p>
+                                <dropzone class="dropzone"
+                                          tag="section"
+                                          v-bind="dropzoneOptions"
+                                          :adapter-options="{
+                                              url: '/ajax/admin/media/add',
+                                                params:{
+                                                    type:'users',
+                                                    target:userObj.username,
+                                                    media:'image_avatar'
+                                                }
+                                            }"
+                                          ref="dropzone">
+                                    <div class="dz-container" @click="triggerBrowse">
+                                        <h4 class="dropfile-instructions">{{ $t('dropzone.choose_file')}}</h4>
+                                        <p class="dropfile-instructions">{{ $t('dropzone.max_size')}}
+                                            {{dropzoneOptions.maxFilesize}}{{$t('units.MB')}}</p>
+                                        <p class="dropfile-instructions">{{ $t('dropzone.accepted_formats')}} JPG,
+                                            PNG</p>
+                                        <fa class="fa-4x" icon="cloud-upload-alt"></fa>
+                                    </div>
+                                    <template #files="props">
+                                        <div v-for="(file, i) in props.files" :key="file.id"
+                                             :class="{'mt-5': i === 0}">
+                                            <div class="table files previews-container">
+                                                <div class="file-row template">
+                                                    <div class="container position-relative">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <div class="preview"><img v-show="file.dataUrl"
+                                                                                          :src="file.dataUrl"
+                                                                                          :alt="file.name"/></div>
+                                                                <p class="name">{{file.name}}</p>
+                                                            </div>
+                                                            <div class="col preview-actions">
+                                                                <div class="row preview-row">
+                                                                    <p class="size"
+                                                                    >{{(file.size/1024/1024).toPrecision(3)}}&nbsp;{{$t('units.MB')}}</p>
                                                                 </div>
-                                                                <div class="col preview-actions">
-                                                                    <div class="row preview-row">
-                                                                        <p class="size"
-                                                                        >{{(file.size/1024/1024).toPrecision(3)}}&nbsp;{{$t('units.MB')}}</p>
+                                                                <div class="row preview-row">
+                                                                    <div id="dropzone_progress" class="progress"
+                                                                         v-show="file.upload.progress<100">
+                                                                        <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                                                             role="progressbar"
+                                                                             :style="`width: ${file.upload.progress}%`"
+                                                                             :aria-valuenow="file.upload.progress"
+                                                                             aria-valuemin="0"
+                                                                             aria-valuemax="100"></div>
                                                                     </div>
-                                                                    <div class="row preview-row">
-                                                                        <div id="dropzone_progress" class="progress"
-                                                                             v-show="file.upload.progress<100">
-                                                                            <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                                                                 role="progressbar"
-                                                                                 :style="`width: ${file.upload.progress}%`"
-                                                                                 :aria-valuenow="file.upload.progress"
-                                                                                 aria-valuemin="0"
-                                                                                 aria-valuemax="100"></div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <transition name="fade">
-                                                                        <div class="row preview-row"
-                                                                             v-show="file.status==='success'">
-                                                                            <button type="button"
-                                                                                    class="btn btn-lg btn-primary text-center"
-                                                                                    @click="currentStep=2">
-                                                                                {{$t('pages.settings.image_proceed')}}
-                                                                            </button>
-                                                                        </div>
-                                                                    </transition>
                                                                 </div>
+                                                                <transition name="fade">
+                                                                    <div class="row preview-row"
+                                                                         v-show="file.status==='success'">
+                                                                        <button type="button"
+                                                                                class="btn btn-lg btn-primary text-center"
+                                                                                @click="currentStep=2">
+                                                                            {{$t('pages.settings.image_proceed')}}
+                                                                        </button>
+                                                                    </div>
+                                                                </transition>
                                                             </div>
                                                         </div>
-                                                        <div class="container position-relative mb-2 font-weight-bold">
-                                                            <div class="col" v-show="file.status==='error'">
-                                                                                    <span
-                                                                                            class="dropzone-error clearfix text-danger"
-                                                                                            v-html="error"></span>
-                                                            </div>
+                                                    </div>
+                                                    <div class="container position-relative mb-2 font-weight-bold">
+                                                        <div class="col" v-show="file.status==='error'">
+                                                            <span
+                                                                    class="dropzone-error clearfix text-danger"
+                                                                    v-html="error"></span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </template>
-                                    </dropzone>
-                                </keep-alive>
+                                        </div>
+                                    </template>
+                                </dropzone>
                             </div>
                         </template>
                         <template #s2>
@@ -183,6 +182,13 @@
     computed: {
       avatars () {
         return this.avatarsParent
+      },
+      userObj(){
+        if(this.user!==null){
+          return this.user
+        }else{
+          return {username:null}
+        }
       }
     },
     data () {
@@ -250,12 +256,14 @@
             })
         })
       },
-      avatarTabClicked () {
-        //After a successful avatar upload, currentStep=2
+      resetComponentFlags () {
+        //After a successful avatar upload, currentStep=3
         // the user can click on the avatar tab in which case we need to reset current step
         // so a new avatar can be uploaded
-        if (this.currentStep === 3)
+        if (this.currentStep === 3) {
           this.currentStep = 1
+          this.cropWasTriggered = false
+        }
       },
       triggerBrowse () {
         let vm = this

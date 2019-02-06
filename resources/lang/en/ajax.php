@@ -203,6 +203,11 @@ return [
         'blog_post_delete' => [
             'h' => 'Confirm blog deletion',
             't' => 'Do you really want to delete blog post {name}?|Do you really want to delete those {number} blog posts?'
+        ],
+        'user_profile_updated'=>[
+            'h'=>'About to log you out...',
+            't'=>'We use your e-mail address to identify you, so we are going to log you out for safety reasons. Please log back in using your new e-mail address.',
+            'b'=>'Got it!'
         ]
     ],
     'error' => [
@@ -230,6 +235,7 @@ return [
             'confirm_password' => 'Confirm Password',
             'reset_password' => 'Reset Password',
             'new_password' => 'New Password',
+            'current_password' => 'Current Password',
         ],
         'members' => [
             'member_search' => 'Type user full name here, i.e \'Jane Doe\'',
@@ -264,7 +270,7 @@ return [
             'avatar-tab' => 'Avatar',
             'avatar-ul-tab' => 'Upload avatar',
             'delete_avatar' => 'Delete avatar',
-            'click_default' => 'Click on an avatar to make it the default.',
+            'click_default' => 'Click on an avatar to make it your profile picture.',
             'image_uploading' => 'Processing in progress...',
             'image_proceed' => 'Proceed to cropping',
             'image_uploaded' => 'The avatar has been processed, you can return to the avatar tab.'

@@ -35,6 +35,5 @@ class AuthServiceProvider extends ServiceProvider
             Gate::policy($model, $policy);
         }
 
-        //
     }
 }

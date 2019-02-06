@@ -398,7 +398,6 @@
         } else {
           this.form.fields.blog_post_slug = data.blog_post_slug
         }
-        this.form.resetChangedFields()
         this.swalNotification('success', msg)
       },
       getInfo (data, saveMode) {

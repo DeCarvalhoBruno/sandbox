@@ -82,7 +82,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
      */
     public function getJWTIdentifier()
     {
-        return $this->getAttribute('username');
+        return $this->getAttribute('email');
     }
 
     public function getIdentifier($identifier = null)
@@ -90,18 +90,12 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
         if (is_int($identifier)) {
             return 'users.user_id';
         }
-        return 'users.username';
+        return 'users.email';
     }
 
     public function getFullname()
     {
         return $this->getAttribute('full_name');
-//        return sprintf(
-//            '%s %s',
-//            $this->getAttribute('first_name'),
-//            $this->getAttribute('last_name')
-//        );
-
     }
 
     /**

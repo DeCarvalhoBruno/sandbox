@@ -8,7 +8,8 @@
                        name="new_username" id="new_username" class="form-control"
                        :class="{ 'is-invalid': form.errors.has('new_username') }"
                        :placeholder="$t('db.new_username')"
-                       aria-describedby="help_new_username">
+                       aria-describedby="help_new_username"
+                       @change="changedField('new_username')">
                 <has-error :form="form" field="new_username"></has-error>
                 <small id="help_new_username" class="text-muted">
                     {{$t('form.description.new_username',[form.fields.username])}}
@@ -22,7 +23,8 @@
                        name="first_name" id="first_name" class="form-control"
                        :class="{ 'is-invalid': form.errors.has('first_name') }"
                        :placeholder="$t('db.first_name')"
-                       aria-describedby="help_first_name">
+                       aria-describedby="help_first_name"
+                       @change="changedField('first_name')">
                 <has-error :form="form" field="first_name"></has-error>
                 <small id="help_first_name" class="text-muted">{{$t('form.description.first_name')}}
                 </small>
@@ -35,7 +37,8 @@
                        name="last_name" id="last_name" class="form-control"
                        :class="{ 'is-invalid': form.errors.has('last_name') }"
                        :placeholder="$t('db.last_name')"
-                       aria-describedby="help_last_name">
+                       aria-describedby="help_last_name"
+                       @change="changedField('last_name')">
                 <has-error :form="form" field="last_name"></has-error>
                 <small id="help_last_name" class="text-muted">{{$t('form.description.last_name')}}
                 </small>
@@ -46,9 +49,11 @@
             <div class="col-md-9">
                 <input v-model="form.fields.new_email" type="text"
                        name="new_email" id="new_email" class="form-control"
+                       autocomplete="email"
                        :class="{ 'is-invalid': form.errors.has('new_email') }"
                        :placeholder="$t('db.new_email')"
-                       aria-describedby="help_new_email">
+                       aria-describedby="help_new_email"
+                       @change="changedField('new_email')">
                 <has-error :form="form" field="new_email"></has-error>
                 <small id="help_new_email" class="text-muted">
                     {{$t('form.description.new_email',[form.fields.email])}}
@@ -69,6 +74,8 @@
 <script>
   import Button from '~/components/Button'
   import AvatarUploader from '~/components/media/AvatarUploader'
+  import Swal from '~/mixins/sweet-alert'
+  import Forms from '~/mixins/form'
   import axios from 'axios'
 
   import { Form, HasError, AlertForm } from '~/components/form'
@@ -82,16 +89,13 @@
       AlertForm,
       AvatarUploader
     },
+    mixins: [
+      Swal,
+      Forms
+    ],
     data () {
       return {
-        form: new Form({
-          username: '',
-          first_name: '',
-          last_name: '',
-          email: ''
-        }),
-        userInfo: null,
-        permissions: null,
+        form: new Form(),
         avatars: []
       }
     },
@@ -107,22 +111,35 @@
     },
     methods: {
       async update () {
-        const {data} = await this.form.patch('/ajax/admin/settings/profile')
-        this.$store.dispatch('auth/updateUser', {user: data})
-        this.form.keys().forEach(key => {
-          this.form[key] = this.userInfo[key]
-        })
+        if (this.form.hasDetectedChanges()) {
+          if (this.form.hasFieldChanged('new_email')) {
+            const {data} = await this.form.patch('/ajax/admin/settings/profile')
+            this.swalEdumacationInfo(
+              this.$t('modal.user_profile_updated.h'),
+              this.$t('modal.user_profile_updated.t'),
+              this.$t('modal.user_profile_updated.b')
+            ).then(async (result) => {
+              if (result.value) {
+                await this.$store.dispatch('auth/revokeUser')
+                this.$router.push({name: 'admin.login'})
+              }
+            })
+            return
+          } else {
+            const {data} = await this.form.patch('/ajax/admin/settings/profile')
+            this.form = new Form(data.user, true)
+            this.$store.dispatch('auth/updateUser', {user: data.user})
+          }
+        }
         this.swalNotification('success', this.$t('message.profile_updated'))
       },
       getInfo (data) {
-        this.form = new Form(data.user)
-        this.userInfo = data.user
-        this.permissions = data.permissions
+        this.form = new Form(data.user, true)
         this.avatars = data.avatars
       }
     },
     beforeRouteEnter (to, from, next) {
-      axios.get(`/ajax/admin/users/session`).then(({data}) => {
+      axios.get(`/ajax/admin/users/profile`).then(({data}) => {
         next(vm => vm.getInfo(data))
       })
     },

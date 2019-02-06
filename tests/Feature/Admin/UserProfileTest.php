@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -42,14 +44,58 @@ class UserProfileTest extends TestCase
         $this->assertFileExists($path);
     }
 
+    public function test_set_new_password_with_wrong_current_password()
+    {
+        $this->withExceptionHandling();
+        $u = $this->signIn()->createUser();
+        $response = $this->patchJson(
+            '/ajax/admin/settings/password',
+            [
+                'current_password' => 'random',
+                'password' => 'dfsdfsfsdfds',
+                'password_confirmation' => 'dfsdfsfsdfds'
+            ]
+        );
+        $response->assertStatus(422);
+    }
+
+    public function test_set_new_password_same_password()
+    {
+        $this->withExceptionHandling();
+        $u = $this->signIn()->createUser();
+        $response = $this->patchJson(
+            '/ajax/admin/settings/password',
+            [
+                'current_password' => 'secret',
+                'password' => 'secret',
+                'password_confirmation' => 'secret'
+            ]
+        );
+        $response->assertStatus(422);
+    }
+
     public function test_set_new_password()
     {
-        
+        $this->withExceptionHandling();
+        $u = $this->signIn()->createUser();
+        $response = $this->patchJson(
+            '/ajax/admin/settings/password',
+            [
+                'current_password' => 'secret',
+                'password' => 'dfsdfsfsdfds',
+                'password_confirmation' => 'dfsdfsfsdfds'
+            ]
+        );
+        $response->assertStatus(204);
+
+        $freshPassword = auth()->user()->fresh()->getAttribute('password');
+        $this->assertTrue(Hash::check('dfsdfsfsdfds', $freshPassword));
     }
 
     public function test_update_profile()
     {
-        
+
+
     }
 
 }

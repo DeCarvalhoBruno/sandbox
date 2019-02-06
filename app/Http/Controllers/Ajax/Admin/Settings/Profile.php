@@ -25,7 +25,10 @@ class Profile extends Controller
             $this->user->getAttribute('username'),
             $request->all()
         );
-        return response($savedUser, Response::HTTP_OK);
+
+        return response([
+            'user' => $savedUser->only(['username', 'first_name', 'last_name', 'email']),
+        ],Response::HTTP_OK);
     }
 
     /**

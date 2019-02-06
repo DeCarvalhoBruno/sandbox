@@ -82,8 +82,21 @@ class Form {
     this.changedFields = {}
   }
 
+  /**
+   *
+   * @returns {{}|*}
+   */
   getChangedFields () {
     return this.changedFields
+  }
+
+  /**
+   *
+   * @param field
+   * @returns {boolean}
+   */
+  hasFieldChanged (field) {
+    return this.changedFields.hasOwnProperty(field)
   }
 
   /**
@@ -150,6 +163,7 @@ class Form {
   finishProcessing () {
     this.busy = false
     this.successful = true
+    this.resetChangedFields()
   }
 
   /**

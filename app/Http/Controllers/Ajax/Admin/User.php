@@ -182,11 +182,9 @@ class User extends Controller
      * @param \App\Contracts\Models\User $userProvider|\App\Support\Providers\User $userProvider
      * @return array
      */
-    public function session(UserProvider $userProvider)
+    public function profile(UserProvider $userProvider)
     {
         $f = app()->make(RawQueries::class);
-        $entityTypeId = $this->user->getAttribute('entity_type_id');
-
         return [
             'user' => $this->user->only([
                 'first_name',
@@ -195,7 +193,6 @@ class User extends Controller
                 'username',
                 'full_name',
             ]),
-            'permissions' => $f->getAllUserPermissions($entityTypeId),
             'avatars' => $userProvider->getAvatars($this->user->getKey())
         ];
     }

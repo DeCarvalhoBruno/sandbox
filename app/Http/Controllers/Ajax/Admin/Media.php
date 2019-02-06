@@ -100,7 +100,7 @@ class Media extends Controller
                     }
                 } catch (\Exception $e) {
                     return response([
-                        'msg' => trans('error.media.type_size'),
+                        'data' => trans('error.media.type_size'),
                         'error' => $e->getMessage()
                     ], Response::HTTP_INTERNAL_SERVER_ERROR);
                 }
@@ -221,7 +221,7 @@ class Media extends Controller
             $this->mediaRepo->image()->saveAvatar($avatarInfo);
         } catch (\Exception $e) {
             return response([
-                'msg' => trans('error.media.type_size'),
+                'data' => trans('error.media.type_size'),
                 'error' => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

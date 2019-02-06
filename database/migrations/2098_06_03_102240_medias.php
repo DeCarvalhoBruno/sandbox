@@ -326,5 +326,21 @@ SQL;
            join media_types on media_types.media_type_id = media_records.media_type_id;
         ');
 
+        \DB::unprepared('
+            CREATE VIEW entity_count AS
+            select "users" as tbl,count(user_id) as cnt
+            from users
+            UNION
+            select "groups" as tbl, count(group_id) as cnt
+            from `groups`
+            UNION
+            select "blog_posts" as tbl, count(blog_post_id) as cnt
+            from `blog_posts`
+            UNION
+            select "medias" as tbl, count(media_type_id) as cnt
+            from `media_types`
+        ');
+
     }
+
 }

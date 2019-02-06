@@ -37,9 +37,6 @@ class Entities extends Migration
         $this->createEntities();
         $this->createTriggers();
         $this->createGroups();
-        if (App::environment() !== 'testing') {
-            $this->createViews();
-        }
     }
 
     private static function createGroups()
@@ -176,26 +173,6 @@ class Entities extends Migration
         $entity->save();
 
     }
-
-    public function createViews()
-    {
-        \DB::unprepared('
-            CREATE VIEW entity_count AS
-            select "users" as tbl,count(user_id) as cnt
-            from users
-            UNION
-            select "groups" as tbl, count(group_id) as cnt
-            from `groups`
-            UNION
-            select "blog_posts" as tbl, count(blog_post_id) as cnt
-            from `blog_posts`
-            UNION
-            select "medias" as tbl, count(media_type_id) as cnt
-            from `media_types`
-  ');
-        
-    }
-
 
     /**
      * Reverse the migrations.
