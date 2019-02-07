@@ -1,5 +1,6 @@
 <?php
 return [
+    'home'=>'/',
     'admin_login'=>'login',
     'login' => 'login',
     'activate' => 'register/activate/{token}',

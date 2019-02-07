@@ -2,6 +2,7 @@ const path = require('path')
 const mix = require('laravel-mix')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const webpack = require('webpack')
+require('dotenv').config()
 
 const folderName = '1b8eb'
 const publicPath = `public/${folderName}`
@@ -52,7 +53,7 @@ if (mix.inProduction()) {
   // ])
 }
 mix.browserSync({
-  proxy: 'laravel.local/admin/login',
+  proxy: process.env.APP_URL + '/admin/login',
   browser: 'chrome',
   files: [
     `public/${folderName}/**/*`,

@@ -41,7 +41,6 @@
         "vuex-router-sync": "^5.0.0"
     },
     "devDependencies": {
-        "promise-polyfill": "^8.1.0",
         "admin-lte": "^2.4.2",
         "babel-eslint": "^8.2.1",
         "babel-plugin-syntax-dynamic-import": "^7.0.0-beta.3",
@@ -49,6 +48,7 @@
         "browser-sync-webpack-plugin": "^2.2.2",
         "clean-webpack-plugin": "^0.1.18",
         "cross-env": "^5.1",
+        "dotenv": "^6.2.0",
         "dynamic-polyfill": "^1.0.1",
         "es6-promise": "^4.2.5",
         "eslint": "^4.15.0",
@@ -59,6 +59,7 @@
         "gulp-watch": "^5.0.1",
         "laravel-mix": "^3.0.0",
         "mjml": "^4.3.1",
+        "promise-polyfill": "^8.1.0",
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.16.1",
         "sass-loader": "^7.1.0",

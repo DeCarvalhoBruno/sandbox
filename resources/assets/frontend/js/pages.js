@@ -1,3 +1,3 @@
 export default {
-  'x': 'pages/.js'
+  'home': 'pages/home.js'
 }

@@ -30,8 +30,8 @@ class Frontend extends Routes
             $r->group([
             ], call_user_func('static::guest', $locale));
 
-            $r->group([
-            ], call_user_func('static::auth', $locale));
+//            $r->group([
+//            ], call_user_func('static::auth', $locale));
 
         };
     }
@@ -39,6 +39,10 @@ class Frontend extends Routes
     public static function guest($locale)
     {
         return function (Router $r) use ($locale) {
+
+            $r->get(trans('routes.home', [], $locale), 'Home@index')
+                ->name(self::i18nRouteNames($locale, 'home'));
+
             $r->get(trans('routes.login', [], $locale), 'Auth\Login@index')
                 ->name(self::i18nRouteNames($locale, 'login'));
             $r->get(trans('routes.activate', [], $locale), 'Auth\Login@activate')
@@ -62,6 +66,7 @@ class Frontend extends Routes
 
             $r->get(trans('routes.blog_slug', [], $locale), 'Blog@getPost')
                 ->name(self::i18nRouteNames($locale, 'blog'));
+
         };
 
     }
@@ -70,8 +75,7 @@ class Frontend extends Routes
     {
         return function (Router $r) use ($locale) {
 //            $r->get('/test', 'Frontend@test');
-            $r->get('/', 'Home@index')
-                ->name(self::i18nRouteNames($locale, 'home'));
+
         };
     }
 

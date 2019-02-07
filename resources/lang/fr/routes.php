@@ -1,4 +1,5 @@
 <?php return [
+    'home'=>'/',
     'admin_login' => 'connexion',
     'login' => 'connexion',
     'activate' => 'inscription/activation/{token}',
