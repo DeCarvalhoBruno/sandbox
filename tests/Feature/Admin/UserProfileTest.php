@@ -94,7 +94,20 @@ class UserProfileTest extends TestCase
 
     public function test_update_profile()
     {
-
+        $this->withExceptionHandling();
+        $t = $this->createUser();
+        $u = $this->signIn($t);
+        $response = $this->patchJson(
+            '/ajax/admin/settings/profile',
+            [
+                'first_name' => 'Jane',
+                'full_name' => 'Jane Doe',
+                'last_name' => 'Doe',
+                'new_username' => 'jane_doe',
+                'new_email' => 'jane.doe@example.com'
+            ]);
+        $response->assertStatus(200);
+        $this->assertNotNull(User::query()->where('email','=','jane.doe@example.com')->first());
 
     }
 
