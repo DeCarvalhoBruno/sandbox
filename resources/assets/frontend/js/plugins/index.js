@@ -1,5 +1,5 @@
 import './axios'
-// import './fontawesome'
+import './fontawesome'
 import './jquery'
 
 import 'bootstrap/js/dist/util'

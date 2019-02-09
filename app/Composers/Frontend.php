@@ -1,4 +1,5 @@
 <?php namespace App\Composers;
+use App\Facades\JavaScript;
 
 class Frontend extends Composer
 {
@@ -18,6 +19,10 @@ class Frontend extends Composer
                 ),
                 config('app.name'))
         ];
+        JavaScript::putArray([
+            'locale' => app()->getLocale(),
+        ]);
+        JavaScript::bindJsVariablesToView();
         $this->addVarsToView($data, $view);
     }
 }

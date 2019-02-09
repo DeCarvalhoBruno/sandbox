@@ -1,13 +1,10 @@
+import i18n from '~/plugins/i18n'
 import '~/plugins'
-import Pages from '~/pages'
+import App from './components/App'
 
-let f = async function pageLoader (token,pages) {
-  if (pages.hasOwnProperty(token)) {
-    // import(`~/pages/${token}`)
-    await import(/* webpackChunkName: "p-" */ `~/${pages[token]}`)
-  }
-}
+window.Vue = require('vue')
 
-let pageSelector = document.head.querySelector('meta[name="p-token"]')
-let token = (pageSelector) ? pageSelector.content : null
-f(token,Pages)
+new Vue({
+  i18n,
+  ...App
+})

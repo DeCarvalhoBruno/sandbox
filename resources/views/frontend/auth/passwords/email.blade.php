@@ -1,8 +1,11 @@
-@extends('frontend.default')
+@extends('frontend.default-bare')
 
 @section('content')
     <div class="container">
-        <div class="row justify-content-md-center mt-5">
+        <div class="row justify-content-center mt-5">
+            <img src="{{asset('media/img/site/logo.png')}}">
+        </div>
+        <div class="row justify-content-md-center mt-3">
             <div class="col-md-8">
                 @if (session('status'))
                     <div class="alert alert-success">
@@ -16,10 +19,9 @@
                 @endif
             </div>
         </div>
-
         <div class="row justify-content-md-center mt-1">
             <div class="col-md-8">
-                <div class="card">
+                <div class="card card-shadow">
                     <div class="card-body">
                         <form role="form" method="POST" action="{{ route('password.email') }}">
                             {!! csrf_field() !!}

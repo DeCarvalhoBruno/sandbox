@@ -5,7 +5,6 @@ import router from '~/router'
 import App from '~/components/App'
 
 import '~/plugins'
-// import '~/components'
 
 new Vue({
   i18n,

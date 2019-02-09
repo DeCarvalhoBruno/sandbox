@@ -6,7 +6,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1 maximum-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="p-token" content="{{ get_page_token() }}">
+    <meta name="page-id" content="{{ get_page_id() }}">
 
     <title>{{$title}}</title>
     <link href="{{ mix('css/app.css','6aa0e') }}" rel="stylesheet">

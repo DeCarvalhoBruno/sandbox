@@ -30,9 +30,6 @@ class Register extends Controller
     {
         $user = $userRepo->createOne($request->all());
         event(new UserRegistered($user, $userRepo->generateActivationToken($user)));
-
-//        \Auth::guard()->login($user);
-
         return redirect(route_i18n('login'))->with('status', 'registered');
     }
 

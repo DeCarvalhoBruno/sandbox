@@ -1,3 +1,11 @@
+.font-light {
+  font-weight: 300;
+}
+
+.btn-primary {
+  background-color:$primary;
+}
+
 //Don't display body until fontawesome icons have finished loading
 .fontawesome-i2svg-pending body {
   display: none;

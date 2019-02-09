@@ -15,13 +15,11 @@ var ResponsiveBootstrapToolkit = (function($){
      */
     detectionDivs: {
       // Bootstrap 3
-      bootstrap: {
         'xs': $('<div class="device-xs d-block d-sm-none"></div>'),
         'sm': $('<div class="device-sm d-none d-sm-block d-md-none"></div>'),
         'md': $('<div class="device-md d-none d-md-block d-lg-none"></div>'),
         'lg': $('<div class="device-lg d-none d-lg-block d-xl-none"></div>'),
         'xl': $('<div class="device-lg d-none d-xl-block"></div>')
-      },
     },
 
     /**
@@ -152,11 +150,6 @@ var ResponsiveBootstrapToolkit = (function($){
     interval: 300,
 
     /**
-     *
-     */
-    framework: null,
-
-    /**
      * Breakpoint aliases, listed from smallest to biggest
      */
     breakpoints: null,
@@ -174,16 +167,9 @@ var ResponsiveBootstrapToolkit = (function($){
     /**
      * Determines which framework-specific breakpoint detection divs to use
      */
-    use: function( frameworkName, breakpoints ) {
-      self.framework = frameworkName.toLowerCase();
-
-      if( self.framework === 'bootstrap') {
-        self.breakpoints = internal.detectionDivs[ self.framework ];
-      } else {
-        self.breakpoints = breakpoints;
-      }
-
-      internal.applyDetectionDivs();
+    use: function( breakpoints ) {
+        self.breakpoints = internal.detectionDivs;
+        internal.applyDetectionDivs();
     },
 
     /**
@@ -218,10 +204,7 @@ var ResponsiveBootstrapToolkit = (function($){
   $(document).ready(function(){
     $('<div class="rbt"></div>').appendTo('body');
   });
-
-  if( self.framework === null ) {
-    self.use('bootstrap');
-  }
+  self.use('bootstrap');
 
   return self;
 

@@ -141,8 +141,8 @@ if (!function_exists('route_i18n')) {
     }
 }
 
-if (!function_exists('get_page_token')) {
-    function get_page_token()
+if (!function_exists('get_page_id')) {
+    function get_page_id()
     {
         return substr(md5(app('router')->getCurrentRoute()->getName()), 0, 10);
     }

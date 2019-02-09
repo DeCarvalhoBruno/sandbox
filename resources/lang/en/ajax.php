@@ -89,7 +89,7 @@ return [
         'users' => 'User|Users',
         'groups' => 'Group|Groups',
         'blog_posts' => 'Blog Post|Blog Posts',
-        'username' => 'User name',
+        'username' => 'Username',
         'first_name' => 'First name',
         'last_name' => 'Last name',
         'full_name' => 'Full name',
