@@ -119,7 +119,7 @@
   import { Tabs } from 'bootstrap-vue/es/components'
   import { VueTransmit } from 'vue-transmit'
   import axios from 'axios'
-  import media from '~/mixins/media'
+  import media from 'back_path/mixins/media'
   import VueClipboard from 'vue-clipboard2'
 
   Vue.use(VueClipboard)

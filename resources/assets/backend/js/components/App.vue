@@ -11,7 +11,7 @@
   import Loading from './Loading'
 
   // Load layout components dynamically.
-  const requireContext = require.context('~/layouts', false, /.*\.vue$/)
+  const requireContext = require.context('back_path/layouts', false, /.*\.vue$/)
 
   const layouts = requireContext.keys()
     .map(file =>

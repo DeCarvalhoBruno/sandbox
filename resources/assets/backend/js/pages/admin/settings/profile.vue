@@ -63,7 +63,7 @@
         <div class="form-group row">
             <div class="container col-lg-6 justify-content-center">
                 <div class="col-lg text-center">
-                    <v-button :loading="form.busy">{{ $t('general.update') }}</v-button>
+                    <submit-button :loading="form.busy">{{ $t('general.update') }}</submit-button>
                 </div>
             </div>
         </div>
@@ -72,19 +72,19 @@
 </template>
 
 <script>
-  import Button from '~/components/Button'
-  import AvatarUploader from '~/components/media/AvatarUploader'
-  import Swal from '~/mixins/sweet-alert'
-  import Forms from '~/mixins/form'
+  import Button from 'back_path/components/SubmitButton'
+  import AvatarUploader from 'back_path/components/media/AvatarUploader'
+  import Swal from 'back_path/mixins/sweet-alert'
+  import Forms from 'back_path/mixins/form'
   import axios from 'axios'
 
-  import { Form, HasError, AlertForm } from '~/components/form'
+  import { Form, HasError, AlertForm } from 'back_path/components/form'
   import { mapGetters } from 'vuex'
 
   export default {
     scrollToTop: false,
     components: {
-      'v-button': Button,
+      Button,
       HasError,
       AlertForm,
       AvatarUploader

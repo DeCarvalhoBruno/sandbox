@@ -7,7 +7,7 @@
   import 'trumbowyg/dist/trumbowyg.min.js'
 
   // import 'trumbowyg/dist/plugins/'
-  // import '~/components/wysiwyg/plugins/image'
+  // import 'back_path/components/wysiwyg/plugins/image'
 
   const events = ['init', 'focus', 'blur', 'change', 'resize', 'paste', 'openfullscreen', 'closefullscreen', 'close'];
   const eventPrefix = 'tbw';

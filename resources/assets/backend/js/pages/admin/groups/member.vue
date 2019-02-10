@@ -103,9 +103,9 @@
 </template>
 
 <script>
-  import InputTagSearch from '~/components/InputTagSearch'
+  import InputTagSearch from 'back_path/components/InputTagSearch'
   import axios from 'axios'
-  import { Form, HasError } from '~/components/form'
+  import { Form, HasError } from 'back_path/components/form'
 
   export default {
     name: 'member',

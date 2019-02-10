@@ -4,8 +4,6 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const webpack = require('webpack')
 require('dotenv').config()
 
-console.log()
-
 const folderName = '6aa0e'
 const publicPath = `public/${folderName}`
 
@@ -55,6 +53,7 @@ mix.browserSync({
     'app/**/*'
   ]
 })
+
 mix.webpackConfig({
   plugins: [
     new CleanWebpackPlugin([
@@ -70,13 +69,14 @@ mix.webpackConfig({
       jQuery: 'jquery',
       Popper: 'popper.js/dist/umd/popper',
       axios: 'axios/dist/axios.min.js',
-      ResponsiveBootstrapToolkit: '~/plugins/jquery/bootstrap-toolkit.js'
+      ResponsiveBootstrapToolkit: 'front_path/plugins/jquery/bootstrap-toolkit.js'
     })
   ],
   resolve: {
     extensions: ['.js', '.json', '.vue'],
     alias: {
-      '~': path.join(__dirname, './resources/assets/frontend/js'),
+      'front_path': path.resolve(path.join(__dirname, './resources/assets/frontend/js')),
+      'back_path': path.resolve(path.join(__dirname, './resources/assets/backend/js')),
       'jquery': 'jquery/dist/jquery.min.js'
     }
   },

@@ -36,7 +36,7 @@
 </template>
 
 <script>
-  import Navbar from '~/components/Navbar'
+  import Navbar from 'back_path/components/Navbar'
 
   export default {
     name: 'default',

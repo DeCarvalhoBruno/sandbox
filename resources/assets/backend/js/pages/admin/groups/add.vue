@@ -76,9 +76,9 @@
             </b-tabs>
             <div class="row justify-content-center">
                 <div class="col-md-6 offset-md-3 mb-4">
-                    <v-button class="align-content-center" :loading="form.busy">
+                    <submit-button class="align-content-center" :loading="form.busy">
                         {{ $t('general.create') }}
-                    </v-button>
+                    </submit-button>
                 </div>
             </div>
         </form>
@@ -93,18 +93,18 @@
   Vue.use(Card)
   Vue.use(Tabs)
 
-  import Button from '~/components/Button'
-  import Checkbox from '~/components/Checkbox'
-  import { Form, HasError, AlertForm } from '~/components/form'
-  import ButtonCircle from '~/components/ButtonCircle'
-  import PermissionMixin from '~/mixins/permissions'
+  import Button from 'back_path/components/SubmitButton'
+  import Checkbox from 'back_path/components/Checkbox'
+  import { Form, HasError, AlertForm } from 'back_path/components/form'
+  import ButtonCircle from 'back_path/components/ButtonCircle'
+  import PermissionMixin from 'back_path/mixins/permissions'
 
   export default {
     layout: 'basic',
     middleware: 'check-auth',
     name: 'group-edit',
     components: {
-      'v-button': Button,
+      Button,
       Checkbox,
       HasError,
       AlertForm,

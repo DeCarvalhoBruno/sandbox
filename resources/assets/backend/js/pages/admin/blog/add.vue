@@ -17,10 +17,10 @@
                                 <small class="text-muted" v-show="url">{{url}}</small>
                             </div>
                             <div class="col-lg-2">
-                                <v-button type="button" :loading="form.busy"
+                                <submit-button type="button" :loading="form.busy"
                                           class="btn btn-primary float-lg-right"
                                           @click="save">{{$t('general.save')}}
-                                </v-button>
+                                </submit-button>
                             </div>
                         </div>
                         <div id="head-row" class="form-group row">
@@ -209,16 +209,16 @@
   import axios from 'axios'
   import dayjs from 'dayjs'
   import fr from 'dayjs/locale/fr'
-  import Button from '~/components/Button'
-  import Trumbowyg from '~/components/wysiwyg/Trumbowyg'
-  import { Form, HasError, AlertForm } from '~/components/form'
-  import TreeList from '~/components/tree-list/TreeList'
-  import InputTagSearch from '~/components/InputTagSearch'
-  import Datepicker from '~/components/Datepicker'
-  import ImageUploader from '~/components/media/ImageUploader'
+  import Button from 'back_path/components/SubmitButton'
+  import Trumbowyg from 'back_path/components/wysiwyg/Trumbowyg'
+  import { Form, HasError, AlertForm } from 'back_path/components/form'
+  import TreeList from 'back_path/components/tree-list/TreeList'
+  import InputTagSearch from 'back_path/components/InputTagSearch'
+  import Datepicker from 'back_path/components/Datepicker'
+  import ImageUploader from 'back_path/components/media/ImageUploader'
 
-  import swal from '~/mixins/sweet-alert'
-  import form from '~/mixins/form'
+  import swal from 'back_path/mixins/sweet-alert'
+  import form from 'back_path/mixins/form'
   import { deepCopy } from '../../../components/form/util'
 
   export default {
@@ -226,7 +226,7 @@
     middleware: 'check-auth',
     name: 'blog-post-add',
     components: {
-      'v-button': Button,
+      Button,
       HasError,
       Trumbowyg,
       InputTagSearch,

@@ -39,9 +39,9 @@
 
 <script>
   import Vue from 'vue'
-  import Table from '~/components/table/table'
+  import Table from 'back_path/components/table/table'
   import axios from 'axios'
-  import TableMixin from '~/mixins/tables'
+  import TableMixin from 'back_path/mixins/tables'
 
   Vue.use(Table)
 

@@ -160,8 +160,8 @@
 <script>
   import Vue from 'vue'
   import { VueTransmit } from 'vue-transmit'
-  import Wizard from '~/components/Wizard'
-  import Cropper from '~/components/Cropper'
+  import Wizard from 'back_path/components/Wizard'
+  import Cropper from 'back_path/components/Cropper'
   import axios from 'axios'
   import { Tabs } from 'bootstrap-vue/es/components'
 

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import store from '~/store'
+import store from 'back_path/store'
 import Meta from 'vue-meta'
 import routes from './routes'
 import Router from 'vue-router'
@@ -13,7 +13,7 @@ const globalMiddleware = ['locale']
 
 // Load middleware modules dynamically.
 const routeMiddleware = resolveMiddleware(
-  require.context('~/middleware', false, /.*\.js$/)
+  require.context('back_path/middleware', false, /.*\.js$/)
 )
 
 const router = createRouter()

@@ -1,45 +1,45 @@
-const Login = () => import('~/pages/admin/auth/login').then(m => m.default || m)
+const Login = () => import('back_path/pages/admin/auth/login').then(m => m.default || m)
 
-const Dashboard = () => import('~/pages/admin/dashboard').then(
-  m => m.default || m)
-
-const Users = () => import('~/pages/admin/users/index').then(
-  m => m.default || m)
-const UserEdit = () => import('~/pages/admin/users/edit').then(
+const Dashboard = () => import('back_path/pages/admin/dashboard').then(
   m => m.default || m)
 
-const Groups = () => import('~/pages/admin/groups/index').then(
+const Users = () => import('back_path/pages/admin/users/index').then(
   m => m.default || m)
-const GroupEdit = () => import('~/pages/admin/groups/edit').then(
-  m => m.default || m)
-const GroupAdd = () => import('~/pages/admin/groups/add').then(
-  m => m.default || m)
-const GroupMember = () => import('~/pages/admin/groups/member').then(
+const UserEdit = () => import('back_path/pages/admin/users/edit').then(
   m => m.default || m)
 
-const Blog = () => import('~/pages/admin/blog/index').then(
+const Groups = () => import('back_path/pages/admin/groups/index').then(
   m => m.default || m)
-const BlogAdd = () => import('~/pages/admin/blog/add').then(
+const GroupEdit = () => import('back_path/pages/admin/groups/edit').then(
   m => m.default || m)
-const BlogCategory = () => import('~/pages/admin/blog/category').then(
+const GroupAdd = () => import('back_path/pages/admin/groups/add').then(
   m => m.default || m)
-
-const Settings = () => import('~/pages/admin/settings/index').then(
-  m => m.default || m)
-const SettingsGeneral = () => import('~/pages/admin/settings/general').then(
-  m => m.default || m)
-const SettingsProfile = () => import('~/pages/admin/settings/profile').then(
-  m => m.default || m)
-const SettingsPassword = () => import('~/pages/admin/settings/password').then(
+const GroupMember = () => import('back_path/pages/admin/groups/member').then(
   m => m.default || m)
 
-const Media = () => import('~/pages/admin/media/index').then(
+const Blog = () => import('back_path/pages/admin/blog/index').then(
   m => m.default || m)
-const MediaEdit = () => import('~/pages/admin/media/edit').then(
+const BlogAdd = () => import('back_path/pages/admin/blog/add').then(
+  m => m.default || m)
+const BlogCategory = () => import('back_path/pages/admin/blog/category').then(
   m => m.default || m)
 
-import routesI18n from '~/lang/routes'
-import store from '~/store'
+const Settings = () => import('back_path/pages/admin/settings/index').then(
+  m => m.default || m)
+const SettingsGeneral = () => import('back_path/pages/admin/settings/general').then(
+  m => m.default || m)
+const SettingsProfile = () => import('back_path/pages/admin/settings/profile').then(
+  m => m.default || m)
+const SettingsPassword = () => import('back_path/pages/admin/settings/password').then(
+  m => m.default || m)
+
+const Media = () => import('back_path/pages/admin/media/index').then(
+  m => m.default || m)
+const MediaEdit = () => import('back_path/pages/admin/media/edit').then(
+  m => m.default || m)
+
+import routesI18n from 'back_path/lang/routes'
+import store from 'back_path/store'
 
 let routes = [
   {
@@ -139,7 +139,7 @@ let routes = [
   },
   {
     path: '*',
-    component: require('~/pages/errors/404.vue')
+    component: require('back_path/pages/errors/404.vue')
   }
 ]
 

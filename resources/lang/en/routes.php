@@ -8,5 +8,6 @@ return [
     'password_reset' => 'password/reset',
     'password_email' => 'password/email',
     'password_reset_token' => 'password/reset/{token}/{email}',
+    'user_profile'=>'profile',
     'blog_slug' => 'blog/{slug}',
 ];

@@ -1,16 +1,9 @@
 <script>
-  import Pages from '~/pages'
+  import Pages from 'front_path/pages'
   import Vue from 'vue'
 
   let pageSelector = document.head.querySelector('meta[name="page-id"]')
   let token = (pageSelector) ? pageSelector.content : null
-
-  async function pageLoader (token, pages) {
-    if (pages.hasOwnProperty(token)) {
-      // import(`~/pages/${token}`)
-      await import(/* webpackChunkName: "p-" */ `~/${pages[token].page}`)
-    }
-  }(token, Pages)
 
   let getComponentsToLoadFromList = function getComponentsToLoadFromList (token, pages) {
     if (pages.hasOwnProperty(token)) {
@@ -18,25 +11,48 @@
     }
     return []
   }
-
-  const requireContext = require.context('./', false, /.*\.vue$/)
-
-  const componentList = requireContext.keys()
+  const frontendContext = require.context('./', false, /.*\.vue$/)
+  const backendContext = require.context('back_path/components', false, /[^App\.vue].*\.vue$/)
+  // const backendComponents = require.context('../../../backend/js/components', false, /.*\.vue$/)
+  const frontend = frontendContext.keys()
     .map(file =>
-      [file.replace(/(^.\/)|(\.vue$)/g, ''), requireContext(file)]
+      [file.replace(/(^.\/)|(\.vue$)/g, ''), frontendContext(file)]
+    )
+    .reduce((components, [name, component]) => {
+      components[name] = component
+      return components
+    }, {})
+  const backend = backendContext.keys()
+    .map(file =>
+      [file.replace(/(^.\/)|(\.vue$)/g, ''), backendContext(file)]
     )
     .reduce((components, [name, component]) => {
       components[name] = component
       return components
     }, {})
 
-  let ComponentsList = getComponentsToLoadFromList(token, Pages)
+  let ComponentsToLoadList = getComponentsToLoadFromList(token, Pages)
 
-  ComponentsList.forEach(componentName => {
-    Vue.component(componentName, componentList[componentName])
-  })
+  if (ComponentsToLoadList.hasOwnProperty('frontend')) {
+    ComponentsToLoadList.frontend.forEach(componentName => {
+      Vue.component(componentName, frontend[componentName])
+    })
+  }
+  if (ComponentsToLoadList.hasOwnProperty('backend')) {
+    ComponentsToLoadList.backend.forEach(componentName => {
+      Vue.component(componentName, backend[componentName])
+    })
+  }
 
   export default {
     el: '#app'
   }
+
+  async function pageLoader (token, pages) {
+    if (pages.hasOwnProperty(token)) {
+      if (pages[token].hasOwnProperty(page)) {
+        await import(/* webpackChunkName: "p-" */ `front_path/${pages[token].page}`)
+      }
+    }
+  }  (token, Pages)
 </script>

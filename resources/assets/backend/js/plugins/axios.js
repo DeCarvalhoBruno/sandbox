@@ -1,8 +1,8 @@
 import axios from 'axios'
-import store from '~/store'
-import router from '~/router'
+import store from 'back_path/store'
+import router from 'back_path/router'
 import swal from 'sweetalert2'
-import i18n from '~/plugins/i18n'
+import i18n from 'back_path/plugins/i18n'
 
 // Request interceptor
 axios.interceptors.request.use(request => {

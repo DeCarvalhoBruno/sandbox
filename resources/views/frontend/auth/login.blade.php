@@ -4,8 +4,6 @@
         <div class="row justify-content-center mt-5">
             <img src="{{asset('media/img/site/logo.png')}}">
         </div>
-
-
         @if(is_null($status))
             <div class="row justify-content-md-center mt-5">
                 <h3 class="font-light mb-0">{{trans('auth.login_account')}}</h3>
@@ -25,11 +23,13 @@
                         <div class="col-md-8">
                             <div class="card card-shadow">
                                 <div class="card-body">
-                                    <form class="form-horizontal mt-3" method="POST" action="{{ route('login.post') }}">
+                                    <inline-form :class="['form-horizontal','mt-3']"
+                                                 :action="'{{ route('login.post') }}'"
+                                                 :method="'POST'">
                                         {{ csrf_field() }}
                                         <div class="form-group row">
                                             <label for="email"
-                                                   class="col-md-4 col-form-label text-lg-right">E-Mail Address</label>
+                                                   class="col-md-4 col-form-label text-lg-right">{{trans('auth.email_address')}}</label>
                                             <div class="col-md-6">
                                                 <input id="email"
                                                        type="email"
@@ -74,30 +74,23 @@
                                                 </div>
                                                 <u>
                                                     <a class="small"
-                                                       href="{{ route_i18n('password.request') }}">
-                                                        {{trans('ajax.pages.auth.forgot_password')}}
-                                                    </a>
+                                                       href="{{ route_i18n('password.request') }}">{{trans('ajax.pages.auth.forgot_password')}}</a>
                                                 </u>
-
                                             </div>
                                         </div>
                                         <div class="form-group row mt-5">
                                             <div class="col-xl-8 offset-xl-2 col-lg-6 offset-lg-3">
-                                                <button type="submit" class="btn btn-primary btn-block">
-                                                    {{trans('ajax.general.login')}}
-                                                </button>
+                                                <submit-button ref="submitButton" :block="true">{{trans('ajax.general.login')}}</submit-button>
                                             </div>
                                         </div>
                                         <div class="form-group row text-center m-0">
                                             <div class="col align-content-lg-center">
                                                 <u>
-                                                    <a class="small" href="{{ route_i18n('register') }}">
-                                                        {{trans('auth.create_account')}}
-                                                    </a>
+                                                    <a class="small" href="{{ route_i18n('register') }}">{{trans('auth.create_account')}}</a>
                                                 </u>
                                             </div>
                                         </div>
-                                    </form>
+                                    </inline-form>
                                 </div>
                             </div>
                         </div>

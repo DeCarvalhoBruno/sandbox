@@ -11,7 +11,7 @@
         </div>
         <div class="form-group row">
             <div class="col-md-9 ml-md-auto">
-                <v-button :loading="form.busy">{{ $t('general.update') }}</v-button>
+                <submit-button :loading="form.busy">{{ $t('general.update') }}</submit-button>
             </div>
         </div>
     </form>
@@ -19,14 +19,14 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import Button from '~/components/Button'
-  import { Form } from '~/components/form'
-  import routesI18n from '~/lang/routes'
+  import Button from 'back_path/components/SubmitButton'
+  import { Form } from 'back_path/components/form'
+  import routesI18n from 'back_path/lang/routes'
 
   export default {
     scrollToTop: false,
     components: {
-      'v-button': Button,
+      Button,
     },
     computed: mapGetters({
       locale: 'prefs/locale',

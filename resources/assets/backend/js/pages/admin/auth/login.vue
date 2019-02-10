@@ -38,7 +38,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-md-7 offset-md-3 d-flex">
-                                <v-button :loading="form.busy">{{ $t('general.login') }}</v-button>
+                                <submit-button :loading="form.busy">{{ $t('general.login') }}</submit-button>
                             </div>
                         </div>
                     </form>
@@ -49,9 +49,9 @@
 </template>
 
 <script>
-  import Button from '~/components/Button'
-  import Checkbox from '~/components/Checkbox'
-  import { Form, HasError, AlertForm } from '~/components/form'
+  import Button from 'back_path/components/SubmitButton'
+  import Checkbox from 'back_path/components/Checkbox'
+  import { Form, HasError, AlertForm } from 'back_path/components/form'
 
   export default {
     middleware: 'guest',
@@ -59,7 +59,7 @@
       return {title: this.$t('title.login')}
     },
     components: {
-      'v-button': Button,
+      Button,
       Checkbox,
       HasError,
       AlertForm,

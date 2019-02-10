@@ -1,5 +1,5 @@
 <template>
-    <div id="password">
+    <div class="password-wrapper">
         <div class="password-group">
             <input v-model="password"
                    :type="inputType"
@@ -10,11 +10,7 @@
             <div class="password-icons">
                 <div v-show="passwordCount" class="password-badge"
                      :class="isOK?'password-badge-success':'password-badge-error'">
-
-
-                        <span v-if="!isOK">
-                                            {{passwordCount}}
-                                        </span>
+                    <span v-if="!isOK">{{passwordCount}}</span>
                     <span v-else><fa icon="check"></fa></span>
                 </div>
                 <div class="password-toggle">
@@ -27,15 +23,13 @@
                     </button>
                 </div>
             </div>
-
         </div>
         <div class="row password-strength-meter">
             <div class="password-strength-meter-fill" :data-score="passwordScore"></div>
         </div>
         <div v-show="passwordRecommends.length&&passwordCount" class="row password-recommends">
             <p v-show="passwordRecommends.length&&passwordCount" class="pl-1">Password strength recommendations:</p>
-            <transition-group name="fade"
-                              tag="ul">
+            <transition-group name="fade" tag="ul">
                 <li v-for="(val,index) in passwordRecommends" :key="`rec${index}`">{{$t(`pages.auth.${val}`)}}</li>
             </transition-group>
         </div>
@@ -55,10 +49,6 @@
   export default {
     name: 'password-strength',
     props: {
-      id: {
-        type: String,
-        default: 'password'
-      },
       placeholder: {
         type: String,
         default: ''

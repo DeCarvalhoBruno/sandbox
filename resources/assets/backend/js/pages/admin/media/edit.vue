@@ -88,9 +88,9 @@
                     </div>
                     <div class="row justify-content-center mb-4 mt-2">
                         <div>
-                            <v-button class="align-content-center"
+                            <submit-button class="align-content-center"
                                       :loading="form.busy">{{ $t('general.update') }}
-                            </v-button>
+                            </submit-button>
                             <button type="button"
                                     class="btn btn-secondary"
                                     @click="$router.go(-1)">{{$t('general.cancel')}}
@@ -128,14 +128,14 @@
 </template>
 <script>
   import Vue from 'vue'
-  import Button from '~/components/Button'
+  import Button from 'back_path/components/SubmitButton'
   import axios from 'axios'
-  import Cropper from '~/components/Cropper'
-  import { Form, HasError, AlertForm } from '~/components/form'
+  import Cropper from 'back_path/components/Cropper'
+  import { Form, HasError, AlertForm } from 'back_path/components/form'
   import { Card, Tabs } from 'bootstrap-vue/es/components'
-  import RecordPaginator from '~/components/RecordPaginator'
-  import MediaMixin from '~/mixins/media'
-  import FormMixin from '~/mixins/form'
+  import RecordPaginator from 'back_path/components/RecordPaginator'
+  import MediaMixin from 'back_path/mixins/media'
+  import FormMixin from 'back_path/mixins/form'
 
   Vue.use(Card)
   Vue.use(Tabs)
@@ -145,7 +145,7 @@
     middleware: 'check-auth',
     name: 'media-edit',
     components: {
-      'v-button': Button,
+      Button,
       HasError,
       Form,
       RecordPaginator,

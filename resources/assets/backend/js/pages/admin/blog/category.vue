@@ -19,7 +19,7 @@
 </template>
 
 <script>
-  import TreeList from '~/components/tree-list/TreeList'
+  import TreeList from 'back_path/components/tree-list/TreeList'
   import axios from 'axios'
 
   export default {

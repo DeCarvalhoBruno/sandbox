@@ -30,8 +30,8 @@ class Frontend extends Routes
             $r->group([
             ], call_user_func('static::guest', $locale));
 
-//            $r->group([
-//            ], call_user_func('static::auth', $locale));
+            $r->group([
+            ], call_user_func('static::auth', $locale));
 
         };
     }
@@ -49,7 +49,6 @@ class Frontend extends Routes
                 ->name(self::i18nRouteNames($locale, 'activate'));
 
             $r->post('login', 'Auth\Login@login')->name('login.post');
-            $r->post('logout', 'Auth\Login@logout')->name('logout');
 
             $r->get(trans('routes.register', [], $locale), 'Auth\Register@showRegistrationForm')
                 ->name(self::i18nRouteNames($locale, 'register'));
@@ -64,8 +63,8 @@ class Frontend extends Routes
                 ->name(self::i18nRouteNames($locale, 'password.reset'));
             $r->post('password/reset', 'Auth\ResetPassword@reset')->name( 'password.reset.do');
 
-            $r->get(trans('routes.blog_slug', [], $locale), 'Blog@getPost')
-                ->name(self::i18nRouteNames($locale, 'blog'));
+//            $r->get(trans('routes.blog_slug', [], $locale), 'Blog@getPost')
+//                ->name(self::i18nRouteNames($locale, 'blog'));
 
         };
 
@@ -74,7 +73,9 @@ class Frontend extends Routes
     public static function auth($locale)
     {
         return function (Router $r) use ($locale) {
-//            $r->get('/test', 'Frontend@test');
+            $r->post('logout', 'Auth\Login@logout')->name('logout');
+            $r->get(trans('routes.user_profile', [], $locale), 'User@edit')
+                ->name(self::i18nRouteNames($locale, 'profile'));
 
         };
     }

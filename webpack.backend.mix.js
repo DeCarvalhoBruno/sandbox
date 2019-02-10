@@ -91,14 +91,11 @@ mix.webpackConfig({
       // Promise: ['es6-promise', 'Promise']
     })
   ],
-  // externals: {
-  //   // 'trumbowyg': 'js/trumbowyg',
-  //   'trumbowyg/dist/ui/icons.svg': 'trumbowyg/dist/ui/icons.svg'
-  // },
   resolve: {
     extensions: ['.js', '.json', '.vue'],
     alias: {
-      '~': path.join(__dirname, './resources/assets/backend/js'),
+      'front_path': path.resolve(path.join(__dirname, './resources/assets/frontend/js')),
+      'back_path': path.resolve(path.join(__dirname, './resources/assets/backend/js')),
       'jquery': 'jquery/dist/jquery.min.js',
       'popper': 'popper.js/dist/popper.min.js'
     }

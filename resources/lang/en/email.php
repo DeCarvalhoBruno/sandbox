@@ -3,7 +3,7 @@
 return [
     'welcome' => [
         'subject' => ':app_name - Your registration',
-        'title' => 'You registered on our website. This pleases us.',
+        'title' => 'You registered to our website. This pleases us.',
         'body1' => 'You can use your e-mail address and the password entered during registration to log in.',
         'body2' => 'If you don\'t remember your password, please click on the \'forgot password\' button below the login form and set a new password.',
         'body3' => 'Before using your account, please make sure to click on the \'activate account\' button below.',

@@ -29,8 +29,8 @@
     </div>
 </template>
 <script>
-  import TreeListItem from '~/components/tree-list/TreeListItem'
-  import Search from '~/components/tree-list/Search'
+  import TreeListItem from 'back_path/components/tree-list/TreeListItem'
+  import Search from 'back_path/components/tree-list/Search'
   import axios from 'axios'
 
   export default {

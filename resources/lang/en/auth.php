@@ -13,7 +13,9 @@ return [
         'reset_title' => 'Your password has been reset!',
         'reset_body' => 'You can login using your new password.',
         'recaptcha_title' => 'Oops, something went wrong!',
-        'recaptcha_body' => 'We were unable to validate your request through Google Recaptcha. Please try submitting the form again in a few moments.'
+        'recaptcha_body' => 'We were unable to validate your request through Google Recaptcha. Please try submitting the form again in a few moments.',
+        'email_reset_title' => 'Almost done!',
+        'email_reset_body' => 'Please enter the password of your choice below and we\'ll reset it for you.'
     ],
     'content' => [
         'email' => 'E-Mail Address',
@@ -21,13 +23,11 @@ return [
     ],
     'create_account' => 'Create an account',
     'login_account' => 'Log in to your account',
-    'email_title' => 'Almost done!',
-    'email_body' => 'Please enter the password of your choice below and we\'ll reset it for you.',
     'register_username_help' => 'Can contains letters, numbers and underscores',
     'email_address' => 'E-Mail Address',
     'register' => 'Register an account',
     'password_help' => 'Must have a minimum of 6 characters.',
     'hide_password' => 'Hide password',
-    'show_password' => 'Show password'
-
+    'show_password' => 'Show password',
+    'required_fields' => 'Fields marked with an asterisk (*) are mandatory.'
 ];

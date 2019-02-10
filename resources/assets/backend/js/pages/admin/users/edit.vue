@@ -112,9 +112,9 @@
             </b-tabs>
             <div class="row justify-content-center">
                 <div class="col-md-6 offset-md-3 mb-4">
-                    <v-button class="align-content-center" :loading="form.busy">
+                    <submit-button class="align-content-center" :loading="form.busy">
                         {{ $t('general.update') }}
-                    </v-button>
+                    </submit-button>
                     <button v-if="intended!==null"
                             type="button"
                             class="btn btn-secondary"
@@ -137,16 +137,16 @@
 
 <script>
   import Vue from 'vue'
-  import Button from '~/components/Button'
-  import Checkbox from '~/components/Checkbox'
-  import PermissionMixin from '~/mixins/permissions'
-  import FormMixin from '~/mixins/form'
-  import { Form, HasError, AlertForm } from '~/components/form'
+  import Button from 'back_path/components/SubmitButton'
+  import Checkbox from 'back_path/components/Checkbox'
+  import PermissionMixin from 'back_path/mixins/permissions'
+  import FormMixin from 'back_path/mixins/form'
+  import { Form, HasError, AlertForm } from 'back_path/components/form'
   import { Card, Tabs } from 'bootstrap-vue/es/components'
-  import ButtonCircle from '~/components/ButtonCircle'
-  import RecordPaginator from '~/components/RecordPaginator'
+  import ButtonCircle from 'back_path/components/ButtonCircle'
+  import RecordPaginator from 'back_path/components/RecordPaginator'
   import axios from 'axios'
-  import { deepCopy } from '~/components/form/util'
+  import { deepCopy } from 'back_path/components/form/util'
 
   Vue.use(Card)
   Vue.use(Tabs)
@@ -156,7 +156,7 @@
     middleware: 'check-auth',
     name: 'user-edit',
     components: {
-      'v-button': Button,
+      Button,
       Checkbox,
       HasError,
       AlertForm,

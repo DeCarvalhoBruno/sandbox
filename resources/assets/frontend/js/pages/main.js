@@ -1,6 +1,6 @@
 (function () {
   var header = $('header')
-  if(!header.length)
+  if (!header.length)
     return
   var wrapper = $('div#wrapper')
   header.before(wrapper)
@@ -22,31 +22,60 @@
     }
   }).scroll()
 })(jQuery);
-(function($, viewport){
-  $(document).ready(function() {
-    $('<h1 class="viewport" style="position:absolute;top:0;left:0"></h1>').appendTo('body')
+(function ($, viewport) {
+  $(document).ready(function () {
+
+    var noTouch = false
+    if (!('ontouchstart' in document.documentElement)) {
+      $('body').addClass('no-touch')
+      noTouch = true
+    }
+
+    $('<h1 class="viewport" style="position:absolute;top:0;left:0"></h1>')
+      .appendTo('body')
     $('h1.viewport').html(viewport.current())
 
     // Executes only in XS breakpoint
-    if(viewport.is('xs')) {
+    if (viewport.is('xs')) {
       // ...
     }
 
     // Executes in SM, MD and LG breakpoints
-    if(viewport.is('>=sm')) {
-      // ...
+    if (viewport.is('>=sm')) {
+      if (noTouch) {
+        $('.dropdown-hover')
+          .hover(
+            function () {
+              $(this).addClass('show')
+            },
+            function () {
+              $(this).removeClass('show')
+            }
+          )
+      }
+      //   .click(function(){
+      //       var g = $(this)
+      //       if(g.hasClass('show')){
+      //         g.dropdown('show')
+      //       }else{
+      //         g.dropdown('hide')
+      //       }
+      // })
     }
 
     // Executes in XS and SM breakpoints
-    if(viewport.is('<md')) {
+    if (viewport.is('<md')) {
       // ...
     }
 
     // Execute code each time window size changes
     $(window).resize(
-      viewport.changed(function() {
+      viewport.changed(function () {
         $('h1.viewport').html(viewport.current())
       })
-    );
-  });
+    )
+  })
 })(jQuery, ResponsiveBootstrapToolkit);
+(function () {
+
+})()

@@ -8,8 +8,8 @@
         <div class="row justify-content-md-center mt-3">
             <div class="col-md-8">
                     <div class="alert alert-info" role="alert">
-                        <h4 class="alert-heading">{{ trans('auth.email_title') }}</h4>
-                        <p>{{ trans('auth.email_body') }}</p>
+                        <h4 class="alert-heading">{{ trans('auth.alerts.email_reset_title') }}</h4>
+                        <p>{{ trans('auth.alerts.email_reset_body') }}</p>
                     </div>
             </div>
         </div>

@@ -17,7 +17,9 @@ class Frontend extends Composer
                         str_replace('.', '_', $view->getName())
                     )
                 ),
-                config('app.name'))
+                config('app.name')
+            ),
+            'user'=>auth()->user()
         ];
         JavaScript::putArray([
             'locale' => app()->getLocale(),

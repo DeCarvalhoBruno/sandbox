@@ -1,5 +1,5 @@
-import i18n from '~/plugins/i18n'
-import '~/plugins'
+import i18n from 'front_path/plugins/i18n'
+import 'front_path/plugins'
 import App from './components/App'
 
 window.Vue = require('vue')

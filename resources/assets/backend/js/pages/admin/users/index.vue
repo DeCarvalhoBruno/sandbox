@@ -110,10 +110,10 @@
 
 <script>
   import Vue from 'vue'
-  import Table from '~/components/table/table'
-  import TableFilter from '~/components/table/TableFilter'
-  import TableMixin from '~/mixins/tables'
-  import Swal from '~/mixins/sweet-alert'
+  import Table from 'back_path/components/table/table'
+  import TableFilter from 'back_path/components/table/TableFilter'
+  import TableMixin from 'back_path/mixins/tables'
+  import Swal from 'back_path/mixins/sweet-alert'
   import axios from 'axios'
 
   Vue.use(Table)
