@@ -23,7 +23,7 @@ return [
     ],
     'create_account' => 'Create an account',
     'login_account' => 'Log in to your account',
-    'register_username_help' => 'Can contains letters, numbers and underscores',
+    'register_username_help' => 'Can contains letters, numbers and underscores. Must be no more than 15 characters long.',
     'email_address' => 'E-Mail Address',
     'register' => 'Register an account',
     'password_help' => 'Must have a minimum of 6 characters.',

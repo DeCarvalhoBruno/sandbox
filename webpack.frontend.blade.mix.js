@@ -69,7 +69,8 @@ mix.webpackConfig({
       jQuery: 'jquery',
       Popper: 'popper.js/dist/umd/popper',
       axios: 'axios/dist/axios.min.js',
-      ResponsiveBootstrapToolkit: 'front_path/plugins/jquery/bootstrap-toolkit.js'
+      ResponsiveBootstrapToolkit: 'front_path/plugins/jquery/bootstrap-toolkit.js',
+      swal: 'sweetalert2/dist/sweetalert2.all.min.js'
     })
   ],
   resolve: {

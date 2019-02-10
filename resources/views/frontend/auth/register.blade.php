@@ -27,7 +27,7 @@
                                 <h5 class="font-light text-danger">{{ trans('auth.required_fields') }}</h5>
                             </div>
                         </div>
-                        <inline-form :id="'register-form'" :action="'{{ route_i18n('register.do') }}'"
+                        <inline-form :id="'register-form'" :action="'{{ route('register.do') }}'"
                                      :method="'POST'">
                                 {!! csrf_field() !!}
                                 <div class="form-group row">

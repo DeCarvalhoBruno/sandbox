@@ -27,5 +27,6 @@ class TestStuff extends Command
      */
     public function handle()
     {
+
     }
 }

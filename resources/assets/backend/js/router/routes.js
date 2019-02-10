@@ -1,41 +1,41 @@
-const Login = () => import('back_path/pages/admin/auth/login').then(m => m.default || m)
+const Login = () => import('back_path/pages/login').then(m => m.default || m)
 
-const Dashboard = () => import('back_path/pages/admin/dashboard').then(
-  m => m.default || m)
-
-const Users = () => import('back_path/pages/admin/users/index').then(
-  m => m.default || m)
-const UserEdit = () => import('back_path/pages/admin/users/edit').then(
+const Dashboard = () => import('back_path/pages/dashboard').then(
   m => m.default || m)
 
-const Groups = () => import('back_path/pages/admin/groups/index').then(
+const Users = () => import('back_path/pages/users/index').then(
   m => m.default || m)
-const GroupEdit = () => import('back_path/pages/admin/groups/edit').then(
-  m => m.default || m)
-const GroupAdd = () => import('back_path/pages/admin/groups/add').then(
-  m => m.default || m)
-const GroupMember = () => import('back_path/pages/admin/groups/member').then(
+const UserEdit = () => import('back_path/pages/users/edit').then(
   m => m.default || m)
 
-const Blog = () => import('back_path/pages/admin/blog/index').then(
+const Groups = () => import('back_path/pages/groups/index').then(
   m => m.default || m)
-const BlogAdd = () => import('back_path/pages/admin/blog/add').then(
+const GroupEdit = () => import('back_path/pages/groups/edit').then(
   m => m.default || m)
-const BlogCategory = () => import('back_path/pages/admin/blog/category').then(
+const GroupAdd = () => import('back_path/pages/groups/add').then(
   m => m.default || m)
-
-const Settings = () => import('back_path/pages/admin/settings/index').then(
-  m => m.default || m)
-const SettingsGeneral = () => import('back_path/pages/admin/settings/general').then(
-  m => m.default || m)
-const SettingsProfile = () => import('back_path/pages/admin/settings/profile').then(
-  m => m.default || m)
-const SettingsPassword = () => import('back_path/pages/admin/settings/password').then(
+const GroupMember = () => import('back_path/pages/groups/member').then(
   m => m.default || m)
 
-const Media = () => import('back_path/pages/admin/media/index').then(
+const Blog = () => import('back_path/pages/blog/index').then(
   m => m.default || m)
-const MediaEdit = () => import('back_path/pages/admin/media/edit').then(
+const BlogAdd = () => import('back_path/pages/blog/add').then(
+  m => m.default || m)
+const BlogCategory = () => import('back_path/pages/blog/category').then(
+  m => m.default || m)
+
+const Settings = () => import('back_path/pages/settings/index').then(
+  m => m.default || m)
+const SettingsGeneral = () => import('back_path/pages/settings/general').then(
+  m => m.default || m)
+const SettingsProfile = () => import('back_path/pages/settings/profile').then(
+  m => m.default || m)
+const SettingsPassword = () => import('back_path/pages/settings/password').then(
+  m => m.default || m)
+
+const Media = () => import('back_path/pages/media/index').then(
+  m => m.default || m)
+const MediaEdit = () => import('back_path/pages/media/edit').then(
   m => m.default || m)
 
 import routesI18n from 'back_path/lang/routes'

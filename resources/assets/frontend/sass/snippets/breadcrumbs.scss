@@ -1,0 +1,40 @@
+#breadcrumb-wrapper {
+  margin-top: 1rem;
+  font-family: $font-family-title;
+  font-size: 0.8rem;
+  letter-spacing: 0.15rem;
+
+  .card {
+    padding: .5rem;
+    box-shadow: 0 .0625rem .25rem rgba(0, 0, 0, .075);
+  }
+
+  ul.breadcrumbs {
+    position: relative;
+    padding: 0;
+    margin: 0;
+
+    li {
+      position: relative;
+      text-decoration: none;
+      display: inline-block;
+      padding: 0 .5rem;
+
+      &:not(:last-child) {
+        padding-right: 1.3rem;
+
+        &:after {
+          position: absolute;
+          top: 0;
+          right: 0;
+          content: '›';
+        }
+      }
+
+      a:hover {
+        text-decoration: none;
+      }
+
+    }
+  }
+}

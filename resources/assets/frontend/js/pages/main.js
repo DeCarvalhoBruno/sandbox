@@ -31,7 +31,21 @@
       noTouch = true
     }
 
-    $('<h1 class="viewport" style="position:absolute;top:0;left:0"></h1>')
+    if(window.hasOwnProperty('config')){
+      if(window.config.hasOwnProperty('msg')){
+        swal.fire({
+          type:window.config.msg.type,
+          title:window.config.msg.title,
+          position: 'top-end',
+          toast: true,
+          showConfirmButton: false,
+          timer: 4000
+        })
+      }
+    }
+
+    $('<h1 class="viewport" ' +
+      'style="position:absolute;bottom:4rem;right:1rem;font-weight: bold;"></h1>')
       .appendTo('body')
     $('h1.viewport').html(viewport.current())
 

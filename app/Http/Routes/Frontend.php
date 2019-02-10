@@ -52,8 +52,7 @@ class Frontend extends Routes
 
             $r->get(trans('routes.register', [], $locale), 'Auth\Register@showRegistrationForm')
                 ->name(self::i18nRouteNames($locale, 'register'));
-            $r->post('register', 'Auth\Register@register')
-                ->name(self::i18nRouteNames($locale, 'register.do'));
+            $r->post('register', 'Auth\Register@register')->name('register.do');
 
             $r->get(trans('routes.password_reset', [], $locale), 'Auth\ForgotPassword@showLinkRequestForm')
                 ->name(self::i18nRouteNames($locale, 'password.request'));
@@ -76,6 +75,7 @@ class Frontend extends Routes
             $r->post('logout', 'Auth\Login@logout')->name('logout');
             $r->get(trans('routes.user_profile', [], $locale), 'User@edit')
                 ->name(self::i18nRouteNames($locale, 'profile'));
+            $r->post('profile/update', 'User@update')->name('profile.update');
 
         };
     }

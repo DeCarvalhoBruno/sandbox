@@ -29,6 +29,15 @@ label.field-required {
   }
 }
 
+@include media-breakpoint-down(md) {
+  label.field-required {
+    &:before {
+      left: 0;
+      right: unset;
+    }
+  }
+}
+
 .password-wrapper {
   .password-group {
     position: relative;
@@ -123,6 +132,8 @@ label.field-required {
     margin-right: 13px;
     height: 24px;
     padding: 3px;
+    cursor: default;
+    user-select:none;
   }
 
   .password-badge-error {

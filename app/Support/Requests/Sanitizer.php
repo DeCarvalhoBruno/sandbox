@@ -47,6 +47,7 @@ class Sanitizer
     public function __construct(array $data, array $rules, $activateTagStrippingFilter = true)
     {
         $this->data = $data;
+        unset($this->data['_token']);
         $this->rules = $this->parseRulesArray($rules);
         $this->activateTagStrippingFilter = $activateTagStrippingFilter;
 

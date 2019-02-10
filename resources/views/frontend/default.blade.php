@@ -21,22 +21,22 @@
         </nav>
         <ul class="nav">
             @if(Auth::check())
-            <li class="nav-item dropdown dropdown-hover">
-                <a class="nav-link dropdown-toggle pr-0"
-                   data-toggle="dropdown" href="#" role="button"
-                   aria-haspopup="true" aria-expanded="false">{{$user->getAttribute('username')}}</a>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a href="{{route_i18n('profile')}}" class="dropdown-item">{{trans('general.user_profile')}}</a>
-                    <div class="dropdown-divider"></div>
-                    <form id="logout_form" accept-charset="UTF-8" action="{{route('logout')}}" method="POST">
-                        <fieldset>
-                            <input type="hidden" value="{{csrf_token()}}" name="_token">
-                        </fieldset>
-                    </form>
-                    <a onclick="document.querySelector('#logout_form').submit()" href="#" class="dropdown-item">Logout</a>
-                </div>
-            </li>
-                @else
+                <li class="nav-item dropdown dropdown-hover">
+                    <a class="nav-link dropdown-toggle pr-0"
+                       data-toggle="dropdown" href="#" role="button"
+                       aria-haspopup="true" aria-expanded="false">{{$user->getAttribute('username')}}</a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a href="{{route_i18n('profile')}}" class="dropdown-item">{{trans('general.user_profile')}}</a>
+                        <div class="dropdown-divider"></div>
+                        <form id="logout_form" accept-charset="UTF-8" action="{{route('logout')}}" method="POST">
+                            <fieldset>
+                                <input type="hidden" value="{{csrf_token()}}" name="_token">
+                            </fieldset>
+                        </form>
+                        <a onclick="document.querySelector('#logout_form').submit()" href="#" class="dropdown-item">Logout</a>
+                    </div>
+                </li>
+            @else
                 <li class="nav nav-item">
                     <a class="nav-link" href="{{route_i18n('login')}}">{{trans('ajax.general.login')}}</a>
                 </li>
@@ -89,9 +89,15 @@
     </div>
 </header>
 <div id="app">
-
-
-    <div id="content_container">
+    <div id="content_container" class="container">
+        @if(isset($breadcrumbs))
+            <div id="breadcrumb-wrapper" class="col">
+                    <div class="card">
+                        {!! $breadcrumbs !!}
+                    </div>
+                </div>
+            </div>
+        @endif
         @yield('content')
     </div>
 </div>
