@@ -2,9 +2,15 @@
 
 class Frontend extends Controller
 {
-    public function test()
+    public function contact()
     {
+        return view('frontend.site.contact');
 
+    }
+
+    public function sendContactEmail()
+    {
+        
     }
 
 }

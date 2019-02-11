@@ -1,5 +1,5 @@
 <?php return [
-    'home'=>'/',
+    'home' => '/',
     'admin_login' => 'connexion',
     'login' => 'connexion',
     'activate' => 'inscription/activation/{token}',
@@ -7,7 +7,8 @@
     'password_reset' => 'identifiants/reinitialiser',
     'password_email' => 'identifiants/email',
     'password_reset_token' => 'identifiants/reinitialiser/{token}/{email}',
-    'user_profile'=>'profil',
+    'user_profile' => 'profil',
+    'contact' => 'contact',
     'blog_slug' => 'blog/{slug}',
 
 ];

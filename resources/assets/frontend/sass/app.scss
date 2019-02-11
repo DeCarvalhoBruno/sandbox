@@ -44,10 +44,15 @@
 //**********************************************
 @import "./core";
 @import "./elements/form";
-@import "../../backend/sass/elements/submit-button";
+@import "./blocks/header";
+@import "./blocks/footer";
+
 //**********************************************
-@import "./snippets/header-menu";
 @import "./snippets/blog-featured";
 @import "./snippets/breadcrumbs";
+//**********************************************
+
+@import "../../backend/sass/elements/submit-button";
+@import "./vendor/sweetalert2/app";
 
 

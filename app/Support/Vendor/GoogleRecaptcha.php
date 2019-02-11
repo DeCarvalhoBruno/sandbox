@@ -61,4 +61,13 @@ class GoogleRecaptcha
         return static::$siteVerifyUrl . $this->payload;
     }
 
+    public static function validate($attribute, $value, $parameters, $validator) {
+        $result = static::check($value, 'localhost', env('RECAPTCHA_SECRET_KEY'));
+        if ($result === true) {
+            return true;
+        }
+        $validator->errors()->add('recaptcha', '');
+        return false;
+    }
+
 }

@@ -1,0 +1,42 @@
+.footer {
+  clear: both;
+  margin-top: 4rem;
+  background-color: #fff;
+  border-top: 2px solid #dee2e6;
+  padding-top: 1rem;
+
+  .container {
+    padding:0.5rem 0;
+  }
+
+  form {
+    input {
+      font-size: 90%;
+    }
+  }
+
+  .row > [class*=col-] {
+    margin-bottom: 1.5rem
+  }
+
+  .list-group-sm .list-group-item {
+    background-color: #fff;
+    padding-left: 0;
+  }
+
+  .list-group-sm .list-group-item:focus,
+  .list-group-sm .list-group-item:hover {
+    background-color: inherit;
+    color: $anchor;
+  }
+}
+
+.copyright {
+  font-weight: 300;
+  letter-spacing: 0.2rem;
+  text-align: center;
+  padding: .5rem 0;
+  background-color: #fff;
+  border-top: 1px solid #dee2e6;
+  font-size: 90%
+}

@@ -20,7 +20,12 @@
       wrapper.height(outerHeight)
       // windowScrollToTop = thisScrollTop
     }
-  }).scroll()
+    if ($(this).scrollTop() > 200) {
+      $('#scroll-up').fadeIn()
+    } else {
+      $('#scroll-up').fadeOut()
+    }
+  })
 })(jQuery);
 (function ($, viewport) {
   $(document).ready(function () {
@@ -31,30 +36,11 @@
       noTouch = true
     }
 
-    if(window.hasOwnProperty('config')){
-      if(window.config.hasOwnProperty('msg')){
-        swal.fire({
-          type:window.config.msg.type,
-          title:window.config.msg.title,
-          position: 'top-end',
-          toast: true,
-          showConfirmButton: false,
-          timer: 4000
-        })
-      }
-    }
-
     $('<h1 class="viewport" ' +
       'style="position:absolute;bottom:4rem;right:1rem;font-weight: bold;"></h1>')
       .appendTo('body')
     $('h1.viewport').html(viewport.current())
 
-    // Executes only in XS breakpoint
-    if (viewport.is('xs')) {
-      // ...
-    }
-
-    // Executes in SM, MD and LG breakpoints
     if (viewport.is('>=sm')) {
       if (noTouch) {
         $('.dropdown-hover')
@@ -67,22 +53,14 @@
             }
           )
       }
-      //   .click(function(){
-      //       var g = $(this)
-      //       if(g.hasClass('show')){
-      //         g.dropdown('show')
-      //       }else{
-      //         g.dropdown('hide')
-      //       }
-      // })
     }
+    $('#scroll-up').click(function(e) {
+      e.preventDefault()
+      $('html, body').animate({
+        scrollTop: 0
+      }, 1000)
+    });
 
-    // Executes in XS and SM breakpoints
-    if (viewport.is('<md')) {
-      // ...
-    }
-
-    // Execute code each time window size changes
     $(window).resize(
       viewport.changed(function () {
         $('h1.viewport').html(viewport.current())
@@ -91,5 +69,16 @@
   })
 })(jQuery, ResponsiveBootstrapToolkit);
 (function () {
-
-})()
+  if(window.hasOwnProperty('config')){
+    if(window.config.hasOwnProperty('msg')){
+      swal.fire({
+        type:window.config.msg.type,
+        title:window.config.msg.title,
+        position: 'top-end',
+        toast: true,
+        showConfirmButton: false,
+        timer: 4000
+      })
+    }
+  }
+})(jQuery);

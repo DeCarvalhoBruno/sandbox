@@ -1,3 +1,21 @@
+#scroll-up {
+  background-color: $primary;
+  color: #ffffff;
+  padding: 0.5rem;
+  border-radius: 3px;
+  position: fixed;
+  width: 3rem;
+  height: 3rem;
+  bottom: 2rem;
+  right: 2rem;
+  text-align: center;
+
+  &:hover{
+    background-color: lighten($primary,10%);
+    transition: background-color 0.5s ease-in-out;
+  }
+}
+
 body {
   background-color: $body-bg;
 }
@@ -7,7 +25,7 @@ body {
 }
 
 .btn-primary {
-  background-color:$primary;
+  background-color: $primary;
 }
 
 //Don't display body until fontawesome icons have finished loading

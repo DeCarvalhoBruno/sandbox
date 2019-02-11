@@ -33,5 +33,16 @@ export default {
         'SubmitButton'
       ]
     }
+  },
+  // Contact
+  '2f8a6bf31f': {
+    components: {
+      frontend: [
+        'InlineForm'
+      ],
+      backend: [
+        'SubmitButton'
+      ]
+    }
   }
 }

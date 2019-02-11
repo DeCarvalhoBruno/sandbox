@@ -1,7 +1,7 @@
 import './axios'
 import './fontawesome'
 import './jquery'
-import 'sweetalert2'
+// import swal from 'sweetalert2/dist/sweetalert2.min.js'
 
 import 'bootstrap/js/dist/util'
 import 'bootstrap/js/dist/dropdown'

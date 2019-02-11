@@ -16,7 +16,7 @@ class CreateUser extends FormRequest
             'username' => 'required|string|max:15|regex:/^(\w){1,}$/|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'g-recaptcha'=>'captcha'
+            'g-recaptcha' => 'captcha'
         ];
     }
 
@@ -24,7 +24,7 @@ class CreateUser extends FormRequest
     {
         $input = $this->input();
 
-        unset($input['password_confirmation'],$input['g-recaptcha']);
+        unset($input['password_confirmation'], $input['g-recaptcha']);
         $this->replace($input);
     }
 

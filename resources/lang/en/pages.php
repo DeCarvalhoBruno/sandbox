@@ -7,5 +7,10 @@
         'new_username' => 'New Username',
         'new_password_confirm' => 'New Password Confirmation',
         'update_success'=>'Your profile has been updated.'
+    ],
+    'contact'=>[
+        'email_subject'=>'Subject',
+        'sender_email'=>'Your email',
+        'email_body'=>'Message body'
     ]
 ];

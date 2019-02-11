@@ -1,0 +1,22 @@
+@import './variables';
+@import './animations';
+@import './mixins';
+@import './toasts';
+@import "./sweetalert2";
+
+.swal2-popup .swal2-title {
+  font-family: $font-family-title;
+  font-weight: 300;
+  color: $primary;
+}
+
+.swal2-popup.swal2-toast .swal2-title {
+  font-size: 1.2rem;
+  letter-spacing: 0.1rem;
+}
+
+body.swal2-toast-shown.swal2-shown {
+  .swal2-header {
+    padding: 0.3rem 2.5rem;
+  }
+}

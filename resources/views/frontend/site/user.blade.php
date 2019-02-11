@@ -1,7 +1,7 @@
 @extends('frontend.default')
 
 @section('content')
-    <section id="user-profile" class="container mt-4">
+    <div id="user-profile" class="container mt-4">
         <div class="col-md-8 offset-md-2">
             <div id="user_register_container" class="card card-shadow">
                 <div class="card-body">
@@ -120,10 +120,9 @@
                                         :block="true">{{trans('ajax.general.register')}}</submit-button>
                             </div>
                         </div>
-                        <input type="hidden" id="g-recaptcha" name="g-recaptcha" value="">
                     </inline-form>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 @endsection

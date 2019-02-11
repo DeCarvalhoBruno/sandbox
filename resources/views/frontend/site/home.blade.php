@@ -1,7 +1,7 @@
 @extends('frontend.default')
 
 @section('content')
-    <section id="blog-featured" class="container">
+    <div id="blog-featured" class="container">
         <div class="row">
             <div id="blog-featured-carousel" class="col-lg-7">
                 <div id="carousel-1" class="carousel slide" data-ride="false">
@@ -60,6 +60,5 @@
                 </div>
             </div>
         </div>
-        </div>
-    </section>
+    </div>
 @endsection

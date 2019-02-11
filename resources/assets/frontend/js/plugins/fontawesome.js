@@ -5,12 +5,13 @@ import {
   faCircle,
   faInfo,
   faCheck,
-  faHome
+  faHome,
+  faAngleUp
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(
-  faUser, faCircle, faInfo, faCheck, faHome
+  faUser, faCircle, faInfo, faCheck, faHome, faAngleUp
 )
 
 Vue.component('fa', FontAwesomeIcon)
