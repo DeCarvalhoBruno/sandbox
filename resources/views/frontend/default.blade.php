@@ -12,7 +12,7 @@
     <link href="{{ mix('css/app.css','6aa0e') }}" rel="stylesheet">
 </head>
 <body>
-@include('partials.header')
+    @include('partials.header')
 <div id="app">
     <div id="content_container" class="container">
         @if(isset($breadcrumbs))
@@ -24,11 +24,11 @@
         @endif
         @yield('content')
     </div>
-    @include('partials.footer')
     <a href="#" id="scroll-up" style="display: none;">
         <fa class="fa-2x" icon="angle-up"></fa>
     </a>
 </div>
+@include('partials.footer')
 <!-- Scripts -->
 @yield('scripts')
 @include('partials.javascript_footer')

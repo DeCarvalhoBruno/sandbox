@@ -63,7 +63,7 @@ class Frontend extends Routes
             $r->post('password/reset', 'Auth\ResetPassword@reset')->name( 'password.reset.do');
             $r->get(trans('routes.contact', [], $locale), 'Frontend@contact')
                 ->name(self::i18nRouteNames($locale, 'contact'));
-            $r->post('contact/send', 'Frontend\Frontend@sendContactEmail')->name( 'contact.send');
+            $r->post('contact/send', 'Frontend@sendContactEmail')->name( 'contact.send');
 //            $r->get(trans('routes.blog_slug', [], $locale), 'Blog@getPost')
 //                ->name(self::i18nRouteNames($locale, 'blog'));
 

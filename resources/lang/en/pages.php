@@ -9,8 +9,10 @@
         'update_success'=>'Your profile has been updated.'
     ],
     'contact'=>[
+        'form_title'=>'Get in touch with us',
         'email_subject'=>'Subject',
         'sender_email'=>'Your email',
-        'email_body'=>'Message body'
+        'email_body'=>'Message body',
+        'send_success'=>'Thank you for getting in touch with us! We\'ll get back to you shortly.'
     ]
 ];

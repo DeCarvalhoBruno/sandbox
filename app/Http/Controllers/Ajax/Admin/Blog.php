@@ -219,7 +219,6 @@ class Blog extends Controller
             foreach ($postSlugs as $slug) {
                 $uuids = $mediaRepo->image()->getImagesFromSlug($slug, Entity::BLOG_POSTS, ['media_uuid'])
                     ->pluck('media_uuid')->all();
-                dump($uuids);
                 if (!empty($uuids) && !is_null($uuids)) {
                     $mediaUuids = array_merge($mediaUuids, $uuids);
                 }

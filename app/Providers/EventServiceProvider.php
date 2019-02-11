@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Events\PermissionEntityUpdated;
+use App\Events\PersonSentContactRequest;
+use App\Listeners\PersonSentContactRequest as PersonSentContactRequestListener;
 use App\Events\UserRegistered;
 use App\Listeners\UpdatePermissions;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -22,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         UserRegistered::class => [
             UpdatePermissions::class,
             UserRegisteredListener::class
+        ],
+        PersonSentContactRequest::class=>[
+            PersonSentContactRequestListener::class
         ]
     ];
 

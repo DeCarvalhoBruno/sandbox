@@ -11,8 +11,8 @@ class Welcome extends Email
         $this->view = [
             'title' => trans('email.welcome.title'),
             'subject' => trans('email.welcome.subject', ['app_name' => config('app.name')]),
-            'email' => $this->data->user->getAttribute('email'),
-            'user_name' => $this->data->user->getFullname(),
+            'recipient_email' => $this->data->user->getAttribute('email'),
+            'recipient_name' => $this->data->user->getFullname(),
             'activation_token' => $this->data->activation_token
         ];
     }
@@ -24,7 +24,7 @@ class Welcome extends Email
     {
         $message->subject($this->view['subject']);
         $message->from($this->from, $this->fromName);
-        $message->to($this->data->user->getAttribute('email'), $this->data->user->getFullname());
+        $message->to($this->view['recipient_email'], $this->view['recipient_name']);
         $message->replyTo($this->from, $this->fromName);
     }
 

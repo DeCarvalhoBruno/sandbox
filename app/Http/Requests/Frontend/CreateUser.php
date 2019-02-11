@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Frontend;
 
 use App\Support\Requests\FormRequest;
-use App\Support\Vendor\GoogleRecaptcha;
 use Illuminate\Support\Facades\Validator;
 
 class CreateUser extends FormRequest
@@ -30,14 +29,7 @@ class CreateUser extends FormRequest
 
     public function prepareForValidation()
     {
-        Validator::extend('captcha', function ($attribute, $value, $parameters, $validator) {
-            $result= GoogleRecaptcha::check($value,'localhost',env('RECAPTCHA_SECRET_KEY'));
-            if($result===true){
-                return true;
-            }
-            $validator->errors()->add('recaptcha','');
-            return false;
-        });
+        Validator::extend('captcha', ['\App\Support\Vendor\GoogleRecaptcha', 'validate']);
         parent::prepareForValidation();
     }
 }

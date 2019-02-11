@@ -1,3 +1,28 @@
+body {
+  background-color: $body-bg;
+}
+
+a {
+  color: $anchor;
+
+  &:hover {
+    color: $anchor-hover;
+  }
+}
+
+.font-light {
+  font-weight: 300;
+}
+
+.btn-primary {
+  background-color: $primary;
+}
+
+#app {
+  min-height: calc(100vh - 24.5rem);
+  position: relative;
+}
+
 #scroll-up {
   background-color: $primary;
   color: #ffffff;
@@ -10,22 +35,10 @@
   right: 2rem;
   text-align: center;
 
-  &:hover{
-    background-color: lighten($primary,10%);
+  &:hover {
+    background-color: lighten($primary, 10%);
     transition: background-color 0.5s ease-in-out;
   }
-}
-
-body {
-  background-color: $body-bg;
-}
-
-.font-light {
-  font-weight: 300;
-}
-
-.btn-primary {
-  background-color: $primary;
 }
 
 //Don't display body until fontawesome icons have finished loading

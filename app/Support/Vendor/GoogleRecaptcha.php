@@ -9,7 +9,7 @@ class GoogleRecaptcha
     private $secret;
     private $payload;
 
-    public static function check($googleResponse,$clientIP,$secret)
+    public static function check($googleResponse, $clientIP, $secret)
     {
         if (!$googleResponse || empty($googleResponse)) {
             return false;
@@ -57,11 +57,24 @@ class GoogleRecaptcha
         return $response;
     }
 
-    public function getGoogleVerifyURL(){
+    public function getGoogleVerifyURL()
+    {
         return static::$siteVerifyUrl . $this->payload;
     }
 
-    public static function validate($attribute, $value, $parameters, $validator) {
+    /**
+     * Method called by laravel's validator that allows to execute internal methods
+     * without writing google code in our request classes.
+     *
+     * @see \App\Http\Requests\Frontend\CreateUser
+     * @param $attribute
+     * @param $value
+     * @param $parameters
+     * @param $validator
+     * @return bool
+     */
+    public static function validate($attribute, $value, $parameters, $validator)
+    {
         $result = static::check($value, 'localhost', env('RECAPTCHA_SECRET_KEY'));
         if ($result === true) {
             return true;

@@ -14,13 +14,13 @@
             <div class="col-6 col-lg-3">
                 <h6 class="bold">Service</h6>
                 <div class="list-group list-group-flush list-group-no-border list-group-sm">
-                    <a href="javascript:void(0)" class="list-group-item list-group-item-action">Help</a>
+                    <a href="javascript:void(0)" class="list-group-item">Help</a>
                 </div>
             </div>
             <div class="col-6 col-lg-3">
                 <h6 class="bold">{{env('APP_NAME')}}</h6>
                 <div class="list-group list-group-flush list-group-no-border list-group-sm">
-                    <a href="about.html" class="list-group-item list-group-item-action">About Us</a>
+                    <a href="about.html" class="list-group-item">About Us</a>
                 </div>
             </div>
             <div class="col-sm-6 col-lg-3"></div>

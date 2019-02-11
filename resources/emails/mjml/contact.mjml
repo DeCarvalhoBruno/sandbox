@@ -1,0 +1,46 @@
+<mjml>
+    <mj-head>
+        <mj-font name="Lato" href="https://fonts.googleapis.com/css?family=Lato:300,400,700"/>
+        <mj-attributes>
+            <mj-all font-family="Lato, Helvetica, Arial, sans-serif"/>
+        </mj-attributes>
+    </mj-head>
+    <mj-body>
+        <mj-section background-color="#ffffff" padding-left="0px" padding-right="0px" padding-bottom="25px"
+                    padding-top="20px" width="100%">
+            <mj-column vertical-align="top" width="600px">
+                <mj-image href="#" src="image/logo3.png" alt="Logo" border="none" padding-left="0px" padding-right="0px"
+                          padding-bottom="0px" padding-top="0" width="300px" text-align="center"></mj-image>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#a42227" padding-left="0px" padding-right="0px" padding-bottom="10px"
+                    padding-top="10px" align="center" border-bottom="8px solid #a75c23">
+            <mj-column>
+                <mj-text padding-left="0px" padding-right="0px" padding-bottom="20px" font-size="25px" line-height="27px"
+                         padding-top="20px" align="center" color="#ffffff"><span style="padding-bottom: 15px">Contact</span>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#efd6ce" padding-left="0px" padding-right="0px" padding-bottom="50px"
+                    padding-top="50px" align="center">
+            <mj-column vertical-align="top" width="100%" align="center">
+                <mj-text font-size="15px" padding-top="15px">E-mail address: **********************
+                </mj-text>
+                <mj-text padding-top="15px">Subject: **********************
+                </mj-text>
+                <mj-text padding-top="15px" font-size="16px" font-weight="bold">Message body: **********************
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-left="0px" padding-right="0px" padding-bottom="15px"
+                    padding-top="10px">
+            <mj-column>
+                <mj-text align="center" font-size="10px" line-height="10px" font-family="Helvetica, Arial, sans-serif"
+                         padding-left="0px" padding-right="0px" padding-bottom="5px" padding-top="0" color="#707070"
+                         font-style="italic">This email originates from the XXXXXXXXXXX platorm and is addressed to XXXXXXXX
+                    (XXXXXXXX)
+                </mj-text>
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>

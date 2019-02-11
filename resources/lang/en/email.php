@@ -16,5 +16,12 @@ return [
         'body2' => 'If you did not request a password reset, you can just delete this e-mail.',
         'cta' => 'Reset your password'
     ],
+    'contact' => [
+        'title' => 'A message was sent through the contact form.',
+        'email_subject' => 'Contact form message received',
+        'email' => 'E-mail address:',
+        'subject' => 'Subject:',
+        'message_body' => 'Message body:'
+    ],
     'origin' => 'This email originates from the :app_name platform and is addressed to :name (:email)',
 ];

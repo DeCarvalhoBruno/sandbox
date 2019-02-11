@@ -10,9 +10,10 @@ class SendContactEmail extends FormRequest
     public function rules()
     {
         return [
-            'sender_email' => 'nullable',
-            'email_subject' => 'nullable',
-            'email_body' => 'nullable'
+            'sender_email' => 'nullable|email',
+            'email_subject' => 'nullable|max:255',
+            'email_body' => 'nullable',
+            'g-recaptcha'=>'captcha'
         ];
     }
 
@@ -34,7 +35,7 @@ class SendContactEmail extends FormRequest
 
     public function prepareForValidation()
     {
-        Validator::extend('captcha', call_user_func(['App\Support\Vendor\GoogleRecaptcha','validate']));
+        Validator::extend('captcha',['\App\Support\Vendor\GoogleRecaptcha', 'validate']);
         parent::prepareForValidation();
     }
 }

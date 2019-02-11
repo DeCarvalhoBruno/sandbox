@@ -77,7 +77,7 @@
         position: 'top-end',
         toast: true,
         showConfirmButton: false,
-        timer: 4000
+        timer: 8000
       })
     }
   }

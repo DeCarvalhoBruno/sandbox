@@ -1,18 +1,12 @@
-// So as not to get the promise reference not found on my old and non upgradable version of node
-require('es6-promise').polyfill()
+const {src, dest, watch} = require('gulp')
+const mjml = require('gulp-mjml')
 
-var gulp = require('gulp')
-var mjml = require('gulp-mjml')
-// var mjmlEngine = require('mjml')
-
-Object.assign = require('object-assign')
-
-gulp.task('default', function () {
-  gulp.src('resources/emails/tmp/*.mjml')
+exports.default = function () {
+  return src('resources/emails/tmp/*.mjml')
     .pipe(mjml())
-    .pipe(gulp.dest('resources/emails/views/'))
-})
+    .pipe(dest('resources/emails/views/'))
+}
 
-gulp.task('watch', function () {
-  gulp.watch('resources/emails/tmp/*.mjml', ['default'])
-})
+exports.watch = function () {
+  return watch('resources/emails/tmp/*.mjml', ['default'])
+}
