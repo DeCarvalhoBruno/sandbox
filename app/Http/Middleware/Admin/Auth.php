@@ -5,7 +5,7 @@ namespace App\Http\Middleware\Admin;
 use Closure;
 use Illuminate\Http\Response;
 
-class UnauthorizedIfGuest
+class Auth
 {
     /**
      * Handle an incoming request.
@@ -17,8 +17,7 @@ class UnauthorizedIfGuest
      */
     public function handle($request, Closure $next)
     {
-        auth()->setDefaultDriver('jwt');
-        if (!\Auth::guard()->check()) {
+        if (!\Auth::guard('jwt')->check()) {
             return response(trans('error.http.401'),Response::HTTP_UNAUTHORIZED);
         }
         return $next($request);

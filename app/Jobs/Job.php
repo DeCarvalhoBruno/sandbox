@@ -11,4 +11,11 @@ abstract class Job
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public function handle()
+    {
+        if ($this->attempts() > 3) {
+            $this->delete();
+        }
+    }
+
 }

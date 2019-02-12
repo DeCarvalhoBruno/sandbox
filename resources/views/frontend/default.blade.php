@@ -32,6 +32,12 @@
 <!-- Scripts -->
 @yield('scripts')
 @include('partials.javascript_footer')
-<script src="{{ mix('js/app.js','6aa0e') }}"></script>
+    @if (app()->environment()==='production')
+        <script src="{{ mix('js/manifest.js','6aa0e') }}"></script>
+        <script src="{{ mix('js/vendor.js','6aa0e') }}"></script>
+        <script src="{{ mix('js/app.js','6aa0e') }}"></script>
+    @else
+        <script src="{{ mix('js/app.js','6aa0e') }}"></script>
+    @endif
 </body>
 </html>

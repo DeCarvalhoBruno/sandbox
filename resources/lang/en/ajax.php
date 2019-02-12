@@ -270,7 +270,7 @@ return [
             'avatar-tab' => 'Avatar',
             'avatar-ul-tab' => 'Upload avatar',
             'delete_avatar' => 'Delete avatar',
-            'click_default' => 'Click on an avatar to make it your profile picture.',
+            'click_default' => 'Click on an avatar to make it your profile picture. Changes in avatars will be saved automatically.',
             'image_uploading' => 'Processing in progress...',
             'image_proceed' => 'Proceed to cropping',
             'image_uploaded' => 'The avatar has been processed, you can return to the avatar tab.'

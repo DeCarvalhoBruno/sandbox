@@ -31,7 +31,7 @@ class Frontend extends Routes
             ], call_user_func('static::guest', $locale));
 
             $r->group([
-                'middleware' => ['auth:web','web'],
+                'middleware' => ['frontend_auth'],
             ], call_user_func('static::auth', $locale));
 
         };
@@ -45,7 +45,7 @@ class Frontend extends Routes
                 ->name(self::i18nRouteNames($locale, 'home'));
 
             $r->get(trans('routes.login', [], $locale), 'Auth\Login@index')
-                ->name(self::i18nRouteNames($locale, 'login'));
+                ->name(self::i18nRouteNames($locale, 'login'))->middleware('frontend_guest');
             $r->get(trans('routes.activate', [], $locale), 'Auth\Login@activate')
                 ->name(self::i18nRouteNames($locale, 'activate'));
 

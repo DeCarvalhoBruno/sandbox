@@ -59,7 +59,8 @@
                             <div class="col-xl-6 offset-xl-4 col-lg-6 offset-lg-4">
                                 <submit-button
                                         ref="submitButton"
-                                        :block="true">{{trans('general.send')}}</submit-button>
+                                        :block="true"
+                                        :value="'{{trans('general.send')}}'"></submit-button>
                             </div>
                         </div>
                         <input type="hidden" class="g-recaptcha" name="g-recaptcha" value="">

@@ -26,6 +26,17 @@ class Users extends Migration
             $table->unique(['user_id','username'],'idx_user_id_username');
         });
 
+        Schema::create('stat_users', function (Blueprint $table) {
+            $table->increments('stat_user_id');
+
+            $table->unsignedInteger('user_id');
+            $table->timestamp('stat_user_last_visit')->nullable();
+
+            $table->foreign('user_id')
+                ->references('user_id')->on('users')
+                ->onDelete('cascade');
+        });
+
         Schema::create('user_activations', function (Blueprint $table) {
             $table->unsignedInteger('user_id');
             $table->string('activation_token',32);

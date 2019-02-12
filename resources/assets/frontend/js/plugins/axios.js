@@ -1,4 +1,6 @@
 import axios from 'axios'
+import swal from 'sweetalert2'
+import i18n from 'front_path/plugins/i18n'
 
 axios.interceptors.request.use(request => {
   const {token} = window.config
@@ -12,13 +14,42 @@ axios.interceptors.request.use(request => {
 
 axios.interceptors.response.use(response => response, error => {
   const {status} = error.response
-  const {data} = error.response
-console.log(error)
   let text
-  if (data && data.length > 0) {
-    text = error.response.data[0]
+  if (error.response.data && error.response.data.length > 0) {
+    text = error.response.data
   } else {
-    text = null
+    text = i18n.$t('modal.error.t')
+  }
+
+  if (status >= 500) {
+    let settings = {
+      type: 'error',
+      title: i18n.$t('modal.error.h'),
+      text: text,
+      reverseButtons: true,
+      confirmButtonText: i18n.$t('general.ok')
+    }
+    swal.fire(settings)
+  }
+
+  if (status === 401) {
+    swal.fire({
+      type: 'warning',
+      title: i18n.$t('modal.token_expired.h'),
+      text: i18n.$t('modal.token_expired.t'),
+      showCancelButton: false,
+      confirmButtonText: i18n.$t('general.ok')
+    })
+  }
+
+  if (status === 403) {
+    swal.fire({
+      type: 'error',
+      title: i18n.$t('modal.unauthorized.h'),
+      text: i18n.$t('modal.unauthorized.t'),
+      reverseButtons: true,
+      confirmButtonText: i18n.$t('general.ok')
+    })
   }
 
   return Promise.reject(error)

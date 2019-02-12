@@ -31,8 +31,6 @@ class Frontend extends Composer
         }
         JavaScript::putArray([
             'locale' => app()->getLocale(),
-            'token' => \Session::get('jwt_token'),
-            'user' => auth()->user()->only(['username'])
         ]);
         JavaScript::bindJsVariablesToView();
         $this->addVarsToView($data, $view);

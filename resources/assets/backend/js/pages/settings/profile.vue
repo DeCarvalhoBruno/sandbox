@@ -104,11 +104,6 @@
         user: 'auth/user'
       })
     },
-    mounted () {
-      this.$refs.avatarUploader.$on('avatars_updated', avatars => {
-        this.avatars = avatars
-      })
-    },
     methods: {
       async update () {
         if (this.form.hasDetectedChanges()) {

@@ -1,12 +1,13 @@
 <template>
-    <button :type="nativeType" :disabled="isLoading" class="btn" :class="{
+  <button :type="nativeType" :disabled="isLoading" class="btn" :class="{
     [`btn-${type}`]: true,
     'btn-block': block,
     'btn-lg': large,
     'btn-loading': isLoading
   }">
-        <slot></slot>
-    </button>
+    <template v-if="value">{{value}}</template>
+    <slot v-else></slot>
+  </button>
 </template>
 
 <script>
@@ -32,6 +33,10 @@
       large: {
         type: Boolean,
         default: false
+      },
+      value: {
+        type: String,
+        default: null
       }
     },
     data () {

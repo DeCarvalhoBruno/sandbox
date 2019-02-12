@@ -18,6 +18,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
+        \Illuminate\Auth\Events\Login::class => [
+
+        ],
         PermissionEntityUpdated::class => [
             UpdatePermissions::class,
         ],
@@ -25,7 +28,7 @@ class EventServiceProvider extends ServiceProvider
             UpdatePermissions::class,
             UserRegisteredListener::class
         ],
-        PersonSentContactRequest::class=>[
+        PersonSentContactRequest::class => [
             PersonSentContactRequestListener::class
         ]
     ];

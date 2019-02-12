@@ -25,16 +25,16 @@ axios.interceptors.response.use(response => response, error => {
   if (error.response.data && error.response.data.length > 0) {
     text = error.response.data
   } else {
-    text = i18n.thisScrollTop('modal.error.t')
+    text = i18n.$t('modal.error.t')
   }
 
   if (status >= 500) {
     let settings = {
       type: 'error',
-      title: i18n.thisScrollTop('modal.error.h'),
+      title: i18n.$t('modal.error.h'),
       text: text,
       reverseButtons: true,
-      confirmButtonText: i18n.thisScrollTop('general.ok')
+      confirmButtonText: i18n.$t('general.ok')
     }
     swal.fire(settings)
   }
@@ -42,11 +42,11 @@ axios.interceptors.response.use(response => response, error => {
   if (status === 401 && store.getters['auth/check']) {
     swal.fire({
       type: 'warning',
-      title: i18n.thisScrollTop('modal.token_expired.h'),
-      text: i18n.thisScrollTop('modal.token_expired.t'),
+      title: i18n.$t('modal.token_expired.h'),
+      text: i18n.$t('modal.token_expired.t'),
       reverseButtons: true,
-      confirmButtonText: i18n.thisScrollTop('general.ok'),
-      cancelButtonText: i18n.thisScrollTop('general.cancel')
+      confirmButtonText: i18n.$t('general.ok'),
+      cancelButtonText: i18n.$t('general.cancel')
     }).then(async () => {
       await store.dispatch('auth/revokeUser')
       router.push({name: 'admin.login'})
@@ -56,10 +56,10 @@ axios.interceptors.response.use(response => response, error => {
   if (status === 403) {
     swal.fire({
       type: 'error',
-      title: i18n.thisScrollTop('modal.unauthorized.h'),
-      text: i18n.thisScrollTop('modal.unauthorized.t'),
+      title: i18n.$t('modal.unauthorized.h'),
+      text: i18n.$t('modal.unauthorized.t'),
       reverseButtons: true,
-      confirmButtonText: i18n.thisScrollTop('general.ok')
+      confirmButtonText: i18n.$t('general.ok')
     })
   }
 

@@ -26,13 +26,11 @@ class SendMail extends Job
      * Execute the job.
      *
      * @return void
-     * @throws \App\Exceptions\EmailException
+     * @throws \Exception
      */
     public function handle()
     {
-        if ($this->attempts() > 3) {
-            $this->delete();
-        }
+        parent::handle();
         try {
             if ($this->driver === self::DRIVER_MAILGUN) {
                 $this->email->sendMailgun();

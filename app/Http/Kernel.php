@@ -51,16 +51,16 @@ class Kernel extends HttpKernel
      *
      * These middleware may be assigned to groups or used individually.
      *
+     * @see \Illuminate\Auth\Middleware\Authenticate::class
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-        'redirect_guest' => \App\Http\Middleware\Frontend\RedirectIfGuest::class,
-        'redirect_auth' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'auth.admin' => \App\Http\Middleware\Admin\UnauthorizedIfGuest::class,
-        'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        'frontend_auth' => \App\Http\Middleware\Frontend\Auth::class,
+        'frontend_guest'=> \App\Http\Middleware\Frontend\Guest::class,
+        'admin_auth' => \App\Http\Middleware\Admin\Auth::class,
         'can' => \App\Http\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+
+        'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];
 }

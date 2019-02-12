@@ -27,22 +27,16 @@ mix.js('resources/assets/frontend/js/app.js', 'js/app.js')
 if (mix.inProduction()) {
   mix.version()
 
-  // mix.extract([
-  //   'vue',
-  //   'vform',
-  //   'axios',
-  //   'vuex',
-  //   'jquery',
-  //   'popper.js',
-  //   'vue-i18n',
-  //   'vue-meta',
-  //   'js-cookie',
-  //   'vue-router',
-  //   'sweetalert2',
-  //   'vuex-router-sync',
-  //   '@fortawesome/fontawesome',
-  //   '@fortawesome/vue-fontawesome'
-  // ])
+  mix.extract([
+    'vue',
+    'axios',
+    'jquery',
+    'popper.js',
+    'vue-i18n',
+    'sweetalert2',
+    '@fortawesome/fontawesome',
+    '@fortawesome/vue-fontawesome'
+  ])
 }
 mix.browserSync({
   proxy: process.env.APP_URL,

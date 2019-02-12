@@ -113,14 +113,20 @@
                                 @endif
                             </div>
                         </div>
-                        <avatar-uploader ref="avatarUploader" :user="{{json_encode(auth()->user()->only('username'))}}" :avatars-parent="{{json_encode($avatars)}}"/>
                         <div class="form-group row pt-3">
                             <div class="col-xl-8 offset-xl-2 col-lg-6 offset-lg-3">
                                 <submit-button
                                         ref="submitButton"
-                                        :block="true">{{trans('ajax.general.register')}}</submit-button>
+                                        :block="true" :value="'{{trans('ajax.general.save')}}'"></submit-button>
                             </div>
                         </div>
+                        <avatar-uploader
+                                ref="avatarUploader"
+                                :user="{{json_encode(auth()->user()->only('username'))}}"
+                                :avatars-parent="{{json_encode($avatars)}}"
+                        :extra-headers="{{json_encode(
+                        ['Authorization'=>sprintf('Bearer %s',\Session::get('jwt_token'))]
+                        )}}"></avatar-uploader>
                     </inline-form>
                 </div>
             </div>

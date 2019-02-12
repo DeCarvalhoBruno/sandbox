@@ -1,10 +1,14 @@
-import i18n from 'front_path/plugins/i18n'
-import 'front_path/plugins'
+import Vue from 'vue'
 import App from './components/App'
+import 'front_path/plugins'
+import i18n from 'front_path/plugins/i18n'
+import { loadMessages } from './plugins/i18n'
 
-window.Vue = require('vue')
-
-new Vue({
-  i18n,
-  ...App
+(async function () {
+  await loadMessages()
+})().then(() => {
+  new Vue({
+    i18n: i18n,
+    ...App
+  }).$mount('#app')
 })

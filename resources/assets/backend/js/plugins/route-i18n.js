@@ -12,9 +12,9 @@ export default function install (Vue) {
     delete route.name
 
     if (i18n.locale !== i18n.fallbackLocale) {
-      route.path = '/' + i18n.locale + '/' + i18n.thisScrollTop(name)
+      route.path = '/' + i18n.locale + '/' + i18n.$t(name)
     } else {
-      route.path = '/' + i18n.thisScrollTop(name)
+      route.path = '/' + i18n.$t(name)
     }
 
     return route

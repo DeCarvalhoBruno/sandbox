@@ -34,6 +34,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->make('view')->composer('admin.default', \App\Composers\Admin::class);
         $this->app->make('view')->composer('frontend.auth.*', \App\Composers\Frontend::class);
         $this->app->make('view')->composer('frontend.site.*', \App\Composers\Frontend::class);
+        $this->app->make('view')->composer(
+            'frontend.site.profile', \App\Composers\Frontend\Profile::class
+        );
 
         if (app()->environment() == 'local') {
             Schema::defaultStringLength(191);

@@ -44,10 +44,6 @@
     })
   }
 
-  export default {
-    el: '#app'
-  }
-
   async function pageLoader (token, pages) {
     if (pages.hasOwnProperty(token)) {
       if (pages[token].hasOwnProperty(page)) {
@@ -55,4 +51,7 @@
       }
     }
   }  (token, Pages)
+
+
+  export default {}
 </script>
