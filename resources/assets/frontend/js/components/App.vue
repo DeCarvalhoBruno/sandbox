@@ -13,7 +13,7 @@
   }
   const frontendContext = require.context('./', false, /.*\.vue$/)
   const backendContext = require.context('back_path/components', false, /[^App\.vue].*\.vue$/)
-  // const backendComponents = require.context('../../../backend/js/components', false, /.*\.vue$/)
+
   const frontend = frontendContext.keys()
     .map(file =>
       [file.replace(/(^.\/)|(\.vue$)/g, ''), frontendContext(file)]

@@ -94,7 +94,7 @@
   Vue.use(Card)
   Vue.use(Tabs)
 
-  import Button from 'back_path/components/SubmitButton'
+  import SubmitButton from 'back_path/components/SubmitButton'
   import Checkbox from 'back_path/components/Checkbox'
   import { Form, HasError, AlertForm } from 'back_path/components/form'
   import ButtonCircle from 'back_path/components/ButtonCircle'
@@ -105,7 +105,7 @@
     middleware: 'check-auth',
     name: 'group-edit',
     components: {
-      Button,
+      SubmitButton,
       Checkbox,
       HasError,
       AlertForm,

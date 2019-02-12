@@ -4,19 +4,19 @@ namespace App\Http\Controllers\Frontend\Auth;
 
 use App\Http\Controllers\Frontend\Controller;
 use App\Support\Providers\User as UserProvider;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class Login extends Controller
 {
-    use ThrottlesLogins;
+    use AuthenticatesUsers;
 
     public function index()
     {
         $status = \Session::get('status');
-        return view('frontend.auth.login',compact('status'));
+        return view('frontend.auth.login', compact('status'));
     }
 
     /**
@@ -32,7 +32,7 @@ class Login extends Controller
     /**
      * Handle a login request to the application.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -63,69 +63,50 @@ class Login extends Controller
     }
 
     /**
-     * Validate the user login request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return void
-     */
-    protected function validateLogin(Request $request)
-    {
-        $request->validate([
-            $this->username() => 'required|string',
-            'password' => 'required|string',
-        ]);
-    }
-
-    /**
      * Attempt to log the user into the application.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return bool
      */
     protected function attemptLogin(Request $request)
     {
-        return $this->guard()->attempt(
-            $this->credentials($request), $request->filled('remember')
-        );
-    }
+        $token = \Auth::guard('jwt')->attempt($this->credentials($request));
 
-    /**
-     * Get the needed authorization credentials from the request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    protected function credentials(Request $request)
-    {
-        return $request->only($this->username(), 'password');
+        if ($token) {
+            \Session::put('jwt_token', $token);
+            return true;
+        }
+        return false;
     }
 
     /**
      * Send the response after the user was authenticated.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     protected function sendLoginResponse(Request $request)
     {
         $request->session()->regenerate();
+        $this->guard()->login(\Auth::guard('jwt')->user());
 
         $this->clearLoginAttempts($request);
+//        $token = \Auth::guard('jwt')->login($this->guard()->user());
 
-        return $this->authenticated($request, $this->guard()->user())
-            ?: redirect()->intended(route_i18n('home'));
+
+        return redirect()->intended(route_i18n('home'));
     }
 
     /**
      * The user has been authenticated.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  mixed  $user
+     * @param  \Illuminate\Http\Request $request
+     * @param  mixed $user
      * @return mixed
      */
     protected function authenticated(Request $request, $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -154,7 +135,7 @@ class Login extends Controller
     /**
      * Log the user out of the application.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function logout(Request $request)
@@ -162,6 +143,7 @@ class Login extends Controller
         $this->guard()->logout();
 
         $request->session()->invalidate();
+//        \Auth::guard('jwt')->logout();
 
         return $this->loggedOut($request) ?: redirect(route_i18n('home'));
     }
@@ -169,7 +151,7 @@ class Login extends Controller
     /**
      * The user has logged out of the application.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return mixed
      */
     protected function loggedOut(Request $request)
@@ -184,7 +166,7 @@ class Login extends Controller
      */
     protected function guard()
     {
-        return Auth::guard();
+        return Auth::guard('web');
     }
 
     public function activate($token, UserProvider $userRepo)

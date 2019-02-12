@@ -209,24 +209,23 @@
   import axios from 'axios'
   import dayjs from 'dayjs'
   import fr from 'dayjs/locale/fr'
-  import Button from 'back_path/components/SubmitButton'
+  import SubmitButton from 'back_path/components/SubmitButton'
   import Trumbowyg from 'back_path/components/wysiwyg/Trumbowyg'
   import { Form, HasError, AlertForm } from 'back_path/components/form'
   import TreeList from 'back_path/components/tree-list/TreeList'
   import InputTagSearch from 'back_path/components/InputTagSearch'
   import Datepicker from 'back_path/components/Datepicker'
-  import ImageUploader from 'back_path/components/media/ImageUploader'
+  import ImageUploader from 'back_path/components/ImageUploader'
 
   import swal from 'back_path/mixins/sweet-alert'
   import form from 'back_path/mixins/form'
-  import { deepCopy } from '../../../components/form/util'
 
   export default {
     layout: 'basic',
     middleware: 'check-auth',
     name: 'blog-post-add',
     components: {
-      Button,
+      SubmitButton,
       HasError,
       Trumbowyg,
       InputTagSearch,

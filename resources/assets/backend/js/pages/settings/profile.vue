@@ -72,8 +72,8 @@
 </template>
 
 <script>
-  import Button from 'back_path/components/SubmitButton'
-  import AvatarUploader from 'back_path/components/media/AvatarUploader'
+  import SubmitButton from 'back_path/components/SubmitButton'
+  import AvatarUploader from 'back_path/components/AvatarUploader'
   import Swal from 'back_path/mixins/sweet-alert'
   import Forms from 'back_path/mixins/form'
   import axios from 'axios'
@@ -84,7 +84,7 @@
   export default {
     scrollToTop: false,
     components: {
-      Button,
+      SubmitButton,
       HasError,
       AlertForm,
       AvatarUploader

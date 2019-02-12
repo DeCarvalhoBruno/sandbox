@@ -1,5 +1,5 @@
 <template>
-    <div class="form-group row">
+    <div id="avatar-uploader" class="form-group row">
         <div class="card w-100" ref="cropperContainer">
             <b-tabs card>
                 <b-tab :title="$t('pages.settings.avatar-tab')" @click="resetComponentFlags" active>
@@ -278,7 +278,7 @@
         })
         this.$refs.dropzone.$on('error', function (file, error, xhr) {
           if (typeof xhr != 'undefined') {
-            if (typeof xhr.response.msg != 'undefined') {
+            if (xhr.response!= null) {
               vm.error = xhr.response.msg
             } else {
               vm.error = error

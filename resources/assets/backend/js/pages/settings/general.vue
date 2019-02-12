@@ -19,14 +19,14 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import Button from 'back_path/components/SubmitButton'
+  import SubmitButton from 'back_path/components/SubmitButton'
   import { Form } from 'back_path/components/form'
   import routesI18n from 'back_path/lang/routes'
 
   export default {
     scrollToTop: false,
     components: {
-      Button,
+      SubmitButton,
     },
     computed: mapGetters({
       locale: 'prefs/locale',

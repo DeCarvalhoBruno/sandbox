@@ -46,9 +46,7 @@ class ConvertLangFilesToJs extends Command
                     fwrite($fh, json_encode(include($file)));
                     fclose($fh);
                     $this->info('    - Backend ' . $subdir);
-                }
-                $file = sprintf('%s/ajax-frontend.php', $langDir);
-                if (is_file($file)) {
+
                     $fh = fopen(sprintf('resources/assets/frontend/js/lang/%s.json', $subdir), 'w');
                     fwrite($fh, json_encode(include($file)));
                     fclose($fh);

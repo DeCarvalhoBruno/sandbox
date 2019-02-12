@@ -30,7 +30,8 @@ export default {
         'PasswordStrength'
       ],
       backend: [
-        'SubmitButton'
+        'SubmitButton',
+        'AvatarUploader'
       ]
     }
   },

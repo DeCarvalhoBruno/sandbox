@@ -15,7 +15,7 @@ class Controller extends BaseController
 
     public function __construct()
     {
-//        auth()->setDefaultDriver('jwt');
+        auth()->setDefaultDriver('jwt');
         $this->user = auth()->user();
         $this->request = app('request');
     }

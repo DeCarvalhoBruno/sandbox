@@ -6,12 +6,16 @@ import {
   faInfo,
   faCheck,
   faHome,
-  faAngleUp
+  faAngleUp,
+  faSync,
+  faTrashAlt,
+  faCloudUploadAlt
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(
-  faUser, faCircle, faInfo, faCheck, faHome, faAngleUp
+  faUser, faCircle, faInfo, faCheck, faHome, faAngleUp, faSync, faTrashAlt,
+  faCloudUploadAlt
 )
 
 Vue.component('fa', FontAwesomeIcon)

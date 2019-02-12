@@ -204,17 +204,17 @@ return [
             'h' => 'Confirm blog deletion',
             't' => 'Do you really want to delete blog post {name}?|Do you really want to delete those {number} blog posts?'
         ],
-        'user_profile_updated'=>[
-            'h'=>'About to log you out...',
-            't'=>'We use your e-mail address to identify you, so we are going to log you out for safety reasons. Please log back in using your new e-mail address.',
-            'b'=>'Got it!'
+        'user_profile_updated' => [
+            'h' => 'About to log you out...',
+            't' => 'We use your e-mail address to identify you, so we are going to log you out for safety reasons. Please log back in using your new e-mail address.',
+            'b' => 'Got it!'
         ]
     ],
     'error' => [
         'page_not_found' => 'Page Not Found',
         'passwords_dont_match' => 'The passwords must be identical.',
         'form' => 'Errors were found on this form.',
-        'add_category'=>'Creation of category "{cat}" failed. Please try again.'
+        'add_category' => 'Creation of category "{cat}" failed. Please try again.'
     ],
     'message' => [
         'profile_updated' => 'Your profile has been updated!',
@@ -328,6 +328,15 @@ return [
         'max_files_exceeded' => 'The maximum number of files was reached.',
         'delete_media' => 'Delete media',
         'edit_media' => 'Edit media'
+    ],
+    'pwd-strength' => [
+        'too_short' => 'The password must meet the minimum length condition.',
+        'too_long' => 'The password must fewer the maximum length condition.',
+        'one_lowercase' => 'The password must contain at least one lowercase letter.',
+        'one_uppercase' => 'The password must contain at least one uppercase letter.',
+        'one_number' => 'The password must contain at least one number.',
+        'special_char' => 'The password must contain at least one special character.',
+        'has_repeats' => 'The password may not contain sequences of three or more repeated characters.'
     ],
     'media' => [
         'cropper_resize_image' => 'Use handles to resize image',

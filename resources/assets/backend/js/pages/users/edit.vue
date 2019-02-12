@@ -137,7 +137,7 @@
 
 <script>
   import Vue from 'vue'
-  import Button from 'back_path/components/SubmitButton'
+  import SubmitButton from 'back_path/components/SubmitButton'
   import Checkbox from 'back_path/components/Checkbox'
   import PermissionMixin from 'back_path/mixins/permissions'
   import FormMixin from 'back_path/mixins/form'
@@ -156,7 +156,7 @@
     middleware: 'check-auth',
     name: 'user-edit',
     components: {
-      Button,
+      SubmitButton,
       Checkbox,
       HasError,
       AlertForm,

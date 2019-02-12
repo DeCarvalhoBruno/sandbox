@@ -179,7 +179,7 @@ class User extends Controller
     }
 
     /**
-     * @param \App\Contracts\Models\User $userProvider|\App\Support\Providers\User $userProvider
+     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
      * @return array
      */
     public function profile(UserProvider $userProvider)

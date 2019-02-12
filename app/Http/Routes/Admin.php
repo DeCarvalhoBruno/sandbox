@@ -17,10 +17,9 @@ class Admin extends Routes
         return function (Router $r) {
             $r->group([], call_user_func('static::guest'));
             $r->group([
-                'middleware' => ['auth.admin','admin'],
+                'middleware' => ['auth:jwt'],
             ], call_user_func('static::auth'));
             $r->group([
-                'middleware' => ['admin'],
             ], call_user_func('static::handledBySPA'));
         };
     }

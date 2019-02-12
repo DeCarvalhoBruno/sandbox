@@ -30,7 +30,7 @@
         <div v-show="passwordRecommends.length&&passwordCount" class="row password-recommends">
             <p v-show="passwordRecommends.length&&passwordCount" class="pl-1">Password strength recommendations:</p>
             <transition-group name="fade" tag="ul">
-                <li v-for="(val,index) in passwordRecommends" :key="`rec${index}`">{{$t(`pages.auth.${val}`)}}</li>
+                <li v-for="(val,index) in passwordRecommends" :key="`rec${index}`">{{$t(`pwd-strength.${val}`)}}</li>
             </transition-group>
         </div>
     </div>

@@ -31,6 +31,7 @@ class Frontend extends Routes
             ], call_user_func('static::guest', $locale));
 
             $r->group([
+                'middleware' => ['auth:web','web'],
             ], call_user_func('static::auth', $locale));
 
         };

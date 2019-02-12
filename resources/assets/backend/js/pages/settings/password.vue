@@ -37,7 +37,7 @@
 </template>
 
 <script>
-  import Button from 'back_path/components/SubmitButton'
+  import SubmitButton from 'back_path/components/SubmitButton'
   import Swal from 'back_path/mixins/sweet-alert'
   import { Form, HasError, AlertForm } from 'back_path/components/form'
   import { mapGetters } from 'vuex'
@@ -45,7 +45,7 @@
   export default {
     scrollToTop: false,
     components: {
-      Button,
+      SubmitButton,
       HasError,
       AlertForm
     },

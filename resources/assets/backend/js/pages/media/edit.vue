@@ -128,7 +128,7 @@
 </template>
 <script>
   import Vue from 'vue'
-  import Button from 'back_path/components/SubmitButton'
+  import SubmitButton from 'back_path/components/SubmitButton'
   import axios from 'axios'
   import Cropper from 'back_path/components/Cropper'
   import { Form, HasError, AlertForm } from 'back_path/components/form'
@@ -145,7 +145,7 @@
     middleware: 'check-auth',
     name: 'media-edit',
     components: {
-      Button,
+      SubmitButton,
       HasError,
       Form,
       RecordPaginator,

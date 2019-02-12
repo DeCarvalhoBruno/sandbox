@@ -1,4 +1,5 @@
 <?php namespace App\Composers;
+
 use App\Facades\JavaScript;
 use App\Support\Frontend\Breadcrumbs;
 
@@ -21,15 +22,17 @@ class Frontend extends Composer
                 ),
                 config('app.name')
             ),
-            'user'=>auth()->user()
+            'user' => auth()->user()
         ];
 
         $originalData = $view->getData();
-        if(isset($originalData['breadcrumbs'])){
+        if (isset($originalData['breadcrumbs'])) {
             $data['breadcrumbs'] = Breadcrumbs::render($originalData['breadcrumbs']);
         }
         JavaScript::putArray([
             'locale' => app()->getLocale(),
+            'token' => \Session::get('jwt_token'),
+            'user' => auth()->user()->only(['username'])
         ]);
         JavaScript::bindJsVariablesToView();
         $this->addVarsToView($data, $view);
@@ -37,7 +40,7 @@ class Frontend extends Composer
 
     private function checkFlashMessages()
     {
-        if(\Session::has('msg')){
+        if (\Session::has('msg')) {
             JavaScript::putArray([
                 'msg' => \Session::pull('msg'),
             ]);

@@ -6,11 +6,17 @@ use \App\Support\Providers\User as UserProvider;
 class User extends Controller
 {
 
-    public function edit()
+    /**
+     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit(UserProvider $userProvider)
     {
-        return view('frontend.site.user', [
-            'user' => $this->user,
-            'breadcrumbs' => [trans('titles.routes.profile') => route_i18n('profile')]
+        $user = auth()->user();
+        return view('frontend.site.profile', [
+            'user' => $user,
+            'breadcrumbs' => [trans('titles.routes.profile') => route_i18n('profile')],
+            'avatars' => $userProvider->getAvatars($user->getKey())
         ]);
     }
 
