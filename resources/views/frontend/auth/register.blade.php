@@ -143,6 +143,7 @@
                                 </div>
                             </div>
                             <input type="hidden" class="g-recaptcha" name="g-recaptcha" value="">
+                            <input type="hidden" id="user-date" name="stat_user_timezone">
                         </inline-form>
                     </div>
                 </div>

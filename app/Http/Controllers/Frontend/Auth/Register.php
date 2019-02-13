@@ -28,7 +28,9 @@ class Register extends Controller
      */
     public function register(CreateUser $request, UserProvider $userRepo)
     {
-        $user = $userRepo->createOne($request->all());
+        $user = $userRepo->createOne($request->except(['timezone']));
+        $userRepo->updateStats($user,$request->only(['stat_user_timezone']));
+
         event(new UserRegistered($user, $userRepo->generateActivationToken($user)));
         return redirect(route_i18n('login'))->with('status', 'registered');
     }

@@ -31,6 +31,7 @@ class Users extends Migration
 
             $table->unsignedInteger('user_id');
             $table->timestamp('stat_user_last_visit')->nullable();
+            $table->mediumInteger('stat_user_timezone')->nullable()->comment('The time zone difference, in minutes, from host system settings to UTC. UTC plus 1 makes it plus sixty.');
 
             $table->foreign('user_id')
                 ->references('user_id')->on('users')

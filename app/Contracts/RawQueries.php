@@ -9,9 +9,12 @@ interface RawQueries
 
     public function triggerCreateEntityType($name, $primaryKey);
 
+    public function triggerCreateEntityTypeUsers();
+
     public function triggerDeleteEntityType($name, $primaryKey, $entityTypeId);
 
     public function triggerUserFullName();
 
     public function getAllUserPermissions($entityTypeId);
+
 }

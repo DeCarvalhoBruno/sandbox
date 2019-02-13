@@ -4,11 +4,12 @@ namespace App\Providers;
 
 use App\Events\PermissionEntityUpdated;
 use App\Events\PersonSentContactRequest;
-use App\Listeners\PersonSentContactRequest as PersonSentContactRequestListener;
 use App\Events\UserRegistered;
+use App\Listeners\PersonSentContactRequest as PersonSentContactRequestListener;
 use App\Listeners\UpdatePermissions;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use App\Listeners\UserLogin;
 use App\Listeners\UserRegistered as UserRegisteredListener;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -19,7 +20,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         \Illuminate\Auth\Events\Login::class => [
-
+            UserLogin::class
         ],
         PermissionEntityUpdated::class => [
             UpdatePermissions::class,

@@ -1,5 +1,6 @@
 <?php namespace App\Support\Providers;
 
+use App\Models\Stats\StatUser;
 use App\Models\UserActivation;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Hashing\BcryptHasher;
@@ -291,6 +292,19 @@ class User extends Model implements UserProvider, UserInterface
             //A mysql trigger sets the activated boolean on the users table whenever a delete occurs.
         }
         return 0;
+    }
+
+    /**
+     * @param \App\Models\User $user
+     * @param array $values
+     */
+    public function updateStats(\App\Models\User $user, $values)
+    {
+        if (isset($values['stat_user_timezone']) && is_numeric($values['stat_user_timezone'])) {
+            StatUser::query()->where('user_id', $user->getKey())
+                ->update(['stat_user_timezone' => intval($values['stat_user_timezone'])]);
+        }
+
     }
 
     /**

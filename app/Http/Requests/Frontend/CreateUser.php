@@ -15,6 +15,7 @@ class CreateUser extends FormRequest
             'username' => 'required|string|max:15|regex:/^(\w){1,}$/|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'stat_user_timezone' => 'nullable',
             'g-recaptcha' => 'captcha'
         ];
     }

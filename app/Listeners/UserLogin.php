@@ -11,7 +11,7 @@ class UserLogin extends Listener
     public function handle(Login $event)
     {
         $this->dispatch(new UpdateOnUserLogin(
-            $event->user
+            $event->guard, $event->user, $event->remember
         ));
     }
 }

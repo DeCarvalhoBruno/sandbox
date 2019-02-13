@@ -28,7 +28,7 @@
   })
 })(jQuery);
 (function ($, viewport) {
-  $(document).ready(function () {
+$(document).ready(function () {
 
     var noTouch = false
     if (!('ontouchstart' in document.documentElement)) {

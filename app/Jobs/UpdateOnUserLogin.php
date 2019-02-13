@@ -9,16 +9,31 @@ class UpdateOnUserLogin extends Job
     use InteractsWithQueue, SerializesModels;
 
 //    public $queue = 'db';
+    /**
+     * @var \Illuminate\Contracts\Auth\Authenticatable
+     */
     private $user;
+    /**
+     * @var string
+     */
+    private $guard;
+    /**
+     * @var boolean
+     */
+    private $remember;
 
     /**
      * Create a new job instance.
      *
-     * @param $user \Illuminate\Contracts\Auth\Authenticatable
+     * @param string $guard
+     * @param \Illuminate\Contracts\Auth\Authenticatable $user
+     * @param boolean $remember
      */
-    public function __construct($user)
+    public function __construct($guard, $user, $remember)
     {
         $this->user = $user;
+        $this->guard = $guard;
+        $this->remember = $remember;
     }
 
     /**

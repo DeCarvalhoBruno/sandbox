@@ -134,16 +134,19 @@ class Entities extends Migration
             if (!isset($this->entityPrimaryKeyColumns[$entity['entity_name']]) || $entity['entity_name'] == 'system') {
                 continue;
             }
-            $db->triggerCreateEntityType(
-                $entity['entity_name'],
-                $this->entityPrimaryKeyColumns[$entity['entity_name']]
-            );
+            if ($entity['entity_name'] !== 'users') {
+                $db->triggerCreateEntityType(
+                    $entity['entity_name'],
+                    $this->entityPrimaryKeyColumns[$entity['entity_name']]
+                );
+            }
             $db->triggerDeleteEntityType(
                 $entity['entity_name'],
                 $this->entityPrimaryKeyColumns[$entity['entity_name']],
                 $entity['entity_id']
             );
         }
+        $db->triggerCreateEntityTypeUsers();
         $db->triggerUserFullName();
         $db->triggerUserUpdateActivated();
 

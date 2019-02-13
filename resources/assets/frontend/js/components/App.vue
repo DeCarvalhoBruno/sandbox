@@ -44,14 +44,14 @@
     })
   }
 
-  async function pageLoader (token, pages) {
+  (async function pageLoader (token, pages) {
     if (pages.hasOwnProperty(token)) {
-      if (pages[token].hasOwnProperty(page)) {
-        await import(/* webpackChunkName: "p-" */ `front_path/${pages[token].page}`)
+      if (pages[token].hasOwnProperty('page')) {
+        await import(/* webpackChunkName: "page-" */ `front_path/pages/${pages[token].page}`)
       }
     }
-  }  (token, Pages)
+  })  (token, Pages)
 
 
-  export default {}
+export default {}
 </script>

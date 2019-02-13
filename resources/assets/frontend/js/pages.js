@@ -12,6 +12,7 @@ export default {
   },
   // Register
   '9de4a97425': {
+    page: 'register.js',
     components: {
       frontend: [
         'PasswordStrength',
