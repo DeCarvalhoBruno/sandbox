@@ -32,8 +32,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app->make('view')->composer('admin.default', \App\Composers\Admin::class);
-        $this->app->make('view')->composer('frontend.auth.*', \App\Composers\Frontend::class);
-        $this->app->make('view')->composer('frontend.site.*', \App\Composers\Frontend::class);
+        $this->app->make('view')->composer([
+            'frontend.auth.*',
+            'frontend.site.*',
+            'frontend.errors.*'
+        ],
+            \App\Composers\Frontend::class);
         $this->app->make('view')->composer(
             'frontend.site.profile', \App\Composers\Frontend\Profile::class
         );

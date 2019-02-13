@@ -144,7 +144,11 @@ if (!function_exists('route_i18n')) {
 if (!function_exists('get_page_id')) {
     function get_page_id()
     {
-        return substr(md5(app('router')->getCurrentRoute()->getName()), 0, 10);
+        $router = app('router')->getCurrentRoute();
+        if (!is_null($router)) {
+            return substr(md5($router->getName()), 0, 10);
+        }
+        return 'undefined';
     }
 }
 

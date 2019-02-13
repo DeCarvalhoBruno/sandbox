@@ -17,7 +17,7 @@ class Frontend extends Composer
                 trans(
                     sprintf(
                         'titles.%s',
-                        str_replace('.', '_', $view->getName())
+                        (!is_null($view)) ? str_replace('.', '_', $view->getName()) : 'error'
                     )
                 ),
                 config('app.name')
@@ -25,9 +25,11 @@ class Frontend extends Composer
             'user' => auth()->user()
         ];
 
-        $originalData = $view->getData();
-        if (isset($originalData['breadcrumbs'])) {
-            $data['breadcrumbs'] = Breadcrumbs::render($originalData['breadcrumbs']);
+        if (!is_null($view)) {
+            $originalData = $view->getData();
+            if (isset($originalData['breadcrumbs'])) {
+                $data['breadcrumbs'] = Breadcrumbs::render($originalData['breadcrumbs']);
+            }
         }
         JavaScript::putArray([
             'locale' => app()->getLocale(),

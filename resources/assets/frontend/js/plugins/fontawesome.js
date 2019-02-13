@@ -10,13 +10,14 @@ import {
   faSync,
   faSyncAlt,
   faTrashAlt,
-  faCloudUploadAlt
+  faCloudUploadAlt,
+  faExclamation
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(
   faUser, faCircle, faInfo, faCheck, faHome, faAngleUp, faSync, faSyncAlt,
-  faTrashAlt, faCloudUploadAlt
+  faTrashAlt, faCloudUploadAlt, faExclamation
 )
 
 Vue.component('fa', FontAwesomeIcon)
