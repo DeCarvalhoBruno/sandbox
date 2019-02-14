@@ -16,8 +16,8 @@ class Breadcrumbs
 <ul class="breadcrumbs">
 EOD;
         $this->addNode(route_i18n('home'), chr(10) . str_repeat(' ',8).'<fa icon="home"></fa>');
-        foreach ($chain as $label=>$url) {
-            $this->addNode($url, $label);
+        foreach ($chain as $item) {
+            $this->addNode($item['url'], $item['label']);
         }
         $this->breadcrumbs .= chr(10) . "</ul>";
         return $this->breadcrumbs;

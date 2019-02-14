@@ -39,7 +39,8 @@ class AppServiceProvider extends ServiceProvider
         ],
             \App\Composers\Frontend::class);
         $this->app->make('view')->composer(
-            'frontend.site.profile', \App\Composers\Frontend\Profile::class
+            'frontend.site.settings.profile',
+            \App\Composers\Frontend\Profile::class
         );
 
         if (app()->environment() == 'local') {

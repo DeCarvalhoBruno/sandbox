@@ -16,7 +16,7 @@
 <div id="app">
     <div id="content_container" class="container">
         @if(isset($breadcrumbs))
-            <div id="breadcrumb-wrapper" class="col">
+            <div id="breadcrumb-wrapper" class="col p-0">
                 <div class="card">
                     {!! $breadcrumbs !!}
                 </div>

@@ -1,8 +1,8 @@
-@extends('frontend.default')
+@extends('frontend.site.settings.default')
 
-@section('content')
-    <div id="user-profile" class="container mt-4">
-        <div class="col-md-8 offset-md-2">
+@section('pane')
+    <div id="user-profile" class="container p-0">
+        <div class="col p-0">
             <div id="user_register_container" class="card card-shadow">
                 <div class="card-body">
                     <inline-form :id="'register-form'" :action="'{{ route('profile.update') }}'"

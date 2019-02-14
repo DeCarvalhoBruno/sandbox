@@ -1,11 +1,9 @@
 <?php namespace App\Console\Commands;
 
-use App\Emails\User\Welcome as WelcomeEmail;
 use App\Jobs\SendMail;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Bus\DispatchesJobs;
-use Symfony\Component\Console\Input\InputOption;
 
 class SendTestEmail extends Command
 {
@@ -16,7 +14,8 @@ class SendTestEmail extends Command
      *
      * @var    string
      */
-    protected $name = 'mail:test';
+    protected $signature = 'mail:test 
+                            {name : Type of email to send ("welcome", etc.)}';
 
     /**
      * The console command description.
@@ -25,22 +24,12 @@ class SendTestEmail extends Command
      */
     protected $description = 'Send email for testing purposes';
 
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return array(
-            array(
-                't',
-                't',
-                InputOption::VALUE_REQUIRED,
-                'Type of email to send ("welcome", etc.)'
-            ),
-        );
-    }
+    private $types = [
+        'welcome' => '\App\Emails\User\Welcome',
+        'contact' => 'App\Emails\Frontend\Contact',
+        'password_reset' => '\App\Emails\User\PasswordReset'
+    ];
+
 
     /**
      * Execute the console command.
@@ -49,33 +38,45 @@ class SendTestEmail extends Command
      */
     public function handle()
     {
-        $type = $this->option('t');
+        $type = $this->argument('name');
 
-        call_user_func(['self',$type]);
+        if (isset($this->types[$type])) {
+            $data = call_user_func(['self', $type]);
+            $this->dispatch(new SendMail(new $this->types[$type]($data)));
+            $this->info('The e-mail event was dispatched');
+        } else {
+            $this->error(sprintf('"%s" is not a valid email type', $type));
+        }
     }
 
     public function welcome()
     {
-        $data = [
-            'user' => (new User())->newQuery()->where('users.user_id', '=', 2)->first(),
+        return [
+            'user' => $this->getUser(),
             'activation_token' => '123456'
         ];
-        $this->dispatch(new SendMail(new WelcomeEmail($data)));
-        $this->finishDisplay();
-
     }
 
-    public function __call($method, $args)
+    public function contact()
     {
-        $this->comment('**********************************************');
-        $this->info(sprintf('%s is not a valid email type', $method));
-        $this->comment('**********************************************');
+        return [
+            'contact_email' => 'contact_form_sender@example.com',
+            'contact_subject' => 'URGENT: Business inquiry (investment opportunity)',
+            'message_body' => "Please get in touch with me as soon as possible.",
+        ];
     }
 
-    public function finishDisplay()
+    public function password_reset()
     {
-        $this->info('the e-mail event was dispatched');
+        return [
+            'user' => $this->getUser(),
+            'token' => '123456'
+        ];
+    }
 
+    private function getUser()
+    {
+        return (new User())->newQuery()->where('users.user_id', '=', 2)->first();
     }
 
 }

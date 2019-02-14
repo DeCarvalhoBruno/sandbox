@@ -25,12 +25,6 @@ class Frontend extends Composer
             'user' => auth()->user()
         ];
 
-        if (!is_null($view)) {
-            $originalData = $view->getData();
-            if (isset($originalData['breadcrumbs'])) {
-                $data['breadcrumbs'] = Breadcrumbs::render($originalData['breadcrumbs']);
-            }
-        }
         JavaScript::putArray([
             'locale' => app()->getLocale(),
         ]);

@@ -1,114 +1,163 @@
 <?php namespace App\Emails;
 
-use GuzzleHttp\Client as GuzzleClient;
+use App\Contracts\Mailer;
+use App\Support\Email\ViewData;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 
 class Email
 {
     use SerializesModels;
-    protected $viewName;
-    protected $view=[];
-    protected $data;
-    protected $domain;
-    protected $files;
-    protected $from;
-    protected $fromName;
-    protected $testing;
-    protected $vars;
 
+    /**
+     * @var string
+     */
+    protected $viewName;
+    /**
+     * @var \Illuminate\Support\Collection
+     */
+    protected $viewData = [];
+    /**
+     * @var \stdClass
+     */
+    protected $data;
+    /**
+     * @var array
+     */
+    protected $files;
+    /**
+     * @var \Illuminate\Support\Collection
+     */
+    protected $config;
+    /**
+     * @var int
+     */
+    protected $taskedMailer = Mailer::DRIVER_MAILGUN;
 
     /**
      *
      * @param array $data
      * @param array $files
-     * @param bool $testing
      */
-    public function __construct($data, $files = null, $testing = false)
+    public function __construct($data, $files = null)
     {
         $this->parseFiles($files);
-        $this->data     = (object)$data;
-        $this->from     = \Config::get('mail.from.address');
-        $this->fromName = \Config::get('mail.from.name');
-        $this->testing  = $testing;
-    }
-
-    public function sendMailgun()
-    {
+        $this->data = (object)$data;
+        $this->config = new Collection([
+            'from.address' => config('mail.from.address'),
+            'from.name' => config('mail.from.name'),
+            'test_mode' => config('mail.mailgun.test_mode'),
+            'reply_to.address' => config('mail.from.address'),
+            'reply_to.name' => config('mail.from.name'),
+            'domain' => config('mail.mailgun.domain'),
+            'timezone' => config('app.timezone'),
+            'private_key' => config('mail.mailgun.keys.private')
+        ]);
+        $this->viewData = new ViewData();
         $this->prepareViewData();
-        $this->setDomain();
-
-        if (\Config::get('mail.driver') == 'mailgun') {
-            $transport = new MailgunTransport(new GuzzleClient(), \Config::get('services.mailgun.secret'),
-                $this->domain, $this->vars);
-            $mailer    = new \Swift_Mailer($transport);
-
-            \Mail::setSwiftMailer($mailer);
-        }
-        $this->sendmail();
-    }
-
-    public function send()
-    {
-        $this->prepareViewData();
-        $this->setDomain();
-        $this->sendmail();
     }
 
     /**
-     * @return void
-     */
-    protected function sendmail()
-    {
-        $currentInstance = $this;
-
-        \Mail::send($this->viewName, $this->view, function ($message) use ($currentInstance) {
-            return call_user_func([$currentInstance, 'message'], $message);
-        });
-    }
-
-    /**
+     * The default email is sent to the currently logged in user.
+     * Child classes should have their own implementation
+     *
      * @param \Illuminate\Mail\Message $message
      */
-    public function message($message)
+    public function fillMessage($message)
     {
-        $message->subject($this->view['subject']);
-        $message->from($this->from, $this->fromName);
-        $message->to($this->data->user->getAttribute('email'), $this->data->user->getFullname());
-        $message->replyTo($this->from, $this->fromName);
-    }
-
-    /**
-     * @return array
-     */
-    public function getData()
-    {
-        return ['data' => $this->data, 'view' => $this->view];
+        $message->subject($this->viewData->get('subject'))
+            ->to($this->viewData->get('recipient_email'), $this->viewData->get('recipient_name'));
     }
 
     /**
      * @return void
      */
-    public function setDomain()
+    public function prepareViewData()
     {
-        $this->domain = 'local';
+        $this->viewData->add([
+            'recipient_email' => $this->data->user->getAttribute('email'),
+            'recipient_name' => $this->data->user->getFullname()
+        ]);
     }
+
 
     /**
      * @param array $files
+     * @return void
      */
     private function parseFiles($files)
     {
-        if ( ! is_null($files)) {
+        if (!is_null($files)) {
             foreach ($files as $file) {
-                $path          = storage_path() . '/uploads/' . str_random(5) . $file->getClientOriginalName();
+                $path = storage_path() . '/uploads/' . str_random(5) . $file->getClientOriginalName();
                 $this->files[] = (object)[
                     'path' => $path,
-                    'as'   => $file->getClientOriginalName(),
+                    'as' => $file->getClientOriginalName(),
                     'mime' => $file->getMimeType()
                 ];
                 \File::move($file->getRealPath(), $path);
             }
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getViewName(): string
+    {
+        return $this->viewName;
+    }
+
+    /**
+     * @return array
+     */
+    public function getViewData(): array
+    {
+        return $this->viewData->toArray();
+    }
+
+    /**
+     * @param string $key
+     * @return mixed
+     */
+    public function config($key)
+    {
+        return $this->config->get($key);
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @return void
+     */
+    public function setConfig($key, $value)
+    {
+        $this->config->put($key, $value);
+    }
+
+    /**
+     * @return array
+     */
+    public function getFiles(): array
+    {
+        return $this->files;
+    }
+
+    /**
+     * @return int
+     * @see \App\Contracts\Mailer
+     */
+    public function getTaskedMailer(): int
+    {
+        return $this->taskedMailer;
     }
 
 }

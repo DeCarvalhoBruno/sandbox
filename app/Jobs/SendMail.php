@@ -1,25 +1,25 @@
 <?php namespace App\Jobs;
 
+use App\Contracts\Mailer;
 use App\Emails\Email;
+use App\Support\Email\LaravelMailer;
+use App\Support\Email\MailgunMailer;
 
 class SendMail extends Job
 {
-//    public $queue = 'mail';
+    public $queue = 'mail';
     private $email;
     private $driver;
-    const DRIVER_SMTP = 1;
-    const DRIVER_MAILGUN = 2;
 
     /**
      * Create a new job instance.
      *
      * @param $email \App\Emails\Email
-     * @param int $driver
      */
-    public function __construct(Email $email, $driver = self::DRIVER_MAILGUN)
+    public function __construct(Email $email)
     {
         $this->email = $email;
-        $this->driver = $driver;
+        $this->driver = $email->getTaskedMailer();
     }
 
     /**
@@ -32,10 +32,10 @@ class SendMail extends Job
     {
         parent::handle();
         try {
-            if ($this->driver === self::DRIVER_MAILGUN) {
-                $this->email->sendMailgun();
+            if ($this->driver === Mailer::DRIVER_SMTP) {
+                LaravelMailer::send($this->email);
             } else {
-                $this->email->send();
+                $response = MailgunMailer::send($this->email);
             }
             $this->delete();
         } catch (\Exception $e) {

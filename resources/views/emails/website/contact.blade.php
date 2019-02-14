@@ -13,10 +13,10 @@
 <![endif]-->
 
 
-<div  style="background:#a42227;background-color:#a42227;Margin:0px auto;max-width:600px;">
+<div  style="background:#a42227;background-color:#a42227;Margin:0px auto;border-radius:16px 16px 0px 0px;max-width:600px;">
 
     <table
-            align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#a42227;background-color:#a42227;width:100%;"
+            align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#a42227;background-color:#a42227;width:100%;border-radius:16px 16px 0px 0px;"
     >
         <tbody>
         <tr>
@@ -87,10 +87,10 @@
 <![endif]-->
 
 
-<div  style="background:#efd6ce;background-color:#efd6ce;Margin:0px auto;max-width:600px;">
+<div  style="background:#efd6ce;background-color:#efd6ce;Margin:0px auto;border-radius:0px 0px 16px 16px;max-width:600px;">
 
     <table
-            align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#efd6ce;background-color:#efd6ce;width:100%;"
+            align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#efd6ce;background-color:#efd6ce;width:100%;border-radius:0px 0px 16px 16px;"
     >
         <tbody>
         <tr>

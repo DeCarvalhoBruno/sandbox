@@ -8,6 +8,7 @@ class Entity extends Model
     use Enumerable;
 
     const BLOG_POSTS = 0x12c;           //300
+    const EMAILS = 0x2d0;               //720
     const GROUPS = 0x44c;               //1100
     const GROUP_MEMBERS = 0x44d;        //1101
     const SYSTEM = 0xaf0;               //2800
@@ -21,7 +22,8 @@ class Entity extends Model
      * @var array Used in case a specific model isn't in \App\Models
      */
     public static $classMap = [
-        'BlogPost' => 'Blog\BlogPost'
+        'BlogPost' => 'Blog\BlogPost',
+        'Email'=>'Email\Email'
     ];
 
     /**

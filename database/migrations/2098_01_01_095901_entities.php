@@ -32,6 +32,25 @@ class Entities extends Migration
                 ->references('entity_id')->on('entities');
         });
 
+        Schema::create('email_recipient_types', function (Blueprint $table) {
+            $table->increments('email_recipient_type_id');
+            $table->string('email_recipient_type_name', 50);
+        });
+        \App\Models\Email\EmailRecipientType::insert([
+            ['email_recipient_type_name' => 'all'],
+        ]);
+
+        Schema::create('emails', function (Blueprint $table) {
+            $table->increments('email_id');
+            $table->unsignedInteger('email_recipient_type_id')
+                ->default(\App\Models\Email\EmailRecipientType::ALL);
+            $table->text('email_content')->nullable();
+            $table->text('email_sources')->nullable();
+            $table->foreign('email_recipient_type_id')
+                ->references('email_recipient_type_id')->on('email_recipient_types')
+                ->onDelete('cascade');
+        });
+
         $this->addEntities();
         $this->entityTypes();
         $this->createEntities();

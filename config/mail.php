@@ -120,4 +120,13 @@ return [
         ],
     ],
 
+    'mailgun' => [
+        'test_mode' => env('MAILGUN_TESTMODE', false),
+        'domain' => env('MAILGUN_DOMAIN', ''),
+        'keys' => [
+            'public' => env('MAILGUN_PUBLIC_KEY', ''),
+            'private' => env('MAILGUN_PRIVATE_KEY', '')
+        ]
+    ]
+
 ];
