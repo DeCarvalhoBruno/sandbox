@@ -15,6 +15,7 @@ class People extends Migration
     {
         Schema::create('people', function (Blueprint $table) {
             $table->increments('person_id');
+            $table->string('email')->unique()->nullable();
             $table->string('first_name', 75)->nullable();
             $table->string('last_name', 75)->nullable();
             $table->string('full_name', 150)->nullable();

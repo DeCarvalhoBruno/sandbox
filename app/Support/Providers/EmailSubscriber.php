@@ -1,10 +1,9 @@
-<?php namespace App\Services\Email;
+<?php namespace App\Support\Providers;
 
+use App\Contracts\Models\EmailSubscriber as SubscriberInterface;
 use App\Models\Email\EmailSubscriber as EmailSubscriberModel;
 use App\Models\Entity;
 use App\Models\EntityType;
-use App\Support\Providers\Model;
-use App\Contracts\Models\EmailSubscriber as SubscriberInterface;
 
 /**
  * @method \App\Models\Email\EmailSubscriber createModel(array $attributes = [])

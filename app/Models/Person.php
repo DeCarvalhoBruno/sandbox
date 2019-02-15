@@ -10,6 +10,7 @@ class Person extends Model
     public $primaryKey = 'person_id';
 
     protected $fillable = [
+        'email',
         'first_name',
         'last_name',
         'user_id',

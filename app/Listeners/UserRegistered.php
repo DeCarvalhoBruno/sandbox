@@ -19,8 +19,7 @@ class UserRegistered extends Listener
                 new WelcomeEmail([
                     'user' => $event->getUser(),
                     'activation_token' => $event->getToken()
-                ]),
-                SendMail::DRIVER_SMTP
+                ])
             )
         );
     }

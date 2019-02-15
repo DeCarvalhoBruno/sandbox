@@ -16,13 +16,12 @@ class Users extends Migration
         Schema::enableForeignKeyConstraints();
         Schema::create('users', function (Blueprint $table) {
             $table->increments('user_id');
-            $table->string('email')->unique()->nullable();
             $table->string('username',15)->unique()->nullable();
             $table->string('password')->nullable();
             $table->boolean('activated')->default(false);
             $table->rememberToken()->nullable();
             $table->index('remember_token','idx_users_remember_token');
-            $table->unique(['user_id','email'],'idx_user_id_email');
+//            $table->unique(['user_id','email'],'idx_user_id_email');
             $table->unique(['user_id','username'],'idx_user_id_username');
         });
 

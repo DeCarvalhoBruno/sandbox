@@ -28,10 +28,13 @@ class Password extends Controller
         ])->after(function ($validator) use ($request) {
             if (!Hash::check($request->get('current_password'), $this->user->getAttribute('password'))) {
                 $validator->errors()->add('current_password', trans('error.form.wrong_password'));
+                return false;
             }
             if (Hash::check($request->get('password'), $this->user->getAttribute('password'))) {
                 $validator->errors()->add('password', trans('error.form.identical_passwords'));
+                return false;
             }
+            return true;
         })->validate();
 
         $user->updateOneByUsername(

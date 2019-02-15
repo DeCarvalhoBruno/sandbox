@@ -16,7 +16,7 @@ return [
     ],
     'form' => [
         'identical_passwords' => 'The password you entered is identical to your previous password! Please enter a different password.',
-        'wrong_password' => 'The password you entered does not match what we have on record.'
+        'wrong_password' => 'The current password you entered does not match what we have on record.'
     ],
     'media' => [
         'no_file' => 'No file to process.',

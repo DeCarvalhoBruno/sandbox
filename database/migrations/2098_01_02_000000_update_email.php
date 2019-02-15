@@ -26,7 +26,7 @@ class UpdateEmail extends Migration
             $table->increments('email_subscriber_id');
 
             $table->unsignedInteger('email_subscriber_target_id')->default(0);
-            $table->string('email')->unique()->nullable();
+//            $table->string('email')->unique()->nullable();
             $table->unsignedInteger('email_event_id');
 
             $table->foreign('email_subscriber_target_id')

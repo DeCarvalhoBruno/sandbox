@@ -25,6 +25,16 @@ a {
 #app {
   min-height: calc(100vh - 24.5rem);
   position: relative;
+
+
+  .list-group-item.active {
+    border-left:3px solid $primary;
+    border-bottom:1px solid rgba(0, 0, 0, 0.125);
+    border-top:1px solid rgba(0, 0, 0, 0.125);
+
+    background-color: #fff;
+    color:#000;
+  }
 }
 
 #scroll-up {
@@ -52,4 +62,6 @@ a {
 
 .fontawesome-i2svg-active body {
   display: initial;
+  transition: all 0.5s ease-in-out;
 }
+

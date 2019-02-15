@@ -44,10 +44,11 @@ class UserProfileTest extends TestCase
         $this->assertFileExists($path);
     }
 
-    public function test_set_new_password_with_wrong_current_password()
+    public function set_new_password_with_wrong_current_password()
     {
-        $this->withExceptionHandling();
+//        $this->withExceptionHandling();
         $u = $this->signIn()->createUser();
+
         $response = $this->patchJson(
             '/ajax/admin/settings/password',
             [
@@ -59,7 +60,7 @@ class UserProfileTest extends TestCase
         $response->assertStatus(422);
     }
 
-    public function test_set_new_password_same_password()
+    public function set_new_password_same_password()
     {
         $this->withExceptionHandling();
         $u = $this->signIn()->createUser();
@@ -74,7 +75,7 @@ class UserProfileTest extends TestCase
         $response->assertStatus(422);
     }
 
-    public function test_set_new_password()
+    public function set_new_password()
     {
         $this->withExceptionHandling();
         $u = $this->signIn()->createUser();
@@ -92,7 +93,7 @@ class UserProfileTest extends TestCase
         $this->assertTrue(Hash::check('dfsdfsfsdfds', $freshPassword));
     }
 
-    public function test_update_profile()
+    public function update_profile()
     {
         $this->withExceptionHandling();
         $t = $this->createUser();

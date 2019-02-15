@@ -12,7 +12,7 @@ class UpdateUser extends FormRequest
     public function rules()
     {
         return [
-            'new_email' => 'email|unique:users,email',
+            'new_email' => 'email|unique:people,email',
             'new_username' => 'regex:/^(\w){1,15}$/|unique:users,username',
         ];
     }

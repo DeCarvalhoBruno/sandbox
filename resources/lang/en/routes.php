@@ -10,6 +10,7 @@ return [
     'password_reset_token' => 'password/reset/{token}/{email}',
     'settings_profile' => 'settings/profile',
     'settings_notifications' => 'settings/notifications',
+    'settings_account' => 'settings/account',
     'contact' => 'contact',
     'blog_slug' => 'blog/{slug}',
 ];

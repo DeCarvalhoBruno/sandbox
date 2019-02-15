@@ -16,10 +16,13 @@ class Breadcrumbs
 <ul class="breadcrumbs">
 EOD;
         $this->addNode(route_i18n('home'), chr(10) . str_repeat(' ',8).'<fa icon="home"></fa>');
+        $lastItem = array_pop($chain);
         foreach ($chain as $item) {
             $this->addNode($item['url'], $item['label']);
         }
+        $this->lastNode($lastItem['label']);
         $this->breadcrumbs .= chr(10) . "</ul>";
+
         return $this->breadcrumbs;
     }
 
@@ -31,6 +34,16 @@ EOD;
     <span class="breadcrumb-item">
       <a class="breadcrumb-link" href="$url">$nodeLabel</a>
     </span>
+  </li>
+EOD;
+    }
+
+    private function lastNode($nodeLabel)
+    {
+        $this->breadcrumbs .= <<<EOD
+  
+  <li>
+    <span class="breadcrumb-item">$nodeLabel</span>
   </li>
 EOD;
     }

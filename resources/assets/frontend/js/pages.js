@@ -23,16 +23,38 @@ export default {
       ]
     }
   },
-  // User Profile
+  // Settings: profile
   '7d97481b1f': {
+    components: {
+      frontend: [
+        'InlineForm'
+      ],
+      backend: [
+        'SubmitButton',
+        'AvatarUploader'
+      ]
+    }
+  },
+  // Settings: Account
+  'e268443e43': {
     components: {
       frontend: [
         'InlineForm',
         'PasswordStrength'
       ],
       backend: [
-        'SubmitButton',
-        'AvatarUploader'
+        'SubmitButton'
+      ]
+    }
+  },
+  // Settings: Notifications
+  'f37bd2f666': {
+    components: {
+      frontend: [
+        'InlineForm'
+      ],
+      backend: [
+        'SubmitButton'
       ]
     }
   },

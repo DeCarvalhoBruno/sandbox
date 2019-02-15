@@ -42,12 +42,12 @@ class User extends Model implements UserProvider, UserInterface
     {
         $user = $this->createModel([
             'username' => $data['username'],
-            'password' => bcrypt($data['password']),
-            'email' => $data['email']
+            'password' => bcrypt($data['password'])
         ]);
         $user->save();
         $this->person->createModel([
                 'user_id' => $user->getKey(),
+                'email' => $data['email'],
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name']
             ]

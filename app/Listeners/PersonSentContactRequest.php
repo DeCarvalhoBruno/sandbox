@@ -19,8 +19,7 @@ class PersonSentContactRequest extends Listener
                     'contact_email' => $event->getContactEmail(),
                     'contact_subject' => $event->getContactSubject(),
                     'message_body'=>$event->getMessageBody()
-                ]),
-                SendMail::DRIVER_SMTP
+                ])
             )
         );
     }

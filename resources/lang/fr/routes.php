@@ -7,9 +7,9 @@
     'password_reset' => 'identifiants/reinitialiser',
     'password_email' => 'identifiants/email',
     'password_reset_token' => 'identifiants/reinitialiser/{token}/{email}',
-    'settings_profile' => 'settings/profile',
-    'settings_notifications' => 'settings/notifications',
-    'user_profile' => 'profil',
+    'settings_profile' => 'parametres/profil',
+    'settings_notifications' => 'parametres/notifications',
+    'settings_account' => 'parametres/compte',
     'contact' => 'contact',
     'blog_slug' => 'blog/{slug}',
 

@@ -19,6 +19,7 @@
       text-decoration: none;
       display: inline-block;
       padding: 0 .5rem;
+      user-select: none;
 
       &:not(:last-child) {
         padding-right: 1.3rem;
@@ -35,6 +36,14 @@
         text-decoration: none;
       }
 
+    }
+  }
+
+  .breadcrumb-item {
+    fa, svg {
+      width: 1.125em;
+      height: 1em;
+      display: inline-block;
     }
   }
 }

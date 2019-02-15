@@ -5,11 +5,15 @@
         <div class="col-md-3" style="font-size: 0.9rem;">
             <div class="card">
                 <div class="card-header">
-                    Personal Settings
+                    {{trans('pages.profile.settings_title')}}
                 </div>
                 <div class="list-group list-group-flush">
-                    <a class="list-group-item list-group-item-action active" href="{{route_i18n('profile')}}">Profile</a></li>
-                    <a class="list-group-item list-group-item-action" href="{{route_i18n('notifications')}}">Notifications</a></li>
+                    <a class="list-group-item list-group-item-action {{($viewName==='profile')?'active':''}}"
+                       href="{{route_i18n('profile')}}">{{trans('pages.profile.profile_title')}}</a>
+                    <a class="list-group-item list-group-item-action {{($viewName==='account')?'active':''}}"
+                       href="{{route_i18n('account')}}">{{trans('pages.profile.account_title')}}</a>
+                    <a class="list-group-item list-group-item-action {{($viewName==='notifications')?'active':''}}"
+                       href="{{route_i18n('notifications')}}">{{trans('pages.profile.notifications_title')}}</a>
                 </div>
             </div>
         </div>

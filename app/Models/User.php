@@ -35,7 +35,6 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     public static $nameColumn = 'username';
     protected $fillable = [
         'username',
-        'email',
         'password',
         'activated',
         'remember_token'
@@ -90,7 +89,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
         if (is_int($identifier)) {
             return 'users.user_id';
         }
-        return 'users.email';
+        return 'people.email';
     }
 
     public function getFullname()
@@ -131,8 +130,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
                         [
                             'user' => $this,
                             'token' => $token
-                        ]),
-                    SendMail::DRIVER_SMTP
+                        ])
                 )
             );
 

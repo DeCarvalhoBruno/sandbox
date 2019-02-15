@@ -1,6 +1,5 @@
-<?php namespace App\Services\Email;
+<?php namespace App\Support\Providers;
 
-use App\Support\Providers\Model;
 use App\Contracts\Models\EmailCampaign as CampaignInterface;
 use App\Contracts\Models\EmailUserEvent as EmailUserEventInterface;
 
@@ -9,12 +8,12 @@ use App\Contracts\Models\EmailUserEvent as EmailUserEventInterface;
  */
 class EmailCampaign extends Model implements CampaignInterface
 {
+    protected $model = \App\Models\Email\EmailCampaign::class;
     /**
      * @var \App\Contracts\Models\EmailUserEvent|\App\Support\Providers\EmailUserEvent
      */
     private $event;
 
-    protected $model = \App\Models\Email\EmailCampaign::class;
 
     /**
      * EmailCampaign constructor.

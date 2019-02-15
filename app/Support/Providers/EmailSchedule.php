@@ -1,12 +1,10 @@
-<?php namespace App\Services\Email;
+<?php namespace App\Support\Providers;
 
+use App\Contracts\Models\EmailSchedule as ScheduleInterface;
 use App\Models\Email\Email as EmailModel;
 use App\Models\Email\EmailSchedule as EmailScheduleModel;
 use App\Models\Entity;
 use App\Models\EntityType;
-use App\Support\Providers\Model;
-use App\Contracts\Models\EmailSchedule as ScheduleInterface;
-use App\Contracts\Models\Email as EmailInterface;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
@@ -16,30 +14,6 @@ use Illuminate\Support\Collection;
 class EmailSchedule extends Model implements ScheduleInterface
 {
     protected $model = \App\Models\Email\EmailSchedule::class;
-
-    /**
-     * @var \App\Contracts\Models\Email|\App\Support\Providers\Email
-     */
-    private $content;
-
-    /**
-     *
-     * @param null|string $model
-     * @param \App\Contracts\Models\Email|\App\Support\Providers\Email $eci
-     */
-    public function __construct(EmailInterface $eci = null, $model = null)
-    {
-        parent::__construct($model);
-        $this->content = $eci;
-    }
-
-    /**
-     * @return \App\Contracts\Models\Email|\App\Support\Providers\Email
-     */
-    public function content()
-    {
-        return $this->content;
-    }
 
     /**
      * @param int $entityID

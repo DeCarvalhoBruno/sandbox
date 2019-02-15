@@ -21,7 +21,12 @@ class AppServiceProvider extends ServiceProvider
         Contract\Text::class,
         Contract\Blog::class,
         Contract\BlogCategory::class,
-        Contract\BlogTag::class
+        Contract\Email::class,
+        Contract\Emailevent::class,
+        Contract\EmailCampaign::class,
+        Contract\EmailSchedule::class,
+        Contract\EmailSubscriber::class,
+        Contract\EmailUserEvent::class
     ];
 
     /**
@@ -41,6 +46,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->make('view')->composer(
             'frontend.site.settings.profile',
             \App\Composers\Frontend\Profile::class
+        );
+        $this->app->make('view')->composer(
+            'frontend.site.settings.panes.*',
+            \App\Composers\Frontend\Settings::class
         );
 
         if (app()->environment() == 'local') {

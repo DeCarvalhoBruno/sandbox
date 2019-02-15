@@ -14,7 +14,6 @@ class UsersSeeder extends Seeder
         $this->avatar = new \App\Support\Providers\Image(new \App\Support\Providers\Avatar);
         $pwd = bcrypt('secret');
         $u = factory(App\Models\User::class)->create([
-            'email' => 'john.doe@example.com',
             'username' => 'john_doe',
             'password' => $pwd,
             'activated' => true,
@@ -22,6 +21,7 @@ class UsersSeeder extends Seeder
         ]);
         $this->createAvatar('john_doe', 'John Doe');
         factory(App\Models\Person::class)->create([
+            'email' => 'john.doe@example.com',
             'first_name' => 'John',
             'last_name' => 'Doe',
             'user_id' => $u->getAttribute('user_id')
@@ -36,7 +36,6 @@ class UsersSeeder extends Seeder
         ]);
 
         $u = factory(App\Models\User::class)->create([
-            'email' => 'jane.doe@example.com',
             'username' => 'jane_doe',
             'password' => $pwd,
             'activated' => true,
@@ -44,12 +43,38 @@ class UsersSeeder extends Seeder
         ]);
 
         factory(App\Models\Person::class)->create([
+            'email' => 'jane.doe@example.com',
             'first_name' => 'Jane',
             'last_name' => 'Doe',
             'user_id' => $u->getAttribute('user_id')
         ]);
 
         $this->createAvatar('jane_doe', 'Jane Doe');
+
+        factory(App\Models\GroupMember::class)->create([
+            "group_id" => 2,
+            'user_id' => $u->getAttribute('user_id')
+        ]);
+        factory(App\Models\GroupMember::class)->create([
+            "group_id" => 4,
+            'user_id' => $u->getAttribute('user_id')
+        ]);
+
+        $u = factory(App\Models\User::class)->create([
+            'username' => env('MAIN_ACCOUNT_USERNAME'),
+            'password' => $pwd,
+            'activated' => true,
+            'remember_token' => null,
+        ]);
+
+        factory(App\Models\Person::class)->create([
+            'email' => env('MAIN_ACCOUNT_EMAIL'),
+            'first_name' => env('MAIN_ACCOUNT_FIRST_NAME'),
+            'last_name' => env('MAIN_ACCOUNT_LAST_NAME'),
+            'user_id' => $u->getAttribute('user_id')
+        ]);
+
+        $this->createAvatar(env('MAIN_ACCOUNT_USERNAME'), env('MAIN_ACCOUNT_FIRST_NAME').' '.env('MAIN_ACCOUNT_LAST_NAME'));
 
         factory(App\Models\GroupMember::class)->create([
             "group_id" => 2,
@@ -77,10 +102,10 @@ class UsersSeeder extends Seeder
             $u = factory(App\Models\User::class)->create([
                 'username' => ($usernames[$username] == 0) ? $username : $username . $usernames[$username],
                 'activated' => true,
-                'email' => sprintf('%s.%s@%s', strtolower($fn), strtolower($ln), $faker->freeEmailDomain),
                 'password' => $pwd,
             ]);
             factory(App\Models\Person::class)->create([
+                'email' => sprintf('%s.%s@%s', strtolower($fn), strtolower($ln), $faker->freeEmailDomain),
                 'first_name' => $fn,
                 'last_name' => $ln,
                 'user_id' => $u->getAttribute('user_id'),

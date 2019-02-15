@@ -69,8 +69,9 @@ class Frontend extends Routes
             $r->get(trans('routes.contact', [], $locale), 'Frontend@contact')
                 ->name(self::i18nRouteNames($locale, 'contact'));
             $r->post('contact/send', 'Frontend@sendContactEmail')->name( 'contact.send');
-//            $r->get(trans('routes.blog_slug', [], $locale), 'Blog@getPost')
-//                ->name(self::i18nRouteNames($locale, 'blog'));
+
+            $r->get(trans('routes.blog_slug', [], $locale), 'Blog@getPost')
+                ->name(self::i18nRouteNames($locale, 'blog'));
 
         };
 
@@ -82,12 +83,12 @@ class Frontend extends Routes
             $r->post('logout', 'Auth\Login@logout')->name('logout');
             $r->get(trans('routes.settings_profile', [], $locale), 'Settings\Profile@edit')
                 ->name(self::i18nRouteNames($locale, 'profile'));
-            $r->get(trans('routes.settings_notifications', [], $locale), 'Settings\Notifications@edit')
-                ->name(self::i18nRouteNames($locale, 'notifications'));
             $r->post('settings/profile/update', 'Settings\Profile@update')
                 ->name('profile.update');
-            $r->post('settings/notifications/update', 'Settings\Notifications@update')
-                ->name('notifications.update');
+            $r->get(trans('routes.settings_notifications', [], $locale), 'Settings\Notifications@edit')
+                ->name(self::i18nRouteNames($locale, 'notifications'));
+            $r->get(trans('routes.settings_account', [], $locale), 'Settings\Account@edit')
+                ->name(self::i18nRouteNames($locale, 'account'));
 
         };
     }

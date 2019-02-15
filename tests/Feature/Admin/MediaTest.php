@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\Entity;
-use App\Models\Media\MediaDigital;
 use App\Support\Providers\Avatar;
 use App\Support\Providers\File;
 use App\Support\Providers\Image;
@@ -82,7 +81,7 @@ class MediaTest extends TestCase
         ], $mediaDBFields[0]);
     }
 
-    public function test_media_crop()
+    public function media_crop()
     {
         $u = $this->signIn()->createUser();
         $imageTitle = 'mean_mug';

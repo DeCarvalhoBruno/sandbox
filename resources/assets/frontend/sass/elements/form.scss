@@ -12,6 +12,17 @@
   }
 }
 
+.form-heading-wrapper{
+  margin-bottom: 1rem;
+
+  .form-heading{
+    padding-bottom:.4rem;
+    font-weight: 300;
+    border-bottom:1px solid #e1e4e8;
+  }
+
+}
+
 #user_register_container {
   .form-group .form-has-help {
     border-bottom: 1px dashed #cc0f00;

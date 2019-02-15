@@ -74,16 +74,12 @@
 
     methods: {
       async login () {
-        try {
           const {data} = await this.form.post('/admin/login')
           this.$store.dispatch('auth/updateUser', {user: data.user})
           this.$store.dispatch('auth/saveToken', {
             token: data.token,
             remember: this.remember
           })
-        } catch (e) {
-
-        }
         this.$router.push({name: 'admin.dashboard'})
       },
       metaInfo () {

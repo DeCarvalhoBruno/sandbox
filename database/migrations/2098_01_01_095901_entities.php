@@ -62,7 +62,6 @@ class Entities extends Migration
     {
         $u = factory(App\Models\User::class)->create([
             'username' => 'root',
-            'email' => 'system@localhost.local',
             'password' => bcrypt(config('auth.root_password')),
             'activated' => true,
             'user_id' => 1,
@@ -70,6 +69,7 @@ class Entities extends Migration
         ]);
         factory(App\Models\Person::class)->create([
             'person_id' => 1,
+            'email' => 'system@localhost.local',
             'first_name' => 'root',
             'last_name' => '',
             'user_id' => 1

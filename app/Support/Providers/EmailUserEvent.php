@@ -1,4 +1,4 @@
-<?php namespace App\Services\Email;
+<?php namespace App\Support\Providers;
 
 use App\Support\Providers\Model;
 use App\Contracts\Models\EmailUserEvent as EmailUserEventInterface;

@@ -11,10 +11,9 @@ class UserTest extends TestCase
 {
     use DatabaseMigrations, WithoutMiddleware;
 
-    public function test_show()
+    public function show()
     {
-        $this->signIn();
-        $user = $this->createUser();
+        $user = $this->signIn()->createUser();
 
         $response = $this->getJson('/ajax/admin/users/' . $user->username);
 

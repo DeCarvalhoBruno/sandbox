@@ -14,7 +14,7 @@ class Profile extends Controller
     public function edit(UserProvider $userProvider)
     {
         $user = auth()->user();
-        return view('frontend.site.settings.profile', [
+        return view('frontend.site.settings.panes.profile', [
             'user' => $user,
             'breadcrumbs' => Breadcrumbs::render([
                 ['label' => trans('titles.routes.profile'), 'url' => route_i18n('profile')]
@@ -31,9 +31,19 @@ class Profile extends Controller
     public function update(UpdateUser $request, UserProvider $userRepo)
     {
         if (!empty($request->all())) {
-            $userRepo->updateOneByUsername(auth()->user()->getAttribute('username'), $request->all());
+            $notifications = $request->input('notifications');
+            $rest = $request->except(['notifications']);
+            if (!empty($rest)) {
+                if(isset($rest['password'])){
+                    $rest['password'] = bcrypt($rest['password']);
+                }
+                $userRepo->updateOneByUsername(
+                    auth()->user()->getAttribute('username'),
+                    $rest
+                );
+            }
         }
-        return redirect(route_i18n('home'))->with(
+        return back()->with(
             'msg',
             ['type' => 'success', 'title' => trans('pages.profile.update_success')]
         );

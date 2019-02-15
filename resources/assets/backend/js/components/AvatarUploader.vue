@@ -3,7 +3,7 @@
     <div class="card w-100" ref="cropperContainer">
       <b-tabs card>
         <b-tab :title="$t('pages.settings.avatar-tab')" @click="resetComponentFlags" active>
-          <p v-show="avatars.length>1" class="font-italic">{{$t('pages.settings.click_default')}}</p>
+          <p v-show="avatars.length>0" class="font-italic">{{$t('pages.settings.click_default')}}</p>
           <div class="thumbnail-group" :class="{'thumbnail-loading':ajaxIsLoading}">
             <fa v-show="ajaxIsLoading" class="fa-5x sync-icon" icon="sync" spin></fa>
             <ul class="p-0">
@@ -179,7 +179,7 @@
     props: {
       user: Object,
       avatarsParent: Array,
-      extraHeaders: {type: Object, default: {}}
+      extraHeaders: null
     },
     data () {
       return {
