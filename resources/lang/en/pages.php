@@ -16,7 +16,6 @@
         'notifications_title' => 'Notifications',
         'notifications_heading' => 'E-mail notification options',
         'notifications_help' => 'Please choose the types of e-mails you would like to receive from us:',
-        'email_newsletter' => 'Newsletter',
         'account_title' => 'Account'
     ],
     'contact' => [

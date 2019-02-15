@@ -10,37 +10,34 @@ class EmailSubscriber extends Model
     protected $fillable = [
         'email_subscriber_target_id',
         'email_subscriber_source_id',
-        'email_event_id'
+        'email_list_id'
     ];
     public $timestamps = false;
 
     /**
      * @link https://laravel.com/docs/5.7/eloquent#query-scopes
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeRecipientEntityType(Builder $query)
+    public function scopeRecipientEntityType(Builder $builder): Builder
     {
-        return $query->join('entity_types as recipients', 'recipients.entity_type_id', '=',
+        return $builder->join('entity_types', 'entity_types.entity_type_id', '=',
             'email_subscribers.email_subscriber_target_id');
     }
 
     /**
      * @link https://laravel.com/docs/5.7/eloquent#query-scopes
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $userID
-     *
-     * @return \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeUser(Builder $query, $userID = null)
+    public function scopeUser(Builder $builder, $userID = null): Builder
     {
-        return $query->join('users', function ($q) use ($userID) {
-            $q->on('recipients.entity_type_target_id', '=', 'users.user_id');
-            $q->where('recipients.entity_id', '=', Entity::USERS);
-            if ( ! is_null($userID)) {
+        return $builder->join('users', function ($q) use ($userID) {
+            $q->on('users.user_id','=','people.user_id');
+            if (!is_null($userID)) {
                 $q->where('users.user_id', '=', $userID);
             }
         });
@@ -48,26 +45,26 @@ class EmailSubscriber extends Model
 
     /**
      * @link https://laravel.com/docs/5.7/eloquent#query-scopes
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int $entityID
-     *
-     * @return \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    public function scopeEmailEvent(Builder $query, $entityID = null)
+    public function scopePerson(Builder $builder)
     {
-        $query->join('email_events', 'email_events.email_event_id', '=', 'email_subscribers.email_event_id');
-        if ( ! is_null($entityID)) {
-            if (is_array($entityID)) {
-                $query->whereIn('email_events.entity_id', $entityID);
+        return $builder->join('people',
+            'entity_types.entity_type_target_id', '=', 'people.person_id')
+            ->where('entity_types.entity_id', '=', Entity::PEOPLE);
+    }
 
-            } else {
-                $query->where('email_events.entity_id', '=', $entityID);
-
-            }
-        }
-
-        return $query;
+    /**
+     * @link https://laravel.com/docs/5.7/eloquent#query-scopes
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeEmailList(Builder $builder): Builder
+    {
+        $builder->join('email_lists', 'email_lists.email_list_id', '=', 'email_subscribers.email_list_id');
+        return $builder;
     }
 
 }

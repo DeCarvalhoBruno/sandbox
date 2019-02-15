@@ -9,7 +9,7 @@ class EmailSchedule extends Model
     protected $fillable = [
         'email_schedule_source_id',
         'email_schedule_name',
-        'email_event_id',
+        'email_list_id',
         'email_schedule_send_at',
         'email_schedule_periodicity',
     ];
@@ -23,10 +23,10 @@ class EmailSchedule extends Model
      *
      * @return \Illuminate\Database\Eloquent\Builder $query
      */
-    public function scopeEmailEvent(Builder $query, $entityID = null)
+    public function scopeEmailList(Builder $query, $entityID = null)
     {
-        return $query->join('email_events', function ($q) use ($entityID) {
-            $q->on('email_events.email_event_id', '=', 'email_schedules.email_event_id');
+        return $query->join('email_lists', function ($q) use ($entityID) {
+            $q->on('email_lists.email_list_id', '=', 'email_schedules.email_list_id');
             if ( ! is_null($entityID)) {
                 $q->where('entity_id', '=', $entityID);
             }

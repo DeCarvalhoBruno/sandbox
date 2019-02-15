@@ -10,7 +10,7 @@ class EmailCampaign extends Model
         'email_campaign_name',
         'email_campaign_codename',
         'email_campaign_total_sent',
-        'email_event_id',
+        'email_list_id',
         'created_at'
     ];
     public $timestamps = false;

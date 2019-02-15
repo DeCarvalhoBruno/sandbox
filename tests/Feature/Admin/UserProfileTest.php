@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Email\EmailList;
+use App\Models\Email\EmailSubscriber;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -20,7 +22,8 @@ class UserProfileTest extends TestCase
      */
     public function test_avatar_add()
     {
-        $u = $this->signIn()->createUser();
+        $u = $this->createUser();
+        $this->signIn($u);
         $imageTitle = 'mean_mug';
         $imageExtension = 'jpg';
         $imageFilename = sprintf('%s.%s', $imageTitle, $imageExtension);
@@ -46,8 +49,9 @@ class UserProfileTest extends TestCase
 
     public function set_new_password_with_wrong_current_password()
     {
-//        $this->withExceptionHandling();
-        $u = $this->signIn()->createUser();
+        $this->withExceptionHandling();
+        $u = $this->createUser();
+        $this->signIn($u);
 
         $response = $this->patchJson(
             '/ajax/admin/settings/password',
@@ -108,8 +112,24 @@ class UserProfileTest extends TestCase
                 'new_email' => 'jane.doe@example.com'
             ]);
         $response->assertStatus(200);
-        $this->assertNotNull(User::query()->where('email','=','jane.doe@example.com')->first());
-
+        $this->assertNotNull(User::query()->where('email', '=', 'jane.doe@example.com')->first());
     }
+
+    public function test_edit_emailing_lists()
+    {
+        $t = $this->createUser();
+        $u = $this->signIn($t);
+        $response = $this->post('settings/profile/update', [
+            'notifications' => [
+                EmailList::NEWSLETTERS => 'on'
+            ]
+        ]);
+        $response->assertStatus(302);
+        $this->assertEquals(1, count(EmailSubscriber::query()->get()->toArray()));
+        $response = $this->post('settings/profile/update', []);
+        $response->assertStatus(302);
+        $this->assertEquals(0, count(EmailSubscriber::query()->get()->toArray()));
+    }
+
 
 }

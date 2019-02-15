@@ -197,13 +197,9 @@ class User extends Model implements UserProvider, UserInterface
     public function updateRememberToken(UserContract $user, $token)
     {
         $user->setRememberToken($token);
-
         $timestamps = $user->timestamps;
-
         $user->timestamps = false;
-
         $user->save();
-
         $user->timestamps = $timestamps;
     }
 

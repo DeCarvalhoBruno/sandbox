@@ -105,12 +105,16 @@ trait Enumerable
      *
      * @param mixed $id
      *
+     * @param bool $presentable
      * @return string The lower case string
      */
-    public static function getConstantName($id)
+    public static function getConstantName($id, $presentable = false)
     {
         $name = static::getConstantNameByID($id);
         if (!is_null($name)) {
+            if ($presentable) {
+                return trans(sprintf('general.enumerables.%s', strtolower($name)));
+            }
             return strtolower($name);
         }
         throw new \UnexpectedValueException(sprintf('Constant %s does not exist.', $id));
@@ -133,6 +137,15 @@ trait Enumerable
             return $id;
         }
         throw new \UnexpectedValueException(sprintf('Constant %s does not exist.', $name));
+    }
+
+    public static function getModelPresentableName($entityID)
+    {
+        $entities = array_flip(static::getConstants());
+        if (isset($entities[$entityID])) {
+            return trans(sprintf('general.enumerables.%s', $entities[$entityID]));
+        }
+        return null;
     }
 
 }

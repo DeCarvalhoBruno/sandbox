@@ -12,11 +12,11 @@ class UpdateEmail extends Migration
      */
     public function up()
     {
-        Schema::create('email_events', function (Blueprint $table) {
-            $table->increments('email_event_id');
+        Schema::create('email_lists', function (Blueprint $table) {
+            $table->increments('email_list_id');
 
             $table->unsignedSmallInteger('entity_id');
-            $table->string('email_event_name', 70)->nullable();
+            $table->string('email_list_name', 70)->nullable();
             $table->foreign('entity_id')
                 ->references('entity_id')->on('entities')
                 ->onDelete('cascade');
@@ -27,13 +27,13 @@ class UpdateEmail extends Migration
 
             $table->unsignedInteger('email_subscriber_target_id')->default(0);
 //            $table->string('email')->unique()->nullable();
-            $table->unsignedInteger('email_event_id');
+            $table->unsignedInteger('email_list_id');
 
             $table->foreign('email_subscriber_target_id')
                 ->references('entity_type_id')->on('entity_types')
                 ->onDelete('cascade');
-            $table->foreign('email_event_id')
-                ->references('email_event_id')->on('email_events')
+            $table->foreign('email_list_id')
+                ->references('email_list_id')->on('email_lists')
                 ->onDelete('cascade');
         });
 
@@ -42,7 +42,7 @@ class UpdateEmail extends Migration
 
             $table->unsignedInteger('email_schedule_source_id');
 //            $table->unsignedInteger('email_schedule_target_id');
-            $table->unsignedInteger('email_event_id');
+            $table->unsignedInteger('email_list_id');
             $table->string('email_schedule_name', 100)->nullable();
 
             $table->date('email_schedule_send_at')->nullable();
@@ -54,21 +54,21 @@ class UpdateEmail extends Migration
             $table->foreign('email_schedule_source_id')
                 ->references('entity_type_id')->on('entity_types')
                 ->onDelete('cascade');
-            $table->foreign('email_event_id')
-                ->references('email_event_id')->on('email_events')
+            $table->foreign('email_list_id')
+                ->references('email_list_id')->on('email_lists')
                 ->onDelete('cascade');
-//            $table->unique(['email_schedule_target_id', 'email_schedule_source_id', 'email_event_id'],
+//            $table->unique(['email_schedule_target_id', 'email_schedule_source_id', 'email_list_id'],
 //                'idx_email_schedule');
         });
 
         Schema::create('email_campaigns', function (Blueprint $table) {
             $table->increments('email_campaign_id');
 
-            $table->unsignedInteger('email_event_id');
+            $table->unsignedInteger('email_list_id');
             $table->string('email_campaign_name', 100)->nullable();
 
-            $table->foreign('email_event_id')
-                ->references('email_event_id')->on('email_events');
+            $table->foreign('email_list_id')
+                ->references('email_list_id')->on('email_lists');
         });
 
         Schema::create('email_user_event_types', function (Blueprint $table) {
@@ -132,20 +132,20 @@ class UpdateEmail extends Migration
             ]
         );
 
-        $entities = \App\Models\Email\EmailEvent::getConstants();
+        $entities = \App\Models\Email\EmailList::getConstants();
 
         $systemEntities = [
-            'NEWSLETTER' => \App\Models\Entity::SYSTEM,
+            'NEWSLETTERS' => \App\Models\Entity::SYSTEM,
         ];
         $emailEvents = [];
         foreach ($entities as $name => $id) {
             $emailEvents[] = [
-                'email_event_id'=>$id,
-                'email_event_name' => $name,
+                'email_list_id'=>$id,
+                'email_list_name' => $name,
                 'entity_id' => $systemEntities[$name]
             ];
         }
-        \App\Models\Email\EmailEvent::insert($emailEvents);
+        \App\Models\Email\EmailList::insert($emailEvents);
 
     }
 

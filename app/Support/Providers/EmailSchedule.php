@@ -41,7 +41,7 @@ class EmailSchedule extends Model implements ScheduleInterface
     public function addScheduleWithContent($input)
     {
         $dataSchedule = [
-            'email_event_id' => $input['email_event_id'],
+            'email_list_id' => $input['email_list_id'],
             'email_schedule_name' => $input['email_schedule_name'],
         ];
         if (empty($input['email_schedule_send_at'])) {
@@ -122,7 +122,7 @@ class EmailSchedule extends Model implements ScheduleInterface
                     trans(sprintf('common.%s', Entity::getConstantName($entityID))),
                     $targetName),
                 'email_schedule_source_id' => $entityTypeID,
-                'email_event_id' => $emailEvent,
+                'email_list_id' => $emailEvent,
                 'email_schedule_send_at' => $dateSent,
             ]);
             EmailContent::insert([
@@ -148,7 +148,7 @@ class EmailSchedule extends Model implements ScheduleInterface
                 'entity_types.entity_id',
                 'entity_type_target_id',
                 'email_schedule_id',
-                'email_schedules.email_event_id',
+                'email_schedules.email_list_id',
                 'email_schedule_name'
             ])
             ->first();
@@ -157,7 +157,7 @@ class EmailSchedule extends Model implements ScheduleInterface
         return new Collection([
             'content' => $this->content->yieldEmailContent(
                 $targetID,
-                $schedule->getAttribute('email_event_id')
+                $schedule->getAttribute('email_list_id')
             ),
             'schedule' => (object)$schedule->toArray()
         ]);
@@ -188,7 +188,7 @@ class EmailSchedule extends Model implements ScheduleInterface
                 'entity_types.entity_id',
                 'entity_type_target_id',
                 'email_schedule_id',
-                'email_schedules.email_event_id',
+                'email_schedules.email_list_id',
                 'email_schedule_name'
             ])
             ->get();
@@ -198,12 +198,12 @@ class EmailSchedule extends Model implements ScheduleInterface
             foreach ($existingSchedules as $schedule) {
                 $targetID = $schedule->getAttribute('entity_type_target_id');
                 $tmp = $this->content->yieldEmailContent($targetID,
-                    $schedule->getAttribute('email_event_id'));
+                    $schedule->getAttribute('email_list_id'));
                 if (!empty($tmp)) {
                     $tmp->put('email_schedule_id', $schedule->getAttribute('email_schedule_id'));
-                    $tmp->put('email_event_id', $schedule->getAttribute('email_event_id'));
+                    $tmp->put('email_list_id', $schedule->getAttribute('email_list_id'));
                     $tmp->put('email_schedule_name', $schedule->getAttribute('email_schedule_name'));
-                    $content[$schedule->getAttribute('email_event_id')][$targetID] = $tmp;
+                    $content[$schedule->getAttribute('email_list_id')][$targetID] = $tmp;
                 }
             }
         } else {

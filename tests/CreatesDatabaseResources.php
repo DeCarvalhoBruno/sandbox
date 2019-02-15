@@ -1,6 +1,7 @@
 <?php namespace Tests;
 
 use App\Models\GroupMember;
+use App\Models\User;
 
 trait CreatesDatabaseResources
 {
@@ -25,7 +26,10 @@ trait CreatesDatabaseResources
             $u[$i] = $this->create('User');
             $this->create('Person', ['user_id' => $u[$i]->getAttribute('user_id')]);
         }
-        return (count($u) === 1) ? $u[0] : $u;
+
+        return (count($u) === 1) ?
+            User::query()->where('users.user_id', '=', $u[0]->getKey())->first()
+            : $u;
     }
 
     /**

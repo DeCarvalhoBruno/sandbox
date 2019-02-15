@@ -3,7 +3,8 @@
 use App\Http\Controllers\Frontend\Controller;
 use App\Http\Requests\Frontend\UpdateUser;
 use App\Support\Frontend\Breadcrumbs;
-use App\Support\Providers\User as UserProvider;
+use App\Contracts\Models\User as UserProvider;
+use App\Contracts\Models\Email as EmailProvider;
 
 class Profile extends Controller
 {
@@ -25,16 +26,16 @@ class Profile extends Controller
 
     /**
      * @param \App\Http\Requests\Frontend\UpdateUser $request
-     * @param \Illuminate\Contracts\Auth\UserProvider|\App\Support\Providers\User $userRepo
+     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
+     * @param \App\Contracts\Models\Email|\App\Support\Providers\Email $emailRepo
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdateUser $request, UserProvider $userRepo)
+    public function update(UpdateUser $request, UserProvider $userRepo, EmailProvider $emailRepo)
     {
         if (!empty($request->all())) {
-            $notifications = $request->input('notifications');
             $rest = $request->except(['notifications']);
             if (!empty($rest)) {
-                if(isset($rest['password'])){
+                if (isset($rest['password'])) {
                     $rest['password'] = bcrypt($rest['password']);
                 }
                 $userRepo->updateOneByUsername(
@@ -43,6 +44,10 @@ class Profile extends Controller
                 );
             }
         }
+            $emailRepo->subscriber()->addUserToLists(
+                auth()->user()->getAttribute('person_id'),
+                $request->input('notifications')
+            );
         return back()->with(
             'msg',
             ['type' => 'success', 'title' => trans('pages.profile.update_success')]

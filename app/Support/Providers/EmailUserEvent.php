@@ -1,6 +1,5 @@
 <?php namespace App\Support\Providers;
 
-use App\Support\Providers\Model;
 use App\Contracts\Models\EmailUserEvent as EmailUserEventInterface;
 use Illuminate\Support\Collection;
 
@@ -11,6 +10,12 @@ class EmailUserEvent extends Model implements EmailUserEventInterface
 {
 
     protected $model = \App\Models\Email\EmailUserEvent::class;
+
+
+
+
+
+
 
     /**
      * @param int $id

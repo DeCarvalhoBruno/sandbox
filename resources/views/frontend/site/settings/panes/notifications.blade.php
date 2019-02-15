@@ -48,19 +48,20 @@
                                         <p class="font-light">{{trans('pages.profile.notifications_help')}}</p>
                                     </div>
                                 </div>
-
+                                @foreach($mailing_lists as $id=>$list)
                                 <div class="row">
                                     <div class="col-lg-6 offset-lg-4">
                                         <div class="custom-control custom-checkbox">
                                             <input type="checkbox"
                                                    class="custom-control-input"
-                                                   id="notif-chk-1"
-                                                   name="notifications[newsletter]">
+                                                   id="notif-chk-{{$id}}"
+                                                   name="notifications[{{$id}}]" {{isset($subscribed[$id])?'checked':''}}>
                                             <label class="custom-control-label"
-                                                   for="notif-chk-1">{{trans('pages.profile.email_newsletter')}}</label>
+                                                   for="notif-chk-{{$id}}">{{trans(sprintf('general.mailing_lists.%s',$list))}}</label>
                                         </div>
                                     </div>
                                 </div>
+                                @endforeach
                             </div>
                         </div>
                         <div class="form-group row mt-5">

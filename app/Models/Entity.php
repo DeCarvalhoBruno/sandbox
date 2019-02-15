@@ -11,6 +11,7 @@ class Entity extends Model
     const EMAILS = 0x2d0;               //720
     const GROUPS = 0x44c;               //1100
     const GROUP_MEMBERS = 0x44d;        //1101
+    const PEOPLE = 0x8fc;               //2300
     const SYSTEM = 0xaf0;               //2800
     const USERS = 0xc1c;                //3100
 
@@ -118,7 +119,7 @@ class Entity extends Model
     {
         $entities = array_flip(static::getConstants());
         if (isset($entities[$entityID])) {
-            return str_singular(strtolower($entities[$entityID]));
+            return trans(sprintf('general.enumerables.%s',$entities[$entityID]));
         }
         return null;
     }
