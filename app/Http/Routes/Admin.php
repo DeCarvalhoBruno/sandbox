@@ -1,6 +1,7 @@
 <?php namespace App\Http\Routes;
 
 use Illuminate\Routing\Router;
+use Illuminate\Broadcasting\BroadcastController;
 
 class Admin extends Routes
 {
@@ -10,8 +11,21 @@ class Admin extends Routes
             'prefix' => '/admin',
                 'namespace' => 'App\Http\Controllers\Admin',
         ], call_user_func('static::defaultRouteGroup'));
+
+        $router->group([
+            'middleware'=>['admin_auth','admin']
+        ], call_user_func('static::broadcasting'));
     }
 
+    public static function broadcasting()
+    {
+        return function (Router $r) {
+            $r->match(
+                ['get', 'post'], '/broadcasting/auth',
+                '\\'.BroadcastController::class.'@authenticate'
+            );
+        };
+    }
     public static function defaultRouteGroup()
     {
         return function (Router $r) {

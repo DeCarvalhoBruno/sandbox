@@ -55,6 +55,7 @@ if (mix.inProduction()) {
 mix.browserSync({
   proxy: process.env.APP_URL + '/admin/login',
   browser: 'chrome',
+  notify: false,
   files: [
     `public/${folderName}/**/*`,
     'app/**/*',

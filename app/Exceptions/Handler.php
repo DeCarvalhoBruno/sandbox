@@ -88,17 +88,18 @@ class Handler extends ExceptionHandler
             return $this->unauthenticated($request, $e);
         } elseif ($e instanceof ValidationException) {
             return $this->convertValidationExceptionToResponse($e, $request);
-        } elseif ($e instanceof HttpException) {
-            if ($request->expectsJson()) {
-                return response_json(['msg' => trans('error.http.419')], 419);
-            }
-            return response()->view(sprintf(
-                'frontend.errors.%s',
-                $e->getStatusCode()), [
-                'errors' => new ViewErrorBag,
-                'exception' => $e->getMessage(),
-            ]);
         }
+//        elseif ($e instanceof HttpException) {
+////            if ($request->expectsJson()) {
+////                return response_json(['msg' => trans('error.http.419')], 419);
+////            }
+//            return response()->view(sprintf(
+//                'frontend.errors.%s',
+//                $e->getStatusCode()), [
+//                'errors' => new ViewErrorBag,
+//                'exception' => $e->getMessage(),
+//            ]);
+//        }
 
         return $request->expectsJson()
             ? $this->prepareJsonResponse($request, $e)

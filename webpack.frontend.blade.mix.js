@@ -41,6 +41,7 @@ if (mix.inProduction()) {
 mix.browserSync({
   proxy: process.env.APP_URL,
   browser: 'chrome',
+  notify: false,
   files: [
     `public/${folderName}/**/*`,
     'resources/views/**/*',
