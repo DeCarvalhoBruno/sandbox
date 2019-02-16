@@ -150,4 +150,16 @@ class Sanitizer
         }
         return $value;
     }
+
+    public static function clean($values)
+    {
+        if (!empty($values)) {
+            $rules = [];
+            foreach ($values as $k => $v) {
+                $rules[$k] = 'strip_tags|trim';
+            }
+            return (new self($values, $rules))->sanitize();
+        }
+        return $values;
+    }
 }

@@ -19,7 +19,7 @@ class People extends Migration
             $table->string('first_name', 75)->nullable();
             $table->string('last_name', 75)->nullable();
             $table->string('full_name', 150)->nullable();
-            $table->integer('user_id')->unsigned();
+            $table->integer('user_id')->unsigned()->default(0);
 
             $table->timestamps();
 

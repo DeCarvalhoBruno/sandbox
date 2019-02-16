@@ -172,3 +172,12 @@ if (!function_exists('get_locale_presentable_date_format')) {
         }
     }
 }
+
+if (!function_exists('response_json')) {
+    function response_json($content = '', $status = 200, array $headers = [])
+    {
+        return app(\Illuminate\Contracts\Routing\ResponseFactory::class)
+            ->json($content, $status, $headers);
+    }
+
+}

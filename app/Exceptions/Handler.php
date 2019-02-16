@@ -89,6 +89,9 @@ class Handler extends ExceptionHandler
         } elseif ($e instanceof ValidationException) {
             return $this->convertValidationExceptionToResponse($e, $request);
         } elseif ($e instanceof HttpException) {
+            if ($request->expectsJson()) {
+                return response_json(['msg' => trans('error.http.419')], 419);
+            }
             return response()->view(sprintf(
                 'frontend.errors.%s',
                 $e->getStatusCode()), [

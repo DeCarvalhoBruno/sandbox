@@ -2,9 +2,12 @@
 
 use App\Contracts\Models\EmailSubscriber as SubscriberInterface;
 use App\Models\Email\EmailSubscriber as SubscriberModel;
+use App\Models\Email\EmailList;
 use App\Models\Entity;
 use App\Models\EntityType;
+use App\Models\Person;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\QueryException;
 
 /**
  * @method \App\Models\Email\EmailSubscriber createModel(array $attributes = [])
@@ -29,14 +32,12 @@ class EmailSubscriber extends Model implements SubscriberInterface
             ->select($columns);
     }
 
-    public function addUserToLists($personID, $list)
+    /**
+     * @param int $personID
+     * @param array $savedList
+     */
+    public function addUserToLists($personID, $savedList)
     {
-        if (is_null($list)) {
-            $savedList = [];
-        } else {
-            $savedList = array_keys($list);
-        }
-
         $currentUserLists = $this->buildAllUser(
             $personID,
             ['email_lists.email_list_id'])
@@ -64,9 +65,46 @@ class EmailSubscriber extends Model implements SubscriberInterface
                         'email_list_id' => $listId
                     ];
                 }
-                SubscriberModel::insert($subscriberDb);
+                try {
+                    SubscriberModel::insert($subscriberDb);
+                } catch (QueryException $e) {
+                    //Probably a unique index being triggered in case we subscribe the user
+                    //to lists he's already in.
+                    return;
+                }
             }
         }
+    }
+
+    /**
+     * @param array $input
+     * @param array $lists
+     * @return void
+     */
+    public function addPersonToLists($input, $lists = [])
+    {
+        if (empty($lists)) {
+            $lists = EmailList::getDefaults();
+        }
+
+        if (!isset($input['email']) || empty($input['email'])) {
+            return;
+        }
+
+        try {
+            $person = new Person([
+                'full_name' => $input['full_name'],
+                'email' => $input['email']
+            ]);
+            $person->save();
+        } catch (\Illuminate\Database\QueryException $e) {
+            $person = Person::buildByEmail($input['email'], ['person_id'])->first();
+            if (is_null($person)) {
+                return;
+            }
+        }
+
+        $this->addUserToLists($person->getKey(), $lists);
     }
 
 }

@@ -26,7 +26,6 @@ class UpdateEmail extends Migration
             $table->increments('email_subscriber_id');
 
             $table->unsignedInteger('email_subscriber_target_id')->default(0);
-//            $table->string('email')->unique()->nullable();
             $table->unsignedInteger('email_list_id');
 
             $table->foreign('email_subscriber_target_id')
@@ -35,30 +34,25 @@ class UpdateEmail extends Migration
             $table->foreign('email_list_id')
                 ->references('email_list_id')->on('email_lists')
                 ->onDelete('cascade');
+            $table->unique(['email_subscriber_target_id','email_list_id'],'idx_subscriber_lists');
         });
 
         Schema::create('email_schedules', function (Blueprint $table) {
             $table->increments('email_schedule_id');
 
             $table->unsignedInteger('email_schedule_source_id');
-//            $table->unsignedInteger('email_schedule_target_id');
             $table->unsignedInteger('email_list_id');
             $table->string('email_schedule_name', 100)->nullable();
 
             $table->date('email_schedule_send_at')->nullable();
             $table->unsignedSmallInteger('email_schedule_periodicity')->nullable()->default(0);
 
-//            $table->foreign('email_schedule_target_id')
-//                ->references('entity_type_id')->on('entity_types')
-//                ->onDelete('cascade');
             $table->foreign('email_schedule_source_id')
                 ->references('entity_type_id')->on('entity_types')
                 ->onDelete('cascade');
             $table->foreign('email_list_id')
                 ->references('email_list_id')->on('email_lists')
                 ->onDelete('cascade');
-//            $table->unique(['email_schedule_target_id', 'email_schedule_source_id', 'email_list_id'],
-//                'idx_email_schedule');
         });
 
         Schema::create('email_campaigns', function (Blueprint $table) {

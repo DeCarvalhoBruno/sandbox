@@ -44,10 +44,16 @@ class Profile extends Controller
                 );
             }
         }
-            $emailRepo->subscriber()->addUserToLists(
-                auth()->user()->getAttribute('person_id'),
-                $request->input('notifications')
-            );
+        $lists = $request->input('notifications');
+        if (!empty($lists)) {
+            $lists = array_flip($lists);
+        } else {
+            $lists = [];
+        }
+        $emailRepo->subscriber()->addUserToLists(
+            auth()->user()->getAttribute('person_id'),
+            $lists
+        );
         return back()->with(
             'msg',
             ['type' => 'success', 'title' => trans('pages.profile.update_success')]

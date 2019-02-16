@@ -5,10 +5,12 @@ namespace App\Providers;
 use App\Events\PermissionEntityUpdated;
 use App\Events\PersonSentContactRequest;
 use App\Events\UserRegistered;
+use App\Events\UserSubscribedToNewsletter;
 use App\Listeners\PersonSentContactRequest as PersonSentContactRequestListener;
 use App\Listeners\UpdatePermissions;
 use App\Listeners\UserLogin;
 use App\Listeners\UserRegistered as UserRegisteredListener;
+use App\Listeners\UserSubscribedToNewsletter as UserSubscribedToNewsletterListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -31,6 +33,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         PersonSentContactRequest::class => [
             PersonSentContactRequestListener::class
+        ],
+        UserSubscribedToNewsletter::class=>[
+            UserSubscribedToNewsletterListener::class
         ]
     ];
 

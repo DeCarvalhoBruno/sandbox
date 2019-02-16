@@ -11,7 +11,7 @@ return [
         '403'=>"Access to this resource is forbidden.",
         '404'=>"Looks like we weren't able to locate that resource. Our apologies.",
         '405'=>"The platform cannot process a request with that method.",
-        '419'=>"Your session has expired. Please log back in.",
+        '419'=>"Your session has expired. Please log back in or refresh the page.",
         '429'=>"We are receiving too many requests at the moment. Please try again in a few moments.",
         '503'=>"Service unavailable. We are doing some cleanup.",
     ],

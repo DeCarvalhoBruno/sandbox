@@ -30,12 +30,15 @@
 (function ($, viewport) {
 $(document).ready(function () {
 
+    //Detect touch based devices so we can make layout adjustments
+    //especially when it has to do with hover/click behavior
     var noTouch = false
     if (!('ontouchstart' in document.documentElement)) {
       $('body').addClass('no-touch')
       noTouch = true
     }
 
+    //@TODO: remove this from production code
     $('<h1 class="viewport" ' +
       'style="position:absolute;bottom:4rem;right:1rem;font-weight: bold;"></h1>')
       .appendTo('body')
@@ -54,6 +57,8 @@ $(document).ready(function () {
           )
       }
     }
+
+    //Action for the "back to top" button
     $('#scroll-up').click(function(e) {
       e.preventDefault()
       $('html, body').animate({
@@ -61,6 +66,24 @@ $(document).ready(function () {
       }, 1000)
     });
 
+    //Action for the newsletter subscription form
+    $('#form-newsletter-subscribe').on('submit',function(e){
+      e.preventDefault()
+      var formData = new FormData(document.forms['form-newsletter-subscribe'])
+      axios.post('/email/subscribe/newsletter', formData)
+        .then(function (response){
+            swal.fire({
+              title:response.data.title,
+              text:response.data.text,
+              showConfirmButton: true,
+              showCancelButton:false
+            })
+      }).catch(function(){
+        document.location=document.location.href
+      })
+    })
+
+    //@TODO: remove this from production code
     $(window).resize(
       viewport.changed(function () {
         $('h1.viewport').html(viewport.current())

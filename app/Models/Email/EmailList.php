@@ -14,6 +14,16 @@ class EmailList extends Model
 //    const BLOG_POSTS_DIGEST = 0x12c;    //300
     const NEWSLETTERS = 0x7d0;            //2000
 
+    /**
+     * @return array
+     */
+    public static function getDefaults()
+    {
+        return [
+            self::NEWSLETTERS
+        ];
+    }
+
     public static function getList()
     {
         $constants = self::getConstants();

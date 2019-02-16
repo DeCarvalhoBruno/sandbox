@@ -73,6 +73,9 @@ class Frontend extends Routes
             $r->get(trans('routes.blog_slug', [], $locale), 'Blog@getPost')
                 ->name(self::i18nRouteNames($locale, 'blog'));
 
+            $r->post('email/subscribe/newsletter', 'Frontend@newsletterSubscribe')
+                ->name( 'subscribe_newsletter');
+
         };
 
     }
