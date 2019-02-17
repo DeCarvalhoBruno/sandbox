@@ -23,5 +23,7 @@ window.Echo = new Echo({
 })
 
 window.Echo.private('general').listen('.emailing.subscription', (e) => {
-
+  store.dispatch('session/notify', {data: {type: 'emailing.subscription'}})
+}).listen('.message.contact', (e) => {
+  store.dispatch('session/notify', {data: {type: 'message.contact'}})
 })

@@ -35,6 +35,7 @@ class EmailSubscriber extends Model implements SubscriberInterface
     /**
      * @param int $personID
      * @param array $savedList
+     * @return boolean true if mailing lists were added
      */
     public function addUserToLists($personID, $savedList)
     {
@@ -46,7 +47,7 @@ class EmailSubscriber extends Model implements SubscriberInterface
         $listsToRemove = array_diff($currentUserLists, $savedList);
         $listsToAdd = array_diff($savedList, $currentUserLists);
         if (empty($listsToAdd) && empty($listsToRemove)) {
-            return;
+            return false;
         }
         $targetID = EntityType::getEntityTypeID(Entity::PEOPLE, intval($personID));
 
@@ -67,28 +68,30 @@ class EmailSubscriber extends Model implements SubscriberInterface
                 }
                 try {
                     SubscriberModel::insert($subscriberDb);
+                    return true;
                 } catch (QueryException $e) {
                     //Probably a unique index being triggered in case we subscribe the user
                     //to lists he's already in.
-                    return;
+                    return false;
                 }
             }
         }
+        return false;
     }
 
     /**
      * @param array $input
      * @param array $lists
-     * @return void
+     * @return array
      */
-    public function addPersonToLists($input, $lists = [])
+    public function addPersonToLists($input, $lists = []): ?array
     {
         if (empty($lists)) {
             $lists = EmailList::getDefaults();
         }
 
         if (!isset($input['email']) || empty($input['email'])) {
-            return;
+            return null;
         }
 
         try {
@@ -100,11 +103,12 @@ class EmailSubscriber extends Model implements SubscriberInterface
         } catch (\Illuminate\Database\QueryException $e) {
             $person = Person::buildByEmail($input['email'], ['person_id'])->first();
             if (is_null($person)) {
-                return;
+                return null;
             }
         }
 
-        $this->addUserToLists($person->getKey(), $lists);
+        $result = $this->addUserToLists($person->getKey(), $lists);
+        return $result ? $input : null;
     }
 
 }

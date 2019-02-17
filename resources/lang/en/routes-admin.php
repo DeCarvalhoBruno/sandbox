@@ -7,6 +7,7 @@ return [
     'admin.settings.password' => 'admin/settings/password',
     'admin.settings.general' => 'admin/settings/general',
     'admin.settings' => '',
+    'admin.system.log' => 'admin/system/log',
     'admin.media.edit' => 'admin/media/edit/:media',
     'admin.login' => 'admin/login',
     'admin.groups.members' => 'admin/group/:group/members',

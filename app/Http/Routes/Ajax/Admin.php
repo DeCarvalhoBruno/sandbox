@@ -93,6 +93,8 @@ class Admin
 
             $r->get('dashboard', 'Dashboard@index');
 
+            $r->get('system/events/log', 'SystemEventLog@show');
+
         };
     }
 }

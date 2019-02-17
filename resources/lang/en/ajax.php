@@ -15,7 +15,8 @@ return [
         'settings_profile' => 'Settings - Modify my profile',
         'user_edit' => 'Editing a user',
         'user_index' => 'Listing users',
-        'dashboard' => 'Dashboard'
+        'dashboard' => 'Dashboard',
+        'system_log'=>'System Log'
     ],
     'breadcrumb' => [
         'admin-dashboard' => 'Home',
@@ -33,6 +34,7 @@ return [
         'admin-settings-password' => 'Your password',
         'admin-settings-profile' => 'Your profile',
         'admin-settings-general' => 'Your general settings',
+        'admin-system-log' => 'System Log',
     ],
     'sidebar' => [
         'main_nav' => 'MAIN NAVIGATION',

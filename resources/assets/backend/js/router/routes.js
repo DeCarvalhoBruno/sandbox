@@ -33,6 +33,9 @@ const SettingsProfile = () => import('back_path/pages/settings/profile').then(
 const SettingsPassword = () => import('back_path/pages/settings/password').then(
   m => m.default || m)
 
+const SystemLog = () => import('back_path/pages/system/log').then(
+  m => m.default || m)
+
 const Media = () => import('back_path/pages/media/index').then(
   m => m.default || m)
 const MediaEdit = () => import('back_path/pages/media/edit').then(
@@ -132,6 +135,11 @@ let routes = [
         component: SettingsPassword
       }
     ]
+  },
+  {
+    name: 'admin.system.log',
+    meta: {parent: 'admin.dashboard'},
+    component: SystemLog
   },
   {
     name: 'admin.login',

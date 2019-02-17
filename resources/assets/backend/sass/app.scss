@@ -55,29 +55,24 @@
 @import "sidebar-drawer/dropdown";
 @import "skin";
 @import "transitions";
+@import "content";
+
 @import "elements/submit-button";
 @import "elements/buttons";
 @import "elements/tables";
 @import "elements/images";
-@import "content";
+
 @import "components/input-tag";
 @import "components/form";
-@import "widgets/callout";
-@import "widgets/small-box";
-@import "components/datepicker";
 @import "components/dropzone";
 @import "components/wizard";
-@import "vendor/cropper";
-@import "components/trumbowyg";
 @import "components/tree";
+
+@import "widgets/callout";
+@import "widgets/small-box";
+@import "widgets/timeline";
+
+@import "vendor/datepicker";
+@import "vendor/cropper";
+@import "vendor/trumbowyg";
 @import "bootstrap";
-
-
-//**********************************************
-
-
-
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-}

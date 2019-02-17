@@ -1,7 +1,16 @@
 <?php namespace App\Events;
 
-class PersonSentContactRequest extends Event
+use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
+
+class PersonSentContactRequest extends Event implements ShouldBroadcast
 {
+    use Dispatchable, InteractsWithSockets, SerializesModels;
+
     /**
      * @var string
      */
@@ -26,6 +35,26 @@ class PersonSentContactRequest extends Event
         $this->contactEmail = $email;
         $this->contactSubject = $subject;
         $this->messageBody = $messageBody;
+    }
+
+    public function broadcastOn()
+    {
+        return new PrivateChannel('general');
+
+    }
+
+    public function broadcastAs()
+    {
+        return 'message.contact';
+    }
+
+    public function broadcastWith()
+    {
+        return [
+            'email' => $this->contactEmail,
+            'subject' => $this->contactSubject,
+            'body' => $this->messageBody
+        ];
     }
 
     /**

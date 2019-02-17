@@ -36,8 +36,6 @@ class UserSubscribedToNewsletter implements ShouldBroadcast
     public function broadcastOn()
     {
         return new PrivateChannel('general');
-//        return new Channel('general');
-
     }
 
     public function broadcastAs()
@@ -49,8 +47,5 @@ class UserSubscribedToNewsletter implements ShouldBroadcast
     {
         return ['input'=>$this->input];
     }
-
-
-
 
 }

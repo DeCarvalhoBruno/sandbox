@@ -10,7 +10,6 @@
         'new_username_heading'=>'Change your username',
         'new_username' => 'New Username',
         'new_password_confirm' => 'New Password Confirmation',
-        'update_success' => 'Your profile has been updated.',
         'settings_title' => 'Personal Settings',
         'profile_title' => ' Profile',
         'notifications_title' => 'Notifications',
@@ -23,6 +22,5 @@
         'email_subject' => 'Subject',
         'sender_email' => 'Your email',
         'email_body' => 'Message body',
-        'send_success' => 'Thank you for getting in touch with us! We\'ll get back to you shortly.'
-    ]
+    ],
 ];

@@ -7,6 +7,12 @@
         'newsletters' => 'Newsletter|Newsletter'
     ],
     'mailing_lists' => [
-        'newsletters' => 'Newsletter'
+        'newsletters' => 'Newsletter',
+    ],
+    'time' => [
+        'today' => 'Today',
+        'yesterday' => 'Yesterday',
+        'this_week' => 'This week',
+        'last_week' => 'Last week'
     ]
 ];

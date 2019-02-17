@@ -6,6 +6,7 @@
     'admin.settings.password' => 'admin/parametres/mot-de-passe',
     'admin.settings.general' => 'admin/parametres/general',
     'admin.settings' => '',
+    'admin.system.log' => 'admin/systeme/journal',
     'admin.media.edit' => '__admin/media/edit/:media',
     'admin.login' => 'admin/connexion',
     'admin.groups.members' => 'admin/groupes/:group/membres',

@@ -3,12 +3,14 @@ import swal from 'sweetalert2'
 
 export const state = {
   flashMessage: null,
-  intendedUrl: null
+  intendedUrl: null,
+  notificationCount: 0
 }
 
 export const getters = {
   flashMessage: state => state.flashMessage,
-  intendedUrl: state => state.intendedUrl
+  intendedUrl: state => state.intendedUrl,
+  notificationCount: state => state.notificationCount
 }
 
 export const mutations = {
@@ -30,6 +32,13 @@ export const mutations = {
       })
       state.flashMessage = null
     }
+  },
+  [types.NOTIFY] (state, {data}) {
+    console.log(data)
+    state.notificationCount++
+  },
+  [types.RESET_NOTIFICATIONS] (state) {
+    state.notificationCount = 0
   }
 }
 
@@ -42,5 +51,11 @@ export const actions = {
   },
   checkFlashMessage ({commit}) {
     commit(types.CHECK_FLASH_MESSAGE)
+  },
+  notify ({commit}, {data}) {
+    commit(types.NOTIFY, {data})
+  },
+  resetNotifications ({commit}) {
+    commit(types.RESET_NOTIFICATIONS)
   }
 }

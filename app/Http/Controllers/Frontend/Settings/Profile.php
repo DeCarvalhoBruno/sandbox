@@ -56,7 +56,7 @@ class Profile extends Controller
         );
         return back()->with(
             'msg',
-            ['type' => 'success', 'title' => trans('pages.profile.update_success')]
+            ['type' => 'success', 'title' => trans('messages.profile_update_success')]
         );
 
     }
