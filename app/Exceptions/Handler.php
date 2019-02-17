@@ -11,6 +11,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Routing\Router;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
@@ -88,6 +89,9 @@ class Handler extends ExceptionHandler
             return $this->unauthenticated($request, $e);
         } elseif ($e instanceof ValidationException) {
             return $this->convertValidationExceptionToResponse($e, $request);
+        }
+         elseif ($e instanceof AccessDeniedHttpException) {
+            return response_json(['msg' => trans('error.http.403')], 403);
         }
 //        elseif ($e instanceof HttpException) {
 ////            if ($request->expectsJson()) {

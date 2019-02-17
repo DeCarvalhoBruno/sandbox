@@ -13,6 +13,7 @@ class Admin extends Routes
         ], call_user_func('static::defaultRouteGroup'));
 
         $router->group([
+            'namespace' => 'App\Http\Controllers\Admin',
             'middleware'=>['admin_auth','admin']
         ], call_user_func('static::broadcasting'));
     }
@@ -22,7 +23,7 @@ class Admin extends Routes
         return function (Router $r) {
             $r->match(
                 ['get', 'post'], '/broadcasting/auth',
-                '\\'.BroadcastController::class.'@authenticate'
+                'Auth\Broadcast@authenticate'
             );
         };
     }
