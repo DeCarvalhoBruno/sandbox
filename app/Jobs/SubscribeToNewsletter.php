@@ -28,7 +28,6 @@ class SubscribeToNewsletter implements ShouldQueue
         $this->input = $input;
     }
 
-
     /**
      * Execute the job.
      *

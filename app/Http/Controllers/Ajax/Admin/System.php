@@ -1,21 +1,20 @@
 <?php namespace App\Http\Controllers\Ajax\Admin;
 
-use App\Contracts\Models\System;
+use App\Contracts\Models\System as SystemProvider;
 use App\Http\Controllers\Admin\Controller;
-use App\Models\System\SystemEvent;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
 
-class SystemEventLog extends Controller
+class System extends Controller
 {
 
     /**
-     * @param \App\Contracts\Models\System| \App\Support\Providers\System $systemEventRepo
+     * @param \App\Contracts\Models\System| \App\Support\Providers\System $systemRepo
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function show(System $systemEventRepo)
+    public function getLog(SystemProvider $systemRepo)
     {
-        $events = $systemEventRepo->log()->getFromThisWeek()->get();
+        $events = $systemRepo->log()->getFromThisWeek()->get();
         $schedule = [];
         if (!is_null($events)) {
             $today = Carbon::now()->setTime(0, 0, 0);
@@ -29,7 +28,7 @@ class SystemEventLog extends Controller
                 $data = unserialize($event->getAttribute('system_event_log_data'));
                 $output = clone($data);
                 $output->title = trans($data->title[0], $data->title[1]);
-                $output->message=[];
+                $output->message = [];
                 foreach ($data->message as $msg) {
                     $output->message[] = trans($msg[0], $msg[1]);
                 }
@@ -48,7 +47,5 @@ class SystemEventLog extends Controller
             }
         }
         return response(['events' => $schedule], Response::HTTP_OK);
-
     }
-
 }

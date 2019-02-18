@@ -34,6 +34,31 @@ class SystemEventLog extends Migration
             ['system_event_id' => 1, 'system_event_name' => 'Newsletter Subscription'],
             ['system_event_id' => 2, 'system_event_name' => 'Contact form message'],
         ]);
+
+        Schema::create('system_sections', function (Blueprint $table) {
+            $table->increments('system_section_id');
+            $table->string('system_section_name', 75);
+        });
+
+        \App\Models\System\SystemSection::insert([
+            ['system_section_name' => 'Backend'],
+            ['system_section_name' => 'Frontend'],
+        ]);
+
+        Schema::create('system_user_settings', function (Blueprint $table) {
+            $table->increments('system_user_setting_id');
+
+            $table->unsignedInteger('system_section_id');
+            $table->unsignedInteger('user_id');
+            $table->string('system_events_subscribed', 75);
+
+            $table->foreign('system_section_id')
+                ->references('system_section_id')->on('system_sections')
+                ->onDelete('cascade');
+            $table->foreign('user_id')
+                ->references('user_id')->on('users')
+                ->onDelete('cascade');
+        });
     }
 
     /**

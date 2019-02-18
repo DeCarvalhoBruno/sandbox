@@ -35,7 +35,7 @@ class UserSubscribedToNewsletter implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new PrivateChannel('general');
+        return new PrivateChannel('notifications');
     }
 
     public function broadcastAs()
@@ -45,7 +45,13 @@ class UserSubscribedToNewsletter implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        return ['input'=>$this->input];
+        return [
+            'title' => trans('messages.newsletter_subscribed',
+                [
+                    'user' => $this->input['full_name'],
+                    'email' => $this->input['email']
+                ])
+        ];
     }
 
 }

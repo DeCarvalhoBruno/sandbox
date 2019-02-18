@@ -74,7 +74,8 @@ class UsersSeeder extends Seeder
             'user_id' => $u->getAttribute('user_id')
         ]);
 
-        $this->createAvatar(env('MAIN_ACCOUNT_USERNAME'), env('MAIN_ACCOUNT_FIRST_NAME').' '.env('MAIN_ACCOUNT_LAST_NAME'));
+        $this->createAvatar(env('MAIN_ACCOUNT_USERNAME'),
+            env('MAIN_ACCOUNT_FIRST_NAME') . ' ' . env('MAIN_ACCOUNT_LAST_NAME'));
 
         factory(App\Models\GroupMember::class)->create([
             "group_id" => 2,
@@ -85,13 +86,17 @@ class UsersSeeder extends Seeder
             'user_id' => $u->getAttribute('user_id')
         ]);
 
+        $locales = ['fi_FI', 'fr_FR', 'en_US', 'hu_HU', 'pt_PT', 'es_ES'];
+        $usernames = [];
         $faker = Faker\Factory::create();
 
-        $usernames = [];
         for ($i = 1; $i <= 500; $i++) {
-            $fn = $faker->firstName;
-            $ln = $faker->lastName;
-            $username = substr(strtolower(substr($fn, 0, 1) . '_' . $ln), 0, 15);
+            if ($i % 20 == 0) {
+                $faker = Faker\Factory::create($locales[rand(0, 5)]);
+            }
+            $fn = ($faker->unique()->firstName);
+            $ln = ($faker->unique()->lastName);
+            $username = (substr(slugify(strtolower(substr($fn, 0, 1)) . '_' . slugify($ln)), 0, 15));
 
             if (isset($usernames[$username])) {
                 $usernames[$username]++;
@@ -105,7 +110,11 @@ class UsersSeeder extends Seeder
                 'password' => $pwd,
             ]);
             factory(App\Models\Person::class)->create([
-                'email' => sprintf('%s.%s@%s', strtolower($fn), strtolower($ln), $faker->freeEmailDomain),
+                'email' => sprintf('%s.%s@%s.%s',
+                    slugify(strtolower($fn)),
+                    slugify(strtolower($ln)),
+                    $faker->domainWord, $faker->tld
+                ),
                 'first_name' => $fn,
                 'last_name' => $ln,
                 'user_id' => $u->getAttribute('user_id'),

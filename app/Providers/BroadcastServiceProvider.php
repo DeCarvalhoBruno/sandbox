@@ -15,11 +15,8 @@ class BroadcastServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Broadcast::channel('general',function(){
+        Broadcast::channel('notifications', function ($user) {
             return true;
         });
-
-
-
     }
 }

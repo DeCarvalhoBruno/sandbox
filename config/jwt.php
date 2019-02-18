@@ -119,7 +119,22 @@ return [
     |
     */
 
-    'refresh_ttl' => env('JWT_REFRESH_TTL', 20160),
+    'refresh_ttl' => env('JWT_REFRESH_TTL', 262000),
+
+    /*
+    |--------------------------------------------------------------------------
+    | JWT Guard: Time to live when user hits 'remember me'
+    |--------------------------------------------------------------------------
+    |
+    | The ttl_remember_me value sets the amount of time jwt gets to keep
+    | its token when the user has clicked the 'remember me' button during login.
+    |
+    | If this value is changed, jwt's 'refresh_ttl' has to be the same, otherwise
+    | the token will be revoked before reaching the desired deadline.
+    |
+    */
+
+    'ttl_remember_me' => 262000,
 
     /*
     |--------------------------------------------------------------------------

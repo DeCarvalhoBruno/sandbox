@@ -16,6 +16,9 @@ class Login extends Controller
 
     protected function attemptLogin(Request $request)
     {
+        if ($request->has('remember')) {
+            $this->guard()->setTTL(config('jwt.ttl_remember_me'));
+        }
         $token = $this->guard()->attempt($this->credentials($request));
 
         if ($token) {

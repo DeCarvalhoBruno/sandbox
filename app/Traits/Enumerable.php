@@ -148,4 +148,20 @@ trait Enumerable
         return null;
     }
 
+    /**
+     * Gets translated names of class constants
+     * i.e [1=>First Constant, 2=>Second Constant]
+     *
+     * @return array
+     */
+    public static function getPresentableConstants()
+    {
+        $output = [];
+        $constants = static::getConstants();
+        foreach ($constants as $name => $id) {
+            $output[$id] = trans(sprintf('general.enumerables.%s', strtolower($name)));
+        }
+        return $output;
+    }
+
 }

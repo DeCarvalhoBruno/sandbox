@@ -78,6 +78,8 @@ class Admin
             $r->delete('blog/post/edit/{slug}/image/{uuid}', 'Blog@deleteImage')
                 ->middleware('can:edit,App\Models\Blog\BlogPost');
 
+            $r->get('settings/general', 'Settings\General@edit');
+            $r->patch('settings/general', 'Settings\General@update');
             $r->patch('settings/password', 'Settings\Password@update');
             $r->patch('settings/profile', 'Settings\Profile@update');
             $r->get('settings/avatar', 'Settings\Profile@avatar');
@@ -93,8 +95,7 @@ class Admin
 
             $r->get('dashboard', 'Dashboard@index');
 
-            $r->get('system/events/log', 'SystemEventLog@show');
-
+            $r->get('system/events/log', 'System@getLog');
         };
     }
 }

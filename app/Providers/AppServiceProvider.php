@@ -28,8 +28,9 @@ class AppServiceProvider extends ServiceProvider
         Contract\EmailSchedule::class,
         Contract\EmailSubscriber::class,
         Contract\EmailUserEvent::class,
+        Contract\SystemEventLog::class,
+        Contract\SystemUserSettings::class,
         Contract\System::class,
-        Contract\SystemEventLog::class
     ];
 
     /**

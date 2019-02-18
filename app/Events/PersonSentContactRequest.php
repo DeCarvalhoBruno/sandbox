@@ -1,6 +1,6 @@
 <?php namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
+use App\Models\System\SystemEvent;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -39,7 +39,7 @@ class PersonSentContactRequest extends Event implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new PrivateChannel('general');
+        return new PrivateChannel('notifications');
 
     }
 
@@ -51,9 +51,10 @@ class PersonSentContactRequest extends Event implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'email' => $this->contactEmail,
-            'subject' => $this->contactSubject,
-            'body' => $this->messageBody
+            'title' => trans('messages.contact_form_message',
+                [
+                    'email' => $this->contactEmail
+                ]),
         ];
     }
 

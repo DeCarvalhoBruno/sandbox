@@ -7,6 +7,7 @@ use App\Contracts\HasPermissions;
 use App\Emails\User\PasswordReset;
 use App\Jobs\SendMail;
 use App\Models\Media\MediaEntity;
+use App\Models\System\SystemUserSettings;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\HasANameColumn;
@@ -113,6 +114,46 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     public function getEmailForPasswordReset()
     {
         return $this->getAttribute('email');
+    }
+
+    /**
+     * Sets the attribute that stores system event ids for which the user
+     * should be notified in real time.
+     *
+     * @see \App\Models\System\SystemEvent
+     */
+    public function setSubscribedNotifications()
+    {
+        $this->setAttribute(
+            'system_events_subscribed',
+            explode(',', $this->getAttribute('system_events_subscribed'))
+        );
+    }
+
+    /**
+     * Retrieves the attribute that stores system event ids for which the user
+     * should be notified in real time.
+     *
+     * @see \App\Models\System\SystemEvent
+     * @return array
+     */
+    public function getSubscribedNotifications()
+    {
+        return explode(',', $this->getAttribute('system_events_subscribed'));
+    }
+
+    /**
+     * @param int $systemEventID
+     * @return bool
+     */
+    public function shouldBeNotified(int $systemEventID): bool
+    {
+        $notifs = $this->getSubscribedNotifications();
+        if (is_array($notifs) && !empty($notifs)) {
+            $notifKeys = array_flip($notifs);
+            return isset($notifKeys[$systemEventID]);
+        }
+        return false;
     }
 
     /**
@@ -275,6 +316,20 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     public function scopeActivation(Builder $builder)
     {
         return $this->join($builder, UserActivation::class);
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeSettings(Builder $builder)
+    {
+        return $builder->leftJoin('system_user_settings',
+            'system_user_settings.user_id',
+            '=',
+            'users.user_id'
+        );
     }
 
     /**

@@ -2,12 +2,14 @@
 
 use App\Models\Stats\StatUser;
 use App\Models\UserActivation;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Hashing\BcryptHasher;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Support\Str;
 use App\Contracts\Models\User as UserInterface;
 use App\Contracts\Models\Person as PersonInterface;
+use Tymon\JWTAuth\JWTGuard;
 
 /**
  * Class User
@@ -158,10 +160,12 @@ class User extends Model implements UserProvider, UserInterface
     public function retrieveById($identifier)
     {
         $model = $this->createModel();
-
-        return $model->newQuery()->entityType()
-            ->where($model->getIdentifier($identifier), $identifier)
-            ->first();
+        $builder = $model->newQuery()->entityType()
+            ->where($model->getIdentifier($identifier), $identifier);
+        if (auth()->guard() instanceof JWTGuard) {
+            return $builder->settings()->first();
+        }
+        return $builder->first();
     }
 
     /**
