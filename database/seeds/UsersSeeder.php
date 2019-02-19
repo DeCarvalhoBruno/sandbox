@@ -24,6 +24,7 @@ class UsersSeeder extends Seeder
             'email' => 'john.doe@example.com',
             'first_name' => 'John',
             'last_name' => 'Doe',
+            'person_slug' => 'john-doe',
             'user_id' => $u->getAttribute('user_id')
         ]);
         factory(App\Models\GroupMember::class)->create([
@@ -46,6 +47,7 @@ class UsersSeeder extends Seeder
             'email' => 'jane.doe@example.com',
             'first_name' => 'Jane',
             'last_name' => 'Doe',
+            'person_slug' => 'jane-doe',
             'user_id' => $u->getAttribute('user_id')
         ]);
 
@@ -71,6 +73,10 @@ class UsersSeeder extends Seeder
             'email' => env('MAIN_ACCOUNT_EMAIL'),
             'first_name' => env('MAIN_ACCOUNT_FIRST_NAME'),
             'last_name' => env('MAIN_ACCOUNT_LAST_NAME'),
+            'person_slug' => slugify(
+                env('MAIN_ACCOUNT_FIRST_NAME') . ' ' .
+                env('MAIN_ACCOUNT_LAST_NAME')
+            ),
             'user_id' => $u->getAttribute('user_id')
         ]);
 
@@ -87,7 +93,7 @@ class UsersSeeder extends Seeder
         ]);
 
         $locales = ['fi_FI', 'fr_FR', 'en_US', 'hu_HU', 'pt_PT', 'es_ES'];
-        $usernames = [];
+        $usernames =$slugs = [];
         $faker = Faker\Factory::create();
 
         for ($i = 1; $i <= 500; $i++) {
@@ -96,12 +102,19 @@ class UsersSeeder extends Seeder
             }
             $fn = ($faker->unique()->firstName);
             $ln = ($faker->unique()->lastName);
+            $ps =  slugify($fn . ' ' . $ln);
             $username = (substr(slugify(strtolower(substr($fn, 0, 1)) . '_' . slugify($ln)), 0, 15));
 
             if (isset($usernames[$username])) {
                 $usernames[$username]++;
             } else {
                 $usernames[$username] = 0;
+            }
+
+            if (isset($slugs[$ps])) {
+                $slugs[$ps]++;
+            } else {
+                $slugs[$ps] = 0;
             }
 
             $u = factory(App\Models\User::class)->create([
@@ -117,6 +130,7 @@ class UsersSeeder extends Seeder
                 ),
                 'first_name' => $fn,
                 'last_name' => $ln,
+                'person_slug' =>($slugs[$ps] == 0) ? $ps : $ps . $slugs[$ps],
                 'user_id' => $u->getAttribute('user_id'),
                 'created_at' => $faker->dateTimeBetween('-2 years')
             ]);

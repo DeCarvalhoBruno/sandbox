@@ -249,6 +249,17 @@ abstract class Model
     }
 
     /**
+     * Only usable for models using the HasASlugColumn trait
+     *
+     * @see \App\Traits\Models\HasASlugColumn
+     * @return mixed
+     */
+    public function getSlugColumn()
+    {
+        return $this->createModel()->getSlugColumnName();
+    }
+
+    /**
      * @param $userID
      * @param \App\Filters\Filters $filter
      */

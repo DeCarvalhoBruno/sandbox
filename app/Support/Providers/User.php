@@ -25,15 +25,28 @@ class User extends Model implements UserProvider, UserInterface
      */
     protected $hasher;
     /**
-     * @var \App\Support\Providers\Person
+     * @var \App\Contracts\Models\Person|\App\Support\Providers\Person
      */
     private $person;
 
+    /**
+     *
+     * @param \App\Contracts\Models\Person|\App\Support\Providers\Person $p
+     */
     public function __construct(PersonInterface $p)
     {
         parent::__construct();
         $this->hasher = new BcryptHasher();
         $this->person = $p;
+    }
+
+    /**
+     * @return \App\Contracts\Models\Person|\App\Support\Providers\Person
+     */
+    public function person()
+    {
+        return $this->person;
+
     }
 
     /**

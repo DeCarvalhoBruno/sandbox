@@ -25,7 +25,6 @@ class ProductsSeeder extends Seeder
         $data = $this->initSeeding();
         $this->seedPackagers($data->packagers);
         unset($data->packagers);
-        \App\Models\Shop\Language::insert($data->languages);
         $this->seedChunk($data->productBrands, \App\Models\Shop\ProductBrand::class);
         $this->seedChunk($data->productCategories, \App\Models\Shop\ProductCategory::class);
         $this->seedChunk($data->productIngredients, \App\Models\Shop\ProductIngredient::class, 100);

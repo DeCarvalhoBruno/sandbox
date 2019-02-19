@@ -25,7 +25,7 @@ class Blog extends Controller
             'table' => $blogRepo->buildList([
                 \DB::raw('null as selected'),
                 'blog_post_title',
-                'username',
+                'full_name',
                 'blog_post_slug'
             ])->filter($filter)->paginate(10),
             'columns' => $blogRepo->createModel()->getColumnInfo([
@@ -33,8 +33,8 @@ class Blog extends Controller
                     'name' => trans('ajax.db.blog_post_title'),
                     'width' => '50%'
                 ],
-                'username' => (object)[
-                    'name' => trans('ajax.db.username'),
+                'full_name' => (object)[
+                    'name' => trans('ajax.db.full_name'),
                     'width' => '30%'
                 ]
             ], $filter)
@@ -49,7 +49,8 @@ class Blog extends Controller
         return [
             'record' => [
                 'blog_post_status' => BlogPostStatus::getConstantByID(BlogPostStatus::BLOG_POST_STATUS_DRAFT),
-                'blog_post_user' => $this->user->getAttribute('username'),
+                'blog_post_person' => $this->user->getAttribute('full_name'),
+                'person_slug' => $this->user->getAttribute('person_slug'),
                 'categories' => [],
                 'tags' => [],
             ],
@@ -77,7 +78,7 @@ class Blog extends Controller
                 'blog_post_excerpt',
                 'published_at',
                 'blog_post_status_name as blog_post_status',
-                'users.username as blog_post_user',
+                'people.full_name as blog_post_person',
                 'entity_type_id'
             ])->first();
         if (is_null($record)) {
@@ -121,16 +122,16 @@ class Blog extends Controller
         try {
             $post = $blogRepo->createOne(
                 $request->all(),
-                $userRepo->buildOneByUsername(
-                    $request->getUsername(),
-                    [$userRepo->getQualifiedKeyName()]
+                $userRepo->person()->buildOneBySlug(
+                    $request->getPersonSlug(),
+                    [$userRepo->person()->getKeyName()]
                 )
             );
 
             $blogRepo->category()->attachToPost($request->getCategories(), $post);
             $blogRepo->tag()->attachToPost($request->getTags(), $post);
         } catch (\Exception $e) {
-            return response(null, Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return (
@@ -159,15 +160,15 @@ class Blog extends Controller
      */
     public function update($slug, CreateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo)
     {
-        $user = $request->getUsername();
+        $person = $request->getPersonSlug();
 
-        if (!is_null($user)) {
-            $query = $userRepo->buildOneByUsername(
-                $user,
-                [$userRepo->getQualifiedKeyName()]
-            )->get();
+        if (!is_null($person)) {
+            $query = $userRepo->person()->buildOneBySlug(
+                $person,
+                [$userRepo->person()->getKeyName()]
+            )->first();
             if (!is_null($query)) {
-                $request->setUserId($query->pluck($userRepo->getKeyName())->first());
+                $request->setPersonSlug($query[$userRepo->person()->getKeyName()]);
             }
         }
         $post = $blogRepo->updateOne($slug, $request->all());
@@ -233,8 +234,8 @@ class Blog extends Controller
     }
 
     /**
-     * @param $slug
-     * @param $uuid
+     * @param string $slug
+     * @param string $uuid
      * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
      * @return mixed
      */

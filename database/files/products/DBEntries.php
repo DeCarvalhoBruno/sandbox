@@ -8,7 +8,6 @@ class DBEntries
     private $productBrands = [];
     private $productBrandRecords = [];
     private $packagers = [];
-    private $languages = [];
     private $productCategories = [];
     private $productCategoryRecords = [];
     private $productIngredients = [];
@@ -78,11 +77,6 @@ class DBEntries
             'product_packager_activity' => (empty($packager->activity)) ? null : (implode(', ', $packager->activity)),
             'product_packager_species' => $packager->species,
         ];
-    }
-
-    public function addLanguages(array $languages)
-    {
-        $this->languages = $languages;
     }
 
     public function addProductCategories(ProductCategory $cat)

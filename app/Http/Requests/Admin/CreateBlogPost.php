@@ -13,7 +13,7 @@ class CreateBlogPost extends FormRequest
     /**
      * @var string
      */
-    private $username;
+    private $personSlug;
     /**
      * @var array
      */
@@ -44,9 +44,9 @@ class CreateBlogPost extends FormRequest
     {
         $input = $this->input();
 
-        if (isset($input['blog_post_user'])) {
-            $this->username = $input['blog_post_user'];
-            unset($input['blog_post_user']);
+        if (isset($input['blog_post_person'])) {
+            $this->personSlug = $input['blog_post_person'];
+            unset($input['blog_post_person']);
         }
 
         if (isset($input['categories'])) {
@@ -84,9 +84,9 @@ class CreateBlogPost extends FormRequest
     /**
      * @return mixed
      */
-    public function getUsername()
+    public function getPersonSlug()
     {
-        return $this->username;
+        return $this->personSlug;
     }
 
     /**
@@ -105,9 +105,9 @@ class CreateBlogPost extends FormRequest
         return $this->tags;
     }
 
-    public function setUserId($id)
+    public function setPersonSlug($id)
     {
-        $this->merge(['user_id'=>$id]);
+        $this->merge(['person_id'=>$id]);
     }
 
 

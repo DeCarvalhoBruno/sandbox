@@ -19,6 +19,7 @@ class People extends Migration
             $table->string('first_name', 75)->nullable();
             $table->string('last_name', 75)->nullable();
             $table->string('full_name', 150)->nullable();
+            $table->string('person_slug', 150)->nullable();
             $table->integer('user_id')->unsigned()->default(0);
 
             $table->timestamps();
@@ -27,6 +28,7 @@ class People extends Migration
                 ->references('user_id')->on('users')
                 ->onDelete('cascade');
             $table->unique(['user_id', 'person_id'], 'idx_user_person');
+            $table->unique(['person_slug'], 'idx_person_slug');
         });
     }
 

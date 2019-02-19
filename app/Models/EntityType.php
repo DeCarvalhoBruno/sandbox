@@ -151,7 +151,7 @@ class EntityType extends Model
     {
         $targetType = Entity::getModelClassNamespace($entityID);
 
-        return $targetType::$nameColumn;
+        return $targetType::$slugColumn;
     }
 
     /**

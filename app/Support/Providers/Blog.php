@@ -52,7 +52,7 @@ class Blog extends Model implements BlogInterface
      */
     public function buildList($attributes)
     {
-        return $this->select($attributes)->user();
+        return $this->select($attributes)->person();
     }
 
 
@@ -67,22 +67,22 @@ class Blog extends Model implements BlogInterface
             ->select($attributes)
             ->entityType()
             ->status()
-            ->user()
+            ->person()
             ->where('blog_post_slug', '=', $slug);
     }
 
     /**
      * @param array $data
-     * @param \App\Models\User $user
+     * @param \Illuminate\Database\Eloquent\Builder
      * @return \App\Models\Blog\BlogPost
      */
-    public function createOne($data, $user)
+    public function createOne($data, $person)
     {
-        $userModel = $user->first();
-        if (is_null($userModel)) {
-            throw new \UnexpectedValueException('User account for blog post creation not found.');
+        $personModel = $person->first();
+        if (is_null($personModel)) {
+            throw new \UnexpectedValueException('Person for blog post creation not found.');
         }
-        $data['user_id'] = $userModel->getKey();
+        $data['person_id'] = $personModel->getKey();
         $post = new BlogPost($data);
         $post->save();
         return $post;

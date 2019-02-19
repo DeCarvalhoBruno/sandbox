@@ -4,7 +4,7 @@ use App\Contracts\Enumerable as EnumerableContract;
 use App\Contracts\HasAnEntity;
 use App\Contracts\HasPermissions as HasPermissionsContract;
 use App\Models\Entity;
-use App\Models\User;
+use App\Models\Person;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
@@ -25,7 +25,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
 //    public $timestamps = false;
     protected $primaryKey = 'blog_post_id';
     protected $fillable = [
-        'user_id',
+        'person_id',
         'blog_post_status_id',
         'blog_post_title',
         'blog_post_slug',
@@ -35,13 +35,13 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
         'published_at'
     ];
     protected $hidden = [
-        'user_id',
+        'person_id',
         'blog_post_status_id'
     ];
     protected $sortable = [
       'blog_post_title'
     ];
-    public static $nameColumn = 'blog_post_slug';
+    public static $slugColumn = 'blog_post_slug';
 
     public static function boot()
     {
@@ -95,9 +95,9 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    public function scopeUser(Builder $builder)
+    public function scopePerson(Builder $builder)
     {
-        return $this->joinReverse($builder, User::class);
+        return $this->joinReverse($builder, Person::class);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Traits\Models;
 
-trait HasANameColumn
+trait HasASlugColumn
 {
     /**
      * Get the name of the column in the entity's table that gives it its name, i.e name, title, label, etc.
@@ -10,8 +10,13 @@ trait HasANameColumn
      * @see \App\Models\Entity
      * @return string
      */
-    public function getNameColumn(){
-        return $this->getAttribute(static::$nameColumn);
+    public function getSlugColumn(){
+        return $this->getAttribute(static::$slugColumn);
+    }
+
+    public function getSlugColumnName()
+    {
+        return static::$slugColumn;
     }
 
 }

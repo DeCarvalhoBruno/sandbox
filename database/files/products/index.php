@@ -60,7 +60,6 @@ function processDataForDB()
     fclose($handle);
 
     $dbEntries = new DBEntries();
-    $dbEntries->addLanguages(extractLanguages());
 
     foreach ($productRepo->embCodeIndex as $packager) {
         $dbEntries->addPackagers($packager);
@@ -316,30 +315,7 @@ function getEmbCodesFromFiles()
     closedir($dir);
 }
 
-function extractLanguages()
-{
-    $languageCSV = \League\Csv\Reader::createFromPath('_languages.tsv', 'r');
-    //Tab as delimiter
-    $languageCSV->setDelimiter(chr(9));
-    $languageDBColumns = [
-        'language_name',
-        'language_family',
-        'native_name',
-        'ISO_639_1',
-        'ISO_639_2T',
-        'ISO_639_2B',
-        'ISO_639_3',
-        'ISO_639_6',
-    ];
 
-    $records = $languageCSV->getRecords($languageDBColumns);
-    $lang = [];
-    foreach ($records as $offset => $record) {
-        $lang[] = $record;
-    }
-    return $lang;
-
-}
 
 
 execution_time($startExecTime);

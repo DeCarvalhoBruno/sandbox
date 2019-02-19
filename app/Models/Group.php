@@ -3,7 +3,7 @@
 use App\Contracts\HasAnEntity;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
-use App\Traits\Models\HasANameColumn;
+use App\Traits\Models\HasASlugColumn;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use App\Traits\Models\HasPermissions as HasPermissionsTrait;
 use App\Contracts\HasPermissions;
@@ -14,7 +14,7 @@ use App\Contracts\Enumerable as EnumerableContract;
 
 class Group extends Model implements HasAnEntity, HasPermissions, EnumerableContract
 {
-    use HasAnEntityTrait, HasANameColumn, Enumerable, Presentable, DoesSqlStuff, HasPermissionsTrait;
+    use HasAnEntityTrait, HasASlugColumn, Enumerable, Presentable, DoesSqlStuff, HasPermissionsTrait;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;
@@ -23,7 +23,7 @@ class Group extends Model implements HasAnEntity, HasPermissions, EnumerableCont
 
     public $primaryKey = 'group_id';
     public static $entityID = \App\Models\Entity::GROUPS;
-    protected $nameColumn = 'group_name';
+    public static $slugColumn = 'group_name';
     protected $fillable = [
         'group_name',
         'group_mask',

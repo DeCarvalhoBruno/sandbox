@@ -207,31 +207,31 @@ class Medias extends Migration
 
     private function addMedia()
     {
-        $nameColumn = 'media_name';
+        $slugColumn = 'media_name';
         $mediaIdColumn = 'media_id';
 
         $digital = [
-            $nameColumn => 'DIGITAL',
+            $slugColumn => 'DIGITAL',
             $mediaIdColumn => Media::DIGITAL,
             'children' => [
                 [
-                    $nameColumn => 'VIDEO',
+                    $slugColumn => 'VIDEO',
                     $mediaIdColumn => Media::VIDEO,
                 ],
                 [
-                    $nameColumn => 'AUDIO',
+                    $slugColumn => 'AUDIO',
                     $mediaIdColumn => Media::AUDIO,
                 ],
                 [
-                    $nameColumn => 'TEXT',
+                    $slugColumn => 'TEXT',
                     $mediaIdColumn => Media::TEXT,
                 ],
                 [
-                    $nameColumn => 'IMAGE',
+                    $slugColumn => 'IMAGE',
                     $mediaIdColumn => Media::IMAGE,
                     'children' => [
                         [
-                            $nameColumn => 'IMAGE_AVATAR',
+                            $slugColumn => 'IMAGE_AVATAR',
                             $mediaIdColumn => Media::IMAGE_AVATAR,
                         ]
                     ],
@@ -243,28 +243,28 @@ class Medias extends Migration
 
     private function addMediaGroups()
     {
-        $nameColumn = 'media_group_name';
+        $slugColumn = 'media_group_name';
         $files = [
-            $nameColumn => 'TEXT',
+            $slugColumn => 'TEXT',
             'id' => MediaGroup::TEXT,
             'children' => [
                 [
-                    $nameColumn => 'TEXT_LIBRARY',
+                    $slugColumn => 'TEXT_LIBRARY',
                     'id' => MediaGroup::TEXT_LIBRARY,
                 ]
             ],
 
         ];
         $images = [
-            $nameColumn => 'IMAGE',
+            $slugColumn => 'IMAGE',
             'id' => MediaGroup::IMAGE,
             'children' => [
                 [
-                    $nameColumn => 'IMAGE_GALLERY',
+                    $slugColumn => 'IMAGE_GALLERY',
                     'id' => MediaGroup::IMAGE_GALLERY,
                 ],
                 [
-                    $nameColumn => 'IMAGE_LIBRARY',
+                    $slugColumn => 'IMAGE_LIBRARY',
                     'id' => MediaGroup::IMAGE_LIBRARY,
                 ]
             ],

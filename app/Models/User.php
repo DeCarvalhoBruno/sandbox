@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
+use App\Contracts\Enumerable as EnumerableContract;
 use App\Contracts\HasAnEntity;
 use App\Contracts\HasPermissions;
 use App\Emails\User\PasswordReset;
 use App\Jobs\SendMail;
 use App\Models\Media\MediaEntity;
-use App\Models\System\SystemUserSettings;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
-use App\Traits\Models\HasANameColumn;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
+use App\Traits\Models\HasASlugColumn;
 use App\Traits\Models\HasPermissions as HasPermissionsTrait;
 use App\Traits\Presentable;
 use Carbon\Carbon;
@@ -20,11 +20,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as LaravelUser;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use App\Contracts\Enumerable as EnumerableContract;
 
 class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermissions, EnumerableContract
 {
-    use Notifiable, HasAnEntityTrait, HasANameColumn, DoesSqlStuff, Enumerable, Presentable, HasPermissionsTrait;
+    use Notifiable, HasAnEntityTrait, HasASlugColumn, DoesSqlStuff, Enumerable, Presentable, HasPermissionsTrait;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;
@@ -33,7 +32,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
 
     public $table = 'users';
     protected $primaryKey = 'user_id';
-    public static $nameColumn = 'username';
+    public static $slugColumn = 'username';
     protected $fillable = [
         'username',
         'password',

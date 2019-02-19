@@ -72,18 +72,6 @@ class Products extends Migration
             $table->unique(['product_id','product_brand_id'],'idx_product_brand_id');
         });
 
-        Schema::create('languages', function (Blueprint $table) {
-            $table->increments('language_id');
-            $table->string('language_name', 50);
-            $table->string('language_family', 30);
-            $table->string('native_name', 50);
-            $table->string('ISO_639_1', 2);
-            $table->string('ISO_639_2T', 3);
-            $table->string('ISO_639_2B', 3);
-            $table->string('ISO_639_3', 10);
-            $table->string('ISO_639_6', 10);
-        });
-
         Schema::create('product_categories', function (Blueprint $table) {
             $table->increments('product_category_id');
             $table->unsignedInteger('language_id');

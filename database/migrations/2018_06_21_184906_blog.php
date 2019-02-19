@@ -13,6 +13,18 @@ class Blog extends Migration
      */
     public function up()
     {
+        Schema::create('languages', function (Blueprint $table) {
+            $table->increments('language_id');
+            $table->string('language_name', 50);
+            $table->string('language_family', 30);
+            $table->string('native_name', 50);
+            $table->string('ISO_639_1', 2);
+            $table->string('ISO_639_2T', 3);
+            $table->string('ISO_639_2B', 3);
+            $table->string('ISO_639_3', 10);
+            $table->string('ISO_639_6', 10);
+        });
+
         Schema::create('blog_post_status', function (Blueprint $table) {
             $table->increments('blog_post_status_id');
 
@@ -22,9 +34,10 @@ class Blog extends Migration
         Schema::create('blog_posts', function (Blueprint $table) {
             $table->increments('blog_post_id');
 
-            $table->unsignedInteger('user_id')->default(0);
+            $table->unsignedInteger('person_id')->default(0);
             $table->unsignedInteger('blog_post_status_id')
                 ->default(\App\Models\Blog\BlogPostStatus::BLOG_POST_STATUS_DRAFT);
+            $table->unsignedInteger('language_id')->default(1);
 
             $table->string('blog_post_title')->nullable();
             $table->string('blog_post_slug')->nullable();
@@ -34,9 +47,11 @@ class Blog extends Migration
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')
-                ->references('user_id')->on('users');
-            $table->unique(['blog_post_slug'],'idx_blog_post_id_slug');
+            $table->foreign('person_id')
+                ->references('person_id')->on('people');
+            $table->foreign('language_id')
+                ->references('language_id')->on('languages');
+            $table->unique(['blog_post_slug'], 'idx_blog_post_id_slug');
         });
 
         Schema::create('blog_post_version', function (Blueprint $table) {
@@ -146,13 +161,14 @@ class Blog extends Migration
         \App\Models\Blog\BlogPostStatus::insert($status);
 
         $newLabelType = \App\Models\Blog\BlogPostLabelType::create(
-            ['blog_post_label_id'=>\App\Models\Blog\BlogPostLabel::BLOG_POST_CATEGORY]
+            ['blog_post_label_id' => \App\Models\Blog\BlogPostLabel::BLOG_POST_CATEGORY]
         );
         \App\Models\Blog\BlogPostCategory::create([
             'blog_post_category_name' => 'Default',
             'blog_post_label_type_id' => $newLabelType->getKey()
         ]);
         $this->createViews();
+        $this->extractLanguages();
     }
 
     public function createViews()
@@ -168,6 +184,31 @@ class Blog extends Migration
           GROUP BY node.blog_post_category_slug,node.blog_post_category_id,node.blog_post_category_name
           ORDER BY node.lft;
         ');
+    }
+
+    private function extractLanguages()
+    {
+        $languageCSV = \League\Csv\Reader::createFromPath(base_path().'/database/files/data/languages.tsv', 'r');
+        //Tab as delimiter
+        $languageCSV->setDelimiter(chr(9));
+        $languageDBColumns = [
+            'language_name',
+            'language_family',
+            'native_name',
+            'ISO_639_1',
+            'ISO_639_2T',
+            'ISO_639_2B',
+            'ISO_639_3',
+            'ISO_639_6',
+        ];
+
+        $records = $languageCSV->getRecords($languageDBColumns);
+        $lang = [];
+        foreach ($records as $offset => $record) {
+            $lang[] = $record;
+        }
+        \App\Models\Language::insert($lang);
+
     }
 
     /**

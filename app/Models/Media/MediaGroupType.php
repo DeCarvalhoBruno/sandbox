@@ -1,11 +1,11 @@
 <?php namespace App\Models\Media;
 
-use App\Traits\Models\HasANameColumn;
+use App\Traits\Models\HasASlugColumn;
 use Illuminate\Database\Eloquent\Model;
 
 class MediaGroupType extends Model
 {
-    use HasANameColumn;
+    use HasASlugColumn;
 
     protected $primaryKey = 'media_group_type_id';
     protected $fillable = [
@@ -16,5 +16,5 @@ class MediaGroupType extends Model
     /**
      * This model's name type column
      */
-    public static $nameColumn = 'media_group_type_title';
+    public static $slugColumn = 'media_group_type_title';
 }

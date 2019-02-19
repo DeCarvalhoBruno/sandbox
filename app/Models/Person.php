@@ -2,13 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\Models\HasASlugColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Person extends Model
 {
+    use HasASlugColumn;
+
     public $table = 'people';
     public $primaryKey = 'person_id';
+    public static $slugColumn = 'person_slug';
 
     protected $fillable = [
         'email',
@@ -16,10 +20,8 @@ class Person extends Model
         'last_name',
         'full_name',
         'user_id',
+        'person_slug',
         'created_at'
-    ];
-    protected $hidden = [
-        'person_id'
     ];
 
     /**
