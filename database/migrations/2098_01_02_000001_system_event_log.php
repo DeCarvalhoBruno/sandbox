@@ -50,7 +50,7 @@ class SystemEventLog extends Migration
 
             $table->unsignedInteger('system_section_id');
             $table->unsignedInteger('user_id');
-            $table->string('system_events_subscribed', 75);
+            $table->string('system_events_subscribed', 75)->nullable();
 
             $table->foreign('system_section_id')
                 ->references('system_section_id')->on('system_sections')

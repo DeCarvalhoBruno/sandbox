@@ -16,7 +16,7 @@ return [
         'user_edit' => 'Editing a user',
         'user_index' => 'Listing users',
         'dashboard' => 'Dashboard',
-        'system_log'=>'System Log'
+        'system_log' => 'System Log'
     ],
     'breadcrumb' => [
         'admin-dashboard' => 'Home',
@@ -85,7 +85,8 @@ return [
         'uploaded_on' => 'Uploaded on',
         'media' => 'Media',
         'crop' => 'Crop',
-        'close' => 'Close'
+        'close' => 'Close',
+        'view_all' => 'View All'
     ],
     'db' => [
         'users' => 'User|Users',
@@ -219,8 +220,9 @@ return [
         'add_category' => 'Creation of category "{cat}" failed. Please try again.'
     ],
     'message' => [
-        'profile_updated' => 'Your profile has been updated!',
-        'password_updated' => 'Your password has been updated!',
+        'profile_updated' => 'Your profile has been updated.',
+        'settings_updated'=>'Your general settings were updated.',
+        'password_updated' => 'Your password has been updated.',
         'user_update_ok' => 'The user was updated.',
         'user_delete_ok' => 'User {name} was deleted.|The users were deleted.',
         'group_update_ok' => 'The group was updated.',
@@ -275,7 +277,8 @@ return [
             'click_default' => 'Click on an avatar to make it your profile picture. Avatar changes will be saved automatically.',
             'image_uploading' => 'Processing in progress...',
             'image_proceed' => 'Proceed to cropping',
-            'image_uploaded' => 'The avatar has been processed, you can return to the avatar tab.'
+            'image_uploaded' => 'The avatar has been processed, you can return to the avatar tab.',
+            'notifications' => 'Choose the events for which you would like to receive live notifications:'
         ],
         'blog' => [
             'categories' => 'Categories',
@@ -302,6 +305,9 @@ return [
             'add_child_node' => 'Add a child element to "{name}"',
             'edit_node' => 'Edit node "{name}"',
             'delete_node' => 'Delete node "{name}"',
+        ],
+        'system_log' => [
+            'notifications' => 'No new notifications|1 new notification|{number} new notifications'
         ]
     ],
     'tables' => [

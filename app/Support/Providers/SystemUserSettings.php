@@ -33,16 +33,20 @@ class SystemUserSettings extends Model implements SystemInterface
     {
         if (isset($data['events']) && is_array($data['events'])) {
             sort($data['events']);
+            $events = implode(',', $data['events']);
+            if (empty($events)) {
+                $events = null;
+            }
             $existing = $this->createModel()->newQuery()
                 ->where('user_id', '=', $userId)
                 ->first();
             if (!is_null($existing)) {
-                $existing->update(['system_events_subscribed' => implode(',', $data['events'])]);
+                $existing->update(['system_events_subscribed' => $events]);
             } else {
                 $this->createModel([
                     'user_id' => $userId,
                     'system_section_id' => $systemSectionID,
-                    'system_events_subscribed' => implode(',', $data['events'])
+                    'system_events_subscribed' => $events
                 ])->save();
             }
         }

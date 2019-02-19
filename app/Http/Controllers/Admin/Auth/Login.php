@@ -16,9 +16,9 @@ class Login extends Controller
 
     protected function attemptLogin(Request $request)
     {
-        if ($request->has('remember')) {
-            $this->guard()->setTTL(config('jwt.ttl_remember_me'));
-        }
+//        if ($request->get('remember')) {
+//            $this->guard()->setTTL(config('jwt.ttl_remember_me'));
+//        }
         $token = $this->guard()->attempt($this->credentials($request));
 
         if ($token) {
@@ -34,9 +34,13 @@ class Login extends Controller
         $token = (string)$this->guard()->getToken();
         $expiration = $this->guard()->getPayload()->get('exp');
         return [
-            'user' => $this->guard()->user()->only(['username', 'first_name', 'last_name']),
+            'user' => $this->guard()->user()->only([
+                'username',
+                'first_name',
+                'last_name',
+                'system_events_subscribed'
+            ]),
             'token' => $token,
-            'token_type' => 'bearer',
             'expires_in' => $expiration - time(),
         ];
     }
@@ -52,6 +56,7 @@ class Login extends Controller
         $request->validate([
             $this->username() => 'required|string',
             'password' => 'required|string',
+            'remember' => 'boolean'
         ]);
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
+use App\Models\System\SystemEvent;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -35,12 +35,14 @@ class UserSubscribedToNewsletter implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new PrivateChannel('notifications');
+        return new PrivateChannel(
+            sprintf('notifications.%s',SystemEvent::NEWSLETTER_SUBSCRIPTION)
+        );
     }
 
     public function broadcastAs()
     {
-        return 'emailing.subscription';
+        return 'default';
     }
 
     public function broadcastWith()

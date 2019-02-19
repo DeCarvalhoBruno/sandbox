@@ -39,13 +39,15 @@ class PersonSentContactRequest extends Event implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new PrivateChannel('notifications');
+        return new PrivateChannel(
+            sprintf('notifications.%s',SystemEvent::CONTACT_FORM_MESSAGE)
+        );
 
     }
 
     public function broadcastAs()
     {
-        return 'message.contact';
+        return 'default';
     }
 
     public function broadcastWith()

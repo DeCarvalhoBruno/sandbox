@@ -1,40 +1,40 @@
 <template>
-    <div id="app_backend_wrapper">
-        <navbar></navbar>
-        <drawer :menu-items="MenuItems"></drawer>
-        <div class="content-wrapper">
-            <section class="content-header">
-                <div id="breadcrumb-container" class="container">
-                    <div class="row">
-                        <div class="link-back" v-if="hasBreadCrumbs()">
-                            <a @click="$router.go(-1)"><&nbsp;{{$t('general.back')}}</a>
-                        </div>
-                        <ol class="breadcrumb">
-                            <li v-for="(crumb,index) in breadCrumbs" :key="index">
-                                <template v-if="crumb.route!==$router.currentRoute.name">
-                                    <router-link
-                                            :to="{ name: crumb.route }">{{crumb.label}}
-                                    </router-link>
-                                </template>
-                                <template v-else>
-                                    <span>{{crumb.label}}</span>
-                                </template>
-                            </li>
-                        </ol>
-                    </div>
-                </div>
-            </section>
-            <section class="content">
-                <transition name="page" mode="out-in">
-                    <div class="container-fluid">
-                        <slot>
-                            <router-view></router-view>
-                        </slot>
-                    </div>
-                </transition>
-            </section>
+  <div id="app_backend_wrapper">
+    <navbar></navbar>
+    <drawer :menu-items="MenuItems"></drawer>
+    <div class="content-wrapper">
+      <section class="content-header">
+        <div id="breadcrumb-container" class="container">
+          <div class="row">
+            <div class="link-back" v-if="hasBreadCrumbs()">
+              <a @click="$router.go(-1)"><&nbsp;{{$t('general.back')}}</a>
+            </div>
+            <ol class="breadcrumb">
+              <li v-for="(crumb,index) in breadCrumbs" :key="index">
+                <template v-if="crumb.route!==$router.currentRoute.name">
+                  <router-link
+                      :to="{ name: crumb.route }">{{crumb.label}}
+                  </router-link>
+                </template>
+                <template v-else>
+                  <span>{{crumb.label}}</span>
+                </template>
+              </li>
+            </ol>
+          </div>
         </div>
+      </section>
+      <section class="content">
+        <transition name="page" mode="out-in">
+          <div class="container-fluid">
+            <slot>
+              <router-view></router-view>
+            </slot>
+          </div>
+        </transition>
+      </section>
     </div>
+  </div>
 </template>
 
 <script>
@@ -46,7 +46,7 @@
     name: 'basic',
     components: {
       Navbar,
-      Drawer,
+      Drawer
     },
     data: function () {
       return {
@@ -59,6 +59,14 @@
         this.breadCrumbs = this.makeBreadcrumbs(this.$router.currentRoute).reverse()
         this.$store.dispatch('session/checkFlashMessage')
       }
+    },
+    mounted () {
+      this.$store.dispatch('broadcast/init', {
+        data: {
+          token: this.$store.getters['auth/token'],
+          user: this.$store.getters['auth/user']
+        }
+      })
     },
     methods: {
       hasBreadCrumbs () {
@@ -85,6 +93,6 @@
       translateRouteName (route) {
         return {route: route, label: this.$t('breadcrumb.' + (route.replace(/\.+/g, '-')))}
       }
-    },
+    }
   }
 </script>

@@ -221,15 +221,18 @@ class User extends Model implements UserProvider, UserInterface
             return;
         }
 
-        $query = $this->createModel()->newQuery()->entityType();
+        $builder = $this->createModel()->newQuery()->entityType();
+        if (auth()->guard() instanceof JWTGuard) {
+            $builder = $builder->settings();
+        }
 
         foreach ($credentials as $key => $value) {
             if (!Str::contains($key, 'password')) {
-                $query->where($key, $value)->where('activated', '=', true);
+                $builder->where($key, $value)->where('activated', '=', true);
             }
         }
 
-        return $query->first();
+        return $builder->first();
     }
 
     /**

@@ -26,7 +26,7 @@
             <div class="form-group row">
               <div class="col-md-3"></div>
               <div class="col-md-9 d-flex">
-                <checkbox v-model="remember" name="remember">
+                <checkbox v-model="form.fields.remember" name="remember">
                   {{ $t('pages.auth.remember_me') }}
                 </checkbox>
 
@@ -67,19 +67,19 @@
     data: () => ({
       form: new Form({
         email: '',
-        password: ''
+        password: '',
+        remember:false
       }),
-      remember: false
     }),
 
     methods: {
       async login () {
-          const {data} = await this.form.post('/admin/login')
-          this.$store.dispatch('auth/updateUser', {user: data.user})
-          this.$store.dispatch('auth/saveToken', {
-            token: data.token,
-            remember: this.remember
-          })
+        const {data} = await this.form.post('/admin/login')
+        this.$store.dispatch('auth/updateUser', {user: data.user})
+        this.$store.dispatch('auth/saveToken', {
+          token: data.token,
+          remember: this.form.remember
+        })
         this.$router.push({name: 'admin.dashboard'})
       },
       metaInfo () {

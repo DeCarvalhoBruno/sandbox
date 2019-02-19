@@ -33,14 +33,8 @@ class General extends Controller
     public function edit(SystemProvider $systemRepo)
     {
         $settings = [];
-        $subscribed = auth()->user()->getAttribute('system_events_subscribed');
+        $settings['events'] = auth()->user()->getAttribute('system_events_subscribed');
         $events = $systemRepo->getEvents();
-
-        if (!is_null($subscribed) && !empty($subscribed)) {
-            $settings['events'] = explode(',', $subscribed);
-        } else {
-            $settings['events'] = [];
-        }
 
         return response([
             'existing' => $settings,

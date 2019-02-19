@@ -4,7 +4,9 @@
     'send' => 'Send',
     'enumerables' => [
         'users' => 'User|Users',
-        'newsletters' => 'Newsletter|Newsletter'
+        'newsletters' => 'Newsletter|Newsletter',
+        'newsletter_subscription' => 'Newsletter subscription',
+        'contact_form_message' => 'Contact form message'
     ],
     'mailing_lists' => [
         'newsletters' => 'Newsletter',

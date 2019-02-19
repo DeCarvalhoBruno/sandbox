@@ -126,7 +126,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     {
         $this->setAttribute(
             'system_events_subscribed',
-            explode(',', $this->getAttribute('system_events_subscribed'))
+            $this->getSubscribedNotifications()
         );
     }
 
@@ -139,7 +139,11 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
      */
     public function getSubscribedNotifications()
     {
-        return explode(',', $this->getAttribute('system_events_subscribed'));
+        $f = explode(',', $this->getAttribute('system_events_subscribed'));
+        if ($f[0] === "") {
+            return [];
+        }
+        return $f;
     }
 
     /**

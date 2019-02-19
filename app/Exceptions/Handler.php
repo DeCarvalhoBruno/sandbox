@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Http\Response;
 use Illuminate\Support\ViewErrorBag;
 use Psr\Log\LoggerInterface;
 use Illuminate\Auth\AuthenticationException;
@@ -89,8 +90,7 @@ class Handler extends ExceptionHandler
             return $this->unauthenticated($request, $e);
         } elseif ($e instanceof ValidationException) {
             return $this->convertValidationExceptionToResponse($e, $request);
-        }
-         elseif ($e instanceof AccessDeniedHttpException) {
+        } elseif ($e instanceof AccessDeniedHttpException) {
             return response_json(['msg' => trans('error.http.403')], 403);
         }
 //        elseif ($e instanceof HttpException) {

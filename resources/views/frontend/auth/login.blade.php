@@ -80,13 +80,16 @@
                                         </div>
                                         <div class="form-group row mt-5">
                                             <div class="col-xl-8 offset-xl-2 col-lg-6 offset-lg-3">
-                                                <submit-button ref="submitButton" :block="true">{{trans('ajax.general.login')}}</submit-button>
+                                                <submit-button ref="submitButton"
+                                                               :block="true"
+                                                               :value="{{trans('ajax.general.login')}}"></submit-button>
                                             </div>
                                         </div>
                                         <div class="form-group row text-center m-0">
                                             <div class="col align-content-lg-center">
                                                 <u>
-                                                    <a class="small" href="{{ route_i18n('register') }}">{{trans('auth.create_account')}}</a>
+                                                    <a class="small"
+                                                       href="{{ route_i18n('register') }}">{{trans('auth.create_account')}}</a>
                                                 </u>
                                             </div>
                                         </div>

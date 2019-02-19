@@ -15,8 +15,23 @@ class BroadcastServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Broadcast::channel('notifications', function ($user) {
-            return true;
-        });
+        Broadcast::channel('notifications.{id}', forward_static_call('static::notifications'));
+    }
+
+
+    public static function notifications()
+    {
+        /**
+         * @param \App\Models\User $user
+         * @param int $id
+         * @return bool
+         */
+        return function ($user, $id) {
+            if($user->shouldBeNotified(intval($id))){
+                return true;
+            }
+            return false;
+        };
+
     }
 }

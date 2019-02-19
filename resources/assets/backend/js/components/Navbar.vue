@@ -26,32 +26,39 @@
           </li>
         </ul>
         <ul class="navbar-nav nav justify-content-end">
-          <div class="btn-nav-group">
+          <li class="btn-nav-group">
             <div class="btn-nav">
               <router-link :to="{ name: 'admin.settings.profile' }"
                            :title="$t('general.settings')">
                 <fa icon="envelope" fixed-width size="lg"></fa>
               </router-link>
             </div>
-          </div>
-          <div class="btn-nav-group">
-            <div class="btn-nav">
-              <router-link :to="{ name: 'admin.system.log' }"
-                           :title="$t('title.system_log')">
-                <fa icon="bell" fixed-width size="lg" :class="buttonBellClasses"></fa>
-                <span v-if="notificationCount>0" id="alerts_badge" class="badge badge-pill badge-danger">{{notificationCount}}</span>
-              </router-link>
-            </div>
-          </div>
-          <!--<b-dropdown right variant="dark" no-caret-->
-                      <!--:class="['no-caret']"-->
-                      <!--@show="resetNotifications">-->
-            <!--<b-dropdown-header>Dropdown header</b-dropdown-header>-->
-            <!--<b-dropdown-divider/>-->
-            <!--<template #button-content>-->
-
-            <!--</template>-->
-          <!--</b-dropdown>-->
+          </li>
+          <b-dropdown right variant="dark" no-caret
+                      :class="['no-caret']"
+                      @hide="resetNotifications">
+            <template #button-content>
+              <fa icon="bell" fixed-width size="lg" :class="buttonBellClasses"></fa>
+              <span v-if="notificationCount>0"
+                    id="alerts_badge"
+                    class="badge badge-pill badge-danger">{{notificationCount}}</span>
+            </template>
+            <b-dropdown-header>{{$tc(
+              'pages.system_log.notifications',
+              notificationCount,
+              {number:notificationCount}
+              )}}
+            </b-dropdown-header>
+            <b-dropdown-divider v-show="notificationCount>0"></b-dropdown-divider>
+            <b-dropdown-item v-for="(notification, idx) in notifications" :key="'notif'+idx">
+              {{notification}}
+            </b-dropdown-item>
+            <b-dropdown-divider></b-dropdown-divider>
+            <b-dropdown-item router-tag="a"
+                             :to="{ name: 'admin.system.log' }">
+              {{ $t('general.view_all') }}
+            </b-dropdown-item>
+          </b-dropdown>
 
           <b-dropdown right :text="user.username" variant="dark">
             <b-dropdown-item router-tag="a"
@@ -90,7 +97,8 @@
     },
     computed: mapGetters({
       user: 'auth/user',
-      notificationCount: 'session/notificationCount'
+      notificationCount: 'session/notificationCount',
+      notifications: 'session/notifications'
     }),
     watch: {
       notificationCount () {
@@ -102,7 +110,7 @@
       }
     },
     methods: {
-      resetNotifications(){
+      resetNotifications () {
         this.$store.dispatch('session/resetNotifications')
       },
       async logout () {

@@ -14,7 +14,6 @@ class Admin extends Composer
         $tmp = auth()->user();
         $user = null;
         if ($tmp instanceof User) {
-            $tmp->setSubscribedNotifications();
             $user = $tmp->only(['username', 'system_events_subscribed']);
         }
         JavaScript::putArray([
