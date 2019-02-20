@@ -27,7 +27,7 @@ class Blog extends Controller
                 'blog_post_title',
                 'full_name',
                 'blog_post_slug'
-            ])->filter($filter)->paginate(10),
+            ])->filter($filter)->paginate(25),
             'columns' => $blogRepo->createModel()->getColumnInfo([
                 'blog_post_title' => (object)[
                     'name' => trans('ajax.db.blog_post_title'),

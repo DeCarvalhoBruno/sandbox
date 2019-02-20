@@ -13,12 +13,18 @@ class BlogSeeder extends Seeder
      */
     public function run()
     {
-        $file = sprintf('%s/%s',$this->origDir,'blog_data.txt');
-        $fhandle = fopen($file,'r');
-        $data = unserialize(fread($fhandle,filesize($file)));
+        $file = sprintf('%s/%s', $this->origDir, 'blog_data.txt');
+        $fhandle = fopen($file, 'r');
+        $data = unserialize(fread($fhandle, filesize($file)));
         fclose($fhandle);
-        foreach($data as $modelData){
-            dump(count($modelData->data),$modelData->model);
+        foreach ($data as $key => $modelData) {
+            dump(count($modelData->data), $modelData->model);
+            if ($key == 'categories') {
+                foreach ($modelData->data as $cats) {
+                    (new \App\Models\Blog\BlogCategory($cats))->save();
+                }
+                continue;
+            }
             $this->seedChunk($modelData->data, $modelData->model);
         }
 

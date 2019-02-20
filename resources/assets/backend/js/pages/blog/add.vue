@@ -1,7 +1,7 @@
 <template>
   <div id="blog_post_container" class="container p-0 m-0">
     <div id="trumbowyg-icons" v-html="require('trumbowyg/dist/ui/icons.svg')"></div>
-    <form @submit.prevent="save" id="form_edit_blog" ref="form_this">
+    <form @submit.prevent="save" id="form_edit_blog">
       <div class="row p-0 m-0 mt-1">
         <div class="card col-lg">
           <div class="container">
@@ -139,15 +139,16 @@
           </div>
           <div class="row p-0 m-0 input-tag-wrapper">
             <span class="badge badge-pill badge-light"
+                  @click.prevent="removeTag(index)"
                   v-for="(badge, index) in form.fields.tags"
                   :key="index">
-              <span v-html="badge" @click.prevent="removeTag(index)"></span>
+              <span v-html="badge"></span>
               <fa icon="tag" class="badge-tag-icon"></fa>
             </span>
             <input type="text"
                    ref="tag"
                    v-model="tagInput"
-                   @keyup.enter="addTag"
+                   @keydown.enter.prevent="addTag"
                    maxlength="35"
                    :placeholder="$t('pages.blog.add_tag_pholder')"/>
           </div>
@@ -183,25 +184,25 @@
           </div>
         </div>
       </div>
-      <div class="row p-0 m-0">
-        <div class="card col-lg p-0 m-0">
-          <div class="card-header bg-transparent">{{$t('pages.blog.media')}}</div>
-          <div class="card-body">
-            <image-uploader
-                :target="form.fields.blog_post_slug"
-                type="blog_posts"
-                media="image"
-                :is-active="this.saveMode==='edit'"
-                :thumbnails-parent="thumbnails"
-                @images-updated="updateThumbnails"/>
-          </div>
-        </div>
-      </div>
-      <div class="row p-0 mt-5 mb-5">
-        <div class="row p-0 mt-5 mb-5">
-        </div>
-      </div>
     </form>
+    <div class="row p-0 m-0">
+      <div class="card col-lg p-0 m-0">
+        <div class="card-header bg-transparent">{{$t('pages.blog.media')}}</div>
+        <div class="card-body">
+          <image-uploader
+              :target="form.fields.blog_post_slug"
+              type="blog_posts"
+              media="image"
+              :is-active="this.saveMode==='edit'"
+              :thumbnails-parent="thumbnails"
+              @images-updated="updateThumbnails"/>
+        </div>
+      </div>
+    </div>
+    <div class="row p-0 mt-5 mb-5">
+      <div class="row p-0 mt-5 mb-5">
+      </div>
+    </div>
   </div>
 </template>
 
@@ -336,15 +337,14 @@
         if (mode === 'add') {
           if (this.form.fields.categories.indexOf(val) === -1) {
             this.form.fields.categories.push(val)
-            this.changedField('categories')
           }
         } else {
           let i = this.form.fields.categories.indexOf(val)
           if (i > -1) {
             this.form.fields.categories.splice(i, 1)
           }
-
         }
+        this.changedField('categories')
       },
       getConfig () {
         return {
@@ -375,7 +375,7 @@
         this[value] = !this[value]
       },
       async save () {
-        if (!this.form.fields.blog_post_title) {
+        if (!this.form.fields.blog_post_title || !this.form.hasDetectedChanges()) {
           return
         }
         let suffix, msg
@@ -411,7 +411,7 @@
         }
         this.blog_post_person = this.form.fields.blog_post_person
         this.form.fields.blog_post_person = this.form.fields.person_slug
-        delete(this.form.fields.person_slug)
+        delete (this.form.fields.person_slug)
         this.status_list = data.status_list
         this.url = data.url
         this.current_status = this.$t(`constants.${data.record.blog_status}`)

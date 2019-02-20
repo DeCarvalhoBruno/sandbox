@@ -8,9 +8,9 @@ class BlogTag extends Model
 {
     use DoesSqlStuff;
 
-    protected $table = 'blog_post_tags';
-    protected $primaryKey = 'blog_post_tag_id';
-    protected $fillable = ['blog_post_tag_name', 'blog_post_tag_slug'];
+    protected $table = 'blog_tags';
+    protected $primaryKey = 'blog_tag_id';
+    protected $fillable = ['blog_tag_name', 'blog_tag_slug'];
     public $timestamps = false;
 
     /**

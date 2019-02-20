@@ -1,11 +1,11 @@
-<?php namespace App\Models\Blog;
+<?php namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class PersonMeta extends Model
 {
 
-    public $table = 'person_meta';
+    public $table = 'people_meta';
     public $primaryKey = 'person_meta_id';
 
     protected $fillable = [

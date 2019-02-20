@@ -184,11 +184,13 @@
   }
 
   .link-back {
-    padding: .2rem 1rem 0;
     font-size: .8rem;
 
-    &:hover {
-      cursor: pointer;
+    a{
+      padding: 1rem;
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 
