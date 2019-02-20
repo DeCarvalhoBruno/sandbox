@@ -26,7 +26,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     protected $primaryKey = 'blog_post_id';
     protected $fillable = [
         'person_id',
-        'blog_post_status_id',
+        'blog_status_id',
         'blog_post_title',
         'blog_post_slug',
         'blog_post_content',
@@ -36,7 +36,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     ];
     protected $hidden = [
         'person_id',
-        'blog_post_status_id'
+        'blog_status_id'
     ];
     protected $sortable = [
       'blog_post_title'
@@ -83,10 +83,10 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     public function scopeStatus(Builder $builder)
     {
         return $builder->join(
-            'blog_post_status',
-            'blog_post_status.blog_post_status_id',
+            'blog_status',
+            'blog_status.blog_status_id',
             '=',
-            'blog_posts.blog_post_status_id'
+            'blog_posts.blog_status_id'
         );
     }
 

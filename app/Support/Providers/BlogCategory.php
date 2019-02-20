@@ -1,23 +1,23 @@
 <?php namespace App\Support\Providers;
 
 use App\Contracts\Models\BlogCategory as BlogCategoryInterface;
-use App\Models\Blog\BlogPostLabel;
-use App\Models\Blog\BlogPostLabelRecord;
-use App\Models\Blog\BlogPostLabelType;
+use App\Models\Blog\BlogLabel;
+use App\Models\Blog\BlogLabelRecord;
+use App\Models\Blog\BlogLabelType;
 
 class BlogCategory extends Model implements BlogCategoryInterface
 {
-    protected $model = \App\Models\Blog\BlogPostCategory::class;
+    protected $model = \App\Models\Blog\BlogCategory::class;
 
     public function createOne($label, $parentSlug)
     {
-        $newLabelType = BlogPostLabelType::create(
-            ['blog_post_label_id' => BlogPostLabel::BLOG_POST_CATEGORY]
+        $newLabelType = BlogLabelType::create(
+            ['blog_label_id' => BlogLabel::BLOG_CATEGORY]
         );
         $newCat = $this->createModel(
             [
-                'blog_post_category_name' => $label,
-                'blog_post_label_type_id' => $newLabelType->getKey()
+                'blog_category_name' => $label,
+                'blog_label_type_id' => $newLabelType->getKey()
             ]);
         if (!is_null($parentSlug) && !empty($parentSlug)) {
             $parentCategory = $this->getCat($parentSlug);
@@ -39,9 +39,9 @@ class BlogCategory extends Model implements BlogCategoryInterface
     {
         $builder = $this->createModel()->newQuery();
         if (is_array($codename)) {
-            $builder->whereIn('blog_post_category_slug', $codename);
+            $builder->whereIn('blog_category_slug', $codename);
         } else {
-            $builder->where('blog_post_category_slug', '=', $codename);
+            $builder->where('blog_category_slug', '=', $codename);
         }
         return $builder;
     }
@@ -57,17 +57,17 @@ class BlogCategory extends Model implements BlogCategoryInterface
             return;
         }
         $labelTypes = $this->getByCodename($categories)->labelType()
-            ->select(['blog_post_label_types.blog_post_label_type_id as id'])
+            ->select(['blog_label_types.blog_label_type_id as id'])
             ->get();
         if (!is_null($labelTypes)) {
             $records = [];
             foreach ($labelTypes as $label) {
                 $records[] = [
                     $post->getKeyName() => $post->getKey(),
-                    'blog_post_label_type_id' => $label->getAttribute('id')
+                    'blog_label_type_id' => $label->getAttribute('id')
                 ];
             }
-            BlogPostLabelRecord::insert($records);
+            BlogLabelRecord::insert($records);
         }
     }
 
@@ -82,10 +82,10 @@ class BlogCategory extends Model implements BlogCategoryInterface
         $toBeRemoved = array_diff($inStore, $updated);
         if (!empty($toBeRemoved)) {
             $entries = $this->getByCodename($toBeRemoved)->labelType()
-                ->select(['blog_post_label_types.blog_post_label_type_id'])
-                ->get()->pluck('blog_post_label_type_id')->toArray();
-            BlogPostLabelRecord::query()
-                ->whereIn('blog_post_label_type_id', $entries)
+                ->select(['blog_label_types.blog_label_type_id'])
+                ->get()->pluck('blog_label_type_id')->toArray();
+            BlogLabelRecord::query()
+                ->whereIn('blog_label_type_id', $entries)
                 ->where('blog_post_id', $post->getKey())
                 ->delete();
         }
@@ -103,20 +103,20 @@ class BlogCategory extends Model implements BlogCategoryInterface
     public function getSelected($postId)
     {
         return $this->createModel()->newQuery()
-            ->select(['blog_post_category_slug'])
+            ->select(['blog_category_slug'])
             ->labelType()
             ->labelRecord($postId)
-            ->get()->pluck('blog_post_category_slug')->toArray();
+            ->get()->pluck('blog_category_slug')->toArray();
     }
 
     /**
      * @param string $id
-     * @return \App\Models\Blog\BlogPostCategory|null
+     * @return \App\Models\Blog\BlogCategory|null
      */
     public function getCat($id)
     {
         return $this->createModel()
-            ->where('blog_post_category_slug', $id)->first();
+            ->where('blog_category_slug', $id)->first();
     }
 
 }

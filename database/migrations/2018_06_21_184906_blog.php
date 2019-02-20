@@ -25,22 +25,22 @@ class Blog extends Migration
             $table->string('ISO_639_6', 10);
         });
 
-        Schema::create('blog_post_status', function (Blueprint $table) {
-            $table->increments('blog_post_status_id');
+        Schema::create('blog_status', function (Blueprint $table) {
+            $table->increments('blog_status_id');
 
-            $table->string('blog_post_status_name', 75)->nullable();
+            $table->string('blog_status_name', 75)->nullable();
         });
 
         Schema::create('blog_posts', function (Blueprint $table) {
             $table->increments('blog_post_id');
 
             $table->unsignedInteger('person_id')->default(0);
-            $table->unsignedInteger('blog_post_status_id')
-                ->default(\App\Models\Blog\BlogPostStatus::BLOG_POST_STATUS_DRAFT);
+            $table->unsignedInteger('blog_status_id')
+                ->default(\App\Models\Blog\BlogStatus::BLOG_STATUS_DRAFT);
             $table->unsignedInteger('language_id')->default(1);
 
             $table->string('blog_post_title')->nullable();
-            $table->string('blog_post_slug')->nullable();
+            $table->string('blog_post_slug',100)->nullable();
             $table->text('blog_post_content')->nullable();
             $table->text('blog_post_excerpt')->nullable();
             $table->boolean('blog_post_is_sticky')->default(false);
@@ -54,118 +54,158 @@ class Blog extends Migration
             $table->unique(['blog_post_slug'], 'idx_blog_post_id_slug');
         });
 
-        Schema::create('blog_post_version', function (Blueprint $table) {
-            $table->increments('blog_post_version_id');
+//        Schema::create('blog_post_version', function (Blueprint $table) {
+//            $table->increments('blog_post_version_id');
+//
+//            $table->unsignedInteger('blog_post_id');
+//            $table->unsignedInteger('user_id')->default(0);
+//            $table->unsignedTinyInteger('blog_post_version_number')->default(0);
+//            $table->text('blog_post_content')->nullable();
+//            $table->timestamp('created_at')->nullable();
+//
+//            $table->foreign('blog_post_id')
+//                ->references('blog_post_id')->on('blog_posts')
+//                ->onDelete('cascade');
+//            $table->foreign('user_id')
+//                ->references('user_id')->on('users');
+//        });
+
+        Schema::create('blog_sources', function (Blueprint $table) {
+            $table->increments('blog_source_id');
+
+            $table->unsignedInteger('language_id')->default(1);
+            $table->string('blog_source_name', 75)->nullable();
+
+            $table->foreign('language_id')
+                ->references('language_id')->on('languages');
+        });
+
+        Schema::create('blog_source_record_types', function (Blueprint $table) {
+            $table->increments('blog_source_record_type_id');
+
+            $table->string('blog_source_record_type_name', 75)->nullable();
+        });
+
+        \App\Models\Blog\BlogSourceRecordType::insert([
+            ['blog_source_record_type_name'=>'url'],
+            ['blog_source_record_type_name'=>'img'],
+            ['blog_source_record_type_name'=>'file'],
+        ]);
+
+        Schema::create('blog_source_records', function (Blueprint $table) {
+            $table->increments('blog_source_record_id');
 
             $table->unsignedInteger('blog_post_id');
-            $table->unsignedInteger('user_id')->default(0);
-            $table->unsignedTinyInteger('blog_post_version_number')->default(0);
-            $table->text('blog_post_content')->nullable();
-            $table->timestamp('created_at')->nullable();
+            $table->unsignedInteger('blog_source_id');
+            $table->unsignedInteger('blog_source_record_type_id')->default(1);
+            $table->text('blog_source_content')->nullable();
+            $table->text('blog_source_description')->nullable();
 
+            $table->foreign('blog_source_id')
+                ->references('blog_source_id')->on('blog_sources')
+                ->onDelete('cascade');
             $table->foreign('blog_post_id')
                 ->references('blog_post_id')->on('blog_posts')
                 ->onDelete('cascade');
-            $table->foreign('user_id')
-                ->references('user_id')->on('users');
         });
 
-        Schema::create('blog_post_labels', function (Blueprint $table) {
-            $table->increments('blog_post_label_id');
 
-            $table->string('blog_post_label_name', 75)->nullable();
+        Schema::create('blog_labels', function (Blueprint $table) {
+            $table->increments('blog_label_id');
+
+            $table->string('blog_label_name', 75)->nullable();
         });
 
-        Schema::create('blog_post_label_types', function (Blueprint $table) {
-            $table->increments('blog_post_label_type_id');
+        Schema::create('blog_label_types', function (Blueprint $table) {
+            $table->increments('blog_label_type_id');
 
-            $table->unsignedInteger('blog_post_label_id')
-                ->default(\App\Models\Blog\BlogPostLabel::BLOG_POST_TAG);
-            $table->foreign('blog_post_label_id')
-                ->references('blog_post_label_id')->on('blog_post_labels')
+            $table->unsignedInteger('blog_label_id')
+                ->default(\App\Models\Blog\BlogLabel::BLOG_TAG);
+            $table->foreign('blog_label_id')
+                ->references('blog_label_id')->on('blog_labels')
                 ->onDelete('cascade');
-            $table->index(array('blog_post_label_type_id', 'blog_post_label_id'), 'idx_blog_post_labels');
+            $table->index(array('blog_label_type_id', 'blog_label_id'), 'idx_blog_labels');
         });
 
-        Schema::create('blog_post_categories', function (Blueprint $table) {
-            $table->increments('blog_post_category_id');
+        Schema::create('blog_categories', function (Blueprint $table) {
+            $table->increments('blog_category_id');
 
             $table->unsignedInteger('parent_id')->nullable();
             $table->unsignedInteger('lft')->default(0);
             $table->unsignedInteger('rgt')->default(0);
-            $table->unsignedInteger('blog_post_label_type_id');
-            $table->string('blog_post_category_name', 75)->nullable();
-            $table->string('blog_post_category_slug', 75)->nullable();
+            $table->unsignedInteger('blog_label_type_id');
+            $table->string('blog_category_name', 75)->nullable();
+            $table->string('blog_category_slug', 75)->nullable();
 
             $table->timestamps();
 
             $table->index(array('lft', 'rgt', 'parent_id'));
-            $table->unique(array('blog_post_category_slug'));
+            $table->unique(array('blog_category_slug'));
 
-            $table->foreign('blog_post_label_type_id')
-                ->references('blog_post_label_type_id')->on('blog_post_label_types')
+            $table->foreign('blog_label_type_id')
+                ->references('blog_label_type_id')->on('blog_label_types')
                 ->onDelete('cascade');
         });
 
-        Schema::create('blog_post_tags', function (Blueprint $table) {
-            $table->increments('blog_post_tag_id');
+        Schema::create('blog_tags', function (Blueprint $table) {
+            $table->increments('blog_tag_id');
 
-            $table->unsignedInteger('blog_post_label_type_id');
-            $table->string('blog_post_tag_name', 35)->nullable();
-            $table->string('blog_post_tag_slug', 35)->nullable();
+            $table->unsignedInteger('blog_label_type_id');
+            $table->string('blog_tag_name', 35)->nullable();
+            $table->string('blog_tag_slug', 35)->nullable();
 
-            $table->foreign('blog_post_label_type_id')
-                ->references('blog_post_label_type_id')->on('blog_post_label_types')
+            $table->foreign('blog_label_type_id')
+                ->references('blog_label_type_id')->on('blog_label_types')
                 ->onDelete('cascade');
-            $table->unique(array('blog_post_tag_name'));
+            $table->unique(array('blog_tag_name'));
         });
 
-        Schema::create('blog_post_label_records', function (Blueprint $table) {
-            $table->increments('blog_post_label_record_id');
+        Schema::create('blog_label_records', function (Blueprint $table) {
+            $table->increments('blog_label_record_id');
 
             $table->unsignedInteger('blog_post_id');
-            $table->unsignedInteger('blog_post_label_type_id');
+            $table->unsignedInteger('blog_label_type_id');
 
             $table->foreign('blog_post_id')
                 ->references('blog_post_id')->on('blog_posts')
                 ->onDelete('cascade');
-            $table->foreign('blog_post_label_type_id')
-                ->references('blog_post_label_type_id')->on('blog_post_label_types')
+            $table->foreign('blog_label_type_id')
+                ->references('blog_label_type_id')->on('blog_label_types')
                 ->onDelete('cascade');
-            $table->index(array('blog_post_id', 'blog_post_label_type_id'), 'idx_blog_post_type');
+            $table->index(array('blog_post_id', 'blog_label_type_id'), 'idx_blog_post_type');
         });
 
         $label_types = [
-            ['blog_post_label_name' => \App\Models\Blog\BlogPostLabel::getConstantByID(\App\Models\Blog\BlogPostLabel::BLOG_POST_TAG)],
-            ['blog_post_label_name' => \App\Models\Blog\BlogPostLabel::getConstantByID(\App\Models\Blog\BlogPostLabel::BLOG_POST_CATEGORY)],
+            ['blog_label_name' => \App\Models\Blog\BlogLabel::getConstantByID(\App\Models\Blog\BlogLabel::BLOG_TAG)],
+            ['blog_label_name' => \App\Models\Blog\BlogLabel::getConstantByID(\App\Models\Blog\BlogLabel::BLOG_CATEGORY)],
         ];
-        \App\Models\Blog\BlogPostLabel::insert($label_types);
+        \App\Models\Blog\BlogLabel::insert($label_types);
 
         $status = [
             [
-                'blog_post_status_name' => \App\Models\Blog\BlogPostStatus::getConstantByID(
-                    \App\Models\Blog\BlogPostStatus::BLOG_POST_STATUS_DRAFT
+                'blog_status_name' => \App\Models\Blog\BlogStatus::getConstantByID(
+                    \App\Models\Blog\BlogStatus::BLOG_STATUS_DRAFT
                 )
             ],
             [
-                'blog_post_status_name' => \App\Models\Blog\BlogPostStatus::getConstantByID(
-                    \App\Models\Blog\BlogPostStatus::BLOG_POST_STATUS_REVIEW
+                'blog_status_name' => \App\Models\Blog\BlogStatus::getConstantByID(
+                    \App\Models\Blog\BlogStatus::BLOG_STATUS_REVIEW
                 )
             ],
             [
-                'blog_post_status_name' => \App\Models\Blog\BlogPostStatus::getConstantByID(
-                    \App\Models\Blog\BlogPostStatus::BLOG_POST_STATUS_PUBLISHED
+                'blog_status_name' => \App\Models\Blog\BlogStatus::getConstantByID(
+                    \App\Models\Blog\BlogStatus::BLOG_STATUS_PUBLISHED
                 )
             ]
         ];
-        \App\Models\Blog\BlogPostStatus::insert($status);
+        \App\Models\Blog\BlogStatus::insert($status);
 
-        $newLabelType = \App\Models\Blog\BlogPostLabelType::create(
-            ['blog_post_label_id' => \App\Models\Blog\BlogPostLabel::BLOG_POST_CATEGORY]
+        $newLabelType = \App\Models\Blog\BlogLabelType::create(
+            ['blog_label_id' => \App\Models\Blog\BlogLabel::BLOG_CATEGORY]
         );
-        \App\Models\Blog\BlogPostCategory::create([
-            'blog_post_category_name' => 'Default',
-            'blog_post_label_type_id' => $newLabelType->getKey()
+        \App\Models\Blog\BlogCategory::create([
+            'blog_category_name' => 'Default',
+            'blog_label_type_id' => $newLabelType->getKey()
         ]);
         $this->createViews();
         $this->extractLanguages();
@@ -173,15 +213,15 @@ class Blog extends Migration
 
     public function createViews()
     {
-        \DB::unprepared('CREATE VIEW blog_post_category_tree AS
+        \DB::unprepared('CREATE VIEW blog_category_tree AS
         SELECT
-            node.blog_post_category_id,
-            node.blog_post_category_name as label,
-            (COUNT(parent.blog_post_category_id) - 1) AS lvl,
-            node.blog_post_category_slug as id
-          FROM blog_post_categories AS node, blog_post_categories AS parent
+            node.blog_category_id,
+            node.blog_category_name as label,
+            (COUNT(parent.blog_category_id) - 1) AS lvl,
+            node.blog_category_slug as id
+          FROM blog_categories AS node, blog_categories AS parent
           WHERE node.lft BETWEEN parent.lft AND parent.rgt
-          GROUP BY node.blog_post_category_slug,node.blog_post_category_id,node.blog_post_category_name
+          GROUP BY node.blog_category_slug,node.blog_category_id,node.blog_category_name
           ORDER BY node.lft;
         ');
     }

@@ -162,9 +162,9 @@
       'createdAt' => 'inscription',
    ],
    'constants' => [
-      'BLOG_POST_STATUS_DRAFT' => 'Brouillon',
-      'BLOG_POST_STATUS_REVIEW' => 'Relecture',
-      'BLOG_POST_STATUS_PUBLISHED' => 'Publié',
+      'BLOG_STATUS_DRAFT' => 'Brouillon',
+      'BLOG_STATUS_REVIEW' => 'Relecture',
+      'BLOG_STATUS_PUBLISHED' => 'Publié',
    ],
    'form' => [
       'description' => [

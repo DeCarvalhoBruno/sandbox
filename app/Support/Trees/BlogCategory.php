@@ -1,9 +1,9 @@
 <?php namespace App\Support\Trees;
 
-use App\Models\Views\BlogPostCategoryTree;
-use App\Support\Providers\BlogCategory;
+use App\Models\Views\BlogCategoryTree;
+use App\Support\Providers\BlogCategory as BlogCategoryProvider;
 
-class BlogPostCategory
+class BlogCategory
 {
     /**
      * @var string
@@ -51,7 +51,7 @@ class BlogPostCategory
     }
 
     /**
-     * @param \App\Support\Trees\BlogPostCategory $node
+     * @param \App\Support\Trees\BlogCategory $node
      * @param int $level
      * @return object
      */
@@ -71,7 +71,7 @@ class BlogPostCategory
      * @param string $label
      * @param string $id
      * @param bool $selected
-     * @return \App\Support\Trees\BlogPostCategory
+     * @return \App\Support\Trees\BlogCategory
      */
     public function addChild($label, $id, $selected)
     {
@@ -105,10 +105,10 @@ class BlogPostCategory
     private static function makeTree($postId = null)
     {
         $selectedCategories = [];
-        $f = BlogPostCategoryTree::query()
+        $f = BlogCategoryTree::query()
             ->select(['label', 'lvl', 'id'])->get()->toArray();
         if (!is_null($postId)) {
-            $selectedCategories = array_flip((new BlogCategory())->getSelected($postId));
+            $selectedCategories = array_flip((new BlogCategoryProvider())->getSelected($postId));
         }
         $level = 0;
         $root = '';

@@ -4,11 +4,11 @@ use App\Contracts\Models\BlogCategory as BlogCategoryProvider;
 use App\Http\Controllers\Admin\Controller;
 use Illuminate\Http\Response;
 
-class BlogPostCategory extends Controller
+class BlogCategory extends Controller
 {
     public function index()
     {
-        return \App\Support\Trees\BlogPostCategory::getTree();
+        return \App\Support\Trees\BlogCategory::getTree();
     }
 
     /**
@@ -27,7 +27,7 @@ class BlogPostCategory extends Controller
             return response(null, Response::HTTP_NO_CONTENT);
         }
 
-        return ['id' => $newCat->getAttribute('blog_post_category_slug')];
+        return ['id' => $newCat->getAttribute('blog_category_slug')];
     }
 
     /**
@@ -40,8 +40,8 @@ class BlogPostCategory extends Controller
         $cat = $catRepo->getCat($id);
         if (!is_null($cat)) {
             $label = $this->request->get('label');
-            $cat->setAttribute('blog_post_category_name', $label);
-            $cat->setAttribute('blog_post_category_slug', str_slug($label, '-', app()->getLocale()));
+            $cat->setAttribute('blog_category_name', $label);
+            $cat->setAttribute('blog_category_slug', str_slug($label, '-', app()->getLocale()));
             $cat->save();
         }
         return response(null, Response::HTTP_NO_CONTENT);
@@ -49,8 +49,8 @@ class BlogPostCategory extends Controller
 
     public function delete($id)
     {
-        $model = \App\Models\Blog\BlogPostCategory::query()
-            ->where('blog_post_category_slug', $id)->first();
+        $model = \App\Models\Blog\BlogCategory::query()
+            ->where('blog_category_slug', $id)->first();
         if (!is_null($model)) {
             $model->delete();
         }

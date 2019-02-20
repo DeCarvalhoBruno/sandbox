@@ -57,10 +57,10 @@ class Admin
             $r->patch('members/{group}', 'GroupMember@update')
                 ->middleware('can:view,App\Models\Group');
 
-            $r->get('blog/categories', 'BlogPostCategory@index');
-            $r->post('blog/categories', 'BlogPostCategory@create');
-            $r->patch('blog/categories/{id}', 'BlogPostCategory@update');
-            $r->delete('blog/categories/{id}', 'BlogPostCategory@delete');
+            $r->get('blog/categories', 'BlogCategory@index');
+            $r->post('blog/categories', 'BlogCategory@create');
+            $r->patch('blog/categories/{id}', 'BlogCategory@update');
+            $r->delete('blog/categories/{id}', 'BlogCategory@delete');
 
             $r->get('blog/posts', 'Blog@index')
                 ->middleware('can:view,App\Models\Blog\BlogPost');

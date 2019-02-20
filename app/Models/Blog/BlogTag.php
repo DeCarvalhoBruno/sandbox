@@ -4,7 +4,7 @@ use App\Traits\Models\DoesSqlStuff;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class BlogPostTag extends Model
+class BlogTag extends Model
 {
     use DoesSqlStuff;
 
@@ -20,7 +20,7 @@ class BlogPostTag extends Model
      */
     public function scopeLabelType(Builder $builder)
     {
-        return $this->joinReverse($builder, BlogPostLabelType::class);
+        return $this->joinReverse($builder, BlogLabelType::class);
     }
 
     /**
@@ -31,6 +31,6 @@ class BlogPostTag extends Model
      */
     public function scopeLabelRecord(Builder $builder, $blogPostId = null)
     {
-        return BlogPostCategory::scopeLabelRecord($builder, $blogPostId);
+        return BlogCategory::scopeLabelRecord($builder, $blogPostId);
     }
 }

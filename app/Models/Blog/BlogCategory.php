@@ -5,16 +5,16 @@ use App\Traits\Models\DoesSqlStuff;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class BlogPostCategory extends Model
+class BlogCategory extends Model
 {
     use NodeTrait, DoesSqlStuff;
 
-    protected $table = 'blog_post_categories';
-    protected $primaryKey = 'blog_post_category_id';
+    protected $table = 'blog_categories';
+    protected $primaryKey = 'blog_category_id';
     protected $fillable = [
-        'blog_post_category_name',
-        'blog_post_label_type_id',
-        'blog_post_category_slug'
+        'blog_category_name',
+        'blog_label_type_id',
+        'blog_category_slug'
     ];
     protected $hidden = ['parent_id', 'lft', 'rgt'];
 
@@ -33,9 +33,9 @@ class BlogPostCategory extends Model
 
     private static function checkSlug($model)
     {
-        $col = 'blog_post_category_slug';
+        $col = 'blog_category_slug';
         $model->{$col} = str_slug(
-            substr($model->blog_post_category_name, 0, 75),
+            substr($model->blog_category_name, 0, 75),
             '-',
             app()->getLocale()
         );
@@ -58,7 +58,7 @@ class BlogPostCategory extends Model
      */
     public function scopeLabelType(Builder $builder)
     {
-        return $this->joinReverse($builder, BlogPostLabelType::class);
+        return $this->joinReverse($builder, BlogLabelType::class);
     }
 
     /**
@@ -69,11 +69,11 @@ class BlogPostCategory extends Model
      */
     public static function scopeLabelRecord(Builder $builder, $blogPostId = null)
     {
-        return $builder->join('blog_post_label_records', function ($q) use ($blogPostId) {
+        return $builder->join('blog_label_records', function ($q) use ($blogPostId) {
             $q->on(
-                'blog_post_label_types.blog_post_label_type_id',
+                'blog_label_types.blog_label_type_id',
                 '=',
-                'blog_post_label_records.blog_post_label_type_id'
+                'blog_label_records.blog_label_type_id'
             );
             if (!is_null($blogPostId)) {
                 $q->where('blog_post_id', '=', $blogPostId);

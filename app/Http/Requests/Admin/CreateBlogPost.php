@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
-use App\Models\Blog\BlogPostStatus;
+use App\Models\Blog\BlogStatus;
 use App\Support\Requests\FormRequest;
 use Illuminate\Support\Facades\Validator;
 
@@ -27,7 +27,7 @@ class CreateBlogPost extends FormRequest
     {
         return [
             'blog_post_title' => 'max:255',
-            'blog_post_status' => 'status',
+            'blog_status' => 'status',
             'published_at' => 'date_format:YmdHi'
         ];
     }
@@ -59,9 +59,9 @@ class CreateBlogPost extends FormRequest
             unset($input['tags']);
         }
 
-        if (isset($input['blog_post_status'])) {
-            $input['blog_post_status_id'] = BlogPostStatus::getConstant($input['blog_post_status']);
-            unset($input['blog_post_status']);
+        if (isset($input['blog_status'])) {
+            $input['blog_status_id'] = BlogStatus::getConstant($input['blog_status']);
+            unset($input['blog_status']);
         }
 
         if (isset($input['published_at'])) {
@@ -76,7 +76,7 @@ class CreateBlogPost extends FormRequest
     public function prepareForValidation()
     {
         Validator::extend('status', function ($attribute, $value, $parameters, $validator) {
-            return BlogPostStatus::isValidName($value);
+            return BlogStatus::isValidName($value);
         });
         parent::prepareForValidation();
     }

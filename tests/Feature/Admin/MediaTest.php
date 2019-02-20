@@ -29,7 +29,7 @@ class MediaTest extends TestCase
         $this->postJson(
             "/ajax/admin/blog/post/create",
             [
-                'blog_post_status' => "BLOG_POST_STATUS_DRAFT",
+                'blog_status' => "BLOG_STATUS_DRAFT",
                 'blog_post_title' => $postTitle,
                 'blog_post_user' => $u->getAttribute('user_name'),
                 'published_at' => "201902051959",

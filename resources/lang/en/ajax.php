@@ -162,9 +162,9 @@ return [
         'createdAt' => 'created',
     ],
     'constants' => [
-        'BLOG_POST_STATUS_DRAFT' => 'Draft',
-        'BLOG_POST_STATUS_REVIEW' => 'Under review',
-        'BLOG_POST_STATUS_PUBLISHED' => 'Published'
+        'BLOG_STATUS_DRAFT' => 'Draft',
+        'BLOG_STATUS_REVIEW' => 'Under review',
+        'BLOG_STATUS_PUBLISHED' => 'Published'
     ],
     'form' => [
         'description' => [

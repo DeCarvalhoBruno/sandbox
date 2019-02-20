@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Blog\BlogPostCategory;
+use App\Models\Blog\BlogCategory;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
@@ -23,7 +23,7 @@ class BlogCategoryTest extends TestCase
         $this->postJson(
             "/ajax/admin/blog/categories",
             ['label' => $str2, 'parent' => slugify($str)]);
-        $this->assertEquals(BlogPostCategory::query()->get()->count(), 3);
+        $this->assertEquals(BlogCategory::query()->get()->count(), 3);
     }
 
     public function test_show()
@@ -38,11 +38,11 @@ class BlogCategoryTest extends TestCase
         $this->postJson(
             "/ajax/admin/blog/categories",
             ['label' => $str, 'parent' => '']);
-        $this->assertEquals(BlogPostCategory::query()->get()->count(), 2);
+        $this->assertEquals(BlogCategory::query()->get()->count(), 2);
         $response = $this->deleteJson(
             "/ajax/admin/blog/categories/".slugify($str));
         $response->assertStatus(204);
-        $this->assertEquals(BlogPostCategory::query()->get()->count(), 1);
+        $this->assertEquals(BlogCategory::query()->get()->count(), 1);
     }
 
 }

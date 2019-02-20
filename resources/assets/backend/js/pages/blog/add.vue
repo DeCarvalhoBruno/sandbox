@@ -26,8 +26,8 @@
             <div id="head-row" class="form-group row">
               <div class="col-lg-6" id="head-col-draft">
                 <template v-if="form_status_editing">
-                  <select v-model="form.fields.blog_post_status"
-                          @change="changedField('blog_post_status')"
+                  <select v-model="form.fields.blog_status"
+                          @change="changedField('blog_status')"
                           class="custom-control custom-select">
                     <option v-for="(idx,status) in status_list" :key="idx" :value="status"
                     >{{$t(`constants.${status}`)}}
@@ -48,8 +48,8 @@
                   <span>{{$t('general.status')}}: </span>
                   <span class="form-field-togglable"
                         @click="toggleEditing('form_status_editing')"
-                  >{{ ($te(`constants.${form.fields.blog_post_status}`))?
-                    $t(`constants.${form.fields.blog_post_status}`):
+                  >{{ ($te(`constants.${form.fields.blog_status}`))?
+                    $t(`constants.${form.fields.blog_status}`):
                     ''}}</span>
                 </template>
               </div>
@@ -174,7 +174,7 @@
           <div class="card-body">
             <div class="mini-tree-list-container container">
               <div class="row">
-                <tree-list :data="this.blog_post_categories"
+                <tree-list :data="this.blog_categories"
                            :edit-mode="false"
                            :add-root-button-label="$t('pages.blog.add_root_button')"
                            @tree-selected="categorySelected"/>
@@ -251,13 +251,13 @@
         blog_post_person: null,
         url: null,
         saveMode: null,
-        blog_post_categories: [],
+        blog_categories: [],
         tagInput: '',
         thumbnails: [],
         form: new Form({
           blog_post_content: '',
           blog_post_title: '',
-          blog_post_status: '',
+          blog_status: '',
           blog_post_person: '',
           categories: [],
           tags: []
@@ -414,9 +414,9 @@
         delete(this.form.fields.person_slug)
         this.status_list = data.status_list
         this.url = data.url
-        this.current_status = this.$t(`constants.${data.record.blog_post_status}`)
+        this.current_status = this.$t(`constants.${data.record.blog_status}`)
         this.saveMode = saveMode
-        this.blog_post_categories = data.blog_post_categories
+        this.blog_categories = data.blog_categories
         this.thumbnails = data.thumbnails
       }
     },

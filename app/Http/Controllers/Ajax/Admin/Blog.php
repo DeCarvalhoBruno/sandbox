@@ -6,7 +6,7 @@ use App\Contracts\Models\User as UserProvider;
 use App\Filters\Blog as BlogFilter;
 use App\Http\Controllers\Admin\Controller;
 use App\Http\Requests\Admin\CreateBlogPost;
-use App\Models\Blog\BlogPostStatus;
+use App\Models\Blog\BlogStatus;
 use App\Models\Entity;
 use App\Models\Media\MediaImgFormat;
 use Illuminate\Http\Request;
@@ -48,14 +48,14 @@ class Blog extends Controller
     {
         return [
             'record' => [
-                'blog_post_status' => BlogPostStatus::getConstantByID(BlogPostStatus::BLOG_POST_STATUS_DRAFT),
+                'blog_status' => BlogStatus::getConstantByID(BlogStatus::BLOG_STATUS_DRAFT),
                 'blog_post_person' => $this->user->getAttribute('full_name'),
                 'person_slug' => $this->user->getAttribute('person_slug'),
                 'categories' => [],
                 'tags' => [],
             ],
-            'status_list' => BlogPostStatus::getConstants('BLOG'),
-            'blog_post_categories' => \App\Support\Trees\BlogPostCategory::getTree(),
+            'status_list' => BlogStatus::getConstants('BLOG'),
+            'blog_categories' => \App\Support\Trees\BlogCategory::getTree(),
             'thumbnails' => []
         ];
     }
@@ -77,7 +77,7 @@ class Blog extends Controller
                 'blog_post_content',
                 'blog_post_excerpt',
                 'published_at',
-                'blog_post_status_name as blog_post_status',
+                'blog_status_name as blog_status',
                 'people.full_name as blog_post_person',
                 'entity_type_id'
             ])->first();
@@ -85,14 +85,14 @@ class Blog extends Controller
             return response(trans('error.http.500.blog_post_not_found'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         $blogPost = $record->toArray();
-        $categories = \App\Support\Trees\BlogPostCategory::getTreeWithSelected($blogPost['blog_post_id']);
+        $categories = \App\Support\Trees\BlogCategory::getTreeWithSelected($blogPost['blog_post_id']);
         $blogPost['categories'] = $categories->categories;
         $blogPost['tags'] = $blogRepo->tag()->getByPost($blogPost['blog_post_id']);
         unset($blogPost['entity_type_id'], $blogPost['blog_post_id']);
         return [
             'record' => $blogPost,
-            'status_list' => BlogPostStatus::getConstants('BLOG'),
-            'blog_post_categories' => $categories->tree,
+            'status_list' => BlogStatus::getConstants('BLOG'),
+            'blog_categories' => $categories->tree,
             'url' => $this->getPostUrl($record),
             'blog_post_slug' => $record->getAttribute('blog_post_slug'),
             'thumbnails' => $mediaRepo->image()->getImages(
@@ -146,7 +146,7 @@ class Blog extends Controller
         $params = [
             'slug' => $post->getAttribute('blog_post_slug'),
         ];
-        if ($post->getAttribute('blog_post_status_id') != BlogPostStatus::BLOG_POST_STATUS_PUBLISHED) {
+        if ($post->getAttribute('blog_status_id') != BlogStatus::BLOG_STATUS_PUBLISHED) {
             $params['preview'] = true;
         }
         return route_i18n('blog', $params);

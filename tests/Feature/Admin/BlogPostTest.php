@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\Blog\BlogPost;
-use App\Models\Blog\BlogPostLabelRecord;
-use App\Models\Blog\BlogPostTag;
+use App\Models\Blog\BlogLabelRecord;
+use App\Models\Blog\BlogTag;
 use App\Models\Entity;
 use App\Support\Providers\Avatar;
 use App\Support\Providers\File;
@@ -27,7 +27,7 @@ class BlogPostTest extends TestCase
         $response = $this->postJson(
             "/ajax/admin/blog/post/create",
             [
-                'blog_post_status' => "BLOG_POST_STATUS_DRAFT",
+                'blog_status' => "BLOG_STATUS_DRAFT",
                 'blog_post_title' => "dads",
                 'blog_post_user' => "john_doe",
                 'published_at' => "201902051959",
@@ -44,7 +44,7 @@ class BlogPostTest extends TestCase
         $response = $this->postJson(
             "/ajax/admin/blog/post/create",
             [
-                'blog_post_status' => "BLOG_POST_STATUS_DRAFT",
+                'blog_status' => "BLOG_STATUS_DRAFT",
                 'blog_post_title' => "dads",
                 'blog_post_user' => $u->getAttribute('user_name'),
                 'categories' => [],
@@ -63,7 +63,7 @@ class BlogPostTest extends TestCase
 //        $response = $this->postJson(
 //            "/ajax/admin/blog/post/create",
 //            [
-//                'blog_post_status' => "BLOG_POST_STATUS_DRAFT",
+//                'blog_status' => "BLOG_STATUS_DRAFT",
 //                'blog_post_user' => $u->getAttribute('user_name'),
 //                'categories' => [],
 //                'published_at' => "201902051959",
@@ -79,7 +79,7 @@ class BlogPostTest extends TestCase
         $this->postJson(
             "/ajax/admin/blog/post/create",
             [
-                'blog_post_status' => "BLOG_POST_STATUS_DRAFT",
+                'blog_status' => "BLOG_STATUS_DRAFT",
                 'blog_post_title' => "dads",
                 'blog_post_user' => $u->getAttribute('user_name'),
                 'categories' => [],
@@ -87,7 +87,7 @@ class BlogPostTest extends TestCase
                 'tags' => []
             ]);
         $this->assertEquals(BlogPostTag::query()->get()->count(), 0);
-        $this->assertEquals(BlogPostLabelRecord::query()->get()->count(), 0);
+        $this->assertEquals(BlogLabelRecord::query()->get()->count(), 0);
         $string = 'modified post';
         $response = $this->postJson(
             "/ajax/admin/blog/post/edit/dads",
@@ -98,7 +98,7 @@ class BlogPostTest extends TestCase
             ]);
         $this->assertEquals(BlogPost::query()->first()->getAttribute('blog_post_title'), $string);
         $this->assertEquals(BlogPostTag::query()->get()->count(), 2);
-        $this->assertEquals(BlogPostLabelRecord::query()->get()->count(), 3);
+        $this->assertEquals(BlogLabelRecord::query()->get()->count(), 3);
         $response->assertStatus(200);
     }
 
@@ -109,7 +109,7 @@ class BlogPostTest extends TestCase
         $this->postJson(
             "/ajax/admin/blog/post/create",
             [
-                'blog_post_status' => "BLOG_POST_STATUS_DRAFT",
+                'blog_status' => "BLOG_STATUS_DRAFT",
                 'blog_post_title' => "dads",
                 'blog_post_user' => $u->getAttribute('user_name'),
                 'published_at' => "201902051959",
@@ -133,7 +133,7 @@ class BlogPostTest extends TestCase
         $this->postJson(
             "/ajax/admin/blog/post/create",
             [
-                'blog_post_status' => "BLOG_POST_STATUS_DRAFT",
+                'blog_status' => "BLOG_STATUS_DRAFT",
                 'blog_post_title' => $postTitle,
                 'blog_post_user' => $u->getAttribute('user_name'),
                 'published_at' => "201902051959",
@@ -174,7 +174,7 @@ class BlogPostTest extends TestCase
         $this->postJson(
             "/ajax/admin/blog/post/create",
             [
-                'blog_post_status' => "BLOG_POST_STATUS_DRAFT",
+                'blog_status' => "BLOG_STATUS_DRAFT",
                 'blog_post_title' => $postTitle,
                 'blog_post_user' => $u->getAttribute('user_name'),
                 'published_at' => "201902051959",
@@ -206,7 +206,7 @@ class BlogPostTest extends TestCase
         $this->postJson(
             "/ajax/admin/blog/post/create",
             [
-                'blog_post_status' => "BLOG_POST_STATUS_DRAFT",
+                'blog_status' => "BLOG_STATUS_DRAFT",
                 'blog_post_title' => $postTitle,
                 'blog_post_user' => $u->getAttribute('user_name'),
                 'published_at' => "201902051959",
@@ -237,7 +237,7 @@ class BlogPostTest extends TestCase
         $this->postJson(
             "/ajax/admin/blog/post/create",
             [
-                'blog_post_status' => "BLOG_POST_STATUS_DRAFT",
+                'blog_status' => "BLOG_STATUS_DRAFT",
                 'blog_post_title' => $postTitle,
                 'blog_post_user' => $u->getAttribute('user_name'),
                 'published_at' => "201902051959",
