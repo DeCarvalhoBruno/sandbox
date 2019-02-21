@@ -160,8 +160,6 @@ class Image extends Model implements ImageInterface
                     ]);
                 }
             }
-
-
         });
     }
 

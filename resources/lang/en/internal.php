@@ -5,4 +5,7 @@
         'PERMISSION_EDIT' => 'Edit',
         'PERMISSION_DELETE' => 'Delete',
     ],
+    'date'=>[
+        'pretty'=>'F jS, Y'
+    ]
 ];

@@ -82,7 +82,7 @@
                                             <div class="col-xl-8 offset-xl-2 col-lg-6 offset-lg-3">
                                                 <submit-button ref="submitButton"
                                                                :block="true"
-                                                               :value="{{trans('ajax.general.login')}}"></submit-button>
+                                                               :value="'{{trans('ajax.general.login')}}'"></submit-button>
                                             </div>
                                         </div>
                                         <div class="form-group row text-center m-0">

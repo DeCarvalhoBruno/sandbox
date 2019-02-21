@@ -19,7 +19,7 @@ if (!function_exists('media_entity_path')) {
             $entity = \App\Models\Entity::getConstantName($entity);
         }
         if (is_numeric($media_type)) {
-            $category = \App\Models\Media\Media::getConstantName($media_type);
+            $media_type = \App\Models\Media\Media::getConstantName($media_type);
         }
 
         if (is_null($image)) {

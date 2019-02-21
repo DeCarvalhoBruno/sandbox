@@ -1,33 +1,72 @@
-div#blog-featured {
+$blog-featured-height: 33.75rem;
+$blog-featured-max-width: 46.9rem;
+
+#blog-featured {
+  min-height: $blog-featured-height + 3rem;
+
   figure {
-    padding:0;
-    margin:0;
+    padding: 0;
+    margin: 0;
     text-align: center;
     overflow: hidden;
   }
 
   & > .row {
     padding: 2rem 0 0 0;
-    height: 31.25rem;
+    min-height: $blog-featured-height;
+  }
+
+  .featured-content {
+    .fc-title {
+      background-color: rgba(75, 15, 9, 0.3);
+      border-radius: 10px;
+    }
   }
 
   #blog-featured-carousel {
-    padding: 0 4px 0 0;
-    height: 31.25rem;
+    padding: 0;
+    min-height: $blog-featured-height;
 
-    #carousel-1 {
-      height: 31.25rem;
+    #carousel-home {
+      min-height: $blog-featured-height;
 
       .carousel-inner {
         .carousel-item {
-          //text-align: center;overflow:hidden;
+          position: relative;
+          text-align: left;
+          overflow: hidden;
+          z-index: 0;
+
+          .carousel-featured {
+            position: absolute;
+            z-index: 1;
+            bottom: 3rem;
+            left: 0;
+            padding: 1rem;
+
+            a, span {
+              color: #fff;
+            }
+
+            .fc-cat {
+              font-size: 90%;
+              padding: 0.3rem;
+              border-radius: 2px;
+            }
+
+          }
+
           figure {
             img {
               position: relative;
               display: block;
               left: 50%;
               transform: translate(-50%, 0);
-              max-height: 31.25rem;
+              height: 100%;
+              overflow: hidden;
+              @include media-breakpoint-down(md) {
+                width: $blog-featured-max-width;
+              }
             }
           }
         }
@@ -35,47 +74,117 @@ div#blog-featured {
     }
   }
 
+  .fc-cat {
+    font-size: 80%;
+    padding: 0.3rem;
+    border-radius: 2px;
+  }
+
+  .fc-title {
+    margin-top: 0.5rem;
+    font-weight: bold;
+    letter-spacing: -0.1rem;
+    padding: 0.5rem;
+  }
+
   #blog-featured-right {
-    padding: 0;
+    padding: 0 0 0 1.1rem;
     margin: 0;
-    height: 31.25rem;
+    min-height: $blog-featured-height;
+    @include media-breakpoint-down(md) {
+      padding: 0.5rem 0;
+    }
+
+    .fc-title {
+      font-size: 1.5rem;
+      letter-spacing: normal;
+    }
 
     .col-lg-12 {
       padding: 0;
       margin: 0;
-      height: 15.625rem;
-      text-align: center;
+      max-height: $blog-featured-height / 2;
       overflow: hidden;
+      width: 100%;
+      @include media-breakpoint-down(md) {
+        max-height: unset;
+      }
 
       img {
         position: relative;
         left: 50%;
         transform: translate(-50%, 0);
-        max-height: 20.5rem;
+        width: 100%;
+        @include media-breakpoint-down(md) {
+          width: $blog-featured-max-width;
+        }
       }
     }
 
     .col-lg-6 {
-      height: 15.625rem;
+      max-height: $blog-featured-height / 2;
       text-align: center;
       overflow: hidden;
-      padding:0;
-      margin:0;
-
-      &:nth-child(2){
-        padding: 4px 2px 0 0 !important;
+      padding: 0;
+      margin: 0;
+      @include media-breakpoint-down(md) {
+        max-height: $blog-featured-height;
       }
 
-      &:last-child{
-        padding: 4px 0 0 2px!important;
+      .fc-title {
+        font-size: 1.2rem;
+        margin-top: 0.2rem;
       }
+
+      &:nth-child(2) {
+        padding: 0.2rem 0 0 0;
+      }
+
+      &:last-child {
+        padding: 0.2rem 0 0 0.2rem;
+        @include media-breakpoint-down(md) {
+          padding: 0.2rem 0 0 0;
+        }
+      }
+
 
       img {
         position: relative;
         left: 50%;
         transform: translate(-50%, 0);
-        max-height: 15.625rem;
+        max-height: $blog-featured-height / 2;
+        @include media-breakpoint-down(md) {
+          max-height: unset;
+          width: $blog-featured-max-width;
+        }
       }
     }
+
+    .right-featured {
+      position: absolute;
+      z-index: 1;
+      bottom: 0;
+      left: 0;
+      padding: 0.5rem 1rem;
+      text-align: left;
+
+      a, span {
+        color: #fff;
+      }
+    }
+
+    .bottom-featured {
+      position: absolute;
+      z-index: 1;
+      bottom: 0;
+      left: 0;
+      padding: 0.3rem 0.6rem;
+      text-align: left;
+
+      a, span {
+        color: #fff;
+      }
+    }
+
   }
 }

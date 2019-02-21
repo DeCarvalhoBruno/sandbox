@@ -14,7 +14,7 @@
 <body>
     @include('partials.header')
 <div id="app">
-    <div id="content_container" class="container">
+    <div id="content_container" class="container p-0">
         @if(isset($breadcrumbs))
             <div id="breadcrumb-wrapper" class="col p-0">
                 <div class="card">

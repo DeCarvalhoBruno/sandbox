@@ -13,10 +13,10 @@ mix.js('resources/assets/frontend/js/app.js', 'js/app.js')
   .disableNotifications()
   .setPublicPath(path.normalize(publicPath))
   .autoload({
-    'exports-loader?Util!bootstrap/js/dist/util': ['Util'],
-    'exports-loader?Dropdown!bootstrap/js/dist/dropdown': ['Dropdown'],
-    'exports-loader?Tooltip!bootstrap/js/dist/tooltip': ['Tooltip'],
-    'exports-loader?Alert!bootstrap/js/dist/tooltip': ['Alert']
+    // 'exports-loader?Util!bootstrap/js/dist/util': ['Util'],
+    // 'exports-loader?Dropdown!bootstrap/js/dist/dropdown': ['Dropdown'],
+    // 'exports-loader?Tooltip!bootstrap/js/dist/tooltip': ['Tooltip'],
+    // 'exports-loader?Tab!bootstrap/js/dist/tab': ['Tab']
   })
   .options({
     fileLoaderDirs: {

@@ -1,64 +1,146 @@
 @extends('frontend.default')
 
 @section('content')
-    <div id="blog-featured" class="container">
+    <section id="blog-featured">
         <div class="row">
-            <div id="blog-featured-carousel" class="col-lg-7">
-                <div id="carousel-1" class="carousel slide" data-ride="false">
+            <div id="blog-featured-carousel" class="col-lg-7 col-md-12">
+                <div id="carousel-home" class="carousel slide" data-ride="false">
                     <ol class="carousel-indicators">
-                        <li data-target="#carousel-1" data-slide-to="0" class="active"></li>
-                        <li data-target="#carousel-1" data-slide-to="1"></li>
-                        <li data-target="#carousel-1" data-slide-to="2"></li>
+                        <li data-target="#carousel-home" data-slide-to="0" class="active"></li>
+                        <li data-target="#carousel-home" data-slide-to="1"></li>
+                        <li data-target="#carousel-home" data-slide-to="2"></li>
                     </ol>
-                    <div class="carousel-inner">
-                        <div class="carousel-item active" style="text-align: center;overflow:hidden">
-                            <figure>
-                                <img src="media/img/1.jpg"
-                                     class="d-block" alt="...">
-                            </figure>
-                        </div>
-                        <div class="carousel-item" style="text-align: center;overflow:hidden">
-                            <figure>
-                                <img src="media/img/2.jpg"
-                                     class="d-block" alt="...">
-                            </figure>
-                        </div>
-                        <div class="carousel-item" style="text-align: center;overflow:hidden">
-                            <figure>
-                                <img src="media/img/3.jpg"
-                                     class="d-block" alt="...">
-                            </figure>
-                        </div>
+                    <div class="featured-content carousel-inner">
+                        @for($i=0;$i<3;$i++)
+                            <div class="carousel-item {{($i==0)?'active':''}}">
+                                <div class="carousel-featured">
+                                    <div class=carousel-featured-content">
+                                        <a class="fc-cat badge-success"
+                                           href="#">{{$posts['featured'][$i]['cat']}}</a>
+                                        <h2 class="fc-title">
+                                            <a href="#">{{$posts['featured'][$i]['title']}}</a>
+                                        </h2>
+                                        <span class="fc-date">{{$posts['featured'][$i]['date']}}</span>
+                                    </div>
+                                </div>
+                                <figure>
+                                    <img src="{{asset($posts['featured'][$i]['img'])}}"
+                                         class="d-block" alt="...">
+                                </figure>
+                            </div>
+                        @endfor
                     </div>
-                    <a class="carousel-control-prev" href="#carousel-1" role="button" data-slide="prev">
+                    <a class="carousel-control-prev" href="#carousel-home" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
+                        <span class="sr-only">{{trans('ajax.general.prev')}}</span>
                     </a>
-                    <a class="carousel-control-next" href="#carousel-1" role="button" data-slide="next">
+                    <a class="carousel-control-next" href="#carousel-home" role="button" data-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
+                        <span class="sr-only">{{trans('ajax.general.next')}}</span>
                     </a>
                 </div>
             </div>
-            <div id="blog-featured-right" class="col-lg-5">
-                <div class="row container">
-                    <div class="col-lg-12">
-                        <figure>
-                            <img src="media/img/4.jpg">
-                        </figure>
-                    </div>
-                    <div class="col-lg-6">
-                        <figure>
-                            <img src="media/img/5.jpg">
-                        </figure>
-                    </div>
-                    <div class="col-lg-6">
-                        <figure>
-                            <img src="media/img/2.jpg">
-                        </figure>
+            <div id="blog-featured-right" class="col-lg-5 col-md-12">
+                <div class="container p-0">
+                    <div class="row">
+                        <div class="col-lg-12 featured-content featured-content-top">
+                            <div class="right-featured">
+                                <div class=right-featured-content">
+                                    <a class="fc-cat badge-success"
+                                       href="#">{{$posts['featured'][3]['cat']}}</a>
+                                    <h2 class="fc-title">
+                                        <a href="#">{{$posts['featured'][3]['title']}}</a>
+                                    </h2>
+                                </div>
+                            </div>
+                            <figure>
+                                <img src="{{asset($posts['featured'][3]['img'])}}">
+                            </figure>
+                        </div>
+
+                        <div class="col-lg-6 col-md-12 featured-content featured-content-bottom">
+                            <div class="bottom-featured">
+                                <div class=bottom-featured-content">
+                                    <a class="fc-cat badge-success"
+                                       href="#">{{$posts['featured'][4]['cat']}}</a>
+                                    <h2 class="fc-title">
+                                        <a href="#">{{$posts['featured'][4]['title']}}</a>
+                                    </h2>
+                                </div>
+                            </div>
+                            <figure>
+                                <figure>
+                                    <img src="{{asset($posts['featured'][4]['img'])}}">
+                                </figure>
+                            </figure>
+                        </div>
+                        <div class="col-lg-6 col-md-12 featured-content">
+                            <div class="bottom-featured">
+                                <div class=bottom-featured-content">
+                                    <a class="fc-cat badge-success"
+                                       href="#">{{$posts['featured'][5]['cat']}}</a>
+                                    <h2 class="fc-title">
+                                        <a href="#">{{$posts['featured'][5]['title']}}</a>
+                                    </h2>
+                                </div>
+                            </div>
+                            <figure>
+                                <figure>
+                                    <img src="{{asset($posts['featured'][5]['img'])}}">
+                                </figure>
+                            </figure>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+    <section id="blog-spotlight" class="container p-0 m-0">
+        <div class="row">
+            <div class="col-lg col-lg-8 col-md-12 spotlight-list">
+                <div class="container">
+                    <ul class="row">
+                        @foreach($posts['most_viewed'] as $keyMostViewed =>$mostViewedItems)
+                            <li class="col-lg col-lg-6">
+                                <span>{{$keyMostViewed}}</span>
+                                <div class="container">
+                                    <div class="row headline-post">
+                                                <div class="headline-content">
+                                                    <div class="lfc-title">{{$mostViewedItems[0]['title']}}</div>
+                                                    <div class="lfc-date">{{$mostViewedItems[0]['date']}}</div>
+                                                </div>
+                                                <figure>
+                                                    <img src="{{asset($mostViewedItems[0]['img'])}}">
+                                                </figure>
+                                    </div>
+                                    @for($i=1;$i<=4;$i++)
+                                        <ul class="row list-post">
+                                            <li class="col">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-lg-4 list-img-container">
+                                                            <figure>
+                                                                <img src="{{asset($mostViewedItems[$i]['img'])}}">
+                                                            </figure>
+                                                        </div>
+                                                        <div class="col-lg col-lg-8">
+                                                            <div class="row lfc-title">{{$mostViewedItems[$i]['title']}}</div>
+                                                            <div class="row lfc-date">{{$mostViewedItems[$i]['date']}}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    @endfor
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12">
+
+            </div>
+        </div>
+    </section>
 @endsection

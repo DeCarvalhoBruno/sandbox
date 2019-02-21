@@ -139,7 +139,7 @@
                                 <div class="col-xl-8 offset-xl-2 col-lg-6 offset-lg-3">
                                     <submit-button
                                             ref="submitButton"
-                                            :block="true">{{trans('ajax.general.register')}}</submit-button>
+                                            :block="true" :value="'{{trans('ajax.general.register')}}'"></submit-button>
                                 </div>
                             </div>
                             <input type="hidden" class="g-recaptcha" name="g-recaptcha" value="">
