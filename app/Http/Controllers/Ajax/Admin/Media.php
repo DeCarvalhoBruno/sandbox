@@ -197,7 +197,14 @@ class Media extends Controller
             $media->getTargetType(),
             $media->getMediaType(),
             $media->getFileExtension(),
-            MediaImgFormat::PAGE
+            MediaImgFormat::FEATURED
+        );
+        $this->mediaRepo->image()->cropImageToFormat(
+            $media->getUuid(),
+            $media->getTargetType(),
+            $media->getMediaType(),
+            $media->getFileExtension(),
+            MediaImgFormat::HD
         );
         return $this->mediaRepo->image()->save($media);
     }

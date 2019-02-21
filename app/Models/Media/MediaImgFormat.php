@@ -11,7 +11,7 @@ class MediaImgFormat extends Model
     const ORIGINAL = 1;
     const THUMBNAIL = 2;
     const FEATURED = 3;
-    const PAGE = 4;
+    const HD = 4;
     public $timestamps = false;
 
     protected $primaryKey = 'media_img_format_id';
@@ -32,18 +32,18 @@ class MediaImgFormat extends Model
                     'height' => ImageProcessor::$thumbnailHeight
                 ];
             case static::FEATURED:
-                return (object)['width' => 500, 'height' => 300];
-            case static::PAGE:
                 return (object)['width' => 720, 'height' => 540];
+            case static::HD:
+                return (object)['width' => 1280, 'height' => 720];
             default:
                 return [
-                    static::ORIGINAL => (object)['width' => '0', 'height' => '0'],
+                    static::ORIGINAL => (object)['width' => 0, 'height' => 0],
                     static::THUMBNAIL => (object)[
                         'width' => ImageProcessor::$thumbnailWidth,
                         'height' => ImageProcessor::$thumbnailHeight
                     ],
                     static::FEATURED => (object)['width' => 500, 'height' => 300],
-                    static::PAGE => (object)['width' => 720, 'height' => 540],
+                    static::HD => (object)['width' => 1280, 'height' => 720],
                 ];
         }
     }
@@ -57,14 +57,14 @@ class MediaImgFormat extends Model
                 return 'tb';
             case static::FEATURED:
                 return 'ft';
-            case static::PAGE:
-                return 'pg';
+            case static::HD:
+                return 'hd';
             default:
                 return [
                     static::ORIGINAL => '',
                     static::THUMBNAIL => 'tb',
                     static::FEATURED => 'ft',
-                    static::PAGE => 'pg',
+                    static::HD => 'hd',
                 ];
         }
     }

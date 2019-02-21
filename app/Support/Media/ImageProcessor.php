@@ -121,6 +121,11 @@ class ImageProcessor extends InterventionImage
         $image->save($fullPath, static::$quality);
     }
 
+    public static function copyImg($src,$dest)
+    {
+        \File::copy($src,$dest);
+    }
+
     /**
      * @param string $filename
      * @param int $formatID
