@@ -19,5 +19,4 @@ class Media extends Model
     const TEXT = 0x030;
     const IMAGE = 0x040;
     const IMAGE_AVATAR = 0x041;
-    const IMAGE_FEATURED = 0x042;
 }

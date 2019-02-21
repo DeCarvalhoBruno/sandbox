@@ -206,7 +206,13 @@ class Media extends Controller
             $media->getFileExtension(),
             MediaImgFormat::HD
         );
-        return $this->mediaRepo->image()->save($media);
+        return $this->mediaRepo->image()->saveImageDb(
+            $media,
+            [
+                MediaImgFormat::FEATURED,
+                MediaImgFormat::HD
+            ]
+        );
     }
 
     /**

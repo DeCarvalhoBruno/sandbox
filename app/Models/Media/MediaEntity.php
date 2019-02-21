@@ -27,7 +27,7 @@ class MediaEntity extends Model
         \DB::unprepared(sprintf('CALL sp_update_media_entity_in_use(%s)', $mediaEntityId));
     }
 
-    public static function buildImages($columns = ['*'], $entityTypeId = null)
+    public static function buildImages($entityTypeId = null, $columns = ['*'], $mediaImgTypes = null)
     {
         return static::query()->select($columns)
             ->entityType($entityTypeId)->mediaCategoryRecord()
@@ -37,7 +37,7 @@ class MediaEntity extends Model
     /**
      * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
-     * @param int $entityTypeId
+     * @param int|array $entityTypeId
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     public function scopeEntityType(Builder $builder, $entityTypeId = null)
@@ -45,7 +45,11 @@ class MediaEntity extends Model
         return $builder->join('entity_types', function ($q) use ($entityTypeId) {
             $q->on('entity_types.entity_type_id', '=', 'media_entities.entity_type_id');
             if (!is_null($entityTypeId)) {
-                $q->where('entity_types.entity_type_id', '=', $entityTypeId);
+                if (!is_array($entityTypeId)) {
+                    $q->where('entity_types.entity_type_id', '=', $entityTypeId);
+                } else {
+                    $q->whereIn('entity_types.entity_type_id', $entityTypeId);
+                }
             }
         });
     }

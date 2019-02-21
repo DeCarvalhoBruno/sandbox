@@ -60,7 +60,7 @@ class EntityType extends Model
         } elseif (is_array($filter)) {
             $builderWithEntity->whereIn('entity_type_target_id', $filter);
         } else {
-            $builderWithEntity->where(static::getEntityNameColumn($entityID), '=', $filter);
+            $builderWithEntity->where(static::getEntitySlugColumn($entityID), '=', $filter);
         }
 
         return $builderWithEntity;
@@ -147,7 +147,7 @@ class EntityType extends Model
      *
      * @return string
      */
-    public static function getEntityNameColumn($entityID)
+    public static function getEntitySlugColumn($entityID)
     {
         $targetType = Entity::getModelClassNamespace($entityID);
 

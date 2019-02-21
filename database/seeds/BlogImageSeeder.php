@@ -46,14 +46,15 @@ class ImageSeeder extends Seeder
                     $extension,
                     $uuid
                 );
-                $this->saveDb($uuid, $extension, $posts[$image]->entity);
+                $this->saveDb($uuid, $extension, $posts[$image]->entity,
+                    [MediaImgFormat::FEATURED, MediaImgFormat::HD]);
                 \DB::commit();
             }
         }
 
     }
 
-    private function saveDb($uuid, $fileExtension, $entityTypeID)
+    private function saveDb($uuid, $fileExtension, $entityTypeID, $formats)
     {
         $filename = sprintf('%s.%s', $uuid, $fileExtension);
         $mediaType = \App\Models\Media\MediaType::create([
@@ -63,7 +64,7 @@ class ImageSeeder extends Seeder
             'media_in_use' => 0
         ]);
 
-        \App\Models\Media\MediaDigital::create([
+        $mediaDigital = \App\Models\Media\MediaDigital::create([
             'media_type_id' => $mediaType->getKey(),
             'media_extension' => $fileExtension,
             'media_filename' => $filename,
@@ -81,6 +82,19 @@ class ImageSeeder extends Seeder
             'entity_type_id' => $entityTypeID,
             'media_category_record_id' => $mediaCategoryRecord->getKey(),
         ]);
+
+        \App\Models\Media\MediaImg::create([
+            'media_digital_id' => $mediaDigital->getKey()
+        ]);
+
+        if (!is_null($formats)) {
+            foreach ($formats as $format) {
+                \App\Models\Media\MediaImgFormatType::create([
+                    'media_digital_id' => $mediaDigital->getKey(),
+                    'media_img_format_id' => $format
+                ]);
+            }
+        }
     }
 
     private function saveImage($path, $fileExtension, $uuid)

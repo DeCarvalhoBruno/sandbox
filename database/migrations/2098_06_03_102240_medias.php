@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use App\Models\Media\Media;
 use App\Models\Media\MediaGroup;
+use App\Models\Media\MediaImgFormat;
 
 class Medias extends Migration
 {
@@ -62,7 +63,6 @@ class Medias extends Migration
             $table->increments('media_img_id');
 
             $table->unsignedInteger('media_digital_id');
-            $table->string('media_img_alt')->nullable();
             $table->text('media_img_attribution')->nullable();
 
             $table->foreign('media_digital_id')
@@ -276,15 +276,17 @@ class Medias extends Migration
 
     public function imageFormats()
     {
-        $imageFormats = [
-            [
-                'media_img_format_name' => 'ORIGINAL',
-                'media_img_format_width' => 0,
-                'media_img_format_height' => 0
-            ]
-        ];
+        $formats = MediaImgFormat::getFormatDimensions();
+        $imageFormats = [];
+        foreach ($formats as $intVal => $dimensions) {
+            $imageFormats[] = [
+                'media_img_format_name' => MediaImgFormat::getConstantName($intVal),
+                'media_img_format_width' => $dimensions->width,
+                'media_img_format_height' => $dimensions->height,
+                'media_img_format_acronym'=>MediaImgFormat::getFormatAcronyms($intVal)
+            ];
+        }
         \App\Models\Media\MediaImgFormat::insert($imageFormats);
-
     }
 
     private function mediaInUseProcedure()

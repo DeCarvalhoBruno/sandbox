@@ -14,3 +14,4 @@ yarn-error.log
 /resources/emails/tmp
 /resources/emails/views
 /_archive/
+/database/files/data/img/

@@ -8,7 +8,9 @@ use App\Models\EntityType;
 use App\Models\Media\MediaCategoryRecord;
 use App\Models\Media\MediaDigital;
 use App\Models\Media\MediaEntity;
+use App\Models\Media\MediaImg;
 use App\Models\Media\MediaImgFormat;
+use App\Models\Media\MediaImgFormatType;
 use App\Models\Media\MediaRecord;
 use App\Models\Media\MediaType;
 use App\Models\Views\EntitiesWithMedia;
@@ -81,7 +83,7 @@ class Image extends Model implements ImageInterface
      */
     public function saveAvatar(ImageContract $image)
     {
-        $targetEntityTypeId = $this->save($image);
+        $targetEntityTypeId = $this->saveImageDb($image);
         if (env('APP_ENV') !== 'testing') {
             $this->setAsUsed($image->getUuid());
         }
@@ -95,17 +97,17 @@ class Image extends Model implements ImageInterface
 
     /**
      * @param \App\Contracts\Image $image
+     * @param array $formats
      * @return array|int
-     * @throws \Exception
      * @throws \Throwable
      */
-    public function save(ImageContract $image)
+    public function saveImageDb(ImageContract $image, $formats = null)
     {
         $targetEntityTypeId = $this->getTargetEntity($image);
         if (is_null($targetEntityTypeId)) {
             throw new \UnexpectedValueException(trans('error.media.entity_not_found'));
         }
-        $this->createImage($image, $targetEntityTypeId, false);
+        $this->createImage($image, $targetEntityTypeId, false, $formats);
         return $targetEntityTypeId;
     }
 
@@ -113,12 +115,12 @@ class Image extends Model implements ImageInterface
      * @param \App\Contracts\Image|\App\Support\Media\UploadedAvatar $media
      * @param int $entityTypeID
      * @param bool $setAsUsed
-     * @throws \Exception
+     * @param array $formats
      * @throws \Throwable
      */
-    public function createImage($media, $entityTypeID, $setAsUsed = true)
+    public function createImage($media, $entityTypeID, $setAsUsed = true, $formats = null)
     {
-        \DB::transaction(function () use ($media, $entityTypeID, $setAsUsed) {
+        \DB::transaction(function () use ($media, $entityTypeID, $setAsUsed, $formats) {
             //For now the title of the image is the entity's slug, so we have an idea of which is which in mysql
             $mediaType = MediaType::create([
                 'media_title' => $media->getFilename(),
@@ -127,7 +129,7 @@ class Image extends Model implements ImageInterface
                 'media_in_use' => $setAsUsed
             ]);
 
-            MediaDigital::create([
+            $mediaDigital = MediaDigital::create([
                 'media_type_id' => $mediaType->getKey(),
                 'media_extension' => $media->getFileExtension(),
                 'media_filename' => $media->getFilename(),
@@ -145,19 +147,40 @@ class Image extends Model implements ImageInterface
                 'entity_type_id' => $entityTypeID,
                 'media_category_record_id' => $mediaCategoryRecord->getKey(),
             ]);
+
+            MediaImg::create([
+                'media_digital_id' => $mediaDigital->getKey()
+            ]);
+
+            if (!is_null($formats)) {
+                foreach ($formats as $format) {
+                    MediaImgFormatType::create([
+                        'media_digital_id' => $mediaDigital->getKey(),
+                        'media_img_format_id' => $format
+                    ]);
+                }
+            }
+
+
         });
     }
 
     /**
-     * @param int $entityTypeId
+     * @param int|array $entityTypeId
      * @param array $columns
      * @return \App\Models\Media\MediaEntity
      */
     public function getImages($entityTypeId, $columns = ['*'])
     {
-        return MediaEntity::buildImages($columns, $entityTypeId)->get();
+        return MediaEntity::buildImages($entityTypeId, $columns)->get();
     }
 
+    /**
+     * @param string $slug
+     * @param int $entityId
+     * @param array $columns
+     * @return \App\Models\Media\MediaEntity
+     */
     public function getImagesFromSlug($slug, $entityId = Entity::BLOG_POSTS, $columns = ['*'])
     {
         if ($columns[0] == '*') {
@@ -176,6 +199,10 @@ class Image extends Model implements ImageInterface
         return $this->getImages(EntityType::getEntityTypeID($entityId, $slug), $columns);
     }
 
+    /**
+     * @param string $uuid
+     * @return bool
+     */
     public static function setAsUsed($uuid)
     {
         if (is_hex_uuid_string($uuid)) {
@@ -224,6 +251,12 @@ class Image extends Model implements ImageInterface
         }
     }
 
+    /**
+     * @param int $entityId
+     * @param int $imageType
+     * @param string $uuid
+     * @param string $fileExtension
+     */
     public function deleteFiles($entityId, $imageType, $uuid, $fileExtension)
     {
         $formats = MediaImgFormat::getFormatAcronyms();
@@ -242,6 +275,13 @@ class Image extends Model implements ImageInterface
         }
     }
 
+    /**
+     * @param string $uuid
+     * @param int $entityId
+     * @param int $imageType
+     * @param string $fileExtension
+     * @param int $format
+     */
     public function cropImageToFormat($uuid, $entityId, $imageType, $fileExtension, $format = MediaImgFormat::THUMBNAIL)
     {
         ImageProcessor::saveImg(

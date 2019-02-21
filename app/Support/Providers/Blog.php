@@ -46,6 +46,27 @@ class Blog extends Model implements BlogInterface
         return $this->tag;
     }
 
+    public function buildForDisplay()
+    {
+$postList = [
+    2, 1220, 2929, 714, 1799, 1752, 1761, 3454, 1520, 3, 1001, 1751, 4, 60, 1204, 1801, 1206, 740, 747, 723, 1532, 29, 1757, 1787, 2332, 4039, 2364, 456, 1572, 1061, 1270, 1833, 1832, 103, 3858, 2402, 105, 2987, 2396, 801, 4124, 1849, 4197, 524, 1354, 3587, 3593, 203, 2708, 824, 294, 265, 3703, 3965, 1961, 4261, 2505, 1661, 3094, 3370, 4249, 273, 2832, 1737, 1998, 4009, 1185, 4017, 4007, 682, 3180, 326, 2582, 2538, 3171, 2246, 4012
+
+];
+        return $this->select([
+            'blog_post_title as title',
+            'published_at as date',
+            'blog_category_name as cat',
+            'full_name as author',
+            'blog_post_is_sticky as featured',
+            'entity_types.entity_type_id as type'
+        ])->entityType()
+            ->status()
+            ->person()
+            ->category()
+            ->whereIn('blog_posts.blog_post_id',$postList);
+
+    }
+
     /**
      * @param array $attributes
      * @return \Illuminate\Database\Eloquent\Builder
@@ -54,7 +75,6 @@ class Blog extends Model implements BlogInterface
     {
         return $this->select($attributes)->person();
     }
-
 
     /**
      * @param string $slug

@@ -39,7 +39,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
         'blog_status_id'
     ];
     protected $sortable = [
-      'blog_post_title'
+        'blog_post_title'
     ];
     public static $slugColumn = 'blog_post_slug';
 
@@ -116,6 +116,46 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
                     '=', $blogPostId);
             }
         });
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.7/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeLabelRecords(Builder $builder)
+    {
+        return $this->join($builder, BlogLabelRecord::class);
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeLabelTypes(Builder $builder)
+    {
+        return $builder->join('blog_label_types',
+            'blog_label_records.blog_label_type_id',
+            '=',
+            'blog_label_types.blog_label_type_id'
+        );
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeCategories(Builder $builder)
+    {
+        return $builder->join('blog_categories', 'blog_categories.blog_label_type_id', '=', 'blog_label_types.blog_label_type_id');
+    }
+
+    public function scopeCategory(Builder $builder)
+    {
+        return $builder->labelRecords()->labelTypes()->categories();
+
     }
 
 }
