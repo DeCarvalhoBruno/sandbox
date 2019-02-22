@@ -16,5 +16,7 @@ return [
     'subscribe_fullname' => 'Your full name',
     'subscribe_email' => 'Your e-mail address',
     'subscribed_msg_title' => 'Thank you for signing up!',
-    'subscribed_msg_text' => 'We have added your email to our distribution list.'
+    'subscribed_msg_text' => 'We have added your email to our distribution list.',
+    'most_viewed' => 'Most viewed',
+    'follow_us' => 'Follow Us'
 ];

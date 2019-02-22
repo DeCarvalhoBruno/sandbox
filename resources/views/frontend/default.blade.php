@@ -25,7 +25,7 @@
         @yield('content')
     </div>
     <a href="#" id="scroll-up" style="display: none;">
-        <fa class="fa-2x" icon="angle-up"></fa>
+        <i class="fa fa-2x fa-angle-up"></i>
     </a>
 </div>
 @include('partials.footer')

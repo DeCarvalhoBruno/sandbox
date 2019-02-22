@@ -1,5 +1,5 @@
 import './axios'
-import './fontawesome'
+// import './fontawesome'
 import './jquery'
 // import swal from 'sweetalert2/dist/sweetalert2.min.js'
 

@@ -62,6 +62,7 @@ $postList = [
             ->status()
             ->person()
             ->category()
+//            ->where('language_id','=',1)
             ->whereIn('blog_posts.blog_post_id',$postList);
 
     }

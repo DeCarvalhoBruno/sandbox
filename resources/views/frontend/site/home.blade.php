@@ -97,49 +97,85 @@
     </section>
     <section id="blog-spotlight" class="container p-0 m-0">
         <div class="row">
-            <div class="col-lg col-lg-8 col-md-12 spotlight-list">
+            <div class="col-lg col-lg-8 col-md-12 spotlight-container">
                 <div class="container">
                     <ul class="row">
-                        @foreach($posts['most_viewed'] as $keyMostViewed =>$mostViewedItems)
-                            <li class="col-lg col-lg-6">
-                                <span>{{$keyMostViewed}}</span>
-                                <div class="container">
-                                    <div class="row headline-post">
-                                                <div class="headline-content">
-                                                    <div class="lfc-title">{{$mostViewedItems[0]['title']}}</div>
-                                                    <div class="lfc-date">{{$mostViewedItems[0]['date']}}</div>
-                                                </div>
-                                                <figure>
-                                                    <img src="{{asset($mostViewedItems[0]['img'])}}">
-                                                </figure>
-                                    </div>
+                        @foreach($posts['most_viewed_cat'] as $keyMostViewed =>$mostViewedItems)
+                            <li class="col-lg col-lg-6 col-md-12 spotlight-category">
+                                <h5><span>{{$keyMostViewed}}</span></h5>
+                                <ul class="container">
+                                    <li class="row headline-post">
+                                        <div class="headline-content">
+                                            <div class="lfc-title">{{$mostViewedItems[0]['title']}}</div>
+                                            <div class="lfc-date">{{$mostViewedItems[0]['date']}}</div>
+                                        </div>
+                                        <figure>
+                                            <img src="{{asset($mostViewedItems[0]['img'])}}">
+                                        </figure>
+                                    </li>
                                     @for($i=1;$i<=4;$i++)
-                                        <ul class="row list-post">
-                                            <li class="col">
-                                                <div class="container">
-                                                    <div class="row">
-                                                        <div class="col-lg-4 list-img-container">
-                                                            <figure>
-                                                                <img src="{{asset($mostViewedItems[$i]['img'])}}">
-                                                            </figure>
-                                                        </div>
-                                                        <div class="col-lg col-lg-8">
-                                                            <div class="row lfc-title">{{$mostViewedItems[$i]['title']}}</div>
-                                                            <div class="row lfc-date">{{$mostViewedItems[$i]['date']}}</div>
-                                                        </div>
+                                        <li class="row list-post">
+                                            <div class="container">
+                                                <div class="row d-flex align-items-center">
+                                                    <div class="col-lg-3 col-md-6 list-img-container">
+                                                        <figure>
+                                                            <img src="{{asset($mostViewedItems[$i]['img'])}}">
+                                                        </figure>
+                                                    </div>
+                                                    <div class="col-lg-9 col-md-6 list-txt-container">
+                                                        <div class="row lfc-title">{{$mostViewedItems[$i]['title']}}</div>
+                                                        <div class="row lfc-date">{{$mostViewedItems[$i]['date']}}</div>
                                                     </div>
                                                 </div>
-                                            </li>
-                                        </ul>
+                                            </div>
+                                        </li>
                                     @endfor
-                                </div>
+                                </ul>
                             </li>
                         @endforeach
                     </ul>
                 </div>
             </div>
             <div class="col-lg-4 col-md-12">
-
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <h5><span>{{trans('titles.follow_us')}}</span></h5>
+                            <div class="container p-0 text-center">
+                                <div class="row">
+                                    <ul class="col social-icon">
+                                        <li><a href="#" target="_blank"><i class="fa fa-rss"></i></a></li>
+                                        <li><a href="#" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                                        <li><a href="#" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+                                        <li><a href="#" target="_blank"><i class="fa fa-vimeo-square"></i></a></li>
+                                        <li><a href="#" target="_blank"><i class="fa fa-youtube"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="blog-mvp-container" class="row">
+                        <div class="col">
+                            <h5><span>{{trans('titles.most_viewed')}}</span></h5>
+                            <div class="container mvp-list">
+                                @foreach($posts['most_viewed'] as $mostViewedItems)
+                                    <div class="row mvp-list-item d-flex align-items-md-center align-items-lg-start">
+                                        <div class="col-lg-3 col-md-6 list-img-container">
+                                            <figure>
+                                                <img src="{{asset($mostViewedItems['img'])}}">
+                                            </figure>
+                                        </div>
+                                        <div class="col-lg-9 col-md-6 list-txt-container">
+                                            <div class="row mli-date">{{$mostViewedItems['date']}}</div>
+                                            <div class="row mli-title">{{$mostViewedItems['title']}}</div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
