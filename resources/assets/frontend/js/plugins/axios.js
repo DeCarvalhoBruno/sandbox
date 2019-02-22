@@ -18,16 +18,16 @@ axios.interceptors.response.use(response => response, error => {
   if (error.response.data && error.response.data.length > 0) {
     text = error.response.data
   } else {
-    text = i18n.$t('modal.error.t')
+    text = i18n.t('modal.error.t')
   }
 
   if (status >= 500) {
     let settings = {
       type: 'error',
-      title: i18n.$t('modal.error.h'),
+      title: i18n.t('modal.error.h'),
       text: text,
       reverseButtons: true,
-      confirmButtonText: i18n.$t('general.ok')
+      confirmButtonText: i18n.t('general.ok')
     }
     swal.fire(settings)
   }
@@ -35,20 +35,20 @@ axios.interceptors.response.use(response => response, error => {
   if (status === 401) {
     swal.fire({
       type: 'warning',
-      title: i18n.$t('modal.token_expired.h'),
-      text: i18n.$t('modal.token_expired.t'),
+      title: i18n.t('modal.token_expired.h'),
+      text: i18n.t('modal.token_expired.t'),
       showCancelButton: false,
-      confirmButtonText: i18n.$t('general.ok')
+      confirmButtonText: i18n.t('general.ok')
     })
   }
 
   if (status === 403) {
     swal.fire({
       type: 'error',
-      title: i18n.$t('modal.unauthorized.h'),
-      text: i18n.$t('modal.unauthorized.t'),
+      title: i18n.t('modal.unauthorized.h'),
+      text: i18n.t('modal.unauthorized.t'),
       reverseButtons: true,
-      confirmButtonText: i18n.$t('general.ok')
+      confirmButtonText: i18n.t('general.ok')
     })
   }
 

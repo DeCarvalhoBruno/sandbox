@@ -12,14 +12,6 @@
       margin: 0;
     }
 
-    figure {
-      padding: 0;
-      margin: 0;
-      text-align: center;
-      overflow: hidden;
-      border-radius: 3px;
-    }
-
     > .container {
       padding: 0;
     }
@@ -80,6 +72,10 @@
           border-radius: 10px;
           font-weight: bold;
           padding: 0.2rem;
+
+          a {
+            color:#fff;
+          }
           @include media-breakpoint-down(md) {
             font-size: 1.5rem;
             width: 80%;

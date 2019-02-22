@@ -11,11 +11,10 @@ class Breadcrumbs
 
     private function make($chain)
     {
-        // render (blog,
         $this->breadcrumbs = <<<EOD
 <ul class="breadcrumbs">
 EOD;
-        $this->addNode(route_i18n('home'), chr(10) . str_repeat(' ',8).'<fa icon="home"></fa>');
+        $this->addNode(route_i18n('home'), chr(10) . str_repeat(' ',8).'<i class="fa fa-home"></i>');
         $lastItem = array_pop($chain);
         foreach ($chain as $item) {
             $this->addNode($item['url'], $item['label']);

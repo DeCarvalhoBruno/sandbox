@@ -12,6 +12,7 @@ class MediaImgFormat extends Model
     const THUMBNAIL = 2;
     const FEATURED = 3;
     const HD = 4;
+    const FHD = 5;
     public $timestamps = false;
 
     protected $primaryKey = 'media_img_format_id';
@@ -35,6 +36,8 @@ class MediaImgFormat extends Model
                 return (object)['width' => 720, 'height' => 540];
             case static::HD:
                 return (object)['width' => 1280, 'height' => 720];
+            case static::FHD:
+                return (object)['width' => 1920, 'height' => 1080];
             default:
                 return [
                     static::ORIGINAL => (object)['width' => 0, 'height' => 0],
@@ -44,6 +47,7 @@ class MediaImgFormat extends Model
                     ],
                     static::FEATURED => (object)['width' => 500, 'height' => 300],
                     static::HD => (object)['width' => 1280, 'height' => 720],
+                    static::FHD => (object)['width' => 1920, 'height' => 1080],
                 ];
         }
     }
@@ -59,12 +63,15 @@ class MediaImgFormat extends Model
                 return 'ft';
             case static::HD:
                 return 'hd';
+            case static::FHD:
+                return 'hf';
             default:
                 return [
                     static::ORIGINAL => '',
                     static::THUMBNAIL => 'tb',
                     static::FEATURED => 'ft',
                     static::HD => 'hd',
+                    static::FD => 'hf',
                 ];
         }
     }

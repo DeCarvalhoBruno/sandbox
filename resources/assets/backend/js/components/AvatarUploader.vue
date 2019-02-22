@@ -5,7 +5,9 @@
         <b-tab :title="$t('pages.settings.avatar-tab')" @click="resetComponentFlags" active>
           <p v-show="avatars.length>0" class="font-italic">{{$t('pages.settings.click_default')}}</p>
           <div class="thumbnail-group" :class="{'thumbnail-loading':ajaxIsLoading}">
-            <fa v-show="ajaxIsLoading" class="fa-5x sync-icon" icon="sync" spin></fa>
+            <div v-show="ajaxIsLoading" class="fa-5x sync-icon">
+              <i class="fa fa-spinner fa-pulse"></i>
+            </div>
             <ul class="p-0">
               <li class="thumbnail-container"
                   v-for="(avatar,index) in avatars"
@@ -22,7 +24,7 @@
                           :class="{'btn-danger':!avatar.used,'disabled':avatar.used}"
                           :title="$t('pages.settings.delete_avatar')"
                           @click="deleteAvatar(avatar.uuid,avatar.used)">
-                    <fa icon="trash-alt"></fa>
+                    <i class="fa fa-trash"></i>
                   </button>
                 </div>
               </li>
@@ -54,7 +56,7 @@
                       {{dropzoneOptions.maxFilesize}}{{$t('units.MB')}}</p>
                     <p class="dropfile-instructions">{{ $t('dropzone.accepted_formats')}} JPG,
                       PNG</p>
-                    <fa class="fa-4x" icon="cloud-upload-alt"></fa>
+                    <i class="fa fa-4x fa-cloud-upload"></i>
                   </div>
                   <template #files="props">
                     <div v-for="(file, i) in props.files" :key="file.id"

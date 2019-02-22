@@ -71,7 +71,7 @@ class Blog extends Controller
         $record = $blogRepo->buildOneBySlug(
             $slug,
             [
-                'blog_post_id',
+                'blog_posts.blog_post_id',
                 'blog_post_title',
                 'blog_post_slug',
                 'blog_post_content',

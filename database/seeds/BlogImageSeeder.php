@@ -61,7 +61,7 @@ class ImageSeeder extends Seeder
             'media_title' => $filename,
             'media_uuid' => $uuid,
             'media_id' => \App\Models\Media\Media::IMAGE,
-            'media_in_use' => 0
+            'media_in_use' => 1
         ]);
 
         $mediaDigital = \App\Models\Media\MediaDigital::create([

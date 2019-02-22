@@ -12,5 +12,6 @@
     'settings_account' => 'parametres/compte',
     'contact' => 'contact',
     'blog_slug' => 'blog/{slug}',
-
+    'blog_cat' => 'categories/{slug}',
+    'blog_tag' => 'tag/{slug}'
 ];

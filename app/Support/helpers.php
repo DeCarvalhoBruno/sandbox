@@ -181,3 +181,13 @@ if (!function_exists('response_json')) {
     }
 
 }
+
+if (!function_exists('page_title')) {
+    function page_title($title){
+        return sprintf(
+            '%s - %s',
+            $title,
+            config('app.name')
+        );
+    }
+}

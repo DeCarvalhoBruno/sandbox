@@ -41,20 +41,19 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app->make('view')->composer('admin.default', \App\Composers\Admin::class);
-        $this->app->make('view')->composer([
-            'frontend.auth.*',
-            'frontend.site.*',
-            'frontend.errors.*'
-        ],
-            \App\Composers\Frontend::class);
         $this->app->make('view')->composer(
-            'frontend.site.settings.profile',
+            'frontend.site.settings.panes.profile',
             \App\Composers\Frontend\Profile::class
         );
         $this->app->make('view')->composer(
             'frontend.site.settings.panes.*',
             \App\Composers\Frontend\Settings::class
         );
+        $this->app->make('view')->composer([
+            'frontend.auth.*',
+            'frontend.site.*',
+            'frontend.errors.*'
+        ], \App\Composers\Frontend::class);
 
         if (app()->environment() == 'local') {
             Schema::defaultStringLength(191);

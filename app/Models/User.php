@@ -302,20 +302,6 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    public static function scopeMediaEntities(Builder $builder)
-    {
-        return $builder->join('media_entities',
-            'media_entities.entity_type_id',
-            '=',
-            'entity_types.entity_type_id'
-        );
-    }
-
-    /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
-     * @param \Illuminate\Database\Eloquent\Builder $builder
-     * @return \Illuminate\Database\Eloquent\Builder $builder
-     */
     public function scopeActivation(Builder $builder)
     {
         return $this->join($builder, UserActivation::class);
@@ -342,12 +328,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
      */
     public function scopeAvatars(Builder $builder)
     {
-        return MediaEntity::scopeMediaDigital(
-            MediaEntity::scopeMediaType(
-                MediaEntity::scopeMediaRecord(
-                    MediaEntity::scopeMediaCategoryRecord(
-                        static::scopeMediaEntities($builder))))
-        );
+        return MediaEntity::scopeImage($builder);
     }
 
 }

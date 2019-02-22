@@ -100,4 +100,33 @@ class MediaEntity extends Model
         return $builder->join('media_digital',
             'media_digital.media_type_id', '=', 'media_types.media_type_id');
     }
+
+    /**
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public static function scopeMediaEntities(Builder $builder)
+    {
+        return $builder->join('media_entities',
+            'media_entities.entity_type_id',
+            '=',
+            'entity_types.entity_type_id'
+        );
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public static function scopeImage($builder)
+    {
+        return self::scopeMediaDigital(
+            self::scopeMediaType(
+                self::scopeMediaRecord(
+                    self::scopeMediaCategoryRecord(
+                        self::scopeMediaEntities($builder))))
+        );
+    }
 }

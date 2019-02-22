@@ -3,7 +3,6 @@
 //Font Awesome
 @import "~font-awesome/scss/font-awesome";
 // Bootstrap
-@import "variables";
 //@import "~bootstrap/scss/bootstrap";
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
@@ -41,6 +40,7 @@
 @import "~bootstrap/scss/utilities";
 //@import "~bootstrap/scss/print";
 
+@import "variables";
 //**********************************************
 @import "./core";
 @import "./elements/form";
@@ -48,9 +48,10 @@
 @import "./blocks/footer";
 
 //**********************************************
-@import "./snippets/blog";
-@import "./snippets/blog-featured";
-@import "./snippets/blog-spotlight";
+@import "snippets/blog/general";
+@import "snippets/blog/post";
+@import "snippets/blog/blog-featured";
+@import "snippets/blog/blog-spotlight";
 @import "./snippets/breadcrumbs";
 @import "./snippets/error";
 //**********************************************

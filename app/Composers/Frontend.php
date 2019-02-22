@@ -11,20 +11,19 @@ class Frontend extends Composer
     public function compose($view)
     {
         $this->checkFlashMessages();
-        $data = [
-            'title' => sprintf(
-                '%s - %s',
+        $data = [];
+        $existingData = $view->getData();
+        if (!isset($existingData['title'])) {
+            $data['title'] = page_title(
                 trans(
                     sprintf(
                         'titles.%s',
                         (!is_null($view)) ? str_replace('.', '_', $view->getName()) : 'error'
                     )
-                ),
-                config('app.name')
-            ),
-            'user' => auth()->user()
-        ];
-
+                )
+            );
+        }
+        $data['user'] = auth()->user();
         JavaScript::putArray([
             'locale' => app()->getLocale(),
         ]);

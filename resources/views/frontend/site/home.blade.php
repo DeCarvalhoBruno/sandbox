@@ -16,16 +16,16 @@
                                 <div class="carousel-featured">
                                     <div class=carousel-featured-content">
                                         <a class="fc-cat badge-success"
-                                           href="#">{{$posts['featured'][$i]['cat']}}</a>
+                                           href="{{route_i18n('blog',$posts['featured'][$i]['cat'])}}">{{trans(sprintf('pages.blog.category.%s',$posts['featured'][$i]['cat']))}}</a>
                                         <h2 class="fc-title">
-                                            <a href="#">{{$posts['featured'][$i]['title']}}</a>
+                                            <a href="{{route_i18n('blog',$posts['featured'][$i]['slug'])}}">{{$posts['featured'][$i]['title']}}</a>
                                         </h2>
                                         <span class="fc-date">{{$posts['featured'][$i]['date']}}</span>
                                     </div>
                                 </div>
                                 <figure>
                                     <img src="{{asset($posts['featured'][$i]['img'])}}"
-                                         class="d-block" alt="...">
+                                         class="d-block" alt="{{$posts['featured'][$i]['title']}}">
                                 </figure>
                             </div>
                         @endfor
@@ -47,14 +47,15 @@
                             <div class="right-featured">
                                 <div class=right-featured-content">
                                     <a class="fc-cat badge-success"
-                                       href="#">{{$posts['featured'][3]['cat']}}</a>
+                                       href="{{route_i18n('blog',$posts['featured'][3]['cat'])}}">{{trans(sprintf('pages.blog.category.%s',$posts['featured'][3]['cat']))}}</a>
                                     <h2 class="fc-title">
-                                        <a href="#">{{$posts['featured'][3]['title']}}</a>
+                                        <a href="{{route_i18n('blog',$posts['featured'][3]['slug'])}}">{{$posts['featured'][3]['title']}}</a>
                                     </h2>
                                 </div>
                             </div>
                             <figure>
-                                <img src="{{asset($posts['featured'][3]['img'])}}">
+                                <img src="{{asset($posts['featured'][3]['img'])}}"
+                                     alt="{{asset($posts['featured'][3]['title'])}}">
                             </figure>
                         </div>
 
@@ -62,15 +63,16 @@
                             <div class="bottom-featured">
                                 <div class=bottom-featured-content">
                                     <a class="fc-cat badge-success"
-                                       href="#">{{$posts['featured'][4]['cat']}}</a>
+                                       href="{{route_i18n('blog',$posts['featured'][4]['cat'])}}">{{trans(sprintf('pages.blog.category.%s',$posts['featured'][4]['cat']))}}</a>
                                     <h2 class="fc-title">
-                                        <a href="#">{{$posts['featured'][4]['title']}}</a>
+                                        <a href="{{route_i18n('blog',$posts['featured'][4]['slug'])}}">{{$posts['featured'][4]['title']}}</a>
                                     </h2>
                                 </div>
                             </div>
                             <figure>
                                 <figure>
-                                    <img src="{{asset($posts['featured'][4]['img'])}}">
+                                    <img src="{{asset($posts['featured'][4]['img'])}}"
+                                         alt="{{asset($posts['featured'][4]['title'])}}">
                                 </figure>
                             </figure>
                         </div>
@@ -78,15 +80,15 @@
                             <div class="bottom-featured">
                                 <div class=bottom-featured-content">
                                     <a class="fc-cat badge-success"
-                                       href="#">{{$posts['featured'][5]['cat']}}</a>
+                                       href="{{route_i18n('blog',$posts['featured'][5]['cat'])}}">{{trans(sprintf('pages.blog.category.%s',$posts['featured'][5]['cat']))}}</a>
                                     <h2 class="fc-title">
-                                        <a href="#">{{$posts['featured'][5]['title']}}</a>
+                                        <a href="{{route_i18n('blog',$posts['featured'][5]['slug'])}}">{{$posts['featured'][5]['title']}}</a>
                                     </h2>
                                 </div>
                             </div>
                             <figure>
                                 <figure>
-                                    <img src="{{asset($posts['featured'][5]['img'])}}">
+                                    <img src="{{asset($posts['featured'][5]['img'])}}" alt="{{asset($posts['featured'][5]['title'])}}">
                                 </figure>
                             </figure>
                         </div>
@@ -102,15 +104,17 @@
                     <ul class="row">
                         @foreach($posts['most_viewed_cat'] as $keyMostViewed =>$mostViewedItems)
                             <li class="col-lg col-lg-6 col-md-12 spotlight-category">
-                                <h5><span>{{$keyMostViewed}}</span></h5>
+                                <h5><span>{{trans(sprintf('pages.blog.category.%s',$keyMostViewed))}}</span></h5>
                                 <ul class="container">
                                     <li class="row headline-post">
                                         <div class="headline-content">
-                                            <div class="lfc-title">{{$mostViewedItems[0]['title']}}</div>
+                                            <div class="lfc-title"><a href="{{route_i18n('blog',$mostViewedItems[0]['slug'])}}">{{$mostViewedItems[0]['title']}}</a>
+                                            </div>
                                             <div class="lfc-date">{{$mostViewedItems[0]['date']}}</div>
                                         </div>
                                         <figure>
-                                            <img src="{{asset($mostViewedItems[0]['img'])}}">
+                                            <img src="{{asset($mostViewedItems[0]['img'])}}"
+                                                 alt="{{asset($mostViewedItems[0]['title'])}}">
                                         </figure>
                                     </li>
                                     @for($i=1;$i<=4;$i++)
@@ -119,11 +123,14 @@
                                                 <div class="row d-flex align-items-center">
                                                     <div class="col-lg-3 col-md-6 list-img-container">
                                                         <figure>
-                                                            <img src="{{asset($mostViewedItems[$i]['img'])}}">
+                                                            <img src="{{asset($mostViewedItems[$i]['img'])}}"
+                                                                 alt="{{asset($mostViewedItems[$i]['title'])}}">
                                                         </figure>
                                                     </div>
                                                     <div class="col-lg-9 col-md-6 list-txt-container">
-                                                        <div class="row lfc-title">{{$mostViewedItems[$i]['title']}}</div>
+                                                        <div class="row lfc-title"><a
+                                                                    href="{{route_i18n('blog',$mostViewedItems[$i]['slug'])}}">{{$mostViewedItems[$i]['title']}}</a>
+                                                        </div>
                                                         <div class="row lfc-date">{{$mostViewedItems[$i]['date']}}</div>
                                                     </div>
                                                 </div>
@@ -163,12 +170,15 @@
                                     <div class="row mvp-list-item d-flex align-items-md-center align-items-lg-start">
                                         <div class="col-lg-3 col-md-6 list-img-container">
                                             <figure>
-                                                <img src="{{asset($mostViewedItems['img'])}}">
+                                                <img src="{{asset($mostViewedItems['img'])}}"
+                                                     alt="{{asset($mostViewedItems['title'])}}">
                                             </figure>
                                         </div>
                                         <div class="col-lg-9 col-md-6 list-txt-container">
                                             <div class="row mli-date">{{$mostViewedItems['date']}}</div>
-                                            <div class="row mli-title">{{$mostViewedItems['title']}}</div>
+                                            <div class="row mli-title"><a
+                                                        href="{{route_i18n('blog',$mostViewedItems['slug'])}}">{{$mostViewedItems['title']}}</a>
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach

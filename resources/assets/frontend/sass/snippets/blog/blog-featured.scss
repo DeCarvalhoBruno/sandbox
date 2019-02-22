@@ -13,6 +13,20 @@
     min-height: $blog-featured-height;
   }
 
+  .carousel-control-prev{
+    left:-10%;
+  }
+
+  .carousel-control-next{
+    right:-10%;
+  }
+
+  .carousel-control-prev,.carousel-control-next{
+    top: 42%;
+    bottom: 39%;
+    width:33%;
+  }
+
   .featured-content {
     .fc-title, .fc-date {
       background-color: rgba(75, 15, 9, 0.4);
@@ -54,8 +68,8 @@
 
           .carousel-featured {
             position: absolute;
-            z-index: 1;
-            bottom: 2rem;
+            z-index: 9;
+            bottom: 1rem;
             left: 0;
             padding: 1rem;
 
@@ -101,6 +115,7 @@
     .fc-title {
       font-size: 1.5rem;
       letter-spacing: normal;
+      letter-spacing: -0.1rem;
     }
 
     .col-lg-12 {

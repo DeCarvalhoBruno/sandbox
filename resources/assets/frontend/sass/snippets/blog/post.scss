@@ -1,0 +1,50 @@
+#blog-post {
+
+  figure {
+    max-height: 20rem;
+    width: 100%;
+
+    img {
+      position: relative;
+      display: block;
+      //left: 50%;
+      width: 100%;
+      //transform: translate(0%, -10%);
+      overflow: hidden;
+      filter: blur(0.6rem);
+    }
+  }
+
+  .post-title {
+    margin-top: 1.5rem;
+    position: relative;
+    z-index: 0;
+    text-align: center;
+    border-radius: 10px;
+    overflow: hidden;
+
+    .post-title-label {
+      position: absolute;
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.5);
+      width: 100%;
+      height: 100%;
+      vertical-align: middle;
+      padding: 1rem;
+      z-index: 1;
+
+      .title-label {
+        color: #fff;
+        position: relative;
+        top: 12rem;
+        height: 7rem;
+
+      }
+    }
+
+    h3 {
+      font-family: $font-family-title;
+      font-weight: 900;
+    }
+  }
+}

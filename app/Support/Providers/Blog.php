@@ -54,10 +54,11 @@ $postList = [
         return $this->select([
             'blog_post_title as title',
             'published_at as date',
-            'blog_category_name as cat',
+            'blog_category_slug as cat',
             'full_name as author',
             'blog_post_is_sticky as featured',
-            'entity_types.entity_type_id as type'
+            'entity_types.entity_type_id as type',
+            'blog_post_slug as slug'
         ])->entityType()
             ->status()
             ->person()
@@ -81,13 +82,14 @@ $postList = [
      * @param array $attributes
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function buildOneBySlug($slug, $attributes = null)
+    public function buildOneBySlug($slug, $attributes = ['*'])
     {
         return $this->createModel()->newQuery()
             ->select($attributes)
             ->entityType()
             ->status()
             ->person()
+            ->category()
             ->where('blog_post_slug', '=', $slug);
     }
 

@@ -11,7 +11,7 @@
                 <div v-show="passwordCount" class="password-badge"
                      :class="isOK?'password-badge-success':'password-badge-error'">
                     <span v-if="!isOK">{{passwordCount}}</span>
-                    <span v-else><fa icon="check"></fa></span>
+                    <span v-else><i class="fa fa-check"></i></span>
                 </div>
                 <div class="password-toggle">
                     <button type="button" :aria-label="passwordLabel" class="btn-clean" @click="togglePassword">

@@ -4,6 +4,7 @@ use App\Contracts\Enumerable as EnumerableContract;
 use App\Contracts\HasAnEntity;
 use App\Contracts\HasPermissions as HasPermissionsContract;
 use App\Models\Entity;
+use App\Models\Media\MediaEntity;
 use App\Models\Person;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
@@ -149,13 +150,29 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
      */
     public function scopeCategories(Builder $builder)
     {
-        return $builder->join('blog_categories', 'blog_categories.blog_label_type_id', '=', 'blog_label_types.blog_label_type_id');
+        return $builder->join('blog_categories', 'blog_categories.blog_label_type_id', '=',
+            'blog_label_types.blog_label_type_id');
     }
 
+    /**
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
     public function scopeCategory(Builder $builder)
     {
         return $builder->labelRecords()->labelTypes()->categories();
 
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeImages($builder)
+    {
+        return MediaEntity::scopeImage($builder);
     }
 
 }
