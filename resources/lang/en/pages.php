@@ -24,6 +24,7 @@
         'email_body' => 'Message body',
     ],
     'blog' => [
+        'page_view_count'=>'Page view count',
         'category' => [
             'entertainment' => 'Entertainment',
             'general' => 'General',

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Contracts\RawQueries;
+use App\Support\Providers\View;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use App\Contracts\Models as Contract;
@@ -55,7 +56,7 @@ class AppServiceProvider extends ServiceProvider
             'frontend.errors.*'
         ], \App\Composers\Frontend::class);
 
-        if (app()->environment() == 'local') {
+        if (env('APP_OLD_ASS_RDBMS')) {
             Schema::defaultStringLength(191);
         }
 
@@ -68,6 +69,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(
+            \CyrildeWit\EloquentViewable\Contracts\View::class,
+            View::class
+        );
+
         foreach ($this->bindings as $interface) {
             $this->app->bind($interface, str_replace('\\Contracts\\Models', '\\Support\\Providers', $interface));
         }

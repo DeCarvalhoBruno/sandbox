@@ -11,12 +11,14 @@ use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use App\Traits\Models\HasPermissions;
 use App\Traits\Presentable;
+use CyrildeWit\EloquentViewable\Viewable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 
-class BlogPost extends Model implements HasPermissionsContract, EnumerableContract, HasAnEntity
+class BlogPost extends Model implements HasPermissionsContract, EnumerableContract, HasAnEntity, ViewableContract
 {
-    use Presentable, Enumerable, HasPermissions, DoesSqlStuff, HasAnEntityTrait;
+    use Presentable, Enumerable, HasPermissions, DoesSqlStuff, HasAnEntityTrait, Viewable;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;
@@ -43,6 +45,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
         'blog_post_title'
     ];
     public static $slugColumn = 'blog_post_slug';
+    public $entityID = \App\Models\Entity::BLOG_POSTS;
 
     public static function boot()
     {
@@ -50,7 +53,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
 
         static::creating(
             function ($model) {
-                $model->blog_post_slug = str_slug(
+                $model->blog_post_slug = slugify(
                     substr($model->blog_post_title, 0, 95),
                     '-',
                     app()->getLocale()
@@ -174,5 +177,17 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     {
         return MediaEntity::scopeImage($builder);
     }
+
+    /**
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopePageViews(Builder $builder)
+    {
+        return $builder->join('stat_page_views', 'entity_types.entity_type_id', '=',
+            'stat_page_views.entity_type_id');
+    }
+
 
 }

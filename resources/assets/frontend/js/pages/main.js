@@ -89,6 +89,8 @@ $(document).ready(function () {
         $('h1.viewport').html(viewport.current())
       })
     )
+  $('#app').Lazy();
+
   })
 })(jQuery, ResponsiveBootstrapToolkit);
 (function () {

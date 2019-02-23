@@ -2,10 +2,12 @@
 
 use App\Contracts\Models\Blog as BlogProvider;
 use App\Contracts\Models\Media as MediaProvider;
+use App\Jobs\ProcessPageView;
 use App\Models\Entity;
 use App\Models\Media\Media;
 use App\Models\Media\MediaImgFormat;
 use App\Support\Frontend\Breadcrumbs;
+use Carbon\Carbon;
 
 class Blog extends Controller
 {
@@ -36,11 +38,13 @@ class Blog extends Controller
             'blog_post_content as content',
             'published_at as date',
             'blog_category_slug as cat',
-            'entity_types.entity_type_id as type',
+            'entity_types.entity_type_id',
             'person_slug as person',
-        ])->first();
+            'unq as page_views'
+        ])->pageViews()->first();
+        $post->setAttribute('date', new Carbon($post->getAttribute('date')));
         $dbImages = $mediaRepo->image()->getImages(
-            $post->getAttribute('type'), [
+            $post->getAttribute('entity_type_id'), [
                 'media_in_use as featured',
                 'media_uuid as uuid',
                 'media_extension as ext',
@@ -77,6 +81,9 @@ class Blog extends Controller
                 'url' => route_i18n('blog.category', $post->getAttribute('cat'))
             ]
         ]);
+
+        $this->dispatch(new ProcessPageView($post));
+
         return view('frontend.site.blog.post', compact(
                 'post', 'breadcrumbs', 'title', 'media')
         );

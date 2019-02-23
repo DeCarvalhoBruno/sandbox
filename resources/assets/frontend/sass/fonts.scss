@@ -100,6 +100,20 @@
   url('../../_fonts/fira-sans-v9-latin-regular.svg#FiraSans') format('svg'); /* Legacy iOS */
 }
 
+/* fira-sans-700 - latin */
+@font-face {
+  font-family: 'Fira Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../../_fonts/fira-sans-v9-latin-700.eot'); /* IE9 Compat Modes */
+  src: local('Fira Sans Bold'), local('FiraSans-Bold'),
+  url('../../_fonts/fira-sans-v9-latin-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('../../_fonts/fira-sans-v9-latin-700.woff2') format('woff2'), /* Super Modern Browsers */
+  url('../../_fonts/fira-sans-v9-latin-700.woff') format('woff'), /* Modern Browsers */
+  url('../../_fonts/fira-sans-v9-latin-700.ttf') format('truetype'), /* Safari, Android, iOS */
+  url('../../_fonts/fira-sans-v9-latin-700.svg#FiraSans') format('svg'); /* Legacy iOS */
+}
+
 /* fira-sans-900 - latin */
 @font-face {
   font-family: 'Fira Sans';

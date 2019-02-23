@@ -73,6 +73,7 @@ if (!function_exists('makeHexUuid')) {
     /**
      *
      * @return string The 32 character UUID
+     * @throws \Exception
      */
     function makeHexUuid()
     {
@@ -84,6 +85,7 @@ if (!function_exists('makeHexHashedUuid')) {
     /**
      *
      * @return string The 32 character UUID
+     * @throws \Exception
      */
     function makeHexHashedUuid()
     {
@@ -93,32 +95,13 @@ if (!function_exists('makeHexHashedUuid')) {
 }
 
 if (!function_exists('slugify')) {
-    function slugify($text, $strict = true)
+    function slugify($title, $separator = '-', $language = null)
     {
-        $text = html_entity_decode($text, ENT_QUOTES, 'UTF-8');
-        // replace non letter or digits by -
-        $text = preg_replace('~[^\\pL\d.]+~u', '-', $text);
-
-        // trim
-        $text = trim($text, '-');
-        setlocale(LC_CTYPE, 'fr_FR.utf8');
-        // transliterate
-        if (function_exists('iconv')) {
-            $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-        }
-
-        // lowercase
-        $text = strtolower($text);
-        // remove unwanted characters
-        $text = preg_replace('~[^-\w.]+~', '', $text);
-        if (empty($text)) {
-            return 'empty_';
-        }
-        if ($strict) {
-            $text = str_replace(".", "_", $text);
-        }
-
-        return $text;
+        return \Illuminate\Support\Str::slug(
+            $title,
+            $separator,
+            !is_null($language) ? $language : app()->getLocale()
+        );
     }
 }
 
@@ -183,11 +166,19 @@ if (!function_exists('response_json')) {
 }
 
 if (!function_exists('page_title')) {
-    function page_title($title){
+    function page_title($title)
+    {
         return sprintf(
             '%s - %s',
             $title,
             config('app.name')
         );
+    }
+}
+
+if (!function_exists('viewable')) {
+    function viewable($viewable = null)
+    {
+        return app(\App\Support\Providers\View::class)->forViewable($viewable);
     }
 }

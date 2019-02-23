@@ -41,7 +41,7 @@ class BlogCategory extends Controller
         if (!is_null($cat)) {
             $label = $this->request->get('label');
             $cat->setAttribute('blog_category_name', $label);
-            $cat->setAttribute('blog_category_slug', str_slug($label, '-', app()->getLocale()));
+            $cat->setAttribute('blog_category_slug', slugify($label, '-', app()->getLocale()));
             $cat->save();
         }
         return response(null, Response::HTTP_NO_CONTENT);

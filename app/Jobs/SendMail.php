@@ -35,7 +35,7 @@ class SendMail extends Job
             if ($this->driver === Mailer::DRIVER_SMTP) {
                 LaravelMailer::send($this->email);
             } else {
-                $response = MailgunMailer::send($this->email);
+                MailgunMailer::send($this->email);
             }
             $this->delete();
         } catch (\Exception $e) {

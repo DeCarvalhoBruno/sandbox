@@ -152,6 +152,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
         App\Support\JavaScript\JavaScriptServiceProvider::class,
+        App\Support\View\EloquentViewableServiceProvider::class,
 
         /*
          * Application Service Providers...

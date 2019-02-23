@@ -23,7 +23,7 @@
                                         <span class="fc-date">{{$posts['featured'][$i]['date']}}</span>
                                     </div>
                                 </div>
-                                <figure>
+                                <figure class="loading">
                                     <img src="{{asset($posts['featured'][$i]['img'])}}"
                                          class="d-block" alt="{{$posts['featured'][$i]['title']}}">
                                 </figure>
@@ -110,7 +110,7 @@
                                         <div class="headline-content">
                                             <div class="lfc-title"><a href="{{route_i18n('blog',$mostViewedItems[0]['slug'])}}">{{$mostViewedItems[0]['title']}}</a>
                                             </div>
-                                            <div class="lfc-date">{{$mostViewedItems[0]['date']}}</div>
+                                            <span class="lfc-date">{{$mostViewedItems[0]['date']}}</span>
                                         </div>
                                         <figure>
                                             <img src="{{asset($mostViewedItems[0]['img'])}}"

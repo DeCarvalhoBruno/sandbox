@@ -13,7 +13,7 @@ trait HasAnEntity
      */
     public function getEntity()
     {
-        return $this->entityID;
+        return static::$entityID;
     }
 
 }

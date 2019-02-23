@@ -73,8 +73,12 @@ mix.webpackConfig({
     alias: {
       'front_path': path.resolve(path.join(__dirname, './resources/assets/frontend/js')),
       'back_path': path.resolve(path.join(__dirname, './resources/assets/backend/js')),
-      'jquery': 'jquery/dist/jquery.min.js'
-    }
+      'jquery': 'jquery/src/jquery'
+    },
+    modules: [
+      'node_modules',
+      path.resolve(__dirname, 'jquery-lazy')
+    ]
   },
   output: {
     chunkFilename: 'js/[name].[chunkhash].js',

@@ -51,7 +51,6 @@ class ImageSeeder extends Seeder
                 \DB::commit();
             }
         }
-
     }
 
     private function saveDb($uuid, $fileExtension, $entityTypeID, $formats)

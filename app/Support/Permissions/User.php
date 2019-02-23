@@ -4,6 +4,7 @@ use App\Models\Entity;
 use App\Models\PermissionMask;
 use App\Models\PermissionRecord;
 use App\Models\PermissionStore;
+use Illuminate\Support\Arr;
 
 class User extends Permission
 {
@@ -130,8 +131,9 @@ class User extends Permission
                 $permissionsToInsert[] = $tmp;
             }
         }
+
         $this->computed = new PermissionStoreData(PermissionStoreData::COMPUTED,
-            array_flatten($permissionsToInsert, 1));
+            Arr::flatten($permissionsToInsert, 1));
     }
 
 }

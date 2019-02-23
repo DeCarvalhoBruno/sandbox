@@ -9,9 +9,10 @@
       display: block;
       //left: 50%;
       width: 100%;
-      //transform: translate(0%, -10%);
+      transform: translate(0%, -10%);
       overflow: hidden;
-      filter: blur(0.6rem);
+      filter: blur(0.2rem);
+      zoom: 50%;
     }
   }
 
@@ -26,7 +27,7 @@
     .post-title-label {
       position: absolute;
       text-align: center;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 0, 0, 0.4);
       width: 100%;
       height: 100%;
       vertical-align: middle;
@@ -38,13 +39,48 @@
         position: relative;
         top: 12rem;
         height: 7rem;
+        @include media-breakpoint-down(md) {
+          top: 10rem;
+        }
+        @include media-breakpoint-down(sm) {
+          top: 3rem;
+        }
 
+        i {
+          padding: 0 0.5rem
+        }
+
+        .page-views-label {
+          margin-left: 2rem;
+        }
+
+        .date-label {
+          margin-right: 2rem;
+        }
       }
     }
 
     h3 {
       font-family: $font-family-title;
       font-weight: 900;
+    }
+  }
+
+  .post-content-wrapper {
+    margin-top: 1rem;
+    border: none;
+
+    h3 {
+      padding-top: 1.5rem;
+      line-height: 2.5rem;
+      font-family: $font-family-title;
+      font-weight: 700;
+    }
+
+    .post-content {
+      font-size: 1.2rem;
+      line-height: 1.9rem;
+      padding: 2rem 1.5rem;
     }
   }
 }

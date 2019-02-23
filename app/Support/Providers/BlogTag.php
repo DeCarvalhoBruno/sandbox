@@ -35,7 +35,7 @@ class BlogTag extends Model implements BlogTagInterface
         foreach ($names as $name) {
             $newTags[] = [
                 'blog_tag_name' => $name,
-                'blog_tag_slug' => str_slug($name, '-', app()->getLocale()),
+                'blog_tag_slug' => slugify($name, '-', app()->getLocale()),
                 'blog_label_type_id' => $firstLabelId++
             ];
         }

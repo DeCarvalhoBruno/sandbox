@@ -68,10 +68,11 @@
         right: 0.5rem;
 
         .lfc-title {
-          background-color: rgba(75, 15, 9, 0.4);
+          background-color: rgba(48, 10, 6, 0.4);
           border-radius: 10px;
           font-weight: bold;
           padding: 0.2rem;
+          margin-bottom:0.3rem;
 
           a {
             color:#fff;
@@ -83,7 +84,10 @@
         }
 
         .lfc-date {
+          border-radius:3px;
+          padding:0.2rem;
           font-size: 0.85rem;
+          background-color: rgba(48, 10, 6, 0.4);
         }
       }
     }
@@ -111,7 +115,7 @@
     }
 
     .lfc-date {
-      font-size: 0.85rem;
+      font-size: 0.80rem;
     }
   }
 
@@ -123,6 +127,10 @@
 
     figure {
       border-radius: 3px;
+      max-height:5rem;
+      @include media-breakpoint-down(md) {
+        max-height:unset;
+      }
 
       img {
         width: 8rem;

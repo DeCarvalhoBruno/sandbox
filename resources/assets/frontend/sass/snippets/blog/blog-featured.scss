@@ -29,7 +29,7 @@
 
   .featured-content {
     .fc-title, .fc-date {
-      background-color: rgba(75, 15, 9, 0.4);
+      background-color: rgba(48, 10, 6, 0.4);
       border-radius: 10px;
     }
 
@@ -95,6 +95,10 @@
               overflow: hidden;
               @include media-breakpoint-down(md) {
                 width: $blog-featured-max-width;
+              }
+
+              &.loading{
+                background-color: black;
               }
             }
           }

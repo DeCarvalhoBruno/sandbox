@@ -11,28 +11,28 @@
         "intervention/image": "^2.4",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "~1.0",
-        "laravolt/avatar": "^2.0",
+        "laravolt/avatar": "^2.2",
         "mailgun/mailgun-php": "^2.8.1",
         "mews/purifier": "^2.1",
         "php-http/guzzle6-adapter": "^1.1",
         "php-http/message": "^1.7.2",
-        "ramsey/uuid": "^3.7",
+        "ramsey/uuid": "^3.8",
         "suin/php-rss-writer": "^1.6",
         "tymon/jwt-auth": "^1.0.0-rc.3"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.1",
-        "barryvdh/laravel-ide-helper": "^2.4",
-        "filp/whoops": "~2.0",
-        "fzaninotto/faker": "~1.4",
+        "barryvdh/laravel-debugbar": "^3.2",
+        "barryvdh/laravel-ide-helper": "^2.5",
+        "filp/whoops": "~2.3",
+        "fzaninotto/faker": "~1.8",
         "laravel/dusk": "^4.0",
         "league/csv": "^9.1",
-        "mockery/mockery": "~1.0",
+        "mockery/mockery": "~1.2",
         "nunomaduro/collision": "~1.1",
         "php-ds/php-ds": "^1.2",
-        "phpunit/phpunit": "~7.0",
+        "phpunit/phpunit": "~7.5",
         "rap2hpoutre/laravel-log-viewer": "^1.0",
-        "symfony/thanks": "^1.0"
+        "symfony/thanks": "^1.1"
     },
     "autoload": {
         "classmap": [
@@ -54,7 +54,8 @@
     "extra": {
         "laravel": {
             "dont-discover": [
-                "barryvdh/laravel-debugbar"
+                "barryvdh/laravel-debugbar",
+                "cyrildewit/eloquent-viewable"
             ]
         }
     },

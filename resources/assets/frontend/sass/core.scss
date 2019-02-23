@@ -8,8 +8,8 @@ body {
 
 @include media-breakpoint-down(sm) {
   .container{
-    margin:0 0.5rem;
-    max-width: 100%;
+    margin:0 auto;
+    max-width: 95%;
   }
 }
 

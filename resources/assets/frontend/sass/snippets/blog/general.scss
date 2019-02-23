@@ -81,6 +81,11 @@ figure {
 
   figure {
     border-radius: 3px;
+    max-height:5rem;
+    @include media-breakpoint-down(md) {
+      max-height:unset;
+    }
+
 
     img {
       width: 8rem;
@@ -94,6 +99,7 @@ figure {
 
   .mvp-list-item {
     overflow: hidden;
+    margin-bottom:0.5rem;
 
     .mli-title {
     overflow: hidden;

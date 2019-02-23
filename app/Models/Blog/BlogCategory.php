@@ -34,7 +34,7 @@ class BlogCategory extends Model
     private static function checkSlug($model)
     {
         $col = 'blog_category_slug';
-        $model->{$col} = str_slug(
+        $model->{$col} = slugify(
             substr($model->blog_category_name, 0, 75),
             '-',
             app()->getLocale()
