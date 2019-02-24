@@ -35,6 +35,26 @@ class MediaEntity extends Model
     }
 
     /**
+     * @param int $entityId
+     * @param int $mediaId
+     * @param int $mediaImgFormatId
+     * @return string
+     */
+    public function asset(int $entityId, int $mediaId, int $mediaImgFormatId): string
+    {
+        return media_entity_path(
+            $entityId,
+            $mediaId,
+            sprintf(
+                '%s_%s.%s',
+                $this->getAttribute('uuid'),
+                MediaImgFormat::getFormatAcronyms($mediaImgFormatId),
+                $this->getAttribute('ext')
+            )
+        );
+    }
+
+    /**
      * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int|array $entityTypeId

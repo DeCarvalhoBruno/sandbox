@@ -10,4 +10,22 @@ class Language extends Model
     public $primaryKey = 'product_id';
     public $timestamps = false;
 
+    /**
+     * @return int
+     */
+    public static function getAppLanguageId(): int
+    {
+        switch (app()->getLocale()) {
+            case "en":
+                return self::DB_LANGUAGE_ENGLISH_ID;
+                break;
+            case "fr":
+                return self::DB_LANGUAGE_FRENCH_ID;
+                break;
+            default:
+                return self::DB_LANGUAGE_ENGLISH_ID;
+                break;
+        }
+    }
+
 }

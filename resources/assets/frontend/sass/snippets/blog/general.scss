@@ -1,23 +1,28 @@
 $blog-featured-height: 33.75rem;
 $blog-featured-max-width: 46.9rem;
 
-h5 {
-  width: 95%;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-  padding: 0.75rem 0;
-  margin-bottom: 1.5rem;
-
-  span {
-    border-bottom: 2px solid $primary;
-    padding-bottom: 0.68rem;
-  }
-}
-
 figure {
   padding: 0;
   margin: 0;
   text-align: center;
   overflow: hidden;
+}
+
+h5.bordered {
+  width: 95%;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  padding: 0.75rem 0;
+  margin-bottom: 1.5rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  span {
+      border-bottom: 3px solid $primary;
+    padding-bottom:0.6rem;
+      a {
+        text-decoration: none;
+      }
+  }
 }
 
 .social-icon {
@@ -35,13 +40,13 @@ figure {
         line-height: 3rem;
         text-align: center;
         transition: 350ms;
-        font-size:1.5rem;
+        font-size: 1.5rem;
         @include media-breakpoint-down(lg) {
           width: 5rem;
           height: 5rem;
           line-height: 5rem;
           font-size: 2rem;
-          margin-top:0.4rem;
+          margin-top: 0.4rem;
         }
 
         &.fa-rss {
@@ -81,9 +86,9 @@ figure {
 
   figure {
     border-radius: 3px;
-    max-height:5rem;
+    max-height: 5rem;
     @include media-breakpoint-down(md) {
-      max-height:unset;
+      max-height: unset;
     }
 
 
@@ -99,10 +104,10 @@ figure {
 
   .mvp-list-item {
     overflow: hidden;
-    margin-bottom:0.5rem;
+    margin-bottom: 0.5rem;
 
     .mli-title {
-    overflow: hidden;
+      overflow: hidden;
       margin-left: 0.3rem;
       font-weight: bold;
       font-size: 0.9rem;

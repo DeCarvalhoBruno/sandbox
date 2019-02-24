@@ -1,13 +1,6 @@
 #blog-featured {
   min-height: $blog-featured-height + 3rem;
 
-  figure {
-    padding: 0;
-    margin: 0;
-    text-align: center;
-    overflow: hidden;
-  }
-
   & > .row {
     padding: 2rem 0 0 0;
     min-height: $blog-featured-height;
@@ -97,9 +90,6 @@
                 width: $blog-featured-max-width;
               }
 
-              &.loading{
-                background-color: black;
-              }
             }
           }
         }
@@ -118,7 +108,7 @@
 
     .fc-title {
       font-size: 1.5rem;
-      letter-spacing: normal;
+      //letter-spacing: normal;
       letter-spacing: -0.1rem;
     }
 
@@ -144,13 +134,14 @@
     }
 
     .col-lg-6 {
-      max-height: $blog-featured-height / 2;
+      height: $blog-featured-height / 2;
       text-align: center;
       overflow: hidden;
       padding: 0;
       margin: 0;
       @include media-breakpoint-down(md) {
-        max-height: $blog-featured-height;
+        height:$blog-featured-height;
+        //max-height: ;
       }
 
       .fc-title {
@@ -176,7 +167,7 @@
         transform: translate(-50%, 0);
         max-height: $blog-featured-height / 2;
         @include media-breakpoint-down(md) {
-          max-height: unset;
+          max-height: $blog-featured-height;
           width: $blog-featured-max-width;
         }
       }

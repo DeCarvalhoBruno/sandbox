@@ -93,6 +93,15 @@ $postList = [
             ->where('blog_post_slug', '=', $slug);
     }
 
+    public function buildOneByCat($slug,$attributes = ['*']){
+        return $this->createModel()->newQuery()
+            ->select($attributes)
+            ->entityType()
+            ->status()
+            ->person()
+            ->category($slug);
+    }
+
     /**
      * @param array $data
      * @param \Illuminate\Database\Eloquent\Builder

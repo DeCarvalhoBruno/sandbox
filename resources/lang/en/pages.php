@@ -24,7 +24,10 @@
         'email_body' => 'Message body',
     ],
     'blog' => [
-        'page_view_count'=>'Page view count',
+        'most_viewed' => 'Most viewed',
+        'most_viewed_in' => 'Most viewed in :category',
+        'written_by' => ':date by :author',
+        'page_view_count' => 'Page view count',
         'category' => [
             'entertainment' => 'Entertainment',
             'general' => 'General',

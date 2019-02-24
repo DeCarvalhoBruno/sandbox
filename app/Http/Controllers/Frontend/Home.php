@@ -6,6 +6,7 @@ use App\Models\Media\MediaImgFormat;
 use App\Contracts\Models\Blog as BlogProvider;
 use App\Contracts\Models\Media as MediaProvider;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class Home extends Controller
 {
@@ -34,7 +35,7 @@ class Home extends Controller
         ];
         foreach ($dbResult as $post) {
             $post->setAttribute('date', new Carbon($post->getAttribute('time')));
-            $post->setAttribute('title', str_limit($post->getAttribute('title'),100));
+            $post->setAttribute('title', Str::limit($post->getAttribute('title'),100));
             if (isset($images[$post->type])) {
                 $post->setAttribute(
                     'img',

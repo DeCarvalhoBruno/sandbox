@@ -4,6 +4,7 @@ use App\Contracts\Enumerable as EnumerableContract;
 use App\Contracts\HasAnEntity;
 use App\Contracts\HasPermissions as HasPermissionsContract;
 use App\Models\Entity;
+use App\Models\Language;
 use App\Models\Media\MediaEntity;
 use App\Models\Person;
 use App\Traits\Enumerable;
@@ -149,22 +150,28 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     /**
      * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param string $categorySlug
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    public function scopeCategories(Builder $builder)
+    public function scopeCategories(Builder $builder, $categorySlug = null): Builder
     {
-        return $builder->join('blog_categories', 'blog_categories.blog_label_type_id', '=',
-            'blog_label_types.blog_label_type_id');
+        return $builder->join('blog_categories', function ($q) use ($categorySlug) {
+            $q->on('blog_categories.blog_label_type_id', '=', 'blog_label_types.blog_label_type_id');
+            if (!is_null($categorySlug)) {
+                $q->where('blog_category_slug', '=', $categorySlug);
+            }
+        });
     }
 
     /**
      * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param string $categorySlug
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    public function scopeCategory(Builder $builder)
+    public function scopeCategory(Builder $builder, $categorySlug = null)
     {
-        return $builder->labelRecords()->labelTypes()->categories();
+        return $builder->labelRecords()->labelTypes()->categories($categorySlug);
 
     }
 
@@ -187,6 +194,11 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     {
         return $builder->join('stat_page_views', 'entity_types.entity_type_id', '=',
             'stat_page_views.entity_type_id');
+    }
+
+    public function scopeLanguage($builder)
+    {
+        return $builder->where('language_id','=',Language::getAppLanguageId());
     }
 
 

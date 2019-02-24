@@ -23,10 +23,10 @@
                                         <span class="fc-date">{{$posts['featured'][$i]['date']}}</span>
                                     </div>
                                 </div>
-                                <figure class="loading">
-                                    <img src="{{asset($posts['featured'][$i]['img'])}}"
-                                         class="d-block" alt="{{$posts['featured'][$i]['title']}}">
-                                </figure>
+                                @include('partials.img',[
+                                    'media'=>$posts['featured'][$i]['img'],
+                                    'alt'=>$posts['featured'][$i]['title']
+                                ])
                             </div>
                         @endfor
                     </div>
@@ -53,10 +53,10 @@
                                     </h2>
                                 </div>
                             </div>
-                            <figure>
-                                <img src="{{asset($posts['featured'][3]['img'])}}"
-                                     alt="{{asset($posts['featured'][3]['title'])}}">
-                            </figure>
+                            @include('partials.img',[
+                                'media'=>$posts['featured'][3]['img'],
+                                'alt'=>$posts['featured'][3]['title']
+                            ])
                         </div>
 
                         <div class="col-lg-6 col-md-12 featured-content featured-content-bottom">
@@ -69,12 +69,10 @@
                                     </h2>
                                 </div>
                             </div>
-                            <figure>
-                                <figure>
-                                    <img src="{{asset($posts['featured'][4]['img'])}}"
-                                         alt="{{asset($posts['featured'][4]['title'])}}">
-                                </figure>
-                            </figure>
+                            @include('partials.img',[
+                                'media'=>$posts['featured'][4]['img'],
+                                'alt'=>$posts['featured'][4]['title']
+                            ])
                         </div>
                         <div class="col-lg-6 col-md-12 featured-content">
                             <div class="bottom-featured">
@@ -86,11 +84,10 @@
                                     </h2>
                                 </div>
                             </div>
-                            <figure>
-                                <figure>
-                                    <img src="{{asset($posts['featured'][5]['img'])}}" alt="{{asset($posts['featured'][5]['title'])}}">
-                                </figure>
-                            </figure>
+                            @include('partials.img',[
+                                'media'=>$posts['featured'][5]['img'],
+                                'alt'=>$posts['featured'][5]['title']
+                            ])
                         </div>
                     </div>
                 </div>
@@ -104,28 +101,31 @@
                     <ul class="row">
                         @foreach($posts['most_viewed_cat'] as $keyMostViewed =>$mostViewedItems)
                             <li class="col-lg col-lg-6 col-md-12 spotlight-category">
-                                <h5><span>{{trans(sprintf('pages.blog.category.%s',$keyMostViewed))}}</span></h5>
+                                <h5 class="bordered">
+                                    <span><a href="{{route_i18n('blog.category',$keyMostViewed)}}">{{trans(sprintf('pages.blog.category.%s',$keyMostViewed))}}</a></span>
+                                </h5>
                                 <ul class="container">
                                     <li class="row headline-post">
                                         <div class="headline-content">
-                                            <div class="lfc-title"><a href="{{route_i18n('blog',$mostViewedItems[0]['slug'])}}">{{$mostViewedItems[0]['title']}}</a>
+                                            <div class="lfc-title"><a
+                                                        href="{{route_i18n('blog',$mostViewedItems[0]['slug'])}}">{{$mostViewedItems[0]['title']}}</a>
                                             </div>
                                             <span class="lfc-date">{{$mostViewedItems[0]['date']}}</span>
                                         </div>
-                                        <figure>
-                                            <img src="{{asset($mostViewedItems[0]['img'])}}"
-                                                 alt="{{asset($mostViewedItems[0]['title'])}}">
-                                        </figure>
+                                        @include('partials.img',[
+                                            'media'=>$mostViewedItems[0]['img'],
+                                            'alt'=>$mostViewedItems[0]['title']
+                                        ])
                                     </li>
                                     @for($i=1;$i<=4;$i++)
                                         <li class="row list-post">
                                             <div class="container">
                                                 <div class="row d-flex align-items-center">
                                                     <div class="col-lg-3 col-md-6 list-img-container">
-                                                        <figure>
-                                                            <img src="{{asset($mostViewedItems[$i]['img'])}}"
-                                                                 alt="{{asset($mostViewedItems[$i]['title'])}}">
-                                                        </figure>
+                                                        @include('partials.img',[
+                                                            'media'=>$mostViewedItems[$i]['img'],
+                                                            'alt'=>$mostViewedItems[$i]['title']
+                                                        ])
                                                     </div>
                                                     <div class="col-lg-9 col-md-6 list-txt-container">
                                                         <div class="row lfc-title"><a
@@ -147,7 +147,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col">
-                            <h5><span>{{trans('titles.follow_us')}}</span></h5>
+                            <h5 class="bordered"><span>{{trans('titles.follow_us')}}</span></h5>
                             <div class="container p-0 text-center">
                                 <div class="row">
                                     <ul class="col social-icon">
@@ -164,15 +164,15 @@
                     </div>
                     <div id="blog-mvp-container" class="row">
                         <div class="col">
-                            <h5><span>{{trans('titles.most_viewed')}}</span></h5>
+                            <h5 class="bordered"><span>{{trans('pages.blog.most_viewed')}}</span></h5>
                             <div class="container mvp-list">
                                 @foreach($posts['most_viewed'] as $mostViewedItems)
                                     <div class="row mvp-list-item d-flex align-items-md-center align-items-lg-start">
                                         <div class="col-lg-3 col-md-6 list-img-container">
-                                            <figure>
-                                                <img src="{{asset($mostViewedItems['img'])}}"
-                                                     alt="{{asset($mostViewedItems['title'])}}">
-                                            </figure>
+                                            @include('partials.img',[
+                                                'media'=>$mostViewedItems['img'],
+                                                'alt'=>$mostViewedItems['title']
+                                            ])
                                         </div>
                                         <div class="col-lg-9 col-md-6 list-txt-container">
                                             <div class="row mli-date">{{$mostViewedItems['date']}}</div>

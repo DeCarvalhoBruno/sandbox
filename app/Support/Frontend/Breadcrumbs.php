@@ -6,45 +6,29 @@ class Breadcrumbs
 
     public static function render($chain)
     {
-        return (new static())->make($chain);
+        return (new self())->make($chain);
     }
 
     private function make($chain)
     {
-        $this->breadcrumbs = <<<EOD
-<ul class="breadcrumbs">
-EOD;
-        $this->addNode(route_i18n('home'), chr(10) . str_repeat(' ',8).'<i class="fa fa-home"></i>');
-        $lastItem = array_pop($chain);
+        $this->breadcrumbs = '<ul class="breadcrumbs">';
         foreach ($chain as $item) {
-            $this->addNode($item['url'], $item['label']);
+            $this->addNode((object)$item);
         }
-        $this->lastNode($lastItem['label']);
-        $this->breadcrumbs .= chr(10) . "</ul>";
-
+        $this->breadcrumbs .= '</ul>';
         return $this->breadcrumbs;
     }
 
-    private function addNode($url, $nodeLabel)
+    private function addNode(\stdClass $node)
     {
-        $this->breadcrumbs .= <<<EOD
-  
-  <li>
-    <span class="breadcrumb-item">
-      <a class="breadcrumb-link" href="$url">$nodeLabel</a>
-    </span>
-  </li>
-EOD;
-    }
-
-    private function lastNode($nodeLabel)
-    {
-        $this->breadcrumbs .= <<<EOD
-  
-  <li>
-    <span class="breadcrumb-item">$nodeLabel</span>
-  </li>
-EOD;
+        $this->breadcrumbs .= '<li><span class="breadcrumb-item">';
+        if (isset($node->url)) {
+            $this->breadcrumbs .= sprintf('
+      <a class="breadcrumb-link" href="%s">%s</a>', $node->url, $node->label);
+        } else {
+            $this->breadcrumbs .= sprintf('<span>%s</span>', $node->label);
+        }
+        $this->breadcrumbs .= '</span></li>';
     }
 
 }
