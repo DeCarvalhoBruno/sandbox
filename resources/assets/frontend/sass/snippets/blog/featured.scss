@@ -1,4 +1,5 @@
 #blog-featured {
+  margin-top:2.5rem;
   min-height: $blog-featured-height + 3rem;
 
   & > .row {
@@ -89,7 +90,6 @@
               @include media-breakpoint-down(md) {
                 width: $blog-featured-max-width;
               }
-
             }
           }
         }

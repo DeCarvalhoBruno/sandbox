@@ -14,5 +14,6 @@ return [
     'contact' => 'contact',
     'blog_slug' => 'blog/{slug}',
     'blog_cat' => 'categories/{slug}',
-    'blog_tag' => 'tag/{slug}'
+    'blog_tag' => 'tag/{slug}',
+    'blog_author' => 'author/{slug}'
 ];

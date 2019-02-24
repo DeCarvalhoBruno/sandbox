@@ -1,4 +1,7 @@
 #blog-spotlight {
+  margin: 2.5rem 0 8rem 0;
+  padding: 0;
+
   .col-lg {
     padding: 0;
   }
@@ -25,8 +28,8 @@
     }
 
     .spotlight-category {
-      &:nth-child(2n+1){
-        padding-right:0.5rem;
+      &:nth-child(2n+1) {
+        padding-right: 0.5rem;
       }
     }
 
@@ -72,11 +75,12 @@
           border-radius: 10px;
           font-weight: bold;
           padding: 0.2rem;
-          margin-bottom:0.3rem;
+          margin-bottom: 0.3rem;
 
           a {
-            color:#fff;
+            color: #fff;
           }
+
           @include media-breakpoint-down(md) {
             font-size: 1.5rem;
             width: 80%;
@@ -84,8 +88,8 @@
         }
 
         .lfc-date {
-          border-radius:3px;
-          padding:0.2rem;
+          border-radius: 3px;
+          padding: 0.2rem;
           font-size: 0.85rem;
           background-color: rgba(48, 10, 6, 0.4);
         }
@@ -127,9 +131,9 @@
 
     figure {
       border-radius: 3px;
-      max-height:5rem;
+      max-height: 5rem;
       @include media-breakpoint-down(md) {
-        max-height:unset;
+        max-height: unset;
       }
 
       img {

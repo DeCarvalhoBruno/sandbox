@@ -2,6 +2,8 @@
 
 namespace App\Traits\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+
 trait DoesSqlStuff
 {
     /**
@@ -48,7 +50,7 @@ trait DoesSqlStuff
      * @param string $modelName
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function joinReverse($builder, $modelName)
+    public function joinReverse(Builder $builder, $modelName): Builder
     {
         /** @var \Illuminate\Database\Eloquent\Model $modelToJoin */
         $modelToJoin = new $modelName;
@@ -58,6 +60,32 @@ trait DoesSqlStuff
             '=',
             sprintf('%s.%s', $this->getTable(), $modelToJoin->getKeyName())
         );
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param string $modelName
+     * @param string $slug
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function joinReverseWithSlug(Builder $builder, $modelName, $slug = null)
+    {
+        /** @var \Illuminate\Database\Eloquent\Model $modelToJoin */
+        $modelToJoin = new $modelName;
+
+        return $builder->join(
+            $modelToJoin->getTable(),
+            function ($q) use ($slug, $modelName, $modelToJoin) {
+                $q->on(
+                    $modelToJoin->getQualifiedKeyName(),
+                    '=',
+                    sprintf('%s.%s', $this->getTable(), $modelToJoin->getKeyName())
+                );
+                if (!is_null($modelToJoin)) {
+                    $q->where($modelName::$slugColumn,
+                        '=', $slug);
+                }
+            });
     }
 
     /**

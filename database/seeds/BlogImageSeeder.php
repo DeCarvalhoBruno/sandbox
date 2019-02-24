@@ -47,7 +47,7 @@ class ImageSeeder extends Seeder
                     $uuid
                 );
                 $this->saveDb($uuid, $extension, $posts[$image]->entity,
-                    [MediaImgFormat::FEATURED, MediaImgFormat::HD]);
+                    [MediaImgFormat::FEATURED]);
                 \DB::commit();
             }
         }
@@ -122,26 +122,26 @@ class ImageSeeder extends Seeder
             )
         );
 
-        ImageProcessor::saveImg(
-            ImageProcessor::makeCroppedImage(
-                $path,
-                \App\Models\Media\MediaImgFormat::HD
-            ),
-            media_entity_root_path(
-                \App\Models\Entity::BLOG_POSTS,
-                \App\Models\Media\Media::IMAGE,
-                ImageProcessor::makeFormatFilename($uuid, $fileExtension, \App\Models\Media\MediaImgFormat::HD)
-            )
-        );
+//        ImageProcessor::saveImg(
+//            ImageProcessor::makeCroppedImage(
+//                $path,
+//                \App\Models\Media\MediaImgFormat::HD
+//            ),
+//            media_entity_root_path(
+//                \App\Models\Entity::BLOG_POSTS,
+//                \App\Models\Media\Media::IMAGE,
+//                ImageProcessor::makeFormatFilename($uuid, $fileExtension, \App\Models\Media\MediaImgFormat::HD)
+//            )
+//        );
 
-        ImageProcessor::copyImg(
-            $path,
-            media_entity_root_path(
-                \App\Models\Entity::BLOG_POSTS,
-                \App\Models\Media\Media::IMAGE,
-                ImageProcessor::makeFormatFilename($uuid, $fileExtension, \App\Models\Media\MediaImgFormat::ORIGINAL)
-            )
-        );
+//        ImageProcessor::copyImg(
+//            $path,
+//            media_entity_root_path(
+//                \App\Models\Entity::BLOG_POSTS,
+//                \App\Models\Media\Media::IMAGE,
+//                ImageProcessor::makeFormatFilename($uuid, $fileExtension, \App\Models\Media\MediaImgFormat::ORIGINAL)
+//            )
+//        );
 
     }
 

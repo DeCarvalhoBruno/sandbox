@@ -35,7 +35,7 @@
                         @foreach($posts as $post)
                             <div class="row blog-cat-list-item">
                                 <div class="container p-0">
-                                    <div class="row">
+                                    <div class="row d-flex align-items-center">
                                         <div class="col-lg-8 col-md-12 p-0">
                                             <div class="cat-title">
                                                 <h5>

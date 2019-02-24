@@ -10,7 +10,7 @@ class BlogTag extends Model
 
     protected $table = 'blog_tags';
     protected $primaryKey = 'blog_tag_id';
-    protected $fillable = ['blog_tag_name', 'blog_tag_slug'];
+    protected $fillable = ['blog_tag_name', 'blog_tag_slug','blog_label_type_id'];
     public $timestamps = false;
 
     /**

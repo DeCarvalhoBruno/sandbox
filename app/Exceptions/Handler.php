@@ -93,17 +93,18 @@ class Handler extends ExceptionHandler
         } elseif ($e instanceof AccessDeniedHttpException) {
             return response_json(['msg' => trans('error.http.403')], 403);
         }
-//        elseif ($e instanceof HttpException) {
-////            if ($request->expectsJson()) {
-////                return response_json(['msg' => trans('error.http.419')], 419);
-////            }
-//            return response()->view(sprintf(
-//                'frontend.errors.%s',
-//                $e->getStatusCode()), [
-//                'errors' => new ViewErrorBag,
-//                'exception' => $e->getMessage(),
-//            ]);
-//        }
+        elseif ($e instanceof HttpException) {
+//            if ($request->expectsJson()) {
+//                return response_json(['msg' => trans('error.http.419')], 419);
+//            }
+            if(strpos($request->route()->getName(),'admin')===false)
+            return response()->view(sprintf(
+                'frontend.errors.%s',
+                $e->getStatusCode()), [
+                'errors' => new ViewErrorBag,
+                'exception' => $e->getMessage(),
+            ]);
+        }
 
         return $request->expectsJson()
             ? $this->prepareJsonResponse($request, $e)

@@ -21,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
         Contract\Avatar::class,
         Contract\Text::class,
         Contract\BlogCategory::class,
+        Contract\BlogSource::class,
         Contract\BlogTag::class,
         Contract\Blog::class,
         Contract\Email::class,

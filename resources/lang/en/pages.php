@@ -28,6 +28,10 @@
         'most_viewed_in' => 'Most viewed in :category',
         'written_by' => ':date by :author',
         'page_view_count' => 'Page view count',
+        'more_reading' => 'More reading',
+        'source_types' => [
+            'url' => 'Link to resource'
+        ],
         'category' => [
             'entertainment' => 'Entertainment',
             'general' => 'General',

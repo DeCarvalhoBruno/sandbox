@@ -1,20 +1,5 @@
 #blog-post {
-
-  figure {
-    max-height: 20rem;
-    width: 100%;
-
-    img {
-      position: relative;
-      display: block;
-      //left: 50%;
-      width: 100%;
-      transform: translate(0%, -10%);
-      overflow: hidden;
-      filter: blur(0.2rem);
-    }
-  }
-
+  margin-bottom:8rem;
   .post-title {
     margin-top: 1.5rem;
     position: relative;
@@ -22,6 +7,21 @@
     text-align: center;
     border-radius: 10px;
     overflow: hidden;
+
+    figure {
+      max-height: 20rem;
+      width: 100%;
+
+      img {
+        position: relative;
+        display: block;
+        //left: 50%;
+        width: 100%;
+        transform: translate(0%, -10%);
+        overflow: hidden;
+        filter: blur(0.2rem);
+      }
+    }
 
     .post-title-label {
       position: absolute;
@@ -56,6 +56,18 @@
         .date-label {
           margin-right: 2rem;
         }
+
+        .author-label {
+          font-size: 1.2rem;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+
+          a {
+            color: #fff;
+          }
+
+          margin-right: 2rem;
+        }
       }
     }
 
@@ -79,7 +91,95 @@
     .post-content {
       font-size: 1.2rem;
       line-height: 1.9rem;
-      padding: 2rem 1.5rem;
+      padding: 2rem 2rem 3rem;
+      margin-bottom: 1rem;
+      position: relative;
+
+      &:after {
+        position: absolute;
+        bottom: 1rem;
+        left: 10%;
+        content: '';
+        width: 80%;
+        margin: 0 auto;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+
+  #post-source-wrapper {
+    .post-sources {
+      margin-bottom: 3rem;
+    }
+
+    li.source-label {
+      list-style: none;
+      font-size: 0.8rem;
+    }
+  }
+
+  #post-tag-wrapper {
+    .post-tags {
+      li:first-child {
+        font-family: $font-family-title;
+        margin-right: 2rem;
+      }
+
+      .badge.badge-info {
+        padding: 0.8rem;
+
+        a {
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  #blog-post-other {
+    .post-other-item {
+      font-family: $font-family-title;
+      margin-top: 2rem;
+
+      .card {
+        overflow: hidden;
+        box-shadow: 0 1px 7px rgba(0, 0, 0, .05);
+        border: none;
+
+        .card-body {
+          padding: 0 1.25rem 0.8rem;
+        }
+
+        .label-more-reading {
+          color: #303030;
+          font-weight: 300;
+        }
+
+        .label-title {
+          padding: 0.4rem 0;
+        }
+
+        .label-rest {
+          text-align: center;
+          font-weight: 300;
+          font-size: 0.8rem;
+
+          div {
+            padding: 0.3rem 0;
+          }
+
+          i {
+            margin-right: 0.3rem;
+          }
+        }
+
+        img {
+          position: relative;
+          display: block;
+          width: 100%;
+          transform: translate(0%, -10%);
+        }
+      }
+
     }
   }
 }

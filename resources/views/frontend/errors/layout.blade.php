@@ -9,10 +9,8 @@
                         <div class="row">
                             <div class="col-xl-4 offset-xl-4 fa-container">
                                 <span class="fa-stack-1x">
-                                    <fa icon="circle"
-                                        class="fa fa-stack-1x circle"></fa>
-                                    <fa icon="exclamation"
-                                        class="fa fa-stack-1x fa-inverse exclamation flash"></fa>
+                                    <i class="fa fa-circle fa-stack-1x circle"></i>
+                                    <i class="fa fa-exclamation fa-stack-1x fa-inverse exclamation flash"></i>
                                 </span>
                             </div>
                         </div>

@@ -21,7 +21,7 @@ class CreateBlogPost extends FormRequest
     /**
      * @var array
      */
-    private $tags=[];
+    private $tags = [];
 
     public function rules()
     {
@@ -52,11 +52,15 @@ class CreateBlogPost extends FormRequest
         if (isset($input['categories'])) {
             $this->categories = $input['categories'];
             unset($input['categories']);
+        } else {
+            $this->categories = null;
         }
 
         if (isset($input['tags'])) {
             $this->tags = array_unique($input['tags']);
             unset($input['tags']);
+        } else {
+            $this->tags = null;
         }
 
         if (isset($input['blog_status'])) {
@@ -92,7 +96,7 @@ class CreateBlogPost extends FormRequest
     /**
      * @return mixed
      */
-    public function getCategories(): array
+    public function getCategories(): ?array
     {
         return $this->categories;
     }
@@ -100,14 +104,14 @@ class CreateBlogPost extends FormRequest
     /**
      * @return array
      */
-    public function getTags(): array
+    public function getTags(): ?array
     {
         return $this->tags;
     }
 
     public function setPersonSlug($id)
     {
-        $this->merge(['person_id'=>$id]);
+        $this->merge(['person_id' => $id]);
     }
 
 

@@ -94,7 +94,7 @@
             </div>
         </div>
     </section>
-    <section id="blog-spotlight" class="container p-0 m-0">
+    <section id="blog-spotlight" class="container">
         <div class="row">
             <div class="col-lg col-lg-8 col-md-12 spotlight-container">
                 <div class="container">
@@ -154,7 +154,7 @@
                                         <li><a href="#" target="_blank"><i class="fa fa-rss"></i></a></li>
                                         <li><a href="#" target="_blank"><i class="fa fa-facebook"></i></a></li>
                                         <li><a href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
-                                        <li><a href="#" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+                                        <li><a href="#" target="_blank"><i class="fa fa-instagram"></i></a></li>
                                         <li><a href="#" target="_blank"><i class="fa fa-vimeo-square"></i></a></li>
                                         <li><a href="#" target="_blank"><i class="fa fa-youtube"></i></a></li>
                                     </ul>

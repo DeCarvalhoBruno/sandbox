@@ -98,11 +98,18 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     /**
      * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param string $personSlug
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    public function scopePerson(Builder $builder)
+    public function scopePerson(Builder $builder, $personSlug = null): Builder
     {
-        return $this->joinReverse($builder, Person::class);
+        return $builder->join('people', function ($q) use ($personSlug) {
+            $q->on('blog_posts.person_id', '=', 'people.person_id');
+            if (!is_null($personSlug)) {
+                $q->where('people.person_slug',
+                    '=', $personSlug);
+            }
+        });
     }
 
     /**
@@ -178,6 +185,35 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     /**
      * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param string $tagSlug
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeTag(Builder $builder, $tagSlug = null)
+    {
+        return $builder->labelRecords()->labelTypes()->tags($tagSlug);
+
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param string $tagSlug
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeTags(Builder $builder, $tagSlug = null): Builder
+    {
+        return $builder->join('blog_tags', function ($q) use ($tagSlug) {
+            $q->on('blog_tags.blog_label_type_id', '=', 'blog_label_types.blog_label_type_id');
+            if (!is_null($tagSlug)) {
+                $q->where('blog_tag_slug', '=', $tagSlug);
+            }
+        });
+    }
+
+
+    /**
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     public function scopeImages($builder)
@@ -198,7 +234,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
 
     public function scopeLanguage($builder)
     {
-        return $builder->where('language_id','=',Language::getAppLanguageId());
+        return $builder->where('language_id', '=', Language::getAppLanguageId());
     }
 
 

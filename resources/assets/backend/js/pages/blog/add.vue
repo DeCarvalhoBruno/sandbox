@@ -378,19 +378,19 @@
         if (!this.form.fields.blog_post_title || !this.form.hasDetectedChanges()) {
           return
         }
-        let suffix, msg
+        let verb, msg
         let route = this.$route
         if ((route.name.lastIndexOf('add') > 0)) {
-          this.saveMode = suffix = 'create'
+          this.saveMode = verb = 'create'
           msg = this.$t('pages.blog.add_success')
         } else {
           this.saveMode = 'edit'
-          suffix = `${this.saveMode}/${route.params.slug}`
+          verb = `${this.saveMode}/${route.params.slug}`
           msg = this.$t('pages.blog.save_success')
         }
         this.form.fields.published_at = dayjs(this.form.fields.published_at).format('YYYYMMDDHHmm')
         let formBeforeSave = this.form.getFormData()
-        let {data} = await this.form.post(`/ajax/admin/blog/post/${suffix}`)
+        let {data} = await this.form.post(`/ajax/admin/blog/post/${verb}`)
         this.form = new Form(formBeforeSave, true)
         this.url = data.url
         if (this.saveMode === 'create') {

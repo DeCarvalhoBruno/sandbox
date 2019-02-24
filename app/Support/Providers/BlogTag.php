@@ -88,8 +88,11 @@ class BlogTag extends Model implements BlogTagInterface
      * @param array $updated
      * @param \App\Models\Blog\BlogPost $post
      */
-    public function updatePost(array $updated, $post)
+    public function updatePost(?array $updated, $post)
     {
+        if(is_null($updated)){
+            return;
+        }
         $inStore = $this->getByPost($post->getKey());
         $toBeRemoved = array_diff($inStore, $updated);
         if (!empty($toBeRemoved)) {

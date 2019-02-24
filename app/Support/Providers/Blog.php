@@ -4,6 +4,7 @@ use App\Contracts\Models\Blog as BlogInterface;
 use App\Models\Blog\BlogPost;
 use App\Contracts\Models\BlogCategory as CategoryInterface;
 use App\Contracts\Models\BlogTag as TagInterface;
+use App\Contracts\Models\BlogSource as SourceInterface;
 
 class Blog extends Model implements BlogInterface
 {
@@ -17,17 +18,24 @@ class Blog extends Model implements BlogInterface
      * @var \App\Contracts\Models\BlogTag|\App\Support\Providers\BlogTag
      */
     private $tag;
+    /**
+     * @var \App\Contracts\Models\BlogSource|\App\Support\Providers\BlogSource $source
+     */
+    private $source;
+
 
     /**
      *
      * @param \App\Contracts\Models\BlogCategory|\App\Support\Providers\BlogCategory $c
      * @param \App\Contracts\Models\BlogTag|\App\Support\Providers\BlogTag $t
+     * @param \App\Contracts\Models\BlogSource|\App\Support\Providers\BlogSource $s
      */
-    public function __construct(CategoryInterface $c, TagInterface $t)
+    public function __construct(CategoryInterface $c, TagInterface $t, SourceInterface $s)
     {
         parent::__construct();
         $this->category = $c;
         $this->tag = $t;
+        $this->source = $s;
     }
 
     /**
@@ -46,11 +54,137 @@ class Blog extends Model implements BlogInterface
         return $this->tag;
     }
 
+    /**
+     * @return \App\Contracts\Models\BlogSource|\App\Support\Providers\BlogSource
+     */
+    public function source()
+    {
+        return $this->source;
+    }
+
     public function buildForDisplay()
     {
-$postList = [
-    2,3,4,747,6329,2246,2929,5798,5554,4363,5514,1998,1801,6091,3679,4418,29,294,4873,4822,4524,1761,1751,4007,6910,3171,456,2505,1061,2708,4249,4711,6470,1752,1001,203,103,2402,4261,3180,4012,3965,4009,5737,1206,2538,1220,60,723,2332,524,4124,6613,1757,265,3454,682,3370,1572,1737,1270,5582,4017,4564,5846,2582,273,2987,1661,1833,154,824,3703,2396,3587,3779,4492,5123,326,5752,4039,4879,4866,1799,6909,1185,5980,3593,4889,4651,1787,4197,5251,2832,4646,1354,1532,4594,6655,3858,714,4638,4719,6642,5384,801,1849,5169,1832,5608,6565,2364,1520,6325,3094,6274,4705,740,4647
-];
+        $postList = [
+            2,
+            3,
+            4,
+            747,
+            6329,
+            2246,
+            2929,
+            5798,
+            5554,
+            4363,
+            5514,
+            1998,
+            1801,
+            6091,
+            3679,
+            4418,
+            29,
+            294,
+            4873,
+            4822,
+            4524,
+            1761,
+            1751,
+            4007,
+            6910,
+            3171,
+            456,
+            2505,
+            1061,
+            2708,
+            4249,
+            4711,
+            6470,
+            1752,
+            1001,
+            203,
+            103,
+            2402,
+            4261,
+            3180,
+            4012,
+            3965,
+            4009,
+            5737,
+            1206,
+            2538,
+            1220,
+            60,
+            723,
+            2332,
+            524,
+            4124,
+            6613,
+            1757,
+            265,
+            3454,
+            682,
+            3370,
+            1572,
+            1737,
+            1270,
+            5582,
+            4017,
+            4564,
+            5846,
+            2582,
+            273,
+            2987,
+            1661,
+            1833,
+            154,
+            824,
+            3703,
+            2396,
+            3587,
+            3779,
+            4492,
+            5123,
+            326,
+            5752,
+            4039,
+            4879,
+            4866,
+            1799,
+            6909,
+            1185,
+            5980,
+            3593,
+            4889,
+            4651,
+            1787,
+            4197,
+            5251,
+            2832,
+            4646,
+            1354,
+            1532,
+            4594,
+            6655,
+            3858,
+            714,
+            4638,
+            4719,
+            6642,
+            5384,
+            801,
+            1849,
+            5169,
+            1832,
+            5608,
+            6565,
+            2364,
+            1520,
+            6325,
+            3094,
+            6274,
+            4705,
+            740,
+            4647
+        ];
         return $this->select([
             'blog_post_title as title',
             'published_at as date',
@@ -64,7 +198,7 @@ $postList = [
             ->person()
             ->category()
 //            ->where('language_id','=',1)
-            ->whereIn('blog_posts.blog_post_id',$postList);
+            ->whereIn('blog_posts.blog_post_id', $postList);
 
     }
 
@@ -89,17 +223,14 @@ $postList = [
             ->entityType()
             ->status()
             ->person()
-            ->category()
             ->where('blog_post_slug', '=', $slug);
     }
 
-    public function buildOneByCat($slug,$attributes = ['*']){
+    public function buildOneBasic($attributes = ['*'])
+    {
         return $this->createModel()->newQuery()
             ->select($attributes)
-            ->entityType()
-            ->status()
-            ->person()
-            ->category($slug);
+            ->entityType();
     }
 
     /**
