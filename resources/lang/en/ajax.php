@@ -86,7 +86,8 @@ return [
         'media' => 'Media',
         'crop' => 'Crop',
         'close' => 'Close',
-        'view_all' => 'View All'
+        'view_all' => 'View All',
+        'login_with'=>'Login With'
     ],
     'db' => [
         'users' => 'User|Users',

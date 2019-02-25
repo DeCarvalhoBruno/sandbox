@@ -3,7 +3,8 @@ export default {
   'd56b699830': {
     components: {
       frontend: [
-        'InlineForm'
+        'InlineForm',
+        'LoginOAuth'
       ],
       backend: [
         'SubmitButton'

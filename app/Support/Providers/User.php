@@ -325,7 +325,7 @@ class User extends Model implements UserProvider, UserInterface
 
     }
 
-    public function processViaOAuth($provider, SocialiteUser $socialiteUser)
+    public function processViaOAuth(string $provider, SocialiteUser $socialiteUser):\App\Models\User
     {
         $model = $this->createModel();
         $user = $model->newQuery()
@@ -334,7 +334,6 @@ class User extends Model implements UserProvider, UserInterface
                 'provider_user_id' => $socialiteUser->getId()
             ])
             ->first();
-
         if (!is_null($user)) {
             OAuthProvider::query()
                 ->where('oauth_provider_id', $user->getAttribute('oauth_provider_id'))
@@ -346,46 +345,48 @@ class User extends Model implements UserProvider, UserInterface
             return $user;
         }
 
-        if ($model->newQuery()->select(['email'])
-            ->where('email', $socialiteUser->getEmail())->exists()) {
-            throw new EmailTakenException();
-        }
-
-        $username = substr(slugify($socialiteUser->getNickname()), 0, 15);
-
-        if ($model->newQueryWithoutScopes()->select(['username'])
-            ->where('username', $username)->exists()) {
-            $latestUsername =
-                $model->newQueryWithoutScopes()->select(['username'])
-                    ->whereRaw(sprintf(
-                            'blog_post_slug = "%s" or blog_post_slug LIKE "%s-%%"',
-                            $username,
-                            $username)
-                    )
-                    ->latest($model->getKeyName())
-                    ->value('username');
-            if ($latestUsername) {
-                $pieces = explode('-', $latestUsername);
-
-                $number = intval(end($pieces));
-
-                $suffix = sprintf('-%s', ($number + 1));
-                $username = substr($username, 0, -(strlen($suffix))) . $suffix;
+        $user = $model->newQuery()->select(['email'])
+            ->where('email', $socialiteUser->getEmail());
+        if (!$user->exists()) {
+            $nickname = $socialiteUser->getNickname();
+            if (is_null($nickname)) {
+                $nickname = $socialiteUser->getName();
             }
+            $username = substr(slugify($nickname, '_'), 0, 15);
+
+            if ($model->newQueryWithoutScopes()->select(['username'])
+                ->where('username', $username)->exists()) {
+                $latestUsername =
+                    $model->newQueryWithoutScopes()->select(['username'])
+                        ->whereRaw(sprintf(
+                                'blog_post_slug = "%s" or blog_post_slug LIKE "%s-%%"',
+                                $username,
+                                $username)
+                        )
+                        ->latest($model->getKeyName())
+                        ->value('username');
+                if ($latestUsername) {
+                    $pieces = explode('-', $latestUsername);
+
+                    $number = intval(end($pieces));
+
+                    $suffix = sprintf('-%s', ($number + 1));
+                    $username = substr($username, 0, -(strlen($suffix))) . $suffix;
+                }
+            }
+
+            $user = $this->createModel([
+                'username' => $username,
+                'activated' => true
+            ]);
+            $user->save();
+            $this->person->createModel([
+                    'user_id' => $user->getKey(),
+                    'email' => $socialiteUser->getEmail(),
+                    'full_name' => $socialiteUser->getName()
+                ]
+            )->save();
         }
-
-        $user = $this->createModel([
-            'username' => $username,
-            'activated' => true
-        ]);
-        $user->save();
-        $this->person->createModel([
-                'user_id' => $user->getKey(),
-                'email' => $socialiteUser->getEmail(),
-                'full_name' => $socialiteUser->getName()
-            ]
-        )->save();
-
         OAuthProvider::create([
             'user_id' => $user->getKey(),
             'provider' => $provider,

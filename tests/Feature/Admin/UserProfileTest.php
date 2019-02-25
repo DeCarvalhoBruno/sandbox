@@ -77,7 +77,7 @@ class UserProfileTest extends TestCase
         $response->assertStatus(422);
     }
 
-    public function test_set_new_password()
+    public function set_new_password()
     {
         $this->withExceptionHandling();
         $t = $this->createUser();
@@ -99,9 +99,8 @@ class UserProfileTest extends TestCase
     public function update_profile()
     {
         $this->withExceptionHandling();
-        $t = $this->createUser();
-        $u = $this->signIn($t);
-        $response = $this->patchJson(
+        $u = $this->createUser();
+        $response = $this->signIn($u)->patchJson(
             '/ajax/admin/settings/profile',
             [
                 'first_name' => 'Jane',

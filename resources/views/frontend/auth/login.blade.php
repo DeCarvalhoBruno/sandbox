@@ -79,8 +79,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <button type="button" class="btn btn-light">Login with Google</button>
-
+                                            <login-o-auth :provider="'google'"></login-o-auth>
                                         </div>
                                         <div class="form-group row mt-5">
                                             <div class="col-xl-8 offset-xl-2 col-lg-6 offset-lg-3">

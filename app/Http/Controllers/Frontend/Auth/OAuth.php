@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers\Frontend\Auth;
 
-use App\Http\Controllers\Frontend\Controller;
-use App\Exceptions\EmailTakenException;
-use App\Models\OAuthProvider;
-use Illuminate\Http\Request;
-use Laravel\Socialite\Facades\Socialite;
-use Illuminate\Support\Facades\Auth;
 use App\Contracts\Models\User as UserProvider;
-use Laravel\Socialite\Two\User;
+use App\Http\Controllers\Frontend\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 
 class OAuth extends Controller
 {
@@ -34,7 +31,7 @@ class OAuth extends Controller
     public function redirectToProvider($provider)
     {
         return redirect(Socialite::driver($provider)
-            ->stateless()->redirect()->getTargetUrl());
+            ->redirect()->getTargetUrl());
     }
 
     /**
@@ -44,22 +41,19 @@ class OAuth extends Controller
      * @param \Illuminate\Http\Request $request
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
      * @return \Illuminate\Http\Response
-     * @throws \App\Exceptions\EmailTakenException
      */
     public function handleProviderCallback($provider, Request $request, UserProvider $userRepo)
     {
-        $user = Socialite::driver($provider)->stateless()->user();
-        $user = $userRepo->processViaOAuth($provider, $user);
+        $socialiteUser = Socialite::driver($provider)->user();
+
+        $user = $userRepo->processViaOAuth($provider, $socialiteUser);
 
         $request->session()->regenerate();
 
-        $this->guard()->login(\Auth::guard('jwt')->user());
-
-        $this->clearLoginAttempts($request);
+        \Auth::guard('jwt')->login($user);
+        $this->guard()->login($user);
 
         return redirect()->intended(route_i18n('home'));
-
-        return view('oauth/callback');
     }
 
 }

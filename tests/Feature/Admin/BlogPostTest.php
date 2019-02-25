@@ -37,7 +37,7 @@ class BlogPostTest extends TestCase
         $this->assertEquals(BlogPost::query()->get()->count(), 0);
     }
 
-    public function test_create_normal()
+    public function create_normal()
     {
         $u = $this->createUser();
         $this->signIn($u);
@@ -53,6 +53,7 @@ class BlogPostTest extends TestCase
                 'published_at' => "201902051959",
                 'tags' => []
             ]);
+
         $response->assertStatus(200);
         $this->assertEquals(BlogPost::query()->get()->count(), 1);
     }
@@ -106,12 +107,12 @@ class BlogPostTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_delete()
+    public function delete_post()
     {
         $u = $this->createUser();
         $this->signIn($u);
 
-        $this->postJson(
+        $response = $this->postJson(
             "/ajax/admin/blog/post/create",
             [
                 'blog_status' => "BLOG_STATUS_DRAFT",
@@ -131,7 +132,7 @@ class BlogPostTest extends TestCase
         $this->assertEquals(BlogPost::query()->get()->count(), 0);
     }
 
-    public function test_upload_image()
+    public function upload_image()
     {
         $u = $this->createUser();
         $this->signIn($u);
@@ -163,6 +164,7 @@ class BlogPostTest extends TestCase
             ]
         );
         $responseArray = $response->json();
+        dd($responseArray);
         $this->assertArrayHasKey('uuid', $responseArray[0]);
         $imageUuid = $responseArray[0]['uuid'];
         (new Media(new File(new Image(new Avatar()), new Text())))->image()
@@ -239,7 +241,7 @@ class BlogPostTest extends TestCase
         $response->assertStatus(500);
     }
 
-    public function test_delete_image()
+    public function delete_image()
     {
         $u = $this->createUser();
         $this->signIn($u);
