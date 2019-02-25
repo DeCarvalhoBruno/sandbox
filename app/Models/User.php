@@ -331,4 +331,16 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
         return MediaEntity::scopeImage($builder);
     }
 
+    /**
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param array $wheres
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeOauth(Builder $builder, $wheres = null)
+    {
+        return $this->joinWithWheres($builder, OAuthProvider::class, $wheres);
+
+    }
+
 }

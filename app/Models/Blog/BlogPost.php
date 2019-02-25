@@ -55,9 +55,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
         static::creating(
             function ($model) {
                 $model->blog_post_slug = slugify(
-                    substr($model->blog_post_title, 0, 95),
-                    '-',
-                    app()->getLocale()
+                    substr($model->blog_post_title, 0, 95)
                 );
 
                 $latestSlug =

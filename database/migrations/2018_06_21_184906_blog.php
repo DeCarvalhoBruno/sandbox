@@ -40,7 +40,7 @@ class Blog extends Migration
             $table->unsignedInteger('language_id')->default(1);
 
             $table->string('blog_post_title')->nullable();
-            $table->string('blog_post_slug',100)->nullable();
+            $table->string('blog_post_slug', 100)->nullable();
             $table->text('blog_post_content')->nullable();
             $table->text('blog_post_excerpt')->nullable();
             $table->boolean('blog_post_is_sticky')->default(false);
@@ -87,9 +87,9 @@ class Blog extends Migration
         });
 
         \App\Models\Blog\BlogSourceRecordType::insert([
-            ['blog_source_record_type_name'=>'url'],
-            ['blog_source_record_type_name'=>'img'],
-            ['blog_source_record_type_name'=>'file'],
+            ['blog_source_record_type_name' => 'url'],
+            ['blog_source_record_type_name' => 'img'],
+            ['blog_source_record_type_name' => 'file'],
         ]);
 
         Schema::create('blog_source_records', function (Blueprint $table) {
@@ -208,7 +208,9 @@ class Blog extends Migration
             'blog_label_type_id' => $newLabelType->getKey()
         ]);
         $this->createViews();
-        $this->extractLanguages();
+        if (App::environment() !== 'testing') {
+            $this->extractLanguages();
+        }
     }
 
     public function createViews()
@@ -228,7 +230,7 @@ class Blog extends Migration
 
     private function extractLanguages()
     {
-        $languageCSV = \League\Csv\Reader::createFromPath(base_path().'/database/files/data/languages.tsv', 'r');
+        $languageCSV = \League\Csv\Reader::createFromPath(base_path() . '/database/files/data/languages.tsv', 'r');
         //Tab as delimiter
         $languageCSV->setDelimiter(chr(9));
         $languageDBColumns = [

@@ -47,6 +47,23 @@ class Users extends Migration
 
             $table->unique(['user_id','activation_token'],'idx_activations_remember_token');
         });
+
+        Schema::create('oauth_providers', function (Blueprint $table) {
+            $table->increments('oauth_provider_id');
+
+            $table->unsignedInteger('user_id');
+
+            $table->string('provider');
+            $table->string('provider_user_id')->index();
+            $table->string('access_token')->nullable();
+            $table->string('refresh_token')->nullable();
+            $table->timestamps();
+
+            $table->foreign('user_id')
+                ->references('user_id')
+                ->on('users')
+                ->onDelete('cascade');
+        });
     }
 
     /**

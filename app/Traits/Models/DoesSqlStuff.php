@@ -81,11 +81,33 @@ trait DoesSqlStuff
                     '=',
                     sprintf('%s.%s', $this->getTable(), $modelToJoin->getKeyName())
                 );
-                if (!is_null($modelToJoin)) {
+                if (!is_null($slug)) {
                     $q->where($modelName::$slugColumn,
                         '=', $slug);
                 }
             });
+    }
+
+    public function joinWithWheres($builder, $modelName, $wheres = null): Builder
+    {
+        /** @var \Illuminate\Database\Eloquent\Model $modelToJoin */
+        $modelToJoin = new $modelName;
+
+        return $builder->join(
+            $modelToJoin->getTable(),
+            function ($q) use ($modelName, $modelToJoin, $wheres) {
+                $q->on(
+                    $this->getQualifiedKeyName(),
+                    '=',
+                    sprintf('%s.%s', $modelToJoin->getTable(), $this->getKeyName())
+                );
+                if (!is_null($wheres)) {
+                    foreach ($wheres as $whereKey => $whereValue) {
+                        $q->where($whereKey, $whereValue);
+                    }
+                }
+            });
+
     }
 
     /**

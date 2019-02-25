@@ -6,6 +6,7 @@ use App\Contracts\Models\User as UserProvider;
 use App\Filters\Blog as BlogFilter;
 use App\Http\Controllers\Admin\Controller;
 use App\Http\Requests\Admin\CreateBlogPost;
+use App\Http\Requests\Admin\UpdateBlogPost;
 use App\Models\Blog\BlogStatus;
 use App\Models\Entity;
 use App\Models\Media\MediaImgFormat;
@@ -154,11 +155,11 @@ class Blog extends Controller
 
     /**
      * @param $slug
-     * @param \App\Http\Requests\Admin\CreateBlogPost $request
+     * @param \App\Http\Requests\Admin\UpdateBlogPost $request
      * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
      */
-    public function update($slug, CreateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo)
+    public function update($slug, UpdateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo)
     {
         $person = $request->getPersonSlug();
 

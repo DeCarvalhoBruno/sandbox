@@ -1,15 +1,17 @@
 <?php namespace App\Support\Providers;
 
+use App\Contracts\Models\Person as PersonInterface;
+use App\Contracts\Models\User as UserInterface;
+use App\Exceptions\EmailTakenException;
+use App\Models\OAuthProvider;
 use App\Models\Stats\StatUser;
 use App\Models\UserActivation;
-use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Hashing\BcryptHasher;
-use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Support\Str;
-use App\Contracts\Models\User as UserInterface;
-use App\Contracts\Models\Person as PersonInterface;
 use Tymon\JWTAuth\JWTGuard;
+use Laravel\Socialite\Two\User as SocialiteUser;
 
 /**
  * Class User
@@ -320,6 +322,79 @@ class User extends Model implements UserProvider, UserInterface
             StatUser::query()->where('user_id', $user->getKey())
                 ->update(['stat_user_timezone' => intval($values['stat_user_timezone'])]);
         }
+
+    }
+
+    public function processViaOAuth($provider, SocialiteUser $socialiteUser)
+    {
+        $model = $this->createModel();
+        $user = $model->newQuery()
+            ->oauth([
+                'provider' => $provider,
+                'provider_user_id' => $socialiteUser->getId()
+            ])
+            ->first();
+
+        if (!is_null($user)) {
+            OAuthProvider::query()
+                ->where('oauth_provider_id', $user->getAttribute('oauth_provider_id'))
+                ->update([
+                    'access_token' => $socialiteUser->token,
+                    'refresh_token' => $socialiteUser->refreshToken,
+                ]);
+
+            return $user;
+        }
+
+        if ($model->newQuery()->select(['email'])
+            ->where('email', $socialiteUser->getEmail())->exists()) {
+            throw new EmailTakenException();
+        }
+
+        $username = substr(slugify($socialiteUser->getNickname()), 0, 15);
+
+        if ($model->newQueryWithoutScopes()->select(['username'])
+            ->where('username', $username)->exists()) {
+            $latestUsername =
+                $model->newQueryWithoutScopes()->select(['username'])
+                    ->whereRaw(sprintf(
+                            'blog_post_slug = "%s" or blog_post_slug LIKE "%s-%%"',
+                            $username,
+                            $username)
+                    )
+                    ->latest($model->getKeyName())
+                    ->value('username');
+            if ($latestUsername) {
+                $pieces = explode('-', $latestUsername);
+
+                $number = intval(end($pieces));
+
+                $suffix = sprintf('-%s', ($number + 1));
+                $username = substr($username, 0, -(strlen($suffix))) . $suffix;
+            }
+        }
+
+        $user = $this->createModel([
+            'username' => $username,
+            'activated' => true
+        ]);
+        $user->save();
+        $this->person->createModel([
+                'user_id' => $user->getKey(),
+                'email' => $socialiteUser->getEmail(),
+                'full_name' => $socialiteUser->getName()
+            ]
+        )->save();
+
+        OAuthProvider::create([
+            'user_id' => $user->getKey(),
+            'provider' => $provider,
+            'provider_user_id' => $socialiteUser->getId(),
+            'access_token' => $socialiteUser->token,
+            'refresh_token' => $socialiteUser->refreshToken,
+        ]);
+
+        return $user;
 
     }
 

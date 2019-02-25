@@ -6,7 +6,7 @@ use App\Models\Blog\BlogStatus;
 use App\Support\Requests\FormRequest;
 use Illuminate\Support\Facades\Validator;
 
-class CreateBlogPost extends FormRequest
+class UpdateBlogPost extends FormRequest
 {
     protected $activateTagStrippingFilter = false;
 
@@ -26,8 +26,8 @@ class CreateBlogPost extends FormRequest
     public function rules()
     {
         return [
-            'blog_post_title' => 'required|max:255',
-            'blog_status' => 'required|status',
+            'blog_post_title' => 'max:255',
+            'blog_status' => 'status',
             'published_at' => 'date_format:YmdHi'
         ];
     }

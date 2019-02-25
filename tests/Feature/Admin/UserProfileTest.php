@@ -1,9 +1,7 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
-use App\Models\Email\EmailList;
-use App\Models\Email\EmailSubscriber;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -79,10 +77,11 @@ class UserProfileTest extends TestCase
         $response->assertStatus(422);
     }
 
-    public function set_new_password()
+    public function test_set_new_password()
     {
         $this->withExceptionHandling();
-        $u = $this->signIn()->createUser();
+        $t = $this->createUser();
+        $u = $this->signIn($t);
         $response = $this->patchJson(
             '/ajax/admin/settings/password',
             [
@@ -114,22 +113,5 @@ class UserProfileTest extends TestCase
         $response->assertStatus(200);
         $this->assertNotNull(User::query()->where('email', '=', 'jane.doe@example.com')->first());
     }
-
-    public function test_edit_emailing_lists()
-    {
-        $t = $this->createUser();
-        $u = $this->signIn($t);
-        $response = $this->post('settings/profile/update', [
-            'notifications' => [
-                EmailList::NEWSLETTERS => 'on'
-            ]
-        ]);
-        $response->assertStatus(302);
-        $this->assertEquals(1, count(EmailSubscriber::query()->get()->toArray()));
-        $response = $this->post('settings/profile/update', []);
-        $response->assertStatus(302);
-        $this->assertEquals(0, count(EmailSubscriber::query()->get()->toArray()));
-    }
-
 
 }
