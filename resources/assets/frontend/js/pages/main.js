@@ -28,7 +28,7 @@
   })
 })(jQuery);
 (function ($, viewport) {
-$(document).ready(function () {
+  $(document).ready(function () {
 
     //Detect touch based devices so we can make layout adjustments
     //especially when it has to do with hover/click behavior
@@ -59,27 +59,27 @@ $(document).ready(function () {
     }
 
     //Action for the "back to top" button
-    $('#scroll-up').click(function(e) {
+    $('#scroll-up').click(function (e) {
       e.preventDefault()
       $('html, body').animate({
         scrollTop: 0
       }, 1000)
-    });
+    })
 
     //Action for the newsletter subscription form
-    $('#form-newsletter-subscribe').on('submit',function(e){
+    $('#form-newsletter-subscribe').on('submit', function (e) {
       e.preventDefault()
       var formData = new FormData(document.forms['form-newsletter-subscribe'])
       axios.post('/email/subscribe/newsletter', formData)
-        .then(function (response){
-            swal.fire({
-              title:response.data.title,
-              text:response.data.text,
-              showConfirmButton: true,
-              showCancelButton:false
-            })
-      }).catch(function(){
-        document.location=document.location.href
+        .then(function (response) {
+          swal.fire({
+            title: response.data.title,
+            text: response.data.text,
+            showConfirmButton: true,
+            showCancelButton: false
+          })
+        }).catch(function () {
+        document.location = document.location.href
       })
     })
 
@@ -89,17 +89,16 @@ $(document).ready(function () {
         $('h1.viewport').html(viewport.current())
       })
     )
-  $('#app').Lazy();
+    $('#app').Lazy()
 
-
-})
+  })
 })(jQuery, ResponsiveBootstrapToolkit);
 (function () {
-  if(window.hasOwnProperty('config')){
-    if(window.config.hasOwnProperty('msg')){
+  if (window.hasOwnProperty('config')) {
+    if (window.config.hasOwnProperty('msg')) {
       swal.fire({
-        type:window.config.msg.type,
-        title:window.config.msg.title,
+        type: window.config.msg.type,
+        title: window.config.msg.title,
         position: 'top-end',
         toast: true,
         showConfirmButton: false,
@@ -107,4 +106,50 @@ $(document).ready(function () {
       })
     }
   }
-})(jQuery);
+})(jQuery)
+
+var handleSingleClickSignOn = function (googleyolo) {
+  // if (window.location.href.match(/localhost/)===null) {
+  googleyolo.retrieve({
+    supportedAuthMethods: [
+      'https://accounts.google.com'
+    ],
+    supportedIdTokenProviders: [
+      {
+        uri: 'https://accounts.google.com',
+        clientId: window.config.gapi_client
+      }
+    ],
+    context: 'continue'
+  }).catch(function (e) {
+    googleyolo.hint({
+      supportedAuthMethods: [
+        'https://accounts.google.com'
+      ],
+      supportedIdTokenProviders: [
+        {
+          uri: 'https://accounts.google.com',
+          clientId: window.config.gapi_client
+        }
+      ]
+    }).then(function (credentials) {
+      axios.post('/oauth-yolo', {
+        domain: credentials.authDomain,
+        full_name: credentials.displayName,
+        email: credentials.id,
+        avatar: credentials.profilePicture,
+        google_token: credentials.idToken
+      }).then(function (data) {
+
+      })
+    }).catch(function (error) {
+
+    })
+  })
+}
+if (window.hasOwnProperty('config')) {
+  if (window.config.auth_check === false &&
+    window.config.google_verified === false) {
+    window.onGoogleYoloLoad = handleSingleClickSignOn
+  }
+}

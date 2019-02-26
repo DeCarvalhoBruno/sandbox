@@ -109,7 +109,7 @@ class Media extends Controller
                 ], Response::HTTP_OK);
             }
             return response([
-                trans('ajax.dropzone.file_too_big_laravel', [
+                trans('js-common.dropzone.file_too_big_laravel', [
                     'filesize' => round($fileSize / 1000000, 2),
                     'maxFilesize' => MediaDigital::MEDIA_DIGITAL_MAX_FILESIZE
                 ])

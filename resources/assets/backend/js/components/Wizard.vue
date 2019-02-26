@@ -25,20 +25,20 @@
                         <a v-if="backEnabled" class="wizard_back float-left"
                            @click="goBack()">
                             <i class="vgw-icon vgw-prev"></i>
-                            <span>{{$t('general.back')}}</span>
+                            <span>{{$t('wizard.back')}}</span>
                         </a>
                     </div>
                     <div class="col">
                         <a v-if="currentStep != steps.length - 1" class="wizard_next float-right"
                            :class="{'disabled': options[currentStep].nextDisabled}"
                            @click="goNext()">
-                            <span>{{$t('general.next')}}</span>
+                            <span>{{$t('wizard.next')}}</span>
                             <i class="vgw-icon vgw-next"></i>
                         </a>
                         <a v-if="currentStep == steps.length - 1" class="wizard_next float-right final-step"
                            :class="{'disabled': options[currentStep].nextDisabled}"
                            @click="goNext()">
-                            {{$t('general.save')}}
+                            {{$t('wizard.save')}}
                         </a>
                     </div>
                 </div>

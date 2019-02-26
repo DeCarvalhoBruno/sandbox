@@ -2,7 +2,7 @@
     <div class="media-resize" ref="imageContainer">
         <div class="resize-instructions container">
             <div class="row">
-                <h5 class="text-center">{{$t('media.cropper_resize_image')}}</h5>
+                <h5 class="text-center">{{$t('cropper.resize_image')}}</h5>
                 <div class="container p-0">
                     <div class="cropper row">
                         <img ref="img" class="cropper-img"/>
@@ -11,7 +11,7 @@
                         <div class="container p-0">
                             <div class="row">
                                 <div class="col align-self-center">
-                                    <button type="button" :title="$t('general.reload')"
+                                    <button type="button" :title="$t('cropper.reload')"
                                             class="btn btn-primary cropper-reset" @click="resetCropper()">
                                         <i class="fa fa-sync"></i>
                                     </button>
@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="row">
-                <h5 class="text-center">{{$t('media.cropper_preview')}}</h5>
+                <h5 class="text-center">{{$t('cropper.preview')}}</h5>
                 <div class="col-xs-12 container-fluid">
                     <div class="cropper-preview-wrapper">
                         <div class="cropper-preview" ref="cropperPreview">

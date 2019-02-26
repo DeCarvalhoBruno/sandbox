@@ -80,7 +80,6 @@
                                         </div>
                                         <div class="form-group row">
                                             <login-o-auth :provider="'google'"></login-o-auth>
-                                                {{--<a class="btn btn-dark ml-auto" href="{{route('oauth',['driver'=>'google'])}}"><i class="fa fa-google"></i></a>--}}
                                         </div>
                                         <div class="form-group row mt-5">
                                             <div class="col-xl-8 offset-xl-2 col-lg-6 offset-lg-3">

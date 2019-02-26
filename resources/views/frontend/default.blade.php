@@ -7,13 +7,16 @@
           content="width=device-width, initial-scale=1 maximum-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="page-id" content="{{ get_page_id() }}">
+    {{--<meta name="google-signin-scope" content="profile email">--}}
+{{--    <meta name="google-signin-client_id" content="{{env('OAUTH_GOOGLE_CLIENT_ID')}}">--}}
 
     <title>{{$title}}</title>
     <link href="{{ mix('css/app.css','6aa0e') }}" rel="stylesheet">
 </head>
 <body>
     @include('partials.header')
-<div id="app">
+
+    <div id="app">
     <div id="content_container" class="container p-0">
         @if(isset($breadcrumbs))
             <div id="breadcrumb-wrapper" class="col p-0">
@@ -39,6 +42,8 @@
     @else
         <script src="{{ mix('js/app.js','6aa0e') }}"></script>
     @endif
-    <script src="https://apis.google.com/js/platform.js"></script>
+    {{--<script src="https://apis.google.com/js/platform.js?onload=gapiLoaded" async defer></script>--}}
+    <script src="https://smartlock.google.com/client" async defer></script>
+
 </body>
 </html>

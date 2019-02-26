@@ -40,21 +40,25 @@ class ConvertLangFilesToJs extends Command
         while (($subdir = readdir($dir)) !== false) {
             $langDir = $origDir . $subdir;
             if (is_dir($langDir)) {
-                $file = sprintf('%s/ajax.php', $langDir);
-                if (is_file($file)) {
+                $fileBackend = sprintf('%s/js-backend.php', $langDir);
+                $fileFrontend = sprintf('%s/js-frontend.php', $langDir);
+                $fileCommon = sprintf('%s/js-common.php', $langDir);
+                if (is_file($fileBackend)&&is_file($fileFrontend)&&is_file($fileCommon)) {
+                    $contents = array_merge(include($fileBackend),include($fileCommon));
                     $fh = fopen(sprintf('resources/assets/backend/js/lang/%s.json', $subdir), 'w');
-                    fwrite($fh, json_encode(include($file)));
+                    fwrite($fh, json_encode($contents));
                     fclose($fh);
                     $this->info('    - Backend ' . $subdir);
 
+                    $contents = array_merge(include($fileFrontend),include($fileCommon));
                     $fh = fopen(sprintf('resources/assets/frontend/js/lang/%s.json', $subdir), 'w');
-                    fwrite($fh, json_encode(include($file)));
+                    fwrite($fh, json_encode($contents));
                     fclose($fh);
                     $this->info('    - Frontend ' . $subdir);
                 }
-                $file = sprintf('%s/routes-admin.php', $langDir);
-                if (is_file($file)) {
-                    $routes[$subdir] = include($file);
+                $fileBackend = sprintf('%s/routes-admin.php', $langDir);
+                if (is_file($fileBackend)) {
+                    $routes[$subdir] = include($fileBackend);
                     $this->info('    - (routes)' . $subdir);
                 }
 

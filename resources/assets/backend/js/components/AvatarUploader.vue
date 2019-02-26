@@ -2,8 +2,8 @@
   <div id="avatar-uploader" class="form-group row">
     <div class="card w-100" ref="cropperContainer">
       <b-tabs card>
-        <b-tab :title="$t('pages.settings.avatar-tab')" @click="resetComponentFlags" active>
-          <p v-show="avatars.length>0" class="font-italic">{{$t('pages.settings.click_default')}}</p>
+        <b-tab :title="$t('avatar-uploader.avatar-tab')" @click="resetComponentFlags" active>
+          <p v-show="avatars.length>0" class="font-italic">{{$t('avatar-uploader.click_default')}}</p>
           <div class="thumbnail-group" :class="{'thumbnail-loading':ajaxIsLoading}">
             <div v-show="ajaxIsLoading" class="fa-5x sync-icon">
               <i class="fa fa-spinner fa-pulse"></i>
@@ -22,7 +22,7 @@
                 <div class="thumbnail-controls">
                   <button type="button" class="btn btn-sm"
                           :class="{'btn-danger':!avatar.used,'disabled':avatar.used}"
-                          :title="$t('pages.settings.delete_avatar')"
+                          :title="$t('avatar-uploader.delete_avatar')"
                           @click="deleteAvatar(avatar.uuid,avatar.used)">
                     <i class="fa fa-trash"></i>
                   </button>
@@ -31,7 +31,7 @@
             </ul>
           </div>
         </b-tab>
-        <b-tab :title="$t('pages.settings.avatar-ul-tab')" :disabled="avatars.length>6">
+        <b-tab :title="$t('avatar-uploader.avatar-ul-tab')" :disabled="avatars.length>6">
           <wizard ref="wizard" :steps="steps" has-step-buttons="false"
                   :current-step-parent="currentStep-1"
                   @wizard-reset="resetComponentFlags">
@@ -53,7 +53,7 @@
                   <div class="dz-container" @click="triggerBrowse">
                     <h4 class="dropfile-instructions">{{ $t('dropzone.choose_file')}}</h4>
                     <p class="dropfile-instructions">{{ $t('dropzone.max_size')}}
-                      {{dropzoneOptions.maxFilesize}}{{$t('units.MB')}}</p>
+                      {{dropzoneOptions.maxFilesize}}{{$t('dropzone.units.MB')}}</p>
                     <p class="dropfile-instructions">{{ $t('dropzone.accepted_formats')}} JPG,
                       PNG</p>
                     <i class="fa fa-4x fa-cloud-upload"></i>
@@ -74,7 +74,7 @@
                               <div class="col preview-actions">
                                 <div class="row preview-row">
                                   <p class="size"
-                                  >{{(file.size/1024/1024).toPrecision(3)}}&nbsp;{{$t('units.MB')}}</p>
+                                  >{{(file.size/1024/1024).toPrecision(3)}}&nbsp;{{$t('dropzone.units.MB')}}</p>
                                 </div>
                                 <div class="row preview-row">
                                   <div id="dropzone_progress" class="progress"
@@ -93,7 +93,7 @@
                                     <button type="button"
                                             class="btn btn-lg btn-primary text-center"
                                             @click="currentStep=2">
-                                      {{$t('pages.settings.image_proceed')}}
+                                      {{$t('avatar-uploader.image_proceed')}}
                                     </button>
                                   </div>
                                 </transition>
@@ -125,10 +125,10 @@
                   <template #cropper-actions>
                     <div class="col align-self-center">
                       <button class="btn btn-primary" @click="crop()" type="button"
-                      >{{$t('media.cropper_crop_upload')}}
+                      >{{$t('cropper.crop_upload')}}
                       </button>
                       <button class="btn btn-light" @click="cancel()" type="button"
-                      >{{$t('general.cancel')}}
+                      >{{$t('cropper.cancel')}}
                       </button>
                     </div>
                   </template>
@@ -146,9 +146,9 @@
                   <div class="row justify-content-lg-center mt-3">
                     <div class="col col-lg-6 text-center">
                       <p class="blinker blinker-red" v-if="ajaxIsLoading"
-                      >{{$t('pages.settings.image_uploading')}}
+                      >{{$t('avatar-uploader.image_uploading')}}
                       </p>
-                      <p v-else>{{$t('pages.settings.image_uploaded')}}</p>
+                      <p v-else>{{$t('avatar-uploader.image_uploaded')}}</p>
                     </div>
                   </div>
                 </div>

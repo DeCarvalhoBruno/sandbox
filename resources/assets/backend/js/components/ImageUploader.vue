@@ -29,7 +29,7 @@
                                         @click="goToEditImagePage(image.uuid)">
                                     <fa icon="pencil-alt"></fa>
                                 </button>
-                                <button type="button" class="btn btn-sm btn-info" :title="$t('media.image_url_copy')"
+                                <button type="button" class="btn btn-sm btn-info" :title="$t('avatar-uploader.image_url_copy')"
                                         v-clipboard:copy="getImageUrl(image.uuid, 'tb', image.ext, true)"><fa icon="paste"></fa></button>
                             </div>
                         </li>
@@ -52,7 +52,7 @@
                     <div class="dz-container" @click="triggerBrowse">
                         <h4 class="dropfile-instructions">{{ $t('dropzone.choose_file')}}</h4>
                         <p class="dropfile-instructions">{{ $t('dropzone.max_size')}}
-                            {{maxFilesize}}{{$t('units.MB')}}</p>
+                            {{maxFilesize}}{{$t('js-common.dropzone.MB')}}</p>
                         <p class="dropfile-instructions">{{ $t('dropzone.accepted_formats')}} JPG,
                             PNG</p>
                         <fa class="fa-4x" icon="cloud-upload-alt"></fa>
@@ -75,7 +75,7 @@
                                             <div class="col preview-actions">
                                                 <div class="row preview-row">
                                                     <p class="size">
-                                                        {{(file.size/1024/1024).toPrecision(3)}}&nbsp;{{$t('units.MB')}}</p>
+                                                        {{(file.size/1024/1024).toPrecision(3)}}&nbsp;{{$t('dropzone.units.MB')}}</p>
                                                 </div>
                                                 <div class="row preview-row">
                                                     <div id="dropzone_progress" class="progress">

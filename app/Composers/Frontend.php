@@ -26,6 +26,9 @@ class Frontend extends Composer
         $data['user'] = auth()->user();
         JavaScript::putArray([
             'locale' => app()->getLocale(),
+            'gapi_client' => env('OAUTH_GOOGLE_CLIENT_ID'),
+            'auth_check' => auth()->check(),
+            'google_verified'=>request()->cookies->has('google_verified')
         ]);
         JavaScript::bindJsVariablesToView();
         $this->addVarsToView($data, $view);
