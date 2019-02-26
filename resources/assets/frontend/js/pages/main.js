@@ -91,7 +91,8 @@ $(document).ready(function () {
     )
   $('#app').Lazy();
 
-  })
+
+})
 })(jQuery, ResponsiveBootstrapToolkit);
 (function () {
   if(window.hasOwnProperty('config')){

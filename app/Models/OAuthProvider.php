@@ -10,7 +10,7 @@ class OAuthProvider extends Model
 {
     use DoesSqlStuff;
 
-    protected $table = 'oauth_providers';
+    protected $table = 'system_oauth_providers';
     protected $primaryKey = 'oauth_provider_id';
     protected $guarded = ['oauth_provider_id'];
     protected $hidden = [

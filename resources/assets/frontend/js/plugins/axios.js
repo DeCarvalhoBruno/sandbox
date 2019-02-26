@@ -8,7 +8,10 @@ axios.interceptors.request.use(request => {
   request.headers.common['Accept-Language'] = document.querySelector('html')
     .getAttribute('lang')
   request.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-  request.headers.common['Authorization'] = `Bearer ${token}`
+
+  if (token) {
+    request.headers.common['Authorization'] = `Bearer ${token}`
+  }
   return request
 })
 

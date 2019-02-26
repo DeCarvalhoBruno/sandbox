@@ -23,22 +23,16 @@
       async login () {
         const newWindow = openWindow('', 'Login')
         const {data} = await axios.post(`/oauth/${this.provider}`)
-        newWindow.location.href = data.url
+        newWindow.location.href = data
       },
 
       /**
        * @param {MessageEvent} e
        */
       onMessage (e) {
-        if (e.origin !== window.origin || !e.data.token) {
-          return
+        if (e.data.hasOwnProperty('route')) {
+          window.location.href = e.data.route
         }
-
-        // this.$store.dispatch('auth/saveToken', {
-        //   token: e.data.token
-        // })
-        //
-        // this.$router.push({ name: 'home' })
       }
     }
   }

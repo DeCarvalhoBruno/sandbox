@@ -48,7 +48,7 @@ class Users extends Migration
             $table->unique(['user_id','activation_token'],'idx_activations_remember_token');
         });
 
-        Schema::create('oauth_providers', function (Blueprint $table) {
+        Schema::create('system_oauth_providers', function (Blueprint $table) {
             $table->increments('oauth_provider_id');
 
             $table->unsignedInteger('user_id');

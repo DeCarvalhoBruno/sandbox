@@ -97,13 +97,13 @@ class Handler extends ExceptionHandler
 //            if ($request->expectsJson()) {
 //                return response_json(['msg' => trans('error.http.419')], 419);
 //            }
-            if(strpos($request->route()->getName(),'admin')===false)
-            return response()->view(sprintf(
-                'frontend.errors.%s',
-                $e->getStatusCode()), [
-                'errors' => new ViewErrorBag,
-                'exception' => $e->getMessage(),
-            ]);
+//            if(strpos($request->route()->getName(),'admin')===false)
+//            return response()->view(sprintf(
+//                'frontend.errors.%s',
+//                $e->getStatusCode()), [
+//                'errors' => new ViewErrorBag,
+//                'exception' => $e->getMessage(),
+//            ]);
         }
 
         return $request->expectsJson()

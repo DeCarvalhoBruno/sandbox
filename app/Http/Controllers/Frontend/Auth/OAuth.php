@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Frontend\Auth;
 
 use App\Contracts\Models\User as UserProvider;
 use App\Http\Controllers\Frontend\Controller;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
 class OAuth extends Controller
 {
+    use AuthenticatesUsers;
 
 
     /**
@@ -30,8 +32,9 @@ class OAuth extends Controller
      */
     public function redirectToProvider($provider)
     {
-        return redirect(Socialite::driver($provider)
-            ->redirect()->getTargetUrl());
+//        return redirect(Socialite::driver($provider)
+//            ->redirect()->getTargetUrl());
+        return Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
     }
 
     /**
@@ -44,16 +47,19 @@ class OAuth extends Controller
      */
     public function handleProviderCallback($provider, Request $request, UserProvider $userRepo)
     {
-        $socialiteUser = Socialite::driver($provider)->user();
+        $socialiteUser = Socialite::driver($provider)->stateless()->user();
 
         $user = $userRepo->processViaOAuth($provider, $socialiteUser);
 
         $request->session()->regenerate();
 
         \Auth::guard('jwt')->login($user);
-        $this->guard()->login($user);
+        \Session::put('jwt_token', \Auth::guard('jwt')->login($user));
+        $this->guard()->login($user, true);
+        $this->clearLoginAttempts($request);
 
-        return redirect()->intended(route_i18n('home'));
+        return view('frontend.oauth.callback', [
+        ]);
     }
 
 }

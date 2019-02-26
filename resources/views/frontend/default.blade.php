@@ -39,5 +39,6 @@
     @else
         <script src="{{ mix('js/app.js','6aa0e') }}"></script>
     @endif
+    <script src="https://apis.google.com/js/platform.js"></script>
 </body>
 </html>
