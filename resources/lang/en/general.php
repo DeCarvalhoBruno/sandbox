@@ -16,5 +16,8 @@
         'yesterday' => 'Yesterday',
         'this_week' => 'This week',
         'last_week' => 'Last week'
-    ]
+    ],
+    'login' => 'Log In',
+    'home' => 'Home',
+
 ];

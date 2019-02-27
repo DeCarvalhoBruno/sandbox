@@ -41,7 +41,7 @@
   owasp.configs = {
     allowPassphrases: true,
     maxLength: 128,
-    minLength: 6,
+    minLength: 8,
     minPhraseLength: 20,
     minOptionalTestsToPass: 4
   }
@@ -71,7 +71,7 @@
       },
       secureLength: {
         type: Number,
-        default: 7
+        default: 8
       },
       labelShow: {
         type: String,

@@ -37,29 +37,29 @@ class ConvertLangFilesToJs extends Command
 
         $this->info('The following files were converted:');
         $routes = [];
-        while (($subdir = readdir($dir)) !== false) {
-            $langDir = $origDir . $subdir;
+        while (($languageDir = readdir($dir)) !== false) {
+            $langDir = $origDir . $languageDir;
             if (is_dir($langDir)) {
                 $fileBackend = sprintf('%s/js-backend.php', $langDir);
                 $fileFrontend = sprintf('%s/js-frontend.php', $langDir);
                 $fileCommon = sprintf('%s/js-common.php', $langDir);
                 if (is_file($fileBackend)&&is_file($fileFrontend)&&is_file($fileCommon)) {
                     $contents = array_merge(include($fileBackend),include($fileCommon));
-                    $fh = fopen(sprintf('resources/assets/backend/js/lang/%s.json', $subdir), 'w');
+                    $fh = fopen(sprintf('resources/assets/backend/js/lang/%s.json', $languageDir), 'w');
                     fwrite($fh, json_encode($contents));
                     fclose($fh);
-                    $this->info('    - Backend ' . $subdir);
+                    $this->info('    - Backend ' . $languageDir);
 
                     $contents = array_merge(include($fileFrontend),include($fileCommon));
-                    $fh = fopen(sprintf('resources/assets/frontend/js/lang/%s.json', $subdir), 'w');
+                    $fh = fopen(sprintf('resources/assets/frontend/js/lang/%s.json', $languageDir), 'w');
                     fwrite($fh, json_encode($contents));
                     fclose($fh);
-                    $this->info('    - Frontend ' . $subdir);
+                    $this->info('    - Frontend ' . $languageDir);
                 }
                 $fileBackend = sprintf('%s/routes-admin.php', $langDir);
                 if (is_file($fileBackend)) {
-                    $routes[$subdir] = include($fileBackend);
-                    $this->info('    - (routes)' . $subdir);
+                    $routes[$languageDir] = include($fileBackend);
+                    $this->info('    - (routes)' . $languageDir);
                 }
 
             }

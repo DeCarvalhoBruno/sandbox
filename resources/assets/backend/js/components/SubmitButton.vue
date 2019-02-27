@@ -1,18 +1,24 @@
-<template>
-  <button :type="nativeType" :disabled="isLoading" class="btn" :class="{
-    [`btn-${type}`]: true,
-    'btn-block': block,
-    'btn-lg': large,
-    'btn-loading': isLoading
-  }">
-    <template v-if="value">{{value}}</template>
-    <slot v-else></slot>
-  </button>
-</template>
-
 <script>
   export default {
     name: 'submit-button',
+    render: function (h) {
+      return h('button', {
+        class: {
+          'align-content-center': true,
+          'btn': true,
+          [`btn-${this.type}`]: true,
+          'btn-block': this.block,
+          'btn-lg': this.large,
+          'btn-loading': this.isLoading
+        },
+        attrs: {
+          type: this.nativeType,
+          disabled: this.isLoading
+        }
+      }, [
+        (this.value) ? h('span', this.value) : h('slot', this.$slots.default)
+      ])
+    },
     props: {
       type: {
         type: String,

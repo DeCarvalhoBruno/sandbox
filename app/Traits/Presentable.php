@@ -21,8 +21,8 @@ trait Presentable
                 'label' => $info->name,
                 'sortable' => isset($sortable[$name])
             ];
-            if ($name === $filter->getFilter(trans('ajax.filters.sortBy'))) {
-                $result[$name]['order'] = $filter->getFilter(trans('ajax.filters.order'));
+            if ($name === $filter->getFilter(trans('js-backend.filters.sortBy'))) {
+                $result[$name]['order'] = $filter->getFilter(trans('js-backend.filters.order'));
             }
         }
         return $result;

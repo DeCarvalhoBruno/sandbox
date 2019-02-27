@@ -25,9 +25,14 @@ return [
     'login_account' => 'Log in to your account',
     'register_username_help' => 'Can contains letters, numbers and underscores. Must be no more than 15 characters long.',
     'email_address' => 'E-Mail Address',
-    'register' => 'Register an account',
+    'password' => 'Password',
+    'login' => 'Log In',
+    'register_account' => 'Register an account',
+    'remember_me'=>'Remember me',
+    'forgot_password' => 'Forgot Your Password?',
     'password_help' => 'Must have a minimum of 6 characters.',
     'hide_password' => 'Hide password',
     'show_password' => 'Show password',
-    'required_fields' => 'Fields marked with an asterisk (*) are mandatory.'
+    'required_fields' => 'Fields marked with an asterisk (*) are mandatory.',
+    'register' => 'Register'
 ];

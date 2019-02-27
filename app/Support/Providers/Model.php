@@ -266,7 +266,7 @@ abstract class Model
     public function setStoredFilter($userID, $filter)
     {
         if ($filter->hasFilters()) {
-            \Cache::put($this->getStoredFilterKey($userID), $filter, 30);
+            \Cache::put($this->getStoredFilterKey($userID), $filter, 1800);
         } else {
             \Cache::forget($this->getStoredFilterKey($userID));
         }

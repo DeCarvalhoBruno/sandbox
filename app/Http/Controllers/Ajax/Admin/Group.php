@@ -38,11 +38,11 @@ class Group extends Controller
                 ->filter($filter)->paginate(10),
             'columns' => (new \App\Models\Group)->getColumnInfo([
                 'group_name' => (object)[
-                    'name' => trans('ajax.db.group_name'),
+                    'name' => trans('js-backend.db.group_name'),
                     'width' => '80%'
                 ]
             ],$filter),
-            'member_count' => trans('ajax.db.member_count'),
+            'member_count' => trans('js-backend.db.member_count'),
 
         ];
 

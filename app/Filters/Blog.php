@@ -17,7 +17,7 @@ class Blog extends Filters
             return $this->builder
                 ->orderBy($name,
                     trans(
-                        sprintf('ajax.filters.%s',
+                        sprintf('js-backend.filters.%s',
                             $this->getFilter('order')
                         )
                     ) ?? 'asc'

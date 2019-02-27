@@ -52,7 +52,7 @@ class UploadedAvatar extends ImageUpload implements Image
                 $this->uuid
             )
         );
-        \Cache::put('temporary_avatars', $data, 120);
+        \Cache::put('temporary_avatars', $data, 7200);
     }
 
     public function processImage()

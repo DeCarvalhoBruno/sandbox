@@ -68,7 +68,7 @@
                             <div class="col-xl-8 offset-xl-2 col-lg-6 offset-lg-3">
                                 <submit-button
                                         ref="submitButton"
-                                        :block="true" :value="'{{trans('ajax.general.save')}}'"></submit-button>
+                                        :block="true" :value="'{{trans('js-backend.general.save')}}'"></submit-button>
                             </div>
                         </div>
                     </inline-form>

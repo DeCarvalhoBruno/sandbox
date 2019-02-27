@@ -61,8 +61,6 @@ return [
         'create' => 'Create',
         'logout' => 'Logout',
         'login' => 'Log In',
-        'register' => 'Register',
-        'success' => 'Success!',
         'password' => 'Password',
         'actions' => 'Actions',
         'email' => 'E-mail',
@@ -316,15 +314,6 @@ return [
         'option_del_user' => 'Delete user',
         'option_del_blog' => 'Delete blog post',
         'btn_apply_title' => 'Apply action to all selected users'
-    ],
-    'pwd-strength' => [
-        'too_short' => 'The password must meet the minimum length condition.',
-        'too_long' => 'The password must fewer the maximum length condition.',
-        'one_lowercase' => 'The password must contain at least one lowercase letter.',
-        'one_uppercase' => 'The password must contain at least one uppercase letter.',
-        'one_number' => 'The password must contain at least one number.',
-        'special_char' => 'The password must contain at least one special character.',
-        'has_repeats' => 'The password may not contain sequences of three or more repeated characters.'
     ],
     'locales' => [
         'en' => 'English',

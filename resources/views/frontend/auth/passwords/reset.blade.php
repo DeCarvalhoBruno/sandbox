@@ -63,7 +63,7 @@
                             <div class="form-group row pt-3">
                                 <div class="col-xl-8 offset-xl-2 col-lg-6 offset-lg-3">
                                     <button type="submit" class="btn btn-primary btn-block">
-                                        {{trans('ajax.pages.auth.reset_password')}}
+                                        {{trans('js-backend.pages.auth.reset_password')}}
                                     </button>
                                 </div>
                             </div>

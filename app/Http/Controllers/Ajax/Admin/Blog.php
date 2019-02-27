@@ -31,11 +31,11 @@ class Blog extends Controller
             ])->filter($filter)->paginate(25),
             'columns' => $blogRepo->createModel()->getColumnInfo([
                 'blog_post_title' => (object)[
-                    'name' => trans('ajax.db.blog_post_title'),
+                    'name' => trans('js-backend.db.blog_post_title'),
                     'width' => '50%'
                 ],
                 'full_name' => (object)[
-                    'name' => trans('ajax.db.full_name'),
+                    'name' => trans('js-backend.db.full_name'),
                     'width' => '30%'
                 ]
             ], $filter)

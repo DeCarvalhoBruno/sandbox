@@ -6,7 +6,7 @@
             <img src="{{asset('media/img/site/logo.png')}}">
         </div>
         <div class="row justify-content-md-center mt-5">
-            <h3 class="font-light mb-0">{{trans('auth.register')}}</h3>
+            <h3 class="font-light mb-0">{{trans('auth.register_account')}}</h3>
         </div>
         <div class="row justify-content-md-center mt-3">
             @if($errors->has('recaptcha'))
@@ -31,7 +31,7 @@
                                      :method="'POST'">
                             {!! csrf_field() !!}
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label text-lg-right">{{trans('ajax.db.first_name')}}</label>
+                                <label class="col-lg-4 col-form-label text-lg-right">{{trans('pages.profile.first_name')}}</label>
                                 <div class="col-lg-6">
                                     <input type="text"
                                            class="form-control{{ $errors->has('first_name') ? ' is-invalid' : '' }}"
@@ -48,7 +48,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label text-lg-right">{{trans('ajax.db.last_name')}}</label>
+                                <label class="col-lg-4 col-form-label text-lg-right">{{trans('pages.profile.last_name')}}</label>
                                 <div class="col-lg-6">
                                     <input type="text"
                                            class="form-control{{ $errors->has('last_name') ? ' is-invalid' : '' }}"
@@ -69,7 +69,7 @@
                                     <span class="form-has-help"
                                           data-toggle="tooltip"
                                           data-placement="top"
-                                          data-original-title="{{trans('auth.register_username_help')}}">{{trans('ajax.db.username')}}</span>
+                                          data-original-title="{{trans('auth.register_username_help')}}">{{trans('pages.profile.username')}}</span>
                                 </label>
                                 <div class="col-lg-6">
                                     <input type="text"
@@ -106,7 +106,7 @@
                                     <span class="form-has-help"
                                           data-toggle="tooltip"
                                           data-placement="top"
-                                          data-original-title="{{trans('auth.password_help')}}">{{trans('ajax.general.password')}}</span>
+                                          data-original-title="{{trans('auth.password_help')}}">{{trans('pages.profile.password')}}</span>
                                 </label>
                                 <div class="col-lg-6">
                                     <password-strength
@@ -121,7 +121,7 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-4 col-form-label text-lg-right field-required">{{
-                                                                                    trans('ajax.pages.auth.confirm_password')
+                                                                                    trans('pages.profile.confirm_password')
                                                                                 }}</label>
                                 <div class="col-lg-6">
                                     <input type="password"
@@ -139,7 +139,7 @@
                                 <div class="col-xl-8 offset-xl-2 col-lg-6 offset-lg-3">
                                     <submit-button
                                             ref="submitButton"
-                                            :block="true" :value="'{{trans('ajax.general.register')}}'"></submit-button>
+                                            :block="true" :value="'{{trans('auth.register')}}'"></submit-button>
                                 </div>
                             </div>
                             <input type="hidden" class="g-recaptcha" name="g-recaptcha" value="">

@@ -114,8 +114,7 @@
       </b-tabs>
       <div class="row justify-content-center">
         <div class="col-md-6 offset-md-3 mb-4">
-          <submit-button class="align-content-center" :loading="form.busy">
-            {{ $t('general.update') }}
+          <submit-button :loading="form.busy" :value="$t('general.update')">
           </submit-button>
           <button v-if="intended!==null"
                   type="button"

@@ -15,7 +15,12 @@
         'notifications_title' => 'Notifications',
         'notifications_heading' => 'E-mail notification options',
         'notifications_help' => 'Please choose the types of e-mails you would like to receive from us:',
-        'account_title' => 'Account'
+        'account_title' => 'Account',
+        'first_name' => 'First name',
+        'last_name' => 'Last name',
+        'username' => 'Username',
+        'password' => 'Password',
+        'confirm_password' => 'Confirm Password',
     ],
     'contact' => [
         'form_title' => 'Get in touch with us',

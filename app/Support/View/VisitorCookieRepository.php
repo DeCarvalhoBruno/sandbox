@@ -56,6 +56,6 @@ class VisitorCookieRepository
      */
     protected function expiration(): int
     {
-        return 157680000/60; // aka 5 years
+        return 157680000; // aka 5 years
     }
 }

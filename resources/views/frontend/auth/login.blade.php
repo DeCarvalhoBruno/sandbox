@@ -48,7 +48,7 @@
                                         </div>
                                         <div class="form-group row">
                                             <label for="password"
-                                                   class="col-md-4 col-form-label text-lg-right">{{trans('ajax.general.password')}}</label>
+                                                   class="col-md-4 col-form-label text-lg-right">{{trans('auth.password')}}</label>
                                             <div class="col-md-6">
                                                 <input id="password"
                                                        type="password"
@@ -70,22 +70,25 @@
                                                            class="custom-control-input" id="customCheck1"
                                                            name="remember" {{ old('remember') ? 'checked' : '' }}>
                                                     <label class="custom-control-label"
-                                                           for="customCheck1">{{trans('ajax.pages.auth.remember_me')}}</label>
+                                                           for="customCheck1">{{trans('auth.remember_me')}}</label>
                                                 </div>
                                                 <u>
                                                     <a class="small"
-                                                       href="{{ route_i18n('password.request') }}">{{trans('ajax.pages.auth.forgot_password')}}</a>
+                                                       href="{{ route_i18n('password.request') }}">{{trans('auth.forgot_password')}}</a>
                                                 </u>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
-                                            <login-o-auth :provider="'google'"></login-o-auth>
+                                        <div class="form-group row mt-2">
+                                            <div class="m-auto">
+                                                <login-o-auth :provider="'google'"></login-o-auth>
+                                                <login-o-auth :provider="'twitter'"></login-o-auth>
+                                            </div>
                                         </div>
                                         <div class="form-group row mt-5">
                                             <div class="col-xl-8 offset-xl-2 col-lg-6 offset-lg-3">
                                                 <submit-button ref="submitButton"
                                                                :block="true"
-                                                               :value="'{{trans('ajax.general.login')}}'"></submit-button>
+                                                               :value="'{{trans('auth.login')}}'"></submit-button>
                                             </div>
                                         </div>
                                         <div class="form-group row text-center m-0">

@@ -1,8 +1,8 @@
 <script>
   export default {
     name: 'inline-form',
-    render: function (createElement) {
-      return createElement('form', {
+    render: function (h) {
+      return h('form', {
         props: {
           id: {required: false, default: null},
           method: {required: false, default: 'POST'},

@@ -76,7 +76,7 @@ class Filters
      */
     private function translateFilter($value)
     {
-        return trans(sprintf('ajax.filters_inv.%s', $value));
+        return trans(sprintf('js-backend.filters_inv.%s', $value));
     }
 
     /**

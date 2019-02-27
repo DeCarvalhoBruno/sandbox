@@ -203,8 +203,7 @@ class View extends Model
         }
 
         if ($this->shouldCache) {
-            //@TODO remove the division in laravel 5.8
-            $this->cache->put($cacheKey, $viewsCount, $this->cacheLifetime/60);
+            $this->cache->put($cacheKey, $viewsCount, $this->cacheLifetime);
         }
 
         return $viewsCount;

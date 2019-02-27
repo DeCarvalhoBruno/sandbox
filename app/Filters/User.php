@@ -16,12 +16,12 @@ class User extends Filters
      */
     public function sortBy($name)
     {
-        $translatedColumn = trans(sprintf('ajax.db_raw_inv.%s', $name));
+        $translatedColumn = trans(sprintf('js-backend.db_raw_inv.%s', $name));
         if (isset($this->acceptedSortColumns[$translatedColumn])) {
             return $this->builder
                 ->orderBy($translatedColumn,
                     trans(
-                        sprintf('ajax.filters.%s',
+                        sprintf('js-backend.filters.%s',
                             $this->getFilter('order')
                         )
                     ) ?? 'asc'
@@ -58,13 +58,13 @@ class User extends Filters
     public function createdAt($date)
     {
         switch ($date) {
-            case trans("ajax.filters.week"):
+            case trans("js-backend.filters.week"):
                 $testedDate = Carbon::now()->subWeek()->toDateTimeString();
                 break;
-            case trans("ajax.filters.month"):
+            case trans("js-backend.filters.month"):
                 $testedDate = Carbon::now()->subMonth()->toDateTimeString();
                 break;
-            case trans("ajax.filters.year"):
+            case trans("js-backend.filters.year"):
                 $testedDate = Carbon::now()->subYear()->toDateTimeString();
                 break;
             default:

@@ -48,13 +48,13 @@ class User extends Controller
             'sorted' => $userFilter->getFilter('sortBy'),
             'columns' => $userProvider->createModel()->getColumnInfo([
                 'full_name' => (object)[
-                    'name' => trans('ajax.db.full_name'),
+                    'name' => trans('js-backend.db.full_name'),
                 ],
                 'email' => (object)[
-                    'name' => trans('ajax.general.email'),
+                    'name' => trans('js-backend.general.email'),
                 ],
                 'created_at' => (object)[
-                    'name' => trans('ajax.db.user_created_at'),
+                    'name' => trans('js-backend.db.user_created_at'),
                 ]
             ], $userFilter)
         ];

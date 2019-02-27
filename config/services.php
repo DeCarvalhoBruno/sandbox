@@ -38,7 +38,13 @@ return [
     'google' => [
         'client_id' => env('OAUTH_GOOGLE_CLIENT_ID'),
         'client_secret' => env('OAUTH_GOOGLE_CLIENT_SECRET'),
-        'redirect'=>env('OAUTH_GOOGLE_REDIRECT_URL')
+        'redirect' => env('OAUTH_GOOGLE_REDIRECT_URL')
+    ],
+
+    'twitter' => [
+        'client_id' => env('OAUTH_TWITTER_CLIENT_ID'),
+        'client_secret' => env('OAUTH_TWITTER_CLIENT_SECRET'),
+        'redirect' => env('OAUTH_TWITTER_REDIRECT_URL')
     ]
 
 ];

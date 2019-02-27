@@ -1,7 +1,8 @@
 <template>
-  <button class="btn btn-dark ml-auto" type="button" @click="login">
-    {{ $t('general.login_with') }}
-    <i class="fa fa-google"></i>
+  <button class="btn btn-dark" type="button" @click="login">
+    <i :class="`fa fa-${provider}`"></i>
+    {{ $t(`login-o-auth.login_with_${provider}`) }}
+
   </button>
 </template>
 

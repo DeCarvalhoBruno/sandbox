@@ -26,7 +26,7 @@
         this.$emit('clicked')
       }
     },
-    render (h) {
+    render: function (h) {
       return h('button', {
         class: ['btn', 'btn-circle', this.buttonTypeComputed],
         on: {

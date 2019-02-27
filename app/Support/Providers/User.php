@@ -2,7 +2,6 @@
 
 use App\Contracts\Models\Person as PersonInterface;
 use App\Contracts\Models\User as UserInterface;
-use App\Exceptions\EmailTakenException;
 use App\Models\OAuthProvider;
 use App\Models\Stats\StatUser;
 use App\Models\UserActivation;
