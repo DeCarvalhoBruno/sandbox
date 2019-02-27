@@ -52,10 +52,14 @@ class OAuth extends Controller
         $socialiteUser = Socialite::driver($provider)->stateless()->user();
         $this->processUser($request, $userRepo, $provider, $socialiteUser);
 
-        return view('frontend.oauth.callback', [
-        ]);
+        return view('frontend.oauth.callback');
     }
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function googleYolo(Request $request, UserProvider $userRepo)
     {
         $provider = 'google';

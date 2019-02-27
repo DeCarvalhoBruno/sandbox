@@ -2,7 +2,6 @@
   <button class="btn btn-dark" type="button" @click="login">
     <i :class="`fa fa-${provider}`"></i>
     {{ $t(`login-o-auth.login_with_${provider}`) }}
-
   </button>
 </template>
 
@@ -26,10 +25,6 @@
         const {data} = await axios.post(`/oauth/${this.provider}`)
         newWindow.location.href = data
       },
-
-      /**
-       * @param {MessageEvent} e
-       */
       onMessage (e) {
         if (e.data.hasOwnProperty('route')) {
           window.location.href = e.data.route
@@ -38,10 +33,6 @@
     }
   }
 
-  /**
-   * @param  {Object} options
-   * @return {Window}
-   */
   function openWindow (url, title, options = {}) {
     if (typeof url === 'object') {
       options = url

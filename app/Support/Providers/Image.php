@@ -168,8 +168,11 @@ class Image extends Model implements ImageInterface
      * @param array $columns
      * @return \App\Models\Media\MediaEntity
      */
-    public function getImages($entityTypeId, $columns = ['*'])
+    public function getImages($entityTypeId, $columns = null)
     {
+        if (is_null($columns)) {
+            $columns = $this->getDefaultImageColumns();
+        }
         return MediaEntity::buildImages($entityTypeId, $columns)->get();
     }
 
@@ -186,6 +189,7 @@ class Image extends Model implements ImageInterface
                 'media_uuid as uuid',
                 'media_in_use as used',
                 'media_extension as ext',
+                'media_title as title',
                 \DB::raw(
                     sprintf(
                         '"%s" as suffix',
@@ -313,5 +317,21 @@ class Image extends Model implements ImageInterface
     {
         return EntitiesWithMedia::getSiblings($uuid, $columns);
 
+    }
+
+    public function getDefaultImageColumns()
+    {
+        return [
+            'media_uuid as uuid',
+            'media_in_use as used',
+            'media_extension as ext',
+            'media_title as title',
+            \DB::raw(
+                sprintf(
+                    '"%s" as suffix',
+                    MediaImgFormat::getFormatAcronyms(MediaImgFormat::THUMBNAIL)
+                )
+            ),
+        ];
     }
 }

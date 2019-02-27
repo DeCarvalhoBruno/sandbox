@@ -85,6 +85,10 @@ class Frontend extends Routes
             $r->post('email/subscribe/newsletter', 'Frontend@newsletterSubscribe')
                 ->name( 'subscribe_newsletter');
 
+            $r->get(trans('routes.privacy', [], $locale), 'Frontend@privacy')
+                ->name(self::i18nRouteNames($locale, 'privacy'));
+            $r->get(trans('routes.terms_service', [], $locale), 'Frontend@termsOfService')
+                ->name(self::i18nRouteNames($locale, 'terms.service'));
         };
 
     }

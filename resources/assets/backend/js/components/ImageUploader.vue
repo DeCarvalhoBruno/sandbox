@@ -52,7 +52,7 @@
                     <div class="dz-container" @click="triggerBrowse">
                         <h4 class="dropfile-instructions">{{ $t('dropzone.choose_file')}}</h4>
                         <p class="dropfile-instructions">{{ $t('dropzone.max_size')}}
-                            {{maxFilesize}}{{$t('js-common.dropzone.MB')}}</p>
+                            {{maxFilesize}}{{$t('dropzone.units.MB')}}</p>
                         <p class="dropfile-instructions">{{ $t('dropzone.accepted_formats')}} JPG,
                             PNG</p>
                         <fa class="fa-4x" icon="cloud-upload-alt"></fa>
@@ -91,7 +91,7 @@
                                                     <p>{{$t('pages.blog.image_uploaded')}}</p>
                                                 </div>
                                                 <div v-else-if="file.status!=='error'" class="row blinker blinker-red">
-                                                    <p>{{$t('pages.settings.image_uploading')}}</p>
+                                                    <p>{{$t('avatar-uploader.image_uploading')}}</p>
                                                 </div>
                                             </div>
                                         </div>

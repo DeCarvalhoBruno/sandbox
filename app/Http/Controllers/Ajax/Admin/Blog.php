@@ -97,18 +97,7 @@ class Blog extends Controller
             'url' => $this->getPostUrl($record),
             'blog_post_slug' => $record->getAttribute('blog_post_slug'),
             'thumbnails' => $mediaRepo->image()->getImages(
-                $record->getAttribute('entity_type_id'), [
-                'media_uuid as uuid',
-                'media_in_use as used',
-                'media_extension as ext',
-                \DB::raw(
-                    sprintf(
-                        '"%s" as suffix',
-                        MediaImgFormat::getFormatAcronyms(MediaImgFormat::THUMBNAIL)
-                    )
-                ),
-
-            ])
+                $record->getAttribute('entity_type_id'))
         ];
     }
 
@@ -140,17 +129,6 @@ class Blog extends Controller
             'url' => $this->getPostUrl($post),
             'blog_post_slug' => $post->getAttribute('blog_post_slug'),
         ]);
-    }
-
-    private function getPostUrl($post)
-    {
-        $params = [
-            'slug' => $post->getAttribute('blog_post_slug'),
-        ];
-        if ($post->getAttribute('blog_status_id') != BlogStatus::BLOG_STATUS_PUBLISHED) {
-            $params['preview'] = true;
-        }
-        return route_i18n('blog', $params);
     }
 
     /**
@@ -269,6 +247,18 @@ class Blog extends Controller
             $uuid,
             Entity::BLOG_POSTS);
         return $mediaRepo->image()->getImagesFromSlug($slug, Entity::BLOG_POSTS)->toArray();
+    }
+
+
+    private function getPostUrl($post)
+    {
+        $params = [
+            'slug' => $post->getAttribute('blog_post_slug'),
+        ];
+        if ($post->getAttribute('blog_status_id') != BlogStatus::BLOG_STATUS_PUBLISHED) {
+            $params['preview'] = true;
+        }
+        return route_i18n('blog', $params);
     }
 
 }

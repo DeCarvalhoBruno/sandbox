@@ -16,6 +16,7 @@
         'image_uploading' => 'Processing in progress...',
         'image_proceed' => 'Proceed to cropping',
         'image_uploaded' => 'The avatar has been processed, you can return to the avatar tab.',
+        'image_url_copy' => 'Copy image url to clipboard',
     ],
     'dropzone' => [
         'choose_file' => 'Drag and drop your file here (or click to browse)',
@@ -31,7 +32,6 @@
         'max_files_exceeded' => 'The maximum number of files was reached.',
         'delete_media' => 'Delete media',
         'edit_media' => 'Edit media',
-        'image_url_copy' => 'Copy image url to clipboard',
         'units' => [
             'MB' => 'MB'
         ]

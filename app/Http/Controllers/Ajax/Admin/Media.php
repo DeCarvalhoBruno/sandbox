@@ -78,17 +78,7 @@ class Media extends Controller
                             );
                             return response(
                                 $this->mediaRepo->image()->getImages(
-                                    $this->processImage($media), [
-                                    'media_uuid as uuid',
-                                    'media_in_use as used',
-                                    'media_extension as ext',
-                                    \DB::raw(
-                                        sprintf(
-                                            '"%s" as suffix',
-                                            MediaImgFormat::getFormatAcronyms(MediaImgFormat::THUMBNAIL)
-                                        )
-                                    )
-                                ])->toArray(),
+                                    $this->processImage($media))->toArray(),
                                 Response::HTTP_OK
                             );
                             break;

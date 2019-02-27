@@ -15,5 +15,7 @@ return [
     'blog_slug' => 'blog/{slug}',
     'blog_cat' => 'categories/{slug}',
     'blog_tag' => 'tag/{slug}',
-    'blog_author' => 'author/{slug}'
+    'blog_author' => 'author/{slug}',
+    'privacy' => 'privacy',
+    'terms_service' => 'terms-of-service'
 ];

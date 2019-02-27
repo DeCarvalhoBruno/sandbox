@@ -71,7 +71,7 @@ class MediaImgFormat extends Model
                     static::THUMBNAIL => 'tb',
                     static::FEATURED => 'ft',
                     static::HD => 'hd',
-                    static::FD => 'hf',
+                    static::FHD => 'hf',
                 ];
         }
     }

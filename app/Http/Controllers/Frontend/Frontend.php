@@ -1,10 +1,7 @@
 <?php namespace App\Http\Controllers\Frontend;
 
-use App\Emails\Frontend\Contact;
 use App\Events\PersonSentContactRequest;
-use App\Events\UserSubscribedToNewsletter;
 use App\Http\Requests\Frontend\SendContactEmail;
-use App\Jobs\SendMail;
 use App\Jobs\SubscribeToNewsletter;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
@@ -17,7 +14,6 @@ class Frontend extends Controller
     public function contact()
     {
         return view('frontend.site.contact');
-
     }
 
     public function sendContactEmail(SendContactEmail $request)
@@ -47,8 +43,17 @@ class Frontend extends Controller
             'title' => trans('titles.subscribed_msg_title'),
             'text' => trans('titles.subscribed_msg_text')
         ], Response::HTTP_OK);
+    }
 
+    public function privacy()
+    {
+        return view('frontend.site.privacy');
+    }
 
+    public function termsOfService()
+    {
+
+        return view('frontend.site.terms_service');
     }
 
 }

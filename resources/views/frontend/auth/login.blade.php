@@ -81,7 +81,6 @@
                                         <div class="form-group row mt-2">
                                             <div class="m-auto">
                                                 <login-o-auth :provider="'google'"></login-o-auth>
-                                                <login-o-auth :provider="'twitter'"></login-o-auth>
                                             </div>
                                         </div>
                                         <div class="form-group row mt-5">

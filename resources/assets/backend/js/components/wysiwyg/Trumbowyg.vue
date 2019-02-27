@@ -1,5 +1,5 @@
 <template>
-    <textarea></textarea>
+  <textarea></textarea>
 </template>
 
 <script>
@@ -7,17 +7,17 @@
   import 'trumbowyg/dist/trumbowyg.min.js'
 
   // import 'trumbowyg/dist/plugins/'
-  // import 'back_path/components/wysiwyg/plugins/image'
+  // import 'back_path/components/wysiwyg/plugins/'
 
-  const events = ['init', 'focus', 'blur', 'change', 'resize', 'paste', 'openfullscreen', 'closefullscreen', 'close'];
-  const eventPrefix = 'tbw';
+  const events = ['init']
+  const eventPrefix = 'tbw'
   export default {
     name: 'trumbowyg',
     props: {
       value: {
         default: null,
         required: true,
-        validator(value) {
+        validator (value) {
           return value === null || typeof value === 'string' || value instanceof String
         }
       },
@@ -27,32 +27,31 @@
       },
       svgPath: {
         type: [String, Boolean],
-        default: true,
+        default: true
       },
     },
-    data() {
+    data () {
       return {
         // jQuery DOM
         el: null,
       }
     },
-
-    mounted() {
+    mounted () {
       // console.log(svgIcons)
       // Return early if instance is already loaded
-      if (this.el) return;
+      if (this.el) return
       // Store DOM
-      this.el = jQuery(this.$el);
+      this.el = jQuery(this.$el)
       // Init editor with config
-      this.el.trumbowyg(jQuery.extend({}, {svgPath: this.svgPath}, this.config));
+      this.el.trumbowyg(jQuery.extend({}, {svgPath: this.svgPath}, this.config))
       // Set initial value
-      this.el.trumbowyg('html', this.value);
+      this.el.trumbowyg('html', this.value)
       // Watch for further changes
-      this.el.on(`${eventPrefix}change`, this.onChange);
+      this.el.on(`${eventPrefix}change`, this.onChange)
       // Workaround : trumbowyg does not trigger change event on Ctrl+V
-      this.el.on(`${eventPrefix}paste`, this.onChange);
+      this.el.on(`${eventPrefix}paste`, this.onChange)
       // Register events
-      this.registerEvents();
+      this.registerEvents()
     },
     watch: {
       /**
@@ -60,10 +59,10 @@
        *
        * @param newValue String
        */
-      value(newValue) {
+      value (newValue) {
         if (this.el) {
           // Prevent multiple input events
-          if (newValue === this.el.trumbowyg('html')) return;
+          if (newValue === this.el.trumbowyg('html')) return
           // Set new value
           this.el.trumbowyg('html', newValue)
         }
@@ -77,26 +76,26 @@
        *
        * @param event
        */
-      onChange(event) {
-        this.$emit('input', event.target.value);
+      onChange (event) {
+        this.$emit('input', event.target.value)
       },
       /**
        * Emit all available events
        */
-      registerEvents() {
+      registerEvents () {
         events.forEach((name) => {
           this.el.on(`${eventPrefix}${name}`, (...args) => {
-            this.$emit(`${eventPrefix}-${name}`, ...args);
-          });
+            this.$emit(`${eventPrefix}-${name}`, ...args)
+          })
         })
       }
     },
-    beforeDestroy() {
+    beforeDestroy () {
       // Free up memory
       if (this.el) {
-        this.el.trumbowyg('destroy');
-        this.el = null;
+        this.el.trumbowyg('destroy')
+        this.el = null
       }
-    },
-  };
+    }
+  }
 </script>

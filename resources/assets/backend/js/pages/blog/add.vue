@@ -131,11 +131,8 @@
             <trumbowyg v-model="form.fields.blog_post_content" :config="editorConfig"
                        ref="inputBlogPostContent"
                        class="form-control"
-                       name="content"></trumbowyg>
-
-            <!--<input type="text" v-model="message">-->
-            <!--<button type="button"-->
-            <!--v-clipboard:copy="message">Copy!</button>-->
+                       name="content"
+                        :image-list="thumbnails"></trumbowyg>
           </div>
           <div class="row p-0 m-0 input-tag-wrapper">
             <span class="badge badge-pill badge-light"
@@ -358,8 +355,7 @@
             ['unorderedList', 'orderedList'],
             ['horizontalRule'],
             ['removeformat'],
-            ['insertImage'],
-            ['fullscreen']
+            ['fullscreen'],
           ],
           plugins: {}
         }
