@@ -21,6 +21,15 @@ a {
   }
 }
 
+img {
+  opacity: 1;
+  transition: opacity 0.8s;
+}
+
+img[data-src] {
+  opacity: 0;
+}
+
 .font-light {
   font-weight: 300;
 }

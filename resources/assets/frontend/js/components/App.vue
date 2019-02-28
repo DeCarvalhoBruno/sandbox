@@ -47,11 +47,16 @@
   (async function pageLoader (token, pages) {
     if (pages.hasOwnProperty(token)) {
       if (pages[token].hasOwnProperty('page')) {
-        await import(/* webpackChunkName: "page-" */ `front_path/pages/${pages[token].page}`)
+        if (typeof pages[token].page == 'object') {
+           pages[token].page.forEach(async script => {
+              await import(/* webpackChunkName: "page-" */ `front_path/${script}`)
+          })
+        } else {
+          await import(/* webpackChunkName: "page-" */ `front_path/pages/${pages[token].page}`)
+        }
       }
     }
-  })  (token, Pages)
+  })(token, Pages)
 
-
-export default {}
+  export default {}
 </script>

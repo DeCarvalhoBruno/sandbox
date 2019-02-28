@@ -1,3 +1,7 @@
+import ResponsiveBootstrapToolkit from '../plugins/jquery/bootstrap-toolkit'
+import axios from 'axios'
+import swal from 'sweetalert2/dist/sweetalert2.min.js'
+
 (function () {
   var header = $('header')
   if (!header.length)
@@ -29,7 +33,6 @@
 })(jQuery);
 (function ($, viewport) {
   $(document).ready(function () {
-
     //Detect touch based devices so we can make layout adjustments
     //especially when it has to do with hover/click behavior
     var noTouch = false
@@ -89,9 +92,17 @@
         $('h1.viewport').html(viewport.current())
       })
     )
-    $('#app').Lazy()
+
+    // var img = document.getElementsByTagName('img')
+    // for (var i = 0; i < img.length; i++) {
+    //   if (img[i].getAttribute('data-src')) {
+    //     img[i].setAttribute('src', img[i].getAttribute('data-src'))
+    //     img[i].removeAttribute('data-src')
+    //   }
+    // }
 
   })
+
 })(jQuery, ResponsiveBootstrapToolkit);
 (function () {
   if (window.hasOwnProperty('config')) {
@@ -151,5 +162,54 @@ if (window.hasOwnProperty('config')) {
   if (window.config.auth_check === false &&
     window.config.google_verified === false) {
     window.onGoogleYoloLoad = handleSingleClickSignOn
+  }
+}
+
+var lazy = []
+registerListener('load', setLazy)
+registerListener('load', lazyLoad)
+registerListener('scroll', lazyLoad)
+registerListener('resize', lazyLoad)
+
+function setLazy () {
+  lazy = document.getElementsByClassName('lazy')
+}
+
+function lazyLoad () {
+  for (var i = 0; i < lazy.length; i++) {
+    if (isInViewport(lazy[i])) {
+      if (lazy[i].getAttribute('data-src')) {
+        lazy[i].src = lazy[i].getAttribute('data-src')
+        lazy[i].removeAttribute('data-src')
+      }
+    }
+  }
+  if (lazy.length === 0) {
+    window.removeEventListener('scroll', lazyLoad)
+  }
+  cleanLazy()
+}
+
+function cleanLazy () {
+  lazy = Array.prototype.filter.call(lazy,
+    function (l) { return l.getAttribute('data-src')})
+}
+
+function isInViewport (el) {
+  var rect = el.getBoundingClientRect()
+
+  return (
+    rect.bottom >= 0 &&
+    rect.right >= 0 &&
+    rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.left <= (window.innerWidth || document.documentElement.clientWidth)
+  )
+}
+
+function registerListener (event, func) {
+  if (window.addEventListener) {
+    window.addEventListener(event, func)
+  } else {
+    window.attachEvent('on' + event, func)
   }
 }

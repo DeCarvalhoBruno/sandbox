@@ -36,7 +36,6 @@ class CreateBlogPost extends FormRequest
     {
         return [
             'blog_post_title' => 'strip_tags',
-            'blog_post_content' => 'purify'
         ];
     }
 

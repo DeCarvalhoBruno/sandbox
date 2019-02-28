@@ -31,7 +31,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="post-content">
-                            {!! $post->content!!}
+                            {!! \App\Support\Frontend\Transformer::handle($post->content)!!}
                         </div>
                     </div>
                     @if(!$sources->isEmpty())

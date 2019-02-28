@@ -60,12 +60,12 @@ mix.webpackConfig({
       dry: false
     }),
     new webpack.ProvidePlugin({
-      '$': 'jquery',
-      jQuery: 'jquery',
-      Popper: 'popper.js/dist/umd/popper',
-      axios: 'axios/dist/axios.min.js',
-      ResponsiveBootstrapToolkit: 'front_path/plugins/jquery/bootstrap-toolkit.js',
-      swal: 'sweetalert2/dist/sweetalert2.min.js'
+      // '$': 'jquery',
+      // jQuery: 'jquery',
+      // // Popper: 'popper.js/dist/umd/popper',
+      // axios: 'axios/dist/axios.min.js',
+      // ResponsiveBootstrapToolkit: 'front_path/plugins/jquery/bootstrap-toolkit.js',
+      // swal: 'sweetalert2/dist/sweetalert2.min.js'
     })
   ],
   resolve: {

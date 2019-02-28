@@ -210,6 +210,4 @@ var ResponsiveBootstrapToolkit = (function($){
 
 })(jQuery);
 
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = ResponsiveBootstrapToolkit;
-}
+export default ResponsiveBootstrapToolkit

@@ -55,6 +55,7 @@
 
       .carousel-inner {
         .carousel-item {
+          min-height: $blog-featured-height;
           position: relative;
           text-align: left;
           overflow: hidden;
