@@ -1,5 +1,5 @@
 import './axios'
-import './fontawesome'
+// import './fontawesome'
 
 require('./jquery/sidebar/Layout')
 require('./jquery/sidebar/PushMenu')

@@ -8,7 +8,7 @@
                         <p>{{$tc(`db.${entity}`,2)}}</p>
                     </div>
                     <div class="icon">
-                        <fa :icon="data.icon"></fa>
+                        <i :class="'fa fa-'+data.icon"></i>
                     </div>
                     <router-link :to="{ name: `admin.${entity}.index` }" class="nav-link small-box-footer"
                                  active-class="active">

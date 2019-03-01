@@ -6,10 +6,11 @@ $blog-featured-max-width: 46.9rem;
   padding-bottom: 56.25%;
   height: 0;
   overflow: hidden;
-  max-width: 100%;
-}
+  max-width: 75%;
+  @include media-breakpoint-down(md) {
+    max-width: 100%;
+  }
 
-.embed-container {
   iframe, object, embed {
     position: absolute;
     top: 0;

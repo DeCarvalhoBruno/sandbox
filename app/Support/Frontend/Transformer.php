@@ -86,7 +86,7 @@ frameborder="0" allowfullscreen></iframe>',
         return $d;
     }
 
-    public static function twitter($d)
+    public static function tweet($d)
     {
         $twitterIdPosition = strrpos($d[0], '/');
         if ($twitterIdPosition !== false) {

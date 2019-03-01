@@ -6,7 +6,10 @@
         'users' => 'User|Users',
         'newsletters' => 'Newsletter|Newsletter',
         'newsletter_subscription' => 'Newsletter subscription',
-        'contact_form_message' => 'Contact form message'
+        'contact_form_message' => 'Contact form message',
+        'blog_source_record_url' => 'Link',
+        'blog_source_record_img' => 'Image',
+        'blog_source_record_file' => 'File',
     ],
     'mailing_lists' => [
         'newsletters' => 'Newsletter',

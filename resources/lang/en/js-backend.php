@@ -219,7 +219,7 @@ return [
     ],
     'message' => [
         'profile_updated' => 'Your profile has been updated.',
-        'settings_updated'=>'Your general settings were updated.',
+        'settings_updated' => 'Your general settings were updated.',
         'password_updated' => 'Your password has been updated.',
         'user_update_ok' => 'The user was updated.',
         'user_delete_ok' => 'User {name} was deleted.|The users were deleted.',
@@ -269,8 +269,6 @@ return [
         ],
         'settings' => [
             'language' => 'Language',
-
-
             'notifications' => 'Choose the events for which you would like to receive live notifications:'
         ],
         'blog' => [
@@ -292,7 +290,8 @@ return [
             'add_success' => 'The blog post was created.',
             'save_success' => 'The blog post was updated.',
             'edit_image' => 'Edit image',
-            'published_at' => 'Publishing date:'
+            'published_at' => 'Publishing date:',
+            'add_source_button' => 'Add source'
         ],
         'blog_categories' => [
             'add_child_node' => 'Add a child element to "{name}"',

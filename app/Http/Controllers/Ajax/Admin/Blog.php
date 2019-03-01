@@ -95,6 +95,12 @@ class Blog extends Controller
             'status_list' => BlogStatus::getConstants('BLOG'),
             'blog_categories' => $categories->tree,
             'url' => $this->getPostUrl($record),
+            'source_types'=>$blogRepo->source()->listTypes(),
+            'sources'=>$blogRepo->source()
+                ->buildByBlogSlug(
+                    $record->getAttribute('blog_post_slug'),
+                    ['blog_source_content as source','blog_source_record_type_name as type']
+                )->get()->toArray(),
             'blog_post_slug' => $record->getAttribute('blog_post_slug'),
             'thumbnails' => $mediaRepo->image()->getImages(
                 $record->getAttribute('entity_type_id'))
@@ -136,6 +142,7 @@ class Blog extends Controller
      * @param \App\Http\Requests\Admin\UpdateBlogPost $request
      * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
+     * @return array
      */
     public function update($slug, UpdateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo)
     {
@@ -153,6 +160,11 @@ class Blog extends Controller
         $post = $blogRepo->updateOne($slug, $request->all());
         $blogRepo->category()->updatePost($request->getCategories(), $post);
         $blogRepo->tag()->updatePost($request->getTags(), $post);
+        return (
+        [
+            'url' => $this->getPostUrl($post),
+            'blog_post_slug' => $post->getAttribute('blog_post_slug'),
+        ]);
     }
 
     /**
@@ -249,7 +261,10 @@ class Blog extends Controller
         return $mediaRepo->image()->getImagesFromSlug($slug, Entity::BLOG_POSTS)->toArray();
     }
 
-
+    /**
+     * @param \App\Models\Blog\BlogPost $post
+     * @return string
+     */
     private function getPostUrl($post)
     {
         $params = [

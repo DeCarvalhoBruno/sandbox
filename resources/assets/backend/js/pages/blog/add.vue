@@ -14,7 +14,7 @@
                        :placeholder="$t('db.blog_post_title')"
                        aria-describedby="help_blog_post_title"
                        @change="changedField('blog_post_title')">
-                <small class="text-muted" v-show="url">{{url}}</small>
+                <small class="text-muted" v-show="url"><a :href="url" target="_blank">{{url}}</a></small>
               </div>
               <div class="col-lg-2">
                 <submit-button type="button" :loading="form.busy"
@@ -36,12 +36,12 @@
                   <button type="button"
                           class="btn btn-success btn-small"
                           @click="toggleEditing('form_status_editing')">
-                    <fa icon="check"></fa>
+                    <i class="fa fa-check"></i>
                   </button>
                   <button type="button"
                           class="btn btn-light btn-small"
                           @click="toggleEditing('form_status_editing')">
-                    <fa icon="ban"></fa>
+                    <i class="fa fa-ban"></i>
                   </button>
                 </template>
                 <template v-else>
@@ -66,12 +66,12 @@
                         <button type="button"
                                 class="btn btn-success btn-small"
                                 @click="toggleEditing('form_user_editing')">
-                          <fa icon="check"></fa>
+                          <i class="fa fa-check"></i>
                         </button>
                         <button type="button"
                                 class="btn btn-light btn-small"
                                 @click="toggleEditing('form_user_editing')">
-                          <fa icon="ban"></fa>
+                          <i class="fa fa-ban"></i>
                         </button>
                       </div>
                     </div>
@@ -107,12 +107,12 @@
                   <button type="button"
                           class="btn btn-success btn-small"
                           @click="validateAndGo">
-                    <fa icon="check"></fa>
+                    <i class="fa fa-check"></i>
                   </button>
                   <button type="button"
                           class="btn btn-light btn-small"
                           @click="toggleEditing('form_publish_date_editing')">
-                    <fa icon="ban"></fa>
+                    <i class="fa fa-ban"></i>
                   </button>
                 </div>
                 <div class="col pl-0" v-else>
@@ -139,7 +139,7 @@
                   v-for="(badge, index) in form.fields.tags"
                   :key="index">
               <span v-html="badge"></span>
-              <fa icon="tag" class="badge-tag-icon"></fa>
+              <i class="fa fa-tag badge-tag-icon"></i>
             </span>
             <input type="text"
                    ref="tag"
@@ -147,6 +147,30 @@
                    @keydown.enter.prevent="addTag"
                    maxlength="35"
                    :placeholder="$t('pages.blog.add_tag_pholder')"/>
+          </div>
+        </div>
+      </div>
+      <div class="row p-0 m-0">
+        <div class="card col-lg p-0 m-0">
+          <div class="card-body justify-content-md-center">
+            <div class="col-lg-10 offset-lg-1 p-0 m-0">
+              <div class="container">
+                <div class="row form-inline">
+                    <select class="custom-select w-25 mr-3">
+                      <option v-for="(type, idx) in source_types" :key="'st_'+idx">{{type}}</option>
+                    </select>
+                    <input class="form-control w-50 mr-3">
+                    <button type="submit" class="btn btn-primary my-1">{{$t('pages.blog.add_source_button')}}</button>
+                </div>
+                <div class="row">
+                  <div class="container">
+                    <div v-for="(source, idx) in sources" class="row">
+                      <p v-if="source.type=='url'"><i class="fa fa-link"></i><span>{{source.source}}</span></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -250,6 +274,8 @@
         blog_categories: [],
         tagInput: '',
         thumbnails: [],
+        source_types: [],
+        sources: [],
         form: new Form({
           blog_post_content: '',
           blog_post_title: '',
@@ -351,8 +377,8 @@
             ['justifyFull'],
             ['unorderedList', 'orderedList'],
             ['horizontalRule'],
-            ['bbImage'],
-            ['fullscreen'],
+            ['bbCode'],
+            ['fullscreen']
           ],
           plugins: {}
         }
@@ -411,6 +437,8 @@
         this.saveMode = saveMode
         this.blog_categories = data.blog_categories
         this.thumbnails = data.thumbnails
+        this.source_types = data.source_types
+        this.sources = data.sources
       }
     },
     metaInfo () {
