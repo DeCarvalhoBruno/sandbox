@@ -131,8 +131,7 @@
             <trumbowyg v-model="form.fields.blog_post_content" :config="editorConfig"
                        ref="inputBlogPostContent"
                        class="form-control"
-                       name="content"
-                        :image-list="thumbnails"></trumbowyg>
+                       name="content"></trumbowyg>
           </div>
           <div class="row p-0 m-0 input-tag-wrapper">
             <span class="badge badge-pill badge-light"
@@ -148,6 +147,19 @@
                    @keydown.enter.prevent="addTag"
                    maxlength="35"
                    :placeholder="$t('pages.blog.add_tag_pholder')"/>
+          </div>
+        </div>
+      </div>
+      <div class="row p-0 m-0">
+        <div class="card col-lg p-0 m-0">
+          <div class="card-body">
+            <image-uploader
+                :target="form.fields.blog_post_slug"
+                type="blog_posts"
+                media="image"
+                :is-active="this.saveMode==='edit'"
+                :thumbnails-parent="thumbnails"
+                @images-updated="updateThumbnails"/>
           </div>
         </div>
       </div>
@@ -182,20 +194,6 @@
         </div>
       </div>
     </form>
-    <div class="row p-0 m-0">
-      <div class="card col-lg p-0 m-0">
-        <div class="card-header bg-transparent">{{$t('pages.blog.media')}}</div>
-        <div class="card-body">
-          <image-uploader
-              :target="form.fields.blog_post_slug"
-              type="blog_posts"
-              media="image"
-              :is-active="this.saveMode==='edit'"
-              :thumbnails-parent="thumbnails"
-              @images-updated="updateThumbnails"/>
-        </div>
-      </div>
-    </div>
     <div class="row p-0 mt-5 mb-5">
       <div class="row p-0 mt-5 mb-5">
       </div>
@@ -283,10 +281,10 @@
           vm.changedField('blog_post_content')
         })
       })
-      window.addEventListener('beforeunload', this.checkBeforeUnload, {once: true})
+      // window.addEventListener('beforeunload', this.checkBeforeUnload, {once: true})
     },
     beforeDestroy () {
-      window.removeEventListener('beforeunload', this.checkBeforeUnload)
+      // window.removeEventListener('beforeunload', this.checkBeforeUnload)
     },
     methods: {
       checkBeforeUnload (event) {
@@ -350,11 +348,10 @@
             ['viewHTML'],
             ['formatting'],
             ['strong', 'em', 'del'],
-            ['link'],
             ['justifyFull'],
             ['unorderedList', 'orderedList'],
             ['horizontalRule'],
-            ['removeformat'],
+            ['bbImage'],
             ['fullscreen'],
           ],
           plugins: {}

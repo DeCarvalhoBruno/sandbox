@@ -276,7 +276,7 @@ return [
         'blog' => [
             'categories' => 'Categories',
             'media' => 'Media',
-            'tab_available' => 'Available',
+            'tab_available' => 'Available media',
             'tab_upload' => 'Upload',
             'author' => 'Author',
             'filter_title' => 'Filter by title',

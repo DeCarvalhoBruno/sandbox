@@ -7,7 +7,7 @@
   import 'trumbowyg/dist/trumbowyg.min.js'
 
   // import 'trumbowyg/dist/plugins/'
-  // import 'back_path/components/wysiwyg/plugins/'
+  import 'back_path/components/wysiwyg/plugins/bbImage.js'
 
   const events = ['init']
   const eventPrefix = 'tbw'

@@ -1,9 +1,9 @@
 <?php
 return [
     'error' => 'Error',
-    'website_auth_passwords_email' => 'Reset your password',
-    'website_auth_login' => 'Log in',
-    'website_home' => 'Home',
+    'frontend_auth_passwords_email' => 'Reset your password',
+    'frontend_auth_login' => 'Log in',
+    'frontend_site_home' => 'Home',
     'routes' => [
         'home' => 'Home',
         'profile' => 'Your profile',

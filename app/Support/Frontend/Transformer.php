@@ -11,7 +11,7 @@ class Transformer
 
         if (count($bbCodeMatches[0]) > 0) {
             foreach ($bbCodeMatches[0] as $bb) {
-                $p = explode('|', $bb, 3);
+                $p = explode('|', $bb, 4);
                 if (isset($methods[$p[0]])) {
                     $replacements[] = static::{array_shift($p)}($p);
                 } else {
@@ -43,10 +43,14 @@ class Transformer
 
     public static function image($d)
     {
-        return sprintf('<figure><img src="%s" alt="%s"/><figcaption>%s</figcaption></figure>',
-            $d[1],
-            $d[0],
-            $d[2]);
+        return sprintf('<figure class="img-embed"><img class="lazy" 
+src="%s" data-src="%s" alt="%s"/><figcaption>%s</figcaption>
+</figure>',
+            placeholder_image(),
+            isset($d[2]) ? $d[2] : '',
+            isset($d[0]) ? $d[0] : '',
+            isset($d[1]) ? $d[1] : ''
+        );
     }
 
     public static function code($d)

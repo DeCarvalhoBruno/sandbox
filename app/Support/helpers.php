@@ -182,3 +182,10 @@ if (!function_exists('viewable')) {
         return app(\App\Support\Providers\View::class)->forViewable($viewable);
     }
 }
+
+if (!function_exists('placeholder_image')) {
+    function placeholder_image()
+    {
+        return 'data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+    }
+}

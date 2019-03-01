@@ -21,7 +21,6 @@
     // Add some translations
     langs: {
       en: {
-        myplugin: 'Image'
       }
     },
     // Add our plugin to Trumbowyg registred plugins

@@ -7,8 +7,8 @@ body {
 }
 
 @include media-breakpoint-down(sm) {
-  .container{
-    margin:0 auto;
+  .container {
+    margin: 0 auto;
     max-width: 95%;
   }
 }
@@ -23,7 +23,7 @@ a {
 
 img {
   opacity: 1;
-  transition: opacity 0.8s;
+  transition: opacity 0.3s;
 }
 
 img[data-src] {
@@ -36,6 +36,13 @@ img[data-src] {
 
 .btn-primary {
   background-color: $primary;
+  border:none;
+
+  &:hover {
+    transition: background-color 350ms;
+    background-color: #000;
+  }
+
 }
 
 #app {
@@ -44,12 +51,12 @@ img[data-src] {
 
 
   .list-group-item.active {
-    border-left:3px solid $primary;
-    border-bottom:1px solid rgba(0, 0, 0, 0.125);
-    border-top:1px solid rgba(0, 0, 0, 0.125);
+    border-left: 3px solid $primary;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
 
     background-color: #fff;
-    color:#000;
+    color: #000;
   }
 }
 

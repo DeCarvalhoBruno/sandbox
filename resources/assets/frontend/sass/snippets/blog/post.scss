@@ -1,5 +1,30 @@
 #blog-post {
-  margin-bottom:8rem;
+  figure.img-embed {
+    margin: 1.5rem 0;
+    min-height:20rem;
+    @include media-breakpoint-down(md) {
+        min-height:unset;
+    }
+
+    img {
+      border-radius: 3px;
+      border: 1px solid #c4c4c4;
+      @include media-breakpoint-down(md) {
+        width: 100%;
+      }
+    }
+
+    figcaption {
+      font-weight: 700;
+      font-family: $font-family-title;
+      font-size: 0.9rem;
+      color: #352521;
+      font-style: italic;
+    }
+  }
+
+  margin-bottom: 8rem;
+
   .post-title {
     margin-top: 1.5rem;
     position: relative;

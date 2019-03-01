@@ -1,7 +1,7 @@
 @if(!is_null($media))
     <figure>
         @if(isset($alt))
-            <img class="lazy" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="{{asset($media)}}" alt="{{$alt}}"/>
+            <img class="lazy" src="{{placeholder_image()}}" data-src="{{asset($media)}}" alt="{{$alt}}"/>
         @else
             <img src="{{asset($media)}}"/>
         @endif
@@ -10,7 +10,7 @@
     <figure>
         @if(isset($format))
             @if(isset($alt))
-                <img class="lazy" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="{{asset(sprintf('/media/img/site/placeholder_%s.png',\App\Models\Media\MediaImgFormat::getFormatAcronyms($format)))}}"
+                <img class="lazy" src="{{placeholder_image()}}" data-src="{{asset(sprintf('/media/img/site/placeholder_%s.png',\App\Models\Media\MediaImgFormat::getFormatAcronyms($format)))}}"
                      alt="{{isset($alt)??''}}"/>
             @else
                 <img src="{{asset(sprintf('/media/img/site/placeholder_%s.png',\App\Models\Media\MediaImgFormat::getFormatAcronyms($format)))}}"/>

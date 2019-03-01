@@ -30,7 +30,7 @@
                                     <fa icon="pencil-alt"></fa>
                                 </button>
                                 <button type="button" class="btn btn-sm btn-info" :title="$t('avatar-uploader.image_url_copy')"
-                                        v-clipboard:copy="getImageUrl(image.uuid, 'tb', image.ext, true)"><fa icon="paste"></fa></button>
+                                        v-clipboard:copy="getImageUrl(image.uuid, 'ft', image.ext, true)"><fa icon="paste"></fa></button>
                             </div>
                         </li>
                     </ul>
