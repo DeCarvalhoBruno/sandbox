@@ -1,9 +1,10 @@
-<?php namespace App\Support\Frontend;
+<?php namespace App\Support\Presenters;
 
-class Transformer
+class BlogPost extends Presenter
 {
-    public static function handle($string)
+    public function content()
     {
+        $string = $this->entity->getAttribute('content');
         $methods = array_flip(get_class_methods(self::class));
         $replacements = $matches = [];
         preg_match_all('/(?<=\[\[).*(?=\]\])/U', $string, $bbCodeMatches);
@@ -13,7 +14,7 @@ class Transformer
             foreach ($bbCodeMatches[0] as $bb) {
                 $p = explode('|', $bb, 4);
                 if (isset($methods[$p[0]])) {
-                    $replacements[] = static::{array_shift($p)}($p);
+                    $replacements[] = $this->{array_shift($p)}($p);
                 } else {
                     $replacements[] = $bb;
                 }
@@ -22,7 +23,7 @@ class Transformer
         if (count($rawCodeMatches[0]) > 0) {
             foreach ($rawCodeMatches[0] as $bb) {
                 $p = explode('|', $bb, 2);
-                $replacements[] = static::code($p);
+                $replacements[] = $this->code($p);
             }
         }
         if (!empty($replacements)) {
@@ -36,12 +37,12 @@ class Transformer
         return $string;
     }
 
-    public static function link($d)
+   private function link($d)
     {
         return sprintf('<a href="%s">%s</a>', isset($d[1]) ? $d[1] : '', isset($d[0]) ? $d[0] : '');
     }
 
-    public static function image($d)
+   private function image($d)
     {
         return sprintf('<figure class="img-embed"><img class="lazy" 
 src="%s" data-src="%s" alt="%s"/><figcaption>%s</figcaption>
@@ -53,7 +54,7 @@ src="%s" data-src="%s" alt="%s"/><figcaption>%s</figcaption>
         );
     }
 
-    public static function code($d)
+   private function code($d)
     {
         return sprintf('<pre class="prettyprint linenums %s">%s</pre>',
             isset($d[0]) ? 'lang-' . $d[0] : '',
@@ -61,7 +62,7 @@ src="%s" data-src="%s" alt="%s"/><figcaption>%s</figcaption>
         );
     }
 
-    public static function maps($d)
+   private function maps($d)
     {
         preg_match('/^https?\:\/\/(?:www\.)?google\.[a-z]+\/maps\/(.*)/', $d[0], $m);
         if (isset($m[1])) {
@@ -73,7 +74,7 @@ frameborder="0" allowfullscreen></iframe>',
 
     }
 
-    public static function youtube($d)
+   private function youtube($d)
     {
         preg_match('/http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/',
             $d[0], $m);
@@ -86,7 +87,7 @@ frameborder="0" allowfullscreen></iframe>',
         return $d;
     }
 
-    public static function tweet($d)
+   private function tweet($d)
     {
         $twitterIdPosition = strrpos($d[0], '/');
         if ($twitterIdPosition !== false) {

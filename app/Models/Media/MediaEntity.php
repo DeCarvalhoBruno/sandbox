@@ -1,14 +1,17 @@
 <?php namespace App\Models\Media;
 
 use App\Traits\Models\DoesSqlStuff;
+use App\Traits\Presentable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use App\Support\Presenters\MediaEntity as MediaEntityPresenter;
 
 class MediaEntity extends Model
 {
-    use DoesSqlStuff;
+    use DoesSqlStuff, Presentable;
 
     public $timestamps = false;
+    protected $presenter = MediaEntityPresenter::class;
     protected $table = 'media_entities';
     protected $primaryKey = 'media_entity_id';
     protected $fillable = ['entity_type_id', 'media_category_record_id'];

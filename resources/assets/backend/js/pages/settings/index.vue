@@ -1,5 +1,5 @@
 <template>
-    <b-card :title="$t('general.settings')" no-body>
+    <div class="card">
         <div class="container">
             <div class="row">
                 <div class="col-md-3">
@@ -12,27 +12,25 @@
                         </b-nav-item>
                     </b-nav>
                 </div>
-                <div class="col-md-8 my-5">
+                <div class="col-md-9 my-5">
                     <router-view/>
                 </div>
             </div>
         </div>
-    </b-card>
+    </div>
 </template>
 
 <script>
   import Vue from 'vue'
-  import { Card, Nav } from 'bootstrap-vue/es/components'
+  import { Nav } from 'bootstrap-vue/es/components'
 
-  Vue.use(Card)
   Vue.use(Nav)
 
   export default {
     layout: 'basic',
     middleware: 'check-auth',
-    name: 'settings-index',
+    name: 'website-index',
     components: {
-      Card,
       Nav
     },
     computed: {
@@ -43,16 +41,6 @@
             name: this.$t('general.general'),
             route: 'admin.settings.general'
           },
-          {
-            icon: 'user',
-            name: this.$t('general.profile'),
-            route: 'admin.settings.profile'
-          },
-          {
-            icon: 'lock',
-            name: this.$t('general.password'),
-            route: 'admin.settings.password'
-          }
         ]
       }
     }

@@ -24,13 +24,18 @@ const BlogAdd = () => import('back_path/pages/blog/add').then(
 const BlogCategory = () => import('back_path/pages/blog/category').then(
   m => m.default || m)
 
+const User = () => import('back_path/pages/user/index').then(
+  m => m.default || m)
+const UserGeneral = () => import('back_path/pages/user/general').then(
+  m => m.default || m)
+const UserProfile = () => import('back_path/pages/user/profile').then(
+  m => m.default || m)
+const UserPassword = () => import('back_path/pages/user/password').then(
+  m => m.default || m)
+
 const Settings = () => import('back_path/pages/settings/index').then(
   m => m.default || m)
 const SettingsGeneral = () => import('back_path/pages/settings/general').then(
-  m => m.default || m)
-const SettingsProfile = () => import('back_path/pages/settings/profile').then(
-  m => m.default || m)
-const SettingsPassword = () => import('back_path/pages/settings/password').then(
   m => m.default || m)
 
 const SystemLog = () => import('back_path/pages/system/log').then(
@@ -115,25 +120,40 @@ let routes = [
   },
   {
     path: '',
+    component: User,
+    meta: {parent: 'admin.dashboard'},
+    children: [
+      {
+        name: 'admin.user',
+        redirect: {name: 'admin.user.profile'}
+      },
+      {
+        name: 'admin.user.general',
+        component: UserGeneral
+      },
+      {
+        name: 'admin.user.profile',
+        component: UserProfile
+      },
+      {
+        name: 'admin.user.password',
+        component: UserPassword
+      }
+    ]
+  },
+  {
+    path: '',
     component: Settings,
     meta: {parent: 'admin.dashboard'},
     children: [
       {
         name: 'admin.settings',
-        redirect: {name: 'admin.settings.profile'}
+        redirect: {name: 'admin.settings.general'}
       },
       {
         name: 'admin.settings.general',
         component: SettingsGeneral
       },
-      {
-        name: 'admin.settings.profile',
-        component: SettingsProfile
-      },
-      {
-        name: 'admin.settings.password',
-        component: SettingsPassword
-      }
     ]
   },
   {
@@ -173,4 +193,5 @@ function translateRoute (routes, locale, prefix) {
 
   return routes
 }
+
 export default routes

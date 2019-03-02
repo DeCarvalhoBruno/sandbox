@@ -6,6 +6,34 @@ use Illuminate\Database\Eloquent\Builder;
 trait Presentable
 {
     /**
+     * View presenter instance
+     *
+     * @var mixed
+     */
+    protected $presenterInstance;
+
+    /**
+     * Prepare a new or cached presenter instance
+     *
+     * @param string $method
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public function present($method = null)
+    {
+        if ( ! $this->presenterInstance) {
+            $this->presenterInstance = new $this->presenter($this);
+        }
+
+        if ( ! is_null($method)) {
+            return call_user_func([$this->presenterInstance, $method]);
+        }
+
+        return $this->presenterInstance;
+    }
+
+    /**
      * @param $columns
      * @param $filter \App\Filters\Filters
      * @return array

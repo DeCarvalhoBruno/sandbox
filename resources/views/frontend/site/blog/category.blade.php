@@ -10,10 +10,7 @@
                             <div class="cat-img">
                                 @include('partials.img',[
                                     'media'=>isset($media[$featured->getAttribute('type')])?
-                                    $media[$featured->getAttribute('type')]->asset(
-                                        \App\Models\Entity::BLOG_POSTS,
-                                        \App\Models\Media\Media::IMAGE,
-                                        \App\Models\Media\MediaImgFormat::FEATURED):null,
+                                    $media[$featured->getAttribute('type')]->present('asset'):null,
                                     'alt'=>$featured->getAttribute('title')
                                 ])
                             </div>
@@ -25,7 +22,7 @@
                             <div class="cat-date">
                                 {!! trans('pages.blog.written_by',[
                                 'date'=>new \Carbon\Carbon($featured->getAttribute('date')),
-                                'author'=>sprintf('<a href="%s">%s</a>',route_i18n('home'),$featured->getAttribute('author'))
+                                'author'=>sprintf('<a href="%s">%s</a>',route_i18n('blog.author',$featured->getAttribute('author')),$featured->getAttribute('author'))
                                 ])!!}
                             </div>
                             <div class="cat-excerpt">
@@ -45,7 +42,7 @@
                                             <div class="cat-date">
                                                 {!! trans('pages.blog.written_by',[
                                                 'date'=>new \Carbon\Carbon($post->getAttribute('date')),
-                                                'author'=>sprintf('<a href="%s">%s</a>',route_i18n('home'),$post->getAttribute('author'))
+                                                'author'=>sprintf('<a href="%s">%s</a>',route_i18n('blog.author',$post->getAttribute('author')),$post->getAttribute('author'))
                                                 ])!!}
                                             </div>
                                             <div class="cat-excerpt">
@@ -56,10 +53,7 @@
                                             <div class="cat-img">
                                                 @include('partials.img',[
                                                     'media'=>isset($media[$post->getAttribute('type')])?
-                                                    $media[$post->getAttribute('type')]->asset(
-                                                        \App\Models\Entity::BLOG_POSTS,
-                                                        \App\Models\Media\Media::IMAGE,
-                                                        \App\Models\Media\MediaImgFormat::FEATURED):null,
+                                                    $media[$post->getAttribute('type')]->present('asset'):null,
                                                     'alt'=>$post->getAttribute('title')
                                                 ])
                                             </div>
@@ -95,10 +89,7 @@
                                     <div class="col-lg-4 col-sm-6 p-0">
                                         @include('partials.img',[
                                              'media'=>isset($mvpImages[$mvp->getAttribute('type')])?
-                                             $mvpImages[$mvp->getAttribute('type')]->asset(
-                                                 \App\Models\Entity::BLOG_POSTS,
-                                                 \App\Models\Media\Media::IMAGE,
-                                                 \App\Models\Media\MediaImgFormat::THUMBNAIL):null,
+                                             $mvpImages[$mvp->getAttribute('type')]->present('thumbnail'):null,
                                              'alt'=>$mvp->getAttribute('title'),
                                              'format'=>\App\Models\Media\MediaImgFormat::THUMBNAIL
                                          ])</div>

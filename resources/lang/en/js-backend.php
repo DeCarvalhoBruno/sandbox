@@ -31,10 +31,12 @@ return [
         'admin-blog_posts-edit' => 'Edit',
         'admin-blog_posts-category' => 'Categories',
         'admin-media-edit' => 'Edit Image',
-        'admin-settings-password' => 'Your password',
-        'admin-settings-profile' => 'Your profile',
-        'admin-settings-general' => 'Your general settings',
+        'admin-user-password' => 'Your password',
+        'admin-user-profile' => 'Your profile',
+        'admin-user-general' => 'Your general settings',
         'admin-system-log' => 'System Log',
+        'admin-settings-settings'=>'Website settings',
+        'admin-settings-general'=>'General settings'
     ],
     'sidebar' => [
         'main_nav' => 'MAIN NAVIGATION',
@@ -267,9 +269,13 @@ return [
             'info2' => 'Individual permissions can also be set at the user level,
             in which case user permissions will override permissions set here.'
         ],
-        'settings' => [
+        'user' => [
             'language' => 'Language',
-            'notifications' => 'Choose the events for which you would like to receive live notifications:'
+            'notifications' => 'Choose the events for which you would like to receive live notifications:',
+            'settings' => 'Your settings',
+        ],
+        'settings' => [
+            'title' => 'Website settings'
         ],
         'blog' => [
             'categories' => 'Categories',

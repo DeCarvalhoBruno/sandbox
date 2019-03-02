@@ -15,6 +15,7 @@ use App\Traits\Presentable;
 use CyrildeWit\EloquentViewable\Viewable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use App\Support\Presenters\BlogPost as BlogPostPresenter;
 use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 
 class BlogPost extends Model implements HasPermissionsContract, EnumerableContract, HasAnEntity, ViewableContract
@@ -28,6 +29,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
 
 //    public $timestamps = false;
     protected $primaryKey = 'blog_post_id';
+    protected $presenter = BlogPostPresenter::class;
     protected $fillable = [
         'person_id',
         'blog_status_id',

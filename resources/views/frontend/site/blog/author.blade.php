@@ -25,10 +25,7 @@
                                     <div class="col-lg-5">
                                         @include('partials.img',[
                                             'media'=>isset($media[$post->getAttribute('type')])?
-                                            $media[$post->getAttribute('type')]->asset(
-                                                \App\Models\Entity::BLOG_POSTS,
-                                                \App\Models\Media\Media::IMAGE,
-                                                \App\Models\Media\MediaImgFormat::FEATURED):null,
+                                            $media[$post->getAttribute('type')]->present('asset'):null,
                                             'alt'=>$post->getAttribute('title'),
                                         ])
                                     </div>

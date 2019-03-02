@@ -18,11 +18,7 @@
                 </div>
             </div>
             @include('partials.img',[
-                'media'=>!is_null($media)?$media->asset(
-                \App\Models\Entity::BLOG_POSTS,
-                \App\Models\Media\Media::IMAGE,
-                \App\Models\Media\MediaImgFormat::FEATURED
-                ):null,
+                'media'=>!is_null($media)?$media->present('asset'):null,
                 'alt'=>$post->getAttribute('title')
             ])
         </div>
@@ -31,7 +27,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="post-content">
-                            {!! \App\Support\Frontend\Transformer::handle($post->content)!!}
+                            {!! $post->present('content')!!}
                         </div>
                     </div>
                     @if(!$sources->isEmpty())
@@ -72,11 +68,8 @@
                 <div class="col-lg-3 col-md-6 col-sm-12 post-other-item">
                     <div class="card">
                         @if(isset($otherPostMedia[$otherPost->getAttribute('type')]))
-                            <img src="{{$otherPostMedia[$otherPost->getAttribute('type')]->asset(
-                                    \App\Models\Entity::BLOG_POSTS,
-                                    \App\Models\Media\Media::IMAGE,
-                                    \App\Models\Media\MediaImgFormat::FEATURED
-                                    )}}" class="card-img-top" alt="{{$otherPost->getAttribute('title')}}">
+                            <img src="{{$otherPostMedia[$otherPost->getAttribute('type')]->present('asset')}}"
+                                 class="card-img-top" alt="{{$otherPost->getAttribute('title')}}">
                         @else
                             <img src="{{asset(sprintf('/media/img/site/placeholder_%s.png',\App\Models\Media\MediaImgFormat::getFormatAcronyms(\App\Models\Media\MediaImgFormat::FEATURED)))}}"
                                  alt="{{$otherPost->getAttribute('title')}}">

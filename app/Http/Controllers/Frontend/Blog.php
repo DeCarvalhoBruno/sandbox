@@ -47,7 +47,8 @@ class Blog extends Controller
                 'media_in_use as featured',
                 'media_uuid as uuid',
                 'media_extension as ext',
-                'entity_types.entity_type_id as type'
+                'entity_types.entity_type_id as type',
+                'entity_id'
             ]
         );
         $categories = $this->blogRepo->buildOneBySlug(
@@ -185,7 +186,8 @@ class Blog extends Controller
             $collection->pluck('type')->all(), [
                 'media_uuid as uuid',
                 'media_extension as ext',
-                'entity_types.entity_type_id as type'
+                'entity_types.entity_type_id as type',
+                'entity_types.entity_id as entity'
             ]
         );
         $media = [];

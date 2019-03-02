@@ -28,9 +28,9 @@
         <ul class="navbar-nav nav justify-content-end">
           <li class="btn-nav-group">
             <div class="btn-nav">
-              <router-link :to="{ name: 'admin.settings.profile' }"
-                           :title="$t('general.settings')">
-                <i class="fa fa-envelope"></i>
+              <router-link :to="{ name: 'admin.settings.general' }"
+                           :title="$t('pages.settings.title')">
+                <i class="fa fa-sitemap"></i>
               </router-link>
             </div>
           </li>
@@ -62,9 +62,9 @@
 
           <b-dropdown right :text="user.username" variant="dark">
             <b-dropdown-item router-tag="a"
-                             :to="{ name: 'admin.settings.profile' }">
+                             :to="{ name: 'admin.user.profile' }">
               <i class="fa fa-cog"></i>
-              {{ $t('general.settings') }}
+              {{ $t('pages.user.settings') }}
             </b-dropdown-item>
             <b-dropdown-divider/>
             <b-dropdown-item-button @click="logout">
