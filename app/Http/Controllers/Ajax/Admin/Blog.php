@@ -78,6 +78,7 @@ class Blog extends Controller
                 'blog_post_content',
                 'blog_post_excerpt',
                 'published_at',
+                'blog_posts.blog_status_id',
                 'blog_status_name as blog_status',
                 'people.full_name as blog_post_person',
                 'entity_type_id'
@@ -98,8 +99,7 @@ class Blog extends Controller
             'source_types'=>$blogRepo->source()->listTypes(),
             'sources'=>$blogRepo->source()
                 ->buildByBlogSlug(
-                    $record->getAttribute('blog_post_slug'),
-                    ['blog_source_content as source','blog_source_record_type_name as type']
+                    $record->getAttribute('blog_post_slug')
                 )->get()->toArray(),
             'blog_post_slug' => $record->getAttribute('blog_post_slug'),
             'thumbnails' => $mediaRepo->image()->getImages(

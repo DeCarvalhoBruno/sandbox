@@ -74,6 +74,8 @@ class Admin
                 ->middleware('can:edit,App\Models\Blog\BlogPost');
             $r->delete('blog/post/{slug}', 'Blog@destroy');
             $r->post('blog/post/batch/delete', 'Blog@batchDestroy');
+            $r->post('blog/post/source/create', 'BlogSource@create');
+            $r->delete('blog/post/source/delete/{id}/{slug}', 'BlogSource@destroy');
 
             $r->patch('blog/post/edit/{slug}/image/{uuid}', 'Blog@setFeaturedImage')
                 ->middleware('can:edit,App\Models\Blog\BlogPost');

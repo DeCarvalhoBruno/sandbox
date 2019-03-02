@@ -54,42 +54,16 @@ class Blog extends Migration
             $table->unique(['blog_post_slug'], 'idx_blog_post_id_slug');
         });
 
-//        Schema::create('blog_post_version', function (Blueprint $table) {
-//            $table->increments('blog_post_version_id');
-//
-//            $table->unsignedInteger('blog_post_id');
-//            $table->unsignedInteger('user_id')->default(0);
-//            $table->unsignedTinyInteger('blog_post_version_number')->default(0);
-//            $table->text('blog_post_content')->nullable();
-//            $table->timestamp('created_at')->nullable();
-//
-//            $table->foreign('blog_post_id')
-//                ->references('blog_post_id')->on('blog_posts')
-//                ->onDelete('cascade');
-//            $table->foreign('user_id')
-//                ->references('user_id')->on('users');
-//        });
-
         Schema::create('blog_sources', function (Blueprint $table) {
             $table->increments('blog_source_id');
 
-            $table->unsignedInteger('language_id')->default(1);
             $table->string('blog_source_name', 75)->nullable();
-
-            $table->foreign('language_id')
-                ->references('language_id')->on('languages');
         });
 
-        Schema::create('blog_source_record_types', function (Blueprint $table) {
-            $table->increments('blog_source_record_type_id');
-
-            $table->string('blog_source_record_type_name', 75)->nullable();
-        });
-
-        \App\Models\Blog\BlogSourceRecordType::insert([
-            ['blog_source_record_type_name' => 'url'],
-            ['blog_source_record_type_name' => 'img'],
-            ['blog_source_record_type_name' => 'file'],
+        \App\Models\Blog\BlogSource::insert([
+            ['blog_source_name' => 'url'],
+            ['blog_source_name' => 'img'],
+            ['blog_source_name' => 'file'],
         ]);
 
         Schema::create('blog_source_records', function (Blueprint $table) {
@@ -97,7 +71,6 @@ class Blog extends Migration
 
             $table->unsignedInteger('blog_post_id');
             $table->unsignedInteger('blog_source_id');
-            $table->unsignedInteger('blog_source_record_type_id')->default(1);
             $table->text('blog_source_content')->nullable();
             $table->text('blog_source_description')->nullable();
 
@@ -108,7 +81,6 @@ class Blog extends Migration
                 ->references('blog_post_id')->on('blog_posts')
                 ->onDelete('cascade');
         });
-
 
         Schema::create('blog_labels', function (Blueprint $table) {
             $table->increments('blog_label_id');
@@ -151,8 +123,8 @@ class Blog extends Migration
             $table->increments('blog_tag_id');
 
             $table->unsignedInteger('blog_label_type_id');
-            $table->string('blog_tag_name', 35)->nullable();
-            $table->string('blog_tag_slug', 35)->nullable();
+            $table->string('blog_tag_name', 50)->nullable();
+            $table->string('blog_tag_slug', 75)->nullable();
 
             $table->foreign('blog_label_type_id')
                 ->references('blog_label_type_id')->on('blog_label_types')

@@ -291,7 +291,7 @@ return [
             'save_success' => 'The blog post was updated.',
             'edit_image' => 'Edit image',
             'published_at' => 'Publishing date:',
-            'add_source_button' => 'Add source'
+            'add_source_button' => 'Add source',
         ],
         'blog_categories' => [
             'add_child_node' => 'Add a child element to "{name}"',

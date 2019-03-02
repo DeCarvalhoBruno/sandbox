@@ -18,7 +18,7 @@
                                 <label class="input-group-text"
                                        :title="$t('pages.users.filter_full_name')"
                                        @click="fullNameFilter">
-                                    <fa icon="user"></fa>
+                                    <i class="fa fa-user"></i>
                                 </label>
                             </div>
                         </div>
@@ -32,7 +32,7 @@
                             <div class="input-group-append">
                                 <label class="input-group-text"
                                        :title="$t('pages.users.filter_group')">
-                                    <fa icon="users"></fa>
+                                    <i class="fa fa-users"></i>
                                 </label>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                             <div class="input-group-append">
                                 <label class="input-group-text"
                                        :title="$t('pages.users.filter_created_at')">
-                                    <fa icon="calendar"></fa>
+                                    <i class="fa fa-calendar"></i>
                                 </label>
                             </div>
                         </div>
@@ -91,14 +91,14 @@
                                 <router-link :to="{ name: 'admin.users.edit', params: { user: props.row.username } }">
                                     <button type="button" class="btn btn-sm btn-info"
                                             :title="$t('tables.edit_item',{name:props.row[$t('db_raw_inv.full_name')]})">
-                                        <fa icon="pencil-alt"></fa>
+                                        <i class="fa fa-pencil"></i>
                                     </button>
                                 </router-link>
                             </template>
                             <button type="button" class="btn btn-sm btn-danger"
                                     :title="$t('tables.delete_item',{name:props.row[$t('db_raw_inv.full_name')]})"
                                     @click="deleteRow(props.row,'user','username','full_name','/ajax/admin/users')">
-                                <fa icon="trash-alt"></fa>
+                                <i class="fa fa-trash"></i>
                             </button>
                         </div>
                     </td>

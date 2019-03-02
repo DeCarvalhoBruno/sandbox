@@ -40,6 +40,8 @@ trait Enumerable
     }
 
     /**
+     * Whether a constant exists.
+     *
      * @param string $name
      * @param bool $strict
      *
@@ -48,7 +50,6 @@ trait Enumerable
     public static function isValidName($name, $strict = false)
     {
         $constants = static::getConstants();
-
         if ($strict) {
             return array_key_exists($name, $constants);
         }

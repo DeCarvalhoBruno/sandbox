@@ -11,7 +11,7 @@
             <div class="input-group-append">
                 <label class="input-group-text"
                        :title="$t('general.search')">
-                    <fa icon="search"></fa>
+                    <i class="fa fa-search"></i>
                 </label>
             </div>
         </div>

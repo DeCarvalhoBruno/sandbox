@@ -1,7 +1,7 @@
 <template>
     <div class="input-tag-search-wrapper">
         <div class="search-spinner-wrapper">
-            <fa icon="cog" size="lg" :spin="loadIconIsAnimated"></fa>
+            <i class="fa fa-cog" :class="loadIconIsAnimated"></i>
         </div>
         <div class="input-tag-container">
             <div class="form-control input-tag">

@@ -1,0 +1,17 @@
+#blog-post {
+  .blog-source-form {
+    margin-bottom:1.5rem;
+  }
+  .blog-sources {
+    .txt-container {
+      padding: 0.5rem 0;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow:hidden;
+
+      i {
+        margin-right: 0.5rem;
+      }
+    }
+  }
+}

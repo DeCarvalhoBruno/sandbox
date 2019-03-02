@@ -29,7 +29,7 @@
 @import "~bootstrap/scss/pagination";
 @import "~bootstrap/scss/badge";
 @import "~bootstrap/scss/jumbotron";
-@import "~bootstrap/scss/alert";
+//@import "~bootstrap/scss/alert";
 @import "~bootstrap/scss/progress";
 @import "~bootstrap/scss/media";
 @import "~bootstrap/scss/list-group";
@@ -37,9 +37,9 @@
 @import "~bootstrap/scss/modal";
 @import "~bootstrap/scss/tooltip";
 @import "~bootstrap/scss/popover";
-@import "~bootstrap/scss/carousel";
+//@import "~bootstrap/scss/carousel";
 @import "~bootstrap/scss/utilities";
-@import "~bootstrap/scss/print";
+//@import "~bootstrap/scss/print";
 
 @import '~sweetalert2/src/sweetalert2';
 
@@ -56,6 +56,7 @@
 @import "skin";
 @import "transitions";
 @import "content";
+@import "pages";
 
 @import "elements/submit-button";
 @import "elements/buttons";

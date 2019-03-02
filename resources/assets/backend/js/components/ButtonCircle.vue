@@ -36,7 +36,7 @@
           type: 'button'
         }
       }, [
-        h('fa', {props: {icon: this.icon}})
+        h('i', {class: ['fa fa-'+this.icon]})
       ])
     }
   }

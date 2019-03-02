@@ -1,5 +1,5 @@
 <template>
-  <div id="blog_post_container" class="container p-0 m-0">
+  <div id="blog-post" class="container p-0 m-0">
     <div id="trumbowyg-icons" v-html="require('trumbowyg/dist/ui/icons.svg')"></div>
     <form @submit.prevent="save" id="form_edit_blog">
       <div class="row p-0 m-0 mt-1">
@@ -17,8 +17,8 @@
                 <small class="text-muted" v-show="url"><a :href="url" target="_blank">{{url}}</a></small>
               </div>
               <div class="col-lg-2">
-                <submit-button type="button" :loading="form.busy"
-                               class="btn btn-primary float-lg-right"
+                <submit-button :loading="form.busy"
+                               class="float-lg-right"
                                @click="save">{{$t('general.save')}}
                 </submit-button>
               </div>
@@ -152,30 +152,6 @@
       </div>
       <div class="row p-0 m-0">
         <div class="card col-lg p-0 m-0">
-          <div class="card-body justify-content-md-center">
-            <div class="col-lg-10 offset-lg-1 p-0 m-0">
-              <div class="container">
-                <div class="row form-inline">
-                    <select class="custom-select w-25 mr-3">
-                      <option v-for="(type, idx) in source_types" :key="'st_'+idx">{{type}}</option>
-                    </select>
-                    <input class="form-control w-50 mr-3">
-                    <button type="submit" class="btn btn-primary my-1">{{$t('pages.blog.add_source_button')}}</button>
-                </div>
-                <div class="row">
-                  <div class="container">
-                    <div v-for="(source, idx) in sources" class="row">
-                      <p v-if="source.type=='url'"><i class="fa fa-link"></i><span>{{source.source}}</span></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row p-0 m-0">
-        <div class="card col-lg p-0 m-0">
           <div class="card-body">
             <image-uploader
                 :target="form.fields.blog_post_slug"
@@ -184,6 +160,52 @@
                 :is-active="this.saveMode==='edit'"
                 :thumbnails-parent="thumbnails"
                 @images-updated="updateThumbnails"/>
+          </div>
+        </div>
+      </div>
+      <div class="row p-0 m-0">
+        <div class="card col-lg p-0 m-0">
+          <div class="card-body justify-content-md-center">
+            <div class="col p-0 m-0">
+              <div class="container">
+                <div class="row form-inline blog-source-form">
+                  <!--<div class="form-group info-icon"  :title="$t('pages.blog.sources_info')" v-b-tooltip.hover>-->
+                  <!--<i class="fa fa-circle fa-stack-1x"></i>-->
+                  <!--<i class="fa fa-info fa-stack-1x fa-inverse"></i>-->
+                  <!--</div>-->
+                  <div class="form-group w-25 pr-2">
+                    <select v-model='newSource.type' class="form-control w-100">
+                      <option v-for="(type, idx) in source_types" :key="'st_'+idx" :value="idx">{{type}}</option>
+                    </select>
+                  </div>
+                  <div class="form-group w-50 pr-2">
+                    <input v-model='newSource.content' class="form-control w-100">
+                  </div>
+                  <div class="form-group w-25">
+                    <submit-button :native-type="'button'" :loading="loadingButton===0"
+                                   @click="addSource">{{$t('pages.blog.add_source_button')}}
+                    </submit-button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="container blog-sources">
+                    <div v-for="(source, idx) in sources" class="row" :key="'source'+idx">
+                      <div class="txt-container col-lg-10">
+                        <i v-if="source.type=='url'" class="fa fa-link"></i>
+                        <i v-else-if="source.type=='img'" class="fa fa-image"></i>
+                        <i v-else class="fa fa-file"></i><a target="_blank" :href="source.source">{{source.source}}</a>
+                      </div>
+                      <div class="col-lg-2">
+                        <submit-button :type="'sm'" class="btn-danger" :loading="loadingButton===idx+1"
+                                       :native-type="'button'" @click="deleteSource(source.record,idx+1)">
+                          <i class="fa fa-trash"></i>
+                        </submit-button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -226,6 +248,7 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import axios from 'axios'
   import dayjs from 'dayjs'
   import fr from 'dayjs/locale/fr'
@@ -236,6 +259,9 @@
   import InputTagSearch from 'back_path/components/InputTagSearch'
   import Datepicker from 'back_path/components/Datepicker'
   import ImageUploader from 'back_path/components/ImageUploader'
+  import Tooltip from 'bootstrap-vue/es/directives/tooltip/tooltip'
+
+  Vue.directive('b-tooltip', Tooltip)
 
   import swal from 'back_path/mixins/sweet-alert'
   import form from 'back_path/mixins/form'
@@ -252,6 +278,9 @@
       TreeList,
       ImageUploader,
       Datepicker
+    },
+    directives: {
+      Tooltip
     },
     mixins: [
       swal,
@@ -276,6 +305,8 @@
         thumbnails: [],
         source_types: [],
         sources: [],
+        loadingButton: null,
+        newSource: {type: 1, content: null},
         form: new Form({
           blog_post_content: '',
           blog_post_title: '',
@@ -313,6 +344,25 @@
       // window.removeEventListener('beforeunload', this.checkBeforeUnload)
     },
     methods: {
+      async deleteSource (record, index) {
+        this.loadingButton = index
+        const {data} = await axios.delete(
+          `/ajax/admin/blog/post/source/delete/${record}/${this.form.fields.blog_post_slug}`)
+        this.sources = data.sources
+        this.loadingButton = null
+      },
+      async addSource () {
+        this.loadingButton = 0
+        if (this.newSource.content) {
+          const {data} = await axios.post('/ajax/admin/blog/post/source/create', {
+            content: this.newSource.content,
+            type: this.newSource.type,
+            blog_slug: this.form.fields.blog_post_slug
+          })
+          this.sources = data.sources
+          this.loadingButton = null
+        }
+      },
       checkBeforeUnload (event) {
         let confirmationMessage = '_'
         event.returnValue = confirmationMessage

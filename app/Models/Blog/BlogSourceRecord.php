@@ -13,7 +13,6 @@ class BlogSourceRecord extends Model
     protected $fillable = [
         'blog_post_id',
         'blog_source_id',
-        'blog_source_record_type_id',
         'blog_source_content'
     ];
 
@@ -33,8 +32,8 @@ class BlogSourceRecord extends Model
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    public function scopeRecordType(Builder $builder){
-        return $this->joinWithKey($builder,BlogSourceRecordType::class,'blog_source_record_type_id');
+    public function scopeSource(Builder $builder){
+        return $this->joinWithKey($builder,BlogSource::class,'blog_source_id');
     }
 
 }

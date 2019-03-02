@@ -6,7 +6,9 @@
                     <p class="font-italic">{{$t('pages.blog.click_featured')}}</p>
                 </template>
                 <div class="thumbnail-group" :class="{'thumbnail-loading':ajaxIsLoading}">
-                    <fa v-show="ajaxIsLoading" class="fa-5x sync-icon" icon="sync" spin></fa>
+                    <div v-show="ajaxIsLoading" class="fa-5x sync-icon">
+                        <i class="fa fa-spinner fa-pulse"></i>
+                    </div>
                     <ul class="p-0">
                         <li class="thumbnail-container"
                             v-for="(image,index) in thumbnails"
@@ -22,15 +24,17 @@
                                         :class="{'btn-danger':!image.used,'disabled':image.used, 'btn-dark':image.used}"
                                         :title="$t('pages.blog.delete_image')"
                                         @click="deleteImage(image.uuid,image.used)">
-                                    <fa icon="trash-alt"></fa>
+                                    <i class="fa fa-trash"></i>
                                 </button>
                                 <button type="button" class="btn btn-sm btn-info"
                                         :title="$t('pages.blog.edit_image')"
                                         @click="goToEditImagePage(image.uuid)">
-                                    <fa icon="pencil-alt"></fa>
+                                    <i class="fa fa-pencil"></i>
                                 </button>
                                 <button type="button" class="btn btn-sm btn-info" :title="$t('avatar-uploader.image_url_copy')"
-                                        v-clipboard:copy="getImageUrl(image.uuid, 'ft', image.ext, true)"><fa icon="paste"></fa></button>
+                                        v-clipboard:copy="getImageUrl(image.uuid, 'ft', image.ext, true)">
+                                    <i class="fa fa-copy"></i>
+                                </button>
                             </div>
                         </li>
                     </ul>
@@ -55,7 +59,7 @@
                             {{maxFilesize}}{{$t('dropzone.units.MB')}}</p>
                         <p class="dropfile-instructions">{{ $t('dropzone.accepted_formats')}} JPG,
                             PNG</p>
-                        <fa class="fa-4x" icon="cloud-upload-alt"></fa>
+                        <i class="fa fa-4x fa-cloud-upload-o"></i>
                     </div>
                     <template #files="props">
                         <div v-for="(file, i) in props.files" :key="file.id"

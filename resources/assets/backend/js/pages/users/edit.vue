@@ -72,7 +72,7 @@
           <div class="container">
             <div class="callout callout-warning">
               <p><span class="callout-tag callout-tag-warning">
-                <fa icon="exclamation"></fa>
+                <i class="fa fa-exclamation"></i>
               </span>
                 &nbsp;{{$t('pages.users.warning1')}}
               </p>

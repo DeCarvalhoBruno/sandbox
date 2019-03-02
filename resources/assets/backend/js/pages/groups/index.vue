@@ -11,22 +11,19 @@
                                         params: { group: props.row.group_name }
                                         }">
                                 <button class="btn btn-sm btn-info">
-                                    <fa icon="pencil-alt">
-                                    </fa>
+                                    <i class="fa fa-pencil"></i>
                                 </button>
                             </router-link>
                         </template>
                         <button class="btn btn-sm btn-danger"
                                 @click="deleteRow(props.row)">
-                            <fa icon="trash-alt">
-                            </fa>
+                            <i class="fa fa-trash"></i>
                         </button>
                         <template v-if="props.row.group_name">
                             <router-link
                                     :to="{ name: 'admin.groups.members', params: { group: props.row.group_name }}">
                                 <button class="btn btn-sm btn-success">
-                                    <fa icon="users">
-                                    </fa>
+                                    <i class="fa fa-users"></i>
                                 </button>
                             </router-link>
                         </template>

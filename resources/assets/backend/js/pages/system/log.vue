@@ -9,12 +9,12 @@
         </li>
         <transition-group name="fade" tag="li">
           <div v-for="(event, idx) in period" :key="index+idx">
-            <fa :icon="event.icon" class="bg-blue"></fa>
+            <i :class="'fa bg-blue '+event.icon"></i>
             <div class="timeline-item">
               <span v-if="event.hasOwnProperty('date')">{{event.date}}</span>
               <span class="time">
-                <fa icon="clock"
-                    :class="['ml-2','mr-2']"></fa>
+                <i class="fa fa-clock"
+                    :class="['ml-2','mr-2']"></i>
                 {{event.time}}</span>
               <h3 class="timeline-header">{{event.title}}</h3>
               <div v-if="event.message.length"

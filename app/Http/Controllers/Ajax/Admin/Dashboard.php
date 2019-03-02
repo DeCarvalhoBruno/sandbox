@@ -35,7 +35,7 @@ class Dashboard extends Controller
         $icon = [
             'users' => 'user',
             'groups' => 'users',
-            'blog_posts' => 'newspaper',
+            'blog_posts' => 'newspaper-o',
             'medias' => 'image',
         ];
         foreach ($entityCounts as $count) {

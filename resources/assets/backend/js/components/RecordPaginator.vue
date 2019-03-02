@@ -35,7 +35,7 @@
             </template>
             <li class="page-item disabled">
                 <span class="page-link text-center" style="min-width:4rem">
-                    <span v-if="isLoading"><fa class="sync-icon" icon="sync" spin></fa></span>
+                    <span v-if="isLoading"><i class="fa sync-icon"></i></span>
                     <span v-else>{{nav.idx}} / {{nav.total}}</span>
 
                 </span>

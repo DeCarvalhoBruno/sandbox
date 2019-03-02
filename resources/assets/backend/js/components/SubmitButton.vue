@@ -11,12 +11,15 @@
           'btn-lg': this.large,
           'btn-loading': this.isLoading
         },
+        on:{
+          click:()=>this.$emit('click')
+        },
         attrs: {
           type: this.nativeType,
           disabled: this.isLoading
         }
       }, [
-        (this.value) ? h('span', this.value) : h('slot', this.$slots.default)
+        (this.value) ? h('span', this.value) : h('span', this.$slots.default)
       ])
     },
     props: {
@@ -53,11 +56,6 @@
     watch: {
       loading () {
         this.isLoading = this.loading
-      }
-    },
-    methods: {
-      toggleLoad (value) {
-        this.isLoading = value
       }
     }
   }

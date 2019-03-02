@@ -3,8 +3,8 @@
         <li>
             <div class="li-wrapper" :class="[hasChildren?'':'childless']">
                 <span v-if="hasChildren" @click="toggleShow(node.label)">
-                    <fa class="li-indicator" v-if="node.open" icon="minus"></fa>
-                    <fa class="li-indicator" v-else icon="plus"></fa>
+                    <i class="li-indicator fa fa-minus" v-if="node.open"></i>
+                    <i class="li-indicator fa fa-plus" v-else></i>
                 </span>
                 <template v-if="editMode">
                     <div v-if="(node.mode&2)!==0" class="li-input-wrapper">
@@ -20,14 +20,14 @@
                                 <button class="btn btn-sm" type="button" :disabled="!newValue"
                                         :aria-disabled="!newValue"
                                         title="confirm" @click="updateItem">
-                                    <fa icon="check"></fa>
+                                    <i class="fa fa-check"></i>
                                 </button>
                                 <button class="btn btn-sm" type="button" title="cancel" @click="cancelItem">
-                                    <fa icon="ban"></fa>
+                                    <i class="fa fa-ban"></i>
                                 </button>
                             </template>
                             <template v-else>
-                                <fa class="fa sync-icon" icon="sync" spin></fa>
+                                <i class="fa sync-icon"></i>
                             </template>
                         </div>
                     </div>
@@ -38,15 +38,15 @@
                         <div class="li-btn-group">
                             <button type="button" class="btn btn-sm btn-default" @click="addItem"
                                     :title="$t('pages.blog_categories.add_child_node',{name:node.label})">
-                                <fa icon="plus"></fa>
+                                <i class="fa fa-plus"></i>
                             </button>
                             <button type="button" class="btn btn-sm btn-default" @click="editItem"
                                     :title="$t('pages.blog_categories.edit_node',{name:node.label})">
-                                <fa icon="pencil-alt"></fa>
+                                <i class="fa fa-pencil"></i>
                             </button>
                             <button type="button" class="btn btn-sm btn-default" @click="deleteItem"
                                     :title="$t('pages.blog_categories.delete_node',{name:node.label})">
-                                <fa icon="trash-alt"></fa>
+                                <i class="fa fa-trash"></i>
                             </button>
                         </div>
                     </div>

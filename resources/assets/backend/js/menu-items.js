@@ -6,7 +6,7 @@ export default [
   },
   {
     type: 'tree',
-    icon: 'tachometer-alt',
+    icon: 'tachometer',
     name: 'sidebar.dashboard',
     router: {
       name: 'admin.dashboard'
@@ -52,7 +52,7 @@ export default [
   },
   {
     type: 'tree',
-    icon: 'newspaper',
+    icon: 'newspaper-o',
     name: 'sidebar.blog',
     items: [
       {

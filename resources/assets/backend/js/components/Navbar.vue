@@ -14,14 +14,14 @@
       <button v-if="user" class="navbar-toggler" type="button"
               data-target="#navbarSupportedContent"
               aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <fa icon="bars"></fa>
+        <i class="fa fa-bars"></i>
       </button>
       <div v-if="user" class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
             <span><a class="nav-link sidebar-toggle" id="button-sidebar-trigger"
                      data-toggle="push-menu" role="button">
-              <fa icon="bars"></fa>
+              <i class="fa fa-bars"></i>
             </a></span>
           </li>
         </ul>
@@ -30,7 +30,7 @@
             <div class="btn-nav">
               <router-link :to="{ name: 'admin.settings.profile' }"
                            :title="$t('general.settings')">
-                <fa icon="envelope" fixed-width size="lg"></fa>
+                <i class="fa fa-envelope"></i>
               </router-link>
             </div>
           </li>
@@ -38,7 +38,7 @@
                       :class="['no-caret']"
                       @hide="resetNotifications">
             <template #button-content>
-              <fa icon="bell" fixed-width size="lg" :class="buttonBellClasses"></fa>
+              <i class="fa fa-bell" :class="buttonBellClasses"></i>
               <span v-if="notificationCount>0"
                     id="alerts_badge"
                     class="badge badge-pill badge-danger">{{notificationCount}}</span>
@@ -63,12 +63,12 @@
           <b-dropdown right :text="user.username" variant="dark">
             <b-dropdown-item router-tag="a"
                              :to="{ name: 'admin.settings.profile' }">
-              <fa icon="cog" fixed-width></fa>
+              <i class="fa fa-cog"></i>
               {{ $t('general.settings') }}
             </b-dropdown-item>
             <b-dropdown-divider/>
             <b-dropdown-item-button @click="logout">
-              <fa icon="sign-out-alt" fixed-width/>
+              <i class="fa fa-sign-out"></i>
               {{ $t('general.logout') }}
             </b-dropdown-item-button>
           </b-dropdown>

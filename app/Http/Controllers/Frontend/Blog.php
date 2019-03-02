@@ -57,7 +57,7 @@ class Blog extends Controller
         $tags = $this->blogRepo->buildOneBySlug(
             $slug, ['blog_tag_slug as tag', 'blog_tag_name as name']
         )->tag()->get();
-        $sources = $this->blogRepo->source()->buildByBlogSlug($slug,['blog_source_content as source','blog_source_record_type_name as type','blog_source_description as description'])->get();
+        $sources = $this->blogRepo->source()->buildByBlogSlug($slug)->get();
         $otherPosts = $this->blogRepo->buildOneBasic([
             'blog_post_title as title',
             'blog_post_slug as slug',

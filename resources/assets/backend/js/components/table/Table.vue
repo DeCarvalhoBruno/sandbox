@@ -25,9 +25,9 @@
                             :style="{
                             'width': info.hasOwnProperty('width')?info.width:'auto'}">{{info.label}}<span
                                 v-if="info.sortable"
-                                :title="$t('tables.sort_'+getOrder(info.order))"><fa
-                                class="float-right"
-                                :icon="getColumnHeaderIcon(info)"></fa></span>
+                                :title="$t('tables.sort_'+getOrder(info.order))"><i
+                                class="fa float-right"
+                                :class="'fa-'+getColumnHeaderIcon(info)"></i></span>
                         </th>
                         <slot name="header-action">
                             <th>

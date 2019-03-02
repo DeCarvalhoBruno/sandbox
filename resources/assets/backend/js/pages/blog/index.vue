@@ -76,7 +76,7 @@
                                                             'tables.edit_item',{
                                                             name:props.row[$t('db_raw_inv.blog_post_title')]
                                                             })">
-                                        <fa icon="pencil-alt"></fa>
+                                        <i class="fa fa-pencil"></i>
                                     </button>
                                 </router-link>
                                 <button type="button" class="btn btn-sm btn-danger"
@@ -88,7 +88,7 @@
                                                             'blog_post_title',
                                                             '/ajax/admin/blog/post'
                                                         )">
-                                    <fa icon="trash-alt"></fa>
+                                    <i class="fa fa-trash"></i>
                                 </button>
                             </template>
                         </div>
