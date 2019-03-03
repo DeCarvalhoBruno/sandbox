@@ -1,5 +1,5 @@
 <template>
-    <b-card no-body ref="cropperContainer">
+    <div class="card" ref="cropperContainer">
         <form @submit.prevent="save" @keydown="form.onKeydown($event)">
             <b-tabs card>
                 <b-tab :title="$t('general.media')" active>
@@ -124,7 +124,7 @@
                 </b-tab>
             </b-tabs>
         </form>
-    </b-card>
+    </div>
 </template>
 <script>
   import Vue from 'vue'
@@ -132,12 +132,11 @@
   import axios from 'axios'
   import Cropper from 'back_path/components/Cropper'
   import { Form, HasError, AlertForm } from 'back_path/components/form'
-  import { Card, Tabs } from 'bootstrap-vue/es/components'
+  import { Tabs } from 'bootstrap-vue/es/components'
   import RecordPaginator from 'back_path/components/RecordPaginator'
   import MediaMixin from 'back_path/mixins/media'
   import FormMixin from 'back_path/mixins/form'
 
-  Vue.use(Card)
   Vue.use(Tabs)
 
   export default {

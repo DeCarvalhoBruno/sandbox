@@ -23,7 +23,6 @@
 <script>
     import Vue from 'vue'
     import { Nav } from 'bootstrap-vue/es/components'
-
     Vue.use(Nav)
 
     export default {

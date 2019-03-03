@@ -35,8 +35,8 @@ return [
         'admin-user-profile' => 'Your profile',
         'admin-user-general' => 'Your general settings',
         'admin-system-log' => 'System Log',
-        'admin-settings-settings'=>'Website settings',
-        'admin-settings-general'=>'General settings'
+        'admin-settings-settings' => 'Website settings',
+        'admin-settings-general' => 'General settings'
     ],
     'sidebar' => [
         'main_nav' => 'MAIN NAVIGATION',
@@ -273,9 +273,13 @@ return [
             'language' => 'Language',
             'notifications' => 'Choose the events for which you would like to receive live notifications:',
             'settings' => 'Your settings',
+
         ],
         'settings' => [
-            'title' => 'Website settings'
+            'title' => 'Website settings',
+            'entity_types'=>'Represented entity',
+            'entity_person' => 'Person',
+            'entity_organization' => 'Organization'
         ],
         'blog' => [
             'categories' => 'Categories',

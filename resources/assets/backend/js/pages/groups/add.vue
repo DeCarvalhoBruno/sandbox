@@ -1,5 +1,5 @@
 <template>
-    <b-card no-body>
+    <div class="card">
         <form @submit.prevent="save">
             <b-tabs card>
             <alert-form :form="form" :dismiss-label="$t('general.close')"></alert-form>
@@ -82,15 +82,14 @@
                 </div>
             </div>
         </form>
-    </b-card>
+    </div>
 </template>
 
 <script>
   import Vue from 'vue'
   import axios from 'axios'
-  import { Card, Tabs } from 'bootstrap-vue/es/components'
+  import { Tabs } from 'bootstrap-vue/es/components'
 
-  Vue.use(Card)
   Vue.use(Tabs)
 
   import SubmitButton from 'back_path/components/SubmitButton'
@@ -108,7 +107,6 @@
       Checkbox,
       HasError,
       AlertForm,
-      Card,
       Tabs,
       ButtonCircle
     },

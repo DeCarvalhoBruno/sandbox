@@ -21,7 +21,6 @@
           <label class="custom-control-label" :for="event.id">{{event.name}}</label>
         </div>
       </div>
-
     </div>
     <div class="form-group row">
       <div class="col-md-9 ml-md-auto">

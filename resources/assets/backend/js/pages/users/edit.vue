@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body>
+  <div class="card">
     <form @submit.prevent="save" @keydown="form.onKeydown($event)">
       <b-tabs card>
         <b-tab :title="form.fields.full_name" active>
@@ -133,7 +133,7 @@
             route-param-name="user"></record-paginator>
       </div>
     </div>
-  </b-card>
+  </div>
 </template>
 
 <script>
@@ -143,13 +143,12 @@
   import PermissionMixin from 'back_path/mixins/permissions'
   import FormMixin from 'back_path/mixins/form'
   import { Form, HasError, AlertForm } from 'back_path/components/form'
-  import { Card, Tabs } from 'bootstrap-vue/es/components'
+  import { Tabs } from 'bootstrap-vue/es/components'
   import ButtonCircle from 'back_path/components/ButtonCircle'
   import RecordPaginator from 'back_path/components/RecordPaginator'
   import axios from 'axios'
   import { deepCopy } from 'back_path/components/form/util'
 
-  Vue.use(Card)
   Vue.use(Tabs)
 
   export default {
@@ -161,7 +160,6 @@
       Checkbox,
       HasError,
       AlertForm,
-      Card,
       Tabs,
       ButtonCircle,
       RecordPaginator

@@ -1,5 +1,5 @@
 <template>
-    <b-card no-body>
+    <div class="card">
         <form @submit.prevent="save" @keydown="form.onKeydown($event)">
             <b-tabs card>
                 <b-tab :title="form.fields.group_name">
@@ -83,15 +83,14 @@
                 </div>
             </div>
         </form>
-    </b-card>
+    </div>
 </template>
 
 <script>
   import Vue from 'vue'
   import axios from 'axios'
-  import { Card, Tabs } from 'bootstrap-vue/es/components'
+  import { Tabs } from 'bootstrap-vue/es/components'
 
-  Vue.use(Card)
   Vue.use(Tabs)
 
   import SubmitButton from 'back_path/components/SubmitButton'
@@ -109,7 +108,6 @@
       Checkbox,
       HasError,
       AlertForm,
-      Card,
       Tabs,
       ButtonCircle
     },
