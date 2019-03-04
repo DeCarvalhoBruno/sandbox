@@ -77,7 +77,7 @@
           this.$router.go(1)
           this.$router.go()
         }
-        await this.form.patch('/ajax/admin/settings/general')
+        await this.form.patch('/ajax/admin/user/general')
         this.$store.dispatch('auth/patchUser', this.form.fields.events.join(','))
         this.$store.dispatch('broadcast/updateNotifications', {
             data: {
@@ -100,7 +100,7 @@
       }
     },
     beforeRouteEnter (to, from, next) {
-      axios.get('/ajax/admin/settings/general').then(({data}) => {
+      axios.get('/ajax/admin/user/general').then(({data}) => {
         next(vm => vm.getInfo(data))
       })
     }

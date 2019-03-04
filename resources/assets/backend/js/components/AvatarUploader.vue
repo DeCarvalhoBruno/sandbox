@@ -302,7 +302,7 @@
       deleteAvatar (uuid, alreadyUsed) {
         if (!alreadyUsed) {
           this.ajaxIsLoading = true
-          axios.delete(`/ajax/admin/settings/avatar/${uuid}`).then(({data}) => {
+          axios.delete(`/ajax/admin/user/avatar/${uuid}`).then(({data}) => {
             this.avatars = data
             this.ajaxIsLoading = false
           })
@@ -311,7 +311,7 @@
       setAvatarAsUsed (uuid, alreadyUsed) {
         if (!alreadyUsed) {
           this.ajaxIsLoading = true
-          axios.patch('/ajax/admin/settings/avatar', {uuid: uuid}).then(({data}) => {
+          axios.patch('/ajax/admin/user/avatar', {uuid: uuid}).then(({data}) => {
             this.avatars = data
             this.ajaxIsLoading = false
           })

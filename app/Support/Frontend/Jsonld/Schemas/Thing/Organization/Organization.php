@@ -1,4 +1,6 @@
-<?php namespace App\Support\Frontend\Jsonld\Schemas\Thing;
+<?php namespace App\Support\Frontend\Jsonld\Schemas\Thing\Organization;
+
+use App\Support\Frontend\Jsonld\Schemas\Thing\Thing;
 
 class Organization extends Thing
 {

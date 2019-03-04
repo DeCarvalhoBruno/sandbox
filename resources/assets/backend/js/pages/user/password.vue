@@ -66,7 +66,7 @@
     },
     methods: {
       async update () {
-        await this.form.patch('/ajax/admin/settings/password')
+        await this.form.patch('/ajax/admin/user/password')
         this.form.reset()
         this.swalNotification('success', this.$t('message.password_updated'))
       }

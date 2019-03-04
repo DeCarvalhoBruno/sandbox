@@ -82,13 +82,16 @@ class Admin
             $r->delete('blog/post/edit/{slug}/image/{uuid}', 'Blog@deleteImage')
                 ->middleware('can:edit,App\Models\Blog\BlogPost');
 
-            $r->get('settings/general', 'User\General@edit');
-            $r->patch('settings/general', 'User\General@update');
-            $r->patch('settings/password', 'User\Password@update');
-            $r->patch('settings/profile', 'User\Profile@update');
-            $r->get('settings/avatar', 'User\Profile@avatar');
-            $r->patch('settings/avatar', 'User\Profile@setAvatar');
-            $r->delete('settings/avatar/{uuid}', 'User\Profile@deleteAvatar');
+            $r->get('user/general', 'User\General@edit');
+            $r->patch('user/general', 'User\General@update');
+            $r->patch('user/password', 'User\Password@update');
+            $r->patch('user/profile', 'User\Profile@update');
+            $r->get('user/avatar', 'User\Profile@avatar');
+            $r->patch('user/avatar', 'User\Profile@setAvatar');
+            $r->delete('user/avatar/{uuid}', 'User\Profile@deleteAvatar');
+
+            $r->get('settings/general','Settings@edit');
+            $r->post('settings/general','Settings@update');
 
             $r->get('media/{media}', 'Media@edit');
             $r->patch('media/{media}', 'Media@update');

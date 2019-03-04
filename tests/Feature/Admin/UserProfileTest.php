@@ -52,7 +52,7 @@ class UserProfileTest extends TestCase
         $this->signIn($u);
 
         $response = $this->patchJson(
-            '/ajax/admin/settings/password',
+            '/ajax/admin/user/password',
             [
                 'current_password' => 'random',
                 'password' => 'dfsdfsfsdfds',
@@ -67,7 +67,7 @@ class UserProfileTest extends TestCase
         $this->withExceptionHandling();
         $u = $this->signIn()->createUser();
         $response = $this->patchJson(
-            '/ajax/admin/settings/password',
+            '/ajax/admin/user/password',
             [
                 'current_password' => 'secret',
                 'password' => 'secret',
@@ -83,7 +83,7 @@ class UserProfileTest extends TestCase
         $t = $this->createUser();
         $u = $this->signIn($t);
         $response = $this->patchJson(
-            '/ajax/admin/settings/password',
+            '/ajax/admin/user/password',
             [
                 'current_password' => 'secret',
                 'password' => 'dfsdfsfsdfds',
@@ -101,7 +101,7 @@ class UserProfileTest extends TestCase
         $this->withExceptionHandling();
         $u = $this->createUser();
         $response = $this->signIn($u)->patchJson(
-            '/ajax/admin/settings/profile',
+            '/ajax/admin/user/profile',
             [
                 'first_name' => 'Jane',
                 'full_name' => 'Jane Doe',

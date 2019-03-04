@@ -34,17 +34,15 @@
               </div>
             </div>
           </div>
-          <div class="row form-group ">
-            <label for="input-url" class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.entity_url')
-              }}</label>
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.website_type') }}</label>
             <div class="col-md-8">
-              <input type="text" class="form-control" name="entity_url"
-                     id="input-url" autocomplete="off"
-                     v-model="form.fields.entity.url">
+              <button-group @active-changed="changeWebsiteType" :field-name="'website-type'"
+                            :active="form.fields.website_type" :choices="websiteType"></button-group>
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.entity_types') }}</label>
+            <label class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.entity_type') }}</label>
             <div class="col-md-8">
               <button-group @active-changed="changeEntity" :field-name="'entity-type'"
                             :active="form.fields.entity_type" :choices="entityType"></button-group>
@@ -58,13 +56,23 @@
                 <div class="col-md-8">
                   <input type="text" class="form-control" name="entity_name"
                          id="input-name" autocomplete="off"
-                         v-model="form.fields.entity.name">
+                         v-model="form.fields.person_name">
                 </div>
               </div>
             </div>
           </div>
           <div v-else class="form-group row">
             <div class="container">
+              <div class="row form-group ">
+                <label for="organizations" class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.entity_org_type')
+                  }}</label>
+                <div class="col-md-8">
+                  <select id="organizations" class="custom-select" v-model="form.fields.org_type">
+                    <option v-for="(orgType,orgTypeKey) in orgTypes"
+                            :key="orgTypeKey" :value="orgTypeKey">{{orgType}}</option>
+                  </select>
+                </div>
+              </div>
               <div class="row form-group ">
                 <label class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.entity_logo')
                   }}</label>
@@ -75,7 +83,8 @@
                     <label class="custom-file-label" for="input-logo">{{$t('general.choose_file')}}</label>
                   </div>
                   <div>
-                    <img v-if="organizationLogo!==null" :src="organizationLogo" class="w-50 mt-3 image-fluid img-thumbnail rounded mx-auto d-block">
+                    <img v-if="organizationLogo!==null" :src="organizationLogo"
+                         class="w-50 mt-3 image-fluid img-thumbnail rounded mx-auto d-block">
                   </div>
                 </div>
               </div>
@@ -97,6 +106,11 @@
               <button type="button" class="btn btn-info" @click="addLink"><i class="fa fa-plus"></i></button>
             </div>
           </div>
+          <div class="form-group row">
+            <div class="col-md-9 ml-md-auto">
+              <submit-button :loading="form.busy">{{ $t('general.update') }}</submit-button>
+            </div>
+          </div>
         </form>
       </div>
     </div>
@@ -107,25 +121,42 @@
   import axios from 'axios'
   import { Form, HasError, AlertForm } from 'back_path/components/form'
   import ButtonGroup from 'back_path/components/ButtonGroup'
+  import SubmitButton from 'back_path/components/SubmitButton'
+  import swal from 'back_path/mixins/sweet-alert'
 
   export default {
     name: 'website-general',
     components: {
       Form,
-      ButtonGroup
+      ButtonGroup,
+      SubmitButton
     },
+    mixins: [
+      swal
+    ],
     data () {
       return {
         form: new Form({
+          site_description: '',
           entity_type: 'person',
-          entity: {},
+          website_type: 'general',
+          logo:null,
+          person_name: null,
+          org_type:null,
           links: []
         }),
         entityType: {
           person: this.$t('pages.settings.entity_person'),
           organization: this.$t('pages.settings.entity_organization')
         },
-        organizationLogo: null
+        websiteType: {
+          general: this.$t('pages.settings.website_general'),
+          blog: this.$t('pages.settings.website_blog'),
+          tech: this.$t('pages.settings.website_tech'),
+          news: this.$t('pages.settings.website_news')
+        },
+        organizationLogo: null,
+        orgTypes: null
       }
     },
     methods: {
@@ -148,17 +179,29 @@
         reader.onload = e => {
           this.organizationLogo = e.target.result
         }
-        this.form.fields.entity.logo = file
+        this.form.fields.logo = e.target.files[0]
       },
-      changeEntity (entity) {
-        this.form.fields.entity_type = entity
+      changeEntity (type) {
+        this.form.fields.entity_type = type
+      },
+      changeWebsiteType (type) {
+        this.form.fields.website_type = type
       },
       async save () {
-
+        await this.form.post('/ajax/admin/settings/general')
+        this.swalNotification('success', this.$t('message.settings_updated'))
+      },
+      getInfo (data) {
+        this.orgTypes = data.organizations
       }
     },
     metaInfo () {
-      return {title: ''}
+      return {title: this.$t('title.settings')}
+    },
+    beforeRouteEnter (to, from, next) {
+      axios.get('/ajax/admin/settings/general').then(({data}) => {
+        next(vm => vm.getInfo(data))
+      })
     }
   }
 </script>

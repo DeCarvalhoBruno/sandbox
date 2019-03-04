@@ -39,6 +39,7 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      *
      * @return void
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function boot()
     {
@@ -56,6 +57,9 @@ class AppServiceProvider extends ServiceProvider
             'frontend.site.*',
             'frontend.errors.*'
         ], \App\Composers\Frontend::class);
+        $this->app->make('view')->composer([
+            'frontend.site.home',
+        ], \App\Composers\Home::class);
 
         if (env('APP_OLD_ASS_RDBMS')) {
             Schema::defaultStringLength(191);

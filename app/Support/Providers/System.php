@@ -16,23 +16,34 @@ class System extends Model implements SystemInterface
     /**
      * @var \App\Models\System\SystemUserSettings|\App\Support\Providers\SystemUserSettings
      */
+    private $userSettings;
+    /**
+     * @var \App\Models\System\SystemUserSettings|\App\Support\Providers\SystemUserSettings
+     */
     private $settings;
 
     /**
      *
      * @param \App\Contracts\Models\SystemEventLog|\App\Support\Providers\SystemEventLog $log
      * @param \App\Contracts\Models\SystemUserSettings|\App\Support\Providers\SystemUserSettings $ssi
+     * @param \App\Support\Providers\SystemSettings $ss
      */
-    public function __construct(SystemEventLogInterface $log, SystemUserSettingsInterface $ssi)
+    public function __construct(SystemEventLogInterface $log, SystemUserSettingsInterface $ssi, SystemSettings $ss)
     {
         parent::__construct();
         $this->log = $log;
-        $this->settings = $ssi;
+        $this->userSettings = $ssi;
+        $this->settings = $ss;
     }
 
     public function log()
     {
         return $this->log;
+    }
+
+    public function userSettings()
+    {
+        return $this->userSettings;
     }
 
     public function settings()

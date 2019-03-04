@@ -19,7 +19,7 @@ class General extends Controller
      */
     public function update(Request $request, SystemProvider $systemRepo)
     {
-        $systemRepo->settings()
+        $systemRepo->userSettings()
             ->save($this->user->getKey(), SystemSection::BACKEND, $request->all());
         return response(null, Response::HTTP_NO_CONTENT);
     }

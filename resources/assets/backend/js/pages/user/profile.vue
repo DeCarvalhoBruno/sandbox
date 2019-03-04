@@ -108,7 +108,7 @@
       async update () {
         if (this.form.hasDetectedChanges()) {
           if (this.form.hasFieldChanged('new_email')) {
-            const {data} = await this.form.patch('/ajax/admin/settings/profile')
+            const {data} = await this.form.patch('/ajax/admin/user/profile')
             this.swalEdumacationInfo(
               this.$t('modal.user_profile_updated.h'),
               this.$t('modal.user_profile_updated.t'),
@@ -121,7 +121,7 @@
             })
             return
           } else {
-            const {data} = await this.form.patch('/ajax/admin/settings/profile')
+            const {data} = await this.form.patch('/ajax/admin/user/profile')
             this.form = new Form(data.user, true)
             this.$store.dispatch('auth/updateUser', {user: data.user})
           }
