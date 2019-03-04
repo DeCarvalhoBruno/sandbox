@@ -87,6 +87,7 @@ return [
         'crop' => 'Crop',
         'close' => 'Close',
         'view_all' => 'View All',
+        'choose_file' => 'Choose file'
     ],
     'db' => [
         'users' => 'User|Users',
@@ -277,9 +278,17 @@ return [
         ],
         'settings' => [
             'title' => 'Website settings',
-            'entity_types'=>'Represented entity',
+            'site_description' => 'Website description',
+            'allow_robots' => 'Allow search engine bots to crawl pages',
+            'jsonld_on' => 'Enable structured data tagging',
+            'entity_types' => 'Represented entity',
             'entity_person' => 'Person',
-            'entity_organization' => 'Organization'
+            'entity_organization' => 'Organization',
+            'entity_name' => 'Full name',
+            'entity_url' => 'URL',
+            'entity_logo' => 'Logo',
+            'social_url' => 'Social media page url',
+            'entity_social_help' => 'Links to user/organization profiles can be added below. Google recognizes the following platforms: Facebook, Twitter, Google+, Instagram, YouTube, LinkedIn, Myspace, Pinterest, SoundCloud and Tumblr.'
         ],
         'blog' => [
             'categories' => 'Categories',

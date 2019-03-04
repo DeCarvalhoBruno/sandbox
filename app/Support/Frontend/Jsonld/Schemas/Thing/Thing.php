@@ -11,11 +11,17 @@ class Thing extends Schema
     protected $sameAs;
     protected $url;
     protected $potentialAction;
+    protected $mainEntityOfPage;
 
     public function setPotentialAction($values, $class)
     {
         return $this->setValuesDefault(
             sprintf('\App\Support\Frontend\Jsonld\Schemas\Thing\Action\%s', $class), $values);
+    }
+
+    public function setMainEntityOfPage($values, $class){
+        return $this->setValuesDefault(
+            sprintf('\App\Support\Frontend\Jsonld\Schemas\Thing\CreativeWork\%s', $class), $values);
     }
 
 }

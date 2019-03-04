@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Ajax\Admin\Settings;
+namespace App\Http\Controllers\Ajax\Admin\User;
 
 use App\Contracts\Models\Media as MediaProvider;
 use App\Http\Controllers\Admin\Controller;

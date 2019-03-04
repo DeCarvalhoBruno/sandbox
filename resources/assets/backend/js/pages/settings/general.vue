@@ -16,11 +16,31 @@
             <label class="col-md-3 col-form-label text-md-right"></label>
             <div class="col-md-8">
               <div class="custom-control custom-switch">
-                <input type="checkbox"
-                       class="custom-control-input" value="" id="chk-robots"
+                <input type="checkbox" name="robots"
+                       class="custom-control-input" id="chk-robots"
                        v-model="form.fields.robots">
                 <label class="custom-control-label" for="chk-robots">{{ $t('pages.settings.allow_robots') }}</label>
               </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label text-md-right"></label>
+            <div class="col-md-8">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" name="jsonld"
+                       class="custom-control-input" value="" id="chk-json-ld"
+                       v-model="form.fields.jsonld">
+                <label class="custom-control-label" for="chk-json-ld">{{ $t('pages.settings.jsonld_on') }}</label>
+              </div>
+            </div>
+          </div>
+          <div class="row form-group ">
+            <label for="input-url" class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.entity_url')
+              }}</label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="entity_url"
+                     id="input-url" autocomplete="off"
+                     v-model="form.fields.entity.url">
             </div>
           </div>
           <div class="form-group row">
@@ -31,23 +51,51 @@
             </div>
           </div>
           <div v-if="form.fields.entity_type==='person'" class="form-group row">
-              <div class="container">
-                <div class="row form-group ">
-                  <label for="input-given-name" class="col-md-3 col-form-label text-md-right"></label>
-                  <div class="col-md-8">
-                  <input type="text" class="form-control" id="input-given-name" v-model="form.fields.entity.given-name">
-                  </div>
+            <div class="container">
+              <div class="row form-group ">
+                <label for="input-name" class="col-md-3 col-form-label text-md-right">{{
+                  $t('pages.settings.entity_name') }}</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" name="entity_name"
+                         id="input-name" autocomplete="off"
+                         v-model="form.fields.entity.name">
                 </div>
-                <div class="row form-group ">
-                  <label for="input-family-name" class="col-md-3 col-form-label text-md-right"></label>
-                  <div class="col-md-8">
-                  <input type="text" class="form-control" id="input-family-name" v-model="form.fields.entity.family-name">
+              </div>
+            </div>
+          </div>
+          <div v-else class="form-group row">
+            <div class="container">
+              <div class="row form-group ">
+                <label class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.entity_logo')
+                  }}</label>
+                <div class="col-md-8">
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" accept="image/*" name="entity_logo"
+                           id="input-logo" ref="orgLogoFile" @change="showLogo">
+                    <label class="custom-file-label" for="input-logo">{{$t('general.choose_file')}}</label>
+                  </div>
+                  <div>
+                    <img v-if="organizationLogo!==null" :src="organizationLogo" class="w-50 mt-3 image-fluid img-thumbnail rounded mx-auto d-block">
                   </div>
                 </div>
               </div>
+            </div>
           </div>
-          <div v-else class="form-group row">
-
+          <p class="font-italic">{{ $t('pages.settings.entity_social_help') }}</p>
+          <div v-for="(field, idx) in form.fields.links" class="form-group row" :key="'links'+idx">
+            <label class="col-md-3 col-form-label text-md-right"></label>
+            <div class="col-md-8 form-inline">
+              <span class="w-75 mr-2">{{field}}</span>
+              <button type="button" class="btn btn-danger" @click="delLink(idx)"><i class="fa fa-minus"></i></button>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="input-link" class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.social_url')
+              }}</label>
+            <div class="col-md-8 form-inline">
+              <input type="text" class="form-control w-75 mr-2" id="input-link" ref="inputLink" autocomplete="off">
+              <button type="button" class="btn btn-info" @click="addLink"><i class="fa fa-plus"></i></button>
+            </div>
           </div>
         </form>
       </div>
@@ -68,15 +116,41 @@
     },
     data () {
       return {
-        form: new Form({entity_type: 'person', entity: {}}),
+        form: new Form({
+          entity_type: 'person',
+          entity: {},
+          links: []
+        }),
         entityType: {
           person: this.$t('pages.settings.entity_person'),
           organization: this.$t('pages.settings.entity_organization')
-        }
+        },
+        organizationLogo: null
       }
     },
     methods: {
-      changeEntity(entity){
+      addLink () {
+        let link = this.$refs.inputLink.value
+        if (link) {
+          this.form.fields.links.push(link)
+          this.$refs.inputLink.value = ''
+          this.$refs.inputLink.focus()
+        }
+      },
+      delLink (index) {
+        this.form.fields.links.splice(index, 1)
+      },
+      showLogo (e) {
+        if (!e.target.files.length) return
+        let file = e.target.files[0]
+        let reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = e => {
+          this.organizationLogo = e.target.result
+        }
+        this.form.fields.entity.logo = file
+      },
+      changeEntity (entity) {
         this.form.fields.entity_type = entity
       },
       async save () {

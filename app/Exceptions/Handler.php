@@ -3,15 +3,13 @@
 namespace App\Exceptions;
 
 use Exception;
-use Illuminate\Http\Response;
-use Illuminate\Support\ViewErrorBag;
-use Psr\Log\LoggerInterface;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Routing\Router;
 use Illuminate\Validation\ValidationException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -32,17 +30,14 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontFlash = [
-        'password',
-        'password_confirmation',
     ];
 
     /**
      * Report or log an exception.
      *
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
+     * @param  \Exception  $e
+     * @return mixed
      *
-     * @param  \Exception $e
-     * @return void
      * @throws \Exception
      */
     public function report(Exception $e)
@@ -51,8 +46,8 @@ class Handler extends ExceptionHandler
             return;
         }
 
-        if (method_exists($e, 'report')) {
-            return $e->report();
+        if (is_callable($reportCallable = [$e, 'report'])) {
+            return $this->container->call($reportCallable);
         }
 
         try {

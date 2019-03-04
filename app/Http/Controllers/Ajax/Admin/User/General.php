@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Ajax\Admin\Settings;
+namespace App\Http\Controllers\Ajax\Admin\User;
 
-use App\Models\System\SystemEvent;
+use App\Contracts\Models\System as SystemProvider;
+use App\Http\Controllers\Admin\Controller;
 use App\Models\System\SystemSection;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Admin\Controller;
 use Illuminate\Http\Response;
-use App\Support\Providers\User as UserProvider;
-use App\Contracts\Models\System as SystemProvider;
 
 class General extends Controller
 {

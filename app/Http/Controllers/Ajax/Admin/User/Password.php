@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Ajax\Admin\Settings;
+namespace App\Http\Controllers\Ajax\Admin\User;
 
 use App\Http\Controllers\Admin\Controller;
 use App\Support\Providers\User as UserProvider;
