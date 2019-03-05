@@ -13,7 +13,7 @@ class MediaEntity extends Presenter
     {
         return $this->entity->asset($this->entity->getAttribute('entity_id'),
             \App\Models\Media\Media::IMAGE,
-            \App\Models\Media\MediaImgFormat::FEATURED);
+            \App\Models\Media\MediaImgFormat::THUMBNAIL);
     }
 
 }

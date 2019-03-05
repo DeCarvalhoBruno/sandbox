@@ -1,31 +1,43 @@
 <?php namespace App\Http\Controllers\Ajax\Admin;
 
-use App\Contracts\Models\System as SystemProvider;
 use App\Http\Controllers\Admin\Controller;
 use App\Http\Requests\Admin\UpdateSettings;
+use App\Support\Frontend\Jsonld\Models\General;
 use Illuminate\Http\Response;
 
 class Settings extends Controller
 {
     /**
-     * @param \App\Contracts\Models\System|\App\Support\Providers\System $systemRepo
+     * @var \App\Support\Frontend\Jsonld\Models\General
+     */
+    private $settings;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->settings = new General();
+    }
+
+    /**
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function edit(SystemProvider $systemRepo)
+    public function edit()
     {
         return response([
-            'settings'=>\Cache::get('settings_general'),
-            'websites' => $systemRepo->settings()->websiteList(),
-            'organizations' => $systemRepo->settings()->organizationList()
+            'settings' => $this->settings->getSettings(),
+            'websites' => $this->settings->websiteList(),
+            'organizations' => $this->settings->organizationList()
         ], Response::HTTP_OK);
     }
 
     /**
      * @param \App\Http\Requests\Admin\UpdateSettings $request
-     * @param \App\Contracts\Models\System|\App\Support\Providers\System $systemRepo
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function update(UpdateSettings $request, SystemProvider $systemRepo)
+    public function update(UpdateSettings $request)
     {
         $input = $request->all();
         if (!is_null($input['logo'])) {
@@ -38,9 +50,9 @@ class Settings extends Controller
         \Cache::forever('settings_has_jsonld', $input['jsonld']);
 
         if ($input['jsonld'] === true) {
-            \Cache::forever('meta_jsonld', $systemRepo->settings()->makeStructuredData($input));
-        }else{
-            \Cache::forever('meta_jsonld','');
+            \Cache::forever('meta_jsonld', $this->settings->makeStructuredData($input));
+        } else {
+            \Cache::forever('meta_jsonld', '');
         }
         \Cache::forever('meta_robots', $input['robots'] === true ? 'index, follow' : 'noindex, nofollow');
         \Cache::forever('meta_description', $input['site_description']);

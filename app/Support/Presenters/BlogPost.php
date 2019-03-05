@@ -1,7 +1,19 @@
 <?php namespace App\Support\Presenters;
 
+use Illuminate\Support\Str;
+
 class BlogPost extends Presenter
 {
+    public function date()
+    {
+        return new \Carbon\Carbon($this->entity->getAttribute('date'));
+    }
+
+    public function title()
+    {
+        return Str::limit($this->entity->getAttribute('title'));
+    }
+
     public function content()
     {
         $string = $this->entity->getAttribute('content');

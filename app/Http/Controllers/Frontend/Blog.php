@@ -33,11 +33,15 @@ class Blog extends Controller
         $post = $this->blogRepo->buildOneBySlug($slug, [
             'blog_post_title as title',
             'blog_post_content as content',
+            'blog_post_excerpt as excerpt',
+            'blog_post_slug as slug',
             'published_at as date',
             'entity_types.entity_type_id',
             'person_slug as author',
             'full_name as person',
-            'unq as page_views'
+            'unq as page_views',
+            'published_at as date_modified',
+            'published_at as date_published'
         ])->pageViews()->first();
         if (is_null($post)) {
             throw new NotFoundHttpException('Blog Post not found');
@@ -54,7 +58,8 @@ class Blog extends Controller
         $categories = $this->blogRepo->buildOneBySlug(
             $slug,
             ['blog_category_slug as cat']
-        )->category()->first();
+        )->category()->orderBy('blog_category_id','asc')->get();
+        $firstCategory = $categories->first();
         $tags = $this->blogRepo->buildOneBySlug(
             $slug, ['blog_tag_slug as tag', 'blog_tag_name as name']
         )->tag()->get();
@@ -67,7 +72,7 @@ class Blog extends Controller
             'person_slug as author',
             'full_name as person',
             'unq as page_views'
-        ])->pageViews()->person()->category($categories->getAttribute('cat'))->language()
+        ])->pageViews()->person()->category($firstCategory->getAttribute('cat'))->language()
             ->where('blog_post_slug', '!=', $slug)
             ->orderBy('published_at', 'desc')->limit(4)->get();
         $otherPostMedia = $this->getImages($otherPosts, $mediaRepo);
@@ -78,12 +83,13 @@ class Blog extends Controller
             }
         }
 
-        $breadcrumbs = Breadcrumbs::render([
-            [
-                'label' => trans(sprintf('pages.blog.category.%s', $categories->getAttribute('cat'))),
-                'url' => route_i18n('blog.category', $categories->getAttribute('cat'))
-            ]
-        ]);
+        $breadcrumbs=[];
+        foreach($categories as $cat){
+            $breadcrumbs[] = [
+                'label' => trans(sprintf('pages.blog.category.%s', $cat->getAttribute('cat'))),
+                'url' => route_i18n('blog.category', $cat->getAttribute('cat'))
+            ];
+        }
         $this->dispatch(new ProcessPageView($post));
 
         return view('frontend.site.blog.post', compact(

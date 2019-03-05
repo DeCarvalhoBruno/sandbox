@@ -1,31 +1,37 @@
 <?php namespace App\Http\Controllers\Frontend;
 
-use App\Models\Entity;
-use App\Models\Media\Media;
-use App\Models\Media\MediaImgFormat;
 use App\Contracts\Models\Blog as BlogProvider;
 use App\Contracts\Models\Media as MediaProvider;
-use Carbon\Carbon;
-use Illuminate\Support\Str;
+use App\Models\Language;
 
 class Home extends Controller
 {
 
+    /**
+     * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
+     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index(BlogProvider $blogRepo, MediaProvider $mediaRepo)
     {
-        $dbResult = $blogRepo->buildForDisplay()->get();
+        $dbResult = $blogRepo->buildForDisplay()
+            ->orderBy('page_views', 'desc')
+            ->where('language_id', Language::getAppLanguageId())
+            ->limit(115)
+            ->get();
         $result2 = clone($dbResult);
 
         $dbImages = $mediaRepo->image()->getImages(
             $result2->pluck('type')->all(), [
                 'media_uuid as uuid',
                 'media_extension as ext',
-                'entity_types.entity_type_id as type'
+                'entity_types.entity_type_id as type',
+                'entity_id'
             ]
         );
-        $images = [];
+        $media = [];
         foreach ($dbImages as $image) {
-            $images[$image->type] = $image;
+            $media[$image->type] = $image;
         }
 
         $posts = [
@@ -33,46 +39,30 @@ class Home extends Controller
             'most_viewed_cat' => [],
             'most_viewed' => []
         ];
+
         foreach ($dbResult as $post) {
-            $post->setAttribute('date', new Carbon($post->getAttribute('time')));
-            $post->setAttribute('title', Str::limit($post->getAttribute('title'),100));
-            if (isset($images[$post->type])) {
-                $post->setAttribute(
-                    'img',
-                    media_entity_path(
-                        Entity::BLOG_POSTS,
-                        Media::IMAGE,
-                        sprintf(
-                            '%s_%s.%s',
-                            $images[$post->type]->getAttribute('uuid'),
-                            MediaImgFormat::getFormatAcronyms(MediaImgFormat::FEATURED),
-                            $images[$post->type]->getAttribute('ext'))
-                    )
-                );
-            }
             if ($post->featured == 1) {
-                if (isset($images[$post->type])) {
-                    $posts['featured'][] = $post->toArray();
+                if (isset($media[$post->type])) {
+                    $posts['featured'][] = $post;
                 }
             } else {
-                if (isset($images[$post->type])) {
+                if (isset($media[$post->type])) {
                     if (isset($posts['most_viewed_cat'][$post->cat])) {
                         if (count($posts['most_viewed_cat'][$post->cat]) < 5) {
-                            $posts['most_viewed_cat'][$post->cat][] = $post->toArray();
+                            $posts['most_viewed_cat'][$post->cat][] = $post;
                         } else {
                             if (count($posts['most_viewed']) < 18) {
-                                $posts['most_viewed'][] = $post->toArray();
+                                $posts['most_viewed'][] = $post;
                             }
                         }
                     } else {
-                        $posts['most_viewed_cat'][$post->cat][] = $post->toArray();
+                        $posts['most_viewed_cat'][$post->cat][] = $post;
                     }
                 }
             }
         }
         unset($dbResult);
-//        dd($posts);
-        return view('frontend.site.home', compact('posts'));
+        return view('frontend.site.home', compact('posts','media'));
     }
 
 }

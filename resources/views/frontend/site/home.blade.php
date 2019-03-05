@@ -18,15 +18,17 @@
                                         <a class="fc-cat badge-success"
                                            href="{{route_i18n('blog',$posts['featured'][$i]['cat'])}}">{{trans(sprintf('pages.blog.category.%s',$posts['featured'][$i]['cat']))}}</a>
                                         <h2 class="fc-title">
-                                            <a href="{{route_i18n('blog',$posts['featured'][$i]['slug'])}}">{{$posts['featured'][$i]['title']}}</a>
+                                            <a href="{{route_i18n('blog',$posts['featured'][$i]['slug'])}}">{{$posts['featured'][$i]->present('title')}}</a>
                                         </h2>
-                                        <span class="fc-date">{{$posts['featured'][$i]['date']}}</span>
+                                        <span class="fc-date">{{$posts['featured'][$i]->present('date')}}</span>
                                     </div>
                                 </div>
+                                @if(isset($media[$posts['featured'][$i]->getAttribute('type')]))
                                 @include('partials.img',[
-                                    'media'=>$posts['featured'][$i]['img'],
-                                    'alt'=>$posts['featured'][$i]['title']
+                                    'media'=>$media[$posts['featured'][$i]->getAttribute('type')]->present('asset'),
+                                    'alt'=>$posts['featured'][$i]->present('title')
                                 ])
+                                @endif
                             </div>
                         @endfor
                     </div>
@@ -49,14 +51,16 @@
                                     <a class="fc-cat badge-success"
                                        href="{{route_i18n('blog',$posts['featured'][3]['cat'])}}">{{trans(sprintf('pages.blog.category.%s',$posts['featured'][3]['cat']))}}</a>
                                     <h2 class="fc-title">
-                                        <a href="{{route_i18n('blog',$posts['featured'][3]['slug'])}}">{{$posts['featured'][3]['title']}}</a>
+                                        <a href="{{route_i18n('blog',$posts['featured'][3]['slug'])}}">{{$posts['featured'][3]->present('title')}}</a>
                                     </h2>
                                 </div>
                             </div>
-                            @include('partials.img',[
-                                'media'=>$posts['featured'][3]['img'],
-                                'alt'=>$posts['featured'][3]['title']
-                            ])
+                            @if(isset($media[$posts['featured'][3]->getAttribute('type')]))
+                                @include('partials.img',[
+                                    'media'=>$media[$posts['featured'][3]->getAttribute('type')]->present('asset'),
+                                    'alt'=>$posts['featured'][3]->present('title')
+                                ])
+                            @endif
                         </div>
 
                         <div class="col-lg-6 col-md-12 featured-content featured-content-bottom">
@@ -65,14 +69,16 @@
                                     <a class="fc-cat badge-success"
                                        href="{{route_i18n('blog',$posts['featured'][4]['cat'])}}">{{trans(sprintf('pages.blog.category.%s',$posts['featured'][4]['cat']))}}</a>
                                     <h2 class="fc-title">
-                                        <a href="{{route_i18n('blog',$posts['featured'][4]['slug'])}}">{{$posts['featured'][4]['title']}}</a>
+                                        <a href="{{route_i18n('blog',$posts['featured'][4]['slug'])}}">{{$posts['featured'][4]->present('title')}}</a>
                                     </h2>
                                 </div>
                             </div>
-                            @include('partials.img',[
-                                'media'=>$posts['featured'][4]['img'],
-                                'alt'=>$posts['featured'][4]['title']
-                            ])
+                            @if(isset($media[$posts['featured'][4]->getAttribute('type')]))
+                                @include('partials.img',[
+                                    'media'=>$media[$posts['featured'][4]->getAttribute('type')]->present('asset'),
+                                    'alt'=>$posts['featured'][4]->present('title')
+                                ])
+                            @endif
                         </div>
                         <div class="col-lg-6 col-md-12 featured-content">
                             <div class="bottom-featured">
@@ -80,14 +86,16 @@
                                     <a class="fc-cat badge-success"
                                        href="{{route_i18n('blog',$posts['featured'][5]['cat'])}}">{{trans(sprintf('pages.blog.category.%s',$posts['featured'][5]['cat']))}}</a>
                                     <h2 class="fc-title">
-                                        <a href="{{route_i18n('blog',$posts['featured'][5]['slug'])}}">{{$posts['featured'][5]['title']}}</a>
+                                        <a href="{{route_i18n('blog',$posts['featured'][5]['slug'])}}">{{$posts['featured'][5]->present('title')}}</a>
                                     </h2>
                                 </div>
                             </div>
-                            @include('partials.img',[
-                                'media'=>$posts['featured'][5]['img'],
-                                'alt'=>$posts['featured'][5]['title']
-                            ])
+                            @if(isset($media[$posts['featured'][5]->getAttribute('type')]))
+                                @include('partials.img',[
+                                    'media'=>$media[$posts['featured'][5]->getAttribute('type')]->present('asset'),
+                                    'alt'=>$posts['featured'][5]['title']
+                                ])
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -110,28 +118,32 @@
                                             <div class="lfc-title"><a
                                                         href="{{route_i18n('blog',$mostViewedItems[0]['slug'])}}">{{$mostViewedItems[0]['title']}}</a>
                                             </div>
-                                            <span class="lfc-date">{{$mostViewedItems[0]['date']}}</span>
+                                            <span class="lfc-date">{{$mostViewedItems[0]->present('date')}}</span>
                                         </div>
-                                        @include('partials.img',[
-                                            'media'=>$mostViewedItems[0]['img'],
-                                            'alt'=>$mostViewedItems[0]['title']
-                                        ])
+                                        @if(isset($media[$mostViewedItems[0]->getAttribute('type')]))
+                                            @include('partials.img',[
+                                                'media'=>$media[$mostViewedItems[0]->getAttribute('type')]->present('asset'),
+                                                'alt'=>$mostViewedItems[0]->present('title')
+                                            ])
+                                        @endif
                                     </li>
                                     @for($i=1;$i<=4;$i++)
                                         <li class="row list-post">
                                             <div class="container">
                                                 <div class="row d-flex align-items-center">
                                                     <div class="col-lg-3 col-md-6 list-img-container">
-                                                        @include('partials.img',[
-                                                            'media'=>$mostViewedItems[$i]['img'],
-                                                            'alt'=>$mostViewedItems[$i]['title']
-                                                        ])
+                                                        @if(isset($media[$mostViewedItems[$i]->getAttribute('type')]))
+                                                            @include('partials.img',[
+                                                                'media'=>$media[$mostViewedItems[$i]->getAttribute('type')]->present('asset'),
+                                                                'alt'=>$mostViewedItems[$i]->present('title')
+                                                            ])
+                                                        @endif
                                                     </div>
                                                     <div class="col-lg-9 col-md-6 list-txt-container">
                                                         <div class="row lfc-title"><a
-                                                                    href="{{route_i18n('blog',$mostViewedItems[$i]['slug'])}}">{{$mostViewedItems[$i]['title']}}</a>
+                                                                    href="{{route_i18n('blog',$mostViewedItems[$i]['slug'])}}">{{$mostViewedItems[$i]->present('title')}}</a>
                                                         </div>
-                                                        <div class="row lfc-date">{{$mostViewedItems[$i]['date']}}</div>
+                                                        <div class="row lfc-date">{{$mostViewedItems[$i]->present('date')}}</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -169,15 +181,17 @@
                                 @foreach($posts['most_viewed'] as $mostViewedItems)
                                     <div class="row mvp-list-item d-flex align-items-md-center align-items-lg-start">
                                         <div class="col-lg-3 col-md-6 list-img-container">
-                                            @include('partials.img',[
-                                                'media'=>$mostViewedItems['img'],
-                                                'alt'=>$mostViewedItems['title']
-                                            ])
+                                            @if(isset($media[$mostViewedItems->getAttribute('type')]))
+                                                @include('partials.img',[
+                                                    'media'=>$media[$mostViewedItems->getAttribute('type')]->present('asset'),
+                                                    'alt'=>$mostViewedItems->present('title')
+                                                ])
+                                            @endif
                                         </div>
                                         <div class="col-lg-9 col-md-6 list-txt-container">
-                                            <div class="row mli-date">{{$mostViewedItems['date']}}</div>
+                                            <div class="row mli-date">{{$mostViewedItems->present('date')}}</div>
                                             <div class="row mli-title"><a
-                                                        href="{{route_i18n('blog',$mostViewedItems['slug'])}}">{{$mostViewedItems['title']}}</a>
+                                                        href="{{route_i18n('blog',$mostViewedItems['slug'])}}">{{$mostViewedItems->present('title')}}</a>
                                             </div>
                                         </div>
                                     </div>

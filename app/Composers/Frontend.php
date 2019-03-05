@@ -1,7 +1,6 @@
 <?php namespace App\Composers;
 
 use App\Facades\JavaScript;
-use App\Support\Frontend\Breadcrumbs;
 
 class Frontend extends Composer
 {

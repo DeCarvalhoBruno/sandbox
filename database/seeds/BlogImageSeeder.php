@@ -155,13 +155,10 @@ class ImageSeeder extends Seeder
 
     private function parseImages()
     {
-
-
         $dir = opendir($this->origDir);
         if (!$dir) {
             die(sprintf("%s could not be read.", $this->origDir));
         }
-        $productId = 1;
         //We wanna insert products in the database before the rest because of the integrity checks.
         $images = [];
         while (($file = readdir($dir)) !== false) {

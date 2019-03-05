@@ -6,7 +6,7 @@ use App\Support\Frontend\Jsonld\Schemas\Thing\Thing;
 class CreativeWork extends Thing
 {
     static $websiteList = ['WebSite' => '', 'Blog' => ''];
-    static $publisherThingList = ['Person' => ''];
+    static $publisherAuthorThingList = ['Person' => ''];
     protected $about;
     protected $aggregateRating;
     protected $alternativeHeadline;
@@ -27,9 +27,24 @@ class CreativeWork extends Thing
     protected $thumbnailUrl;
     protected $video;
 
-    public function setPublisher($values, $class)
+    public function setPublisher($values, $class = null)
     {
-        if (isset(static::$publisherThingList[$class])) {
+        if (is_null($class)) {
+            return $values;
+        }
+        if (isset(static::$publisherAuthorThingList[$class])) {
+            return $this->setValuesDefault(
+                sprintf('\App\Support\Frontend\Jsonld\Schemas\Thing\%s', $class), $values);
+        } else {
+            return $this->setValuesDefault(
+                Organization::getClassName($class), $values
+            );
+        }
+    }
+
+    public function setAuthor($values, $class)
+    {
+        if (isset(static::$publisherAuthorThingList[$class])) {
             return $this->setValuesDefault(
                 sprintf('\App\Support\Frontend\Jsonld\Schemas\Thing\%s', $class), $values);
         } else {
@@ -46,5 +61,6 @@ class CreativeWork extends Thing
         }
         return sprintf('\App\Support\Frontend\Jsonld\Schemas\Thing\CreativeWork\%s', $value);
     }
+
 
 }
