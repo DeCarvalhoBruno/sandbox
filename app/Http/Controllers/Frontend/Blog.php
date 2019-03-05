@@ -84,11 +84,10 @@ class Blog extends Controller
                 'url' => route_i18n('blog.category', $categories->getAttribute('cat'))
             ]
         ]);
-        $title = page_title($post->getAttribute('title'));
         $this->dispatch(new ProcessPageView($post));
 
         return view('frontend.site.blog.post', compact(
-                'post', 'breadcrumbs', 'title', 'media', 'categories', 'tags', 'otherPosts', 'otherPostMedia','sources')
+                'post', 'breadcrumbs', 'media', 'categories', 'tags', 'otherPosts', 'otherPostMedia','sources')
         );
     }
 

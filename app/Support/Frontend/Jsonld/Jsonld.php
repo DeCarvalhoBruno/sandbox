@@ -30,9 +30,27 @@ class JsonLd
      *
      * @return static
      */
-    public static function create($context, array $data = [])
+    public static function createOne($context, array $data = [])
     {
         return new static($context, $data);
+    }
+
+    public static function create(array $data)
+    {
+        $r = [];
+        foreach ($data as $d) {
+            $r[] = self::createOne($d->class, $d->jsonld);
+        }
+        return $r;
+    }
+
+    public static function generate(array $data)
+    {
+        $r = '';
+        foreach ($data as $d) {
+            $r .= self::createOne($d->class, $d->jsonld)->generateOne();
+        }
+        return $r;
     }
 
     /**
@@ -40,11 +58,9 @@ class JsonLd
      *
      * @return string
      */
-    public function generate()
+    public function generateOne()
     {
-        $properties = $this->schema->getProperties();
-        return $properties ? "<script type=\"application/ld+json\">" . json_encode($properties,
-                JSON_HEX_APOS | JSON_UNESCAPED_UNICODE) . "</script>" : '';
+        return sprintf('<script type="application/ld+json">%s</script>', $this->getJson());
     }
 
     /**
@@ -55,5 +71,13 @@ class JsonLd
     public function __toString()
     {
         return $this->generate();
+    }
+
+    /**
+     * @return false|string
+     */
+    public function getJson()
+    {
+        return json_encode($this->schema->getProperties(), JSON_HEX_APOS | JSON_UNESCAPED_UNICODE);
     }
 }

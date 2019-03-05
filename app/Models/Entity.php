@@ -2,6 +2,7 @@
 
 use App\Traits\Enumerable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Entity extends Model
 {
@@ -87,7 +88,7 @@ class Entity extends Model
     {
         $entities = array_flip(static::getConstants());
         if (isset($entities[$entityID])) {
-            return ucfirst(camel_case(str_singular(strtolower($entities[$entityID]))));
+            return ucfirst(Str::camel(Str::singular(strtolower($entities[$entityID]))));
         }
         return null;
     }

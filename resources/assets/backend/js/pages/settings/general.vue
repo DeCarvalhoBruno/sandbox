@@ -38,7 +38,7 @@
             <label class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.website_type') }}</label>
             <div class="col-md-8">
               <button-group @active-changed="changeWebsiteType" :field-name="'website-type'"
-                            :active="form.fields.website_type" :choices="websiteType"></button-group>
+                            :active="form.fields.website_type" :choices="websiteTypes"></button-group>
             </div>
           </div>
           <div class="form-group row">
@@ -52,11 +52,20 @@
             <div class="container">
               <div class="row form-group ">
                 <label for="input-name" class="col-md-3 col-form-label text-md-right">{{
-                  $t('pages.settings.entity_name') }}</label>
+                  $t('pages.settings.person_name') }}</label>
                 <div class="col-md-8">
                   <input type="text" class="form-control" name="entity_name"
                          id="input-name" autocomplete="off"
                          v-model="form.fields.person_name">
+                </div>
+              </div>
+              <div class="row form-group ">
+                <label for="input-url" class="col-md-3 col-form-label text-md-right">{{
+                  $t('pages.settings.person_url') }}</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" name="entity_name"
+                         id="input-url" autocomplete="off"
+                         v-model="form.fields.person_url">
                 </div>
               </div>
             </div>
@@ -64,12 +73,23 @@
           <div v-else class="form-group row">
             <div class="container">
               <div class="row form-group ">
-                <label for="organizations" class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.entity_org_type')
+                <label for="input-org-name" class="col-md-3 col-form-label text-md-right">{{
+                  $t('pages.settings.person_url') }}</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" name="entity_name"
+                         id="input-org-name" autocomplete="off"
+                         v-model="form.fields.org_url">
+                </div>
+              </div>
+              <div class="row form-group ">
+                <label for="organizations" class="col-md-3 col-form-label text-md-right">{{
+                  $t('pages.settings.entity_org_type')
                   }}</label>
                 <div class="col-md-8">
                   <select id="organizations" class="custom-select" v-model="form.fields.org_type">
                     <option v-for="(orgType,orgTypeKey) in orgTypes"
-                            :key="orgTypeKey" :value="orgTypeKey">{{orgType}}</option>
+                            :key="orgTypeKey" :value="orgTypeKey">{{orgType}}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -78,7 +98,8 @@
                   }}</label>
                 <div class="col-md-8">
                   <div class="custom-file">
-                    <input type="file" class="custom-file-input" accept="image/*" name="entity_logo"
+                    <input type="file" class="custom-file-input" accept="image/jpg,image/jpeg,image/gif,image/png"
+                           name="entity_logo"
                            id="input-logo" ref="orgLogoFile" @change="showLogo">
                     <label class="custom-file-label" for="input-logo">{{$t('general.choose_file')}}</label>
                   </div>
@@ -139,24 +160,21 @@
         form: new Form({
           site_description: '',
           entity_type: 'person',
-          website_type: 'general',
-          logo:null,
+          website_type: 'WebSite',
+          logo: null,
           person_name: null,
-          org_type:null,
+          person_url: null,
+          org_type: null,
+          org_url: null,
           links: []
         }),
         entityType: {
           person: this.$t('pages.settings.entity_person'),
           organization: this.$t('pages.settings.entity_organization')
         },
-        websiteType: {
-          general: this.$t('pages.settings.website_general'),
-          blog: this.$t('pages.settings.website_blog'),
-          tech: this.$t('pages.settings.website_tech'),
-          news: this.$t('pages.settings.website_news')
-        },
         organizationLogo: null,
-        orgTypes: null
+        orgTypes: null,
+        websiteTypes: null
       }
     },
     methods: {
@@ -192,7 +210,13 @@
         this.swalNotification('success', this.$t('message.settings_updated'))
       },
       getInfo (data) {
+        this.websiteTypes = data.websites
         this.orgTypes = data.organizations
+        if (data.settings != null) {
+          this.form = new Form(data.settings)
+          this.organizationLogo = this.form.fields.logo
+          this.form.fields.logo = null
+        }
       }
     },
     metaInfo () {

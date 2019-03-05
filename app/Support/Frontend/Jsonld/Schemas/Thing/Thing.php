@@ -16,12 +16,13 @@ class Thing extends Schema
     public function setPotentialAction($values, $class)
     {
         return $this->setValuesDefault(
-            sprintf('\App\Support\Frontend\Jsonld\Schemas\Thing\Action\%s', $class), $values);
+            sprintf('%s\Action\%s', __NAMESPACE__, $class), $values);
     }
 
-    public function setMainEntityOfPage($values, $class){
+    public function setMainEntityOfPage($values, $class)
+    {
         return $this->setValuesDefault(
-            sprintf('\App\Support\Frontend\Jsonld\Schemas\Thing\CreativeWork\%s', $class), $values);
+            sprintf('%s\CreativeWork\%s', __NAMESPACE__, $class), $values);
     }
 
 }

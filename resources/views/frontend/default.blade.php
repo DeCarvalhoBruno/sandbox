@@ -10,10 +10,15 @@
     <link rel="canonical" href="{{ url()->current() }}"/>
     <meta name="referrer" content="always">
     <link rel="search" type="application/opensearchdescription+xml" title="{{env('APP_NAME')}}" href="/osd.xml">
+    @if(isset($meta_robots))
+        <meta name="robots" content="{{$meta_robots}}">
+        @endif
     @if(isset($meta_description))
         <meta name="description" content="{{$meta_description}}">
     @endif
-
+    @if(isset($meta_jsonld))
+        {!! $meta_jsonld !!}
+    @endif
     <title>{{$title}}</title>
     <link href="{{ mix('css/app.css','6aa0e') }}" rel="stylesheet">
 </head>

@@ -1,5 +1,7 @@
 <?php namespace App\Support\Frontend\Jsonld;
 
+use Illuminate\Support\Str;
+
 class Schema
 {
     /**
@@ -47,16 +49,18 @@ class Schema
         }
 
         foreach ($attributes as $attribute => $value) {
-            if (strpos($attribute, '@') !== false) {
-                $methodClass = explode('@', $attribute);
-                if ($methodClass[1] !== 'id') {
-                    $this->properties[$methodClass[0]] = $this->{'set' . ucfirst($methodClass[0])}($value,
-                        $methodClass[1]);
+            if (isset($value) && !empty($value)) {
+                if (strpos($attribute, '@') !== false) {
+                    $methodClass = explode('@', $attribute);
+                    if ($methodClass[1] !== 'id') {
+                        $this->properties[$methodClass[0]] = $this->{'set' . ucfirst($methodClass[0])}($value,
+                            $methodClass[1]);
+                    } else {
+                        $this->properties[$attribute] = $value;
+                    }
                 } else {
-                    $this->properties[$attribute] = $value;
+                    $this->properties[$attribute] = $this->{'set' . ucfirst($attribute)}($value);
                 }
-            } else {
-                $this->properties[$attribute] = $this->{'set' . ucfirst($attribute)}($value);
             }
         }
     }
@@ -68,12 +72,12 @@ class Schema
      */
     public function __call($method, $arg)
     {
-        $property = camel_case(substr($method, 3));
-        if ($this->reflection->hasProperty($property) && isset($arg[0]) && !empty($arg[0])) {
+        $property = Str::camel(substr($method, 3));
+        if ($this->reflection->hasProperty($property)) {
             return $arg[0];
         }
         throw new \InvalidArgumentException(
-            sprintf('Property %s was not found', $property)
+            sprintf('Property "%s" was not found in class %s', $property, get_class($this))
         );
     }
 
