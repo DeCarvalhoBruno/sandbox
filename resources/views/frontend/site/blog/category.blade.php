@@ -92,7 +92,8 @@
                                              $mvpImages[$mvp->getAttribute('type')]->present('thumbnail'):null,
                                              'alt'=>$mvp->getAttribute('title'),
                                              'format'=>\App\Models\Media\MediaImgFormat::THUMBNAIL
-                                         ])</div>
+                                         ])
+                                    </div>
                                 </div>
                             </div>
                         </div>

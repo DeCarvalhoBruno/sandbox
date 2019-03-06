@@ -17,6 +17,7 @@ return [
         'user_index' => 'Listing users',
         'dashboard' => 'Dashboard',
         'system_log' => 'System Log',
+        'settings_social' => 'Social media settings'
     ],
     'breadcrumb' => [
         'admin-dashboard' => 'Home',
@@ -36,7 +37,8 @@ return [
         'admin-user-general' => 'Your general settings',
         'admin-system-log' => 'System Log',
         'admin-settings-settings' => 'Website settings',
-        'admin-settings-general' => 'General settings'
+        'admin-settings-general' => 'General settings',
+        'admin-settings-social' => 'Social media settings'
     ],
     'sidebar' => [
         'main_nav' => 'MAIN NAVIGATION',
@@ -87,7 +89,7 @@ return [
         'crop' => 'Crop',
         'close' => 'Close',
         'view_all' => 'View All',
-        'choose_file' => 'Choose file'
+        'choose_file' => 'Choose file',
     ],
     'db' => [
         'users' => 'User|Users',
@@ -279,16 +281,23 @@ return [
         'settings' => [
             'title' => 'Website settings',
             'site_description' => 'Website description',
+            'site_title' => 'Website title',
             'allow_robots' => 'Allow search engine bots to crawl pages',
+            'enable_open_graph' => 'Enable open graph support',
+            'enable_twitter_cards' => 'Enable twitter cards support',
+            'twitter_publisher' => 'Twitter publisher username',
+            'facebook_app_id' => 'Facebook App ID',
+            'website_title' => 'Website title',
             'jsonld_on' => 'Enable structured data',
             'entity_type' => 'Represented entity',
             'website_type' => 'Website type',
             'entity_person' => 'Person',
             'entity_organization' => 'Organization',
-            'entity_org_type'=>'Type',
+            'entity_org_type' => 'Type',
             'person_name' => 'Full name',
             'person_url' => 'URL',
             'entity_logo' => 'Logo',
+            'social' => 'Social',
             'social_url' => 'Social media page url',
             'entity_social_help' => 'Links to user/organization profiles can be added below. Google recognizes the following platforms: Facebook, Twitter, Google+, Instagram, YouTube, LinkedIn, Myspace, Pinterest, SoundCloud and Tumblr.'
         ],

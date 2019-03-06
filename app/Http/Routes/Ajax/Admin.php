@@ -92,6 +92,8 @@ class Admin
 
             $r->get('settings/general','Settings@edit');
             $r->post('settings/general','Settings@update');
+            $r->get('settings/social','Settings@editSocial');
+            $r->post('settings/social','Settings@updateSocial');
 
             $r->get('media/{media}', 'Media@edit');
             $r->patch('media/{media}', 'Media@update');

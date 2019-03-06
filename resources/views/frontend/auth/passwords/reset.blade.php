@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center mt-5">
-            <img src="{{asset('media/img/site/logo.png')}}">
+            <img src="{{asset(sprintf('media/img/site/%s',env('APP_LOGO_FILENAME')))}}">
         </div>
         <div class="row justify-content-md-center mt-3">
             <div class="col-md-8">

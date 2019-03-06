@@ -28,4 +28,20 @@ class Language extends Model
         }
     }
 
+    public static function getAppLanguageISO639()
+    {
+        switch (app()->getLocale()) {
+            case "en":
+                return 'en_US';
+                break;
+            case "fr":
+                return 'fr_FR';
+                break;
+            default:
+                return 'en_US';
+                break;
+        }
+
+    }
+
 }

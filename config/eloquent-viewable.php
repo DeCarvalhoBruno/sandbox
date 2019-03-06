@@ -16,7 +16,7 @@ return [
         'view' => [
 
             'table_name' => 'views',
-            'connection' => env('DB_CONNECTION', 'mysql'),
+            'connection' => config('database.default', 'mysql'),
 
         ],
 
@@ -38,7 +38,7 @@ return [
         /*
          * Here you may define the cache store that should be used.
          */
-        'store' => env('CACHE_DRIVER', 'file'),
+        'store' => config('cache.default', 'file'),
 
         /*
          * Default lifetime of cached views count in seconds.

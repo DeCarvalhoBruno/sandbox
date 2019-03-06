@@ -68,7 +68,7 @@ class OAuth extends Controller
         //Default leeway defaults to 1 second which is insufficient to do the token check in time.
         $jwt::$leeway = 10;
         $client = new \Google_Client([
-            'client_id' => env('OAUTH_GOOGLE_CLIENT_ID'),
+            'client_id' => config('services.google.client_id'),
             'jwt' => $jwt
         ]);
 

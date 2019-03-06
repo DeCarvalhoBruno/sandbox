@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="col-6 col-lg-4">
-                <h6 class="bold">{{env('APP_NAME')}}</h6>
+                <h6 class="bold">{{config('app.name')}}</h6>
                 <div class="list-group list-group-flush list-group-no-border list-group-sm">
                     <a href="about.html" class="list-group-item">About Us</a>
                 </div>
@@ -39,4 +39,4 @@
         </div>
     </div>
 </div>
-<div class="copyright">{{trans('general.copyright')}}, {{env('APP_NAME')}}</div>
+<div class="copyright">{{trans('general.copyright')}}, {{config('app.name')}}</div>

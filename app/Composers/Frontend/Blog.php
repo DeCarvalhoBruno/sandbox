@@ -14,8 +14,8 @@ class Blog extends Composer
         $jsonldManager = new JsonldBlog();
         $data = $view->getData();
         $data['title'] = page_title($data['post']->getAttribute('title'));
-        $hasJsonld = \Cache::get('settings_has_jsonld');
 
+        $hasJsonld = \Cache::get('settings_has_jsonld');
         if (!is_null($hasJsonld) && $hasJsonld === true) {
             $data['meta_jsonld'] = $jsonldManager->makeStructuredData((object)[
                 'breadcrumbs' => $data['breadcrumbs'],
@@ -23,6 +23,23 @@ class Blog extends Composer
                 'media' => $data['media']
             ]);
             $data['breadcrumbs'] = Breadcrumbs::render($data['breadcrumbs']);
+        }
+
+        $hasFacebook = \Cache::get('settings_has_facebook');
+        $socialSettings = \Cache::get('settings_social');
+        $socialTagManager = new \App\Support\Frontend\Social\Blog();
+        $socialData = (object)[
+            'post' => $data['post'],
+            'media' => $data['media'],
+            'settings' => $socialSettings
+        ];
+        if (!is_null($hasFacebook) && $hasFacebook === true) {
+            $data['meta_facebook'] = $socialTagManager->getFacebookTagList($socialData);
+        }
+
+        $hasTwitter = \Cache::get('settings_has_twitter');
+        if (!is_null($hasTwitter) && $hasTwitter === true) {
+            $data['meta_twitter'] = $socialTagManager->getTwitterTagList($socialData);
         }
         $this->addVarsToView($data, $view);
     }

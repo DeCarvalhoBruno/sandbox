@@ -179,7 +179,6 @@ class Blog extends Controller
             throw new NotFoundHttpException('Author not found');
         }
         $media = $this->getImages($posts, $mediaRepo);
-//        dd($posts,$media);
         return view(
             'frontend.site.blog.author', compact('posts', 'media', 'author')
         );
@@ -192,7 +191,7 @@ class Blog extends Controller
                 'media_uuid as uuid',
                 'media_extension as ext',
                 'entity_types.entity_type_id as type',
-                'entity_types.entity_id as entity'
+                'entity_types.entity_id as entity_id'
             ]
         );
         $media = [];

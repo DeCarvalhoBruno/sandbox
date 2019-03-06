@@ -4,6 +4,14 @@
       <div class="col p-0 m-0">
         <form @submit.prevent="save">
           <div class="form-group row">
+            <label class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.site_title') }}</label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="site_title"
+                     id="input-website-title" autocomplete="off"
+                     v-model="form.fields.site_title">
+            </div>
+          </div>
+          <div class="form-group row">
             <label for="site_description" class="col-md-3 col-form-label text-md-right">{{
               $t('pages.settings.site_description') }}</label>
             <div class="col-md-8">
@@ -146,7 +154,7 @@
   import swal from 'back_path/mixins/sweet-alert'
 
   export default {
-    name: 'website-general',
+    name: 'settings-general',
     components: {
       Form,
       ButtonGroup,
@@ -159,6 +167,7 @@
       return {
         form: new Form({
           site_description: '',
+          site_title: '',
           entity_type: 'person',
           website_type: 'WebSite',
           logo: null,

@@ -42,7 +42,7 @@ class RouteServiceProvider extends ServiceProvider
         foreach ($this->routeSets as $binder) {
             $this->app->make($binder)->bind($router);
         }
-        if (env('APP_ENV')==='local') {
+        if (config('app.env')==='local') {
             $router->group(['namespace' => '\Rap2hpoutre\LaravelLogViewer'], function () use ($router) {
                 $router->get('logs', 'LogViewerController@index');
             });

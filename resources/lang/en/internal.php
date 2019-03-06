@@ -51,7 +51,7 @@
             'TravelAgency' => 'Travel agency',
         ],
         'websites' => [
-            'website' => 'Website',
+            'WebSite' => 'Website',
             'Blog' => 'Blog'
         ]
     ]

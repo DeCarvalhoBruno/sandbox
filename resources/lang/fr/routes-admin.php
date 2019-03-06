@@ -8,6 +8,7 @@
     'admin.user' => '',
     'admin.settings'=>'',
     'admin.settings.general'=>'admin/parametres/general',
+    'admin.settings.social'=>'admin/parametres/social',
     'admin.system.log' => 'admin/systeme/journal',
     'admin.media.edit' => '__admin/media/edit/:media',
     'admin.login' => 'admin/connexion',

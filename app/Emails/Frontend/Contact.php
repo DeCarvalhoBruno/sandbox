@@ -13,7 +13,7 @@ class Contact extends Email
         $this->viewData->add([
             'title' => trans('email.contact.title'),
             'subject' => sprintf(
-                '[%s] %s', env('APP_NAME'), trans('email.contact.email_subject')
+                '[%s] %s', config('app.name'), trans('email.contact.email_subject')
             ),
             'contact_email' => $this->data->contact_email,
             'contact_subject' => $this->data->contact_subject,

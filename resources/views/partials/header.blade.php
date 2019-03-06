@@ -36,7 +36,7 @@
 <div id="wrapper"></div>
 <header>
     <div class="container">
-        <a class="nav-link nav-logo" href="{{route_i18n('home')}}"><img src="{{asset('media/img/site/logo.png')}}"></a>
+        <a class="nav-link nav-logo" href="{{route_i18n('home')}}"><img src="{{asset(sprintf('media/img/site/%s',env('APP_LOGO_FILENAME')))}}"></a>
         <ul class="nav nav-main d-none d-lg-flex">
             <li class="nav-item"><a class="nav-link active" href="{{route_i18n('home')}}">{{trans('general.home')}}</a></li>
             <li class="nav-item dropdown dropdown-hover">
