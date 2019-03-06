@@ -40,6 +40,7 @@ class Blog extends Controller
             'person_slug as author',
             'full_name as person',
             'unq as page_views',
+            'language_id as language',
             'published_at as date_modified',
             'published_at as date_published'
         ])->pageViews()->first();

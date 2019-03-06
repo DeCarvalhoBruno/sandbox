@@ -12,6 +12,14 @@
             </div>
           </div>
           <div class="form-group row">
+            <label class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.site_keywords') }}</label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="site_keywords"
+                     id="input-website-keywords" autocomplete="off"
+                     v-model="form.fields.site_keywords">
+            </div>
+          </div>
+          <div class="form-group row">
             <label for="site_description" class="col-md-3 col-form-label text-md-right">{{
               $t('pages.settings.site_description') }}</label>
             <div class="col-md-8">
@@ -168,6 +176,7 @@
         form: new Form({
           site_description: '',
           site_title: '',
+          site_keywords: null,
           entity_type: 'person',
           website_type: 'WebSite',
           logo: null,

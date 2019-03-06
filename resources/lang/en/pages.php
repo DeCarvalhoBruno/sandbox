@@ -34,6 +34,8 @@
         'written_by' => ':date by :author',
         'page_view_count' => 'Page view count',
         'more_reading' => 'More reading',
+        'share_facebook'=>'Share on Facebook',
+        'share_twitter'=>'Share on Twitter',
         'source_types' => [
             'url' => 'Link to resource'
         ],

@@ -16,6 +16,7 @@ class Home extends Composer
         $this->setVar('meta_robots');
         $this->setVar('meta_facebook');
         $this->setVar('meta_twitter');
+        $this->setVar('meta_keywords');
         $this->data['title'] = \Cache::get('meta_title');
         if (!is_null($this->data)) {
             $this->addVarsToView($this->data, $view);

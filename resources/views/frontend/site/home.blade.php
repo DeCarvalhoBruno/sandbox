@@ -4,7 +4,7 @@
     <section id="blog-featured">
         <div class="row">
             <div id="blog-featured-carousel" class="col-lg-7 col-md-12">
-                <div id="carousel-home" class="carousel slide" data-ride="false">
+                <div id="carousel-home" class="carousel slide carousel-fade" data-ride="carousel">
                     <ol class="carousel-indicators">
                         <li data-target="#carousel-home" data-slide-to="0" class="active"></li>
                         <li data-target="#carousel-home" data-slide-to="1"></li>

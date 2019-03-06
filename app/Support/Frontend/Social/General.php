@@ -1,16 +1,21 @@
 <?php namespace App\Support\Frontend\Social;
 
+use App\Models\Language;
+
 class General
 {
 
     public function getFacebookTagList(string $title, string $description, array $input): string
     {
+        $logoFilename = env('APP_LOGO_FILENAME');
         $tagList = [
             'og:title' => $title,
             'og:url' => route_i18n('home'),
-            'og:image' => asset(sprintf('media/img/site/%s', env('APP_LOGO_FILENAME'))),
+            'og:image' => asset(sprintf('media/img/site/%s', $logoFilename)),
             'og:description' => $description,
             'og:site_name' => config('app.name'),
+            'og:type'=>'website',
+            'og:locale'=>Language::getAppLanguageISO639(),
         ];
         if (!is_null($input['facebook_app_id']) && !empty($input['facebook_app_id'])) {
             $tagList['fb:app_id'] = $input['facebook_app_id'];

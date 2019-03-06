@@ -1,9 +1,11 @@
 #blog-post {
+  margin-bottom: 8rem;
+
   figure.img-embed {
     margin: 1.5rem 0;
-    min-height:20rem;
+    min-height: 20rem;
     @include media-breakpoint-down(md) {
-        min-height:unset;
+      min-height: unset;
     }
 
     img {
@@ -23,7 +25,62 @@
     }
   }
 
-  margin-bottom: 8rem;
+  .share-container {
+    position:relative;
+    min-height:3rem;
+    padding:1rem 0;
+    margin:0 auto;
+    width:10rem;
+
+    .share-buttons {
+      margin:0 auto;
+      width: 6rem;
+      right: 0.3rem;
+      top: 0.05rem;
+      height: 2.4rem;
+
+      a {
+        display: table-cell;
+        width: 2.8rem;
+        height:2.8rem;
+        position: relative;
+        cursor:pointer;
+      }
+
+      i {
+        font-size: 1.4rem;
+        line-height: 2.8rem;
+      }
+
+      i.circle {
+        font-size: 2.8rem;
+        width: 2.8rem;
+        height:2.8rem;
+        transition:color 0.5s ease;
+      }
+
+      .fa.facebook {
+        i.circle {
+          color: #3B5998;
+        }
+      }
+
+      .fa.twitter {
+        i.circle {
+          color: #00ACED;
+        }
+      }
+
+      a:hover{
+        .fa {
+          i.circle {
+            color: #000;
+            transition:color 0.5s ease;
+          }
+        }
+      }
+    }
+  }
 
   .post-title {
     margin-top: 1.5rem;
@@ -103,8 +160,7 @@
   }
 
   .post-content-wrapper {
-    margin-top: 1rem;
-    border: none;
+    border: 1px solid rgba(74, 14, 9, 0.05);
 
     h3 {
       padding-top: 1.5rem;
@@ -116,7 +172,7 @@
     .post-content {
       font-size: 1.2rem;
       line-height: 1.9rem;
-      padding: 2rem 2rem 3rem;
+      padding: 1rem 2rem 3rem;
       margin-bottom: 1rem;
       position: relative;
 

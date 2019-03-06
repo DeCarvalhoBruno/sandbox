@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Contracts\RawQueries;
 use App\Support\Providers\View;
+use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use App\Contracts\Models as Contract;
@@ -41,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function boot()
+    public function boot(UrlGenerator $url)
     {
         $this->app->make('view')->composer('admin.default', \App\Composers\Admin::class);
         $this->app->make('view')->composer(
@@ -66,6 +67,12 @@ class AppServiceProvider extends ServiceProvider
 
         if (env('APP_OLD_ASS_RDBMS')) {
             Schema::defaultStringLength(191);
+        }
+
+        if (env('APP_HTTPS_ON')) {
+            \URL::forceScheme('https');
+        } else {
+            \URL::forceScheme('http');
         }
 
     }

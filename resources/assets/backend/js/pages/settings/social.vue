@@ -16,6 +16,15 @@
             </div>
           </div>
           <div class="form-group row">
+            <label class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.facebook_publisher') }}</label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="facebook_publisher"
+                     id="input-facebook-publisher" autocomplete="off"
+                     placeholder="https://www.facebook.com/publisher-name"
+                     v-model="form.fields.facebook_publisher">
+            </div>
+          </div>
+          <div class="form-group row">
             <label class="col-md-3 col-form-label text-md-right">{{ $t('pages.settings.facebook_app_id') }}</label>
             <div class="col-md-8">
               <input type="text" class="form-control" name="facebook_app_id"
@@ -75,7 +84,8 @@
           open_graph: null,
           twitter_cards: null,
           twitter_publisher: null,
-          facebook_app_id: null
+          facebook_app_id: null,
+          facebook_publisher:null
         })
       }
     },

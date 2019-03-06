@@ -17,6 +17,7 @@ class Home extends Controller
         $dbResult = $blogRepo->buildForDisplay()
             ->orderBy('page_views', 'desc')
             ->where('language_id', Language::getAppLanguageId())
+            ->where('blog_categories.parent_id',null)
             ->limit(115)
             ->get();
         $result2 = clone($dbResult);
@@ -33,12 +34,12 @@ class Home extends Controller
         foreach ($dbImages as $image) {
             $media[$image->type] = $image;
         }
-
         $posts = [
             'featured' => [],
             'most_viewed_cat' => [],
             'most_viewed' => []
         ];
+
 
         foreach ($dbResult as $post) {
             if ($post->featured == 1) {

@@ -22,6 +22,26 @@
                 'alt'=>$post->getAttribute('title')
             ])
         </div>
+        <div class="row">
+            <div class="share-container">
+                <div id="blog-share-buttons" class="share-buttons">
+                    <a class="stacked" href="#"
+                       title="{{trans('pages.blog.share_facebook')}}">
+                        <span class="fa fa-stack-1x facebook">
+                            <i class="fa fa-circle fa-stack-1x circle"></i>
+                            <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                    <a class="stacked" href="#"
+                       title="{{trans('pages.blog.share_twitter')}}">
+                        <span class="fa fa-stack-1x twitter">
+                            <i class="fa fa-circle fa-stack-1x circle"></i>
+                            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
         <div class="row card post-content-wrapper">
             <div class="col">
                 <div class="container">
@@ -37,7 +57,7 @@
                                     <li class="d-block">References:</li>
                                     @foreach($sources as $source)
                                         <li class="source-label">
-                                                <i class="fa fa-link" title="{{trans('pages.blog.source_types.url')}}"></i>
+                                            <i class="fa fa-link" title="{{trans('pages.blog.source_types.url')}}"></i>
                                             {{$source->getAttribute('description')}}
                                             <a href="{{$source->getAttribute('source')}}">{{$source->getAttribute('source')}}</a>
                                         </li>

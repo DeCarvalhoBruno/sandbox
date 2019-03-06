@@ -47,6 +47,7 @@ class Settings extends Controller
         }
         \Cache::forever('meta_robots', $input['robots'] === true ? 'index, follow' : 'noindex, nofollow');
         \Cache::forever('meta_description', $input['site_description']);
+        \Cache::forever('meta_keywords', $input['site_keywords']);
         \Cache::forever('meta_title', $input['site_title']);
 
         return response(null, Response::HTTP_NO_CONTENT);
