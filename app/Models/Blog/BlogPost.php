@@ -6,21 +6,21 @@ use App\Contracts\HasPermissions as HasPermissionsContract;
 use App\Models\Entity;
 use App\Models\Language;
 use App\Models\Media\MediaEntity;
-use App\Models\Person;
+use App\Support\Database\ElasticSearch\Searchable;
+use App\Support\Presenters\BlogPost as BlogPostPresenter;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use App\Traits\Models\HasPermissions;
 use App\Traits\Presentable;
+use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 use CyrildeWit\EloquentViewable\Viewable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use App\Support\Presenters\BlogPost as BlogPostPresenter;
-use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 
 class BlogPost extends Model implements HasPermissionsContract, EnumerableContract, HasAnEntity, ViewableContract
 {
-    use Presentable, Enumerable, HasPermissions, DoesSqlStuff, HasAnEntityTrait, Viewable;
+    use Presentable, Enumerable, HasPermissions, DoesSqlStuff, HasAnEntityTrait, Viewable, Searchable;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;

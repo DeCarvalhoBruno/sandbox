@@ -153,6 +153,7 @@ return [
 
         App\Support\JavaScript\JavaScriptServiceProvider::class,
         App\Support\View\EloquentViewableServiceProvider::class,
+        App\Support\Database\ElasticSearch\ElasticServiceProvider::class,
 
         /*
          * Application Service Providers...
