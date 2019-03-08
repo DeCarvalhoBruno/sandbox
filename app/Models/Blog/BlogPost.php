@@ -38,7 +38,9 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
         'blog_post_content',
         'blog_post_excerpt',
         'blog_post_is_sticky',
-        'published_at'
+        'published_at',
+        'created_at',
+        'updated_at'
     ];
     protected $hidden = [
         'person_id',

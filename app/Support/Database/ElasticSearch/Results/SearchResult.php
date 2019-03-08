@@ -1,46 +1,46 @@
-<?php namespace App\Support\Database\ElasticSearch;
+<?php namespace App\Support\Database\ElasticSearch\Results;
 
 use Illuminate\Support\Collection;
 
-class Result
+class SearchResult
 {
     /**
      * Time needed to execute the query.
      *
-     * @var
+     * @var string
      */
     protected $took;
 
     /**
      * Check if the query timed out.
      *
-     * @var
+     * @var boolean
      */
     protected $timed_out;
 
     /**
-     * @var
+     * @var integer
      */
     protected $shards;
 
     /**
      * Result of the query.
      *
-     * @var
+     * @var integer
      */
     protected $hits;
 
     /**
      * Total number of hits.
      *
-     * @var
+     * @var integer
      */
     protected $totalHits;
 
     /**
      * Highest document score.
      *
-     * @var
+     * @var float
      */
     protected $maxScore;
 
@@ -58,7 +58,7 @@ class Result
      */
     public function __construct(array $results)
     {
-        $this->took = $results['took'];
+        $this->took = format_duration($results['took']);
 
         $this->timed_out = $results['timed_out'];
 

@@ -189,3 +189,27 @@ if (!function_exists('placeholder_image')) {
         return 'data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
     }
 }
+
+if (!function_exists('format_duration')) {
+    function format_duration(int $duration): string
+    {
+        $hours = (int)($duration / 60 / 60 / 1000);
+        $minutes = (int)($duration / 60 / 1000) - $hours * 60;
+        $seconds = (int)($duration / 1000) - $hours * 60 * 60 - $minutes * 60;
+        if ($hours > 0) {
+            return ($hours == 0 ? '' : $hours . 'h') .
+                ($minutes == 0 ? '00m' : ($minutes < 10 ? '0' . $minutes . 'm' : $minutes . 'm')) .
+                ($seconds == 0 ? '' : ($seconds < 10 ? '0' . $seconds . 's' : $seconds . 's'));
+        } else {
+            if ($minutes > 0) {
+                return ($minutes < 10 ? $minutes . 'm' : $minutes . 'm') .
+                    ($seconds < 10 ? '0' . $seconds . 's' : $seconds . 's');
+            } else {
+                if ($seconds > 0) {
+                    return number_format($duration / 1000, 2) . 's';
+                }
+            }
+        }
+        return round($duration) . 'ms';
+    }
+}
