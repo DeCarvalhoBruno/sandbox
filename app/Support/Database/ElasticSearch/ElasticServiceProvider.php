@@ -1,5 +1,6 @@
 <?php namespace App\Support\Database\ElasticSearch;
 
+use App\Support\Database\ElasticSearch\Commands\Index;
 use App\Support\Database\ElasticSearch\Facades\ElasticSearchIndex;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
@@ -19,6 +20,14 @@ class ElasticServiceProvider extends ServiceProvider
         });
         AliasLoader::getInstance()->alias('ElasticSearch', ElasticSearchManager::class);
         AliasLoader::getInstance()->alias('ElasticSearchIndex', ElasticSearchIndex::class);
+
+        $this->app->singleton('command.elasticsearch.index', function () {
+            return new Index();
+        });
+
+        $this->commands([
+            'command.elasticsearch.index',
+        ]);
     }
 
 }

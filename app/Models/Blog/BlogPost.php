@@ -185,6 +185,20 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     /**
      * @link https://laravel.com/docs/5.7/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeCategoryTree(Builder $builder)
+    {
+        return $builder->join('blog_category_tree',
+            'blog_category_tree.blog_category_id',
+            '=',
+            'blog_label_records.blog_label_type_id'
+        );
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param string $tagSlug
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */

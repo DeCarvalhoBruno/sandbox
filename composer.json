@@ -42,6 +42,7 @@
     "autoload": {
         "classmap": [
             "database/seeds",
+            "database/elasticsearch",
             "database/factories"
         ],
         "psr-4": {

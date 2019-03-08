@@ -25,9 +25,22 @@ class Builder
         $this->connection = $connection;
     }
 
-    public function create($params)
+    /**
+     * @param array $params
+     * @return array
+     */
+    public function create($params): array
     {
-        return $this->connection->indicesStatement($params);
+        return $this->connection->indicesCreateStatement($params);
+    }
+
+    /**
+     * @param array $params
+     * @return array
+     */
+    public function delete($params): array
+    {
+        return $this->connection->indicesDeleteStatement($params);
     }
 
 }

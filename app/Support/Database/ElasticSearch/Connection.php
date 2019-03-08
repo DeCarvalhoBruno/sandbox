@@ -2,13 +2,13 @@
 
 namespace App\Support\Database\ElasticSearch;
 
+use App\Support\Database\ElasticSearch\DSL\SearchBuilder;
+use App\Support\Database\ElasticSearch\DSL\SuggestionBuilder;
 use App\Support\Database\ElasticSearch\Index\Builder as IndexBuilder;
+use App\Support\Database\ElasticSearch\Persistence\EloquentPersistence;
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
 use ONGR\ElasticsearchDSL\Search as DSLQuery;
-use App\Support\Database\ElasticSearch\DSL\SearchBuilder;
-use App\Support\Database\ElasticSearch\DSL\SuggestionBuilder;
-use App\Support\Database\ElasticSearch\Persistence\EloquentPersistence;
 
 class Connection
 {
@@ -110,9 +110,24 @@ class Connection
      *
      * @return array
      */
-    public function indicesStatement(array $params)
+    public function indicesCreateStatement(array $params)
     {
         return $this->elastic->indices()->create($params);
+    }
+
+    /**
+     * Execute a insert statement on index;.
+     *
+     * @param $params
+     *
+     * @return array
+     */
+    public function indicesDeleteStatement(array $params)
+    {
+        if ($this->elastic->indices()->exists($params)) {
+            return $this->elastic->indices()->delete($params);
+        }
+        return [];
     }
 
     /**

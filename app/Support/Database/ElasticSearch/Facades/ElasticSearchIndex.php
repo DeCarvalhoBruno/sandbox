@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Support\Database\ElasticSearch\Facades;
+<?php namespace App\Support\Database\ElasticSearch\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
