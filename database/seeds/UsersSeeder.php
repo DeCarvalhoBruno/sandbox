@@ -11,6 +11,8 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
+        $logging = DB::connection()->logging();
+        DB::connection()->disableQueryLog();
         $this->avatar = new \App\Support\Providers\Image(new \App\Support\Providers\Avatar);
         $pwd = bcrypt('secret');
         $u = factory(App\Models\User::class)->create([
@@ -151,6 +153,9 @@ class UsersSeeder extends Seeder
                 'user_id' => $u->getAttribute('user_id')
             ]);
 
+        }
+        if ($logging) {
+            DB::connection()->enableQueryLog();
         }
     }
 

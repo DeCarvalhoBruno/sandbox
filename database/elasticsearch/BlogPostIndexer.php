@@ -1,7 +1,7 @@
 <?php
 
-use App\Support\Database\ElasticSearch\Facades\ElasticSearchIndex;
 use App\Support\Database\ElasticSearch\Index\Indexer as ElasticSearchIndexer;
+use App\Support\Database\ElasticSearch\Index\Seeder;
 
 class BlogPostIndexer extends ElasticSearchIndexer
 {
@@ -26,33 +26,14 @@ class BlogPostIndexer extends ElasticSearchIndexer
     {
         $this->down();
         $this->up();
-//        $this->indexData($this->prepareData());
+        $this->indexData($this->prepareData());
     }
 
     private function indexData($data)
     {
-        $params = ['body' => []];
-        $i = 0;
-        $indexName = $this->getIndexName();
         foreach ($data as $lang => $posts) {
-            foreach ($posts as $key => $item) {
-                $params['body'][] = [
-                    'index' => [
-                        '_index' => sprintf('%s.%s', $indexName, $lang),
-                        '_type' => 'post',
-                        '_id' => $key
-                    ]
-                ];
-                $params['body'][] = $item;
-                if ($i % 1000 == 0) {
-                    ElasticSearchIndex::bulk($params);
-                    $params = ['body' => []];
-                }
-                $i++;
-            }
-        }
-        if (!empty($params['body'])) {
-            ElasticSearchIndex::bulk($params);
+            $seeder = new Seeder(sprintf('%s.%s', $this->getIndexName(), $lang));
+            $seeder->bulk($posts);
         }
     }
 
@@ -75,7 +56,7 @@ class BlogPostIndexer extends ElasticSearchIndexer
             ])
             ->person()
             ->where('blog_status_id', \App\Models\Blog\BlogStatus::BLOG_STATUS_PUBLISHED)
-            ->limit($limit)
+//            ->limit($limit)
             ->get();
 
         $posts = [];
@@ -85,14 +66,16 @@ class BlogPostIndexer extends ElasticSearchIndexer
             $postIds[$post->getAttribute('id')] = $post->getAttribute('type');
             $languageIds[$post->getAttribute('type')] = $post->getAttribute('lang');
             $posts[$post->getAttribute('type')] = [
-                'url' => route_i18n('blog', ['slug' => $post->getAttribute('slug')]),
                 'title' => $post->getAttribute('title'),
                 'content' => $post->getAttribute('content'),
-                'excerpt' => $post->getAttribute('excerpt'),
                 'date' => $post->getAttribute('published'),
-                'author' => [
-                    'name' => $post->getAttribute('person'),
-                    'url' => route_i18n('blog.author', ['slug' => $post->getAttribute('person')]),
+                'meta' => [
+                    'url' => route_i18n('blog', ['slug' => $post->getAttribute('slug')]),
+                    'excerpt' => $post->getAttribute('excerpt'),
+                    'author' => [
+                        'name' => $post->getAttribute('person'),
+                        'url' => route_i18n('blog.author', ['slug' => $post->getAttribute('author')]),
+                    ]
                 ]
             ];
         }
@@ -108,7 +91,7 @@ class BlogPostIndexer extends ElasticSearchIndexer
             ->where('blog_status_id', \App\Models\Blog\BlogStatus::BLOG_STATUS_PUBLISHED)
             ->category()
             ->categoryTree()
-            ->limit($limit)
+//            ->limit($limit)
             ->get();
 
         foreach ($dbCategories as $category) {
@@ -117,10 +100,10 @@ class BlogPostIndexer extends ElasticSearchIndexer
             }
             $index = $postIds[$category->getAttribute('id')];
 
-            if (!isset($posts[$index]['category'])) {
-                $posts[$index]['category'] = [];
+            if (!isset($posts[$index]['meta']['category'])) {
+                $posts[$index]['meta']['category'] = [];
             }
-            $posts[$index]['category'][] = [
+            $posts[$index]['meta']['category'][] = [
                 'name' => $category->getAttribute('name'),
                 'url' => route_i18n('blog.category', ['slug' => $category->getAttribute('slug')]),
                 'lvl' => intval($category->getAttribute('lvl'))
@@ -136,7 +119,7 @@ class BlogPostIndexer extends ElasticSearchIndexer
             ])->tag()
             ->where('blog_status_id', \App\Models\Blog\BlogStatus::BLOG_STATUS_PUBLISHED)
             ->orderBy('blog_posts.blog_post_id', 'asc')
-            ->limit($limit)
+//            ->limit($limit)
             ->get();
 
         foreach ($dbTags as $tag) {
@@ -144,10 +127,10 @@ class BlogPostIndexer extends ElasticSearchIndexer
                 continue;
             }
             $index = $postIds[$tag->getAttribute('id')];
-            if (!isset($posts[$index]['tag'])) {
-                $posts[$index]['tag'] = [];
+            if (!isset($posts[$index]['meta']['tag'])) {
+                $posts[$index]['meta']['tag'] = [];
             }
-            $posts[$index]['tag'][] = [
+            $posts[$index]['meta']['tag'][] = [
                 'name' => $tag->getAttribute('name'),
                 'url' => route_i18n('blog.tag', ['slug' => $tag->getAttribute('slug')]),
             ];
@@ -160,7 +143,7 @@ class BlogPostIndexer extends ElasticSearchIndexer
             'entity_types.entity_type_id as type',
             'entity_id'
         ])->where('entity_types.entity_id', \App\Models\Entity::BLOG_POSTS)
-            ->limit($limit)
+//            ->limit($limit)
             ->get();
 
         foreach ($dbImages as $image) {
@@ -168,11 +151,10 @@ class BlogPostIndexer extends ElasticSearchIndexer
             if (!isset($posts[$index])) {
                 continue;
             }
-            if (!isset($posts[$index]['image'])) {
-                $posts[$index]['image'] = [];
+            if (!isset($posts[$index]['meta']['image'])) {
+                $posts[$index]['meta']['image'] = [];
             }
-            $posts[$index]['image'][] = [
-                'name' => $image->getAttribute('name'),
+            $posts[$index]['meta']['image'][] = [
                 'url' => $image->present('asset'),
             ];
         }
@@ -192,158 +174,161 @@ class BlogPostIndexer extends ElasticSearchIndexer
 
     private function down()
     {
-
-        ElasticSearchIndex::delete(['index' => sprintf('%s.%s', $this->getIndexName(), 'en')]);
-        ElasticSearchIndex::delete(['index' => sprintf('%s.%s', $this->getIndexName(), 'fr')]);
+        Seeder::delete(sprintf('%s.%s', $this->getIndexName(), 'en'));
+        Seeder::delete(sprintf('%s.%s', $this->getIndexName(), 'fr'));
     }
 
     private function up()
+    {
+        $mapping = [
+            'title' => [
+                'type' => 'text',
+                'analyzer' => 'std_stop_en',
+                'search_analyzer' => 'std_stop_en',
+                'search_quote_analyzer' => 'standard'
+            ],
+            'content' => [
+                'type' => 'text',
+                'analyzer' => 'std_strip_en',
+                'search_analyzer' => 'std_strip_en',
+                'search_quote_analyzer' => 'standard'
+            ],
+            'date' => [
+                'type' => 'date',
+                'format' => 'yyyy-MM-dd HH:mm:ss',
+            ],
+            'meta' => [
+                'enabled' => false
+            ],
+        ];
+
+        $indexEn = new \App\Support\Database\ElasticSearch\Index\Mapping(
+            sprintf('%s.%s', $this->getIndexName(), 'en'),
+            $mapping
+        );
+        Seeder::insert($indexEn->toArray());
+
+        $mapping['title']['analyzer'] = 'std_stop_fr';
+        $mapping['title']['search_analyzer'] = 'std_stop_fr';
+        $mapping['content']['analyzer'] = 'std_strip_fr';
+        $mapping['content']['search_analyzer'] = 'std_strip_fr';
+
+        $indexFr = new \App\Support\Database\ElasticSearch\Index\Mapping(
+            sprintf('%s.%s', $this->getIndexName(), 'fr'),
+            $mapping
+        );
+        Seeder::insert($indexFr->toArray());
+    }
+
+    /**
+     * @TODO: delete later
+     */
+    private function delete_later()
     {
         $data = [
             'index' => '',
             'body' => [
                 'settings' => [
-                    'analyzer' => [
-                        'standard_analyzer' => [
-                            'type' => 'custom',
-                            'tokenizer' => 'standard',
-                            'filter' => [
-                                'lowercase'
+                    'analysis' => [
+                        'filter' => [
+                            'filter_stop_en' => [
+                                'type' => 'stop',
+                                'stopwords' => '_english_'
+                            ],
+                            'filter_stop_fr' => [
+                                'type' => 'stop',
+                                'stopwords' => '_french_'
+                            ],
+                            'filter_snow_en' => [
+                                'type' => 'snowball',
+                                'language' => 'English'
+                            ],
+                            'filter_snow_fr' => [
+                                'type' => 'snowball',
+                                'language' => 'French'
+                            ],
+                        ],
+                        'char_filter' => [
+                            'quotes' => [
+                                'type' => 'mapping',
+                                'mappings' => [
+                                    '\\u0091=>\\u0027',
+                                    '\\u0092=>\\u0027',
+                                    '\\u2018=>\\u0027',
+                                    '\\u2019=>\\u0027',
+                                    '\\u201B=>\\u0027',
+                                    '\\u201C=>\\u0022',
+                                    '\\u201D=>\\u0022',
+                                    '\\u00AB=>\\u0022',
+                                    '\\u00BB=>\\u0022',
+                                ]
                             ]
                         ],
-                        'standard_analyzer_strip' => [
-                            'type' => 'custom',
-                            'tokenizer' => 'standard',
-                            'filter' => [
-                                'lowercase'
+                        'analyzer' => [
+                            'std_strip_en' => [
+                                'type' => 'custom',
+                                'tokenizer' => 'standard',
+                                'filter' => [
+                                    'lowercase',
+                                    'filter_stop_en',
+                                    'filter_snow_en',
+                                ],
+                                'char_filter' => ['html_strip', 'quotes']
                             ],
-                            'char_filter' => 'html_strip'
-                        ],
-                        'stop_analyzer_en' => [
-                            'type' => 'custom',
-                            'tokenizer' => 'standard',
-                            'filter' => [
-                                'lowercase',
-                                'english_stop'
+                            'std_strip_fr' => [
+                                'type' => 'custom',
+                                'tokenizer' => 'standard',
+                                'filter' => [
+                                    'lowercase',
+                                    'filter_stop_fr',
+                                    'filter_snow_en',
+                                    'asciifolding'
+                                ],
+                                'char_filter' => ['html_strip', 'quotes']
                             ],
-                            'char_filter' => 'html_strip'
-                        ],
-                        'stop_analyzer_fr' => [
-                            'type' => 'custom',
-                            'tokenizer' => 'standard',
-                            'filter' => [
-                                'lowercase',
-                                'french_stop'
+                            'stop_en' => [
+                                'type' => 'custom',
+                                'tokenizer' => 'standard',
+                                'filter' => [
+                                    'lowercase',
+                                    'filter_stop_en',
+                                    'filter_snow_en',
+                                ]
                             ],
-                            'char_filter' => 'html_strip'
-                        ],
-                        'autocomplete' => [
-                            'type' => 'custom',
-                            'tokenizer' => 'standard',
-                            'filter' => [
-                                'lowercase',
-                                'autocomplete_filter'
-                            ]
-                        ]
-                    ],
-                    'filter' => [
-                        'english_stop' => [
-                            'type' => 'stop',
-                            'stopwords' => '_english_'
-                        ],
-                        'french_stop' => [
-                            'type' => 'stop',
-                            'stopwords' => '_french_'
-                        ],
-                        'autocomplete_filter' => [
-                            'type' => 'edge_ngram',
-                            'min_gram' => 1,
-                            'max_gram' => 20
+                            'stop_fr' => [
+                                'type' => 'custom',
+                                'tokenizer' => 'standard',
+                                'filter' => [
+                                    'lowercase',
+                                    'filter_stop_fr',
+                                    'filter_snow_en',
+                                    'asciifolding'
+                                ]
+                            ],
                         ]
                     ]
                 ],
                 'mappings' => [
                     'post' => [
                         'properties' => [
-                            'url' => [
-                                'type' => 'text',
-                                'analyzer' => 'standard_analyzer_strip',
-                                'search_quote_analyzer' => 'standard_analyzer_strip',
-                                'index' => false
-                            ],
                             'title' => [
                                 'type' => 'text',
                             ],
                             'content' => [
                                 'type' => 'text'
                             ],
-                            'excerpt' => [
-                                'type' => 'text',
-                                'index' => false
-                            ],
                             'date' => [
                                 'type' => 'date',
                                 'format' => 'yyyy-MM-dd HH:mm:ss',
-                                'index' => false,
                             ],
-                            'image' => [
-                                'properties' => [
-                                    'url' => [
-                                        'type' => 'text',
-                                        'index' => false
-                                    ],
-                                    'alt' => [
-                                        'type' => 'text',
-                                        'index' => false
-                                    ]
-                                ]
+                            'meta' => [
+                                'enabled' => false
                             ],
-                            'tag' => [
-                                'properties' => [
-                                    'name' => [
-                                        'type' => 'keyword'
-                                    ],
-                                    'url' => [
-                                        'type' => 'text',
-                                        'index' => false
-                                    ]
-                                ]
-                            ],
-                            'category' => [
-                                'properties' => [
-                                    'name' => [
-                                        'type' => 'keyword'
-                                    ],
-                                    'url' => [
-                                        'type' => 'text',
-                                        'index' => false
-                                    ],
-                                    'lvl' => [
-                                        'type' => 'integer',
-                                        'index' => false
-                                    ]
-                                ]
-                            ],
-                            'author' => [
-                                'properties' => [
-                                    'name' => [
-                                        'type' => 'text'
-                                    ],
-                                    'url' => [
-                                        'type' => 'text'
-                                    ]
-                                ]
-                            ]
                         ]
                     ]
                 ]
             ]
         ];
-        $data['index'] = sprintf('%s.%s', $this->getIndexName(), 'en');
-//        $data['body']['mappings']['post']['properties']['title']
 
-        ElasticSearchIndex::create($data);
-        $data['index'] = sprintf('%s.%s', $this->getIndexName(), 'fr');
-        ElasticSearchIndex::create($data);
     }
 }

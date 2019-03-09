@@ -34,7 +34,9 @@ abstract class Indexer
 
     protected function __construct()
     {
-        $this->model = $this->createModel();
+        if (!is_null($this->modelClass)) {
+            $this->model = $this->createModel();
+        }
     }
 
     /**

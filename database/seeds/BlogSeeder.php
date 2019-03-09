@@ -15,6 +15,8 @@ class BlogSeeder extends Seeder
      */
     public function run()
     {
+        $logging = DB::connection()->logging();
+        DB::connection()->disableQueryLog();
         $images = $this->parseImages();
 
         $file = sprintf('%s/%s', $this->origDir, 'blog_data.txt');
@@ -57,6 +59,9 @@ and entity_types.entity_id = 300'
                 'unq' => round($num * (rand(90, 97) / 100))
             ];
             $this->seedChunk($viewsRecords, \App\Models\Stats\StatPageView::class, 10);
+        }
+        if ($logging) {
+            DB::connection()->enableQueryLog();
         }
     }
 

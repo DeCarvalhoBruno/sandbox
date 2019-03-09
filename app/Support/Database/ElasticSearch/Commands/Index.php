@@ -30,12 +30,11 @@ class Index extends Command
      * Execute the console command.
      *
      * @return void
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function handle()
     {
-        Model::unguarded(function () {
-            $this->getSeeder()->__invoke();
-        });
+        $this->getSeeder()->__invoke();
 
         $this->info('ElasticSearch Indexing completed successfully.');
     }
@@ -49,7 +48,6 @@ class Index extends Command
     protected function getSeeder()
     {
         $class = $this->laravel->make($this->input->getOption('class'));
-
         return $class->setContainer($this->laravel)->setCommand($this);
     }
 
@@ -61,7 +59,7 @@ class Index extends Command
     protected function getOptions()
     {
         return [
-            ['class', null, InputOption::VALUE_OPTIONAL, 'The class name of the root indexer', 'MainIndexer'],
+            ['class', null, InputOption::VALUE_OPTIONAL, 'The class name of the root indexer', 'ElasticIndexer'],
         ];
     }
 }
