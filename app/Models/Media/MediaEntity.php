@@ -30,11 +30,22 @@ class MediaEntity extends Model
         \DB::unprepared(sprintf('CALL sp_update_media_entity_in_use(%s)', $mediaEntityId));
     }
 
+    /**
+     * @param int $entityTypeId
+     * @param array $columns
+     * @param array $mediaImgTypes
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public static function buildImages($entityTypeId = null, $columns = ['*'], $mediaImgTypes = null)
     {
         return static::query()->select($columns)
-            ->entityType($entityTypeId)->mediaCategoryRecord()
-            ->mediaRecord()->mediaType()->mediaDigital();
+            ->scopes([
+                'entityType' => $entityTypeId,
+                'mediaCategoryRecord',
+                'mediaRecord',
+                'mediaType',
+                'mediaDigital'
+            ]);
     }
 
     /**

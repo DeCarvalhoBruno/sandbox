@@ -1,5 +1,6 @@
 <?php namespace App\Support\Database\ElasticSearch\Results;
 
+use App\Contracts\Searchable;
 use Illuminate\Support\Collection;
 
 class SearchResult
@@ -56,7 +57,19 @@ class SearchResult
      *
      * @param array $results
      */
-    public function __construct(array $results)
+    public function __construct(array $results, $getHits = true)
+    {
+        $this->parseResults($results);
+        if ($getHits) {
+            $this->hits = new Collection($results['hits']['hits']);
+        }
+    }
+
+    /**
+     * @param array $results
+     * @return void
+     */
+    private function parseResults(array $results)
     {
         $this->took = format_duration($results['took']);
 
@@ -64,13 +77,30 @@ class SearchResult
 
         $this->shards = $results['_shards'];
 
-        $this->hits = new Collection($results['hits']['hits']);
-
         $this->totalHits = $results['hits']['total'];
 
         $this->maxScore = $results['hits']['max_score'];
 
         $this->aggregations = isset($results['aggregations']) ? $results['aggregations'] : [];
+
+    }
+
+    /**
+     * @param array $results
+     * @param string $model
+     * @return \App\Support\Database\ElasticSearch\Results\SearchResult
+     */
+    public static function toModel(array $results, string $model): self
+    {
+        $resultSelf = new self($results, false);
+        $models = new Collection();
+        foreach ($results['hits']['hits'] as $result) {
+            $result['_source']['id'] = $result['_id'];
+            $models->push(new $model($result['_source']));
+        }
+        $resultSelf->setHits($models);
+
+        return $resultSelf;
     }
 
     /**
@@ -96,7 +126,7 @@ class SearchResult
     /**
      * Get Shards.
      *
-     * @return array
+     * @return int
      */
     public function shards()
     {
@@ -120,7 +150,7 @@ class SearchResult
      */
     public function timedOut()
     {
-        return (bool) $this->timed_out;
+        return (bool)$this->timed_out;
     }
 
     /**
@@ -139,7 +169,8 @@ class SearchResult
     /**
      * Set the hits value.
      *
-     * @param $values
+     * @param mixed $values
+     * @return void
      */
     public function setHits($values)
     {
@@ -158,4 +189,5 @@ class SearchResult
     {
         return $this->aggregations;
     }
+
 }

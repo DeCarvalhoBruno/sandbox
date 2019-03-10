@@ -8,6 +8,7 @@ use App\Support\Database\ElasticSearch\Index\Builder as IndexBuilder;
 use App\Support\Database\ElasticSearch\Persistence\EloquentPersistence;
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
+use Elasticsearch\Endpoints\Suggest;
 use ONGR\ElasticsearchDSL\Search as DSLQuery;
 
 class Connection
@@ -195,7 +196,7 @@ class Connection
      *
      * @return SearchBuilder
      */
-    public function search()
+    public function search(): SearchBuilder
     {
         return new SearchBuilder($this, $this->getDSLQuery());
     }
@@ -205,7 +206,7 @@ class Connection
      *
      * @return SuggestionBuilder
      */
-    public function suggest()
+    public function suggest(): SuggestionBuilder
     {
         return new SuggestionBuilder($this, $this->getDSLQuery());
     }

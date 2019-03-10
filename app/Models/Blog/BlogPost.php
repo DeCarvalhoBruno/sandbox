@@ -17,8 +17,9 @@ use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 use CyrildeWit\EloquentViewable\Viewable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use App\Contracts\Searchable as SearchableContract;
 
-class BlogPost extends Model implements HasPermissionsContract, EnumerableContract, HasAnEntity, ViewableContract
+class BlogPost extends Model implements HasPermissionsContract, EnumerableContract, HasAnEntity, ViewableContract, SearchableContract
 {
     use Presentable, Enumerable, HasPermissions, DoesSqlStuff, HasAnEntityTrait, Viewable, Searchable;
 
@@ -40,7 +41,10 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
         'blog_post_is_sticky',
         'published_at',
         'created_at',
-        'updated_at'
+        'updated_at',
+        //The following attributes aren't in the db, they're used in elasticsearch results
+        'title',
+        'meta'
     ];
     protected $hidden = [
         'person_id',
@@ -180,8 +184,12 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
      */
     public function scopeCategory(Builder $builder, $categorySlug = null)
     {
-        return $builder->labelRecords()->labelTypes()->categories($categorySlug);
-
+        return $builder->scopes([
+                'labelRecords',
+                'labelTypes',
+                'categories' => $categorySlug
+            ]
+        );
     }
 
     /**
@@ -206,8 +214,11 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
      */
     public function scopeTag(Builder $builder, $tagSlug = null)
     {
-        return $builder->labelRecords()->labelTypes()->tags($tagSlug);
-
+        return $builder->scopes([
+            'labelRecords',
+            'labelTypes',
+            'tags' => $tagSlug
+        ]);
     }
 
     /**
@@ -225,7 +236,6 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
             }
         });
     }
-
 
     /**
      * @link https://laravel.com/docs/5.7/eloquent#local-scopes
@@ -248,6 +258,10 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
             'stat_page_views.entity_type_id');
     }
 
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
     public function scopeLanguage($builder)
     {
         return $builder->where('language_id', '=', Language::getAppLanguageId());

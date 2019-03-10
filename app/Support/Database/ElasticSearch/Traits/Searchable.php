@@ -2,18 +2,62 @@
 
 use App\Support\Database\ElasticSearch\Facades\ElasticSearch;
 
-/**
- * @method static \App\Support\Database\ElasticSearch\DSL\SearchBuilder search()
- * @method static \App\Support\Database\ElasticSearch\DSL\SuggestionBuilder suggest()
- */
 trait Searchable
 {
+    /**
+     * Are elasticsearch documents associated with this model displayed in a certain language?
+     * If so, we've created a locale specific index which is identified using a locale suffix,
+     * i.e 'app_name_index_name.en'
+     *
+     * @var bool
+     */
+    protected $hasDocumentLocale = true;
+
+    /**
+     * @return string
+     */
+    public function getDocumentType(): string
+    {
+        return 'main';
+    }
+
+    /**
+     * @param string $locale
+     * @return string
+     */
+    public function getDocumentIndex($locale = null): string
+    {
+        if ($this->hasDocumentLocale) {
+            return $this->getLocaleDocumentIndex($locale);
+        }
+        return $this->getDocumentIndexString();
+    }
+
+    /**
+     * @param string $locale
+     * @return string
+     */
+    public function getLocaleDocumentIndex(string $locale = null): string
+    {
+        if (is_null($locale)) {
+            $locale = app()->getLocale();
+        }
+        return sprintf('%s.%s', $this->getDocumentIndexString(), $locale);
+    }
+
+    /**
+     * @return string
+     */
+    public function getDocumentIndexString(): string
+    {
+        return strtolower(sprintf('%s.%s', config('app.name'), $this->getTable()));
+    }
 
     /**
      * Handle dynamic method calls into the model.
      *
      * @param string $method
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return mixed
      */

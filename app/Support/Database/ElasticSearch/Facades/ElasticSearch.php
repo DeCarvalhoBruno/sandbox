@@ -4,6 +4,10 @@ namespace App\Support\Database\ElasticSearch\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * @method static \App\Support\Database\ElasticSearch\DSL\SearchBuilder search()
+ * @method static \App\Support\Database\ElasticSearch\DSL\SuggestionBuilder suggest()
+ */
 class ElasticSearch extends Facade
 {
     /**

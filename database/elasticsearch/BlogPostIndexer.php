@@ -41,7 +41,8 @@ class BlogPostIndexer extends ElasticSearchIndexer
     {
         $limit = 10;
         $dbPosts = \App\Models\Blog\BlogPost::query()
-            ->entityType()
+//            ->entityType()
+            ->scopes(['entityType','person'])
             ->select([
                 'blog_posts.blog_post_id as id',
                 'entity_types.entity_type_id as type',
@@ -54,7 +55,6 @@ class BlogPostIndexer extends ElasticSearchIndexer
                 'blog_posts.updated_at as published',
                 'language_id as lang'
             ])
-            ->person()
             ->where('blog_status_id', \App\Models\Blog\BlogStatus::BLOG_STATUS_PUBLISHED)
 //            ->limit($limit)
             ->get();
@@ -62,6 +62,7 @@ class BlogPostIndexer extends ElasticSearchIndexer
         $posts = [];
         $postIds = [];
         $languageIds = [];
+
         foreach ($dbPosts as $post) {
             $postIds[$post->getAttribute('id')] = $post->getAttribute('type');
             $languageIds[$post->getAttribute('type')] = $post->getAttribute('lang');
@@ -88,9 +89,8 @@ class BlogPostIndexer extends ElasticSearchIndexer
                 'blog_category_slug as slug',
                 'lvl'
             ])
+            ->scopes(['category','categoryTree'])
             ->where('blog_status_id', \App\Models\Blog\BlogStatus::BLOG_STATUS_PUBLISHED)
-            ->category()
-            ->categoryTree()
 //            ->limit($limit)
             ->get();
 
@@ -116,7 +116,8 @@ class BlogPostIndexer extends ElasticSearchIndexer
                 'blog_posts.blog_post_id as id',
                 'blog_tag_name as name',
                 'blog_tag_slug as slug'
-            ])->tag()
+            ])
+            ->scopes(['tag'])
             ->where('blog_status_id', \App\Models\Blog\BlogStatus::BLOG_STATUS_PUBLISHED)
             ->orderBy('blog_posts.blog_post_id', 'asc')
 //            ->limit($limit)
@@ -201,10 +202,12 @@ class BlogPostIndexer extends ElasticSearchIndexer
                 'enabled' => false
             ],
         ];
+        $source = ['includes'=>['title','meta']];
 
         $indexEn = new \App\Support\Database\ElasticSearch\Index\Mapping(
             sprintf('%s.%s', $this->getIndexName(), 'en'),
-            $mapping
+            $mapping,
+            $source
         );
         Seeder::insert($indexEn->toArray());
 
@@ -215,7 +218,8 @@ class BlogPostIndexer extends ElasticSearchIndexer
 
         $indexFr = new \App\Support\Database\ElasticSearch\Index\Mapping(
             sprintf('%s.%s', $this->getIndexName(), 'fr'),
-            $mapping
+            $mapping,
+            $source
         );
         Seeder::insert($indexFr->toArray());
     }

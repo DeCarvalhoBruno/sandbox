@@ -14,16 +14,22 @@ class Mapping
      * @var array
      */
     private $mappings;
+    /**
+     * @var array
+     */
+    private $source;
 
     /**
      *
      * @param string $name
      * @param array $mappings
+     * @param array $source
      */
-    public function __construct(string $name, array $mappings = null)
+    public function __construct(string $name, array $mappings = null, $source = null)
     {
         $this->indexName = $name;
         $this->mappings = $mappings;
+        $this->source = $source;
         $this->analysis = new Analysis($this->getAnalyzers($mappings));
     }
 
@@ -36,10 +42,11 @@ class Mapping
                     'analysis' => $this->analysis->toArray()
                 ]),
                 'mappings' => [
-                    'main' => [
+                    'main' => array_filter([
+                        '_source' => $this->source,
                         'properties' =>
                             $this->mappings
-                    ]
+                    ])
                 ]
             ])
         ];

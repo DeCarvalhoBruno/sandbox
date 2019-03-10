@@ -1,7 +1,5 @@
 <?php namespace App\Console\Commands;
 
-
-use App\Support\Database\ElasticSearch\Facades\ElasticSearchIndex;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
@@ -29,8 +27,6 @@ class TestStuff extends Command
      */
     public function handle()
     {
-        $client = ElasticSearchIndex::getX();
-        dd($client);
 
     }
 }

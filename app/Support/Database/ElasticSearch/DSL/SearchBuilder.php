@@ -1,11 +1,15 @@
 <?php namespace App\Support\Database\ElasticSearch\DSL;
 
-use App\Support\Database\ElasticSearch\Result;
+use App\Contracts\Searchable;
+use App\Support\Database\ElasticSearch\Connection;
+use App\Support\Database\ElasticSearch\Results\Paginator;
+use App\Support\Database\ElasticSearch\Results\SearchResult;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Traits\Macroable;
 use ONGR\ElasticsearchDSL\Highlight\Highlight;
 use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
 use ONGR\ElasticsearchDSL\Query\FullText\CommonTermsQuery;
+use ONGR\ElasticsearchDSL\Query\FullText\MatchPhrasePrefixQuery;
 use ONGR\ElasticsearchDSL\Query\FullText\MatchQuery;
 use ONGR\ElasticsearchDSL\Query\FullText\MultiMatchQuery;
 use ONGR\ElasticsearchDSL\Query\FullText\QueryStringQuery;
@@ -27,9 +31,6 @@ use ONGR\ElasticsearchDSL\Query\TermLevel\TermsQuery;
 use ONGR\ElasticsearchDSL\Query\TermLevel\WildcardQuery;
 use ONGR\ElasticsearchDSL\Search as Query;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
-use App\Support\Database\ElasticSearch\Connection;
-use App\Support\Database\ElasticSearch\Exception\InvalidArgumentException;
-use App\Support\Database\ElasticSearch\Searchable;
 
 class SearchBuilder
 {
@@ -64,6 +65,11 @@ class SearchBuilder
     protected $model;
 
     /**
+     * @var string
+     */
+    protected $modelClass;
+
+    /**
      * An instance of plastic Connection.
      *
      * @var Connection
@@ -80,8 +86,8 @@ class SearchBuilder
     /**
      * Builder constructor.
      *
-     * @param Connection $connection
-     * @param Query      $grammar
+     * @param \App\Support\Database\ElasticSearch\Connection $connection
+     * @param \ONGR\ElasticsearchDSL\Search $grammar
      */
     public function __construct(Connection $connection, Query $grammar)
     {
@@ -94,9 +100,9 @@ class SearchBuilder
      *
      * @param string $type
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function type($type)
+    public function type(string $type): self
     {
         $this->type = $type;
 
@@ -108,9 +114,9 @@ class SearchBuilder
      *
      * @param string $index
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function index($index)
+    public function index(string $index): self
     {
         $this->index = $index;
 
@@ -120,30 +126,25 @@ class SearchBuilder
     /**
      * Set the eloquent model to use when querying elastic search.
      *
-     * @param Model|Searchable $model
+     * @param \App\Contracts\Searchable $model
      *
-     * @throws InvalidArgumentException
-     *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function model(Model $model)
+    public function model(Searchable $model): self
     {
-        // Check if the model is searchable before setting the query builder model
-        $traits = class_uses_recursive(get_class($model));
-
-        if (!isset($traits[Searchable::class])) {
-            throw new InvalidArgumentException(get_class($model).' does not use the searchable trait');
-        }
-
-        $this->type($model->getDocumentType());
-
-        if ($index = $model->getDocumentIndex()) {
-            $this->index($index);
-        }
-
         $this->model = $model;
+        $this->modelClass = get_class($model);
+        return $this->type($model->getDocumentType())->index($model->getDocumentIndex());
+    }
 
-        return $this;
+    /**
+     * @param array $attributes
+     * @return \App\Contracts\Searchable|\Illuminate\Database\Eloquent\Model
+     */
+    public function createModel(array $attributes = null): Searchable
+    {
+        return new $this->modelClass($attributes);
+
     }
 
     /**
@@ -151,9 +152,9 @@ class SearchBuilder
      *
      * @param int $offset
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function from($offset)
+    public function from($offset): self
     {
         $this->query->setFrom($offset);
 
@@ -165,9 +166,9 @@ class SearchBuilder
      *
      * @param int $limit
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function size($limit)
+    public function size($limit): self
     {
         $this->query->setSize($limit);
 
@@ -178,12 +179,12 @@ class SearchBuilder
      * Set the query sort values values.
      *
      * @param string|array $fields
-     * @param null         $order
-     * @param array        $parameters
+     * @param null $order
+     * @param array $parameters
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function sortBy($fields, $order = null, array $parameters = [])
+    public function sortBy($fields, $order = null, array $parameters = []): self
     {
         $fields = is_array($fields) ? $fields : [$fields];
 
@@ -201,9 +202,9 @@ class SearchBuilder
      *
      * @param $score
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function minScore($score)
+    public function minScore($score): self
     {
         $this->query->setMinScore($score);
 
@@ -211,9 +212,21 @@ class SearchBuilder
     }
 
     /**
+     * @param $source
+     *
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
+     */
+    public function setSource($source): self
+    {
+        $this->query->setSource($source);
+
+        return $this;
+    }
+
+    /**
      * Switch to a should statement.
      */
-    public function should()
+    public function should(): self
     {
         $this->boolState = BoolQuery::SHOULD;
 
@@ -223,7 +236,7 @@ class SearchBuilder
     /**
      * Switch to a must statement.
      */
-    public function must()
+    public function must(): self
     {
         $this->boolState = BoolQuery::MUST;
 
@@ -233,7 +246,7 @@ class SearchBuilder
     /**
      * Switch to a must not statement.
      */
-    public function mustNot()
+    public function mustNot(): self
     {
         $this->boolState = BoolQuery::MUST_NOT;
 
@@ -243,7 +256,7 @@ class SearchBuilder
     /**
      * Switch to a filter query.
      */
-    public function filter()
+    public function filter(): self
     {
         $this->boolState = BoolQuery::FILTER;
 
@@ -255,9 +268,9 @@ class SearchBuilder
      *
      * @param array | string $ids
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function ids($ids)
+    public function ids($ids): self
     {
         $ids = is_array($ids) ? $ids : [$ids];
 
@@ -273,11 +286,11 @@ class SearchBuilder
      *
      * @param string $field
      * @param string $term
-     * @param array  $attributes
+     * @param array $attributes
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function term($field, $term, array $attributes = [])
+    public function term($field, $term, array $attributes = []): self
     {
         $query = new TermQuery($field, $term, $attributes);
 
@@ -290,12 +303,12 @@ class SearchBuilder
      * Add an terms query.
      *
      * @param string $field
-     * @param array  $terms
-     * @param array  $attributes
+     * @param array $terms
+     * @param array $attributes
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function terms($field, array $terms, array $attributes = [])
+    public function terms($field, array $terms, array $attributes = []): self
     {
         $query = new TermsQuery($field, $terms, $attributes);
 
@@ -309,9 +322,9 @@ class SearchBuilder
      *
      * @param string|array $fields
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function exists($fields)
+    public function exists($fields): self
     {
         $fields = is_array($fields) ? $fields : [$fields];
 
@@ -329,11 +342,11 @@ class SearchBuilder
      *
      * @param string $field
      * @param string $value
-     * @param float  $boost
+     * @param float $boost
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function wildcard($field, $value, $boost = 1.0)
+    public function wildcard($field, $value, $boost = 1.0): self
     {
         $query = new WildcardQuery($field, $value, ['boost' => $boost]);
 
@@ -347,11 +360,11 @@ class SearchBuilder
      *
      * @param float|null $boost
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      *
      * @internal param $field
      */
-    public function matchAll($boost = 1.0)
+    public function matchAll($boost = 1.0): self
     {
         $query = new MatchAllQuery(['boost' => $boost]);
 
@@ -365,11 +378,11 @@ class SearchBuilder
      *
      * @param string $field
      * @param string $term
-     * @param array  $attributes
+     * @param array $attributes
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function match($field, $term, array $attributes = [])
+    public function match($field, $term, array $attributes = []): self
     {
         $query = new MatchQuery($field, $term, $attributes);
 
@@ -381,15 +394,36 @@ class SearchBuilder
     /**
      * Add a multi match query.
      *
-     * @param array  $fields
+     * @param array $fields
      * @param string $term
-     * @param array  $attributes
+     * @param array $attributes
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function multiMatch(array $fields, $term, array $attributes = [])
+    public function multiMatch(array $fields, $term, array $attributes = []): self
     {
         $query = new MultiMatchQuery($fields, $term, $attributes);
+
+        $this->append($query);
+
+        return $this;
+    }
+
+    /**
+     * @param string $field
+     * @param string $term
+     * @param array $attributes
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
+     */
+    public function matchPhrasePrefix($field, $term, array $attributes = []): self
+    {
+        if (empty($attributes)) {
+            $attributes = [
+                'slop' => 2,
+                'max_expansions' => 5
+            ];
+        }
+        $query = new MatchPhrasePrefixQuery($field, $term, $attributes);
 
         $this->append($query);
 
@@ -400,12 +434,12 @@ class SearchBuilder
      * Add a geo bounding box query.
      *
      * @param string $field
-     * @param array  $values
-     * @param array  $parameters
+     * @param array $values
+     * @param array $parameters
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function geoBoundingBox($field, $values, array $parameters = [])
+    public function geoBoundingBox($field, $values, array $parameters = []): self
     {
         $query = new GeoBoundingBoxQuery($field, $values, $parameters);
 
@@ -419,12 +453,12 @@ class SearchBuilder
      *
      * @param string $field
      * @param string $distance
-     * @param mixed  $location
-     * @param array  $attributes
+     * @param mixed $location
+     * @param array $attributes
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function geoDistance($field, $distance, $location, array $attributes = [])
+    public function geoDistance($field, $distance, $location, array $attributes = []): self
     {
         $query = new GeoDistanceQuery($field, $distance, $location, $attributes);
 
@@ -437,12 +471,12 @@ class SearchBuilder
      * Add a geo polygon query.
      *
      * @param string $field
-     * @param array  $points
-     * @param array  $attributes
+     * @param array $points
+     * @param array $attributes
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function geoPolygon($field, array $points = [], array $attributes = [])
+    public function geoPolygon($field, array $points = [], array $attributes = []): self
     {
         $query = new GeoPolygonQuery($field, $points, $attributes);
 
@@ -459,9 +493,9 @@ class SearchBuilder
      * @param array $coordinates
      * @param array $attributes
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function geoShape($field, $type, array $coordinates = [], array $attributes = [])
+    public function geoShape($field, $type, array $coordinates = [], array $attributes = []): self
     {
         $query = new GeoShapeQuery();
 
@@ -477,11 +511,11 @@ class SearchBuilder
      *
      * @param string $field
      * @param string $term
-     * @param array  $attributes
+     * @param array $attributes
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function prefix($field, $term, array $attributes = [])
+    public function prefix($field, $term, array $attributes = []): self
     {
         $query = new PrefixQuery($field, $term, $attributes);
 
@@ -494,11 +528,11 @@ class SearchBuilder
      * Add a query string query.
      *
      * @param string $query
-     * @param array  $attributes
+     * @param array $attributes
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function queryString($query, array $attributes = [])
+    public function queryString($query, array $attributes = []): self
     {
         $query = new QueryStringQuery($query, $attributes);
 
@@ -511,11 +545,11 @@ class SearchBuilder
      * Add a simple query string query.
      *
      * @param string $query
-     * @param array  $attributes
+     * @param array $attributes
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function simpleQueryString($query, array $attributes = [])
+    public function simpleQueryString($query, array $attributes = []): self
     {
         $query = new SimpleQueryStringQuery($query, $attributes);
 
@@ -527,17 +561,21 @@ class SearchBuilder
     /**
      * Add a highlight to result.
      *
-     * @param array  $fields
-     * @param array  $parameters
+     * @param array $fields
+     * @param array $parameters
      * @param string $preTag
      * @param string $postTag
      *
      * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-highlighting.html
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function highlight($fields = ['_all' => []], $parameters = [], $preTag = '<mark>', $postTag = '</mark>')
-    {
+    public function highlight(
+        $fields = ['_all' => []],
+        $parameters = [],
+        $preTag = '<mark>',
+        $postTag = '</mark>'
+    ): self {
         $highlight = new Highlight();
         $highlight->setTags([$preTag], [$postTag]);
 
@@ -558,11 +596,11 @@ class SearchBuilder
      * Add a range query.
      *
      * @param string $field
-     * @param array  $attributes
+     * @param array $attributes
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function range($field, array $attributes = [])
+    public function range(string $field, array $attributes = []): self
     {
         $query = new RangeQuery($field, $attributes);
 
@@ -575,11 +613,12 @@ class SearchBuilder
      * Add a regexp query.
      *
      * @param string $field
-     * @param array  $attributes
+     * @param string $regex
+     * @param array $attributes
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function regexp($field, $regex, array $attributes = [])
+    public function regexp(string $field, string $regex, array $attributes = []): self
     {
         $query = new RegexpQuery($field, $regex, $attributes);
 
@@ -595,9 +634,9 @@ class SearchBuilder
      * @param $term
      * @param array $attributes
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function commonTerm($field, $term, array $attributes = [])
+    public function commonTerm($field, $term, array $attributes = []): self
     {
         $query = new CommonTermsQuery($field, $term, $attributes);
 
@@ -613,9 +652,9 @@ class SearchBuilder
      * @param $term
      * @param array $attributes
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function fuzzy($field, $term, array $attributes = [])
+    public function fuzzy($field, $term, array $attributes = []): self
     {
         $query = new FuzzyQuery($field, $term, $attributes);
 
@@ -629,11 +668,11 @@ class SearchBuilder
      *
      * @param $field
      * @param \Closure $closure
-     * @param string   $score_mode
+     * @param string $score_mode
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function nested($field, \Closure $closure, $score_mode = 'avg')
+    public function nested($field, \Closure $closure, $score_mode = 'avg'): self
     {
         $builder = new self($this->connection, new $this->query());
 
@@ -653,9 +692,9 @@ class SearchBuilder
      *
      * @param \Closure $closure
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function aggregate(\Closure $closure)
+    public function aggregate(\Closure $closure): self
     {
         $builder = new AggregationBuilder($this->query);
 
@@ -669,11 +708,11 @@ class SearchBuilder
      *
      * @param \Closure $search
      * @param \Closure $closure
-     * @param array    $parameters
+     * @param array $parameters
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function functions(\Closure $search, \Closure $closure, $parameters = [])
+    public function functions(\Closure $search, \Closure $closure, $parameters = []): self
     {
         $builder = new self($this->connection, new $this->query());
         $search($builder);
@@ -696,25 +735,31 @@ class SearchBuilder
     {
         $params = [
             'index' => $this->getIndex(),
-            'type'  => $this->getType(),
-            'body'  => $this->toDSL(),
+            'type' => $this->getType(),
+            'body' => $this->toDSL(),
         ];
 
         return $this->connection->searchStatement($params);
     }
 
     /**
-     * Execute the search query against elastic and return the raw result if the model is not set.
      *
-     * @return Result
+     * @return \App\Support\Database\ElasticSearch\Results\SearchResult
      */
-    public function get()
+    public function get(): SearchResult
     {
-        return new Result($this->getRaw());
+        return new SearchResult($this->getRaw());
     }
 
     /**
-     * Return the current elastic type.
+     * @return \App\Support\Database\ElasticSearch\Results\SearchResult
+     */
+    public function toModel(): SearchResult
+    {
+        return SearchResult::toModel($this->getRaw(), $this->modelClass);
+    }
+
+    /**
      *
      * @return string
      */
@@ -758,18 +803,20 @@ class SearchBuilder
      *
      * @param int $limit
      *
-     * @return PlasticPaginator
+     * @param bool $toModel
+     * @return \App\Support\Database\ElasticSearch\Results\Paginator
      */
-    public function paginate($limit = 25)
+    public function paginate($limit = 25, $toModel = true): Paginator
     {
         $page = $this->getCurrentPage();
 
-        $from = $limit * ($page - 1);
-        $size = $limit;
+        $this->from($limit * ($page - 1))->size($limit);
 
-        $result = $this->from($from)->size($size)->get();
+        if ($toModel) {
+            return new Paginator($this->toModel(), $limit, $page);
+        }
 
-        return new PlasticPaginator($result, $size, $page);
+        return new Paginator($this->get(), $limit, $page);
     }
 
     /**
@@ -787,7 +834,7 @@ class SearchBuilder
      *
      * @param $query
      *
-     * @return $this
+     * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
     public function append($query)
     {
@@ -803,6 +850,6 @@ class SearchBuilder
      */
     protected function getCurrentPage()
     {
-        return \Request::get('page') ? (int) \Request::get('page') : 1;
+        return \Request::get('page') ? (int)\Request::get('page') : 1;
     }
 }
