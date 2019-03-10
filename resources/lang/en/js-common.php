@@ -1,4 +1,7 @@
 <?php return [
+    'general'=>[
+        'ok' => 'Ok',
+    ],
     'pwd-strength' => [
         'too_short' => 'The password must meet the minimum length condition.',
         'too_long' => 'The password must fewer the maximum length condition.',
@@ -47,5 +50,19 @@
         'back' => 'Back',
         'next' => 'Next',
         'save' => 'Save'
+    ],
+    'modal'=>[
+        'error' => [
+            'h' => 'Oops...',
+            't' => 'Something went wrong! Please try again.'
+        ],
+        'token_expired' => [
+            'h' => 'Session Expired!',
+            't' => 'Please log in again to continue.',
+        ],
+        'unauthorized' => [
+            'h' => 'Access Denied',
+            't' => 'You are not authorized to view this page.',
+        ],
     ]
 ];

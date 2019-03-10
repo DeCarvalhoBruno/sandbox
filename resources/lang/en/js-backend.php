@@ -52,7 +52,6 @@ return [
         'media' => 'Media'
     ],
     'general' => [
-        'ok' => 'Ok',
         'cancel' => 'Cancel',
         'name' => 'Name',
         'home' => 'Home',
@@ -186,18 +185,6 @@ return [
         ],
     ],
     'modal' => [
-        'error' => [
-            'h' => 'Oops...',
-            't' => 'Something went wrong! Please try again.'
-        ],
-        'token_expired' => [
-            'h' => 'Session Expired!',
-            't' => 'Please log in again to continue.',
-        ],
-        'unauthorized' => [
-            'h' => 'Access Denied',
-            't' => 'You are not authorized to view this page.',
-        ],
         'user_delete' => [
             'h' => 'Confirm user deletion',
             't' => 'Do you really want to delete user {name}?|Do you really want to delete those {number} users?'

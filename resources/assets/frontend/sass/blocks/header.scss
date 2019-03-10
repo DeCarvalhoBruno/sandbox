@@ -11,8 +11,9 @@
 }
 
 .nav-link {
-    color: $nav-link-color;
-  &:hover{
+  color: $nav-link-color;
+
+  &:hover {
     color: $nav-link-color;
   }
 }
@@ -63,6 +64,123 @@ header {
     display: flex;
     -ms-flex-align: center;
     align-items: center;
+
+    .form-search.form-inline {
+      #navbar-search-input {
+        width: 0;
+        padding: 0;
+        transition: width .2s, padding .2s;
+
+        &:focus, &:valid {
+          border: none;
+          box-shadow: none;
+          width: 15rem;
+          padding-left: 0.5rem;
+        }
+      }
+
+      #search-result-container {
+        position: relative;
+        z-index: 1;
+
+        #search-result {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 20rem;
+          z-index: 5;
+
+          .row {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+
+            &:before {
+              display: inline-block;
+              font: normal normal normal 14px/1 FontAwesome;
+              text-rendering: auto;
+              -webkit-font-smoothing: antialiased;
+              position: absolute;
+              top: 50%;
+              right: 01rem;
+              opacity: 0.1;
+              color:$anchor;
+              font-size:4rem;
+            }
+            &.articles:before{
+              content: "\F1EA";
+            }
+            &.authors:before{
+              content: "\F2BE";
+            }
+          }
+
+          .row:last-child {
+            margin: 0;
+            padding: 0;
+
+            header {
+              text-align: center;
+              background-color: #f8f9fa;
+              padding: 0.8rem;
+              border-top: 1px solid #e7f0ff;
+              width: 100%;
+              margin: 0;
+            }
+          }
+
+          header {
+            width: 100%;
+            font-family: $font-family-title;
+            font-weight: bold;
+            margin: 1rem 1rem 0;
+            padding: 0;
+            border-bottom: 1px solid #e7f0ff;
+            display: block;
+            box-shadow: none;
+            height: unset;
+          }
+
+          ul {
+            margin: 0;
+            padding: 0.6rem;
+            width: 100%;
+            list-style: none;
+            display: block;
+
+            li {
+              display: block;
+              min-height: 2rem;
+              padding: 0.25rem;
+              font-size: 0.8rem;
+              vertical-align: middle;
+
+              figure {
+                margin: 0 0.75rem 0 0;
+                padding: 0;
+                text-align: left;
+                display: inline;
+
+                img {
+                  border-radius: 3px;
+                  width: 3rem;
+                  height: 3rem;
+                }
+              }
+
+              i {
+                color: lighten($anchor, 25%);
+                margin-right: 0.3rem;
+              }
+
+              &:hover {
+                background-color: #f8f9fa;
+              }
+            }
+          }
+        }
+      }
+    }
 
     .nav-main {
       .show > .nav-link {

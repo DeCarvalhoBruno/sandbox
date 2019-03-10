@@ -39,8 +39,8 @@ class MediaEntity extends Model
     public static function buildImages($entityTypeId = null, $columns = ['*'], $mediaImgTypes = null)
     {
         return static::query()->select($columns)
+            ->entityType($entityTypeId)
             ->scopes([
-                'entityType' => $entityTypeId,
                 'mediaCategoryRecord',
                 'mediaRecord',
                 'mediaType',

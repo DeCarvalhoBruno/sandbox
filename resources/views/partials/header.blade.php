@@ -18,9 +18,7 @@
                         <a href="{{route_i18n('profile')}}" class="dropdown-item">{{trans('general.user_profile')}}</a>
                         <div class="dropdown-divider"></div>
                         <form id="logout_form" accept-charset="UTF-8" action="{{route('logout')}}" method="POST">
-                            <fieldset>
-                                <input type="hidden" value="{{csrf_token()}}" name="_token">
-                            </fieldset>
+                            <input type="hidden" value="{{csrf_token()}}" name="_token">
                         </form>
                         <a onclick="document.querySelector('#logout_form').submit()" href="#" class="dropdown-item">Logout</a>
                     </div>
@@ -36,9 +34,11 @@
 <div id="wrapper"></div>
 <header>
     <div class="container">
-        <a class="nav-link nav-logo" href="{{route_i18n('home')}}"><img src="{{asset(sprintf('media/img/site/%s',env('APP_LOGO_FILENAME')))}}"></a>
+        <a class="nav-link nav-logo" href="{{route_i18n('home')}}"><img
+                    src="{{asset(sprintf('media/img/site/%s',env('APP_LOGO_FILENAME')))}}"></a>
         <ul class="nav nav-main d-none d-lg-flex">
-            <li class="nav-item"><a class="nav-link active" href="{{route_i18n('home')}}">{{trans('general.home')}}</a></li>
+            <li class="nav-item"><a class="nav-link active" href="{{route_i18n('home')}}">{{trans('general.home')}}</a>
+            </li>
             <li class="nav-item dropdown dropdown-hover">
                 <a class="nav-link dropdown-toggle forwardable" data-toggle="dropdown" href="#"
                    role="button" aria-haspopup="true" aria-expanded="false">Shop</a>
@@ -64,5 +64,43 @@
                 </div>
             </li>
         </ul>
+        <div class="form-inline form-search ml-auto mr-0 mr-sm-1 d-none d-sm-flex">
+            <inline-search search-page="{{route_i18n('home')}}">
+                <template #search-results="props">
+                    <div id="search-result" class="container card p-0">
+                        <div class="row articles">
+                            <header>ARTICLES</header>
+                            <ul>
+                                <li><figure><img src="/media/img/site/placeholder_tb.png"></figure><a href="">article one</a></li>
+                                <li><figure><img src="/media/img/site/placeholder_tb.png"></figure><a href="">article one</a></li>
+                                <li><figure><img src="/media/img/site/placeholder_tb.png"></figure><a href="">article one</a></li>
+                                <li><figure><img src="/media/img/site/placeholder_tb.png"></figure><a href="">article one</a></li>
+                            </ul>
+                        </div>
+                        <div class="row authors">
+                            <header>AUTHORS</header>
+                            <ul>
+                                <li><figure><img src="/media/img/site/placeholder_tb.png"></figure><a href="">author one</a></li>
+                                <li><figure><img src="/media/img/site/placeholder_tb.png"></figure><a href="">author one</a></li>
+                                <li><figure><img src="/media/img/site/placeholder_tb.png"></figure><a href="">author one</a></li>
+                                <li><figure><img src="/media/img/site/placeholder_tb.png"></figure><a href="">author one</a></li>
+                            </ul>
+                        </div>
+                        <div class="row">
+                            <header>TAGS</header>
+                            <ul>
+                                <li><i class="fa fa-tag"></i><a href="">tag one</a></li>
+                                <li><i class="fa fa-tag"></i><a href="">tag one</a></li>
+                                <li><i class="fa fa-tag"></i><a href="">tag one</a></li>
+                                <li><i class="fa fa-tag"></i><a href="">tag one</a></li>
+                            </ul>
+                        </div>
+                        <div class="row">
+                            <header>MORE RESULTS <i class="fa fa-chevron-right"></i></header>
+                        </div>
+                    </div>
+                </template>
+            </inline-search>
+        </div>
     </div>
 </header>

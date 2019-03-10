@@ -46,9 +46,8 @@ img[data-src] {
 }
 
 #app {
-  min-height: calc(100vh - 24.5rem);
+  min-height: calc(100vh - 18.3rem);
   position: relative;
-
 
   .list-group-item.active {
     border-left: 3px solid $primary;

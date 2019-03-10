@@ -1,43 +1,43 @@
 <template>
-    <div class="input-tag-search-wrapper">
-        <div class="search-spinner-wrapper">
-            <i class="fa fa-cog" :class="loadIconIsAnimated"></i>
-        </div>
-        <div class="input-tag-container">
-            <div class="form-control input-tag">
-                    <span class="badge badge-pill badge-light"
-                          v-for="(badge, index) in tagBadges"
-                          :key="index">
-                        <span v-html="badge"></span>
-                        <i href="#" class="button-badge-close" @click.prevent="removeTag(index)"></i>
-                    </span>
-                <input type="text"
-                       :placeholder="dataPlaceholder"
-                       v-model="input"
-                       ref="search"
-                       @focus="dataPlaceholder=''"
-                       @blur="dataPlaceholder=placeholder"
-                       @keyup.enter.prevent="tagFromInput"
-                       @keyup.esc="ignoreSearchResults"
-                       @keyup.delete="removeLastTag"
-                       @keyup="searchTag"
-                       @value="tags">
-                <input type="hidden" :name="elementId" :id="elementId" v-model="hiddenInput">
-            </div>
-            <div v-show="searchResults.length" class="search-results-area">
-                <ul>
-                    <li v-for="(tag, index) in searchResults"
-                        :key="index"
-                        v-text="tag.text"
-                        @click="tagFromSearch(tag)"
-                        class="badge"
-                        :class="{
+  <div class="input-tag-search-wrapper">
+    <div class="search-spinner-wrapper">
+      <i class="fa fa-cog" :class="loadIconIsAnimated"></i>
+    </div>
+    <div class="input-tag-container">
+      <div class="form-control input-tag">
+        <span class="badge badge-pill badge-light"
+              v-for="(badge, index) in tagBadges"
+              :key="index">
+          <span v-html="badge"></span>
+          <i href="#" class="button-badge-close" @click.prevent="removeTag(index)"></i>
+        </span>
+        <input type="text"
+               :placeholder="dataPlaceholder"
+               v-model="input"
+               ref="search"
+               @focus="dataPlaceholder=''"
+               @blur="dataPlaceholder=placeholder"
+               @keyup.enter.prevent="tagFromInput"
+               @keyup.esc="ignoreSearchResults"
+               @keyup.delete="removeLastTag"
+               @keyup="searchTag"
+               @value="tags">
+        <input type="hidden" :name="elementId" :id="elementId" v-model="hiddenInput">
+      </div>
+      <div v-show="searchResults.length" class="search-results-area">
+        <ul>
+          <li v-for="(tag, index) in searchResults"
+              :key="index"
+              v-text="tag.text"
+              @click="tagFromSearch(tag)"
+              class="badge"
+              :class="{
                             'badge-primary': index == searchSelection,
                             'badge-dark': index != searchSelection}"></li>
-                </ul>
-            </div>
-        </div>
+        </ul>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -78,7 +78,7 @@
         dataPlaceholder: this.placeholder,
         searchTriggerDelay: 200,
         searchTriggerLength: 1,
-        lastSearchTime: 0,
+        timer: 0,
         loadIconIsAnimated: false
       }
     },
@@ -153,28 +153,29 @@
       async searchTag (e, value) {
         let input = (typeof value === 'undefined') ? this.input.trim() : value
         if (this.typeahead === true) {
-          let now = Date.now ? Date.now() : new Date().getTime()
-          if ((input.length < this.searchTriggerLength) || (this.lastSearchTime > now - this.searchTriggerDelay)) {
+          if (input.length < this.searchTriggerLength) {
             return
           }
-          this.lastSearchTime = now
-          if (this.oldInput !== input) {
-            this.loadIconIsAnimated = true
-            this.searchResults = await this.searchTerm(input)
-            this.loadIconIsAnimated = false
-            this.searchSelection = 0
+          clearTimeout(this.timer)
+          this.timer = setTimeout(async function () {
+            if (this.oldInput !== input) {
+              this.loadIconIsAnimated = true
+              this.searchResults = await this.searchTerm(input)
+              this.loadIconIsAnimated = false
+              this.searchSelection = 0
 
-            if (input.length) {
-              for (let id in this.existingTags) {
-                let text = this.existingTags[id].toLowerCase()
+              if (input.length) {
+                for (let id in this.existingTags) {
+                  let text = this.existingTags[id].toLowerCase()
 
-                if (text.search(input.toLowerCase()) > -1) {
-                  this.searchResults.push({id, text: this.existingTags[id]})
+                  if (text.search(input.toLowerCase()) > -1) {
+                    this.searchResults.push({id, text: this.existingTags[id]})
+                  }
                 }
               }
+              this.oldInput = input
             }
-            this.oldInput = input
-          }
+          }, this.searchTriggerDelay)
         }
       },
       async searchTerm (term) {

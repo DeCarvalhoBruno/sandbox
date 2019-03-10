@@ -43,6 +43,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
         'created_at',
         'updated_at',
         //The following attributes aren't in the db, they're used in elasticsearch results
+        'type_id',
         'title',
         'meta'
     ];

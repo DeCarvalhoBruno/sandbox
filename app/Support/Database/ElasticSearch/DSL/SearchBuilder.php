@@ -2,6 +2,7 @@
 
 use App\Contracts\Searchable;
 use App\Support\Database\ElasticSearch\Connection;
+use App\Support\Database\ElasticSearch\Exception\InvalidArgumentException;
 use App\Support\Database\ElasticSearch\Results\Paginator;
 use App\Support\Database\ElasticSearch\Results\SearchResult;
 use Illuminate\Database\Eloquent\Model;
@@ -116,7 +117,7 @@ class SearchBuilder
      *
      * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function index(string $index): self
+    public function index($index): self
     {
         $this->index = $index;
 
@@ -126,15 +127,23 @@ class SearchBuilder
     /**
      * Set the eloquent model to use when querying elastic search.
      *
-     * @param \App\Contracts\Searchable $model
+     * @param string $model
      *
      * @return \App\Support\Database\ElasticSearch\DSL\SearchBuilder
      */
-    public function model(Searchable $model): self
+    public function model(string $model): self
     {
-        $this->model = $model;
-        $this->modelClass = get_class($model);
-        return $this->type($model->getDocumentType())->index($model->getDocumentIndex());
+        $this->modelClass = $model;
+        $modelInstance = new $model;
+        if ($modelInstance instanceof Searchable) {
+            return $this->type($modelInstance->getDocumentType())->index($modelInstance->getDocumentIndex());
+        } else {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Model %s does not implement the Searchable contract.',
+                    $model)
+            );
+        }
     }
 
     /**

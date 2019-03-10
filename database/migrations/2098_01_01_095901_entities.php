@@ -30,6 +30,9 @@ class Entities extends Migration
 
             $table->foreign('entity_id')
                 ->references('entity_id')->on('entities');
+
+            $table->unique(['entity_id','entity_type_target_id'],'idx_entity_target');
+            $table->unique(['entity_id','entity_type_id'],'idx_entity_type');
         });
 
         Schema::create('email_recipient_types', function (Blueprint $table) {

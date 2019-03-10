@@ -40,7 +40,6 @@ class Home extends Controller
             'most_viewed' => []
         ];
 
-
         foreach ($dbResult as $post) {
             if ($post->featured == 1) {
                 if (isset($media[$post->type])) {

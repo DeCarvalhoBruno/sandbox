@@ -19,7 +19,7 @@
     <meta name="page-id" content="{{ get_page_id() }}">
     @if(isset($meta_robots))
         <meta name="robots" content="{{$meta_robots}}">
-        @endif
+    @endif
     @if(isset($meta_description))
         <meta name="description" content="{{$meta_description}}">
     @endif
@@ -38,9 +38,8 @@
     <link href="{{ mix('css/app.css','6aa0e') }}" rel="stylesheet">
 </head>
 <body>
-@include('partials.header')
-
 <div id="app">
+@include('partials.header')
     <div id="content_container" class="container p-0">
         @if(isset($breadcrumbs))
             <div id="breadcrumb-wrapper" class="col p-0">

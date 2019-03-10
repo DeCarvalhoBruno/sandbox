@@ -202,7 +202,7 @@ class BlogPostIndexer extends ElasticSearchIndexer
                 'enabled' => false
             ],
         ];
-        $source = ['includes'=>['title','meta']];
+        $source = ['includes'=>['title','meta','date']];
 
         $indexEn = new \App\Support\Database\ElasticSearch\Index\Mapping(
             sprintf('%s.%s', $this->getIndexName(), 'en'),

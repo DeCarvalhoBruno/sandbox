@@ -76,11 +76,13 @@ class Blog extends Model implements BlogInterface
             'entity_types.entity_type_id as type',
             'blog_post_slug as slug',
             'unq as page_views'
-        ])->entityType()
-            ->status()
-            ->person()
-            ->category()
-            ->pageViews();
+        ])->scopes([
+            'entityType',
+            'status',
+            'person',
+            'category',
+            'pageViews'
+        ]);
     }
 
     /**

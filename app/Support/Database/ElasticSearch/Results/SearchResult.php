@@ -1,6 +1,5 @@
 <?php namespace App\Support\Database\ElasticSearch\Results;
 
-use App\Contracts\Searchable;
 use Illuminate\Support\Collection;
 
 class SearchResult
@@ -95,7 +94,7 @@ class SearchResult
         $resultSelf = new self($results, false);
         $models = new Collection();
         foreach ($results['hits']['hits'] as $result) {
-            $result['_source']['id'] = $result['_id'];
+            $result['_source']['type_id'] = $result['_id'];
             $models->push(new $model($result['_source']));
         }
         $resultSelf->setHits($models);
@@ -164,6 +163,15 @@ class SearchResult
     public function hits()
     {
         return $this->hits;
+    }
+
+    /**
+     * @return array
+     */
+    public function source()
+    {
+        return $this->hits->pluck('_source')->toArray();
+
     }
 
     /**
