@@ -32,7 +32,7 @@
     </div>
 </div>
 <div id="wrapper"></div>
-<header>
+<header class="main-header">
     <div class="container">
         <a class="nav-link nav-logo" href="{{route_i18n('home')}}"><img
                     src="{{asset(sprintf('media/img/site/%s',env('APP_LOGO_FILENAME')))}}"></a>
@@ -64,9 +64,11 @@
                 </div>
             </li>
         </ul>
-        <div class="form-inline form-search ml-auto mr-0 mr-sm-1 d-none d-sm-flex">
-            <inline-search placeholder="{{trans('general.search')}}" search-page="{{route_i18n('search')}}">
-            </inline-search>
-        </div>
+        @if(get_page_id()!=='06a943c59f')
+            <div class="form-inline form-search ml-auto mr-0 mr-sm-1 d-none d-sm-flex">
+                <inline-search placeholder="{{trans('general.search')}}" search-page="{{route_i18n('search')}}">
+                </inline-search>
+            </div>
+        @endif
     </div>
 </header>

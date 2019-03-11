@@ -1,6 +1,9 @@
 <?php return [
     'general'=>[
         'ok' => 'Ok',
+        'next' => 'Next',
+        'prev' => 'Previous',
+        'search' => 'Search'
     ],
     'pwd-strength' => [
         'too_short' => 'The password must meet the minimum length condition.',

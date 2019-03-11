@@ -48,13 +48,14 @@
 @import "./blocks/footer";
 
 //**********************************************
-@import "snippets/blog/general";
-@import "snippets/blog/post";
-@import "snippets/blog/category";
-@import "snippets/blog/author";
-@import "snippets/blog/tag";
-@import "snippets/blog/featured";
-@import "snippets/blog/spotlight";
+@import "pages/blog/general";
+@import "pages/blog/post";
+@import "pages/blog/category";
+@import "pages/blog/author";
+@import "pages/blog/tag";
+@import "pages/blog/featured";
+@import "pages/blog/spotlight";
+@import "pages/search";
 @import "snippets/code";
 @import "./snippets/breadcrumbs";
 @import "./snippets/error";

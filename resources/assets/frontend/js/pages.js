@@ -72,7 +72,16 @@ export default {
   },
   // Blog pages
   '126ac9f614': {
-    page: ['plugins/vendor/twitterLoader.js', 'plugins/vendor/prettify.js', 'pages/blog.js'],
+    page: [
+      'plugins/vendor/twitterLoader.js',
+      'plugins/vendor/prettify.js',
+      'pages/blog.js'],
     components: {}
+  },
+  // Search
+  '06a943c59f': {
+    components: {
+      frontend: ['FullPageSearch']
+    }
   }
 }

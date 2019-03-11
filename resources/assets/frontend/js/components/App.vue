@@ -42,8 +42,9 @@
   let ComponentsToLoadList = getComponentsToLoadFromList(token, Pages)
 
   //We might load components on pages that have a nav. No need to load them on pages without a nav.
-  var pagesWithoutNavMenu = ['d56b699830', '9de4a97425']
-  if (pagesWithoutNavMenu.indexOf(token) === -1) {
+  //Page ids are referring to the login, register and search pages
+  var pagesWithoutSearch = ['d56b699830', '9de4a97425','06a943c59f']
+  if (pagesWithoutSearch.indexOf(token) === -1) {
     if (ComponentsToLoadList.hasOwnProperty('frontend')) {
       ComponentsToLoadList.frontend.push('InlineSearch')
     } else {

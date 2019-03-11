@@ -113,7 +113,7 @@ class Frontend extends Routes
     public static function misc()
     {
         return function(Router $r) {
-            $r->post('search','Search@post');
+            $r->post('search/{source?}','Search@post');
         };
     }
 

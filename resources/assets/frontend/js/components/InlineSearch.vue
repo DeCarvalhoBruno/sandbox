@@ -14,10 +14,10 @@
         <i v-else class="fa fa-circle-o-notch fa-spin"></i>
       </button>
     </div>
-    <div v-if="searchData.status&&this.activated" id="search-result-container">
+    <div v-if="searchData.status&&activated" id="search-result-container">
       <div id="search-result" class="container card p-0">
         <div class="row articles">
-          <header>{{searchData.headers.articles}}</header>
+          <header class="search-header">{{searchData.headers.articles}}</header>
           <ul v-if="searchData.hasOwnProperty('articles')&&searchData.articles.length">
             <li v-for="(article, idx) in searchData.articles"
                 :key="'article'+idx"><a :href="article.meta.url">
@@ -30,7 +30,7 @@
           <h6 class="header-no-results" v-else>{{searchData.headers.no_result}}</h6>
         </div>
         <div class="row authors">
-          <header>{{searchData.headers.authors}}</header>
+          <header class="search-header">{{searchData.headers.authors}}</header>
           <ul v-if="searchData.hasOwnProperty('authors')&&searchData.authors.length">
             <li v-for="(author, idx) in searchData.authors"
                 :key="'author'+idx"><a :href="author.url">
@@ -42,7 +42,7 @@
           <h6 class="header-no-results" v-else>{{searchData.headers.no_result}}</h6>
         </div>
         <div class="row">
-          <header>{{searchData.headers.tags}}</header>
+          <header class="search-header">{{searchData.headers.tags}}</header>
           <ul v-if="searchData.hasOwnProperty('tags')&&searchData.tags.length">
             <li v-for="(tag, idx) in searchData.tags"
                 :key="'tag'+idx"><a :href="tag.url"><i class="fa fa-tag"></i>{{tag.name}}</a></li>
@@ -50,7 +50,7 @@
           <h6 class="header-no-results" v-else>{{searchData.headers.no_result}}</h6>
         </div>
         <div class="row">
-          <header>
+          <header class="search-header">
             <span><a :href="searchUrl">{{searchData.headers.more_results}} <i
                 class="fa fa-chevron-right"></i></a></span>
           </header>
@@ -93,7 +93,7 @@
         searchTriggerLength: 1,
         timer: 0,
         searchData: {headers: {}},
-        blackBg: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAAO0lEQVR42u3OMQEAAAwCIO0feovhAwloLlMVEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQWAce/hlAAXSB6WIAAAAASUVORK5CYII=',
+        blackBg: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
         searchLoading: false
       }
     },
@@ -105,7 +105,7 @@
     },
     computed: {
       searchUrl () {
-        return this.searchPage + '?q=' + this.lastInput
+        return this.searchPage + '/' + this.lastInput
       }
     },
     methods: {
@@ -124,11 +124,9 @@
           let vm = this
           this.timer = setTimeout(async function () {
             const {data} = await axios.post('/search', {q: e.target.value})
-            if (data.status == 'ok') {
-              vm.searchData = data
-              vm.activated = true
-              vm.toggleLoading(false)
-            }
+            vm.searchData = data
+            vm.activated = true
+            vm.toggleLoading(false)
           }, this.searchTriggerDelay)
         }
       },

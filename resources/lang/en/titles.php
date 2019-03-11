@@ -4,6 +4,7 @@ return [
     'frontend_auth_passwords_email' => 'Reset your password',
     'frontend_auth_login' => 'Log in',
     'frontend_site_home' => 'Home',
+    'frontend_site_search' => 'Search',
     'routes' => [
         'home' => 'Home',
         'profile' => 'Your profile',

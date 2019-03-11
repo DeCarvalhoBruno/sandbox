@@ -1,39 +1,33 @@
 <?php namespace App\Http\Controllers\Frontend;
 
 use App\Support\Database\ElasticSearch\Facades\ElasticSearch;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class Search extends Controller
 {
-    public function get($q)
+    /**
+     * @param string $q
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function get($q=null)
     {
-
+        $q = strip_tags($q);
+        return view('frontend.site.search', compact('q'));
     }
 
-    public function post(Request $request)
+    /**
+     * @param string $source
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function post($source=null)
     {
-        $size=4;
-        $input = $request->get('q');
+        $input = app('request')->get('q');
         if (!is_null($input && !empty($input))) {
-            $blog = ElasticSearch::search()
-                ->index('naraki.blog_posts.en')
-                ->type('main')
-                ->from(0)
-                ->size($size)
-                ->matchPhrasePrefix('title', strip_tags($input))->get()->source();
-            $author = ElasticSearch::search()
-                ->index('naraki.blog_authors.en')
-                ->from(0)
-                ->size($size)
-                ->type('main')
-                ->matchPhrasePrefix('name', strip_tags($input))->get()->source();
-            $tag = ElasticSearch::search()
-                ->index('naraki.blog_tags.en')
-                ->type('main')
-                ->from(0)
-                ->size($size)
-                ->matchPhrasePrefix('name', strip_tags($input))->get()->source();
+            list($blog, $author, $tag) = [
+                is_null($source)?$this->searchBlog($input):$this->searchBlogPaginate($input),
+                $this->searchAuthor($input),
+                $this->searchTag($input)
+            ];
             return response([
                 'status' => 'ok',
                 'headers' => [
@@ -53,4 +47,62 @@ class Search extends Controller
 
     }
 
+    /**
+     * @param string $input
+     * @param int $size
+     * @return array
+     */
+    private function searchBlog($input, $size = 4)
+    {
+        return ElasticSearch::search()
+            ->index('naraki.blog_posts.en')
+            ->type('main')
+            ->from(0)
+            ->size($size)
+            ->matchPhrasePrefix('title', strip_tags($input))->get()->source();
+    }
+
+    /**
+     * @param string $input
+     * @param int $size
+     * @return \App\Support\Database\ElasticSearch\Results\Paginator
+     */
+    private function searchBlogPaginate($input, $size=8)
+    {
+        return ElasticSearch::search()
+            ->index('naraki.blog_posts.en')
+            ->type('main')
+            ->matchPhrasePrefix('title', strip_tags($input))->paginate($size,false);
+
+    }
+
+    /**
+     * @param string $input
+     * @param int $size
+     * @return array
+     */
+    private function searchAuthor($input, $size = 4)
+    {
+        return ElasticSearch::search()
+            ->index('naraki.blog_authors.en')
+            ->from(0)
+            ->size($size)
+            ->type('main')
+            ->matchPhrasePrefix('name', strip_tags($input))->get()->source();
+    }
+
+    /**
+     * @param string $input
+     * @param int $size
+     * @return array
+     */
+    private function searchTag($input, $size = 4)
+    {
+        return ElasticSearch::search()
+            ->index('naraki.blog_tags.en')
+            ->type('main')
+            ->from(0)
+            ->size($size)
+            ->matchPhrasePrefix('name', strip_tags($input))->get()->source();
+    }
 }

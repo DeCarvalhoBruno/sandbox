@@ -49,10 +49,20 @@
   }
 }
 
-header {
+.search-header {
+  width: 100%;
+  font-family: $font-family-title;
+  font-weight: bold;
+  margin: 1rem 1rem 0;
+  padding: 0;
+  border-bottom: 1px solid #e7f0ff;
+  display: block;
+  cursor: default;
+}
+
+.main-header {
   position: relative;
   z-index: 1030;
-  display: -ms-flexbox;
   display: flex;
   height: 4rem;
   background-color: #fff;
@@ -175,19 +185,6 @@ header {
               font-size: 0.9rem;
             }
           }
-        }
-
-        header {
-          width: 100%;
-          font-family: $font-family-title;
-          font-weight: bold;
-          margin: 1rem 1rem 0;
-          padding: 0;
-          border-bottom: 1px solid #e7f0ff;
-          display: block;
-          box-shadow: none;
-          height: unset;
-          cursor: default;
         }
 
         .header-no-results {
