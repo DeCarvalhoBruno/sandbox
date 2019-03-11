@@ -40,9 +40,26 @@ class BlogPostIndexer extends ElasticSearchIndexer
     private function prepareData()
     {
         $limit = 10;
+
+        $dbImages = \App\Models\Media\MediaEntity::buildImages(null, [
+            'media_uuid as uuid',
+            'media_extension as ext',
+            'entity_types.entity_type_id as type',
+            'entity_id'
+        ])->where('entity_types.entity_id', \App\Models\Entity::BLOG_POSTS)
+            ->where('media_in_use', '1')
+//            ->limit($limit)
+            ->get();
+        $images = [];
+        foreach ($dbImages as $image) {
+            $images[$image->getAttribute('type')] = [
+                'url' => $image->present('thumbnail'),
+            ];
+        }
+
         $dbPosts = \App\Models\Blog\BlogPost::query()
 //            ->entityType()
-            ->scopes(['entityType','person'])
+            ->scopes(['entityType', 'person'])
             ->select([
                 'blog_posts.blog_post_id as id',
                 'entity_types.entity_type_id as type',
@@ -64,9 +81,10 @@ class BlogPostIndexer extends ElasticSearchIndexer
         $languageIds = [];
 
         foreach ($dbPosts as $post) {
-            $postIds[$post->getAttribute('id')] = $post->getAttribute('type');
-            $languageIds[$post->getAttribute('type')] = $post->getAttribute('lang');
-            $posts[$post->getAttribute('type')] = [
+            $index = $post->getAttribute('type');
+            $postIds[$post->getAttribute('id')] = $index;
+            $languageIds[$index] = $post->getAttribute('lang');
+            $posts[$index] = [
                 'title' => $post->getAttribute('title'),
                 'content' => $post->getAttribute('content'),
                 'date' => $post->getAttribute('published'),
@@ -79,8 +97,13 @@ class BlogPostIndexer extends ElasticSearchIndexer
                     ]
                 ]
             ];
+            if (isset($images[$index])) {
+                $posts[$index]['meta']['image'] = $images[$index];
+            } else {
+                $posts[$index]['meta']['image'] = null;
+            }
         }
-        unset($dbPosts);
+        unset($dbPosts, $dbImages, $images);
 
         $dbCategories = \App\Models\Blog\BlogPost::query()
             ->select([
@@ -89,7 +112,7 @@ class BlogPostIndexer extends ElasticSearchIndexer
                 'blog_category_slug as slug',
                 'lvl'
             ])
-            ->scopes(['category','categoryTree'])
+            ->scopes(['category', 'categoryTree'])
             ->where('blog_status_id', \App\Models\Blog\BlogStatus::BLOG_STATUS_PUBLISHED)
 //            ->limit($limit)
             ->get();
@@ -138,29 +161,6 @@ class BlogPostIndexer extends ElasticSearchIndexer
         }
         unset($dbTags);
 
-        $dbImages = \App\Models\Media\MediaEntity::buildImages(null, [
-            'media_uuid as uuid',
-            'media_extension as ext',
-            'entity_types.entity_type_id as type',
-            'entity_id'
-        ])->where('entity_types.entity_id', \App\Models\Entity::BLOG_POSTS)
-//            ->limit($limit)
-            ->get();
-
-        foreach ($dbImages as $image) {
-            $index = $image->getAttribute('type');
-            if (!isset($posts[$index])) {
-                continue;
-            }
-            if (!isset($posts[$index]['meta']['image'])) {
-                $posts[$index]['meta']['image'] = [];
-            }
-            $posts[$index]['meta']['image'][] = [
-                'url' => $image->present('asset'),
-            ];
-        }
-        unset($dbImages);
-
         $langPosts = ['fr' => [], 'en' => []];
         foreach ($languageIds as $typeId => $item) {
             if (intval($item) == 1) {
@@ -202,7 +202,7 @@ class BlogPostIndexer extends ElasticSearchIndexer
                 'enabled' => false
             ],
         ];
-        $source = ['includes'=>['title','meta','date']];
+        $source = ['includes' => ['title', 'meta', 'date']];
 
         $indexEn = new \App\Support\Database\ElasticSearch\Index\Mapping(
             sprintf('%s.%s', $this->getIndexName(), 'en'),

@@ -2,6 +2,7 @@
     'user_profile' => 'User profile',
     'copyright' => 'Copyright © 2019',
     'send' => 'Send',
+    'search' => 'Search...',
     'enumerables' => [
         'users' => 'User|Users',
         'newsletters' => 'Newsletter|Newsletter',

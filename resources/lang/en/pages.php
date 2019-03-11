@@ -46,6 +46,13 @@
             'science' => 'Science',
             'sports' => 'Sports',
             'technology' => 'Technology'
+        ],
+        'search_headers'=>[
+            'articles' => 'ARTICLES',
+            'authors' => 'AUTHORS',
+            'tags' => 'TAGS',
+            'no_result' => 'NO RESULTS',
+            'more_results'=>'MORE RESULTS FOR \':search\''
         ]
     ]
 ];

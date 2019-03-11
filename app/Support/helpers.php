@@ -190,6 +190,15 @@ if (!function_exists('placeholder_image')) {
     }
 }
 
+if (!function_exists('placeholder_image_black')) {
+    function placeholder_image_black()
+    {
+        return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAAO0lEQVR42u3OMQEAAAwCIO0feovhAwloLlMVEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQWAce/hlAAXSB6WIAAAAASUVORK5CYII=';
+    }
+}
+
+
+
 if (!function_exists('format_duration')) {
     function format_duration(int $duration): string
     {

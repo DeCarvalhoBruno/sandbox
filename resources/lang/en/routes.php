@@ -16,7 +16,7 @@ return [
     'blog_cat' => 'categories/{slug}',
     'blog_tag' => 'tag/{slug}',
     'blog_author' => 'author/{slug}',
-    'search' => 'search/{q}',
+    'search' => 'search',
     'privacy' => 'privacy',
     'terms_service' => 'terms-of-service'
 ];

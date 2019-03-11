@@ -6,15 +6,10 @@ class Frontend extends Routes
 {
     public function bind(Router $router)
     {
-//        $router->group([
-//            'prefix' => '/',
-//            'middleware' => ['web'],
-//            'namespace' => 'App\Http\Controllers\Frontend',
-//        ], call_user_func('static::defaultRouteGroup', null));
+
         $availableLocales = config('app.locales');
         unset($availableLocales[app()->getLocale()]);
         $availableLocales[''] = '';
-//        dd($availableLocales);
         foreach ($availableLocales as $k => $v) {
             $router->group([
                 'prefix' => sprintf('/%s', $k),
@@ -22,6 +17,11 @@ class Frontend extends Routes
                 'namespace' => 'App\Http\Controllers\Frontend',
             ], call_user_func('static::defaultRouteGroup', $k));
         }
+                $router->group([
+            'prefix' => '/',
+            'middleware' => ['misc'],
+            'namespace' => 'App\Http\Controllers\Frontend',
+        ], call_user_func('static::misc'));
     }
 
     public static function defaultRouteGroup($locale)
@@ -83,7 +83,6 @@ class Frontend extends Routes
 
             $r->get(trans('routes.search', [], $locale), 'Search@get')
                 ->name(self::i18nRouteNames($locale, 'search'));
-            $r->post('search','Search@post');
 
             $r->post('email/subscribe/newsletter', 'Frontend@newsletterSubscribe')
                 ->name( 'subscribe_newsletter');
@@ -108,7 +107,13 @@ class Frontend extends Routes
                 ->name(self::i18nRouteNames($locale, 'notifications'));
             $r->get(trans('routes.settings_account', [], $locale), 'Settings\Account@edit')
                 ->name(self::i18nRouteNames($locale, 'account'));
+        };
+    }
 
+    public static function misc()
+    {
+        return function(Router $r) {
+            $r->post('search','Search@post');
         };
     }
 

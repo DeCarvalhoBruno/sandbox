@@ -9,7 +9,6 @@ class Blog extends General
 {
     public function makeStructuredData($data): string
     {
-
         $structuredData = [];
         $class = BreadcrumbList::class;
         $jsonld = ['itemListElement' => []];
@@ -28,10 +27,6 @@ class Blog extends General
                 'url' => route_i18n('blog', ['slug' => $data->post->getAttribute('slug')])
             ],
             'headline' => $data->post->getAttribute('title'),
-            'image' => [
-                asset($data->media->present('asset')),
-                asset($data->media->present('thumbnail')),
-            ],
             'datePublished' => (new Carbon($data->post->getAttribute('date_published')))->format('Y-m-d\TH:i:s'),
             'dateModified' => (new Carbon($data->post->getAttribute('date_modified')))->format('Y-m-d\TH:i:s'),
             'author@Person' => [
@@ -42,6 +37,12 @@ class Blog extends General
             ],
             'description' => $data->post->getAttribute('excerpt')
         ];
+        if(!is_null($data->media)){
+            $jsonld['image'] = [
+                asset($data->media->present('asset')),
+                asset($data->media->present('thumbnail')),
+            ];
+        }
         if ($this->settings['entity_type'] === 'person') {
             $jsonld['publisher'] = [
                 '@id' => sprintf('%s#%s', $this->settings['person_url'], 'person')
