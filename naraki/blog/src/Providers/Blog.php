@@ -1,34 +1,35 @@
-<?php namespace App\Support\Providers;
+<?php namespace Naraki\Blog\Providers;
 
-use App\Contracts\Models\Blog as BlogInterface;
+use App\Support\Providers\Model;
+use Naraki\Blog\Contracts\Blog as BlogInterface;
 use App\Models\Blog\BlogPost;
-use App\Contracts\Models\BlogCategory as CategoryInterface;
-use App\Contracts\Models\BlogTag as TagInterface;
-use App\Contracts\Models\BlogSource as SourceInterface;
+use Naraki\Blog\Contracts\BlogCategory as CategoryInterface;
+use Naraki\Blog\Contracts\BlogTag as TagInterface;
+use Naraki\Blog\Contracts\BlogSource as SourceInterface;
 
 class Blog extends Model implements BlogInterface
 {
     protected $model = \App\Models\Blog\BlogPost::class;
 
     /**
-     * @var \App\Contracts\Models\BlogCategory|\App\Support\Providers\BlogCategory
+     * @var \Naraki\Blog\Contracts\BlogCategory|\Naraki\Blog\Providers\BlogCategory
      */
     private $category;
     /**
-     * @var \App\Contracts\Models\BlogTag|\App\Support\Providers\BlogTag
+     * @var \Naraki\Blog\Contracts\BlogTag|\Naraki\Blog\Providers\BlogTag
      */
     private $tag;
     /**
-     * @var \App\Contracts\Models\BlogSource|\App\Support\Providers\BlogSource $source
+     * @var \Naraki\Blog\Contracts\BlogSource|\Naraki\Blog\Providers\BlogSource $source
      */
     private $source;
 
 
     /**
      *
-     * @param \App\Contracts\Models\BlogCategory|\App\Support\Providers\BlogCategory $c
-     * @param \App\Contracts\Models\BlogTag|\App\Support\Providers\BlogTag $t
-     * @param \App\Contracts\Models\BlogSource|\App\Support\Providers\BlogSource $s
+     * @param \Naraki\Blog\Contracts\BlogCategory|\Naraki\Blog\Providers\BlogCategory $c
+     * @param \Naraki\Blog\Contracts\BlogTag|\Naraki\Blog\Providers\BlogTag $t
+     * @param \Naraki\Blog\Contracts\BlogSource|\Naraki\Blog\Providers\BlogSource $s
      */
     public function __construct(CategoryInterface $c, TagInterface $t, SourceInterface $s)
     {
@@ -39,7 +40,7 @@ class Blog extends Model implements BlogInterface
     }
 
     /**
-     * @return \App\Contracts\Models\BlogCategory|\App\Support\Providers\BlogCategory
+     * @return \Naraki\Blog\Contracts\BlogCategory|\Naraki\Blog\Providers\BlogCategory
      */
     public function category()
     {
@@ -47,7 +48,7 @@ class Blog extends Model implements BlogInterface
     }
 
     /**
-     * @return \App\Contracts\Models\BlogTag|\App\Support\Providers\BlogTag
+     * @return \Naraki\Blog\Contracts\BlogTag|\Naraki\Blog\Providers\BlogTag
      */
     public function tag()
     {
@@ -55,7 +56,7 @@ class Blog extends Model implements BlogInterface
     }
 
     /**
-     * @return \App\Contracts\Models\BlogSource|\App\Support\Providers\BlogSource
+     * @return \Naraki\Blog\Contracts\BlogSource|\Naraki\Blog\Providers\BlogSource
      */
     public function source()
     {

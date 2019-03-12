@@ -1,0 +1,32 @@
+{
+    "name": "naraki/blog",
+    "description": "Blog functionality for the Naraki platform",
+    "keywords": ["laravel", "naraki"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bruno D.C",
+            "email": "dev.naraki.io@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "laravel/framework": "5.x"
+    },
+    "autoload": {
+        "psr-4": {
+            "Naraki\\Blog\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Naraki\\Blog\\ServiceProvider"
+            ],
+            "aliases": {
+                "Blog": "Naraki\\Blog\\Facade"
+            }
+        }
+    }
+}

@@ -1,6 +1,6 @@
-<?php namespace App\Support\Providers;
+<?php namespace Naraki\Blog\Providers;
 
-use App\Contracts\Models\BlogCategory as BlogCategoryInterface;
+use Naraki\Blog\Contracts\BlogCategory as BlogCategoryInterface;
 use App\Models\Blog\BlogLabel;
 use App\Models\Blog\BlogLabelRecord;
 use App\Models\Blog\BlogLabelType;

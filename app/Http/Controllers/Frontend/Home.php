@@ -12,9 +12,9 @@ class Home extends Controller
      * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(BlogProvider $blogRepo, MediaProvider $mediaRepo)
+    public function index(MediaProvider $mediaRepo)
     {
-        $dbResult = $blogRepo->buildForDisplay()
+        $dbResult = \Blog::buildForDisplay()
             ->orderBy('page_views', 'desc')
             ->where('language_id', Language::getAppLanguageId())
             ->where('blog_categories.parent_id',null)

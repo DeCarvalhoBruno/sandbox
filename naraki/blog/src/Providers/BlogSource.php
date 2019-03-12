@@ -1,6 +1,6 @@
-<?php namespace App\Support\Providers;
+<?php namespace Naraki\Blog\Providers;
 
-use App\Contracts\Models\BlogSource as BlogSourceInterface;
+use Naraki\Blog\Contracts\BlogSource as BlogSourceInterface;
 use App\Models\Blog\BlogSource as BlogSourceModel;
 use App\Models\Blog\BlogSourceRecord;
 

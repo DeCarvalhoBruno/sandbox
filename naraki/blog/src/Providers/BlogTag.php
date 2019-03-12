@@ -1,6 +1,6 @@
-<?php namespace App\Support\Providers;
+<?php namespace Naraki\Blog\Providers;
 
-use App\Contracts\Models\BlogTag as BlogTagInterface;
+use Naraki\Blog\Contracts\BlogTag as BlogTagInterface;
 use App\Models\Blog\BlogLabelRecord;
 use App\Models\Blog\BlogLabelType;
 
