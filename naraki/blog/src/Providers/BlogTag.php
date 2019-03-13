@@ -1,12 +1,13 @@
 <?php namespace Naraki\Blog\Providers;
 
+use App\Support\Providers\Model;
 use Naraki\Blog\Contracts\BlogTag as BlogTagInterface;
-use App\Models\Blog\BlogLabelRecord;
-use App\Models\Blog\BlogLabelType;
+use Naraki\Blog\Models\BlogLabelRecord;
+use Naraki\Blog\Models\BlogLabelType;
 
 class BlogTag extends Model implements BlogTagInterface
 {
-    protected $model = \App\Models\Blog\BlogTag::class;
+    protected $model = \Naraki\Blog\Models\BlogTag::class;
 
     public function getByPost($postId)
     {
@@ -39,7 +40,7 @@ class BlogTag extends Model implements BlogTagInterface
                 'blog_label_type_id' => $firstLabelId++
             ];
         }
-        \App\Models\Blog\BlogTag::insert($newTags);
+        \Naraki\Blog\Models\BlogTag::insert($newTags);
     }
 
     /**
@@ -59,7 +60,7 @@ class BlogTag extends Model implements BlogTagInterface
 
     /**
      * @param array $tags
-     * @param \App\Models\Blog\BlogPost $post
+     * @param \Naraki\Blog\Models\BlogPost $post
      * @return void
      */
     public function attachToPost($tags, $post)
@@ -86,7 +87,7 @@ class BlogTag extends Model implements BlogTagInterface
 
     /**
      * @param array $updated
-     * @param \App\Models\Blog\BlogPost $post
+     * @param \Naraki\Blog\Models\BlogPost $post
      */
     public function updatePost(?array $updated, $post)
     {

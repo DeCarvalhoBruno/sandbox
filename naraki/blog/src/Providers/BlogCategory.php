@@ -1,13 +1,14 @@
 <?php namespace Naraki\Blog\Providers;
 
+use App\Support\Providers\Model;
 use Naraki\Blog\Contracts\BlogCategory as BlogCategoryInterface;
-use App\Models\Blog\BlogLabel;
-use App\Models\Blog\BlogLabelRecord;
-use App\Models\Blog\BlogLabelType;
+use Naraki\Blog\Models\BlogLabel;
+use Naraki\Blog\Models\BlogLabelRecord;
+use Naraki\Blog\Models\BlogLabelType;
 
 class BlogCategory extends Model implements BlogCategoryInterface
 {
-    protected $model = \App\Models\Blog\BlogCategory::class;
+    protected $model = \Naraki\Blog\Models\BlogCategory::class;
 
     public function createOne($label, $parentSlug)
     {
@@ -48,7 +49,7 @@ class BlogCategory extends Model implements BlogCategoryInterface
 
     /**
      * @param array $categories
-     * @param \App\Models\Blog\BlogPost $post
+     * @param \Naraki\Blog\Models\BlogPost $post
      * @return void
      */
     public function attachToPost($categories, $post)
@@ -114,7 +115,7 @@ class BlogCategory extends Model implements BlogCategoryInterface
 
     /**
      * @param string $id
-     * @return \App\Models\Blog\BlogCategory|null
+     * @return \Naraki\Blog\Models\BlogCategory|null
      */
     public function getCat($id)
     {

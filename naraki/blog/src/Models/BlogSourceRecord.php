@@ -1,4 +1,4 @@
-<?php namespace App\Models\Blog;
+<?php namespace Naraki\Blog\Models;
 
 use App\Traits\Models\DoesSqlStuff;
 use Illuminate\Database\Eloquent\Builder;

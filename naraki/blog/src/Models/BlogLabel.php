@@ -1,4 +1,4 @@
-<?php namespace App\Models\Blog;
+<?php namespace Naraki\Blog\Models;
 
 use App\Traits\Enumerable;
 use Illuminate\Database\Eloquent\Model;

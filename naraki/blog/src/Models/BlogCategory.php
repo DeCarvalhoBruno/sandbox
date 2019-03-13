@@ -1,4 +1,4 @@
-<?php namespace App\Models\Blog;
+<?php namespace Naraki\Blog\Models;
 
 use App\Support\NestedSet\NodeTrait;
 use App\Traits\Models\DoesSqlStuff;

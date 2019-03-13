@@ -72,15 +72,6 @@ class Frontend extends Routes
                 ->name(self::i18nRouteNames($locale, 'contact'));
             $r->post('contact/send', 'Frontend@sendContactEmail')->name( 'contact.send');
 
-            $r->get(trans('routes.blog_slug', [], $locale), 'Blog@getPost')
-                ->name(self::i18nRouteNames($locale, 'blog'));
-            $r->get(trans('routes.blog_cat', [], $locale), 'Blog@category')
-                ->name(self::i18nRouteNames($locale, 'blog.category'));
-            $r->get(trans('routes.blog_tag', [], $locale), 'Blog@tag')
-                ->name(self::i18nRouteNames($locale, 'blog.tag'));
-            $r->get(trans('routes.blog_author', [], $locale), 'Blog@author')
-                ->name(self::i18nRouteNames($locale, 'blog.author'));
-
             $r->get(trans('routes.search', [], $locale), 'Search@get')
                 ->name(self::i18nRouteNames($locale, 'search'));
 

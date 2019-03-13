@@ -1,6 +1,6 @@
-<?php namespace App\Http\Controllers\Ajax\Admin;
+<?php namespace Naraki\Blog\Controllers\Ajax;
 
-use App\Contracts\Models\BlogCategory as BlogCategoryProvider;
+use Naraki\Blog\Contracts\BlogCategory as BlogCategoryProvider;
 use App\Http\Controllers\Admin\Controller;
 use Illuminate\Http\Response;
 
@@ -12,7 +12,7 @@ class BlogCategory extends Controller
     }
 
     /**
-     * @param \App\Contracts\Models\BlogCategory|\App\Support\Providers\BlogCategory $catRepo
+     * @param \Naraki\Blog\Contracts\BlogCategory|\Naraki\Blog\Providers\BlogCategory $catRepo
      * @return \Illuminate\Http\Response|array
      */
     public function create(BlogCategoryProvider $catRepo)
@@ -32,7 +32,7 @@ class BlogCategory extends Controller
 
     /**
      * @param int $id
-     * @param \App\Contracts\Models\BlogCategory|\App\Support\Providers\BlogCategory $catRepo
+     * @param \Naraki\Blog\Contracts\BlogCategory|\Naraki\Blog\Providers\BlogCategory $catRepo
      * @return \Illuminate\Http\Response|array
      */
     public function update($id, BlogCategoryProvider $catRepo)
@@ -49,7 +49,7 @@ class BlogCategory extends Controller
 
     public function delete($id)
     {
-        $model = \App\Models\Blog\BlogCategory::query()
+        $model = \Naraki\Blog\Models\BlogCategory::query()
             ->where('blog_category_slug', $id)->first();
         if (!is_null($model)) {
             $model->delete();

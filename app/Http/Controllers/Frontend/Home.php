@@ -1,6 +1,5 @@
 <?php namespace App\Http\Controllers\Frontend;
 
-use App\Contracts\Models\Blog as BlogProvider;
 use App\Contracts\Models\Media as MediaProvider;
 use App\Models\Language;
 
@@ -8,7 +7,6 @@ class Home extends Controller
 {
 
     /**
-     * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
      * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */

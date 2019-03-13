@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
-use App\Models\Blog\BlogStatus;
+use Naraki\Blog\Models\BlogStatus;
 use App\Support\Requests\FormRequest;
 use Illuminate\Support\Facades\Validator;
 

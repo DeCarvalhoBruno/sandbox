@@ -1,6 +1,7 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php namespace Naraki\Blog\Controllers\Frontend;
 
-use App\Contracts\Models\Blog as BlogProvider;
+use App\Http\Controllers\Frontend\Controller;
+use Naraki\Blog\Contracts\Blog as BlogProvider;
 use App\Contracts\Models\Media as MediaProvider;
 use App\Jobs\ProcessPageView;
 use App\Support\Frontend\Breadcrumbs;
@@ -10,13 +11,13 @@ class Blog extends Controller
 {
 
     /**
-     * @var \App\Contracts\Models\Blog|\App\Support\Providers\Blog
+     * @var \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog
      */
     private $blogRepo;
 
     /**
      *
-     * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
+     * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
      */
     public function __construct(BlogProvider $blogRepo)
     {
@@ -93,7 +94,7 @@ class Blog extends Controller
         }
         $this->dispatch(new ProcessPageView($post));
 
-        return view('frontend.site.blog.post', compact(
+        return view('blog::post', compact(
                 'post', 'breadcrumbs', 'media', 'categories', 'tags', 'otherPosts', 'otherPostMedia','sources')
         );
     }
@@ -132,7 +133,7 @@ class Blog extends Controller
         ]);
 
         return view(
-            'frontend.site.blog.category',
+            'blog::category',
             compact('breadcrumbs', 'posts', 'media', 'featured', 'mvps', 'mvpImages')
         );
     }
@@ -155,7 +156,7 @@ class Blog extends Controller
         $tag = (object)$posts->first()->only(['tag']);
         $media = $this->getImages($posts, $mediaRepo);
         return view(
-            'frontend.site.blog.tag', compact('posts', 'media', 'tag'));
+            'blog::tag', compact('posts', 'media', 'tag'));
     }
 
     /**
@@ -181,7 +182,7 @@ class Blog extends Controller
         }
         $media = $this->getImages($posts, $mediaRepo);
         return view(
-            'frontend.site.blog.author', compact('posts', 'media', 'author')
+            'blog::author', compact('posts', 'media', 'author')
         );
     }
 

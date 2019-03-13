@@ -1,4 +1,4 @@
-<?php namespace App\Models\Blog;
+<?php namespace Naraki\Blog\Models;
 
 use App\Contracts\Enumerable;
 use App\Traits\Enumerable as EnumerableTrait;

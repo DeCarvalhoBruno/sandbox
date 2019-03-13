@@ -1,7 +1,7 @@
 <?php namespace App\Support\Trees;
 
 use App\Models\Views\BlogCategoryTree;
-use App\Support\Providers\BlogCategory as BlogCategoryProvider;
+use Naraki\Blog\Providers\BlogCategory as BlogCategoryProvider;
 
 class BlogCategory
 {

@@ -1,4 +1,4 @@
-<?php namespace App\Composers\Frontend;
+<?php namespace Naraki\Blog\Composers;
 
 use App\Composers\Composer;
 use App\Support\Frontend\Breadcrumbs;

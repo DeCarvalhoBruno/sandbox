@@ -8,7 +8,7 @@ class AuthorIndexer extends ElasticSearchIndexer
     /**
      * Full name of the model that should be mapped
      *
-     * @var \App\Models\Blog\BlogPost
+     * @var \Naraki\Blog\Models\BlogPost
      */
     protected $modelClass = \App\Models\Person::class;
 
@@ -44,14 +44,14 @@ class AuthorIndexer extends ElasticSearchIndexer
 
     private function prepareData()
     {
-        $dbAuthor = \App\Models\Blog\BlogPost::query()
+        $dbAuthor = \Naraki\Blog\Models\BlogPost::query()
             ->select([
                 'language_id as lang',
                 'full_name as person',
                 'person_slug as author',
             ])
             ->person()
-            ->where('blog_status_id', \App\Models\Blog\BlogStatus::BLOG_STATUS_PUBLISHED)
+            ->where('blog_status_id', \Naraki\Blog\Models\BlogStatus::BLOG_STATUS_PUBLISHED)
 //            ->limit($limit)
             ->get();
 

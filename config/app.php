@@ -214,7 +214,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'JavaScript' => App\Facades\JavaScript::class,
-        "Blog"=> \Naraki\Blog\Facades\BlogFacade::class
+        'Blog'=> \Naraki\Blog\Facades\Blog::class
 
     ],
 

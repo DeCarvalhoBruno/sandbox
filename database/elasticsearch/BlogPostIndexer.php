@@ -8,9 +8,9 @@ class BlogPostIndexer extends ElasticSearchIndexer
     /**
      * Full name of the model that should be mapped
      *
-     * @var \App\Models\Blog\BlogPost
+     * @var \Naraki\Blog\Models\BlogPost
      */
-    protected $modelClass = App\Models\Blog\BlogPost::class;
+    protected $modelClass = Naraki\Blog\Models\BlogPost::class;
 
     public function __construct()
     {
@@ -57,7 +57,7 @@ class BlogPostIndexer extends ElasticSearchIndexer
             ];
         }
 
-        $dbPosts = \App\Models\Blog\BlogPost::query()
+        $dbPosts = \Naraki\Blog\Models\BlogPost::query()
 //            ->entityType()
             ->scopes(['entityType', 'person'])
             ->select([
@@ -72,7 +72,7 @@ class BlogPostIndexer extends ElasticSearchIndexer
                 'blog_posts.updated_at as published',
                 'language_id as lang'
             ])
-            ->where('blog_status_id', \App\Models\Blog\BlogStatus::BLOG_STATUS_PUBLISHED)
+            ->where('blog_status_id', \Naraki\Blog\Models\BlogStatus::BLOG_STATUS_PUBLISHED)
 //            ->limit($limit)
             ->get();
 
@@ -105,7 +105,7 @@ class BlogPostIndexer extends ElasticSearchIndexer
         }
         unset($dbPosts, $dbImages, $images);
 
-        $dbCategories = \App\Models\Blog\BlogPost::query()
+        $dbCategories = \Naraki\Blog\Models\BlogPost::query()
             ->select([
                 'blog_posts.blog_post_id as id',
                 'blog_category_name as name',
@@ -113,7 +113,7 @@ class BlogPostIndexer extends ElasticSearchIndexer
                 'lvl'
             ])
             ->scopes(['category', 'categoryTree'])
-            ->where('blog_status_id', \App\Models\Blog\BlogStatus::BLOG_STATUS_PUBLISHED)
+            ->where('blog_status_id', \Naraki\Blog\Models\BlogStatus::BLOG_STATUS_PUBLISHED)
 //            ->limit($limit)
             ->get();
 
@@ -134,14 +134,14 @@ class BlogPostIndexer extends ElasticSearchIndexer
         }
         unset($dbCategories);
 
-        $dbTags = \App\Models\Blog\BlogPost::query()
+        $dbTags = \Naraki\Blog\Models\BlogPost::query()
             ->select([
                 'blog_posts.blog_post_id as id',
                 'blog_tag_name as name',
                 'blog_tag_slug as slug'
             ])
             ->scopes(['tag'])
-            ->where('blog_status_id', \App\Models\Blog\BlogStatus::BLOG_STATUS_PUBLISHED)
+            ->where('blog_status_id', \Naraki\Blog\Models\BlogStatus::BLOG_STATUS_PUBLISHED)
             ->orderBy('blog_posts.blog_post_id', 'asc')
 //            ->limit($limit)
             ->get();

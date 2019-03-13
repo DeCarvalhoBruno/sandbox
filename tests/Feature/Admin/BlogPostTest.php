@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\Blog\BlogPost;
-use App\Models\Blog\BlogLabelRecord;
-use App\Models\Blog\BlogStatus;
-use App\Models\Blog\BlogTag;
+use Naraki\Blog\Models\BlogPost;
+use Naraki\Blog\Models\BlogLabelRecord;
+use Naraki\Blog\Models\BlogStatus;
+use Naraki\Blog\Models\BlogTag;
 use App\Models\Entity;
 use App\Support\Providers\Avatar;
 use App\Support\Providers\File;

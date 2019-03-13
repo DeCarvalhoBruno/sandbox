@@ -18,14 +18,14 @@
             "Naraki\\Blog\\": "src/"
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "extra": {
         "laravel": {
             "providers": [
                 "Naraki\\Blog\\ServiceProvider"
             ],
             "aliases": {
-                "Blog": "Naraki\\Blog\\Facade"
+                "Blog": "Naraki\\Blog\\Facades\\Blog"
             }
         }
     }

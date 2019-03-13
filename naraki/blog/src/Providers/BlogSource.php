@@ -1,12 +1,13 @@
 <?php namespace Naraki\Blog\Providers;
 
+use App\Support\Providers\Model;
 use Naraki\Blog\Contracts\BlogSource as BlogSourceInterface;
-use App\Models\Blog\BlogSource as BlogSourceModel;
-use App\Models\Blog\BlogSourceRecord;
+use Naraki\Blog\Models\BlogSource as BlogSourceModel;
+use Naraki\Blog\Models\BlogSourceRecord;
 
 class BlogSource extends Model implements BlogSourceInterface
 {
-    protected $model = \App\Models\Blog\BlogSourceRecord::class;
+    protected $model = \Naraki\Blog\Models\BlogSourceRecord::class;
 
     public function buildByBlogSlug($slug, $columns = null)
     {

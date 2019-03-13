@@ -20,7 +20,7 @@ class ImageSeeder extends Seeder
         $posts = [];
 //        dd($images);
 
-        $postSlugIds = \App\Models\Blog\BlogPost::query()->select([
+        $postSlugIds = \Naraki\Blog\Models\BlogPost::query()->select([
             'blog_post_slug',
             'blog_post_id',
             'entity_types.entity_type_id'

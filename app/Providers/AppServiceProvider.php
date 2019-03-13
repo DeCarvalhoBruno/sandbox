@@ -52,14 +52,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->make('view')->composer([
             'frontend.auth.*',
             'frontend.site.*',
-            'frontend.errors.*'
+            'frontend.errors.*',
+            'blog::*'
         ], \App\Composers\Frontend::class);
         $this->app->make('view')->composer([
             'frontend.site.home',
         ], \App\Composers\Frontend\Home::class);
-        $this->app->make('view')->composer([
-            'frontend.site.blog.post',
-        ], \App\Composers\Frontend\Blog::class);
 
         if (env('APP_OLD_ASS_RDBMS')) {
             Schema::defaultStringLength(191);

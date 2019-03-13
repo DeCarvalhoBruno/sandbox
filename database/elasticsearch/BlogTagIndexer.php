@@ -8,9 +8,9 @@ class BlogTagIndexer extends ElasticSearchIndexer
     /**
      * Full name of the model that should be mapped
      *
-     * @var \App\Models\Blog\BlogPost
+     * @var \Naraki\Blog\Models\BlogPost
      */
-    protected $modelClass = App\Models\Blog\BlogTag::class;
+    protected $modelClass = Naraki\Blog\Models\BlogTag::class;
 
     public function __construct()
     {
@@ -39,14 +39,14 @@ class BlogTagIndexer extends ElasticSearchIndexer
 
     private function prepareData()
     {
-        $dbTags = \App\Models\Blog\BlogPost::query()
+        $dbTags = \Naraki\Blog\Models\BlogPost::query()
             ->select([
                 'blog_posts.blog_post_id as id',
                 'language_id as lang',
                 'blog_tag_name as name',
                 'blog_tag_slug as slug'
             ])->tag()
-            ->where('blog_status_id', \App\Models\Blog\BlogStatus::BLOG_STATUS_PUBLISHED)
+            ->where('blog_status_id', \Naraki\Blog\Models\BlogStatus::BLOG_STATUS_PUBLISHED)
             ->get();
         $tags = [];
         foreach ($dbTags as $tag) {

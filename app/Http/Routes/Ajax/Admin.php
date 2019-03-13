@@ -57,31 +57,6 @@ class Admin
             $r->patch('members/{group}', 'GroupMember@update')
                 ->middleware('can:view,App\Models\Group');
 
-            $r->get('blog/categories', 'BlogCategory@index');
-            $r->post('blog/categories', 'BlogCategory@create');
-            $r->patch('blog/categories/{id}', 'BlogCategory@update');
-            $r->delete('blog/categories/{id}', 'BlogCategory@delete');
-
-            $r->get('blog/posts', 'Blog@index')
-                ->middleware('can:view,App\Models\Blog\BlogPost');
-            $r->get('blog/post/create', 'Blog@add')
-                ->middleware('can:add,App\Models\Blog\BlogPost');
-            $r->post('blog/post/create', 'Blog@create')
-                ->middleware('can:add,App\Models\Blog\BlogPost');
-            $r->get('blog/post/edit/{slug}', 'Blog@edit')
-                ->middleware('can:edit,App\Models\Blog\BlogPost');
-            $r->post('blog/post/edit/{slug}', 'Blog@update')
-                ->middleware('can:edit,App\Models\Blog\BlogPost');
-            $r->delete('blog/post/{slug}', 'Blog@destroy');
-            $r->post('blog/post/batch/delete', 'Blog@batchDestroy');
-            $r->post('blog/post/source/create', 'BlogSource@create');
-            $r->delete('blog/post/source/delete/{id}/{slug}', 'BlogSource@destroy');
-
-            $r->patch('blog/post/edit/{slug}/image/{uuid}', 'Blog@setFeaturedImage')
-                ->middleware('can:edit,App\Models\Blog\BlogPost');
-            $r->delete('blog/post/edit/{slug}/image/{uuid}', 'Blog@deleteImage')
-                ->middleware('can:edit,App\Models\Blog\BlogPost');
-
             $r->get('user/general', 'User\General@edit');
             $r->patch('user/general', 'User\General@update');
             $r->patch('user/password', 'User\Password@update');

@@ -1,13 +1,13 @@
-<?php namespace App\Http\Controllers\Ajax\Admin;
+<?php namespace Naraki\Blog\Controllers\Ajax;
 
-use App\Contracts\Models\Blog as BlogProvider;
+use Naraki\Blog\Contracts\Blog as BlogProvider;
 use App\Contracts\Models\Media as MediaProvider;
 use App\Contracts\Models\User as UserProvider;
 use App\Filters\Blog as BlogFilter;
 use App\Http\Controllers\Admin\Controller;
 use App\Http\Requests\Admin\CreateBlogPost;
 use App\Http\Requests\Admin\UpdateBlogPost;
-use App\Models\Blog\BlogStatus;
+use Naraki\Blog\Models\BlogStatus;
 use App\Models\Entity;
 use App\Models\Media\MediaImgFormat;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ class Blog extends Controller
 {
     /**
      * @param \App\Filters\Blog $filter
-     * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
+     * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
      * @return array
      */
     public function index(BlogFilter $filter, BlogProvider $blogRepo)
@@ -63,7 +63,7 @@ class Blog extends Controller
 
     /**
      * @param $slug
-     * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
+     * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
      * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
      * @return array
      */
@@ -109,7 +109,7 @@ class Blog extends Controller
 
     /**
      * @param \App\Http\Requests\Admin\CreateBlogPost $request
-     * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
+     * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
      * @return array
      */
@@ -140,7 +140,7 @@ class Blog extends Controller
     /**
      * @param $slug
      * @param \App\Http\Requests\Admin\UpdateBlogPost $request
-     * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
+     * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
      * @return array
      */
@@ -169,7 +169,7 @@ class Blog extends Controller
 
     /**
      * @param $slug
-     * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
+     * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
      * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Exception
@@ -196,7 +196,7 @@ class Blog extends Controller
     }
 
     /**
-     * @param \App\Contracts\Models\Blog|\App\Support\Providers\Blog $blogRepo
+     * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
      * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
@@ -262,7 +262,7 @@ class Blog extends Controller
     }
 
     /**
-     * @param \App\Models\Blog\BlogPost $post
+     * @param \Naraki\Blog\Models\BlogPost $post
      * @return string
      */
     private function getPostUrl($post)

@@ -1,12 +1,14 @@
 <?php namespace Naraki\Blog\Facades;
 
-class BlogFacade extends \Illuminate\Support\Facades\Facade
+use Naraki\Blog\Providers\Blog as BlogProvider;
+
+class Blog extends \Illuminate\Support\Facades\Facade
 {
     /**
      * {@inheritDoc}
      */
     protected static function getFacadeAccessor()
     {
-        return \Naraki\Blog\Providers\Blog::class;
+        return BlogProvider::class;
     }
 }

@@ -1,10 +1,23 @@
 <?php namespace Naraki\Blog;
 
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
-use Naraki\Blog\Providers\Blog;
+use Illuminate\Routing\Router;
+use Naraki\Blog\Providers\Blog as BlogProvider;
+use Naraki\Blog\Composers\Blog as BlogComposer;
 
 class ServiceProvider extends LaravelServiceProvider
 {
+    /**
+     * Indicates if loading of the provider is deferred.
+     *
+     * @var bool
+     */
+    protected $defer = true;
+
+    private $routeSets = [
+        Routes\Admin::class,
+        Routes\Frontend::class,
+    ];
     /**
      * Register services.
      *
@@ -12,22 +25,29 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function register()
     {
-        $this->app->bind(Contracts\Blog::class, Providers\Blog::class);
-        $this->app->bind(Contracts\BlogCategory::class, Providers\BlogCategory::class);
-        $this->app->bind(Contracts\BlogTag::class, Providers\BlogTag::class);
-        $this->app->bind(Contracts\BlogSource::class, Providers\BlogSource::class);
-        $this->app->singleton(Blog::class, function () {
-            $instance = new Providers\Blog;
-        });
-        $this->app->alias(Blog::class, 'blog');
+        $this->app->singleton(Contracts\BlogCategory::class, Providers\BlogCategory::class);
+        $this->app->singleton(Contracts\BlogTag::class, Providers\BlogTag::class);
+        $this->app->singleton(Contracts\BlogSource::class, Providers\BlogSource::class);
+        $this->app->singleton(Contracts\Blog::class, BlogProvider::class);
+        $this->app->alias(BlogProvider::class, 'blog');
+
     }
 
     /**
      * Bootstrap services.
      *
      * @return void
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function boot()
     {
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'blog');
+
+        $this->app->make('view')->composer(['blog::post'], BlogComposer::class);
+
+        $router = $this->app->make(Router::class);
+        foreach ($this->routeSets as $binder) {
+            $this->app->make($binder)->bind($router);
+        }
     }
 }

@@ -1,4 +1,4 @@
-<?php namespace App\Models\Blog;
+<?php namespace Naraki\Blog\Models;
 
 use App\Contracts\Enumerable as EnumerableContract;
 use App\Contracts\HasAnEntity;

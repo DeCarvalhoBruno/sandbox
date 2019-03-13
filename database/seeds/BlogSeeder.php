@@ -27,7 +27,7 @@ class BlogSeeder extends Seeder
             dump(count($modelData->data), $modelData->model);
             if ($key == 'categories') {
                 foreach ($modelData->data as $cats) {
-                    (new \App\Models\Blog\BlogCategory($cats))->save();
+                    (new \Naraki\Blog\Models\BlogCategory($cats))->save();
                 }
                 continue;
             }

@@ -2,14 +2,14 @@
 
 use App\Support\Providers\Model;
 use Naraki\Blog\Contracts\Blog as BlogInterface;
-use App\Models\Blog\BlogPost;
+use Naraki\Blog\Models\BlogPost;
 use Naraki\Blog\Contracts\BlogCategory as CategoryInterface;
 use Naraki\Blog\Contracts\BlogTag as TagInterface;
 use Naraki\Blog\Contracts\BlogSource as SourceInterface;
 
 class Blog extends Model implements BlogInterface
 {
-    protected $model = \App\Models\Blog\BlogPost::class;
+    protected $model = \Naraki\Blog\Models\BlogPost::class;
 
     /**
      * @var \Naraki\Blog\Contracts\BlogCategory|\Naraki\Blog\Providers\BlogCategory
@@ -120,7 +120,7 @@ class Blog extends Model implements BlogInterface
     /**
      * @param array $data
      * @param \Illuminate\Database\Eloquent\Builder
-     * @return \App\Models\Blog\BlogPost
+     * @return \Naraki\Blog\Models\BlogPost
      */
     public function createOne($data, $person)
     {
@@ -137,7 +137,7 @@ class Blog extends Model implements BlogInterface
     /**
      * @param string $slug
      * @param array $data
-     * @return \App\Models\Blog\BlogPost
+     * @return \Naraki\Blog\Models\BlogPost
      */
     public function updateOne($slug, $data)
     {

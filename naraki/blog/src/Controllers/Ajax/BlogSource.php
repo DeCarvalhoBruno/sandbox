@@ -1,13 +1,13 @@
-<?php namespace App\Http\Controllers\Ajax\Admin;
+<?php namespace Naraki\Blog\Controllers\Ajax;
 
-use App\Contracts\Models\BlogSource as BlogSourceProvider;
+use Naraki\Blog\Contracts\BlogSource as BlogSourceProvider;
 use App\Http\Controllers\Admin\Controller;
 use Illuminate\Http\Response;
 
 class BlogSource extends Controller
 {
     /**
-     * @param \App\Contracts\Models\BlogSource|\App\Support\Providers\BlogSource $sourceRepo
+     * @param \Naraki\Blog\Contracts\BlogSource|\Naraki\Blog\Providers\BlogSource $sourceRepo
      * @return \Illuminate\Http\Response|array
      */
     public function create(BlogSourceProvider $sourceRepo)
@@ -16,7 +16,7 @@ class BlogSource extends Controller
         $content = $this->request->get('content');
         $slug = $this->request->get('blog_slug');
 
-        if (is_null($content) || !\App\Models\Blog\BlogSource::isValidValue($type)) {
+        if (is_null($content) || !\Naraki\Blog\Models\BlogSource::isValidValue($type)) {
             return response([$type, $content, $slug], Response::HTTP_NO_CONTENT);
         }
 
@@ -31,7 +31,7 @@ class BlogSource extends Controller
     /**
      * @param string $id
      * @param string $slug
-     * @param \App\Contracts\Models\BlogSource|\App\Support\Providers\BlogSource $sourceRepo
+     * @param \Naraki\Blog\Contracts\BlogSource|\Naraki\Blog\Providers\BlogSource $sourceRepo
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function destroy($id,$slug, BlogSourceProvider $sourceRepo)

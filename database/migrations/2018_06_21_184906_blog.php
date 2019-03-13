@@ -36,7 +36,7 @@ class Blog extends Migration
 
             $table->unsignedInteger('person_id')->default(0);
             $table->unsignedInteger('blog_status_id')
-                ->default(\App\Models\Blog\BlogStatus::BLOG_STATUS_DRAFT);
+                ->default(\Naraki\Blog\Models\BlogStatus::BLOG_STATUS_DRAFT);
             $table->unsignedInteger('language_id')->default(1);
 
             $table->string('blog_post_title')->nullable();
@@ -60,7 +60,7 @@ class Blog extends Migration
             $table->string('blog_source_name', 75)->nullable();
         });
 
-        \App\Models\Blog\BlogSource::insert([
+        \Naraki\Blog\Models\BlogSource::insert([
             ['blog_source_name' => 'url'],
             ['blog_source_name' => 'img'],
             ['blog_source_name' => 'file'],
@@ -92,7 +92,7 @@ class Blog extends Migration
             $table->increments('blog_label_type_id');
 
             $table->unsignedInteger('blog_label_id')
-                ->default(\App\Models\Blog\BlogLabel::BLOG_TAG);
+                ->default(\Naraki\Blog\Models\BlogLabel::BLOG_TAG);
             $table->foreign('blog_label_id')
                 ->references('blog_label_id')->on('blog_labels')
                 ->onDelete('cascade');
@@ -148,34 +148,34 @@ class Blog extends Migration
         });
 
         $label_types = [
-            ['blog_label_name' => \App\Models\Blog\BlogLabel::getConstantByID(\App\Models\Blog\BlogLabel::BLOG_TAG)],
-            ['blog_label_name' => \App\Models\Blog\BlogLabel::getConstantByID(\App\Models\Blog\BlogLabel::BLOG_CATEGORY)],
+            ['blog_label_name' => \Naraki\Blog\Models\BlogLabel::getConstantByID(\Naraki\Blog\Models\BlogLabel::BLOG_TAG)],
+            ['blog_label_name' => \Naraki\Blog\Models\BlogLabel::getConstantByID(\Naraki\Blog\Models\BlogLabel::BLOG_CATEGORY)],
         ];
-        \App\Models\Blog\BlogLabel::insert($label_types);
+        \Naraki\Blog\Models\BlogLabel::insert($label_types);
 
         $status = [
             [
-                'blog_status_name' => \App\Models\Blog\BlogStatus::getConstantByID(
-                    \App\Models\Blog\BlogStatus::BLOG_STATUS_DRAFT
+                'blog_status_name' => \Naraki\Blog\Models\BlogStatus::getConstantByID(
+                    \Naraki\Blog\Models\BlogStatus::BLOG_STATUS_DRAFT
                 )
             ],
             [
-                'blog_status_name' => \App\Models\Blog\BlogStatus::getConstantByID(
-                    \App\Models\Blog\BlogStatus::BLOG_STATUS_REVIEW
+                'blog_status_name' => \Naraki\Blog\Models\BlogStatus::getConstantByID(
+                    \Naraki\Blog\Models\BlogStatus::BLOG_STATUS_REVIEW
                 )
             ],
             [
-                'blog_status_name' => \App\Models\Blog\BlogStatus::getConstantByID(
-                    \App\Models\Blog\BlogStatus::BLOG_STATUS_PUBLISHED
+                'blog_status_name' => \Naraki\Blog\Models\BlogStatus::getConstantByID(
+                    \Naraki\Blog\Models\BlogStatus::BLOG_STATUS_PUBLISHED
                 )
             ]
         ];
-        \App\Models\Blog\BlogStatus::insert($status);
+        \Naraki\Blog\Models\BlogStatus::insert($status);
 
-        $newLabelType = \App\Models\Blog\BlogLabelType::create(
-            ['blog_label_id' => \App\Models\Blog\BlogLabel::BLOG_CATEGORY]
+        $newLabelType = \Naraki\Blog\Models\BlogLabelType::create(
+            ['blog_label_id' => \Naraki\Blog\Models\BlogLabel::BLOG_CATEGORY]
         );
-        \App\Models\Blog\BlogCategory::create([
+        \Naraki\Blog\Models\BlogCategory::create([
             'blog_category_name' => 'Default',
             'blog_label_type_id' => $newLabelType->getKey()
         ]);
