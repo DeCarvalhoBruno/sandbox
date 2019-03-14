@@ -11,7 +11,7 @@
         <div class="container">
           <div class="card row">
             <div class="col">
-              <header class="search-header">{{searchData.headers.articles}}</header>
+              <header class="search-header">{{$t('search.articles')}}</header>
               <ul v-if="searchData.articles!=null&&searchData.articles.data.length">
                 <li v-for="(article, idx) in searchData.articles.data"
                     :key="'article'+idx">
@@ -42,7 +42,7 @@
                   </div>
                 </li>
               </ul>
-              <h6 class="header-no-results" v-else>{{searchData.headers.no_result}}</h6>
+              <h6 class="header-no-results" v-else>{{$t('search.no_result')}}</h6>
             </div>
           </div>
           <div v-if="searchData.articles!=null&&searchData.articles.data.length&&searchData.articles.last_page>1" class="row" id="paginator-wrapper">
@@ -77,26 +77,26 @@
         <div class="container">
           <div id="search-tag-wrapper" class="card row">
             <div class="col">
-              <header class="search-header">{{searchData.headers.tags}}</header>
+              <header class="search-header">{{$t('search.tags')}}</header>
               <ul class="search-tags" v-if="searchData.tags!=null&&searchData.tags.length">
                 <li v-for="(tag, idx) in searchData.tags"
                     :key="'tag'+idx" class="badge badge-info d-inline-flex"><a
                     :href="tag.url">{{tag.name}}</a>
                 </li>
               </ul>
-              <h6 class="header-no-results" v-else>{{searchData.headers.no_result}}</h6>
+              <h6 class="header-no-results" v-else>{{$t('search.no_result')}}</h6>
             </div>
           </div>
           <div id="search-author-wrapper" class="card row mt-3">
             <div class="col">
-              <header class="search-header">{{searchData.headers.authors}}</header>
+              <header class="search-header">{{$t('search.authors')}}</header>
               <ul class="search-tags" v-if="searchData.authors!=null&&searchData.authors.length">
                 <li v-for="(author, idx) in searchData.authors"
                     :key="'author'+idx" class="d-block my-1"><a
                     :href="author.url">{{author.name}}</a>
                 </li>
               </ul>
-              <h6 class="header-no-results" v-else>{{searchData.headers.no_result}}</h6>
+              <h6 class="header-no-results" v-else>{{$t('search.no_result')}}</h6>
             </div>
           </div>
         </div>
@@ -114,7 +114,7 @@
     },
     data () {
       return {
-        searchData: {tags: null, articles: null, authors: null, headers: {}},
+        searchData: {tags: null, articles: null, authors: null},
         lastInput: null,
         inputValue: null,
         searchTriggerDelay: 200,
@@ -144,7 +144,7 @@
             pageTarget = current - 1
           }
         }
-        const {data} = await axios.post('/search/paginate?page=' + pageTarget, {q: this.lastInput})
+        const {data} = await axios.post('http://lumen.local/search/paginate?page=' + pageTarget, {q: this.lastInput})
         this.searchData = data
       },
       async search (e) {
@@ -155,7 +155,7 @@
           clearTimeout(this.timer)
           let vm = this
           this.timer = setTimeout(async function () {
-            const {data} = await axios.post('/search/paginate', {q: e.target.value})
+            const {data} = await axios.post('http://lumen.local/search/paginate', {q: e.target.value})
             let url = window.location.href.substr(0,window.location.href.lastIndexOf('/')+1)+e.target.value
             window.history.replaceState({},vm.$root.$t('general.search')+' - '+e.target.value, url);
             vm.searchData = data
@@ -167,7 +167,7 @@
         this.searchLoading = value
       },
       async getData () {
-        const {data} = await axios.post('/search/paginate', {q: this.initialValue})
+        const {data} = await axios.post('http://lumen.local/search/paginate', {q: this.initialValue})
         this.searchData = data
       }
     }

@@ -153,7 +153,6 @@ return [
 
         App\Support\JavaScript\JavaScriptServiceProvider::class,
         App\Support\View\EloquentViewableServiceProvider::class,
-        App\Support\Database\ElasticSearch\ElasticServiceProvider::class,
         Naraki\Blog\ServiceProvider::class,
 
         /*
@@ -214,8 +213,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'JavaScript' => App\Facades\JavaScript::class,
-        'Blog'=> \Naraki\Blog\Facades\Blog::class
-
+        'Blog' => \Naraki\Blog\Facades\Blog::class
     ],
 
 ];

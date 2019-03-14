@@ -1,7 +1,7 @@
 <?php
 
-use App\Support\Database\ElasticSearch\Index\Indexer as ElasticSearchIndexer;
-use App\Support\Database\ElasticSearch\Index\Seeder;
+use Naraki\ElasticSearch\Index\Indexer as ElasticSearchIndexer;
+use Naraki\ElasticSearch\Index\Seeder;
 
 class BlogPostIndexer extends ElasticSearchIndexer
 {
@@ -204,7 +204,7 @@ class BlogPostIndexer extends ElasticSearchIndexer
         ];
         $source = ['includes' => ['title', 'meta', 'date']];
 
-        $indexEn = new \App\Support\Database\ElasticSearch\Index\Mapping(
+        $indexEn = new \Naraki\ElasticSearch\Index\Mapping(
             sprintf('%s.%s', $this->getIndexName(), 'en'),
             $mapping,
             $source
@@ -216,7 +216,7 @@ class BlogPostIndexer extends ElasticSearchIndexer
         $mapping['content']['analyzer'] = 'std_strip_fr';
         $mapping['content']['search_analyzer'] = 'std_strip_fr';
 
-        $indexFr = new \App\Support\Database\ElasticSearch\Index\Mapping(
+        $indexFr = new \Naraki\ElasticSearch\Index\Mapping(
             sprintf('%s.%s', $this->getIndexName(), 'fr'),
             $mapping,
             $source

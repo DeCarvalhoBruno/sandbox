@@ -2,6 +2,7 @@
 
 use App\Contracts\Models\Media as MediaProvider;
 use App\Models\Language;
+use Naraki\Blog\Facades\Blog;
 
 class Home extends Controller
 {
@@ -12,14 +13,13 @@ class Home extends Controller
      */
     public function index(MediaProvider $mediaRepo)
     {
-        $dbResult = \Blog::buildForDisplay()
+        $dbResult = Blog::buildForDisplay()
             ->orderBy('page_views', 'desc')
             ->where('language_id', Language::getAppLanguageId())
             ->where('blog_categories.parent_id',null)
             ->limit(115)
             ->get();
         $result2 = clone($dbResult);
-
         $dbImages = $mediaRepo->image()->getImages(
             $result2->pluck('type')->all(), [
                 'media_uuid as uuid',

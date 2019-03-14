@@ -6,7 +6,7 @@ use App\Contracts\HasPermissions as HasPermissionsContract;
 use App\Models\Entity;
 use App\Models\Language;
 use App\Models\Media\MediaEntity;
-use App\Support\Database\ElasticSearch\Searchable;
+use Naraki\ElasticSearch\Searchable;
 use App\Support\Presenters\BlogPost as BlogPostPresenter;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
@@ -17,7 +17,7 @@ use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 use CyrildeWit\EloquentViewable\Viewable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use App\Contracts\Searchable as SearchableContract;
+use Naraki\ElasticSearch\Contracts\Searchable as SearchableContract;
 
 class BlogPost extends Model implements HasPermissionsContract, EnumerableContract, HasAnEntity, ViewableContract, SearchableContract
 {

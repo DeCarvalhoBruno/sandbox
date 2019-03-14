@@ -17,7 +17,7 @@
     <div v-if="searchData.status&&activated" id="search-result-container">
       <div id="search-result" class="container card p-0">
         <div class="row articles">
-          <header class="search-header">{{searchData.headers.articles}}</header>
+          <header class="search-header">{{$t('search.articles')}}</header>
           <ul v-if="searchData.hasOwnProperty('articles')&&searchData.articles.length">
             <li v-for="(article, idx) in searchData.articles"
                 :key="'article'+idx"><a :href="article.meta.url">
@@ -27,10 +27,10 @@
               </figure>
               {{article.title}}</a></li>
           </ul>
-          <h6 class="header-no-results" v-else>{{searchData.headers.no_result}}</h6>
+          <h6 class="header-no-results" v-else>{{$t('search.no_result')}}</h6>
         </div>
         <div class="row authors">
-          <header class="search-header">{{searchData.headers.authors}}</header>
+          <header class="search-header">{{$t('search.authors')}}</header>
           <ul v-if="searchData.hasOwnProperty('authors')&&searchData.authors.length">
             <li v-for="(author, idx) in searchData.authors"
                 :key="'author'+idx"><a :href="author.url">
@@ -39,19 +39,19 @@
               </figure>
               {{author.name}}</a></li>
           </ul>
-          <h6 class="header-no-results" v-else>{{searchData.headers.no_result}}</h6>
+          <h6 class="header-no-results" v-else>{{$t('search.no_result')}}</h6>
         </div>
         <div class="row">
-          <header class="search-header">{{searchData.headers.tags}}</header>
+          <header class="search-header">{{$t('search.tags')}}</header>
           <ul v-if="searchData.hasOwnProperty('tags')&&searchData.tags.length">
             <li v-for="(tag, idx) in searchData.tags"
                 :key="'tag'+idx"><a :href="tag.url"><i class="fa fa-tag"></i>{{tag.name}}</a></li>
           </ul>
-          <h6 class="header-no-results" v-else>{{searchData.headers.no_result}}</h6>
+          <h6 class="header-no-results" v-else>{{$t('search.no_result')}}</h6>
         </div>
         <div class="row">
           <header class="search-header">
-            <span><a :href="searchUrl">{{searchData.headers.more_results}} <i
+            <span><a :href="searchUrl">{{$t('search.more_results',[lastInput])}} <i
                 class="fa fa-chevron-right"></i></a></span>
           </header>
         </div>
@@ -89,7 +89,7 @@
       return {
         activated: false,
         lastInput: null,
-        searchTriggerDelay: 300,
+        searchTriggerDelay: 200,
         searchTriggerLength: 1,
         timer: 0,
         searchData: {headers: {}},
@@ -105,7 +105,7 @@
     },
     computed: {
       searchUrl () {
-        return this.searchPage + '/' + this.lastInput
+        return this.searchPage +'/'+ this.lastInput
       }
     },
     methods: {
@@ -123,7 +123,7 @@
           clearTimeout(this.timer)
           let vm = this
           this.timer = setTimeout(async function () {
-            const {data} = await axios.post('/search', {q: e.target.value})
+            const {data} = await axios.post('http://lumen.local/search', {q: e.target.value})
             vm.searchData = data
             vm.activated = true
             vm.toggleLoading(false)
