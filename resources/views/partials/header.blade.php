@@ -66,7 +66,9 @@
         </ul>
         @if(get_page_id()!=='06a943c59f')
             <div class="form-inline form-search ml-auto mr-0 mr-sm-1 d-none d-sm-flex">
-                <inline-search placeholder="{{trans('general.search')}}" search-page="{{route_i18n('search')}}">
+                <inline-search placeholder="{{trans('general.search')}}"
+                               full-page-search-url="{{route_i18n('search')}}"
+                               search-host-url="{{$search_url}}">
                 </inline-search>
             </div>
         @endif

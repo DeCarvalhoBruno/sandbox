@@ -1,7 +1,7 @@
 <?php
 
-use Naraki\ElasticSearch\Index\Indexer as ElasticSearchIndexer;
-use Naraki\ElasticSearch\Index\Seeder;
+use Naraki\Elasticsearch\Index\Indexer as ElasticSearchIndexer;
+use Naraki\Elasticsearch\Index\Seeder;
 
 class AuthorIndexer extends ElasticSearchIndexer
 {
@@ -95,13 +95,13 @@ class AuthorIndexer extends ElasticSearchIndexer
             ],
         ];
 
-        $indexEn = new \Naraki\ElasticSearch\Index\Mapping(
+        $indexEn = new \Naraki\Elasticsearch\Index\Mapping(
             sprintf('%s.%s', $this->getIndexName(), 'en'),
             $mapping
         );
         Seeder::insert($indexEn->toArray());
 
-        $indexFr = new \Naraki\ElasticSearch\Index\Mapping(
+        $indexFr = new \Naraki\Elasticsearch\Index\Mapping(
             sprintf('%s.%s', $this->getIndexName(), 'fr'),
             $mapping
         );

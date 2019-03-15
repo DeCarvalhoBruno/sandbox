@@ -18,8 +18,9 @@
                   <div class="container p-0">
                     <div class="row d-flex align-items-center">
                       <div class="col-md-3">
-                        <figure><a :href="article._source.meta.url"><img v-if="article._source.meta.image" :src="article._source.meta.image.url"
-                                     :alt="article._source.title"/><img
+                        <figure><a :href="article._source.meta.url"><img v-if="article._source.meta.image"
+                                                                         :src="article._source.meta.image.url"
+                                                                         :alt="article._source.title"/><img
                             v-else :src="blackBg" :alt="article._source.title"/></a></figure>
                       </div>
                       <div class="col-md-8">
@@ -45,7 +46,8 @@
               <h6 class="header-no-results" v-else>{{$t('search.no_result')}}</h6>
             </div>
           </div>
-          <div v-if="searchData.articles!=null&&searchData.articles.data.length&&searchData.articles.last_page>1" class="row" id="paginator-wrapper">
+          <div v-if="searchData.articles!=null&&searchData.articles.data.length&&searchData.articles.last_page>1"
+               class="row" id="paginator-wrapper">
             <nav aria-label="Page navigation example" id="paginator">
               <ul class="pagination">
                 <li class="page-item" :class="[searchData.articles.current_page===1?'disabled':'']">
@@ -61,7 +63,8 @@
                                       href="#"
                                       @click.prevent="goToPage(n)">{{n}}</a>
                 </li>
-                <li class="page-item" :class="[searchData.articles.current_page===searchData.articles.last_page?'disabled':'']">
+                <li class="page-item"
+                    :class="[searchData.articles.current_page===searchData.articles.last_page?'disabled':'']">
                   <a class="page-link" href="#"
                      @click.prevent="goToPage(true)"
                      :aria-label="$t('general.next')">
@@ -110,7 +113,8 @@
   export default {
     name: 'full-page-search',
     props: {
-      initialValue: {required: true}
+      initialValue: {required: true},
+      searchHostUrl: {required: true}
     },
     data () {
       return {
@@ -122,6 +126,11 @@
         timer: 0,
         blackBg: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
         searchLoading: false
+      }
+    },
+    computed: {
+      searchUrl () {
+        return `${this.searchHostUrl}/search/paginate`
       }
     },
     mounted () {
@@ -144,7 +153,7 @@
             pageTarget = current - 1
           }
         }
-        const {data} = await axios.post('http://lumen.local/search/paginate?page=' + pageTarget, {q: this.lastInput})
+        const {data} = await axios.post(this.searchUrl+'?page=' + pageTarget, {q: this.lastInput})
         this.searchData = data
       },
       async search (e) {
@@ -155,9 +164,9 @@
           clearTimeout(this.timer)
           let vm = this
           this.timer = setTimeout(async function () {
-            const {data} = await axios.post('http://lumen.local/search/paginate', {q: e.target.value})
-            let url = window.location.href.substr(0,window.location.href.lastIndexOf('/')+1)+e.target.value
-            window.history.replaceState({},vm.$root.$t('general.search')+' - '+e.target.value, url);
+            const {data} = await axios.post(vm.searchUrl, {q: e.target.value})
+            let url = window.location.href.substr(0, window.location.href.lastIndexOf('/') + 1) + e.target.value
+            window.history.replaceState({}, vm.$root.$t('general.search') + ' - ' + e.target.value, url)
             vm.searchData = data
             vm.toggleLoading(false)
           }, this.searchTriggerDelay)
@@ -167,7 +176,7 @@
         this.searchLoading = value
       },
       async getData () {
-        const {data} = await axios.post('http://lumen.local/search/paginate', {q: this.initialValue})
+        const {data} = await axios.post(this.searchUrl, {q: this.initialValue})
         this.searchData = data
       }
     }

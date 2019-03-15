@@ -23,6 +23,7 @@ class Frontend extends Composer
             );
         }
         $data['user'] = auth()->user();
+        $data['search_url'] = env('ELASTIC_SEARCH_URL');
         JavaScript::putArray([
             'locale' => app()->getLocale(),
             'gapi_client' => env('OAUTH_GOOGLE_CLIENT_ID'),

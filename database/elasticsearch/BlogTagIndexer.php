@@ -1,7 +1,7 @@
 <?php
 
-use Naraki\ElasticSearch\Index\Indexer as ElasticSearchIndexer;
-use Naraki\ElasticSearch\Index\Seeder;
+use Naraki\Elasticsearch\Index\Indexer as ElasticSearchIndexer;
+use Naraki\Elasticsearch\Index\Seeder;
 
 class BlogTagIndexer extends ElasticSearchIndexer
 {
@@ -88,14 +88,14 @@ class BlogTagIndexer extends ElasticSearchIndexer
             ],
         ];
 
-        $indexEn = new \Naraki\ElasticSearch\Index\Mapping(
+        $indexEn = new \Naraki\Elasticsearch\Index\Mapping(
             sprintf('%s.%s', $this->getIndexName(), 'en'),
             $mapping
         );
 //        dd($indexEn->toArray());
         Seeder::insert($indexEn->toArray());
 
-        $indexFr = new \Naraki\ElasticSearch\Index\Mapping(
+        $indexFr = new \Naraki\Elasticsearch\Index\Mapping(
             sprintf('%s.%s', $this->getIndexName(), 'fr'),
             $mapping
         );

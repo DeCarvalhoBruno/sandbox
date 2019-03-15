@@ -1,6 +1,6 @@
 <?php
 
-use Naraki\ElasticSearch\Index\Indexer as ElasticSearchIndexer;
+use Naraki\Elasticsearch\Index\Indexer as ElasticSearchIndexer;
 
 class ElasticIndexer extends ElasticSearchIndexer
 {
