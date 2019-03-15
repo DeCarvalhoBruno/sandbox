@@ -154,6 +154,7 @@ return [
         App\Support\JavaScript\JavaScriptServiceProvider::class,
         App\Support\View\EloquentViewableServiceProvider::class,
         Naraki\Blog\ServiceProvider::class,
+        Naraki\Rss\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -162,7 +163,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        App\Providers\RouteServiceProvider::class
     ],
 
     /*

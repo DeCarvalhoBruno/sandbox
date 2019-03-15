@@ -14,6 +14,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="{{asset('apple-icon-76x76.png')}}">
     <link rel="apple-touch-icon" sizes="60x60" href="{{asset('apple-icon-60x60.png')}}">
     <link rel="search" type="application/opensearchdescription+xml" title="{{config('app.name')}}" href="/osd.xml">
+    <link rel="alternate" type="application/atom+xml" title="News" href="{{route('rss',['type'=>'home'])}}">
     <link rel="canonical" href="{{ url()->current() }}"/>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="page-id" content="{{ get_page_id() }}">
@@ -39,7 +40,7 @@
 </head>
 <body>
 <div id="app">
-@include('partials.header')
+    @include('partials.header')
     <div id="content_container" class="container p-0">
         @if(isset($breadcrumbs))
             <div id="breadcrumb-wrapper" class="col p-0">
@@ -62,10 +63,9 @@
     <script src="{{ mix('js/manifest.js','6aa0e') }}"></script>
     <script src="{{ mix('js/vendor.js','6aa0e') }}"></script>
     <script src="{{ mix('js/app.js','6aa0e') }}"></script>
+    <script src="https://smartlock.google.com/client" async defer></script>
 @else
     <script src="{{ mix('js/app.js','6aa0e') }}"></script>
 @endif
-<script src="https://smartlock.google.com/client" async defer></script>
-
 </body>
 </html>

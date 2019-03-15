@@ -18,24 +18,24 @@
                   <div class="container p-0">
                     <div class="row d-flex align-items-center">
                       <div class="col-md-3">
-                        <figure><a :href="article._source.meta.url"><img v-if="article._source.meta.image"
-                                                                         :src="article._source.meta.image.url"
-                                                                         :alt="article._source.title"/><img
-                            v-else :src="blackBg" :alt="article._source.title"/></a></figure>
+                        <figure><a :href="article.meta.url"><img v-if="article.meta.image"
+                                                                         :src="article.meta.image.url"
+                                                                         :alt="article.title"/><img
+                            v-else :src="blackBg" :alt="article.title"/></a></figure>
                       </div>
                       <div class="col-md-8">
                         <div class="row article-info">
-                          <a :href="article._source.meta.url">{{article._source.title}}</a>
+                          <a :href="article.meta.url">{{article.title}}</a>
                         </div>
                         <div class="row">
                           <div class="d-inline-block">
                             <i class="fa fa-user-circle-o"></i>
-                            <a :href="article._source.meta.author.url">{{article._source.meta.author.name}}</a>
+                            <a :href="article.meta.author.url">{{article.meta.author.name}}</a>
                           </div>
                         </div>
                         <div class="row">
                           <div class="d-inline-block">
-                            <i class="fa fa-calendar"></i> {{article._source.date}}
+                            <i class="fa fa-calendar"></i> {{article.date}}
                           </div>
                         </div>
                       </div>

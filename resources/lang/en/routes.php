@@ -18,5 +18,6 @@ return [
     'blog_author' => 'author/{slug}',
     'search' => 'search/{q?}',
     'privacy' => 'privacy',
-    'terms_service' => 'terms-of-service'
+    'terms_service' => 'terms-of-service',
+    'rss'=>'rss'
 ];

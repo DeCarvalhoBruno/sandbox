@@ -11,6 +11,7 @@ class ServiceProvider extends LaravelServiceProvider
         Routes\Admin::class,
         Routes\Frontend::class,
     ];
+
     /**
      * Register services.
      *
@@ -39,10 +40,5 @@ class ServiceProvider extends LaravelServiceProvider
         foreach ($this->routeSets as $binder) {
             $this->app->make($binder)->bind($router);
         }
-    }
-
-    public function provides()
-    {
-        return [Blog::class];
     }
 }
