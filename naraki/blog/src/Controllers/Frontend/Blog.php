@@ -1,7 +1,8 @@
 <?php namespace Naraki\Blog\Controllers\Frontend;
 
 use App\Http\Controllers\Frontend\Controller;
-use Naraki\Blog\Contracts\Blog as BlogProvider;
+use App\Models\Language;
+use Naraki\Blog\Facades\Blog as BlogFacade;
 use Naraki\Media\Contracts\Media as MediaProvider;
 use App\Jobs\ProcessPageView;
 use App\Support\Frontend\Breadcrumbs;
@@ -15,13 +16,9 @@ class Blog extends Controller
      */
     private $blogRepo;
 
-    /**
-     *
-     * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
-     */
-    public function __construct(BlogProvider $blogRepo)
+    public function __construct()
     {
-        $this->blogRepo = $blogRepo;
+        $this->blogRepo = BlogFacade::blog();
     }
 
     /**
@@ -44,7 +41,7 @@ class Blog extends Controller
             'language_id as language',
             'published_at as date_modified',
             'published_at as date_published'
-        ])->pageViews()->first();
+        ])->scopes(['pageViews'])->first();
         if (is_null($post)) {
             throw new NotFoundHttpException('Blog Post not found');
         }
@@ -57,16 +54,17 @@ class Blog extends Controller
                 'entity_id'
             ]
         );
-        $categories = $this->blogRepo->buildOneBySlug(
-            $slug,
-            ['blog_category_slug as cat']
-        )->category()->orderBy('blog_category_id','asc')->get();
+        $categories = $this->blogRepo->buildOneBySlug($slug, ['blog_category_slug as cat'])
+            ->scopes(['category'])
+            ->orderBy('blog_category_id', 'asc')
+            ->get();
         $firstCategory = $categories->first();
-        $tags = $this->blogRepo->buildOneBySlug(
-            $slug, ['blog_tag_slug as tag', 'blog_tag_name as name']
-        )->tag()->get();
+        $tags = $this->blogRepo->buildOneBySlug($slug, ['blog_tag_slug as tag', 'blog_tag_name as name'])
+            ->scopes(['tag'])
+            ->get();
+
         $sources = $this->blogRepo->source()->buildByBlogSlug($slug)->get();
-        $otherPosts = $this->blogRepo->buildOneBasic([
+        $otherPosts = $this->blogRepo->buildSimple([
             'blog_post_title as title',
             'blog_post_slug as slug',
             'published_at as date',
@@ -74,9 +72,10 @@ class Blog extends Controller
             'person_slug as author',
             'full_name as person',
             'unq as page_views'
-        ])->pageViews()->person()->category($firstCategory->getAttribute('cat'))->language()
+        ], ['entityType', 'pageViews', 'person', 'language', 'category' => $firstCategory->getAttribute('cat')])
             ->where('blog_post_slug', '!=', $slug)
             ->orderBy('published_at', 'desc')->limit(4)->get();
+
         $otherPostMedia = $this->getImages($otherPosts, $mediaRepo);
         $media = null;
         foreach ($dbImages as $image) {
@@ -85,8 +84,8 @@ class Blog extends Controller
             }
         }
 
-        $breadcrumbs=[];
-        foreach($categories as $cat){
+        $breadcrumbs = [];
+        foreach ($categories as $cat) {
             $breadcrumbs[] = [
                 'label' => trans(sprintf('pages.blog.category.%s', $cat->getAttribute('cat'))),
                 'url' => route_i18n('blog.category', $cat->getAttribute('cat'))
@@ -95,7 +94,7 @@ class Blog extends Controller
         $this->dispatch(new ProcessPageView($post));
 
         return view('blog::post', compact(
-                'post', 'breadcrumbs', 'media', 'categories', 'tags', 'otherPosts', 'otherPostMedia','sources')
+                'post', 'breadcrumbs', 'media', 'categories', 'tags', 'otherPosts', 'otherPostMedia', 'sources')
         );
     }
 
@@ -106,7 +105,7 @@ class Blog extends Controller
      */
     public function category($slug, MediaProvider $mediaRepo)
     {
-        $posts = $this->blogRepo->buildOneBasic([
+        $posts = $this->blogRepo->buildSimple([
             'blog_post_title as title',
             'blog_post_excerpt as excerpt',
             'blog_post_slug as slug',
@@ -114,8 +113,11 @@ class Blog extends Controller
             'blog_category_slug as cat',
             'entity_types.entity_type_id as type',
             'person_slug as author',
-        ])->person()->category($slug)->language()
-            ->orderBy('published_at', 'desc')->limit(5)->get();
+        ], ['entityType', 'person', 'language', 'category' => $slug])
+            ->orderBy('published_at', 'desc')
+            ->where('language_id', Language::getAppLanguageId())
+            ->limit(5)
+            ->get();
         if (is_null($posts)) {
             throw new NotFoundHttpException('Blog Category not found');
         }
@@ -140,7 +142,7 @@ class Blog extends Controller
 
     public function tag($slug, MediaProvider $mediaRepo)
     {
-        $posts = $this->blogRepo->buildOneBasic([
+        $posts = $this->blogRepo->buildSimple([
             'blog_post_title as title',
             'blog_post_excerpt as excerpt',
             'blog_post_slug as slug',
@@ -148,8 +150,11 @@ class Blog extends Controller
             'entity_types.entity_type_id as type',
             'person_slug as author',
             'blog_tag_name as tag'
-        ])->person()->tag($slug)->language()
-            ->orderBy('published_at', 'desc')->limit(8)->get();
+        ], ['entityType', 'person', 'tag' => $slug])
+            ->orderBy('published_at', 'desc')
+            ->where('language_id', Language::getAppLanguageId())
+            ->limit(8)
+            ->get();
         if (is_null($posts)) {
             throw new NotFoundHttpException('Blog Tag not found');
         }
@@ -166,7 +171,7 @@ class Blog extends Controller
      */
     public function author($slug, MediaProvider $mediaRepo)
     {
-        $posts = $this->blogRepo->buildOneBasic([
+        $posts = $this->blogRepo->buildSimple([
             'blog_post_title as title',
             'blog_post_excerpt as excerpt',
             'blog_post_slug as slug',
@@ -174,8 +179,12 @@ class Blog extends Controller
             'blog_category_slug as cat',
             'entity_types.entity_type_id as type',
             'full_name as author'
-        ])->person($slug)->language()->category()
-            ->orderBy('published_at', 'desc')->limit(8)->get();
+        ], ['entityType', 'person' => $slug, 'language', 'category'])
+            ->where('parent_id', null)
+            ->orderBy('published_at', 'desc')
+            ->limit(8)
+            ->get();
+
         $author = (object)$posts->first()->only(['author']);
         if (is_null($posts)) {
             throw new NotFoundHttpException('Author not found');
@@ -205,7 +214,7 @@ class Blog extends Controller
 
     private function getMostViewedPosts($slug)
     {
-        return $this->blogRepo->buildOneBasic([
+        return $this->blogRepo->buildSimple([
             'blog_post_title as title',
             'blog_post_excerpt as excerpt',
             'blog_post_slug as slug',
@@ -214,7 +223,7 @@ class Blog extends Controller
             'entity_types.entity_type_id as type',
             'person_slug as author',
             'unq as page_views'
-        ])->person()->category($slug)->language()->pageViews()
+        ], ['entityType', 'person', 'category' => $slug, 'language', 'pageViews'])
             ->orderBy('page_views', 'desc')->limit(10)->get();
     }
 

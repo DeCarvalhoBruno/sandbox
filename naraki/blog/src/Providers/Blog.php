@@ -1,6 +1,7 @@
 <?php namespace Naraki\Blog\Providers;
 
 use App\Support\Providers\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Naraki\Blog\Contracts\Blog as BlogInterface;
 use Naraki\Blog\Models\BlogPost;
 use Naraki\Blog\Contracts\Category as CategoryInterface;
@@ -39,9 +40,17 @@ class Blog extends Model implements BlogInterface
     }
 
     /**
+     * @return \Naraki\Blog\Providers\Blog
+     */
+    public function blog()
+    {
+        return $this;
+    }
+
+    /**
      * @return \Naraki\Blog\Contracts\Category|\Naraki\Blog\Providers\Category
      */
-    public function category()
+    public function category(): CategoryInterface
     {
         return $this->category;
     }
@@ -49,7 +58,7 @@ class Blog extends Model implements BlogInterface
     /**
      * @return \Naraki\Blog\Contracts\Tag|\Naraki\Blog\Providers\Tag
      */
-    public function tag()
+    public function tag(): TagInterface
     {
         return $this->tag;
     }
@@ -57,7 +66,7 @@ class Blog extends Model implements BlogInterface
     /**
      * @return \Naraki\Blog\Contracts\Source|\Naraki\Blog\Providers\Source
      */
-    public function source()
+    public function source(): SourceInterface
     {
         return $this->source;
     }
@@ -65,9 +74,9 @@ class Blog extends Model implements BlogInterface
     /**
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function buildForDisplay()
+    public function buildForDisplay(): Builder
     {
-        return $this->select([
+        return $this->buildSimple([
             'blog_post_title as title',
             'published_at as date',
             'blog_category_slug as cat',
@@ -76,7 +85,7 @@ class Blog extends Model implements BlogInterface
             'entity_types.entity_type_id as type',
             'blog_post_slug as slug',
             'unq as page_views'
-        ])->scopes([
+        ], [
             'entityType',
             'status',
             'person',
@@ -89,9 +98,19 @@ class Blog extends Model implements BlogInterface
      * @param array $attributes
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function buildList($attributes)
+    public function buildList($attributes): Builder
     {
-        return $this->select($attributes)->person();
+        return $this->buildSimple($attributes, ['person']);
+    }
+
+    /**
+     * @param array $columns
+     * @param array $scopes
+     * @return \Illuminate\Database\Eloquent\Builder|mixed
+     */
+    public function buildSimple($columns, $scopes): Builder
+    {
+        return $this->select($columns)->scopes($scopes);
     }
 
     /**
@@ -101,19 +120,8 @@ class Blog extends Model implements BlogInterface
      */
     public function buildOneBySlug($slug, $attributes = ['*'])
     {
-        return $this->createModel()->newQuery()
-            ->select($attributes)
-            ->entityType()
-            ->status()
-            ->person()
+        return $this->buildSimple($attributes, ['entityType', 'status', 'person'])
             ->where('blog_post_slug', '=', $slug);
-    }
-
-    public function buildOneBasic($attributes = ['*'])
-    {
-        return $this->createModel()->newQuery()
-            ->select($attributes)
-            ->entityType();
     }
 
     /**
@@ -142,7 +150,7 @@ class Blog extends Model implements BlogInterface
     {
         $builder = $this->createModel()->newQuery()->where('blog_post_slug', '=', $slug);
         (clone($builder))->update($this->filterFillables($data));
-        return $builder->select(['blog_post_id','blog_post_slug','blog_status_id'])->first();
+        return $builder->select(['blog_post_id', 'blog_post_slug', 'blog_status_id'])->first();
     }
 
     /**

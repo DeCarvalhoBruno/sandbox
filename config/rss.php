@@ -15,8 +15,10 @@
     |
     */
     'aliases' => [
-        'home' => \App\Support\Frontend\Rss\Home::class,
-        'category' => \App\Support\Frontend\Rss\Category::class,
-        'author' => \App\Support\Frontend\Rss\Author::class
+        'home' => \Naraki\Blog\Support\Rss\Home::class,
+        'category' => \Naraki\Blog\Support\Rss\Category::class,
+        'author' => \Naraki\Blog\Support\Rss\Author::class,
+        'tag' => \Naraki\Blog\Support\Rss\Tag::class,
+        'search' => \Naraki\Blog\Support\Rss\Search::class
     ]
 ];

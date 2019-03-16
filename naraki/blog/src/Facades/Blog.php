@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Naraki\Blog\Providers\Category category()
  * @method static \Naraki\Blog\Providers\Tag tag()
  * @method static \Naraki\Blog\Providers\Source source()
+ * @method static \Naraki\Blog\Providers\Blog blog()
  */
 class Blog extends Facade
 {

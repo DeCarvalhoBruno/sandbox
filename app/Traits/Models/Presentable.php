@@ -18,7 +18,6 @@ trait Presentable
      * @param string $method
      *
      * @return mixed
-     * @throws \Exception
      */
     public function present($method = null)
     {
