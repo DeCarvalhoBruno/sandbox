@@ -41,7 +41,7 @@ class BlogPostIndexer extends ElasticSearchIndexer
     {
         $limit = 10;
 
-        $dbImages = \App\Models\Media\MediaEntity::buildImages(null, [
+        $dbImages = \Naraki\Media\Models\MediaEntity::buildImages(null, [
             'media_uuid as uuid',
             'media_extension as ext',
             'entity_types.entity_type_id as type',

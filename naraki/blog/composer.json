@@ -9,16 +9,15 @@
             "email": "dev.naraki.io@gmail.com"
         }
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
-        "php": ">=7.0",
-        "laravel/framework": "5.x"
     },
     "autoload": {
-        "psr-4": {
-            "Naraki\\Blog\\": "src/"
-        }
+      "psr-4": {
+        "Naraki\\Blog\\": "src/"
+      }
     },
-    "minimum-stability": "stable",
     "extra": {
         "laravel": {
             "providers": [

@@ -3,9 +3,9 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Models\Media\Media;
-use App\Models\Media\MediaGroup;
-use App\Models\Media\MediaImgFormat;
+use Naraki\Media\Models\Media;
+use Naraki\Media\Models\MediaGroup;
+use Naraki\Media\Models\MediaImgFormat;
 
 class Medias extends Migration
 {
@@ -96,7 +96,7 @@ class Medias extends Migration
             $table->unsignedInteger('media_digital_id');
 
             $table->unsignedInteger('media_img_format_id')
-                ->default(\App\Models\Media\MediaImgFormat::ORIGINAL);
+                ->default(\Naraki\Media\Models\MediaImgFormat::ORIGINAL);
 
             $table->foreign('media_digital_id', 'fk_img_format_types')
                 ->references('media_digital_id')->on('media_digital')
@@ -158,7 +158,7 @@ class Medias extends Migration
             $table->unsignedInteger('media_record_target_id')->comment(
                 'Either a media_record id or a media_group_record_id');
             $table->unsignedInteger('media_category_id')->default(
-                \App\Models\Media\MediaCategory::MEDIA);
+                \Naraki\Media\Models\MediaCategory::MEDIA);
 
             $table->foreign('media_category_id')
                 ->references('media_category_id')->on('media_categories')
@@ -194,7 +194,7 @@ class Medias extends Migration
                 'media_category_name' => 'MEDIA_GROUP'
             ]
         ];
-        \App\Models\Media\MediaCategory::insert($categories);
+        \Naraki\Media\Models\MediaCategory::insert($categories);
 
         $this->addMediaGroups();
         $this->addMedia();
@@ -286,7 +286,7 @@ class Medias extends Migration
                 'media_img_format_acronym'=>MediaImgFormat::getFormatAcronyms($intVal)
             ];
         }
-        \App\Models\Media\MediaImgFormat::insert($imageFormats);
+        \Naraki\Media\Models\MediaImgFormat::insert($imageFormats);
     }
 
     private function mediaInUseProcedure()

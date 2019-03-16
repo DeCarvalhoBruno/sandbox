@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Support\Media\ImageProcessor;
-use App\Models\Media\MediaImgFormat;
+use Naraki\Media\Support\ImageProcessor;
+use Naraki\Media\Models\MediaImgFormat;
 
 class ImageSeeder extends Seeder
 {
@@ -56,39 +56,39 @@ class ImageSeeder extends Seeder
     private function saveDb($uuid, $fileExtension, $entityTypeID, $formats)
     {
         $filename = sprintf('%s.%s', $uuid, $fileExtension);
-        $mediaType = \App\Models\Media\MediaType::create([
+        $mediaType = \Naraki\Media\Models\MediaType::create([
             'media_title' => $filename,
             'media_uuid' => $uuid,
-            'media_id' => \App\Models\Media\Media::IMAGE,
+            'media_id' => \Naraki\Media\Models\Media::IMAGE,
             'media_in_use' => 1
         ]);
 
-        $mediaDigital = \App\Models\Media\MediaDigital::create([
+        $mediaDigital = \Naraki\Media\Models\MediaDigital::create([
             'media_type_id' => $mediaType->getKey(),
             'media_extension' => $fileExtension,
             'media_filename' => $filename,
         ]);
 
-        $mediaRecord = \App\Models\Media\MediaRecord::create([
+        $mediaRecord = \Naraki\Media\Models\MediaRecord::create([
             'media_type_id' => $mediaType->getKey(),
         ]);
 
-        $mediaCategoryRecord = \App\Models\Media\MediaCategoryRecord::create([
+        $mediaCategoryRecord = \Naraki\Media\Models\MediaCategoryRecord::create([
             'media_record_target_id' => $mediaRecord->getKey(),
         ]);
 
-        \App\Models\Media\MediaEntity::create([
+        \Naraki\Media\Models\MediaEntity::create([
             'entity_type_id' => $entityTypeID,
             'media_category_record_id' => $mediaCategoryRecord->getKey(),
         ]);
 
-        \App\Models\Media\MediaImg::create([
+        \Naraki\Media\Models\MediaImg::create([
             'media_digital_id' => $mediaDigital->getKey()
         ]);
 
         if (!is_null($formats)) {
             foreach ($formats as $format) {
-                \App\Models\Media\MediaImgFormatType::create([
+                \Naraki\Media\Models\MediaImgFormatType::create([
                     'media_digital_id' => $mediaDigital->getKey(),
                     'media_img_format_id' => $format
                 ]);
@@ -103,7 +103,7 @@ class ImageSeeder extends Seeder
             ImageProcessor::makeCroppedImage($path),
             media_entity_root_path(
                 \App\Models\Entity::BLOG_POSTS,
-                \App\Models\Media\Media::IMAGE,
+                \Naraki\Media\Models\Media::IMAGE,
                 ImageProcessor::makeFormatFilenameFromImageFilename(
                     sprintf('%s.%s', $uuid, $fileExtension)
                 )
@@ -113,24 +113,24 @@ class ImageSeeder extends Seeder
         ImageProcessor::saveImg(
             ImageProcessor::makeCroppedImage(
                 $path,
-                \App\Models\Media\MediaImgFormat::FEATURED
+                \Naraki\Media\Models\MediaImgFormat::FEATURED
             ),
             media_entity_root_path(
                 \App\Models\Entity::BLOG_POSTS,
-                \App\Models\Media\Media::IMAGE,
-                ImageProcessor::makeFormatFilename($uuid, $fileExtension, \App\Models\Media\MediaImgFormat::FEATURED)
+                \Naraki\Media\Models\Media::IMAGE,
+                ImageProcessor::makeFormatFilename($uuid, $fileExtension, \Naraki\Media\Models\MediaImgFormat::FEATURED)
             )
         );
 
 //        ImageProcessor::saveImg(
 //            ImageProcessor::makeCroppedImage(
 //                $path,
-//                \App\Models\Media\MediaImgFormat::HD
+//                \Naraki\Media\Models\MediaImgFormat::HD
 //            ),
 //            media_entity_root_path(
 //                \App\Models\Entity::BLOG_POSTS,
-//                \App\Models\Media\Media::IMAGE,
-//                ImageProcessor::makeFormatFilename($uuid, $fileExtension, \App\Models\Media\MediaImgFormat::HD)
+//                \Naraki\Media\Models\Media::IMAGE,
+//                ImageProcessor::makeFormatFilename($uuid, $fileExtension, \Naraki\Media\Models\MediaImgFormat::HD)
 //            )
 //        );
 
@@ -138,8 +138,8 @@ class ImageSeeder extends Seeder
 //            $path,
 //            media_entity_root_path(
 //                \App\Models\Entity::BLOG_POSTS,
-//                \App\Models\Media\Media::IMAGE,
-//                ImageProcessor::makeFormatFilename($uuid, $fileExtension, \App\Models\Media\MediaImgFormat::ORIGINAL)
+//                \Naraki\Media\Models\Media::IMAGE,
+//                ImageProcessor::makeFormatFilename($uuid, $fileExtension, \Naraki\Media\Models\MediaImgFormat::ORIGINAL)
 //            )
 //        );
 

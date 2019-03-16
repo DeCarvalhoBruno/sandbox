@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Frontend;
 
-use App\Models\Email\EmailList;
-use App\Models\Email\EmailSubscriber;
+use Naraki\Mail\Models\EmailList;
+use Naraki\Mail\Models\EmailSubscriber;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;

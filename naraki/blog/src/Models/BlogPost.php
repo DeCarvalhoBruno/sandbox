@@ -5,14 +5,14 @@ use App\Contracts\HasAnEntity;
 use App\Contracts\HasPermissions as HasPermissionsContract;
 use App\Models\Entity;
 use App\Models\Language;
-use App\Models\Media\MediaEntity;
+use Naraki\Media\Models\MediaEntity;
 use Naraki\Elasticsearch\Searchable;
-use App\Support\Presenters\BlogPost as BlogPostPresenter;
+use Naraki\Blog\Support\Presenters\BlogPost as BlogPostPresenter;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use App\Traits\Models\HasPermissions;
-use App\Traits\Presentable;
+use App\Traits\Models\Presentable;
 use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 use CyrildeWit\EloquentViewable\Viewable;
 use Illuminate\Database\Eloquent\Builder;
@@ -55,7 +55,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
         'blog_post_title'
     ];
     public static $slugColumn = 'blog_post_slug';
-    public $entityID = \App\Models\Entity::BLOG_POSTS;
+    public static $entityID = \App\Models\Entity::BLOG_POSTS;
 
     public static function boot()
     {

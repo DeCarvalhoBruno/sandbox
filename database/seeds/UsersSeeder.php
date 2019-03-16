@@ -161,11 +161,11 @@ class UsersSeeder extends Seeder
 
     public function createAvatar($username, $name)
     {
-        $f = new \App\Support\Media\GeneratedAvatar(
+        $f = new \Naraki\Media\Support\GeneratedAvatar(
             $username,
             $name,
             \App\Models\Entity::USERS,
-            \App\Models\Media\Media::IMAGE_AVATAR
+            \Naraki\Media\Models\Media::IMAGE_AVATAR
         );
         $f->processAvatar();
         $this->avatar->saveAvatar($f);

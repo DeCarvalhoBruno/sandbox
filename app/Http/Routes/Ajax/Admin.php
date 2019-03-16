@@ -70,13 +70,6 @@ class Admin
             $r->get('settings/social','Settings@editSocial');
             $r->post('settings/social','Settings@updateSocial');
 
-            $r->get('media/{media}', 'Media@edit');
-            $r->patch('media/{media}', 'Media@update');
-            $r->post('media/add', 'Media@add')
-                ->middleware('can:edit,App\Models\User');
-            $r->post('media/crop', 'Media@crop')
-                ->middleware('can:edit,App\Models\User');
-
             $r->get('dashboard', 'Dashboard@index');
 
             $r->get('system/events/log', 'System@getLog');

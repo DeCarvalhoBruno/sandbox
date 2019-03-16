@@ -39,14 +39,14 @@ class Entities extends Migration
             $table->increments('email_recipient_type_id');
             $table->string('email_recipient_type_name', 50);
         });
-        \App\Models\Email\EmailRecipientType::insert([
+        \Naraki\Mail\Models\EmailRecipientType::insert([
             ['email_recipient_type_name' => 'all'],
         ]);
 
         Schema::create('emails', function (Blueprint $table) {
             $table->increments('email_id');
             $table->unsignedInteger('email_recipient_type_id')
-                ->default(\App\Models\Email\EmailRecipientType::ALL);
+                ->default(\Naraki\Mail\Models\EmailRecipientType::ALL);
             $table->text('email_content')->nullable();
             $table->text('email_sources')->nullable();
             $table->foreign('email_recipient_type_id')

@@ -1,7 +1,19 @@
 @import 'fonts';
 //************* Vendor Libraries ****************
 //Font Awesome
-@import "~font-awesome/scss/font-awesome";
+@import "~font-awesome/scss/variables";
+$fa-font-path2: "../../_fonts/vendor" !default;
+@import "~font-awesome/scss/mixins";
+//@import "~font-awesome/scss/path";
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('#{$fa-font-path2}/icomoon.woff?v=#{$fa-version}') format('woff'),
+  url('#{$fa-font-path2}/icomoon.ttf?v=#{$fa-version}') format('truetype'),
+  url('#{$fa-font-path2}/icomoon.svg?v=#{$fa-version}#fontawesomeregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
 // Bootstrap
 @import "variables";
 //@import "~bootstrap/scss/bootstrap";
@@ -28,13 +40,13 @@
 @import "~bootstrap/scss/breadcrumb";
 @import "~bootstrap/scss/pagination";
 @import "~bootstrap/scss/badge";
-@import "~bootstrap/scss/jumbotron";
+//@import "~bootstrap/scss/jumbotron";
 //@import "~bootstrap/scss/alert";
 @import "~bootstrap/scss/progress";
 @import "~bootstrap/scss/media";
 @import "~bootstrap/scss/list-group";
 @import "~bootstrap/scss/close";
-@import "~bootstrap/scss/modal";
+//@import "~bootstrap/scss/modal";
 @import "~bootstrap/scss/tooltip";
 @import "~bootstrap/scss/popover";
 //@import "~bootstrap/scss/carousel";

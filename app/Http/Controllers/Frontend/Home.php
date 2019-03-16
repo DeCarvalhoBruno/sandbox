@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers\Frontend;
 
-use App\Contracts\Models\Media as MediaProvider;
+use Naraki\Media\Contracts\Media as MediaProvider;
 use App\Models\Language;
 use Naraki\Blog\Facades\Blog;
 
@@ -8,7 +8,7 @@ class Home extends Controller
 {
 
     /**
-     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
+     * @param \Naraki\Media\Contracts\Media|\Naraki\Media\Providers\Media $mediaRepo
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(MediaProvider $mediaRepo)
@@ -19,9 +19,8 @@ class Home extends Controller
             ->where('blog_categories.parent_id',null)
             ->limit(115)
             ->get();
-        $result2 = clone($dbResult);
         $dbImages = $mediaRepo->image()->getImages(
-            $result2->pluck('type')->all(), [
+            $dbResult->pluck('type')->all(), [
                 'media_uuid as uuid',
                 'media_extension as ext',
                 'entity_types.entity_type_id as type',

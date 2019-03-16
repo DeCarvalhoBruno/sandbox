@@ -1,9 +1,9 @@
 <?php namespace App\Listeners;
 
 use App\Contracts\Models\System as SystemProvider;
-use App\Emails\Frontend\Contact;
+use Naraki\Mail\Emails\Frontend\Contact;
 use App\Events\PersonSentContactRequest as ContactRequestEvent;
-use App\Jobs\SendMail;
+use Naraki\Mail\Jobs\SendMail;
 use App\Models\System\SystemEvent;
 
 class PersonSentContactRequest extends Listener

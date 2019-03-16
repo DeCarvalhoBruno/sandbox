@@ -7,7 +7,7 @@ use App\Traits\Models\HasASlugColumn;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use App\Traits\Models\HasPermissions as HasPermissionsTrait;
 use App\Contracts\HasPermissions;
-use App\Traits\Presentable;
+use App\Traits\Models\Presentable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Contracts\Enumerable as EnumerableContract;

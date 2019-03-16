@@ -1,8 +1,8 @@
 <?php namespace App\Listeners;
 
-use App\Emails\User\Welcome as WelcomeEmail;
+use Naraki\Mail\Emails\User\Welcome as WelcomeEmail;
 use App\Events\UserRegistered as UserRegisteredEvent;
-use App\Jobs\SendMail;
+use Naraki\Mail\Jobs\SendMail;
 
 class UserRegistered extends Listener
 {

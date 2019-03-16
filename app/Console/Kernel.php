@@ -13,12 +13,11 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\ConvertLangFilesToJs::class,
-        Commands\GenerateLangFiles::class,
-        Commands\MakeRequest::class,
         Commands\CreateRootAssetDirectories::class,
-        Commands\SendTestEmail::class,
-        Commands\TestStuff::class,
-        Commands\Maintenance::class
+        Commands\GenerateLangFiles::class,
+        Commands\Maintenance::class,
+        Commands\MakeRequest::class,
+        Commands\TestStuff::class
     ];
 
     /**

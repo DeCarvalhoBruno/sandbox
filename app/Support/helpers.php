@@ -5,7 +5,7 @@ if (!function_exists('media_entity_path')) {
      * Retrieves the path of an image relative to the public folder
      *
      * @see \App\Models\SystemEntity
-     * @see \App\Models\Media\MediaCategory
+     * @see \Naraki\Media\Models\MediaCategory
      *
      * @param string|int $entity
      * @param string|int $media_type
@@ -19,7 +19,7 @@ if (!function_exists('media_entity_path')) {
             $entity = \App\Models\Entity::getConstantName($entity);
         }
         if (is_numeric($media_type)) {
-            $media_type = \App\Models\Media\Media::getConstantName($media_type);
+            $media_type = \Naraki\Media\Models\Media::getConstantName($media_type);
         }
 
         if (is_null($image)) {
@@ -47,7 +47,7 @@ if (!function_exists('media_entity_root_path')) {
             $entity = \App\Models\Entity::getConstantName($entity);
         }
         if (is_numeric($media_type)) {
-            $media_type = \App\Models\Media\Media::getConstantName($media_type);
+            $media_type = \Naraki\Media\Models\Media::getConstantName($media_type);
         }
 
         return sprintf('%s/media/%s/%s/%s', public_path(), $entity, $media_type, $image);

@@ -91,7 +91,7 @@
                             <img src="{{$otherPostMedia[$otherPost->getAttribute('type')]->present('asset')}}"
                                  class="card-img-top" alt="{{$otherPost->getAttribute('title')}}">
                         @else
-                            <img src="{{asset(sprintf('/media/img/site/placeholder_%s.png',\App\Models\Media\MediaImgFormat::getFormatAcronyms(\App\Models\Media\MediaImgFormat::FEATURED)))}}"
+                            <img src="{{asset(sprintf('/media/img/site/placeholder_%s.png',\Naraki\Media\Models\MediaImgFormat::getFormatAcronyms(\Naraki\Media\Models\MediaImgFormat::FEATURED)))}}"
                                  alt="{{$otherPost->getAttribute('title')}}">
                         @endif
                         <div class="card-body">

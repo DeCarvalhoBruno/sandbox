@@ -27,7 +27,7 @@ class Blog extends Composer
 
         $hasFacebook = \Cache::get('settings_has_facebook');
         $socialSettings = \Cache::get('settings_social');
-        $socialTagManager = new \App\Support\Frontend\Social\Blog();
+        $socialTagManager = new \Naraki\Blog\Support\Social\Blog();
         $socialData = (object)[
             'post' => $data['post'],
             'media' => $data['media'],

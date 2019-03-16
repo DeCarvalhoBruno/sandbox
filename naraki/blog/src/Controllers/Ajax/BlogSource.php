@@ -1,13 +1,13 @@
 <?php namespace Naraki\Blog\Controllers\Ajax;
 
-use Naraki\Blog\Contracts\BlogSource as BlogSourceProvider;
+use Naraki\Blog\Contracts\Source as BlogSourceProvider;
 use App\Http\Controllers\Admin\Controller;
 use Illuminate\Http\Response;
 
 class BlogSource extends Controller
 {
     /**
-     * @param \Naraki\Blog\Contracts\BlogSource|\Naraki\Blog\Providers\BlogSource $sourceRepo
+     * @param \Naraki\Blog\Contracts\Source|\Naraki\Blog\Providers\Source $sourceRepo
      * @return \Illuminate\Http\Response|array
      */
     public function create(BlogSourceProvider $sourceRepo)
@@ -31,7 +31,7 @@ class BlogSource extends Controller
     /**
      * @param string $id
      * @param string $slug
-     * @param \Naraki\Blog\Contracts\BlogSource|\Naraki\Blog\Providers\BlogSource $sourceRepo
+     * @param \Naraki\Blog\Contracts\Source|\Naraki\Blog\Providers\Source $sourceRepo
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function destroy($id,$slug, BlogSourceProvider $sourceRepo)

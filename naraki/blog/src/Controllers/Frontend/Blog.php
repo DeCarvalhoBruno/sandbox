@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Frontend\Controller;
 use Naraki\Blog\Contracts\Blog as BlogProvider;
-use App\Contracts\Models\Media as MediaProvider;
+use Naraki\Media\Contracts\Media as MediaProvider;
 use App\Jobs\ProcessPageView;
 use App\Support\Frontend\Breadcrumbs;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -26,7 +26,7 @@ class Blog extends Controller
 
     /**
      * @param $slug
-     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
+     * @param \Naraki\Media\Contracts\Media|\Naraki\Media\Providers\Media $mediaRepo
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function getPost($slug, MediaProvider $mediaRepo)
@@ -101,7 +101,7 @@ class Blog extends Controller
 
     /**
      * @param $slug
-     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
+     * @param \Naraki\Media\Contracts\Media|\Naraki\Media\Providers\Media $mediaRepo
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function category($slug, MediaProvider $mediaRepo)
@@ -161,7 +161,7 @@ class Blog extends Controller
 
     /**
      * @param $slug
-     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
+     * @param \Naraki\Media\Contracts\Media|\Naraki\Media\Providers\Media $mediaRepo
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function author($slug, MediaProvider $mediaRepo)

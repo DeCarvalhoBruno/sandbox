@@ -3,6 +3,11 @@
 use Naraki\Blog\Contracts\Blog as BlogContract;
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * @method static \Naraki\Blog\Providers\Category category()
+ * @method static \Naraki\Blog\Providers\Tag tag()
+ * @method static \Naraki\Blog\Providers\Source source()
+ */
 class Blog extends Facade
 {
     /**

@@ -91,7 +91,7 @@
                                              'media'=>isset($mvpImages[$mvp->getAttribute('type')])?
                                              $mvpImages[$mvp->getAttribute('type')]->present('thumbnail'):null,
                                              'alt'=>$mvp->getAttribute('title'),
-                                             'format'=>\App\Models\Media\MediaImgFormat::THUMBNAIL
+                                             'format'=>\Naraki\Media\Models\MediaImgFormat::THUMBNAIL
                                          ])
                                     </div>
                                 </div>

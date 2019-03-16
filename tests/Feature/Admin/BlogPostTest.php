@@ -10,7 +10,7 @@ use App\Models\Entity;
 use App\Support\Providers\Avatar;
 use App\Support\Providers\File;
 use App\Support\Providers\Image;
-use App\Support\Providers\Media;
+use Naraki\Media\Providers\Media;
 use App\Support\Providers\Text;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;

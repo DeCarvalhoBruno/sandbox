@@ -2,7 +2,7 @@
 
 use App\Contracts\Models\Email as EmailProvider;
 use App\Http\Controllers\Frontend\Controller;
-use App\Models\Email\EmailList;
+use Naraki\Mail\Models\EmailList;
 use App\Support\Frontend\Breadcrumbs;
 
 class Notifications extends Controller

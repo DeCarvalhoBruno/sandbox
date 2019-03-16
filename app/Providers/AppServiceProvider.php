@@ -16,17 +16,6 @@ class AppServiceProvider extends ServiceProvider
         Contract\User::class,
         Contract\Group::class,
         Contract\Permission::class,
-        Contract\Media::class,
-        Contract\File::class,
-        Contract\Image::class,
-        Contract\Avatar::class,
-        Contract\Text::class,
-        Contract\Email::class,
-        Contract\EmailList::class,
-        Contract\EmailCampaign::class,
-        Contract\EmailSchedule::class,
-        Contract\EmailSubscriber::class,
-        Contract\EmailUserEvent::class,
         Contract\SystemEventLog::class,
         Contract\SystemUserSettings::class,
         Contract\System::class,
@@ -38,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function boot(UrlGenerator $url)
+    public function boot()
     {
         $this->app->make('view')->composer('admin.default', \App\Composers\Admin::class);
         $this->app->make('view')->composer(

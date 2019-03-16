@@ -106,27 +106,27 @@ class Email extends Migration
                 ->onDelete('cascade');
         });
 
-        \App\Models\Email\EmailUserEventType::insert([
+        \Naraki\Mail\Models\EmailUserEventType::insert([
                 [
-                    'email_user_event_type_id' => \App\Models\Email\EmailUserEventType::OPENED,
+                    'email_user_event_type_id' => \Naraki\Mail\Models\EmailUserEventType::OPENED,
                     'email_user_event_type_name' => 'opened'
                 ],
                 [
-                    'email_user_event_type_id' => \App\Models\Email\EmailUserEventType::CLICKED,
+                    'email_user_event_type_id' => \Naraki\Mail\Models\EmailUserEventType::CLICKED,
                     'email_user_event_type_name' => 'clicked'
                 ],
                 [
-                    'email_user_event_type_id' => \App\Models\Email\EmailUserEventType::COMPLAINED,
+                    'email_user_event_type_id' => \Naraki\Mail\Models\EmailUserEventType::COMPLAINED,
                     'email_user_event_type_name' => 'complained'
                 ],
                 [
-                    'email_user_event_type_id' => \App\Models\Email\EmailUserEventType::FAILED,
+                    'email_user_event_type_id' => \Naraki\Mail\Models\EmailUserEventType::FAILED,
                     'email_user_event_type_name' => 'failed'
                 ]
             ]
         );
 
-        $entities = \App\Models\Email\EmailList::getConstants();
+        $entities = \Naraki\Mail\Models\EmailList::getConstants();
 
         $systemEntities = [
             'NEWSLETTERS' => \App\Models\Entity::SYSTEM,
@@ -139,7 +139,7 @@ class Email extends Migration
                 'entity_id' => $systemEntities[$name]
             ];
         }
-        \App\Models\Email\EmailList::insert($emailEvents);
+        \Naraki\Mail\Models\EmailList::insert($emailEvents);
 
     }
 

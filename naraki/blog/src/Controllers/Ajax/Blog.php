@@ -1,26 +1,26 @@
 <?php namespace Naraki\Blog\Controllers\Ajax;
 
-use Naraki\Blog\Contracts\Blog as BlogProvider;
-use App\Contracts\Models\Media as MediaProvider;
 use App\Contracts\Models\User as UserProvider;
-use App\Filters\Blog as BlogFilter;
 use App\Http\Controllers\Admin\Controller;
-use App\Http\Requests\Admin\CreateBlogPost;
-use App\Http\Requests\Admin\UpdateBlogPost;
-use Naraki\Blog\Models\BlogStatus;
 use App\Models\Entity;
-use App\Models\Media\MediaImgFormat;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Naraki\Blog\Contracts\Blog as BlogProvider;
+use Naraki\Blog\Filters\Blog as BlogFilter;
+use Naraki\Blog\Models\BlogStatus;
+use Naraki\Blog\Requests\CreateBlogPost;
+use Naraki\Blog\Requests\UpdateBlogPost;
+use Naraki\Media\Contracts\Media as MediaProvider;
+use Naraki\Media\Models\MediaImgFormat;
 
 class Blog extends Controller
 {
     /**
-     * @param \App\Filters\Blog $filter
+     * @param \Naraki\Blog\Filters\Blog $filter
      * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
      * @return array
      */
-    public function index(BlogFilter $filter, BlogProvider $blogRepo)
+    public function index(BlogFilter $filter, BlogProvider $blogRepo): array
     {
         return [
             'table' => $blogRepo->buildList([
@@ -45,7 +45,7 @@ class Blog extends Controller
     /**
      * @return array
      */
-    public function add()
+    public function add(): array
     {
         return [
             'record' => [
@@ -56,7 +56,7 @@ class Blog extends Controller
                 'tags' => [],
             ],
             'status_list' => BlogStatus::getConstants('BLOG'),
-            'blog_categories' => \App\Support\Trees\BlogCategory::getTree(),
+            'blog_categories' => \Naraki\Blog\Support\Trees\Category::getTree(),
             'thumbnails' => []
         ];
     }
@@ -64,10 +64,10 @@ class Blog extends Controller
     /**
      * @param $slug
      * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
-     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
+     * @param \Naraki\Media\Contracts\Media|\Naraki\Media\Providers\Media $mediaRepo
      * @return array
      */
-    public function edit($slug, BlogProvider $blogRepo, MediaProvider $mediaRepo)
+    public function edit($slug, BlogProvider $blogRepo, MediaProvider $mediaRepo): array
     {
         $record = $blogRepo->buildOneBySlug(
             $slug,
@@ -87,7 +87,7 @@ class Blog extends Controller
             return response(trans('error.http.500.blog_post_not_found'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         $blogPost = $record->toArray();
-        $categories = \App\Support\Trees\BlogCategory::getTreeWithSelected($blogPost['blog_post_id']);
+        $categories = \Naraki\Blog\Support\Trees\Category::getTreeWithSelected($blogPost['blog_post_id']);
         $blogPost['categories'] = $categories->categories;
         $blogPost['tags'] = $blogRepo->tag()->getByPost($blogPost['blog_post_id']);
         unset($blogPost['entity_type_id'], $blogPost['blog_post_id']);
@@ -96,8 +96,8 @@ class Blog extends Controller
             'status_list' => BlogStatus::getConstants('BLOG'),
             'blog_categories' => $categories->tree,
             'url' => $this->getPostUrl($record),
-            'source_types'=>$blogRepo->source()->listTypes(),
-            'sources'=>$blogRepo->source()
+            'source_types' => $blogRepo->source()->listTypes(),
+            'sources' => $blogRepo->source()
                 ->buildByBlogSlug(
                     $record->getAttribute('blog_post_slug')
                 )->get()->toArray(),
@@ -108,12 +108,12 @@ class Blog extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\Admin\CreateBlogPost $request
+     * @param \Naraki\Blog\Requests\CreateBlogPost $request
      * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
      * @return array
      */
-    public function create(CreateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo)
+    public function create(CreateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo): array
     {
         try {
             $post = $blogRepo->createOne(
@@ -139,12 +139,12 @@ class Blog extends Controller
 
     /**
      * @param $slug
-     * @param \App\Http\Requests\Admin\UpdateBlogPost $request
+     * @param \Naraki\Blog\Requests\UpdateBlogPost $request
      * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
      * @return array
      */
-    public function update($slug, UpdateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo)
+    public function update($slug, UpdateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo): array
     {
         $person = $request->getPersonSlug();
 
@@ -160,22 +160,21 @@ class Blog extends Controller
         $post = $blogRepo->updateOne($slug, $request->all());
         $blogRepo->category()->updatePost($request->getCategories(), $post);
         $blogRepo->tag()->updatePost($request->getTags(), $post);
-        return (
-        [
+        return [
             'url' => $this->getPostUrl($post),
             'blog_post_slug' => $post->getAttribute('blog_post_slug'),
-        ]);
+        ];
     }
 
     /**
      * @param $slug
      * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
-     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
+     * @param \Naraki\Media\Contracts\Media|\Naraki\Media\Providers\Media $mediaRepo
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Exception
      * @throws \Throwable
      */
-    public function destroy($slug, BlogProvider $blogRepo, MediaProvider $mediaRepo)
+    public function destroy($slug, BlogProvider $blogRepo, MediaProvider $mediaRepo): Response
     {
         try {
             $mediaUuids = $mediaRepo->image()
@@ -197,12 +196,12 @@ class Blog extends Controller
 
     /**
      * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
-     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
+     * @param \Naraki\Media\Contracts\Media|\Naraki\Media\Providers\Media $mediaRepo
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Throwable
      */
-    public function batchDestroy(BlogProvider $blogRepo, MediaProvider $mediaRepo, Request $request)
+    public function batchDestroy(BlogProvider $blogRepo, MediaProvider $mediaRepo, Request $request): Response
     {
         $input = $request->only('posts');
         if (isset($input['posts'])) {
@@ -227,10 +226,10 @@ class Blog extends Controller
     /**
      * @param string $slug
      * @param string $uuid
-     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
-     * @return mixed
+     * @param \Naraki\Media\Contracts\Media|\Naraki\Media\Providers\Media $mediaRepo
+     * @return array
      */
-    public function setFeaturedImage($slug, $uuid, MediaProvider $mediaRepo)
+    public function setFeaturedImage($slug, $uuid, MediaProvider $mediaRepo): array
     {
         $mediaRepo->image()->setAsUsed($uuid);
         $media = $mediaRepo->image()->getOne($uuid, ['media_extension']);
@@ -238,7 +237,7 @@ class Blog extends Controller
             $mediaRepo->image()->cropImageToFormat(
                 $uuid,
                 Entity::BLOG_POSTS,
-                \App\Models\Media\Media::IMAGE,
+                \Naraki\Media\Models\Media::IMAGE,
                 $media->getAttribute('media_extension'),
                 MediaImgFormat::FEATURED
             );
@@ -249,11 +248,11 @@ class Blog extends Controller
     /**
      * @param string $slug
      * @param string $uuid
-     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
-     * @return mixed
+     * @param \Naraki\Media\Contracts\Media|\Naraki\Media\Providers\Media $mediaRepo
+     * @return array
      * @throws \Exception
      */
-    public function deleteImage($slug, $uuid, MediaProvider $mediaRepo)
+    public function deleteImage($slug, $uuid, MediaProvider $mediaRepo): array
     {
         $mediaRepo->image()->delete(
             $uuid,
@@ -265,7 +264,7 @@ class Blog extends Controller
      * @param \Naraki\Blog\Models\BlogPost $post
      * @return string
      */
-    private function getPostUrl($post)
+    private function getPostUrl($post): string
     {
         $params = [
             'slug' => $post->getAttribute('blog_post_slug'),

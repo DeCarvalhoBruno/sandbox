@@ -47,7 +47,9 @@
         "psr-4": {
             "App\\": "app/",
             "Naraki\\Blog\\": "naraki/blog/src/",
-            "Naraki\\Rss\\": "naraki/rss/src/"
+            "Naraki\\Rss\\": "naraki/rss/src/",
+            "Naraki\\Media\\": "naraki/media/src/",
+            "Naraki\\Mail\\": "naraki/mail/src/"
         },
         "files": [
             "app/Support/helpers.php"

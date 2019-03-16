@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Ajax\Admin\User;
 
-use App\Contracts\Models\Media as MediaProvider;
+use Naraki\Media\Contracts\Media as MediaProvider;
 use App\Http\Controllers\Admin\Controller;
 use App\Http\Requests\Admin\UpdateUser;
 use App\Models\Entity;
@@ -43,7 +43,7 @@ class Profile extends Controller
     /**
      * @param \Illuminate\Http\Request $request
      * @param \App\Support\Providers\User $user
-     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
+     * @param \Naraki\Media\Contracts\Media|\Naraki\Media\Providers\Media $mediaRepo
      * @return \Illuminate\Http\Response
      */
     public function setAvatar(Request $request, UserProvider $user, MediaProvider $mediaRepo)
@@ -55,7 +55,7 @@ class Profile extends Controller
     /**
      * @param int $uuid
      * @param \App\Support\Providers\User $user
-     * @param \App\Contracts\Models\Media|\App\Support\Providers\Media $mediaRepo
+     * @param \Naraki\Media\Contracts\Media|\Naraki\Media\Providers\Media $mediaRepo
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
@@ -64,7 +64,7 @@ class Profile extends Controller
         $mediaRepo->image()->delete(
             $uuid,
             Entity::USERS,
-            \App\Models\Media\Media::IMAGE_AVATAR
+            \Naraki\Media\Models\Media::IMAGE_AVATAR
         );
 
         return response($this->getAvatars($user), Response::HTTP_OK);
