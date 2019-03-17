@@ -21,6 +21,7 @@
         "php-http/message": "^1.7.2",
         "ramsey/uuid": "^3.8",
         "suin/php-rss-writer": "^1.6",
+        "thepixeldeveloper/sitemap": "^5.1",
         "tymon/jwt-auth": "1.0.0-rc.4"
     },
     "require-dev": {
@@ -49,7 +50,8 @@
             "Naraki\\Blog\\": "naraki/blog/src/",
             "Naraki\\Rss\\": "naraki/rss/src/",
             "Naraki\\Media\\": "naraki/media/src/",
-            "Naraki\\Mail\\": "naraki/mail/src/"
+            "Naraki\\Mail\\": "naraki/mail/src/",
+            "Naraki\\Sitemap\\": "naraki/sitemap/src/"
         },
         "files": [
             "app/Support/helpers.php"

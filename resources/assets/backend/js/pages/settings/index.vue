@@ -45,6 +45,11 @@
             icon: 'share-alt',
             name: this.$t('pages.settings.social'),
             route: 'admin.settings.social'
+          },
+          {
+            icon: 'map-signs',
+            name: this.$t('pages.settings.sitemap'),
+            route: 'admin.settings.sitemap'
           }
         ]
       }

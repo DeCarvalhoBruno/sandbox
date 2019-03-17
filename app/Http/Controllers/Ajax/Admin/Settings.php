@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\Admin\Controller;
 use App\Http\Requests\Admin\UpdateSettings;
+use App\Http\Requests\Admin\UpdateSitemapSettings;
 use App\Http\Requests\Admin\UpdateSocialSettings;
 use App\Support\Frontend\Jsonld\Models\General as GeneralJsonldManager;
-use App\Support\Frontend\Social\General;
+use App\Support\Frontend\Social\General as GeneralSocialTagManager;
 use Illuminate\Http\Response;
 
 class Settings extends Controller
@@ -62,7 +63,7 @@ class Settings extends Controller
 
     public function updateSocial(UpdateSocialSettings $request)
     {
-        $socialTagManager = new General();
+        $socialTagManager = new GeneralSocialTagManager();
         $input = $request->all();
         \Cache::forever('settings_social', $input);
         $description = \Cache::get('meta_description');
@@ -76,6 +77,19 @@ class Settings extends Controller
             \Cache::forever('meta_twitter', $socialTagManager->getTwitterTagList($title, $description, $input));
         }
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function editSitemap()
+    {
+        return response([
+            'settings' => \Cache::get('settings_sitemap'),
+        ], Response::HTTP_OK);
+    }
+
+    public function updateSitemap(UpdateSitemapSettings $request)
+    {
+        $input = $request->all();
+        \Cache::forever('settings_social', $input);
     }
 
 

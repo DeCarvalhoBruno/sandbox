@@ -1,6 +1,6 @@
 <?php namespace Naraki\Rss\Controllers;
 
-use App\Http\Controllers\Frontend\Controller;
+use Illuminate\Routing\Controller;
 use Naraki\Rss\Contracts\RssFeedable;
 
 class Rss extends Controller

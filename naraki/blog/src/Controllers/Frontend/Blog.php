@@ -1,6 +1,7 @@
 <?php namespace Naraki\Blog\Controllers\Frontend;
 
-use App\Http\Controllers\Frontend\Controller;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Routing\Controller;
 use App\Models\Language;
 use Naraki\Blog\Facades\Blog as BlogFacade;
 use Naraki\Media\Contracts\Media as MediaProvider;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Blog extends Controller
 {
+    use DispatchesJobs;
 
     /**
      * @var \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog
@@ -64,7 +66,7 @@ class Blog extends Controller
             ->get();
 
         $sources = $this->blogRepo->source()->buildByBlogSlug($slug)->get();
-        $otherPosts = $this->blogRepo->buildSimple([
+        $otherPosts = $this->blogRepo->buildWithScopes([
             'blog_post_title as title',
             'blog_post_slug as slug',
             'published_at as date',
@@ -105,7 +107,7 @@ class Blog extends Controller
      */
     public function category($slug, MediaProvider $mediaRepo)
     {
-        $posts = $this->blogRepo->buildSimple([
+        $posts = $this->blogRepo->buildWithScopes([
             'blog_post_title as title',
             'blog_post_excerpt as excerpt',
             'blog_post_slug as slug',
@@ -143,7 +145,7 @@ class Blog extends Controller
 
     public function tag($slug, MediaProvider $mediaRepo)
     {
-        $posts = $this->blogRepo->buildSimple([
+        $posts = $this->blogRepo->buildWithScopes([
             'blog_post_title as title',
             'blog_post_excerpt as excerpt',
             'blog_post_slug as slug',
@@ -173,7 +175,7 @@ class Blog extends Controller
      */
     public function author($slug, MediaProvider $mediaRepo)
     {
-        $posts = $this->blogRepo->buildSimple([
+        $posts = $this->blogRepo->buildWithScopes([
             'blog_post_title as title',
             'blog_post_excerpt as excerpt',
             'blog_post_slug as slug',
@@ -217,7 +219,7 @@ class Blog extends Controller
 
     private function getMostViewedPosts($slug)
     {
-        return $this->blogRepo->buildSimple([
+        return $this->blogRepo->buildWithScopes([
             'blog_post_title as title',
             'blog_post_excerpt as excerpt',
             'blog_post_slug as slug',

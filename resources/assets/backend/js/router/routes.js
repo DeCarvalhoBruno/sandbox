@@ -39,6 +39,8 @@ const SettingsGeneral = () => import('back_path/pages/settings/general').then(
   m => m.default || m)
 const SettingsSocial = () => import('back_path/pages/settings/social').then(
   m => m.default || m)
+const SettingsSitemap = () => import('back_path/pages/settings/sitemap').then(
+  m => m.default || m)
 
 const SystemLog = () => import('back_path/pages/system/log').then(
   m => m.default || m)
@@ -159,6 +161,10 @@ let routes = [
       {
         name: 'admin.settings.social',
         component: SettingsSocial
+      },
+      {
+        name: 'admin.settings.sitemap',
+        component: SettingsSitemap
       },
     ]
   },

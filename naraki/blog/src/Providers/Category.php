@@ -38,7 +38,7 @@ class Category extends Model implements BlogCategoryInterface
      */
     public function getByCodename($codename)
     {
-        $builder = $this->createModel()->newQuery();
+        $builder = $this->build();
         if (is_array($codename)) {
             $builder->whereIn('blog_category_slug', $codename);
         } else {
@@ -106,7 +106,7 @@ class Category extends Model implements BlogCategoryInterface
      */
     public function getSelected($postId)
     {
-        return $this->createModel()->newQuery()
+        return $this
             ->select(['blog_category_slug'])
             ->labelType()
             ->labelRecord($postId)
@@ -119,7 +119,7 @@ class Category extends Model implements BlogCategoryInterface
      */
     public function getCat($id)
     {
-        return $this->createModel()
+        return $this->build()
             ->where('blog_category_slug', $id)->first();
     }
 

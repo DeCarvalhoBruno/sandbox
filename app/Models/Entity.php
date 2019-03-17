@@ -24,8 +24,8 @@ class Entity extends Model
      * @var array Used in case a specific model isn't in \App\Models
      */
     public static $classMap = [
-        'BlogPost' => 'Blog\BlogPost',
-        'Email'=>'Email\Email'
+        'BlogPost' => 'Naraki\Blog\Models\BlogPost',
+        'Email' => 'Naraki\Mail\Models\Email'
     ];
 
     /**
@@ -65,10 +65,9 @@ class Entity extends Model
     {
         try {
             $className = static::getModelClass($entityID);
-            $classNamespace = sprintf('\App\Models\%s',
-                isset(static::$classMap[$className]) ?
-                    static::$classMap[$className] :
-                    $className);
+            $classNamespace = isset(static::$classMap[$className])
+                ? static::$classMap[$className]
+                : sprintf('\App\Models\%s', $className);
             if (class_exists($classNamespace)) {
                 return ($prefixWithBackslash) ? $classNamespace : substr($classNamespace, 1);
             }
@@ -120,7 +119,7 @@ class Entity extends Model
     {
         $entities = array_flip(static::getConstants());
         if (isset($entities[$entityID])) {
-            return trans(sprintf('general.enumerables.%s',$entities[$entityID]));
+            return trans(sprintf('general.enumerables.%s', $entities[$entityID]));
         }
         return null;
     }

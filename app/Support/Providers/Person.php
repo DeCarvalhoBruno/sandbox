@@ -13,7 +13,7 @@ class Person extends Model implements PersonInterface
 
     public function buildOneBySlug($slug, $columns = ['*']): Builder
     {
-        return $this->createModel()->newQuery()
+        return $this
             ->select($columns)->where('person_slug', $slug);
 
     }
@@ -25,7 +25,7 @@ class Person extends Model implements PersonInterface
      */
     public function search($search, $limit): Builder
     {
-        return $this->createModel()->newQuery()
+        return $this
             ->select(['full_name as text', 'person_slug as id'])
             ->where('full_name', 'like', sprintf('%%%s%%', $search))
             ->limit($limit);

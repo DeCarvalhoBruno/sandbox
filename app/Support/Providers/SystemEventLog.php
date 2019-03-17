@@ -21,7 +21,7 @@ class SystemEventLog extends Model implements SystemEventLogInterface
     public function getFromThisWeek()
     {
         $lastWeek = Carbon::now()->startOfWeek()->subWeek();
-        return $this->createModel()->newQuery()->select(['system_event_id', 'created_at', 'system_event_log_data'])
+        return $this->select(['system_event_id', 'created_at', 'system_event_log_data'])
             ->where('created_at', '>', $lastWeek->toDateTimeString())
             ->orderBy('created_at', 'desc');
     }

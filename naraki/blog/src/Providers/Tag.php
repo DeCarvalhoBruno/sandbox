@@ -11,7 +11,7 @@ class Tag extends Model implements BlogTagInterface
 
     public function getByPost($postId)
     {
-        return $this->createModel()->newQuery()
+        return $this
             ->select(['blog_tag_name'])
             ->labelType()
             ->labelRecord($postId)
@@ -49,7 +49,7 @@ class Tag extends Model implements BlogTagInterface
      */
     public function getByName($name)
     {
-        $builder = $this->createModel()->newQuery();
+        $builder = $this->build();
         if (is_array($name)) {
             $builder->whereIn('blog_tag_name', $name);
         } else {

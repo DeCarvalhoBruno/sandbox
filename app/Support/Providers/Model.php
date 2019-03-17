@@ -3,6 +3,7 @@
 use App\Contracts\HasAnEntity;
 use App\Contracts\RawQueries;
 use App\Models\Entity;
+use Illuminate\Database\Eloquent\Builder;
 
 abstract class Model
 {
@@ -81,15 +82,7 @@ abstract class Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Model
-     */
-    public function build()
-    {
-        return $this->createModel();
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Builder|static
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function noScopes()
     {
@@ -99,11 +92,28 @@ abstract class Model
     /**
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function select($select)
+    public function build()
     {
-        return $this->createModel()->select($select);
+        return $this->createModel()->newQuery();
     }
 
+    /**
+     * @param array $columns
+     * @param array $scopes
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function buildWithScopes(array $columns, array $scopes): Builder
+    {
+        return $this->select($columns)->scopes($scopes);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function select($columns = ['*'])
+    {
+        return $this->createModel()->newQuery()->select($columns);
+    }
 
     /**
      * For models using the HasAnEntity trait
@@ -179,13 +189,10 @@ abstract class Model
     {
         $model = $this->createModel();
 
-        /**
-         * We substract one because a lot of tables have a dummy record of id 0 used for system purposes.
-         */
-        return $model->newQuery()
+        return intval($model->newQuery()
             ->select(
-                \DB::raw(sprintf('count(%s)-1 as cnt', $model->getKeyName())))
-            ->value('cnt');
+                \DB::raw(sprintf('count(%s) as cnt', $model->getKeyName())))
+            ->value('cnt'));
     }
 
     /**

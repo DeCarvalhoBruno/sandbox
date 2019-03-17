@@ -17,7 +17,7 @@
                                 <label class="input-group-text"
                                        :title="$t('general.search')"
                                        @click="filterBlogTitle">
-                                    <i class="fa fa-newspaper"></i>
+                                    <i class="fa fa-newspaper-o"></i>
                                 </label>
                             </div>
                         </div>

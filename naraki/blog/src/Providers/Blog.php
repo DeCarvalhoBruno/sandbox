@@ -76,7 +76,7 @@ class Blog extends Model implements BlogInterface
      */
     public function buildForDisplay(): Builder
     {
-        return $this->buildSimple([
+        return $this->buildWithScopes([
             'blog_post_title as title',
             'published_at as date',
             'blog_category_slug as cat',
@@ -100,17 +100,7 @@ class Blog extends Model implements BlogInterface
      */
     public function buildList($attributes): Builder
     {
-        return $this->buildSimple($attributes, ['person']);
-    }
-
-    /**
-     * @param array $columns
-     * @param array $scopes
-     * @return \Illuminate\Database\Eloquent\Builder|mixed
-     */
-    public function buildSimple($columns, $scopes): Builder
-    {
-        return $this->select($columns)->scopes($scopes);
+        return $this->buildWithScopes($attributes, ['person']);
     }
 
     /**
@@ -120,7 +110,7 @@ class Blog extends Model implements BlogInterface
      */
     public function buildOneBySlug($slug, $attributes = ['*'])
     {
-        return $this->buildSimple($attributes, ['entityType', 'status', 'person'])
+        return $this->buildWithScopes($attributes, ['entityType', 'status', 'person'])
             ->where('blog_post_slug', '=', $slug);
     }
 
@@ -148,7 +138,7 @@ class Blog extends Model implements BlogInterface
      */
     public function updateOne($slug, $data)
     {
-        $builder = $this->createModel()->newQuery()->where('blog_post_slug', '=', $slug);
+        $builder = $this->build()->where('blog_post_slug', '=', $slug);
         (clone($builder))->update($this->filterFillables($data));
         return $builder->select(['blog_post_id', 'blog_post_slug', 'blog_status_id'])->first();
     }
@@ -160,10 +150,40 @@ class Blog extends Model implements BlogInterface
     public function deleteBySlug($slug)
     {
         if (is_string($slug)) {
-            return $this->createModel()->newQuery()->where('blog_post_slug', '=', $slug)->delete();
+            return $this->build()->where('blog_post_slug', '=', $slug)->delete();
         } else {
-            return $this->createModel()->newQuery()->whereIn('blog_post_slug', $slug)->delete();
+            return $this->build()->whereIn('blog_post_slug', $slug)->delete();
         }
     }
+
+    /**
+     * @param int $n
+     * @param string $column
+     * @return string
+     */
+    public function getNth($n, $column)
+    {
+        return $this->select([$column])
+            ->orderBy($column, 'desc')
+            ->limit(1)
+            ->offset($n)->value($column);
+    }
+
+    /**
+     * @param int $n
+     * @param int $offset
+     * @param array $columns
+     * @param string $order
+     * @param string $direction
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getN($n, $offset, $columns, $order, $direction = 'desc')
+    {
+        return $this->select($columns)
+            ->orderBy($order, $direction)
+            ->limit($n)
+            ->offset($offset);
+    }
+
 
 }

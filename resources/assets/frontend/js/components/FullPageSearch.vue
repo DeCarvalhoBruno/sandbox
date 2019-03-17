@@ -19,7 +19,7 @@
                     <div class="row d-flex align-items-center">
                       <div class="col-md-3">
                         <figure><a :href="article.meta.url"><img v-if="article.meta.image"
-                                                                 :src="article.meta.image.url"
+                                                                 :src="article.meta.image"
                                                                  :alt="article.title"/><img
                             v-else :src="blackBg" :alt="article.title"/></a></figure>
                       </div>

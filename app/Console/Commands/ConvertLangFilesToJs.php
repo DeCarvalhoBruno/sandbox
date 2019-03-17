@@ -44,13 +44,24 @@ class ConvertLangFilesToJs extends Command
                 $fileFrontend = sprintf('%s/js-frontend.php', $langDir);
                 $fileCommon = sprintf('%s/js-common.php', $langDir);
                 if (is_file($fileBackend)&&is_file($fileFrontend)&&is_file($fileCommon)) {
-                    $contents = array_merge(include($fileBackend),include($fileCommon));
+                    $contents = include($fileBackend);
+                    $varsCommon = include($fileCommon);
+                    foreach($varsCommon as $k=>$v){
+                        if(isset($contents[$k])){
+                            $contents[$k] = array_merge($contents[$k],$v);
+                        }
+                    }
                     $fh = fopen(sprintf('resources/assets/backend/js/lang/%s.json', $languageDir), 'w');
                     fwrite($fh, json_encode($contents));
                     fclose($fh);
                     $this->info('    - Backend ' . $languageDir);
 
-                    $contents = array_merge(include($fileFrontend),include($fileCommon));
+                    $contents = include($fileFrontend);
+                    foreach($varsCommon as $k=>$v){
+                        if(isset($contents[$k])){
+                            $contents[$k] = array_merge($contents[$k],$v);
+                        }
+                    }
                     $fh = fopen(sprintf('resources/assets/frontend/js/lang/%s.json', $languageDir), 'w');
                     fwrite($fh, json_encode($contents));
                     fclose($fh);

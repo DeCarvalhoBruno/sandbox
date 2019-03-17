@@ -49,7 +49,7 @@ class Image extends Model implements ImageInterface
      */
     public function getOne($uuid, $columns = ['*'])
     {
-        return $this->createModel()->newQuery()
+        return $this
             ->select($columns)
             ->mediaType()->where('media_uuid', '=', $uuid)->first();
     }

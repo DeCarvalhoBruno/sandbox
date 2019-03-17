@@ -17,7 +17,8 @@ return [
         'user_index' => 'Listing users',
         'dashboard' => 'Dashboard',
         'system_log' => 'System Log',
-        'settings_social' => 'Social media settings'
+        'settings_social' => 'Social media settings',
+        'settings_sitemap' => 'Sitemap settings',
     ],
     'breadcrumb' => [
         'admin-dashboard' => 'Home',
@@ -38,7 +39,8 @@ return [
         'admin-system-log' => 'System Log',
         'admin-settings-settings' => 'Website settings',
         'admin-settings-general' => 'General settings',
-        'admin-settings-social' => 'Social media settings'
+        'admin-settings-social' => 'Social media settings',
+        'admin-settings-sitemap' => 'Sitemap settings'
     ],
     'sidebar' => [
         'main_nav' => 'MAIN NAVIGATION',
@@ -284,6 +286,8 @@ return [
             'person_url' => 'URL',
             'entity_logo' => 'Logo',
             'social' => 'Social',
+            'sitemap' => 'Sitemap',
+            'enable_sitemap'=>'Enable sitemaps',
             'social_url' => 'Social media page url',
             'entity_social_help' => 'Links to user/organization profiles can be added below. Google recognizes the following platforms: Facebook, Twitter, Google+, Instagram, YouTube, LinkedIn, Myspace, Pinterest, SoundCloud and Tumblr.'
         ],

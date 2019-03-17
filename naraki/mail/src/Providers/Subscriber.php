@@ -25,7 +25,7 @@ class Subscriber extends Model implements SubscriberInterface
      */
     public function buildAllUser($personID, $columns = ['*']): Builder
     {
-        return $this->createModel()->newQuery()
+        return $this->build()
             ->recipientEntityType()
             ->emailList()
             ->person()

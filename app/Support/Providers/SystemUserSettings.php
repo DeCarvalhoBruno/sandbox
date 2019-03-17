@@ -19,7 +19,7 @@ class SystemUserSettings extends Model implements SystemInterface
      */
     public function getSettings($userID, $systemSectionID = SystemSection::BACKEND)
     {
-        return $this->createModel()->newQuery()
+        return $this->build()
             ->where('user_id', '=', $userID)
             ->where('system_section_id', '=', $systemSectionID);
     }
@@ -37,7 +37,7 @@ class SystemUserSettings extends Model implements SystemInterface
             if (empty($events)) {
                 $events = null;
             }
-            $existing = $this->createModel()->newQuery()
+            $existing = $this->build()
                 ->where('user_id', '=', $userId)
                 ->first();
             if (!is_null($existing)) {

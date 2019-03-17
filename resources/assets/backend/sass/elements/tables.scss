@@ -1,15 +1,13 @@
 #app_backend_wrapper {
   .table {
-    margin-bottom: 2rem;
-  }
-  .table td {
-    border:none;
-  }
-  .table {
     margin-bottom: 0;
+
+    td {
+      border: none;
+    }
   }
 
-  .table-container>h3{
-    padding:2rem 5rem;
+  .table-container > h3 {
+    padding: 2rem 5rem;
   }
 }

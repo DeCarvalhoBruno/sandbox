@@ -157,6 +157,7 @@ return [
         Naraki\Rss\ServiceProvider::class,
         Naraki\Media\ServiceProvider::class,
         Naraki\Mail\ServiceProvider::class,
+        Naraki\Sitemap\ServiceProvider::class,
 
         /*
          * Application Service Providers...

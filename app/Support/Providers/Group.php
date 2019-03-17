@@ -20,7 +20,7 @@ class Group extends Model implements GroupInterface
      */
     public function getOneByName($groupName, $columns = ['*'])
     {
-        return $this->createModel()->newQuery()->select($columns)->where('group_name', '=', $groupName);
+        return $this->select($columns)->where('group_name', '=', $groupName);
     }
 
     /**
@@ -68,7 +68,7 @@ class Group extends Model implements GroupInterface
     public function createOne($data)
     {
         $this->createModel()->insert($data);
-        return $this->createModel()->newQuery()
+        return $this
             ->select(['entity_type_id'])
             ->where('group_name','=',$data['group_name'])
             ->entityType()->first();
@@ -76,7 +76,7 @@ class Group extends Model implements GroupInterface
 
     public function deleteByName($groupName)
     {
-        $this->createModel()->newQuery()->where('group_name','=',$groupName)->delete();
+        $this->build()->where('group_name','=',$groupName)->delete();
         event(new PermissionEntityUpdated);
     }
 
@@ -95,7 +95,7 @@ class Group extends Model implements GroupInterface
             return [
                 'count' => $count,
                 'users' =>
-                    $this->createModel()->newQuery()->select(['full_name as text', 'username as id'])
+                    $this->select(['full_name as text', 'username as id'])
                         ->groupMember()->user()->where('group_name', '=', $groupName)
                         ->orderBy('last_name', 'asc')->get()
             ];
@@ -110,7 +110,7 @@ class Group extends Model implements GroupInterface
      */
     public function searchMembers($groupName, $search, $limit = 10)
     {
-        return $this->createModel()->newQuery()->select(['full_name as text', 'username as id'])
+        return $this->select(['full_name as text', 'username as id'])
             ->groupMember()->user()->where('group_name', '=', strip_tags($groupName))
             ->where('full_name', 'like', sprintf('%%%s%%', strip_tags($search)))
             ->limit($limit)->get();

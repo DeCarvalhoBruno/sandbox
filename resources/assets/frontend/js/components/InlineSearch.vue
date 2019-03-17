@@ -22,7 +22,7 @@
             <li v-for="(article, idx) in searchData.articles"
                 :key="'article'+idx"><a :href="article.meta.url">
               <figure>
-                <img v-if="article.meta.image" :src="article.meta.image.url" :alt="article.title"/>
+                <img v-if="article.meta.image" :src="article.meta.image" :alt="article.title"/>
                 <img v-else :src="blackBg" :alt="article.title"/>
               </figure>
               {{article.title}}</a></li>

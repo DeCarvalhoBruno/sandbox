@@ -18,13 +18,13 @@ class Source extends Model implements BlogSourceInterface
                 'blog_source_record_id as record'
             ];
         }
-        return $this->createModel()->newQuery()->select($columns)
+        return $this->select($columns)
             ->post($slug)->source();
     }
 
     public function createOne($type, $content, $blogSlug)
     {
-        $blogPost = $this->createModel()->newQuery()->select(['blog_posts.blog_post_id'])
+        $blogPost = $this->select(['blog_posts.blog_post_id'])
             ->post($blogSlug)->first();
         if (!is_null($blogPost)) {
             BlogSourceRecord::create([
@@ -37,7 +37,7 @@ class Source extends Model implements BlogSourceInterface
 
     public function deleteOne($id)
     {
-        $model = $this->createModel()->newQuery()->select(['blog_source_record_id'])
+        $model = $this->select(['blog_source_record_id'])
             ->where('blog_source_record_id', $id)->first();
         if (!is_null($model)) {
             return $model->delete();

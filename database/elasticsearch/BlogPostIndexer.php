@@ -52,13 +52,10 @@ class BlogPostIndexer extends ElasticSearchIndexer
             ->get();
         $images = [];
         foreach ($dbImages as $image) {
-            $images[$image->getAttribute('type')] = [
-                'url' => $image->present('thumbnail'),
-            ];
+            $images[$image->getAttribute('type')] = $image->present('thumbnail');
         }
 
         $dbPosts = \Naraki\Blog\Models\BlogPost::query()
-//            ->entityType()
             ->scopes(['entityType', 'person'])
             ->select([
                 'blog_posts.blog_post_id as id',

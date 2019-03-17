@@ -13,7 +13,7 @@ class UsersSeeder extends Seeder
     {
         $logging = DB::connection()->logging();
         DB::connection()->disableQueryLog();
-        $this->avatar = new \App\Support\Providers\Image(new \App\Support\Providers\Avatar);
+        $this->avatar = Media::image();
         $pwd = bcrypt('secret');
         $u = factory(App\Models\User::class)->create([
             'username' => 'john_doe',

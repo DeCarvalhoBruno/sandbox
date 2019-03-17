@@ -160,7 +160,7 @@ class User extends Model implements UserProvider, UserInterface
      */
     public function buildOneByUsername($username, $columns = ['*'])
     {
-        return $this->createModel()->newQuery()
+        return $this
             ->select($columns)->where('username', $username);
     }
 
@@ -271,7 +271,7 @@ class User extends Model implements UserProvider, UserInterface
      */
     public function search($search, $userEntityId, $limit)
     {
-        return $this->createModel()->newQuery()
+        return $this
             ->select(['full_name as text', 'username as id'])
             ->entityType()
             ->permissionRecord()

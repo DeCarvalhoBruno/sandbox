@@ -19,7 +19,7 @@ export default [
     items: [
       {
         type: 'item',
-        icon: 'list-ol',
+        icon: 'list-ul',
         name: 'sidebar.list',
         router: {
           name: 'admin.users.index'
@@ -34,7 +34,7 @@ export default [
     items: [
       {
         type: 'item',
-        icon: 'list-ol',
+        icon: 'list-ul',
         name: 'sidebar.list',
         router: {
           name: 'admin.groups.index'
@@ -42,7 +42,7 @@ export default [
       },
       {
         type: 'item',
-        icon: 'plus-square',
+        icon: 'plus',
         name: 'sidebar.add',
         router: {
           name: 'admin.groups.add'
@@ -57,7 +57,7 @@ export default [
     items: [
       {
         type: 'item',
-        icon: 'list-ol',
+        icon: 'list-ul',
         name: 'sidebar.list',
         router: {
           name: 'admin.blog_posts.index'
@@ -65,7 +65,7 @@ export default [
       },
       {
         type: 'item',
-        icon: 'plus-square',
+        icon: 'plus',
         name: 'sidebar.add',
         router: {
           name: 'admin.blog_posts.add'

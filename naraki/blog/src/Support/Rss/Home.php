@@ -26,7 +26,7 @@ class Home extends Blog implements RssFeedable
 
     private function getData()
     {
-        $dbResult = BlogRepo::buildSimple(
+        $dbResult = BlogRepo::buildWithScopes(
             [
                 'blog_post_title as title',
                 'blog_post_excerpt as excerpt',

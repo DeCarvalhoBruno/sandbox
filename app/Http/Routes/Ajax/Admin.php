@@ -69,6 +69,8 @@ class Admin
             $r->post('settings/general','Settings@update');
             $r->get('settings/social','Settings@editSocial');
             $r->post('settings/social','Settings@updateSocial');
+            $r->get('settings/sitemap','Settings@editSitemap');
+            $r->post('settings/sitemap','Settings@updateSitemap');
 
             $r->get('dashboard', 'Dashboard@index');
 

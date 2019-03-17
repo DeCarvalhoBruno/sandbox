@@ -29,7 +29,8 @@
     }
     //Logo
     .logo {
-      @include logo-variant(darken($light-blue, 5%));
+      color: #343a40;
+      //@include logo-variant(darken($light-blue, 5%));
     }
 
     li.user-header {

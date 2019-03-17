@@ -16,7 +16,7 @@ class Author extends Blog implements RssFeedable
 
     public function getData()
     {
-        $dbResult = BlogRepo::buildSimple([
+        $dbResult = BlogRepo::buildWithScopes([
             'blog_post_title as title',
             'blog_post_excerpt as excerpt',
             'blog_post_slug as slug',

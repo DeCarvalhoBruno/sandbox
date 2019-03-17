@@ -1,12 +1,10 @@
 <template>
   <header class="main-header">
     <!-- Logo -->
-    <div v-if="user" id="logo_wrapper">
+    <div v-if="user" id="logo-wrapper">
       <a href="index2.html" class="logo">
-        <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini">LV</span>
-        <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg">Laravel</span>
+        <span class="logo-mini"><img src="/media/img/site/logo-bk.png"></span>
+        <span class="logo-lg"><img src="/media/img/site/logo-text.png"></span>
       </a>
     </div>
 

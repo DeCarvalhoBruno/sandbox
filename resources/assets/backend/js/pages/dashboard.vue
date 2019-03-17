@@ -12,7 +12,7 @@
                     </div>
                     <router-link :to="{ name: `admin.${entity}.index` }" class="nav-link small-box-footer"
                                  active-class="active">
-                        <span>More info <i class="fa fa-arrow-circle-right"></i></span>
+                        <span>More info <i class="fa fa-arrow-circle-o-right"></i></span>
                     </router-link>
                 </div>
             </div>

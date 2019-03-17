@@ -24,18 +24,20 @@ class User extends Controller
     {
         $userProvider->setStoredFilter($this->user->getKey(), $userFilter);
         $users = $userProvider
-            ->select([
+            ->buildWithScopes([
                 \DB::raw('null as selected'),
                 'full_name',
                 'email',
                 'created_at',
                 'permission_mask',
                 'username'
-            ])->entityType()
-            ->permissionRecord()
-            ->permissionStore()
-            ->permissionMask($this->user->getEntityType())
-            ->activated()
+            ], [
+                'entityType',
+                'permissionRecord',
+                'permissionStore',
+                'permissionMask' => $this->user->getEntityType(),
+                'activated'
+            ])
             ->where('username', '!=', $this->user->getAttribute('username'))
             ->filter($userFilter);
         $groups = (clone $users)->select('group_name')->groupBy('group_name');
@@ -67,21 +69,22 @@ class User extends Controller
      */
     public function edit($username, UserProvider $userProvider)
     {
+
         $filter = $userProvider->getStoredFilter($this->user->getKey(), Entity::USERS);
         $nav = [];
         if (!is_null($filter)) {
-            $userSiblings = $userProvider->select(
-                [
-                    'username',
-                ])->entityType()
-                ->permissionRecord()
-                ->permissionStore()
-                ->permissionMask($this->user->getEntityType())
-                ->activated()
-                ->where('username', '!=', $this->user->getAttribute('username'))
+            $userSiblings = $userProvider->buildWithScopes([
+                'username',
+            ], [
+                'entityType',
+                'permissionRecord',
+                'permissionStore',
+                'permissionMask' => $this->user->getEntityType()
+            ])->where('username', '!=', $this->user->getAttribute('username'))
                 ->filter($filter)
                 ->pluck('username')->all();
-
+            dd($userSiblings);
+            return response($userProvider->select()->limit(10)->get(), 200);
             $total = count($userSiblings);
             $index = array_search($username, $userSiblings);
             $nav = array(

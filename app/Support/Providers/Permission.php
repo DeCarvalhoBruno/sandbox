@@ -25,7 +25,7 @@ class Permission extends Model implements PermissionInterface
         if (!is_int($entityTypeId)) {
             return;
         }
-        $query = $this->createModel()->newQuery()
+        $query = $this
             ->select(['permission_id', 'permission_mask', 'entities.entity_id'])
             ->entityAll($entityTypeId)->entityType();
         $result = $this->createModel()->applyEntityScope($query, $entityId)->get()->toArray();
@@ -64,7 +64,7 @@ class Permission extends Model implements PermissionInterface
         if (!is_null($entityTypeId)) {
             array_push($entities, $entityTypeId);
         }
-        $results = $this->createModel()->newQuery()->newQuery()
+        $results = $this
             ->select(['permission_id', 'permission_mask', 'entities.entity_id', 'entity_type_id'])
             ->entityAll($entities)->get();
         $permission = [];

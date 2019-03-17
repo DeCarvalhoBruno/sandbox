@@ -32,8 +32,26 @@
 
   &:hover {
     background-color: #005e00;
-    color:#fff;
+    color: #fff;
   }
+}
+
+button {
+  &.btn-sm {
+    width: 30px;
+    height: 30px;
+    padding:0.35rem 0;
+  }
+}
+
+.faa-ring.animated,
+.faa-ring.animated-hover:hover,
+.faa-parent.animated-hover:hover {
+  -webkit-animation: ring 3s ease infinite;
+  animation: ring 3s ease infinite;
+  transform-origin-x: 50%;
+  transform-origin-y: 0px;
+  transform-origin-z: initial;
 }
 
 @keyframes ring {
@@ -103,14 +121,3 @@
     transform: rotate(0deg);
   }
 }
-
-.faa-ring.animated,
-.faa-ring.animated-hover:hover,
-.faa-parent.animated-hover:hover {
-  -webkit-animation: ring 3s ease infinite;
-  animation: ring 3s ease infinite;
-  transform-origin-x: 50%;
-  transform-origin-y: 0px;
-  transform-origin-z: initial;
-}
-

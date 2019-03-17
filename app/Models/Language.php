@@ -50,7 +50,16 @@ class Language extends Model
                 return 'en_US';
                 break;
         }
+    }
 
+    /**
+     * @return array
+     */
+    public static function getOtherLocales()
+    {
+        $locales = config('app.locales');
+        unset($locales[app()->getLocale()]);
+        return array_keys($locales);
     }
 
 }
