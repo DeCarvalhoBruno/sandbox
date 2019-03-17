@@ -19,8 +19,8 @@
                     <div class="row d-flex align-items-center">
                       <div class="col-md-3">
                         <figure><a :href="article.meta.url"><img v-if="article.meta.image"
-                                                                         :src="article.meta.image.url"
-                                                                         :alt="article.title"/><img
+                                                                 :src="article.meta.image.url"
+                                                                 :alt="article.title"/><img
                             v-else :src="blackBg" :alt="article.title"/></a></figure>
                       </div>
                       <div class="col-md-8">
@@ -93,7 +93,7 @@
           <div id="search-author-wrapper" class="card row mt-3">
             <div class="col">
               <header class="search-header">{{$t('search.authors')}}</header>
-              <ul class="search-tags" v-if="searchData.authors!=null&&searchData.authors.length">
+              <ul v-if="searchData.authors!=null&&searchData.authors.length">
                 <li v-for="(author, idx) in searchData.authors"
                     :key="'author'+idx" class="d-block my-1"><a
                     :href="author.url">{{author.name}}</a>
@@ -101,6 +101,15 @@
               </ul>
               <h6 class="header-no-results" v-else>{{$t('search.no_result')}}</h6>
             </div>
+          </div>
+          <div class="card row mt-3" v-if="searchData.articles!=null&&searchData.articles.data.length">
+              <div class="col">
+                <header class="search-header">{{$t('search.rss')}}</header>
+                <ul class="search-tags social-icon">
+                  <li class="d-block my-1"><a :href="rssUrl" target="_blank"><i class="fa fa-rss"></i></a>
+                  </li>
+                </ul>
+              </div>
           </div>
         </div>
       </div>
@@ -114,7 +123,8 @@
     name: 'full-page-search',
     props: {
       initialValue: {required: true},
-      searchHostUrl: {required: true}
+      searchHostUrl: {required: true},
+      rssRootUrl: {required: true}
     },
     data () {
       return {
@@ -131,6 +141,9 @@
     computed: {
       searchUrl () {
         return `${this.searchHostUrl}/search/paginate`
+      },
+      rssUrl () {
+        return this.rssRootUrl + '/' + this.lastInput
       }
     },
     mounted () {
@@ -153,7 +166,7 @@
             pageTarget = current - 1
           }
         }
-        const {data} = await axios.post(this.searchUrl+'?page=' + pageTarget, {q: this.lastInput})
+        const {data} = await axios.post(this.searchUrl + '?page=' + pageTarget, {q: this.lastInput})
         this.searchData = data
       },
       async search (e) {

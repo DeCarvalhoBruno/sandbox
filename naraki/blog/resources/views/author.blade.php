@@ -33,6 +33,14 @@
                             </div>
                         </div>
                     @endforeach
+                        <div class="row text-right p-1">
+                            <ul class="col search-tags social-icon">
+                                <li class="d-block my-1"><a href="{{route('rss',
+                                ['type'=>'author','slug'=>$author->author])}}"
+                                                            target="_blank"><i class="fa fa-rss"></i></a>
+                                </li>
+                            </ul>
+                        </div>
                 </div>
             </div>
         </div>

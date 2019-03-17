@@ -62,6 +62,12 @@
                                 </div>
                             </div>
                         @endforeach
+                        <div class="row blog-cat-list-item p-0 my-0">
+                            <ul class="search-tags social-icon p-0">
+                                <li class="d-block my-1"><a href="{{route('rss', ['type'=>'category','slug'=>$featured->getAttribute('cat')])}}" target="_blank"><i class="fa fa-rss"></i></a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>

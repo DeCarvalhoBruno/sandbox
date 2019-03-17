@@ -9,7 +9,12 @@ return [
         'home' => 'Home',
         'profile' => 'Your profile',
         'account' => 'Your account',
-        'notifications' => 'Notification options'
+        'notifications' => 'Notification options',
+        'blog' => [
+            'category' => 'Category - :name',
+            'tag' => 'Tag - :name',
+            'author' => 'Author - :name',
+        ]
     ],
     'subscribe_newsletter' => 'Sign up to our newsletter',
     'subscribe' => 'Sign up',

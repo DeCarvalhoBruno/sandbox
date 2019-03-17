@@ -163,7 +163,7 @@
                             <div class="container p-0 text-center">
                                 <div class="row">
                                     <ul class="col social-icon">
-                                        <li><a href="#" target="_blank"><i class="fa fa-rss"></i></a></li>
+                                        <li><a href="{{route('rss',['type'=>'home'])}}" target="_blank"><i class="fa fa-rss"></i></a></li>
                                         <li><a href="#" target="_blank"><i class="fa fa-facebook"></i></a></li>
                                         <li><a href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
                                         <li><a href="#" target="_blank"><i class="fa fa-instagram"></i></a></li>

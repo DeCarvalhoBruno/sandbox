@@ -2,35 +2,6 @@ import ResponsiveBootstrapToolkit from '../plugins/jquery/bootstrap-toolkit'
 import axios from 'axios'
 import swal from 'sweetalert2/dist/sweetalert2.min.js'
 
-(function () {
-  var header = $('header')
-  if (!header.length)
-    return
-  var wrapper = $('div#wrapper')
-  header.before(wrapper)
-  var offsetTop = wrapper.offset().top
-  var fixedTopClass = 'fixed-top'
-  // var windowScrollToTop = $(window).scrollTop()
-  $(window).scroll(function () {
-    var outerHeight = header.outerHeight()
-    var thisScrollTop = $(this).scrollTop()
-
-    if (thisScrollTop <= offsetTop && (header.hasClass(fixedTopClass))) {
-      header.removeClass(fixedTopClass)
-      wrapper.height(0)
-    }
-    if (offsetTop + outerHeight + 20 <= thisScrollTop) {
-      header.addClass(fixedTopClass)
-      wrapper.height(outerHeight)
-      // windowScrollToTop = thisScrollTop
-    }
-    if ($(this).scrollTop() > 200) {
-      $('#scroll-up').fadeIn()
-    } else {
-      $('#scroll-up').fadeOut()
-    }
-  })
-})(jQuery);
 (function ($, viewport) {
   $(document).ready(function () {
     //Detect touch based devices so we can make layout adjustments
@@ -60,14 +31,6 @@ import swal from 'sweetalert2/dist/sweetalert2.min.js'
           )
       }
     }
-
-    //Action for the "back to top" button
-    $('#scroll-up').click(function (e) {
-      e.preventDefault()
-      $('html, body').animate({
-        scrollTop: 0
-      }, 1000)
-    })
 
     //Action for the newsletter subscription form
     $('#form-newsletter-subscribe').on('submit', function (e) {

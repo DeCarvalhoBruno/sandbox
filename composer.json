@@ -36,7 +36,7 @@
         "phpunit/phpunit": "~7.5",
         "rap2hpoutre/laravel-log-viewer": "^1.0",
         "symfony/thanks": "^1.1",
-        "naraki/elasticsearch": "dev-master#c3de52e as 0.1.0"
+        "naraki/elasticsearch": "dev-master#c6acb07 as 0.1.0"
     },
     "autoload": {
         "classmap": [

@@ -133,10 +133,11 @@ class Blog extends Controller
                 'label' => trans(sprintf('pages.blog.category.%s', $slug)),
             ]
         ]);
+        $title = trans('titles.routes.blog.category', ['name' => $featured->getAttribute('cat')]);
 
         return view(
             'blog::category',
-            compact('breadcrumbs', 'posts', 'media', 'featured', 'mvps', 'mvpImages')
+            compact('breadcrumbs', 'posts', 'media', 'featured', 'mvps', 'mvpImages', 'title')
         );
     }
 
@@ -160,8 +161,9 @@ class Blog extends Controller
         }
         $tag = (object)$posts->first()->only(['tag']);
         $media = $this->getImages($posts, $mediaRepo);
+        $title = trans('titles.routes.blog.tag', ['name' => $tag->tag]);
         return view(
-            'blog::tag', compact('posts', 'media', 'tag'));
+            'blog::tag', compact('posts', 'media', 'tag', 'title'));
     }
 
     /**
@@ -190,8 +192,9 @@ class Blog extends Controller
             throw new NotFoundHttpException('Author not found');
         }
         $media = $this->getImages($posts, $mediaRepo);
+        $title = trans('titles.routes.blog.author', ['name' => $author->author]);
         return view(
-            'blog::author', compact('posts', 'media', 'author')
+            'blog::author', compact('posts', 'media', 'author', 'title')
         );
     }
 

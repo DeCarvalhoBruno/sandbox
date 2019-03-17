@@ -28,7 +28,7 @@ class Tag extends Blog implements RssFeedable
         ], ['entityType', 'person', 'tag' => slugify($this->slug)])
             ->orderBy('published_at', 'desc')
             ->where('language_id', Language::getAppLanguageId())
-            ->limit(8)
+            ->limit(15)
             ->get();
 
         $dbImages = Media::image()->getImages(

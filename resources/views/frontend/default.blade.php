@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>{{$title}}</title>
+    <title>{{config('app.name')}} - {{$title}}</title>
     <meta name="title" content="{{$title}}">
     <meta name="referrer" content="always">
     <meta name="viewport"
