@@ -21,7 +21,8 @@ class Person extends Model
         'full_name',
         'user_id',
         'person_slug',
-        'created_at'
+        'created_at',
+        'updated_at'
     ];
 
     /**
@@ -33,8 +34,18 @@ class Person extends Model
     {
         return Person::query()->select($columns)
             ->where('email', '=', $email);
-
     }
 
+    /**
+     * @link https://laravel.com/docs/5.8/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeBlogPost(Builder $builder)
+    {
+        return $builder->join('blog_posts',
+            'blog_posts.person_id', '=', 'people.person_id'
+        );
+    }
 
 }

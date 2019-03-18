@@ -7,6 +7,7 @@ use Naraki\Blog\Models\BlogPost;
 use Naraki\Blog\Contracts\Category as CategoryInterface;
 use Naraki\Blog\Contracts\Tag as TagInterface;
 use Naraki\Blog\Contracts\Source as SourceInterface;
+use Naraki\Blog\Contracts\Author as AuthorInterface;
 
 class Blog extends Model implements BlogInterface
 {
@@ -24,19 +25,25 @@ class Blog extends Model implements BlogInterface
      * @var \Naraki\Blog\Contracts\Source|\Naraki\Blog\Providers\Source $source
      */
     private $source;
+    /**
+     * @var \Naraki\Blog\Contracts\Author|\Naraki\Blog\Providers\Author $author
+     */
+    private $author;
 
     /**
      *
      * @param \Naraki\Blog\Contracts\Category|\Naraki\Blog\Providers\Category $c
      * @param \Naraki\Blog\Contracts\Tag|\Naraki\Blog\Providers\Tag $t
      * @param \Naraki\Blog\Contracts\Source|\Naraki\Blog\Providers\Source $s
+     * @param \Naraki\Blog\Contracts\Author|\Naraki\Blog\Providers\Author $a
      */
-    public function __construct(CategoryInterface $c, TagInterface $t, SourceInterface $s)
+    public function __construct(CategoryInterface $c, TagInterface $t, SourceInterface $s, AuthorInterface $a)
     {
         parent::__construct();
         $this->category = $c;
         $this->tag = $t;
         $this->source = $s;
+        $this->author = $a;
     }
 
     /**
@@ -69,6 +76,14 @@ class Blog extends Model implements BlogInterface
     public function source(): SourceInterface
     {
         return $this->source;
+    }
+
+    /**
+     * @return \Naraki\Blog\Contracts\Author|\Naraki\Blog\Providers\Author
+     */
+    public function author(): AuthorInterface
+    {
+        return $this->author;
     }
 
     /**

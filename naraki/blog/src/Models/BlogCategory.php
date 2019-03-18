@@ -52,7 +52,7 @@ class BlogCategory extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -62,7 +62,7 @@ class BlogCategory extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $blogPostId
      * @return \Illuminate\Database\Eloquent\Builder $builder

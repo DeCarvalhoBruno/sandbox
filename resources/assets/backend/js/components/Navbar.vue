@@ -28,7 +28,7 @@
             <div class="btn-nav">
               <router-link :to="{ name: 'admin.settings.general' }"
                            :title="$t('pages.settings.title')">
-                <i class="fa fa-sitemap"></i>
+                <i class="fa fa-cogs"></i>
               </router-link>
             </div>
           </li>

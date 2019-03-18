@@ -45,7 +45,7 @@
         }
 
         .dropdown-item {
-          &:hover {
+          &:hover, &:focus {
             outline: none;
           }
         }
@@ -57,6 +57,7 @@
         &.dropdown-menu-right:before {
           right: 15px;
         }
+
         &.dropdown-menu-right:after {
           right: 16px;
         }
@@ -74,7 +75,7 @@
 
       a {
         color: #fff;
-        padding:0.5rem 0.75rem;
+        padding: 0.5rem 0.75rem;
       }
 
       &:hover {
@@ -157,8 +158,9 @@
     left: 0;
     float: left;
     background-color: #343a40;
-    img{
-      width:65%;
+
+    img {
+      width: 65%;
     }
   }
 }
@@ -191,8 +193,9 @@
   .link-back {
     font-size: .8rem;
 
-    a{
+    a {
       padding: 1rem;
+
       &:hover {
         cursor: pointer;
       }

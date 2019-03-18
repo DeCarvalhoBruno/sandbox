@@ -287,9 +287,17 @@ return [
             'entity_logo' => 'Logo',
             'social' => 'Social',
             'sitemap' => 'Sitemap',
-            'enable_sitemap'=>'Enable sitemaps',
+            'enable_sitemap' => 'Enable sitemaps',
+            'sitemap_url' => 'Page url',
             'social_url' => 'Social media page url',
-            'entity_social_help' => 'Links to user/organization profiles can be added below. Google recognizes the following platforms: Facebook, Twitter, Google+, Instagram, YouTube, LinkedIn, Myspace, Pinterest, SoundCloud and Tumblr.'
+            'link_date_placeholder' => 'Click to change date',
+            'link_url' => 'Page url',
+            'link_last_modified' => 'Last modified',
+            'entity_social_help' => 'Links to user/organization profiles can be added below. Google recognizes 
+            the following platforms: Facebook, Twitter, Google+, Instagram, YouTube, LinkedIn, Myspace, 
+            Pinterest, SoundCloud and Tumblr.',
+            'sitemap_help' => 'Links to website pages can be added below. They will be displayed in the sitemap 
+            along with a link to the homepage.'
         ],
         'blog' => [
             'categories' => 'Categories',

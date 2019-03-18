@@ -54,6 +54,9 @@ class Settings extends Controller
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function editSocial()
     {
         return response([
@@ -61,6 +64,10 @@ class Settings extends Controller
         ], Response::HTTP_OK);
     }
 
+    /**
+     * @param \App\Http\Requests\Admin\UpdateSocialSettings $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function updateSocial(UpdateSocialSettings $request)
     {
         $socialTagManager = new GeneralSocialTagManager();
@@ -79,6 +86,9 @@ class Settings extends Controller
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function editSitemap()
     {
         return response([
@@ -86,10 +96,15 @@ class Settings extends Controller
         ], Response::HTTP_OK);
     }
 
+    /**
+     * @param \App\Http\Requests\Admin\UpdateSitemapSettings $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function updateSitemap(UpdateSitemapSettings $request)
     {
         $input = $request->all();
-        \Cache::forever('settings_social', $input);
+        \Cache::forever('settings_sitemap', $input);
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 
 

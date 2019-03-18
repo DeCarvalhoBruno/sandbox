@@ -18,6 +18,8 @@
     'aliases' => [
         'main' => \Naraki\Sitemap\Sitemaps\Main::class,
         'blog' => \Naraki\Sitemap\Sitemaps\Blog::class,
-        'pages' => \Naraki\Sitemap\Sitemaps\Pages::class
+        'pages' => \Naraki\Sitemap\Sitemaps\Pages::class,
+        'authors' => \Naraki\Sitemap\Sitemaps\Authors::class,
+        'tags' => \Naraki\Sitemap\Sitemaps\Tags::class
     ]
 ];

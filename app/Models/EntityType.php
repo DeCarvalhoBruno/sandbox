@@ -187,7 +187,7 @@ class EntityType extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $entityId
      * @param array $userIdList

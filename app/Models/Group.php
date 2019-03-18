@@ -35,7 +35,7 @@ class Group extends Model implements HasAnEntity, HasPermissions, EnumerableCont
     public $timestamps = false;
 
     /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -45,7 +45,7 @@ class Group extends Model implements HasAnEntity, HasPermissions, EnumerableCont
     }
 
     /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -55,7 +55,7 @@ class Group extends Model implements HasAnEntity, HasPermissions, EnumerableCont
     }
 
     /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -66,7 +66,7 @@ class Group extends Model implements HasAnEntity, HasPermissions, EnumerableCont
     }
 
     /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -79,7 +79,7 @@ class Group extends Model implements HasAnEntity, HasPermissions, EnumerableCont
     }
 
     /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -89,7 +89,7 @@ class Group extends Model implements HasAnEntity, HasPermissions, EnumerableCont
     }
 
     /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -99,7 +99,7 @@ class Group extends Model implements HasAnEntity, HasPermissions, EnumerableCont
     }
 
     /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $userId
      * @return \Illuminate\Database\Eloquent\Builder $builder

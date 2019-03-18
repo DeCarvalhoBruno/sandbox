@@ -12,7 +12,7 @@ class Permission extends Model
     protected $fillable = ['entity_type_id', 'entity_id', 'permission_mask'];
 
     /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -24,7 +24,7 @@ class Permission extends Model
     /**
      * Getting permissions pertaining to a particular entity.
      *
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $entityId
      * @return \Illuminate\Database\Eloquent\Builder $builder
@@ -40,7 +40,7 @@ class Permission extends Model
     /**
      * Getting permissions for all entities
      *
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int|array $entityTypeIds
      * @return \Illuminate\Database\Eloquent\Builder $builder
@@ -58,7 +58,7 @@ class Permission extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -71,7 +71,7 @@ class Permission extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -84,7 +84,7 @@ class Permission extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -97,7 +97,7 @@ class Permission extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */

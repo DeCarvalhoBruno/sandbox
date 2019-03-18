@@ -14,7 +14,7 @@ class BlogTag extends Model
     public $timestamps = false;
 
     /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -24,7 +24,7 @@ class BlogTag extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.7/eloquent#local-scopes
+     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $blogPostId
      * @return \Illuminate\Database\Eloquent\Builder $builder
@@ -32,5 +32,17 @@ class BlogTag extends Model
     public function scopeLabelRecord(Builder $builder, $blogPostId = null)
     {
         return BlogCategory::scopeLabelRecord($builder, $blogPostId);
+    }
+
+    /**
+     * @link https://laravel.com/docs/5.8/eloquent#query-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeBlogPost(Builder $builder)
+    {
+        return $builder->join('blog_posts',
+            'blog_label_records.blog_post_id', '=', 'blog_posts.blog_post_id'
+        );
     }
 }

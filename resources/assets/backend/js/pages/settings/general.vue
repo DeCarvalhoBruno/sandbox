@@ -127,6 +127,7 @@
               </div>
             </div>
           </div>
+          <hr class="col-md-9 ml-md-auto">
           <p class="font-italic">{{ $t('pages.settings.entity_social_help') }}</p>
           <div v-for="(field, idx) in form.fields.links" class="form-group row" :key="'links'+idx">
             <label class="col-md-3 col-form-label text-md-right"></label>

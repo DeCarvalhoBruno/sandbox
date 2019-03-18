@@ -89,13 +89,11 @@
               <div class="col-lg align-items-center">
                 <div class="row col" v-if="form_publish_date_editing">
                   <datepicker
-                      ref="datePicker"
                       v-model="current_publish_date"
                       :name="'published_at'"
                       :show-clear-button="false"
-                      @closed="changePublishDate"
-                  >
-                  </datepicker>
+                      :show-on-start="true"
+                      @closed="changePublishDate"></datepicker>
                   <div class="form-inline">
                     <input class="form-control input-hour-minute"
                            :value="format(current_publish_date,'HH')"
@@ -510,7 +508,6 @@
     },
     beforeRouteLeave (to, from, next) {
       if (this.form.hasDetectedChanges()) {
-        // console.log(this.form.hasDetectedChanges(),this.form.getChangedFields())
         this.swalSaveWarning().then((result) => {
           if (result.value) {
             next()

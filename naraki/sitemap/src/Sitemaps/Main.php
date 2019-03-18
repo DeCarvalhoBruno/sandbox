@@ -19,7 +19,7 @@ class Main extends Sitemap implements Sitemapable
         $lastModified = Carbon::make(BlogRepo::getNth(0, 'updated_at'));
 
         $this->addSitemap($smIndex, route('sitemap', ['type' => 'pages']),
-            Carbon::now()
+            Pages::homePageLastModified()
         );
         $this->addSitemap($smIndex, route('sitemap', ['type' => 'blog']),
             $lastModified

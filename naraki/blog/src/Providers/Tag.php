@@ -12,9 +12,7 @@ class Tag extends Model implements BlogTagInterface
     public function getByPost($postId)
     {
         return $this
-            ->select(['blog_tag_name'])
-            ->labelType()
-            ->labelRecord($postId)
+            ->buildWithScopes(['blog_tag_name'],['labelType','labelRecord'=>$postId])
             ->get()->pluck('blog_tag_name')->toArray();
     }
 
@@ -120,6 +118,55 @@ class Tag extends Model implements BlogTagInterface
             ->pluck('blog_tag_name')
             ->toArray();
         return array_diff($names, $tags);
+    }
+
+    public function countAll()
+    {
+        $model = $this->createModel();
+
+        $result = \DB::select(sprintf('
+            select count(%1$s) as c from blog_tags
+            where %1$s in (
+            select distinct(%1$s) from blog_tags
+            join blog_label_types blt on blog_tags.blog_label_type_id = blt.blog_label_type_id
+            join blog_label_records blr on blt.blog_label_type_id = blr.blog_label_type_id)',
+            $model->getKeyName()
+            )
+        );
+        return !empty($result) ? $result[0]->c : null;
+    }
+
+    /**
+     * @param int $n
+     * @param string  $columns
+     * @return string
+     */
+    public function getNth($n, $columns)
+    {
+        return $this->select([$columns])
+            ->scopes(['labelType','labelRecord','blogPost'])
+            ->groupBy('blog_tag_id','blog_posts.updated_at')
+            ->orderBy($columns, 'desc')
+            ->limit(1)
+            ->offset($n)->value('updated_at');
+    }
+
+    /**
+     * @param int $n
+     * @param int $offset
+     * @param array $columns
+     * @param string $order
+     * @param string $direction
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getN($n, $offset, $columns, $order, $direction = 'desc')
+    {
+        return $this->select($columns)
+            ->scopes(['labelType','labelRecord','blogPost'])
+            ->groupBy(...$columns)
+            ->orderBy($order, $direction)
+            ->limit($n)
+            ->offset($offset);
     }
 
 }

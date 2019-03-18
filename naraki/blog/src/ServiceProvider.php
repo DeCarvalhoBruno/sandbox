@@ -21,6 +21,7 @@ class ServiceProvider extends LaravelServiceProvider
         $this->app->singleton(Contracts\Category::class, Providers\Category::class);
         $this->app->singleton(Contracts\Tag::class, Providers\Tag::class);
         $this->app->singleton(Contracts\Source::class, Providers\Source::class);
+        $this->app->singleton(Contracts\Author::class, Providers\Author::class);
         $this->app->singleton(Contracts\Blog::class, Providers\Blog::class);
     }
 
