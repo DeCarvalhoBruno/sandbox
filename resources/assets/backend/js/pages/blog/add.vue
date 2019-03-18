@@ -62,7 +62,7 @@
                                           :placeholder="$t('pages.members.member_search')"
                                           :searchUrl="'/ajax/admin/people/search'"
                                           @updateAddedItems="updatePeople"
-                                          limit="2"/>
+                                          limit="1"/>
                         <button type="button"
                                 class="btn btn-success btn-small"
                                 @click="toggleEditing('form_user_editing')">

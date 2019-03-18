@@ -11,7 +11,7 @@
           <span v-html="badge"></span>
           <i href="#" class="button-badge-close" @click.prevent="removeTag(index)"></i>
         </span>
-        <input type="text"
+        <input type="text" v-if="tagBadges.length<limit"
                :placeholder="dataPlaceholder"
                v-model="input"
                ref="search"
@@ -32,8 +32,8 @@
               @click="tagFromSearch(tag)"
               class="badge"
               :class="{
-                            'badge-primary': index == searchSelection,
-                            'badge-dark': index != searchSelection}"></li>
+                  'badge-primary': index == searchSelection,
+                  'badge-dark': index != searchSelection}"></li>
         </ul>
       </div>
     </div>
@@ -157,23 +157,24 @@
             return
           }
           clearTimeout(this.timer)
+          let vm=this
           this.timer = setTimeout(async function () {
-            if (this.oldInput !== input) {
-              this.loadIconIsAnimated = true
-              this.searchResults = await this.searchTerm(input)
-              this.loadIconIsAnimated = false
-              this.searchSelection = 0
+            if (vm.oldInput !== input) {
+              vm.loadIconIsAnimated = true
+              vm.searchResults = await vm.searchTerm(input)
+              vm.loadIconIsAnimated = false
+              vm.searchSelection = 0
 
               if (input.length) {
-                for (let id in this.existingTags) {
-                  let text = this.existingTags[id].toLowerCase()
+                for (let id in vm.existingTags) {
+                  let text = vm.existingTags[id].toLowerCase()
 
                   if (text.search(input.toLowerCase()) > -1) {
-                    this.searchResults.push({id, text: this.existingTags[id]})
+                    vm.searchResults.push({id, text: vm.existingTags[id]})
                   }
                 }
               }
-              this.oldInput = input
+              vm.oldInput = input
             }
           }, this.searchTriggerDelay)
         }

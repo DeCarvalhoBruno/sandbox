@@ -155,7 +155,7 @@ class Blog extends Model implements BlogInterface
     {
         $builder = $this->build()->where('blog_post_slug', '=', $slug);
         (clone($builder))->update($this->filterFillables($data));
-        return $builder->select(['blog_post_id', 'blog_post_slug', 'blog_status_id'])->first();
+        return $builder->scopes(['entityType'])->select(['blog_post_id', 'blog_post_slug', 'blog_status_id'])->first();
     }
 
     /**

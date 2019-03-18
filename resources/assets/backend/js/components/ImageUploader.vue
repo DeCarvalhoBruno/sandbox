@@ -59,7 +59,7 @@
                             {{maxFilesize}}{{$t('dropzone.units.MB')}}</p>
                         <p class="dropfile-instructions">{{ $t('dropzone.accepted_formats')}} JPG,
                             PNG</p>
-                        <i class="fa fa-4x fa-cloud-upload-o"></i>
+                        <i class="fa fa-4x fa-cloud-upload"></i>
                     </div>
                     <template #files="props">
                         <div v-for="(file, i) in props.files" :key="file.id"

@@ -43,12 +43,14 @@ class ConvertLangFilesToJs extends Command
                 $fileBackend = sprintf('%s/js-backend.php', $langDir);
                 $fileFrontend = sprintf('%s/js-frontend.php', $langDir);
                 $fileCommon = sprintf('%s/js-common.php', $langDir);
-                if (is_file($fileBackend)&&is_file($fileFrontend)&&is_file($fileCommon)) {
+                if (is_file($fileBackend) && is_file($fileFrontend) && is_file($fileCommon)) {
                     $contents = include($fileBackend);
                     $varsCommon = include($fileCommon);
-                    foreach($varsCommon as $k=>$v){
-                        if(isset($contents[$k])){
-                            $contents[$k] = array_merge($contents[$k],$v);
+                    foreach ($varsCommon as $k => $v) {
+                        if (isset($contents[$k])) {
+                            $contents[$k] = array_merge($contents[$k], $v);
+                        } else {
+                            $contents[$k] = $v;
                         }
                     }
                     $fh = fopen(sprintf('resources/assets/backend/js/lang/%s.json', $languageDir), 'w');
@@ -57,9 +59,11 @@ class ConvertLangFilesToJs extends Command
                     $this->info('    - Backend ' . $languageDir);
 
                     $contents = include($fileFrontend);
-                    foreach($varsCommon as $k=>$v){
-                        if(isset($contents[$k])){
-                            $contents[$k] = array_merge($contents[$k],$v);
+                    foreach ($varsCommon as $k => $v) {
+                        if (isset($contents[$k])) {
+                            $contents[$k] = array_merge($contents[$k], $v);
+                        } else {
+                            $contents[$k] = $v;
                         }
                     }
                     $fh = fopen(sprintf('resources/assets/frontend/js/lang/%s.json', $languageDir), 'w');

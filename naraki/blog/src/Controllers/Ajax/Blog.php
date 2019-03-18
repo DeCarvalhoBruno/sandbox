@@ -3,10 +3,12 @@
 use App\Contracts\Models\User as UserProvider;
 use App\Http\Controllers\Admin\Controller;
 use App\Models\Entity;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Naraki\Blog\Contracts\Blog as BlogProvider;
 use Naraki\Blog\Filters\Blog as BlogFilter;
+use Naraki\Blog\Job\UpdateElasticsearch;
 use Naraki\Blog\Models\BlogStatus;
 use Naraki\Blog\Requests\CreateBlogPost;
 use Naraki\Blog\Requests\UpdateBlogPost;
@@ -15,6 +17,8 @@ use Naraki\Media\Models\MediaImgFormat;
 
 class Blog extends Controller
 {
+    use DispatchesJobs;
+
     /**
      * @param \Naraki\Blog\Filters\Blog $filter
      * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
@@ -160,7 +164,19 @@ class Blog extends Controller
         $post = $blogRepo->updateOne($slug, $request->all());
         $blogRepo->category()->updatePost($request->getCategories(), $post);
         $blogRepo->tag()->updatePost($request->getTags(), $post);
+//        $this->dispatch(
+//            new UpdateElasticsearch(
+//                $post->only(['system_entity_id', 'blog_post_id']),
+//                $request->all(),
+//                $request->getCategories(),
+//                $request->getTags()
+//            )
+//        );
         return [
+            'post'=>$post->only(['system_entity_id', 'blog_post_id']),
+            'request'=>$request->all(),
+            'cats'=>$request->getCategories(),
+            'tags'=>$request->getTags(),
             'url' => $this->getPostUrl($post),
             'blog_post_slug' => $post->getAttribute('blog_post_slug'),
         ];
