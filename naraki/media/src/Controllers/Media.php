@@ -24,7 +24,6 @@ class Media extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->mediaRepo = MediaProvider::image();
     }
 
     /**
@@ -34,9 +33,9 @@ class Media extends Controller
      */
     public function add()
     {
-        $input = (object)$this->request->only(['type', 'target', 'media', 'group', 'category', 'file']);
+        $input = (object)app('request')->only(['type', 'target', 'media', 'group', 'category', 'file']);
 
-        $file = $this->request->file('file');
+        $file = app('request')->file('file');
 
         if (!is_null($file)) {
             $fileSize = $file->getSize();
@@ -73,7 +72,7 @@ class Media extends Controller
                                 $input->media
                             );
                             return response(
-                                $this->mediaRepo->image()->getImages(
+                                MediaProvider::image()->getImages(
                                     $this->processImage($media))->toArray(),
                                 Response::HTTP_OK
                             );
@@ -109,7 +108,7 @@ class Media extends Controller
 
     public function edit($uuid)
     {
-        $query = $this->mediaRepo->image()->getOne($uuid,
+        $query = MediaProvider::image()->getOne($uuid,
             [
                 'media_uuid',
                 'media_title',
@@ -126,7 +125,7 @@ class Media extends Controller
         }
         $media = $query->toArray();
 
-        $data = $this->mediaRepo->image()->getSiblings($uuid, ['media_uuid', 'entity_type_id'])->get();
+        $data = MediaProvider::image()->getSiblings($uuid, ['media_uuid', 'entity_type_id'])->get();
         $navData = $data->pluck('media_uuid')->all();
         $fromEntity = $data->pluck('entity_type_id')->first();
         $entityInfo = EntityType::buildQueryFromUnknownEntity($fromEntity);
@@ -162,7 +161,7 @@ class Media extends Controller
      */
     public function update($uuid, UpdateMedia $request, MediaInterface $mediaRepo)
     {
-        if (is_hex_uuid_string($uuid)) {
+        if (is_img_uuid_string($uuid)) {
             $mediaRepo->image()->updateOne($uuid, $request->all());
         }
         return response(null, Response::HTTP_NO_CONTENT);
@@ -178,21 +177,21 @@ class Media extends Controller
     {
         $media->move();
         $media->makeThumbnail();
-        $this->mediaRepo->image()->cropImageToFormat(
+        MediaProvider::image()->cropImageToFormat(
             $media->getUuid(),
             $media->getTargetType(),
             $media->getMediaType(),
             $media->getFileExtension(),
             MediaImgFormat::FEATURED
         );
-        $this->mediaRepo->image()->cropImageToFormat(
+        MediaProvider::image()->cropImageToFormat(
             $media->getUuid(),
             $media->getTargetType(),
             $media->getMediaType(),
             $media->getFileExtension(),
             MediaImgFormat::HD
         );
-        return $this->mediaRepo->image()->saveImageDb(
+        return MediaProvider::image()->saveImageDb(
             $media,
             [
                 MediaImgFormat::FEATURED,
@@ -209,7 +208,7 @@ class Media extends Controller
      */
     public function crop(UserProvider $user)
     {
-        $input = (object)$this->request->only(['uuid', 'height', 'width', 'x', 'y']);
+        $input = (object)app('request')->only(['uuid', 'height', 'width', 'x', 'y']);
 
         /**
          * @var \Naraki\Media\Support\SimpleImage $avatarInfo
@@ -217,7 +216,7 @@ class Media extends Controller
         $avatarInfo = \Cache::get('temporary_avatars')->pull(substr($input->uuid, 0, 32));
         try {
             $avatarInfo->cropAvatar($input);
-            $this->mediaRepo->image()->saveAvatar($avatarInfo);
+            MediaProvider::image()->saveAvatar($avatarInfo);
         } catch (\Exception $e) {
             return response([
                 'data' => trans('error.media.type_size'),

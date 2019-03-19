@@ -1,12 +1,14 @@
 <?php namespace Naraki\Blog\Controllers\Frontend;
 
+use App\Jobs\ProcessPageView;
+use App\Models\Language;
+use App\Support\Frontend\Breadcrumbs;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller;
-use App\Models\Language;
 use Naraki\Blog\Facades\Blog as BlogFacade;
 use Naraki\Media\Contracts\Media as MediaProvider;
-use App\Jobs\ProcessPageView;
-use App\Support\Frontend\Breadcrumbs;
+use Naraki\Media\Facades\Media;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Blog extends Controller
@@ -18,19 +20,13 @@ class Blog extends Controller
      */
     private $blogRepo;
 
-    public function __construct()
-    {
-        $this->blogRepo = BlogFacade::blog();
-    }
-
     /**
      * @param $slug
-     * @param \Naraki\Media\Contracts\Media|\Naraki\Media\Providers\Media $mediaRepo
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function getPost($slug, MediaProvider $mediaRepo)
+    public function getPost($slug)
     {
-        $post = $this->blogRepo->buildOneBySlug($slug, [
+        $post = BlogFacade::buildOneBySlug($slug, [
             'blog_post_title as title',
             'blog_post_content as content',
             'blog_post_excerpt as excerpt',
@@ -47,7 +43,7 @@ class Blog extends Controller
         if (is_null($post)) {
             throw new NotFoundHttpException('Blog Post not found');
         }
-        $dbImages = $mediaRepo->image()->getImages(
+        $dbImages = Media::image()->getImages(
             $post->getAttribute('entity_type_id'), [
                 'media_in_use as featured',
                 'media_uuid as uuid',
@@ -56,17 +52,17 @@ class Blog extends Controller
                 'entity_id'
             ]
         );
-        $categories = $this->blogRepo->buildOneBySlug($slug, ['blog_category_slug as cat'])
+        $categories = BlogFacade::buildOneBySlug($slug, ['blog_category_slug as cat'])
             ->scopes(['category'])
             ->orderBy('blog_category_id', 'asc')
             ->get();
         $firstCategory = $categories->first();
-        $tags = $this->blogRepo->buildOneBySlug($slug, ['blog_tag_slug as tag', 'blog_tag_name as name'])
+        $tags = BlogFacade::buildOneBySlug($slug, ['blog_tag_slug as tag', 'blog_tag_name as name'])
             ->scopes(['tag'])
             ->get();
 
-        $sources = $this->blogRepo->source()->buildByBlogSlug($slug)->get();
-        $otherPosts = $this->blogRepo->buildWithScopes([
+        $sources = BlogFacade::source()->buildByBlogSlug($slug)->get();
+        $otherPosts = BlogFacade::buildWithScopes([
             'blog_post_title as title',
             'blog_post_slug as slug',
             'published_at as date',
@@ -78,7 +74,7 @@ class Blog extends Controller
             ->where('blog_post_slug', '!=', $slug)
             ->orderBy('published_at', 'desc')->limit(4)->get();
 
-        $otherPostMedia = $this->getImages($otherPosts, $mediaRepo);
+        $otherPostMedia = $this->getImages($otherPosts);
         $media = null;
         foreach ($dbImages as $image) {
             if ($image->featured == 1) {
@@ -102,12 +98,11 @@ class Blog extends Controller
 
     /**
      * @param $slug
-     * @param \Naraki\Media\Contracts\Media|\Naraki\Media\Providers\Media $mediaRepo
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function category($slug, MediaProvider $mediaRepo)
+    public function category($slug)
     {
-        $posts = $this->blogRepo->buildWithScopes([
+        $posts = BlogFacade::buildWithScopes([
             'blog_post_title as title',
             'blog_post_excerpt as excerpt',
             'blog_post_slug as slug',
@@ -124,11 +119,11 @@ class Blog extends Controller
             throw new NotFoundHttpException('Blog Category not found');
         }
 
-        $media = $this->getImages($posts, $mediaRepo);
+        $media = $this->getImages($posts);
 
         $featured = $posts->shift();
         $mvps = $this->getMostViewedPosts($slug);
-        $mvpImages = $this->getImages(clone($mvps), $mediaRepo);
+        $mvpImages = $this->getImages(clone($mvps));
 
         $breadcrumbs = Breadcrumbs::render([
             [
@@ -143,9 +138,9 @@ class Blog extends Controller
         );
     }
 
-    public function tag($slug, MediaProvider $mediaRepo)
+    public function tag($slug)
     {
-        $posts = $this->blogRepo->buildWithScopes([
+        $posts = BlogFacade::buildWithScopes([
             'blog_post_title as title',
             'blog_post_excerpt as excerpt',
             'blog_post_slug as slug',
@@ -162,7 +157,7 @@ class Blog extends Controller
             throw new NotFoundHttpException('Blog Tag not found');
         }
         $tag = (object)$posts->first()->only(['tag']);
-        $media = $this->getImages($posts, $mediaRepo);
+        $media = $this->getImages($posts);
         $title = trans('titles.routes.blog.tag', ['name' => $tag->tag]);
         return view(
             'blog::tag', compact('posts', 'media', 'tag', 'title'));
@@ -175,7 +170,7 @@ class Blog extends Controller
      */
     public function author($slug, MediaProvider $mediaRepo)
     {
-        $posts = $this->blogRepo->buildWithScopes([
+        $posts = BlogFacade::buildWithScopes([
             'blog_post_title as title',
             'blog_post_excerpt as excerpt',
             'blog_post_slug as slug',
@@ -188,21 +183,23 @@ class Blog extends Controller
             ->orderBy('published_at', 'desc')
             ->limit(8)
             ->get();
-
+        if ($posts->isEmpty()) {
+            throw new HttpException(404, 'Author not found');
+        }
         $author = (object)$posts->first()->only(['author']);
         if (is_null($posts)) {
             throw new NotFoundHttpException('Author not found');
         }
-        $media = $this->getImages($posts, $mediaRepo);
+        $media = $this->getImages($posts);
         $title = trans('titles.routes.blog.author', ['name' => $author->author]);
         return view(
             'blog::author', compact('posts', 'media', 'author', 'title')
         );
     }
 
-    private function getImages($collection, $mediaRepo)
+    private function getImages($collection)
     {
-        $dbImages = $mediaRepo->image()->getImages(
+        $dbImages = Media::image()->getImages(
             $collection->pluck('type')->all(), [
                 'media_uuid as uuid',
                 'media_extension as ext',
@@ -219,7 +216,7 @@ class Blog extends Controller
 
     private function getMostViewedPosts($slug)
     {
-        return $this->blogRepo->buildWithScopes([
+        return BlogFacade::buildWithScopes([
             'blog_post_title as title',
             'blog_post_excerpt as excerpt',
             'blog_post_slug as slug',

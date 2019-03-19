@@ -12,9 +12,9 @@ class BlogSource extends Controller
      */
     public function create(BlogSourceProvider $sourceRepo)
     {
-        $type = intval($this->request->get('type'));
-        $content = $this->request->get('content');
-        $slug = $this->request->get('blog_slug');
+        $type = intval(app('request')->get('type'));
+        $content = app('request')->get('content');
+        $slug = app('request')->get('blog_slug');
 
         if (is_null($content) || !\Naraki\Blog\Models\BlogSource::isValidValue($type)) {
             return response([$type, $content, $slug], Response::HTTP_NO_CONTENT);

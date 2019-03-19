@@ -17,7 +17,6 @@ class Controller extends BaseController
     {
         auth()->setDefaultDriver('jwt');
         $this->user = auth()->user();
-        $this->request = app('request');
     }
 
 }

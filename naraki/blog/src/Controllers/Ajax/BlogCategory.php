@@ -1,8 +1,8 @@
 <?php namespace Naraki\Blog\Controllers\Ajax;
 
-use Naraki\Blog\Contracts\Category as BlogCategoryProvider;
 use App\Http\Controllers\Admin\Controller;
 use Illuminate\Http\Response;
+use Naraki\Blog\Facades\Blog;
 
 class BlogCategory extends Controller
 {
@@ -12,17 +12,17 @@ class BlogCategory extends Controller
     }
 
     /**
-     * @param \Naraki\Blog\Contracts\Category|\Naraki\Blog\Providers\Category $catRepo
      * @return \Illuminate\Http\Response|array
      */
-    public function create(BlogCategoryProvider $catRepo)
+    public function create()
     {
-        $parent = $this->request->get('parent');
-        $label = $this->request->get('label');
+        $request = app('request');
+        $parent = $request->get('parent');
+        $label = $request->get('label');
         if (is_null($label)) {
             return response(null, Response::HTTP_NO_CONTENT);
         }
-        $newCat = $catRepo->createOne($label, $parent);
+        $newCat = Blog::category()->createOne($label, $parent);
         if (is_null($newCat)) {
             return response(null, Response::HTTP_NO_CONTENT);
         }
@@ -32,14 +32,13 @@ class BlogCategory extends Controller
 
     /**
      * @param int $id
-     * @param \Naraki\Blog\Contracts\Category|\Naraki\Blog\Providers\Category $catRepo
      * @return \Illuminate\Http\Response|array
      */
-    public function update($id, BlogCategoryProvider $catRepo)
+    public function update($id)
     {
-        $cat = $catRepo->getCat($id);
+        $cat = Blog::category()->getCat($id);
         if (!is_null($cat)) {
-            $label = $this->request->get('label');
+            $label = app('request')->get('label');
             $cat->setAttribute('blog_category_name', $label);
             $cat->setAttribute('blog_category_slug', slugify($label, '-', app()->getLocale()));
             $cat->save();
@@ -49,7 +48,7 @@ class BlogCategory extends Controller
 
     public function delete($id)
     {
-        $model = \Naraki\Blog\Models\BlogCategory::query()
+        $model = Blog::category()->build()
             ->where('blog_category_slug', $id)->first();
         if (!is_null($model)) {
             $model->delete();

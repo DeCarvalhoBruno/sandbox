@@ -51,6 +51,5 @@ class People extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('people');
     }
 }

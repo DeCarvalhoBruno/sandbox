@@ -142,6 +142,13 @@ if (!function_exists('is_hex_uuid_string')) {
     }
 }
 
+if (!function_exists('is_img_uuid_string')) {
+    function is_img_uuid_string($v)
+    {
+        return is_string($v) && strlen($v) == 64 && ctype_xdigit(substr($v,32));
+    }
+}
+
 if (!function_exists('get_locale_presentable_date_format')) {
     function get_locale_date_format()
     {

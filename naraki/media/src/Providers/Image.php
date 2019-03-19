@@ -117,6 +117,7 @@ class Image extends Model implements ImageInterface
      * @param int $entityTypeID
      * @param bool $setAsUsed
      * @param array $formats
+     * @return void
      * @throws \Throwable
      */
     public function createImage($media, $entityTypeID, $setAsUsed = true, $formats = null)
@@ -208,7 +209,7 @@ class Image extends Model implements ImageInterface
      */
     public static function setAsUsed($uuid)
     {
-        if (is_hex_uuid_string($uuid)) {
+        if (is_img_uuid_string($uuid)) {
             return \DB::unprepared(sprintf('CALL sp_update_media_type_in_use("%s")', $uuid));
         }
         throw new \UnexpectedValueException('uuid is not valid');
@@ -231,7 +232,7 @@ class Image extends Model implements ImageInterface
             ])->mediaDigital();
         $media = null;
         if (is_string($uuid)) {
-            if (is_hex_uuid_string($uuid)) {
+            if (is_img_uuid_string($uuid)) {
                 $media = $builder->where('media_uuid', '=', $uuid)
                     ->get();
             }

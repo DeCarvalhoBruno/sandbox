@@ -155,7 +155,15 @@ class Blog extends Model implements BlogInterface
     {
         $builder = $this->build()->where('blog_post_slug', '=', $slug);
         (clone($builder))->update($this->filterFillables($data));
-        return $builder->scopes(['entityType'])->select(['blog_post_id', 'blog_post_slug', 'blog_status_id'])->first();
+        //using entity_type to refresh Elasticsearch, post id for categories and tags,
+        //status and slug to make the blog post url
+        return $builder->scopes(['entityType'])->select([
+            'entity_type_id',
+            'person_id',
+            'blog_post_id',
+            'blog_post_slug',
+            'blog_status_id'
+        ])->first();
     }
 
     /**

@@ -21,11 +21,10 @@ class SimpleImage extends ImageUpload implements Image
         $this->hddFilename = sprintf('%s.%s', $uuid, $extension);
         $this->filename = $filename;
         $this->fileExtension = $extension;
-        $this->uuid = $uuid;
+        $this->uuid = sprintf('%s_%s', substr($target, 0, 31), $uuid);
         $this->targetType = $type;
         $this->mediaType = $mediaType;
     }
-
 
     /**
      * @param \stdClass $imageAlterations

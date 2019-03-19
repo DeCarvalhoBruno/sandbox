@@ -9,7 +9,7 @@ abstract class TestCase extends BaseTestCase
     use CreatesApplication, CreatesDatabaseResources;
     protected $oldExceptionHandler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 //        \DB::statement('PRAGMA foreign_keys=on;');

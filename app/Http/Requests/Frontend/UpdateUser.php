@@ -25,7 +25,7 @@ class UpdateUser extends FormRequest
     {
         Validator::extend('same_password', function ($attribute, $value, $parameters, $validator) {
             if (Hash::check(
-                $this->request->get('password'),
+                app('request')->get('password'),
                 auth()->user()->getAttribute('password')
             )) {
                 $validator->errors()->add('password', trans('error.form.identical_passwords'));
@@ -35,7 +35,7 @@ class UpdateUser extends FormRequest
         });
         Validator::extend('current_password', function ($attribute, $value, $parameters, $validator) {
             if (!Hash::check(
-                $this->request->get('current_password'),
+                app('request')->get('current_password'),
                 auth()->user()->getAttribute('password')
             )) {
                 $validator->errors()->add('current_password', trans('error.form.wrong_password'));

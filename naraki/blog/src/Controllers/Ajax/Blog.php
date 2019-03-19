@@ -115,9 +115,9 @@ class Blog extends Controller
      * @param \Naraki\Blog\Requests\CreateBlogPost $request
      * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
-     * @return array
+     * @return \Illuminate\Http\Response
      */
-    public function create(CreateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo): array
+    public function create(CreateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo)
     {
         try {
             $post = $blogRepo->createOne(
@@ -134,7 +134,7 @@ class Blog extends Controller
             return response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return (
+        return response(
         [
             'url' => $this->getPostUrl($post),
             'blog_post_slug' => $post->getAttribute('blog_post_slug'),
@@ -163,20 +163,20 @@ class Blog extends Controller
         }
         $post = $blogRepo->updateOne($slug, $request->all());
         $blogRepo->category()->updatePost($request->getCategories(), $post);
-        $blogRepo->tag()->updatePost($request->getTags(), $post);
+        $updatedTags = $blogRepo->tag()->updatePost($request->getTags(), $post);
 //        $this->dispatch(
 //            new UpdateElasticsearch(
-//                $post->only(['system_entity_id', 'blog_post_id']),
-//                $request->all(),
-//                $request->getCategories(),
-//                $request->getTags()
+//                (object) $post->only(['entity_type_id', 'blog_post_id']),
+//                (object) $request->all(),
+//                $updatedTags,
+//                is_array($request->getTags())
 //            )
 //        );
         return [
-            'post'=>$post->only(['system_entity_id', 'blog_post_id']),
-            'request'=>$request->all(),
-            'cats'=>$request->getCategories(),
-            'tags'=>$request->getTags(),
+            'post' => $post->only(['entity_type_id', 'blog_post_id']),
+            'request' => $request->all(),
+            'cats' => $request->getCategories(),
+            'tags' => $updatedTags,
             'url' => $this->getPostUrl($post),
             'blog_post_slug' => $post->getAttribute('blog_post_slug'),
         ];

@@ -41,33 +41,36 @@ class BlogTagIndexer extends ElasticSearchIndexer
     {
         $dbTags = \Naraki\Blog\Models\BlogPost::query()
             ->select([
-                'blog_posts.blog_post_id as id',
+                'blog_label_record_id as id',
                 'language_id as lang',
                 'blog_tag_name as name',
                 'blog_tag_slug as slug'
             ])->tag()
             ->where('blog_status_id', \Naraki\Blog\Models\BlogStatus::BLOG_STATUS_PUBLISHED)
             ->get();
-        $tags = [];
+        $tags = $tagNames = [];
         foreach ($dbTags as $tag) {
             $lang = $tag->getAttribute('lang');
             if (!isset($tags[$tag->getAttribute('lang')])) {
-                $tags[$lang] = [];
+                $tags[$lang] = $tagNames[$lang]= [];
             }
 
             $name = $tag->getAttribute('name');
-            if (!isset($tags[$lang][$name])) {
-                $tags[$lang][$name] = [
+            if (!isset($tagNames[$lang][$name])) {
+                $tagNames[$lang][$name] = true;
+                $tags[$lang][$tag->getAttribute('id')] = [
                     'name' => $tag->getAttribute('name'),
                     'url' => route_i18n('blog.tag', ['slug' => $tag->getAttribute('slug')]),
                 ];
             }
         }
         unset($dbTags);
+//        $f = array_chunk($tags[\App\Models\Language::DB_LANGUAGE_ENGLISH_ID],50,true);
+//        dd($f[0]);
 
         return [
-            'en' => array_values($tags[\App\Models\Language::DB_LANGUAGE_ENGLISH_ID]),
-            'fr' => array_values($tags[\App\Models\Language::DB_LANGUAGE_FRENCH_ID])
+            'en' => $tags[\App\Models\Language::DB_LANGUAGE_ENGLISH_ID],
+            'fr' => $tags[\App\Models\Language::DB_LANGUAGE_FRENCH_ID]
         ];
     }
 

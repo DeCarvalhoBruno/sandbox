@@ -180,15 +180,15 @@ class Blog extends Migration
             'blog_label_type_id' => $newLabelType->getKey()
         ]);
         $this->createViews();
-        if (App::environment() !== 'testing') {
-            $this->extractLanguages();
-        }
+        $this->extractLanguages();
     }
 
     public function createViews()
     {
         \DB::unprepared('CREATE VIEW blog_category_tree AS
         SELECT
+            node.lft,
+            node.rgt,
             node.blog_category_id,
             node.blog_category_name as label,
             (COUNT(parent.blog_category_id) - 1) AS lvl,
@@ -221,8 +221,32 @@ class Blog extends Migration
         foreach ($records as $offset => $record) {
             $lang[] = $record;
         }
-        \App\Models\Language::insert($lang);
 
+        if (App::environment() !== 'testing') {
+            $this->seedChunk($lang, \App\Models\Language::class, 5);
+        } else {
+            \App\Models\Language::insert([
+                array_combine($languageDBColumns, [
+                    '1',
+                    'English',
+                    'Indo-European',
+                    'English',
+                    'en',
+                    'eng',
+                    'eng',
+                    'eng'
+                ])
+            ]);
+        }
+
+    }
+
+    private function seedChunk($data, $model, $nbChunks = 25)
+    {
+        $chunks = array_chunk($data, $nbChunks);
+        foreach ($chunks as $chunk) {
+            forward_static_call(sprintf('%s::insert', $model), $chunk);
+        }
     }
 
     /**

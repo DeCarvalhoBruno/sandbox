@@ -102,32 +102,36 @@ class BlogPostIndexer extends ElasticSearchIndexer
         }
         unset($dbPosts, $dbImages, $images);
 
-        $dbCategories = \Naraki\Blog\Models\BlogPost::query()
-            ->select([
-                'blog_posts.blog_post_id as id',
-                'blog_category_name as name',
-                'blog_category_slug as slug',
-                'lvl'
-            ])
-            ->scopes(['category', 'categoryTree'])
+        $dbCategories = \Naraki\Blog\Facades\Blog::buildWithScopes([
+            'blog_posts.blog_post_id as id',
+            'blog_category_name as name',
+            'blog_category_slug as slug',
+        ], ['category'])
             ->where('blog_status_id', \Naraki\Blog\Models\BlogStatus::BLOG_STATUS_PUBLISHED)
 //            ->limit($limit)
             ->get();
 
+        $categoryHierarchies = [];
         foreach ($dbCategories as $category) {
             if (!isset($postIds[$category->getAttribute('id')])) {
                 continue;
             }
             $index = $postIds[$category->getAttribute('id')];
+            if (!isset($categoryHierarchies[$category->getAttribute('slug')])) {
+                $categoryHierarchies[$category->getAttribute('slug')] = [];
+                $tmp = \Naraki\Blog\Facades\Blog::category()->getHierarchy($category->getAttribute('slug'));
+                foreach ($tmp as $mp) {
+                    $categoryHierarchies[$category->getAttribute('slug')][] = [
+                        'name' => $mp->label,
+                        'url' => route_i18n('blog.category', ['slug' => $mp->id]),
+                    ];
+                }
+            }
 
             if (!isset($posts[$index]['meta']['category'])) {
                 $posts[$index]['meta']['category'] = [];
             }
-            $posts[$index]['meta']['category'][] = [
-                'name' => $category->getAttribute('name'),
-                'url' => route_i18n('blog.category', ['slug' => $category->getAttribute('slug')]),
-                'lvl' => intval($category->getAttribute('lvl'))
-            ];
+            $posts[$index]['meta']['category'][] = $categoryHierarchies[$category->getAttribute('slug')];
         }
         unset($dbCategories);
 
@@ -219,117 +223,5 @@ class BlogPostIndexer extends ElasticSearchIndexer
             $source
         );
         Seeder::insert($indexFr->toArray());
-    }
-
-    /**
-     * @TODO: delete later
-     */
-    private function delete_later()
-    {
-        $data = [
-            'index' => '',
-            'body' => [
-                'settings' => [
-                    'analysis' => [
-                        'filter' => [
-                            'filter_stop_en' => [
-                                'type' => 'stop',
-                                'stopwords' => '_english_'
-                            ],
-                            'filter_stop_fr' => [
-                                'type' => 'stop',
-                                'stopwords' => '_french_'
-                            ],
-                            'filter_snow_en' => [
-                                'type' => 'snowball',
-                                'language' => 'English'
-                            ],
-                            'filter_snow_fr' => [
-                                'type' => 'snowball',
-                                'language' => 'French'
-                            ],
-                        ],
-                        'char_filter' => [
-                            'quotes' => [
-                                'type' => 'mapping',
-                                'mappings' => [
-                                    '\\u0091=>\\u0027',
-                                    '\\u0092=>\\u0027',
-                                    '\\u2018=>\\u0027',
-                                    '\\u2019=>\\u0027',
-                                    '\\u201B=>\\u0027',
-                                    '\\u201C=>\\u0022',
-                                    '\\u201D=>\\u0022',
-                                    '\\u00AB=>\\u0022',
-                                    '\\u00BB=>\\u0022',
-                                ]
-                            ]
-                        ],
-                        'analyzer' => [
-                            'std_strip_en' => [
-                                'type' => 'custom',
-                                'tokenizer' => 'standard',
-                                'filter' => [
-                                    'lowercase',
-                                    'filter_stop_en',
-                                    'filter_snow_en',
-                                ],
-                                'char_filter' => ['html_strip', 'quotes']
-                            ],
-                            'std_strip_fr' => [
-                                'type' => 'custom',
-                                'tokenizer' => 'standard',
-                                'filter' => [
-                                    'lowercase',
-                                    'filter_stop_fr',
-                                    'filter_snow_en',
-                                    'asciifolding'
-                                ],
-                                'char_filter' => ['html_strip', 'quotes']
-                            ],
-                            'stop_en' => [
-                                'type' => 'custom',
-                                'tokenizer' => 'standard',
-                                'filter' => [
-                                    'lowercase',
-                                    'filter_stop_en',
-                                    'filter_snow_en',
-                                ]
-                            ],
-                            'stop_fr' => [
-                                'type' => 'custom',
-                                'tokenizer' => 'standard',
-                                'filter' => [
-                                    'lowercase',
-                                    'filter_stop_fr',
-                                    'filter_snow_en',
-                                    'asciifolding'
-                                ]
-                            ],
-                        ]
-                    ]
-                ],
-                'mappings' => [
-                    'post' => [
-                        'properties' => [
-                            'title' => [
-                                'type' => 'text',
-                            ],
-                            'content' => [
-                                'type' => 'text'
-                            ],
-                            'date' => [
-                                'type' => 'date',
-                                'format' => 'yyyy-MM-dd HH:mm:ss',
-                            ],
-                            'meta' => [
-                                'enabled' => false
-                            ],
-                        ]
-                    ]
-                ]
-            ]
-        ];
-
     }
 }

@@ -12,7 +12,7 @@ class Tag extends Model implements BlogTagInterface
     public function getByPost($postId)
     {
         return $this
-            ->buildWithScopes(['blog_tag_name'],['labelType','labelRecord'=>$postId])
+            ->buildWithScopes(['blog_tag_name'], ['labelType', 'labelRecord' => $postId])
             ->get()->pluck('blog_tag_name')->toArray();
     }
 
@@ -86,20 +86,22 @@ class Tag extends Model implements BlogTagInterface
     /**
      * @param array $updated
      * @param \Naraki\Blog\Models\BlogPost $post
+     * @return array|null
      */
     public function updatePost(?array $updated, $post)
     {
-        if(is_null($updated)){
-            return;
+        if (is_null($updated)) {
+            return null;
         }
         $inStore = $this->getByPost($post->getKey());
         $toBeRemoved = array_diff($inStore, $updated);
+        $labelTypes = null;
         if (!empty($toBeRemoved)) {
-            $entries = $this->getByName($toBeRemoved)->labelType()
+            $labelTypes = $this->getByName($toBeRemoved)->labelType()
                 ->select(['blog_label_types.blog_label_type_id'])
                 ->get()->pluck('blog_label_type_id')->toArray();
             BlogLabelRecord::query()
-                ->whereIn('blog_label_type_id', $entries)
+                ->whereIn('blog_label_type_id', $labelTypes)
                 ->where('blog_post_id', $post->getKey())
                 ->delete();
         }
@@ -108,6 +110,7 @@ class Tag extends Model implements BlogTagInterface
         if (!empty($toBeAdded)) {
             $this->attachToPost($toBeAdded, $post);
         }
+        return ['added' => $toBeAdded, 'removed' => $labelTypes];
     }
 
     public function getUnknownTags($names)
@@ -130,7 +133,7 @@ class Tag extends Model implements BlogTagInterface
             select distinct(%1$s) from blog_tags
             join blog_label_types blt on blog_tags.blog_label_type_id = blt.blog_label_type_id
             join blog_label_records blr on blt.blog_label_type_id = blr.blog_label_type_id)',
-            $model->getKeyName()
+                $model->getKeyName()
             )
         );
         return !empty($result) ? $result[0]->c : null;
@@ -138,14 +141,14 @@ class Tag extends Model implements BlogTagInterface
 
     /**
      * @param int $n
-     * @param string  $columns
+     * @param string $columns
      * @return string
      */
     public function getNth($n, $columns)
     {
         return $this->select([$columns])
-            ->scopes(['labelType','labelRecord','blogPost'])
-            ->groupBy('blog_tag_id','blog_posts.updated_at')
+            ->scopes(['labelType', 'labelRecord', 'blogPost'])
+            ->groupBy('blog_tag_id', 'blog_posts.updated_at')
             ->orderBy($columns, 'desc')
             ->limit(1)
             ->offset($n)->value('updated_at');
@@ -162,7 +165,7 @@ class Tag extends Model implements BlogTagInterface
     public function getN($n, $offset, $columns, $order, $direction = 'desc')
     {
         return $this->select($columns)
-            ->scopes(['labelType','labelRecord','blogPost'])
+            ->scopes(['labelType', 'labelRecord', 'blogPost'])
             ->groupBy(...$columns)
             ->orderBy($order, $direction)
             ->limit($n)

@@ -34,7 +34,7 @@ class Medias extends Migration
 
             $table->string('media_title')->nullable();
             $table->text('media_description')->nullable();
-            $table->string('media_uuid', 32);
+            $table->string('media_uuid', 64);
             $table->boolean('media_in_use')->default(true);
 
             $table->foreign('media_id')

@@ -79,7 +79,7 @@ class Category extends Model implements BlogCategoryInterface
      */
     public function updatePost(?array $updated, $post)
     {
-        if(is_null($updated)){
+        if (is_null($updated)) {
             return;
         }
         $inStore = $this->getSelected($post->getKey());
@@ -114,13 +114,27 @@ class Category extends Model implements BlogCategoryInterface
     }
 
     /**
-     * @param string $id
+     * @param string $slug
      * @return \Naraki\Blog\Models\BlogCategory|null
      */
-    public function getCat($id)
+    public function getCat($slug)
     {
         return $this->build()
-            ->where('blog_category_slug', $id)->first();
+            ->where('blog_category_slug', $slug)->first();
+    }
+
+    /**
+     * @param string $slug
+     * @return array
+     */
+    public function getHierarchy($slug)
+    {
+        return \DB::select('
+            select bct.label,bct.id,bct.lvl from blog_category_tree, blog_category_tree as bct
+            where blog_category_tree.id=?
+            and blog_category_tree.lft between bct.lft and bct.rgt
+        ', [$slug]);
+
     }
 
 }
