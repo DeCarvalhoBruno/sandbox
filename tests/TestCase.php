@@ -18,9 +18,9 @@ abstract class TestCase extends BaseTestCase
         $this->withoutGate();
     }
 
-    protected function signIn($user = null)
+    protected function signIn($user = null, $guard = null)
     {
-        $this->actingAs($user ?: $this->createUser());
+        $this->actingAs($user ?: $this->createUser(), $guard);
         return $this;
     }
 

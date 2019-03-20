@@ -143,9 +143,17 @@ if (!function_exists('is_hex_uuid_string')) {
 }
 
 if (!function_exists('is_img_uuid_string')) {
+    /**
+     * Image uuids are made of 32 characters of the entity slug plus a 32 char uuid
+     * the entity may be shorter than 32 chars, so we can only make sure that the string is at most 64 chars long.
+     * Example UUID: "this-is-the-title-of-my-post_cc6c34c3eaa14649b01ebe3dcda689de"
+     *
+     * @param $v
+     * @return bool
+     */
     function is_img_uuid_string($v)
     {
-        return is_string($v) && strlen($v) == 64 && ctype_xdigit(substr($v,32));
+        return is_string($v) && strlen($v) <= 64 && ctype_xdigit(substr($v,-32));
     }
 }
 

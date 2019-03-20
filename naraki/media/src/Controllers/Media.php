@@ -5,6 +5,7 @@ use App\Models\Entity;
 use App\Models\EntityType;
 use App\Support\Providers\User as UserProvider;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Naraki\Media\Contracts\Media as MediaInterface;
 use Naraki\Media\Models\Media as MediaModel;
 use Naraki\Media\Models\MediaDigital;
@@ -16,11 +17,6 @@ use Naraki\Media\Support\UploadedImage;
 
 class Media extends Controller
 {
-    /**
-     * @var \Naraki\Media\Providers\Media
-     */
-    private $mediaRepo;
-
     public function __construct()
     {
         parent::__construct();
@@ -156,13 +152,12 @@ class Media extends Controller
      *
      * @param string $uuid
      * @param \Naraki\Media\Requests\Update $request
-     * @param \Naraki\Media\Contracts\Media|\Naraki\Media\Providers\Media $mediaRepo
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function update($uuid, UpdateMedia $request, MediaInterface $mediaRepo)
+    public function update($uuid, UpdateMedia $request)
     {
         if (is_img_uuid_string($uuid)) {
-            $mediaRepo->image()->updateOne($uuid, $request->all());
+            MediaProvider::image()->updateOne($uuid, $request->all());
         }
         return response(null, Response::HTTP_NO_CONTENT);
     }
@@ -213,7 +208,7 @@ class Media extends Controller
         /**
          * @var \Naraki\Media\Support\SimpleImage $avatarInfo
          */
-        $avatarInfo = \Cache::get('temporary_avatars')->pull(substr($input->uuid, 0, 32));
+        $avatarInfo = Cache::get('temporary_avatars')->pull($input->uuid);
         try {
             $avatarInfo->cropAvatar($input);
             MediaProvider::image()->saveAvatar($avatarInfo);

@@ -174,15 +174,25 @@ class Blog extends Model implements BlogInterface
 
     /**
      * @param int|array $slug
-     * @return int
+     * @return mixed
      */
     public function deleteBySlug($slug)
     {
+        $model = null;
         if (is_string($slug)) {
-            return $this->build()->where('blog_post_slug', '=', $slug)->delete();
+            $model = $this->select(['entity_type_id'])->where('blog_post_slug', '=', $slug)
+                ->scopes(['entityType'])->get();
+            if (!is_null($model)) {
+                $this->build()->where('blog_post_slug', '=', $slug)->delete();
+            }
         } else {
-            return $this->build()->whereIn('blog_post_slug', $slug)->delete();
+            $model = $this->build()->select(['entity_type_id'])->whereIn('blog_post_slug', $slug)
+                ->scopes(['entityType'])->get();
+            if (!is_null($model)) {
+                $this->build()->whereIn('blog_post_slug', $slug)->delete();
+            }
         }
+        return $model;
     }
 
     /**

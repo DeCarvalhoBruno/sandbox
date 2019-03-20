@@ -1,6 +1,5 @@
 <?php namespace App\Http\Controllers\Frontend\Settings;
 
-use App\Contracts\Models\Email as EmailProvider;
 use App\Http\Controllers\Frontend\Controller;
 use Naraki\Mail\Models\EmailList;
 use App\Support\Frontend\Breadcrumbs;
@@ -8,11 +7,21 @@ use App\Support\Frontend\Breadcrumbs;
 class Notifications extends Controller
 {
     /**
-     * @param \App\Contracts\Models\Email|\App\Support\Providers\Email $emailRepo
+     * @var \Naraki\Mail\Contracts\Email|\Naraki\Mail\Providers\Email $emailRepo
+     */
+    private $emailRepo;
+
+    public function __construct()
+    {
+        $this->emailRepo = app(\Naraki\Mail\Contracts\Email::class);
+    }
+
+    /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit(EmailProvider $emailRepo)
+    public function edit()
     {
+
         $user = auth()->user();
         return view('frontend.site.settings.panes.notifications', [
             'user' => $user,
@@ -24,7 +33,7 @@ class Notifications extends Controller
             ]),
             'mailing_lists' => EmailList::getList(),
             'subscribed' => array_flip(
-                $emailRepo->subscriber()
+                $this->emailRepo->subscriber()
                     ->buildAllUser(
                 $user->getAttribute('person_id'),
                 ['email_lists.email_list_id']

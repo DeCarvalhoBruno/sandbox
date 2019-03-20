@@ -4,10 +4,19 @@ use App\Http\Controllers\Frontend\Controller;
 use App\Http\Requests\Frontend\UpdateUser;
 use App\Support\Frontend\Breadcrumbs;
 use App\Contracts\Models\User as UserProvider;
-use App\Contracts\Models\Email as EmailProvider;
 
 class Profile extends Controller
 {
+    /**
+     * @var \Naraki\Mail\Contracts\Email|\Naraki\Mail\Providers\Email $emailRepo
+     */
+    private $emailRepo;
+
+    public function __construct()
+    {
+        $this->emailRepo = app(\Naraki\Mail\Contracts\Email::class);
+    }
+
     /**
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -27,10 +36,9 @@ class Profile extends Controller
     /**
      * @param \App\Http\Requests\Frontend\UpdateUser $request
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
-     * @param \App\Contracts\Models\Email|\App\Support\Providers\Email $emailRepo
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdateUser $request, UserProvider $userRepo, EmailProvider $emailRepo)
+    public function update(UpdateUser $request, UserProvider $userRepo)
     {
         if (!empty($request->all())) {
             $rest = $request->except(['notifications']);
@@ -50,7 +58,7 @@ class Profile extends Controller
         } else {
             $lists = [];
         }
-        $emailRepo->subscriber()->addUserToLists(
+        $this->emailRepo->subscriber()->addUserToLists(
             auth()->user()->getAttribute('person_id'),
             $lists
         );

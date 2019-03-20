@@ -3,10 +3,12 @@
 use App\Traits\Models\DoesSqlStuff;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Naraki\Elasticsearch\Contracts\Searchable as SearchableContract;
+use Naraki\Elasticsearch\Searchable;
 
-class BlogTag extends Model
+class BlogTag extends Model implements SearchableContract
 {
-    use DoesSqlStuff;
+    use DoesSqlStuff, Searchable;
 
     protected $table = 'blog_tags';
     protected $primaryKey = 'blog_tag_id';

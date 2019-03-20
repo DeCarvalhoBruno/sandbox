@@ -9,7 +9,6 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Contracts\Models\Email as EmailProvider;
 use App\Support\Requests\Sanitizer;
 use App\Contracts\Models\System as SystemProvider;
 
@@ -20,25 +19,30 @@ class SubscribeToNewsletter implements ShouldQueue
     private $input;
 
     /**
+     * @var \Naraki\Mail\Contracts\Email|\Naraki\Mail\Providers\Email $emailRepo
+     */
+    private $emailRepo;
+
+    /**
      *
      * @param $input
      */
     public function __construct($input)
     {
         $this->input = $input;
+        $this->emailRepo = app(\Naraki\Mail\Contracts\Email::class);
     }
 
     /**
      * Execute the job.
      *
-     * @param \App\Contracts\Models\Email|\App\Support\Providers\Email $emailRepo
      * @param \App\Contracts\Models\System|\App\Support\Providers\System $systemRepo
      * @return void
      */
-    public function handle(EmailProvider $emailRepo, SystemProvider $systemRepo)
+    public function handle(SystemProvider $systemRepo)
     {
         try {
-            $data = $emailRepo->subscriber()->addPersonToLists(
+            $data = $this->emailRepo->subscriber()->addPersonToLists(
                 Sanitizer::clean($this->input)
             );
             if (is_array($data)) {

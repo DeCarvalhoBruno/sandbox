@@ -14,7 +14,16 @@ class Tag extends Model implements BlogTagInterface
     {
         return $this
             ->buildWithScopes(['blog_tag_name', 'blog_tag_slug'], ['labelType', 'labelRecord' => $postId])
-            ->get()->pluck('blog_tag_name', 'blog_tag_slug')->toArray();
+            ->get()->pluck('blog_tag_name')->toArray();
+    }
+
+    public function getByPostColumns($postId)
+    {
+        return $this
+            ->buildWithScopes(
+                ['blog_tag_name', 'blog_tag_slug', 'blog_label_record_id'],
+                ['labelType', 'labelRecord' => $postId])
+            ->get()->toArray();
     }
 
     public function createMany($names)

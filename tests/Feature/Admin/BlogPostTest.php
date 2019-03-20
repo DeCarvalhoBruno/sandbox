@@ -33,11 +33,13 @@ class BlogPostTest extends TestCase
                 'blog_post_person' => "john_doe",
                 'published_at' => "201902051959",
             ]);
+
         $response->assertStatus(500);
+        $this->assertEquals('Person for blog post creation not found.',$response->content());
         $this->assertEquals(BlogPost::query()->get()->count(), 0);
     }
 
-    public function create_normal()
+    public function test_create_normal()
     {
         $u = $this->createUser();
         $this->signIn($u);
@@ -76,7 +78,7 @@ class BlogPostTest extends TestCase
         $response->assertStatus(422);
     }
 
-    public function edit()
+    public function test_edit()
     {
         $u = $this->createUser();
         $this->signIn($u);
@@ -107,12 +109,12 @@ class BlogPostTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function delete_post()
+    public function test_delete_post()
     {
         $u = $this->createUser();
         $this->signIn($u);
 
-        $response = $this->postJson(
+        $this->postJson(
             "/ajax/admin/blog/post/create",
             [
                 'blog_status' => "BLOG_STATUS_DRAFT",
@@ -122,17 +124,15 @@ class BlogPostTest extends TestCase
             ]);
         $this->assertEquals(BlogPost::query()->get()->count(), 1);
         $response = $this->deleteJson('/ajax/admin/blog/post/dadsw');
-        $response->assertStatus(200);
+        $response->assertStatus(204);
         $this->assertEquals(BlogPost::query()->get()->count(), 1);
 
-        $this->assertEquals("0", $response->getContent());
         $response = $this->deleteJson('/ajax/admin/blog/post/dads');
-        $response->assertStatus(200);
-        $this->assertEquals("1", $response->getContent());
+        $response->assertStatus(204);
         $this->assertEquals(BlogPost::query()->get()->count(), 0);
     }
 
-    public function upload_image()
+    public function test_upload_image()
     {
         $u = $this->createUser();
         $this->signIn($u);
@@ -164,10 +164,9 @@ class BlogPostTest extends TestCase
             ]
         );
         $responseArray = $response->json();
-        dd($responseArray);
         $this->assertArrayHasKey('uuid', $responseArray[0]);
         $imageUuid = $responseArray[0]['uuid'];
-        (new Media(new File(new Image(new Avatar()), new Text())))->image()
+        \Naraki\Media\Facades\Media::image()
             ->getImagesFromSlug(
                 slugify($postTitle),
                 Entity::BLOG_POSTS,

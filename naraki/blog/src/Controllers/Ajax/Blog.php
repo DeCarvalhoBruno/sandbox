@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Naraki\Blog\Contracts\Blog as BlogProvider;
 use Naraki\Blog\Filters\Blog as BlogFilter;
+use Naraki\Blog\Job\DeleteElasticsearch;
 use Naraki\Blog\Job\UpdateElasticsearch;
 use Naraki\Blog\Models\BlogStatus;
 use Naraki\Blog\Requests\CreateBlogPost;
@@ -172,19 +173,15 @@ class Blog extends Controller
         $post = $blogRepo->updateOne($slug, $request->all());
         $blogRepo->category()->updatePost($request->getCategories(), $post);
         $updatedTags = $blogRepo->tag()->updatePost($request->getTags(), $post);
-//        $this->dispatch(
-//            new UpdateElasticsearch(
-//                (object) $post,
-//                (object) $request->all(),
-//                (object)$updatedTags,
-//                is_array($request->getCategories())
-//            )
-//        );
+        $this->dispatch(new UpdateElasticsearch(
+            UpdateElasticsearch::WRITE_MODE_UPDATE,
+            $post,
+            (object)$request->all(),
+            (object)$updatedTags,
+            is_array($request->getCategories()
+            )
+        ));
         return [
-            'post' => $post,
-            'request' => $request->all(),
-            'cats' => $request->getCategories(),
-            'tags' => $updatedTags,
             'url' => $this->getPostUrl($post),
             'blog_post_slug' => $post->getAttribute('blog_post_slug'),
         ];
@@ -214,8 +211,9 @@ class Blog extends Controller
         } catch (\Exception $e) {
             return response(trans('error.http.500.general_error'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+        $this->dispatch(new DeleteElasticsearch($deleteResult));
 
-        return response($deleteResult, Response::HTTP_OK);
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -238,10 +236,13 @@ class Blog extends Controller
                     $mediaUuids = array_merge($mediaUuids, $uuids);
                 }
             }
-            \DB::transaction(function () use ($postSlugs, $mediaUuids, $blogRepo, $mediaRepo) {
+            $deleteResult = \DB::transaction(function () use ($postSlugs, $mediaUuids, $blogRepo, $mediaRepo) {
                 $mediaRepo->image()->delete($mediaUuids, Entity::BLOG_POSTS);
-                $blogRepo->deleteBySlug($postSlugs);
+                return $blogRepo->deleteBySlug($postSlugs);
             });
+            $this->dispatch(new DeleteElasticsearch(
+                $deleteResult
+            ));
             return response(null, Response::HTTP_NO_CONTENT);
         }
         return response(trans('error.http.500.general_error'), Response::HTTP_INTERNAL_SERVER_ERROR);

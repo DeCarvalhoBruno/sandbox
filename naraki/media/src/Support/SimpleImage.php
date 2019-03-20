@@ -21,7 +21,7 @@ class SimpleImage extends ImageUpload implements Image
         $this->hddFilename = sprintf('%s.%s', $uuid, $extension);
         $this->filename = $filename;
         $this->fileExtension = $extension;
-        $this->uuid = sprintf('%s_%s', substr($target, 0, 31), $uuid);
+        $this->uuid =$uuid;
         $this->targetType = $type;
         $this->mediaType = $mediaType;
     }

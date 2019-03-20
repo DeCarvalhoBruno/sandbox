@@ -15,6 +15,7 @@ use Illuminate\Http\Response;
 
 class User extends Controller
 {
+
     /**
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
      * @param \App\Filters\User $userFilter
@@ -184,6 +185,7 @@ class User extends Controller
     /**
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
      * @return array
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function profile(UserProvider $userProvider)
     {

@@ -4,13 +4,13 @@ use App\Jobs\Job;
 use App\Models\Person;
 use Naraki\Blog\Facades\Blog;
 use Naraki\Blog\Models\BlogPost;
+use Naraki\Blog\Models\BlogTag;
 use Naraki\Elasticsearch\Facades\ElasticSearchIndex;
 
 class UpdateElasticsearch extends Job
 {
     const WRITE_MODE_CREATE = 1;
     const WRITE_MODE_UPDATE = 2;
-    const WRITE_MODE_DELETE = 3;
     public $queue = 'db';
     /**
      * @var int
@@ -34,6 +34,7 @@ class UpdateElasticsearch extends Job
         'blog_post_title' => ['title', 'meta' => false],
         'blog_post_content' => ['content', 'meta' => false],
         'blog_post_excerpt' => ['excerpt', 'meta' => true],
+        'blog_post_slug' => ['url', 'meta' => false],
         'tag' => ['tag', 'meta' => true],
         'url' => ['url', 'meta' => true],
         'author' => ['author', 'meta' => true],
@@ -53,9 +54,9 @@ class UpdateElasticsearch extends Job
     public function __construct(
         int $writeMode,
         BlogPost $blogPostData,
-        \stdClass $requestData,
-        \stdClass $tags,
-        bool $refreshCategories
+        \stdClass $requestData = null,
+        \stdClass $tags = null,
+        bool $refreshCategories = null
     ) {
         $this->writeMode = $writeMode;
         $this->blogPostData = $blogPostData;
@@ -74,37 +75,29 @@ class UpdateElasticsearch extends Job
     {
         parent::handle();
         try {
-            switch ($this->writeMode) {
-                case self::WRITE_MODE_CREATE:
-                case self::WRITE_MODE_UPDATE:
-                    $this->processPost();
+            $this->processPost();
 
-                    if (isset($this->requestData->person_id)) {
-                        $this->processAuthor();
-                    }
-
-                    if ($this->refreshCategories === true) {
-                        $this->processCategories();
-                    }
-
-                    if (!is_null($this->tags)) {
-                        $this->processTags();
-                    }
-
-                    if (!empty($this->documentContents)) {
-                        if ($this->writeMode === self::WRITE_MODE_CREATE) {
-                            $this->createDocument();
-                        } else {
-                            $this->updateDocument();
-                        }
-                    }
-                    break;
-                case self::WRITE_MODE_DELETE:
-                    $this->deleteDocument();
-                    break;
+            if (isset($this->requestData->person_id)) {
+                $this->processAuthor();
             }
 
+            if ($this->refreshCategories === true) {
+                $this->processCategories();
+            }
 
+            if (!is_null($this->tags)) {
+                $this->processTags();
+            }
+            if (!empty($this->documentContents)) {
+                switch ($this->writeMode) {
+                    case self::WRITE_MODE_CREATE:
+                        $this->createDocument();
+                        break;
+                    case self::WRITE_MODE_UPDATE:
+                        $this->updateDocument();
+                        break;
+                }
+            }
             $this->delete();
         } catch (\Exception $e) {
             \Log::critical($e->getMessage(), ['trace' => $e->getTraceAsString()]);
@@ -113,7 +106,7 @@ class UpdateElasticsearch extends Job
         }
     }
 
-    private function createDocument()
+    public function createDocument()
     {
         $model = new BlogPost();
         $this->documentContents['meta']['url'] = route_i18n(
@@ -128,12 +121,10 @@ class UpdateElasticsearch extends Job
         ];
 
         ElasticSearchIndex::create($document);
-        return $document;
     }
 
-    private function updateDocument()
+    public function updateDocument()
     {
-        dd($this->documentContents);
         $model = new BlogPost();
         $document = [
             'index' => $model->getLocaleDocumentIndex(),
@@ -146,12 +137,18 @@ class UpdateElasticsearch extends Job
             ]
         ];
         ElasticSearchIndex::update($document);
-        return $document;
     }
 
-    private function deleteDocument()
+    public function deleteDocument()
     {
-
+        $model = new BlogPost();
+        ElasticSearchIndex::delete(
+            [
+                'index' => $model->getLocaleDocumentIndex(),
+                'type' => 'main',
+                'id' => $this->blogPostData->getAttribute('entity_type_id'),
+            ]
+        );
     }
 
     private function processPost()
@@ -197,16 +194,34 @@ class UpdateElasticsearch extends Job
             if (!isset($this->documentContents['meta'])) {
                 $this->documentContents['meta'] = [];
             }
+            $model = new BlogTag();
             foreach ($tags as $slug => $name) {
-                $this->documentContents['meta']['tag'][] = [
+                $tag = [
                     'name' => $name,
                     'url' => route_i18n('blog.tag', ['slug' => $slug]),
                 ];
+                ElasticSearchIndex::create(
+                    [
+                        'index' => $model->getLocaleDocumentIndex(),
+                        'type' => 'main',
+                        'id' => $name,
+                        'body' => $tag
+                    ]);
+                $this->documentContents['meta']['tag'][] = $tag;
             }
         }
 
         if (isset($this->tags->removed) && !empty($this->tags->removed)) {
-
+            $model = new BlogTag();
+            foreach ($this->tags->removed as $removed) {
+                ElasticSearchIndex::delete(
+                    [
+                        'index' => $model->getLocaleDocumentIndex(),
+                        'type' => 'main',
+                        'id' => $removed,
+                    ]
+                );
+            }
         }
     }
 

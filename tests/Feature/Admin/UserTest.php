@@ -45,7 +45,7 @@ class UserTest extends TestCase
 
     public function test_update_without_valid_email()
     {
-        $response = $this->validation_testing_setup(['new_email' => 'fdhj@f','permissions'=>[]]);
+        $response = $this->validation_testing_setup(['new_email' => 'fdhjfcd.z','permissions'=>[]]);
         $json = $response->json();
         $this->assertArrayHasKey('new_email', $json['errors']);
     }
@@ -86,7 +86,8 @@ class UserTest extends TestCase
     private function validation_testing_setup($formParams)
     {
         $this->withExceptionHandling();
-        $user = $this->signIn()->createUser();
+        $user = $this->createUser();
+        $this->signIn($user,'jwt');
 
         $response = $this->patchJson(
             "/ajax/admin/users/{$user->username}", $formParams
