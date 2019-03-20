@@ -1,5 +1,6 @@
 <?php namespace Naraki\Blog\Providers;
 
+use App\Models\Person;
 use App\Support\Providers\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Naraki\Blog\Contracts\Blog as BlogInterface;
@@ -131,19 +132,24 @@ class Blog extends Model implements BlogInterface
 
     /**
      * @param array $data
-     * @param \Illuminate\Database\Eloquent\Builder
+     * @param \Illuminate\Database\Eloquent\Model|\App\Models\Person $person
      * @return \Naraki\Blog\Models\BlogPost
      */
-    public function createOne($data, $person)
+    public function createOne(array $data, ?Person $person): BlogPost
     {
-        $personModel = $person->first();
-        if (is_null($personModel)) {
+        if (is_null($person)) {
             throw new \UnexpectedValueException('Person for blog post creation not found.');
         }
-        $data['person_id'] = $personModel->getKey();
+        $data['person_id'] = $person->getKey();
         $post = new BlogPost($data);
         $post->save();
-        return $post;
+        return $post->newQuery()->select([
+            'entity_type_id',
+            'person_id',
+            'blog_post_id',
+            'blog_post_slug',
+            'blog_status_id'
+        ])->whereKey($post->getKey())->scopes(['entityType'])->first();
     }
 
     /**

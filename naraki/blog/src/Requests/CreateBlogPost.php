@@ -68,7 +68,8 @@ class CreateBlogPost extends FormRequest
         if (isset($input['published_at'])) {
             //Taking in a date format which we set manually in javascript.
             // This ensures we get a consistent format we can convert easily as opposed to locale based date formats
-            $input['published_at'] = date_create_from_format('YmdHi', $input['published_at']);
+            $input['published_at'] = date_create_from_format('YmdHi', $input['published_at'])
+                ->format('Y-m-d H:i:s');
         }
 
         $this->replace($input);

@@ -2,6 +2,7 @@
 
 use App\Support\Providers\Model;
 use Naraki\Blog\Contracts\Tag as BlogTagInterface;
+use Naraki\Blog\Models\BlogLabel;
 use Naraki\Blog\Models\BlogLabelRecord;
 use Naraki\Blog\Models\BlogLabelType;
 
@@ -12,33 +13,39 @@ class Tag extends Model implements BlogTagInterface
     public function getByPost($postId)
     {
         return $this
-            ->buildWithScopes(['blog_tag_name'], ['labelType', 'labelRecord' => $postId])
-            ->get()->pluck('blog_tag_name')->toArray();
+            ->buildWithScopes(['blog_tag_name', 'blog_tag_slug'], ['labelType', 'labelRecord' => $postId])
+            ->get()->pluck('blog_tag_name', 'blog_tag_slug')->toArray();
     }
 
     public function createMany($names)
     {
+
         if (empty($names)) {
             return;
         }
         //We create a first label type to get its id
-        $newLabelType = BlogLabelType::create();
+        $newLabelType = BlogLabelType::query()->create(['blog_label_id' => BlogLabel::BLOG_TAG]);
         $firstLabelId = $newLabelType->getKey();
         $nbTags = count($names);
 
         if ($nbTags > 1) {
             //When we create the rest of the label types we account for the one we created (n-1)
-            BlogLabelType::insert(array_fill(0, $nbTags - 1, []));
+            BlogLabelType::query()->insert(array_fill(
+                    0,
+                    $nbTags - 1,
+                    ['blog_label_id' => BlogLabel::BLOG_TAG])
+            );
         }
         $newTags = [];
         foreach ($names as $name) {
             $newTags[] = [
                 'blog_tag_name' => $name,
-                'blog_tag_slug' => slugify($name, '-', app()->getLocale()),
+                'blog_tag_slug' => slugify($name),
                 'blog_label_type_id' => $firstLabelId++
             ];
         }
-        \Naraki\Blog\Models\BlogTag::insert($newTags);
+
+        \Naraki\Blog\Models\BlogTag::query()->insert($newTags);
     }
 
     /**

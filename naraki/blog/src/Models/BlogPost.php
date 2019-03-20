@@ -47,10 +47,6 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
         'title',
         'meta'
     ];
-    protected $hidden = [
-        'person_id',
-        'blog_status_id'
-    ];
     protected $sortable = [
         'blog_post_title'
     ];

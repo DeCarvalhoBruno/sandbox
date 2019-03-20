@@ -120,25 +120,33 @@ class Blog extends Controller
     public function create(CreateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo)
     {
         try {
+            $person = $userRepo->person()->buildOneBySlug(
+                $request->getPersonSlug(),
+                [$userRepo->person()->getKeyName()]
+            )->first();
             $post = $blogRepo->createOne(
                 $request->all(),
-                $userRepo->person()->buildOneBySlug(
-                    $request->getPersonSlug(),
-                    [$userRepo->person()->getKeyName()]
-                )
+                $person
             );
-
+            $request->setPersonSlug($person->getKey());
             $blogRepo->category()->attachToPost($request->getCategories(), $post);
             $blogRepo->tag()->attachToPost($request->getTags(), $post);
         } catch (\Exception $e) {
             return response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
+        $this->dispatch(new UpdateElasticsearch(
+            UpdateElasticsearch::WRITE_MODE_CREATE,
+            $post,
+            (object)$request->all(),
+            (object)['added' => $request->getTags()],
+            is_array($request->getCategories()
+            )
+        ));
         return response(
-        [
-            'url' => $this->getPostUrl($post),
-            'blog_post_slug' => $post->getAttribute('blog_post_slug'),
-        ]);
+            [
+                'url' => $this->getPostUrl($post),
+                'blog_post_slug' => $post->getAttribute('blog_post_slug'),
+            ]);
     }
 
     /**
@@ -158,7 +166,7 @@ class Blog extends Controller
                 [$userRepo->person()->getKeyName()]
             )->first();
             if (!is_null($query)) {
-                $request->setPersonSlug($query[$userRepo->person()->getKeyName()]);
+                $request->setPersonSlug($query->getKey());
             }
         }
         $post = $blogRepo->updateOne($slug, $request->all());
@@ -166,14 +174,14 @@ class Blog extends Controller
         $updatedTags = $blogRepo->tag()->updatePost($request->getTags(), $post);
 //        $this->dispatch(
 //            new UpdateElasticsearch(
-//                (object) $post->only(['entity_type_id', 'blog_post_id']),
+//                (object) $post,
 //                (object) $request->all(),
-//                $updatedTags,
-//                is_array($request->getTags())
+//                (object)$updatedTags,
+//                is_array($request->getCategories())
 //            )
 //        );
         return [
-            'post' => $post->only(['entity_type_id', 'blog_post_id']),
+            'post' => $post,
             'request' => $request->all(),
             'cats' => $request->getCategories(),
             'tags' => $updatedTags,

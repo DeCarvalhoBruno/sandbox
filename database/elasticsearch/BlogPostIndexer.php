@@ -66,7 +66,7 @@ class BlogPostIndexer extends ElasticSearchIndexer
                 'blog_post_title as title',
                 'full_name as person',
                 'person_slug as author',
-                'blog_posts.updated_at as published',
+                'blog_posts.published_at as published',
                 'language_id as lang'
             ])
             ->where('blog_status_id', \Naraki\Blog\Models\BlogStatus::BLOG_STATUS_PUBLISHED)
