@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'enabled' => env('ELASTIC_SEARCH_ENABLED', true),
     /*
      * Connection settings
      */

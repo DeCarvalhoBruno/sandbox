@@ -2,29 +2,25 @@
 
 namespace Tests\Feature\Admin;
 
-use Naraki\Blog\Models\BlogPost;
-use Naraki\Blog\Models\BlogLabelRecord;
-use Naraki\Blog\Models\BlogStatus;
-use Naraki\Blog\Models\BlogTag;
 use App\Models\Entity;
-use App\Support\Providers\Avatar;
-use App\Support\Providers\File;
-use App\Support\Providers\Image;
-use Naraki\Media\Providers\Media;
-use App\Support\Providers\Text;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Naraki\Blog\Models\BlogLabelRecord;
+use Naraki\Blog\Models\BlogPost;
+use Naraki\Blog\Models\BlogTag;
+use Naraki\Elasticsearch\Facades\ElasticSearchIndex;
 use Tests\TestCase;
 
 class BlogPostTest extends TestCase
 {
     use DatabaseMigrations, WithoutMiddleware;
 
-    public function test_create_non_existing_user()
+    public function test_blog_post_create_non_existing_user()
     {
         $this->withExceptionHandling();
+        ElasticSearchIndex::shouldReceive('index')->times(0);
         $response = $this->postJson(
             "/ajax/admin/blog/post/create",
             [
@@ -35,16 +31,17 @@ class BlogPostTest extends TestCase
             ]);
 
         $response->assertStatus(500);
-        $this->assertEquals('Person for blog post creation not found.',$response->content());
+        $this->assertEquals('Person for blog post creation not found.', $response->content());
         $this->assertEquals(BlogPost::query()->get()->count(), 0);
     }
 
-    public function test_create_normal()
+    public function test_blog_post_create_normal()
     {
         $u = $this->createUser();
         $this->signIn($u);
 
         $this->assertEquals(BlogPost::query()->get()->count(), 0);
+        ElasticSearchIndex::shouldReceive('index')->times(1);
         $response = $this->postJson(
             "/ajax/admin/blog/post/create",
             [
@@ -60,12 +57,12 @@ class BlogPostTest extends TestCase
         $this->assertEquals(BlogPost::query()->get()->count(), 1);
     }
 
-    public function test_create_without_title()
+    public function test_blog_post_create_without_title()
     {
         $this->withExceptionHandling();
         $u = $this->createUser();
         $this->signIn($u);
-
+        ElasticSearchIndex::shouldReceive('index')->times(0);
         $response = $this->postJson(
             "/ajax/admin/blog/post/create",
             [
@@ -78,10 +75,11 @@ class BlogPostTest extends TestCase
         $response->assertStatus(422);
     }
 
-    public function test_edit()
+    public function test_blog_post_edit()
     {
         $u = $this->createUser();
         $this->signIn($u);
+        ElasticSearchIndex::shouldReceive('index')->times(1);
         $this->postJson(
             "/ajax/admin/blog/post/create",
             [
@@ -96,6 +94,8 @@ class BlogPostTest extends TestCase
         $this->assertEquals(1, BlogPost::query()->get()->count());
         $this->assertEquals(0, BlogLabelRecord::query()->get()->count());
         $string = 'modified post';
+        ElasticSearchIndex::shouldReceive('update')->times(1);
+        ElasticSearchIndex::shouldReceive('index')->times(2);
         $response = $this->postJson(
             "/ajax/admin/blog/post/edit/dads",
             [
@@ -103,17 +103,49 @@ class BlogPostTest extends TestCase
                 'tags' => ['dededed', 'deefegg'],
                 'categories' => ['default']
             ]);
-        $this->assertEquals(BlogPost::query()->first()->getAttribute('blog_post_title'), $string);
-        $this->assertEquals(BlogTag::query()->get()->count(), 2);
-        $this->assertEquals(BlogLabelRecord::query()->get()->count(), 3);
+        $this->assertEquals($string, BlogPost::query()->first()->getAttribute('blog_post_title'));
+        $this->assertEquals(2, BlogTag::query()->get()->count());
+        $this->assertEquals(3, BlogLabelRecord::query()->get()->count());
         $response->assertStatus(200);
     }
 
-    public function test_delete_post()
+    public function test_blog_post_modify_tags()
     {
         $u = $this->createUser();
         $this->signIn($u);
+        ElasticSearchIndex::shouldReceive('index')->times(6);
+        $this->postJson(
+            "/ajax/admin/blog/post/create",
+            [
+                'blog_status' => "BLOG_STATUS_DRAFT",
+                'blog_post_title' => "dads",
+                'blog_post_person' => $u->getAttribute('person_slug'),
+                'categories' => [],
+                'published_at' => "201902051959",
+                'tags' => ['tag1', 'tag2', 'tag3']
+            ]);
+        $this->assertEquals(3, BlogTag::query()->get()->count());
+        $this->assertEquals(3, BlogLabelRecord::query()->get()->count());
 
+        $string = 'modified post';
+        ElasticSearchIndex::shouldReceive('destroy')->twice();
+        ElasticSearchIndex::shouldReceive('update')->once();
+        $this->postJson(
+            "/ajax/admin/blog/post/edit/dads",
+            [
+                'blog_post_title' => $string,
+                'tags' => ['tag1', 'tag4'],
+                'categories' => ['default']
+            ]);
+        $this->assertEquals(2, BlogTag::query()->get()->count());
+        $this->assertEquals(3, BlogLabelRecord::query()->get()->count());
+    }
+
+    public function test_blog_post_delete_post()
+    {
+        $u = $this->createUser();
+        $this->signIn($u);
+        ElasticSearchIndex::shouldReceive('index')->times(1);
         $this->postJson(
             "/ajax/admin/blog/post/create",
             [
@@ -123,6 +155,7 @@ class BlogPostTest extends TestCase
                 'published_at' => "201902051959",
             ]);
         $this->assertEquals(BlogPost::query()->get()->count(), 1);
+        ElasticSearchIndex::shouldReceive('destroy')->times(1);
         $response = $this->deleteJson('/ajax/admin/blog/post/dadsw');
         $response->assertStatus(204);
         $this->assertEquals(BlogPost::query()->get()->count(), 1);
@@ -132,12 +165,13 @@ class BlogPostTest extends TestCase
         $this->assertEquals(BlogPost::query()->get()->count(), 0);
     }
 
-    public function test_upload_image()
+    public function test_blog_post_upload_image()
     {
         $u = $this->createUser();
         $this->signIn($u);
 
         $postTitle = 'This is the title of my post';
+        ElasticSearchIndex::shouldReceive('index')->times(1);
         $this->postJson(
             "/ajax/admin/blog/post/create",
             [
@@ -175,11 +209,12 @@ class BlogPostTest extends TestCase
         $this->assertEquals($imageUuid, $responseArray[0]['uuid']);
     }
 
-    public function test_upload_image_too_big()
+    public function test_blog_post_upload_image_too_big()
     {
         $u = $this->createUser();
         $this->signIn($u);
         $postTitle = 'This is the title of my post';
+        ElasticSearchIndex::shouldReceive('index')->times(1);
         $this->postJson(
             "/ajax/admin/blog/post/create",
             [
@@ -208,11 +243,12 @@ class BlogPostTest extends TestCase
         $response->assertStatus(500);
     }
 
-    public function test_upload_image_without_file()
+    public function test_blog_post_upload_image_without_file()
     {
         $u = $this->createUser();
         $this->signIn($u);
         $postTitle = 'This is the title of my post';
+        ElasticSearchIndex::shouldReceive('index')->times(1);
         $this->postJson(
             "/ajax/admin/blog/post/create",
             [
@@ -240,11 +276,12 @@ class BlogPostTest extends TestCase
         $response->assertStatus(500);
     }
 
-    public function delete_image()
+    public function test_delete_blog_post_image()
     {
         $u = $this->createUser();
         $this->signIn($u);
         $postTitle = 'This is the title of my post';
+        ElasticSearchIndex::shouldReceive('index')->times(1);
         $this->postJson(
             "/ajax/admin/blog/post/create",
             [

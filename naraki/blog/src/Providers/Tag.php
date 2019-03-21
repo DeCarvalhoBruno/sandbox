@@ -17,13 +17,17 @@ class Tag extends Model implements BlogTagInterface
             ->get()->pluck('blog_tag_name')->toArray();
     }
 
+    /**
+     * @param $postId
+     * @return \Naraki\Blog\Models\BlogTag[]
+     */
     public function getByPostColumns($postId)
     {
         return $this
             ->buildWithScopes(
-                ['blog_tag_name', 'blog_tag_slug', 'blog_label_record_id'],
+                ['blog_tag_name as name', 'blog_tag_slug as slug', 'blog_label_record_id as id'],
                 ['labelType', 'labelRecord' => $postId])
-            ->get()->toArray();
+            ->get();
     }
 
     public function createMany($names)
@@ -100,9 +104,12 @@ class Tag extends Model implements BlogTagInterface
     }
 
     /**
+     * We return removed elements by label_record_id because that's what we use in elasticsearch
+     * to reference tags.
+     *
      * @param array $updated
      * @param \Naraki\Blog\Models\BlogPost $post
-     * @return array|null
+     * @return array An array containing added elements (their slugs) and removed elements (their label_record_id)
      */
     public function updatePost(?array $updated, $post)
     {
@@ -111,14 +118,15 @@ class Tag extends Model implements BlogTagInterface
         }
         $inStore = $this->getByPost($post->getKey());
         $toBeRemoved = array_diff($inStore, $updated);
+//        dd($inStore,$updated,$toBeRemoved);
         $labelTypes = null;
         if (!empty($toBeRemoved)) {
             $labelTypes = $this->getByName($toBeRemoved)->labelType()
                 ->select(['blog_label_types.blog_label_type_id'])
                 ->get()->pluck('blog_label_type_id')->toArray();
-            BlogLabelRecord::query()
+
+            BlogLabelType::query()
                 ->whereIn('blog_label_type_id', $labelTypes)
-                ->where('blog_post_id', $post->getKey())
                 ->delete();
         }
 

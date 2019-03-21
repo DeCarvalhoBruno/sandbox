@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Naraki\Elasticsearch\Facades\ElasticSearchIndex;
 use Naraki\Media\Facades\Media;
 use Tests\TestCase;
 
@@ -24,7 +25,8 @@ class MediaTest extends TestCase
         $u = $this->createUser();
         $this->signIn($u);
         $postTitle = 'This is the title of my post';
-        $response = $this->postJson(
+        ElasticSearchIndex::shouldReceive('index')->times(1);
+        $this->postJson(
             "/ajax/admin/blog/post/create",
             [
                 'blog_status' => "BLOG_STATUS_DRAFT",

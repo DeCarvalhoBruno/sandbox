@@ -1,9 +1,7 @@
 <?php namespace Naraki\Blog\Job;
 
 use App\Jobs\Job;
-use App\Models\Person;
 use Illuminate\Support\Collection;
-use Naraki\Blog\Facades\Blog;
 use Naraki\Blog\Models\BlogPost;
 use Naraki\Elasticsearch\Facades\ElasticSearchIndex;
 
@@ -37,7 +35,6 @@ class DeleteElasticsearch extends Job
         parent::handle();
         try {
             $this->deleteDocument();
-
             $this->delete();
         } catch (\Exception $e) {
             \Log::critical($e->getMessage(), ['trace' => $e->getTraceAsString()]);
@@ -50,9 +47,9 @@ class DeleteElasticsearch extends Job
     {
         $model = new BlogPost();
         foreach ($this->blogPostData as $data) {
-            ElasticSearchIndex::delete(
+            ElasticSearchIndex::destroy(
                 [
-                    'index' => $model->getLocaleDocumentIndex(),
+                    'index' => $model->getLocaleDocumentIndex($data->getAttribute('language_id')),
                     'type' => 'main',
                     'id' => $data->getAttribute('entity_type_id'),
                 ]

@@ -16,7 +16,7 @@ class UpdateElasticSearchTest extends TestCase
 {
     use DatabaseMigrations, WithoutMiddleware;
 
-    public function test_class()
+    public function test_elasticsearch_blog_post_creation()
     {
         $u = $this->createUser();
         $this->postJson(
@@ -29,6 +29,7 @@ class UpdateElasticSearchTest extends TestCase
             '/ajax/admin/blog/categories',
             ['label' => 'cat111', 'parent' => slugify('cat11')]);
         $title = 'This is my blog post titled one';
+        ElasticSearchIndex::shouldReceive('index')->times(8);
         $blogPostData = [
             'blog_status' => 'BLOG_STATUS_DRAFT',
             'blog_post_title' => $title,
@@ -64,7 +65,7 @@ class UpdateElasticSearchTest extends TestCase
 
     }
 
-    public function test_create_document()
+    public function test_elasticsearch_blog_create_document()
     {
         $u = $this->createUser();
         $this->postJson(
@@ -76,7 +77,7 @@ class UpdateElasticSearchTest extends TestCase
         $this->postJson(
             '/ajax/admin/blog/categories',
             ['label' => 'cat111', 'parent' => slugify('cat11')]);
-        ElasticSearchIndex::shouldReceive('create')->once();
+        ElasticSearchIndex::shouldReceive('index')->times(4);
         $blogPostData = [
             'blog_status' => 'BLOG_STATUS_DRAFT',
             'blog_post_title' => 'This is my blog post titled one',
@@ -113,7 +114,7 @@ class UpdateElasticSearchTest extends TestCase
         });
     }
 
-    public function test_update_document()
+    public function test_elasticsearch_blog_update_document()
     {
         $u = $this->createUser();
         $this->postJson(
@@ -136,12 +137,13 @@ class UpdateElasticSearchTest extends TestCase
             'published_at' => '201902051959',
             'tags' => ['tag1', 'tag2', 'tag3']
         ];
+        ElasticSearchIndex::shouldReceive('index')->times(4);
+        ElasticSearchIndex::shouldReceive('update')->once();
         $this->postJson(
             '/ajax/admin/blog/post/create',
             $blogPostData);
 
         $postTitle2 = 'This is my blog post that I have just updated';
-        ElasticSearchIndex::shouldReceive('update')->once();
         $this->postJson(
             "/ajax/admin/blog/post/edit/" . slugify($postTitle),
             [
@@ -166,7 +168,7 @@ class UpdateElasticSearchTest extends TestCase
         });
     }
 
-    public function test_delete()
+    public function test_elasticsearch_blog_delete()
     {
         $u = $this->createUser();
 
@@ -179,6 +181,7 @@ class UpdateElasticSearchTest extends TestCase
             'blog_post_person' => $u->getAttribute('person_slug'),
             'published_at' => '201902051959'
         ];
+        ElasticSearchIndex::shouldReceive('index')->times(4);
         $this->postJson(
             '/ajax/admin/blog/post/create',
             $blogPostData);
@@ -197,7 +200,6 @@ class UpdateElasticSearchTest extends TestCase
         $this->postJson(
             '/ajax/admin/blog/post/create',
             $blogPostData);
-
         Bus::fake();
         $this->deleteJson('/ajax/admin/blog/post/title1');
         Bus::assertDispatched(DeleteElasticsearch::class, function ($job) use ($blogPostData) {

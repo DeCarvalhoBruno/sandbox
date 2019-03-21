@@ -146,6 +146,7 @@ class Blog extends Model implements BlogInterface
         return $post->newQuery()->select([
             'entity_type_id',
             'person_id',
+            'language_id',
             'blog_post_id',
             'blog_post_slug',
             'blog_status_id'
@@ -161,11 +162,12 @@ class Blog extends Model implements BlogInterface
     {
         $builder = $this->build()->where('blog_post_slug', '=', $slug);
         (clone($builder))->update($this->filterFillables($data));
-        //using entity_type to refresh Elasticsearch, post id for categories and tags,
+        //using entity_type and language_id to refresh Elasticsearch, post id for categories and tags,
         //status and slug to make the blog post url
         return $builder->scopes(['entityType'])->select([
             'entity_type_id',
             'person_id',
+            'language_id',
             'blog_post_id',
             'blog_post_slug',
             'blog_status_id'
@@ -180,13 +182,15 @@ class Blog extends Model implements BlogInterface
     {
         $model = null;
         if (is_string($slug)) {
-            $model = $this->select(['entity_type_id'])->where('blog_post_slug', '=', $slug)
+            $model = $this->select(['entity_type_id','language_id'])
+                ->where('blog_post_slug', '=', $slug)
                 ->scopes(['entityType'])->get();
             if (!is_null($model)) {
                 $this->build()->where('blog_post_slug', '=', $slug)->delete();
             }
         } else {
-            $model = $this->build()->select(['entity_type_id'])->whereIn('blog_post_slug', $slug)
+            $model = $this->build()->select(['entity_type_id','language_id'])
+                ->whereIn('blog_post_slug', $slug)
                 ->scopes(['entityType'])->get();
             if (!is_null($model)) {
                 $this->build()->whereIn('blog_post_slug', $slug)->delete();

@@ -69,10 +69,13 @@ class UpdateElasticsearch extends Job
      * Execute the job.
      *
      * @return void
-     * @throws \Exception
      */
     public function handle()
     {
+        if (!config('elastic-search.enabled')) {
+            $this->delete();
+        }
+
         parent::handle();
         try {
             $this->processPost();
@@ -88,6 +91,7 @@ class UpdateElasticsearch extends Job
             if (!is_null($this->tags)) {
                 $this->processTags();
             }
+
             if (!empty($this->documentContents)) {
                 switch ($this->writeMode) {
                     case self::WRITE_MODE_CREATE:
@@ -100,7 +104,8 @@ class UpdateElasticsearch extends Job
             }
             $this->delete();
         } catch (\Exception $e) {
-            \Log::critical($e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            \Log::critical($e->getMessage(),
+                ['trace' => $e->getTraceAsString(), 'document' => $this->documentContents]);
 //            app('bugsnag')->notifyException($e, ['mailData'=>$this->email->getData()], "error");
             $this->release(60);
         }
@@ -114,41 +119,27 @@ class UpdateElasticsearch extends Job
             ['slug' => $this->blogPostData->getAttribute('blog_post_slug')]
         );
         $document = [
-            'index' => $model->getLocaleDocumentIndex(),
+            'index' => $model->getLocaleDocumentIndex($this->blogPostData->getAttribute('language_id')),
             'type' => 'main',
             'id' => $this->blogPostData->getAttribute('entity_type_id'),
             'body' => $this->documentContents
         ];
 
-        ElasticSearchIndex::create($document);
+        ElasticSearchIndex::index($document);
     }
 
     public function updateDocument()
     {
         $model = new BlogPost();
         $document = [
-            'index' => $model->getLocaleDocumentIndex(),
+            'index' => $model->getLocaleDocumentIndex($this->blogPostData->getAttribute('language_id')),
             'type' => 'main',
-            'id' => $this->blogPostData->getAttribute('entity_type_id'),
+            'id' => intval($this->blogPostData->getAttribute('entity_type_id')),
             'body' => [
-                'doc' => [
-                    $this->documentContents
-                ]
+                'doc' => $this->documentContents
             ]
         ];
         ElasticSearchIndex::update($document);
-    }
-
-    public function deleteDocument()
-    {
-        $model = new BlogPost();
-        ElasticSearchIndex::delete(
-            [
-                'index' => $model->getLocaleDocumentIndex(),
-                'type' => 'main',
-                'id' => $this->blogPostData->getAttribute('entity_type_id'),
-            ]
-        );
     }
 
     private function processPost()
@@ -190,33 +181,36 @@ class UpdateElasticsearch extends Job
     private function processTags()
     {
         if (!empty($this->tags->added)) {
-            $tags = Blog::tag()->getByPost($this->blogPostData->getAttribute('blog_post_id'));
+            $tags = Blog::tag()->getByPostColumns($this->blogPostData->getAttribute('blog_post_id'));
             if (!isset($this->documentContents['meta'])) {
                 $this->documentContents['meta'] = [];
             }
             $model = new BlogTag();
-            foreach ($tags as $slug => $name) {
-                $tag = [
-                    'name' => $name,
-                    'url' => route_i18n('blog.tag', ['slug' => $slug]),
+            foreach ($tags as $tag) {
+                $tagData = [
+                    'name' => $tag->getAttribute('name'),
+                    'url' => route_i18n('blog.tag', ['slug' => $tag->getAttribute('slug')]),
                 ];
-                ElasticSearchIndex::create(
-                    [
-                        'index' => $model->getLocaleDocumentIndex(),
-                        'type' => 'main',
-                        'id' => $name,
-                        'body' => $tag
-                    ]);
-                $this->documentContents['meta']['tag'][] = $tag;
+                $this->documentContents['meta']['tag'][] = $tagData;
+                ElasticSearchIndex::index([
+                    'index' => $model->getLocaleDocumentIndex(
+                        $this->blogPostData->getAttribute('language_id')
+                    ),
+                    'type' => 'main',
+                    'id' => $tag->getAttribute('id'),
+                    'body' => $tagData
+                ]);
             }
         }
 
         if (isset($this->tags->removed) && !empty($this->tags->removed)) {
             $model = new BlogTag();
             foreach ($this->tags->removed as $removed) {
-                ElasticSearchIndex::delete(
+                ElasticSearchIndex::destroy(
                     [
-                        'index' => $model->getLocaleDocumentIndex(),
+                        'index' => $model->getLocaleDocumentIndex(
+                            $this->blogPostData->getAttribute('language_id')
+                        ),
                         'type' => 'main',
                         'id' => $removed,
                     ]

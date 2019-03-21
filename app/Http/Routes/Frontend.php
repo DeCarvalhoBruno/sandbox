@@ -17,11 +17,11 @@ class Frontend extends Routes
                 'namespace' => 'App\Http\Controllers\Frontend',
             ], call_user_func('static::defaultRouteGroup', $k));
         }
-                $router->group([
-            'prefix' => '/',
-            'middleware' => ['misc'],
-            'namespace' => 'App\Http\Controllers\Frontend',
-        ], call_user_func('static::misc'));
+//                $router->group([
+//            'prefix' => '/',
+//            'middleware' => ['misc'],
+//            'namespace' => 'App\Http\Controllers\Frontend',
+//        ], call_user_func('static::misc'));
     }
 
     public static function defaultRouteGroup($locale)
