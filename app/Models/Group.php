@@ -11,6 +11,7 @@ use App\Traits\Models\Presentable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Contracts\Enumerable as EnumerableContract;
+use Illuminate\Database\Query\JoinClause;
 
 class Group extends Model implements HasAnEntity, HasPermissions, EnumerableContract
 {
@@ -35,7 +36,7 @@ class Group extends Model implements HasAnEntity, HasPermissions, EnumerableCont
     public $timestamps = false;
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -45,7 +46,7 @@ class Group extends Model implements HasAnEntity, HasPermissions, EnumerableCont
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -55,7 +56,7 @@ class Group extends Model implements HasAnEntity, HasPermissions, EnumerableCont
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -66,20 +67,20 @@ class Group extends Model implements HasAnEntity, HasPermissions, EnumerableCont
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     public function scopeEntityType(Builder $builder)
     {
-        return $builder->join('entity_types', function ($q) {
+        return $builder->join('entity_types', function (JoinClause $q) {
             $q->on('entity_types.entity_type_target_id', '=', 'groups.group_id')
                 ->where('entity_types.entity_id', '=', Entity::GROUPS);
         });
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -89,7 +90,7 @@ class Group extends Model implements HasAnEntity, HasPermissions, EnumerableCont
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -99,7 +100,7 @@ class Group extends Model implements HasAnEntity, HasPermissions, EnumerableCont
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $userId
      * @return \Illuminate\Database\Eloquent\Builder $builder

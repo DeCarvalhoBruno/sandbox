@@ -7,6 +7,7 @@ use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use App\Traits\Models\HasPermissions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\JoinClause;
 
 class GroupMember extends Model implements HasAnEntity
 {
@@ -25,7 +26,7 @@ class GroupMember extends Model implements HasAnEntity
     ];
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -35,7 +36,7 @@ class GroupMember extends Model implements HasAnEntity
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -45,13 +46,13 @@ class GroupMember extends Model implements HasAnEntity
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     public function scopeEntityType(Builder $builder)
     {
-        return $builder->join('entity_types', function ($q) {
+        return $builder->join('entity_types', function (JoinClause $q) {
             $q->on('entity_types.entity_type_target_id', '=', 'group_members.user_id')
                 ->where('entity_types.entity_id', '=', Entity::USERS);
         });

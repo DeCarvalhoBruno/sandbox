@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers\Frontend;
 
-use Naraki\Media\Contracts\Media as MediaProvider;
+use Naraki\Media\Facades\Media as MediaProvider;
 use App\Models\Language;
 use Naraki\Blog\Facades\Blog;
 
@@ -8,18 +8,17 @@ class Home extends Controller
 {
 
     /**
-     * @param \Naraki\Media\Contracts\Media|\Naraki\Media\Providers\Media $mediaRepo
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(MediaProvider $mediaRepo)
+    public function index()
     {
         $dbResult = Blog::buildForDisplay()
             ->orderBy('page_views', 'desc')
             ->where('language_id', Language::getAppLanguageId())
-            ->where('blog_categories.parent_id',null)
+            ->where('blog_categories.parent_id', null)
             ->limit(115)
             ->get();
-        $dbImages = $mediaRepo->image()->getImages(
+        $dbImages = MediaProvider::image()->getImages(
             $dbResult->pluck('type')->all(), [
                 'media_uuid as uuid',
                 'media_extension as ext',
@@ -59,7 +58,7 @@ class Home extends Controller
             }
         }
         unset($dbResult);
-        return view('frontend.site.home', compact('posts','media'));
+        return view('frontend.site.home', compact('posts', 'media'));
     }
 
 }

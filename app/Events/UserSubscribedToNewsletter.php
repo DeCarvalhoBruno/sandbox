@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\System\SystemEvent;
+use Naraki\System\Models\SystemEvent;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;

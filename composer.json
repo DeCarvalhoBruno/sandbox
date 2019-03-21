@@ -47,11 +47,13 @@
         ],
         "psr-4": {
             "App\\": "app/",
+            "Naraki\\System\\": "naraki/system/src/",
             "Naraki\\Blog\\": "naraki/blog/src/",
             "Naraki\\Rss\\": "naraki/rss/src/",
             "Naraki\\Media\\": "naraki/media/src/",
             "Naraki\\Mail\\": "naraki/mail/src/",
-            "Naraki\\Sitemap\\": "naraki/sitemap/src/"
+            "Naraki\\Sitemap\\": "naraki/sitemap/src/",
+            "Naraki\\Forum\\": "naraki/forum/src/"
         },
         "files": [
             "app/Support/helpers.php"

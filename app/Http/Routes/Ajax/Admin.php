@@ -57,24 +57,7 @@ class Admin
             $r->patch('members/{group}', 'GroupMember@update')
                 ->middleware('can:view,App\Models\Group');
 
-            $r->get('user/general', 'User\General@edit');
-            $r->patch('user/general', 'User\General@update');
-            $r->patch('user/password', 'User\Password@update');
-            $r->patch('user/profile', 'User\Profile@update');
-            $r->get('user/avatar', 'User\Profile@avatar');
-            $r->patch('user/avatar', 'User\Profile@setAvatar');
-            $r->delete('user/avatar/{uuid}', 'User\Profile@deleteAvatar');
-
-            $r->get('settings/general','Settings@edit');
-            $r->post('settings/general','Settings@update');
-            $r->get('settings/social','Settings@editSocial');
-            $r->post('settings/social','Settings@updateSocial');
-            $r->get('settings/sitemap','Settings@editSitemap');
-            $r->post('settings/sitemap','Settings@updateSitemap');
-
             $r->get('dashboard', 'Dashboard@index');
-
-            $r->get('system/events/log', 'System@getLog');
         };
     }
 }

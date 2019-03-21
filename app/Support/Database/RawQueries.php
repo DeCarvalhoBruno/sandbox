@@ -3,9 +3,15 @@
 use App\Models\Entity;
 use App\Models\EntityType;
 use App\Contracts\HasPermissions;
+use App\Contracts\RawQueries as RawQueriesInterface;
 
-abstract class RawQueries
+abstract class RawQueries implements RawQueriesInterface
 {
+    /**
+     * @param array $testedArray
+     * @param $group
+     * @return array
+     */
     public function getUsersInArrayNotInGroup($testedArray, $group)
     {
         $userIds = \DB::select(
@@ -80,6 +86,10 @@ UNION
         return (object)$permission;
     }
 
+    /**
+     * @param string $name
+     * @param string $primaryKey
+     */
     public function triggerCreateEntityType($name, $primaryKey)
     {
         \DB::unprepared(
@@ -112,6 +122,11 @@ UNION
         );
     }
 
+    /**
+     * @param string $name
+     * @param string $primaryKey
+     * @param int $entityId
+     */
     public function triggerDeleteEntityType($name, $primaryKey, $entityId)
     {
         \DB::unprepared(

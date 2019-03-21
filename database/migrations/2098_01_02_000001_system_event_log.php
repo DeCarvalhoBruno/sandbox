@@ -30,7 +30,7 @@ class SystemEventLog extends Migration
                 ->onDelete('cascade');
         });
 
-        \App\Models\System\SystemEvent::insert([
+        \Naraki\System\Models\SystemEvent::insert([
             ['system_event_id' => 1, 'system_event_name' => 'Newsletter Subscription'],
             ['system_event_id' => 2, 'system_event_name' => 'Contact form message'],
         ]);
@@ -40,7 +40,7 @@ class SystemEventLog extends Migration
             $table->string('system_section_name', 75);
         });
 
-        \App\Models\System\SystemSection::insert([
+        \Naraki\System\Models\SystemSection::insert([
             ['system_section_name' => 'Backend'],
             ['system_section_name' => 'Frontend'],
         ]);

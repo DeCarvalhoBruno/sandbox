@@ -1,9 +1,6 @@
 <?php namespace App\Support\Database;
 
-use App\Contracts\RawQueries;
-use App\Support\Database\RawQueries as RawQueriesClass;
-
-class MysqlRawQueries extends RawQueriesClass implements RawQueries
+class MysqlRawQueries extends RawQueries
 {
     public function triggerUserFullName(){
         \DB::unprepared('

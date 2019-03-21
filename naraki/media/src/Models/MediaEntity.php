@@ -4,6 +4,7 @@ use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\Presentable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\JoinClause;
 use Naraki\Media\Support\Presenters\MediaEntity as MediaEntityPresenter;
 
 class MediaEntity extends Model
@@ -69,14 +70,14 @@ class MediaEntity extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int|array $entityTypeId
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     public function scopeEntityType(Builder $builder, $entityTypeId = null)
     {
-        return $builder->join('entity_types', function ($q) use ($entityTypeId) {
+        return $builder->join('entity_types', function (JoinClause $q) use ($entityTypeId) {
             $q->on('entity_types.entity_type_id', '=', 'media_entities.entity_type_id');
             if (!is_null($entityTypeId)) {
                 if (!is_array($entityTypeId)) {
@@ -89,32 +90,38 @@ class MediaEntity extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $mediaCategoryId
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     public static function scopeMediaCategoryRecord(Builder $builder, $mediaCategoryId = MediaCategory::MEDIA)
     {
-        return $builder->join('media_category_records', function ($q) use ($mediaCategoryId) {
-            $q->on('media_entities.media_category_record_id', '=', 'media_category_records.media_category_record_id');
+        return $builder->join('media_category_records', function (JoinClause $q) use ($mediaCategoryId) {
+            $q->on('media_entities.media_category_record_id',
+                '=',
+                'media_category_records.media_category_record_id'
+            );
             $q->where('media_category_records.media_category_id', '=', $mediaCategoryId);
         });
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     public static function scopeMediaRecord(Builder $builder)
     {
         return $builder->join('media_records',
-            'media_category_records.media_record_target_id', '=', 'media_records.media_record_id');
+            'media_category_records.media_record_target_id',
+            '=',
+            'media_records.media_record_id'
+        );
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -125,7 +132,7 @@ class MediaEntity extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -136,7 +143,7 @@ class MediaEntity extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -150,7 +157,7 @@ class MediaEntity extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */

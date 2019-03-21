@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace Naraki\System\Requests;
 
 use App\Support\Requests\FormRequest;
 use App\Traits\ProcessesPermissions;

@@ -12,6 +12,6 @@ class UpdatePermissions extends Listener
      */
     public function handle()
     {
-        $this->dispatch(new \App\Jobs\UpdatePermissions);
+        $this->dispatch(new \Naraki\Permission\Jobs\Update);
     }
 }

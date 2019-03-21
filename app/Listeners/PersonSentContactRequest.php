@@ -1,21 +1,21 @@
 <?php namespace App\Listeners;
 
-use App\Contracts\Models\System as SystemProvider;
+use Naraki\System\Contracts\System as SystemProvider;
 use Naraki\Mail\Emails\Frontend\Contact;
 use App\Events\PersonSentContactRequest as ContactRequestEvent;
 use Naraki\Mail\Jobs\SendMail;
-use App\Models\System\SystemEvent;
+use Naraki\System\Models\SystemEvent;
 
 class PersonSentContactRequest extends Listener
 {
     /**
-     * @var \App\Contracts\Models\System|\App\Support\Providers\System
+     * @var \Naraki\System\Contracts\System|\App\Support\Providers\System
      */
     private $systemRepo;
 
     /**
      *
-     * @param \App\Contracts\Models\System|\App\Support\Providers\System $systemRepo
+     * @param \Naraki\System\Contracts\System|\App\Support\Providers\System $systemRepo
      */
     public function __construct(SystemProvider $systemRepo)
     {

@@ -111,7 +111,7 @@ abstract class Permission
      */
     protected function sqlUsersWithPermissions()
     {
-        return \App\Models\Permission::query()->select([
+        return \Naraki\Permission\Models\Permission::query()->select([
             'group_members.user_id as group_user_id',
             'users.user_id',
             'permission_mask'

@@ -34,7 +34,7 @@ class Entity extends Model
      * @param int $entityID
      * @param array $attributes
      * @param string $testContract
-     * @return \Illuminate\Database\Eloquent\Model|\App\Contracts\HasPermissions
+     * @return \Illuminate\Database\Eloquent\Model|\Naraki\Permission\Contracts\HasPermissions
      */
     public static function createModel($entityID, array $attributes = [], $testContract = null)
     {
@@ -43,7 +43,8 @@ class Entity extends Model
             $o = new $class($attributes);
             if (!is_null($testContract) && !($o instanceof $testContract)) {
                 throw new \UnexpectedValueException(
-                    sprintf('Model %s is supposed to be an instance of %s' . !($class instanceof $testContract),
+                    sprintf(
+                        'Model %s is supposed to be an instance of %s' . !($class instanceof $testContract),
                         $class,
                         $testContract)
                 );
@@ -63,25 +64,21 @@ class Entity extends Model
      */
     public static function getModelClassNamespace($entityID, $prefixWithBackslash = true)
     {
-        try {
-            $className = static::getModelClass($entityID);
-            $classNamespace = isset(static::$classMap[$className])
-                ? static::$classMap[$className]
-                : sprintf('\App\Models\%s', $className);
-            if (class_exists($classNamespace)) {
-                return ($prefixWithBackslash) ? $classNamespace : substr($classNamespace, 1);
-            }
-            throw new \UnexpectedValueException(sprintf('Class %s does not exist. (%s)', $className, $entityID));
-        } catch (\ReflectionException $re) {
-            throw new \UnexpectedValueException('Reflection failed .' . $re->getMessage());
+        $className = static::getModelClass($entityID);
+        $classNamespace = isset(static::$classMap[$className])
+            ? static::$classMap[$className]
+            : sprintf('\App\Models\%s', $className);
+        if (class_exists($classNamespace)) {
+            return ($prefixWithBackslash) ? $classNamespace : substr($classNamespace, 1);
         }
+        throw new \UnexpectedValueException(sprintf('Class %s does not exist. (%s)', $className, $entityID));
     }
 
     /**
      * Returns the model's class name using its entity_id
      *
      * @param int $entityID
-     * @return null|string
+     * @return string
      */
     public static function getModelClass($entityID)
     {
@@ -102,6 +99,9 @@ class Entity extends Model
     public static function getModelPrimaryKey($entityID, $getQualifiedName = false)
     {
         $class = self::getModelClassNamespace($entityID);
+        /**
+         * @var Model $instance
+         */
         $instance = new $class();
         if ($getQualifiedName === false) {
             return $instance->getKeyName();
@@ -112,8 +112,9 @@ class Entity extends Model
 
     /**
      * Get the model's presentable name, i.e 'Users', 'Groups', using its entity_id
-     * @param $entityID
-     * @return null|string
+     *
+     * @param int $entityID
+     * @return string
      */
     public static function getModelPresentableName($entityID)
     {

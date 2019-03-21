@@ -3,6 +3,7 @@
 namespace App\Traits\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 
 trait DoesSqlStuff
 {
@@ -75,7 +76,7 @@ trait DoesSqlStuff
 
         return $builder->join(
             $modelToJoin->getTable(),
-            function ($q) use ($slug, $modelName, $modelToJoin) {
+            function (JoinClause $q) use ($slug, $modelName, $modelToJoin) {
                 $q->on(
                     $modelToJoin->getQualifiedKeyName(),
                     '=',
@@ -88,14 +89,20 @@ trait DoesSqlStuff
             });
     }
 
-    public function joinWithWheres($builder, $modelName, $wheres = null): Builder
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param string $modelName
+     * @param array $wheres
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function joinWithWheres(Builder $builder, $modelName, $wheres = null): Builder
     {
         /** @var \Illuminate\Database\Eloquent\Model $modelToJoin */
         $modelToJoin = new $modelName;
 
         return $builder->join(
             $modelToJoin->getTable(),
-            function ($q) use ($modelName, $modelToJoin, $wheres) {
+            function (JoinClause $q) use ($modelName, $modelToJoin, $wheres) {
                 $q->on(
                     $this->getQualifiedKeyName(),
                     '=',

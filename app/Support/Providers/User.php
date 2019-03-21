@@ -4,13 +4,14 @@ use App\Contracts\Models\Person as PersonInterface;
 use App\Contracts\Models\User as UserInterface;
 use App\Models\OAuthProvider;
 use App\Models\Stats\StatUser;
+use App\Models\User as UserModel;
 use App\Models\UserActivation;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Hashing\BcryptHasher;
 use Illuminate\Support\Str;
-use Tymon\JWTAuth\JWTGuard;
 use Laravel\Socialite\Two\User as SocialiteUser;
+use Tymon\JWTAuth\JWTGuard;
 
 /**
  * Class User
@@ -79,13 +80,15 @@ class User extends Model implements UserProvider, UserInterface
      */
     public function generateActivationToken($user)
     {
-        $token = makeHexHashedUuid();
+        try {
+            $token = makeHexHashedUuid();
+        } catch (\Exception $e) {
+        }
         (new UserActivation([
             'user_id' => $user->getKey(),
             'activation_token' => $token
         ]))->save();
         return $token;
-
     }
 
     /**
@@ -97,9 +100,9 @@ class User extends Model implements UserProvider, UserInterface
      */
     public function updateOne($model, $field, $value, $data)
     {
-        $user = $model->newQuery()->where($field, $value)->entityType()->first();
+        $user = $model->newQuery()->where($field, $value)->scopes(['entityType'])->first();
 
-        $this->person->createModel()
+        $this->person->build()
             ->where('person_id', $user->person_id)
             ->update($this->person->filterFillables($data));
 
@@ -111,9 +114,9 @@ class User extends Model implements UserProvider, UserInterface
 
         if (isset($data[$field])) {
             return $model->newQuery()->where($field, $data[$field])
-                ->entityType()->first();
+                ->scopes(['entityType'])->first();
         } else {
-            return $model->newQuery()->where($field, $value)->entityType()->first();
+            return $model->newQuery()->where($field, $value)->scopes(['entityType'])->first();
         }
     }
 
@@ -156,7 +159,7 @@ class User extends Model implements UserProvider, UserInterface
     /**
      * @param string $username
      * @param array $columns
-     * @return \App\Models\User
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function buildOneByUsername($username, $columns = ['*'])
     {
@@ -174,10 +177,10 @@ class User extends Model implements UserProvider, UserInterface
     public function retrieveById($identifier)
     {
         $model = $this->createModel();
-        $builder = $model->newQuery()->entityType()
+        $builder = $model->newQuery()->scopes(['entityType'])
             ->where($model->getIdentifier($identifier), $identifier);
         if (auth()->guard() instanceof JWTGuard) {
-            return $builder->settings()->first();
+            return $builder->scopes(['settings'])->first();
         }
         return $builder->first();
     }
@@ -193,7 +196,7 @@ class User extends Model implements UserProvider, UserInterface
     {
         $model = $this->createModel();
 
-        $model = $model->newQuery()->entityType()
+        $model = $model->newQuery()->scopes(['entityType'])
             ->where($model->getIdentifier(), $identifier)->first();
 
         if (!$model) {
@@ -215,10 +218,6 @@ class User extends Model implements UserProvider, UserInterface
     public function updateRememberToken(UserContract $user, $token)
     {
         $user->setRememberToken($token);
-        $timestamps = $user->timestamps;
-        $user->timestamps = false;
-        $user->save();
-        $user->timestamps = $timestamps;
     }
 
     /**
@@ -232,12 +231,12 @@ class User extends Model implements UserProvider, UserInterface
         if (empty($credentials) ||
             (count($credentials) === 1 &&
                 array_key_exists('password', $credentials))) {
-            return;
+            return null;
         }
 
-        $builder = $this->createModel()->newQuery()->entityType();
+        $builder = $this->createModel()->newQuery()->scopes(['entityType']);
         if (auth()->guard() instanceof JWTGuard) {
-            $builder = $builder->settings();
+            $builder = $builder->scopes(['settings']);
         }
 
         foreach ($credentials as $key => $value) {
@@ -272,23 +271,23 @@ class User extends Model implements UserProvider, UserInterface
     public function search($search, $userEntityId, $limit)
     {
         return $this
-            ->select(['full_name as text', 'username as id'])
-            ->entityType()
-            ->permissionRecord()
-            ->permissionStore()
-            ->permissionMask($userEntityId)
+            ->buildWithScopes(
+                ['full_name as text', 'username as id'],
+                ['entityType', 'permissionRecord', 'permissionStore', 'permissionMask' => $userEntityId])
             ->where('full_name', 'like', sprintf('%%%s%%', $search))
             ->limit($limit);
     }
 
+    /**
+     * @param int $userId
+     * @return array
+     */
     public function getAvatars($userId)
     {
-        return $this->createModel()->select([
-            'media_uuid as uuid',
-            'media_extension as ext',
-            'media_in_use as used'
-        ])->newQuery()
-            ->entityType($userId)->avatars()->get()->toArray();
+        return $this->buildWithScopes(
+            ['media_uuid as uuid', 'media_extension as ext', 'media_in_use as used'],
+            ['entityType' => $userId, 'avatars'])
+            ->get()->toArray();
     }
 
 
@@ -298,7 +297,7 @@ class User extends Model implements UserProvider, UserInterface
      */
     public function activate($token)
     {
-        $model = (new UserActivation);
+        $model = new UserActivation;
         $user = $model->newQuery()
             ->select(['user_id'])
             ->where('activation_token', '=', $token)
@@ -315,16 +314,20 @@ class User extends Model implements UserProvider, UserInterface
      * @param \App\Models\User $user
      * @param array $values
      */
-    public function updateStats(\App\Models\User $user, $values)
+    public function updateStats(UserModel $user, $values)
     {
         if (isset($values['stat_user_timezone']) && is_numeric($values['stat_user_timezone'])) {
             StatUser::query()->where('user_id', $user->getKey())
                 ->update(['stat_user_timezone' => intval($values['stat_user_timezone'])]);
         }
-
     }
 
-    public function processViaOAuth(string $provider, SocialiteUser $socialiteUser):\App\Models\User
+    /**
+     * @param string $provider
+     * @param \Laravel\Socialite\Two\User $socialiteUser
+     * @return \App\Models\User
+     */
+    public function processViaOAuth(string $provider, SocialiteUser $socialiteUser): UserModel
     {
         $model = $this->createModel();
         $user = $model->newQuery()
@@ -386,7 +389,7 @@ class User extends Model implements UserProvider, UserInterface
                 ]
             )->save();
         }
-        OAuthProvider::create([
+        OAuthProvider::query()->create([
             'user_id' => $user->getKey(),
             'provider' => $provider,
             'provider_user_id' => $socialiteUser->getId(),

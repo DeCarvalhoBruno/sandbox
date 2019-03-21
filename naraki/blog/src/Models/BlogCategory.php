@@ -4,6 +4,7 @@ use App\Support\NestedSet\NodeTrait;
 use App\Traits\Models\DoesSqlStuff;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\JoinClause;
 
 class BlogCategory extends Model
 {
@@ -52,7 +53,7 @@ class BlogCategory extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -62,14 +63,14 @@ class BlogCategory extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $blogPostId
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     public static function scopeLabelRecord(Builder $builder, $blogPostId = null)
     {
-        return $builder->join('blog_label_records', function ($q) use ($blogPostId) {
+        return $builder->join('blog_label_records', function (JoinClause $q) use ($blogPostId) {
             $q->on(
                 'blog_label_types.blog_label_type_id',
                 '=',

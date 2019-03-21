@@ -13,6 +13,7 @@ class Account extends Controller
         $user = auth()->user();
         return view('frontend.site.settings.panes.account', [
             'user' => $user,
+            'title' => trans('pages.profile.settings_title'),
             'breadcrumbs' => Breadcrumbs::render([
                 ['label' => trans('titles.routes.account'), 'url' => route_i18n('account')]
             ])

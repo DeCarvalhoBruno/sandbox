@@ -12,7 +12,7 @@ class PermissionsSeeder extends Seeder
      */
     public function run()
     {
-        (new \App\Models\Permission())->insert([
+        (new \Naraki\Permission\Models\Permission())->insert([
             [
                 'entity_type_id'=>8,
                 'entity_id'=>\App\Models\Entity::USERS,
@@ -39,6 +39,6 @@ class PermissionsSeeder extends Seeder
                 'permission_mask'=>0b1010,
             ],
         ]);
-        $this->dispatch(new \App\Jobs\UpdatePermissions);
+        $this->dispatch(new \Naraki\Permission\Jobs\Update);
     }
 }

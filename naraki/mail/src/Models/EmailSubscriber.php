@@ -3,6 +3,7 @@
 use App\Models\Entity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\JoinClause;
 
 class EmailSubscriber extends Model
 {
@@ -15,7 +16,7 @@ class EmailSubscriber extends Model
     public $timestamps = false;
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#query-scopes
+     * @link https://laravel.com/docs/eloquent#query-scopes
      *
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder
@@ -27,7 +28,7 @@ class EmailSubscriber extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#query-scopes
+     * @link https://laravel.com/docs/eloquent#query-scopes
      *
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $userID
@@ -35,7 +36,7 @@ class EmailSubscriber extends Model
      */
     public function scopeUser(Builder $builder, $userID = null): Builder
     {
-        return $builder->join('users', function ($q) use ($userID) {
+        return $builder->join('users', function (JoinClause $q) use ($userID) {
             $q->on('users.user_id','=','people.user_id');
             if (!is_null($userID)) {
                 $q->where('users.user_id', '=', $userID);
@@ -44,7 +45,7 @@ class EmailSubscriber extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#query-scopes
+     * @link https://laravel.com/docs/eloquent#query-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -56,7 +57,7 @@ class EmailSubscriber extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#query-scopes
+     * @link https://laravel.com/docs/eloquent#query-scopes
      *
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder

@@ -2,10 +2,10 @@
 
 use App\Events\PersonSentContactRequest;
 use App\Http\Requests\Frontend\SendContactEmail;
-use App\Jobs\SubscribeToNewsletter;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Naraki\Mail\Jobs\SubscribeToNewsletter;
 
 class Frontend extends Controller
 {

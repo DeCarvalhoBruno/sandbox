@@ -1,24 +1,23 @@
-<?php
-
-namespace App\Models;
+<?php namespace App\Models;
 
 use App\Contracts\Enumerable as EnumerableContract;
 use App\Contracts\HasAnEntity;
 use App\Contracts\HasPermissions;
-use Naraki\Mail\Emails\User\PasswordReset;
-use Naraki\Mail\Jobs\SendMail;
-use Naraki\Media\Models\MediaEntity;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
-use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use App\Traits\Models\HasASlugColumn;
+use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use App\Traits\Models\HasPermissions as HasPermissionsTrait;
 use App\Traits\Models\Presentable;
 use Carbon\Carbon;
 use Illuminate\Bus\Dispatcher;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Foundation\Auth\User as LaravelUser;
 use Illuminate\Notifications\Notifiable;
+use Naraki\Mail\Emails\User\PasswordReset;
+use Naraki\Mail\Jobs\SendMail;
+use Naraki\Media\Models\MediaEntity;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermissions, EnumerableContract
@@ -119,7 +118,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
      * Sets the attribute that stores system event ids for which the user
      * should be notified in real time.
      *
-     * @see \App\Models\System\SystemEvent
+     * @see \Naraki\System\Models\SystemEvent
      */
     public function setSubscribedNotifications()
     {
@@ -133,7 +132,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
      * Retrieves the attribute that stores system event ids for which the user
      * should be notified in real time.
      *
-     * @see \App\Models\System\SystemEvent
+     * @see \Naraki\System\Models\SystemEvent
      * @return array
      */
     public function getSubscribedNotifications()
@@ -183,7 +182,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
      *
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      *
      * @return \Illuminate\Database\Eloquent\Builder $query
      */
@@ -203,14 +202,14 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int|null $userId
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     public function scopeEntityType(Builder $builder, $userId = null)
     {
-        return $builder->join('entity_types', function ($q) use ($userId) {
+        return $builder->join('entity_types', function (JoinClause $q) use ($userId) {
             $q->on('entity_types.entity_type_target_id', '=', 'users.user_id')
                 ->where('entity_types.entity_id', '=', Entity::USERS);
             if (!is_null($userId)) {
@@ -221,21 +220,21 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $entityId
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     public static function scopePermissionRecord(Builder $builder, $entityId = Entity::USERS)
     {
-        return $builder->join('permission_records', function ($q) use ($entityId) {
+        return $builder->join('permission_records', function (JoinClause $q) use ($entityId) {
             $q->on('permission_records.permission_target_id', '=', 'entity_types.entity_type_id')
                 ->where('permission_records.entity_id', '=', $entityId);
         });
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -249,14 +248,14 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $userId
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     public static function scopePermissionMask(Builder $builder, $userId)
     {
-        return $builder->join('permission_masks', function ($q) use ($userId) {
+        return $builder->join('permission_masks', function (JoinClause $q) use ($userId) {
             $q->on('permission_masks.permission_store_id', '=', 'permission_records.permission_store_id')
                 ->where('permission_masks.permission_holder_id', '=', $userId)
                 ->where('permission_mask', '>', 0);
@@ -278,7 +277,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param string $groupName
      * @return \Illuminate\Database\Eloquent\Builder $builder
@@ -289,7 +288,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
             'group_members.user_id',
             '=',
             'users.user_id'
-        )->join('groups', function ($q) use ($groupName) {
+        )->join('groups', function (JoinClause $q) use ($groupName) {
             $q->on('group_members.group_id', '=', 'groups.group_id');
             if (!is_null($groupName)) {
                 $q->where('group_name', '=', $groupName);
@@ -298,7 +297,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -308,7 +307,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -322,7 +321,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -332,7 +331,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param array $wheres
      * @return \Illuminate\Database\Eloquent\Builder $builder

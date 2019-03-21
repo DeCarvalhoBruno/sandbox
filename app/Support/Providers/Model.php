@@ -1,6 +1,5 @@
 <?php namespace App\Support\Providers;
 
-use App\Contracts\HasAnEntity;
 use App\Contracts\RawQueries;
 use App\Models\Entity;
 use Illuminate\Database\Eloquent\Builder;
@@ -78,7 +77,11 @@ abstract class Model
     {
         $model = $this->createModel();
 
-        return $model->where(sprintf('%s.%s', $model->getTable(), $model->getKeyName()), $id);
+        return $model->newQuery()->where(
+            sprintf('%s.%s',
+                $model->getTable(),
+                $model->getKeyName()
+            ), $id);
     }
 
     /**
@@ -117,71 +120,6 @@ abstract class Model
     }
 
     /**
-     * For models using the HasAnEntity trait
-     *
-     * @see \App\Traits\Models\HasAnEntity
-     * @param int $id
-     * @param int $entityID
-     *
-     * @return mixed
-     */
-    public function deleteWithMedia($id, $entityID)
-    {
-        $model = $this->createModel();
-
-        return $model->deleteWithMedia($id, $entityID);
-    }
-
-    /**
-     * @param array $ids
-     * @param int $entityID
-     */
-    public function deleteMultiple(array $ids, $entityID)
-    {
-        $model = $this->createModel();
-
-        foreach ($ids as $id) {
-            $model->deleteWithMedia($id, $entityID);
-        }
-    }
-
-    /**
-     * Model has to use the SoftDeletes trait
-     *
-     * @see  \Illuminate\Database\Eloquent\SoftDeletes::forceDelete
-     *
-     * @param int $id
-     * @param int $entityID
-     */
-    public function destroyOne($id, $entityID)
-    {
-        $model = $this->createModel();
-        $result = $model->withTrashed()->where($model->getKeyName(), $id)->first();
-        if (!is_null($result)) {
-            $result->forceDelete();
-            if ($model instanceof HasAnEntity) {
-                $model->deleteWithMedia($id, $entityID);
-            }
-        }
-    }
-
-    /**
-     * Model has to use the SoftDeletes trait
-     *
-     * @see  \Illuminate\Database\Eloquent\SoftDeletes::forceDelete
-     *
-     * @param $id
-     */
-    public function restoreOne($id)
-    {
-        $model = $this->createModel();
-        $result = $model->withTrashed()->where($model->getKeyName(), $id)->first();
-        if (!is_null($result)) {
-            $result->restore();
-        }
-    }
-
-    /**
      * Counts all occurrences in a table
      *
      * @return int
@@ -217,23 +155,6 @@ abstract class Model
     }
 
     /**
-     * @param string $table
-     * @return int|null
-     */
-    public static function getLastID($table)
-    {
-        $result = \DB::select(
-            sprintf('SELECT AUTO_INCREMENT AS c FROM information_schema.tables
-                WHERE table_name = "%s" AND table_schema = "%s"',
-                (new $table)->getTable(),
-                config('database.connections.mysql.database')
-            )
-        );
-        return !empty($result) ? $result[0]->c : null;
-
-    }
-
-    /**
      * @param string $model
      * @return int|null
      */
@@ -254,17 +175,6 @@ abstract class Model
     public function getQualifiedKeyName()
     {
         return $this->createModel()->getQualifiedKeyName();
-    }
-
-    /**
-     * Only usable for models using the HasASlugColumn trait
-     *
-     * @see \App\Traits\Models\HasASlugColumn
-     * @return mixed
-     */
-    public function getSlugColumn()
-    {
-        return $this->createModel()->getSlugColumnName();
     }
 
     /**
@@ -297,14 +207,22 @@ abstract class Model
         return null;
     }
 
+    /**
+     * @param int $userID
+     * @return string
+     */
     private function getStoredFilterKey($userID)
     {
         return sprintf('backend_filter_%s', $userID);
     }
 
+    /**
+     * @param int $entityTypeID
+     * @return mixed
+     */
     public function getAllUserPermissions($entityTypeID)
     {
-        return (app()->make(RawQueries::class))->getAllUserPermissions($entityTypeID);
+        return (app(RawQueries::class))->getAllUserPermissions($entityTypeID);
     }
 
 }

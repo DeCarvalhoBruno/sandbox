@@ -1,6 +1,6 @@
 <?php namespace App\Support\Providers;
 
-use App\Models\System\SystemPageView as ViewModel;
+use Naraki\System\Models\SystemPageView as ViewModel;
 use App\Support\View\ViewSessionHistory;
 use App\Support\View\VisitorCookieRepository;
 use Carbon\Carbon;

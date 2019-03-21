@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\JoinClause;
 
 class EmailSchedule extends Model
 {
@@ -16,7 +17,7 @@ class EmailSchedule extends Model
     public $timestamps = false;
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#query-scopes
+     * @link https://laravel.com/docs/eloquent#query-scopes
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param int $entityID
@@ -25,16 +26,16 @@ class EmailSchedule extends Model
      */
     public function scopeEmailList(Builder $query, $entityID = null)
     {
-        return $query->join('email_lists', function ($q) use ($entityID) {
+        return $query->join('email_lists', function (JoinClause $q) use ($entityID) {
             $q->on('email_lists.email_list_id', '=', 'email_schedules.email_list_id');
-            if ( ! is_null($entityID)) {
+            if (!is_null($entityID)) {
                 $q->where('entity_id', '=', $entityID);
             }
         });
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#query-scopes
+     * @link https://laravel.com/docs/eloquent#query-scopes
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param int $targetID
@@ -43,9 +44,12 @@ class EmailSchedule extends Model
      */
     public function scopeSourceEntityType(Builder $query, $targetID = null)
     {
-        return $query->join('entity_types', function ($q) use ($targetID) {
-            $q->on('email_schedules.email_schedule_source_id', '=', 'entity_types.entity_type_id');
-            if ( ! is_null($targetID)) {
+        return $query->join('entity_types', function (JoinClause $q) use ($targetID) {
+            $q->on('email_schedules.email_schedule_source_id',
+                '=',
+                'entity_types.entity_type_id'
+            );
+            if (!is_null($targetID)) {
                 $q->where('entity_type_target_id', '=', $targetID);
             }
         });

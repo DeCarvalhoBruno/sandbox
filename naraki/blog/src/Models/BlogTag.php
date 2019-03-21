@@ -16,7 +16,7 @@ class BlogTag extends Model implements SearchableContract
     public $timestamps = false;
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -26,7 +26,7 @@ class BlogTag extends Model implements SearchableContract
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int $blogPostId
      * @return \Illuminate\Database\Eloquent\Builder $builder
@@ -37,7 +37,7 @@ class BlogTag extends Model implements SearchableContract
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#query-scopes
+     * @link https://laravel.com/docs/eloquent#query-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */

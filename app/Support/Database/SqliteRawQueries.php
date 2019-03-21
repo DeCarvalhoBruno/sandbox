@@ -1,9 +1,6 @@
 <?php namespace App\Support\Database;
 
-use App\Contracts\RawQueries;
-use App\Support\Database\RawQueries as RawQueriesClass;
-
-class SqliteRawQueries extends RawQueriesClass implements RawQueries
+class SqliteRawQueries extends RawQueries
 {
 
     public function triggerUserFullName()

@@ -13,7 +13,7 @@ class EmailUserEvent extends Model
     public $timestamps = false;
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#query-scopes
+     * @link https://laravel.com/docs/eloquent#query-scopes
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      *
@@ -26,7 +26,7 @@ class EmailUserEvent extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#query-scopes
+     * @link https://laravel.com/docs/eloquent#query-scopes
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      *

@@ -153,11 +153,13 @@ return [
 
         App\Support\JavaScript\JavaScriptServiceProvider::class,
         App\Support\View\EloquentViewableServiceProvider::class,
-        Naraki\Blog\ServiceProvider::class,
-        Naraki\Rss\ServiceProvider::class,
         Naraki\Media\ServiceProvider::class,
+        Naraki\Blog\ServiceProvider::class,
+        Naraki\Forum\ServiceProvider::class,
+        Naraki\Rss\ServiceProvider::class,
         Naraki\Mail\ServiceProvider::class,
         Naraki\Sitemap\ServiceProvider::class,
+        Naraki\System\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -217,8 +219,9 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'JavaScript' => App\Facades\JavaScript::class,
-        'Blog' => \Naraki\Blog\Facades\Blog::class,
         'Media' => \Naraki\Media\Facades\Media::class,
+        'Blog' => \Naraki\Blog\Facades\Blog::class,
+        'Forum' => \Naraki\Forum\Facades\Forum::class
     ],
 
 ];

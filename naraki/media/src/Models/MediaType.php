@@ -13,7 +13,7 @@ class MediaType extends Model
     protected $fillable = ['media_title', 'media_description', 'media_uuid', 'media_in_use','media_id'];
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */

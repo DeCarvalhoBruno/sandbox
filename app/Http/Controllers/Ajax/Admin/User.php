@@ -1,30 +1,35 @@
-<?php
+<?php namespace App\Http\Controllers\Ajax\Admin;
 
-namespace App\Http\Controllers\Ajax\Admin;
-
-use App\Contracts\Models\User as UserProvider;
 use App\Contracts\Models\Permission as PermissionProvider;
-use App\Contracts\RawQueries;
 use App\Events\PermissionEntityUpdated;
 use App\Filters\User as UserFilter;
 use App\Http\Controllers\Admin\Controller;
-use App\Http\Requests\Admin\UpdateUser;
+use Naraki\System\Requests\UpdateUser;
 use App\Models\Entity;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class User extends Controller
 {
+    /**
+     * @var \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
+     */
+    private $repo;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->repo = app(\App\Contracts\Models\User::class);
+    }
 
     /**
-     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
      * @param \App\Filters\User $userFilter
      * @return array
      */
-    public function index(UserProvider $userProvider, UserFilter $userFilter)
+    public function index(UserFilter $userFilter)
     {
-        $userProvider->setStoredFilter($this->user->getKey(), $userFilter);
-        $users = $userProvider
+        $this->repo->setStoredFilter($this->user->getKey(), $userFilter);
+        $users = $this->repo
             ->buildWithScopes([
                 \DB::raw('null as selected'),
                 'full_name',
@@ -49,7 +54,7 @@ class User extends Controller
             'table' => $users->paginate(25),
             'groups' => $groups->pluck('group_name'),
             'sorted' => $userFilter->getFilter('sortBy'),
-            'columns' => $userProvider->createModel()->getColumnInfo([
+            'columns' => $this->repo->createModel()->getColumnInfo([
                 'full_name' => (object)[
                     'name' => trans('js-backend.db.full_name'),
                 ],
@@ -65,16 +70,14 @@ class User extends Controller
 
     /**
      * @param $username
-     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
      * @return mixed
      */
-    public function edit($username, UserProvider $userProvider)
+    public function edit($username)
     {
-
-        $filter = $userProvider->getStoredFilter($this->user->getKey(), Entity::USERS);
+        $filter = $this->repo->getStoredFilter($this->user->getKey(), Entity::USERS);
         $nav = [];
         if (!is_null($filter)) {
-            $userSiblings = $userProvider->buildWithScopes([
+            $userSiblings = $this->repo->buildWithScopes([
                 'username',
             ], [
                 'entityType',
@@ -84,8 +87,9 @@ class User extends Controller
             ])->where('username', '!=', $this->user->getAttribute('username'))
                 ->filter($filter)
                 ->pluck('username')->all();
-            dd($userSiblings);
-            return response($userProvider->select()->limit(10)->get(), 200);
+
+            return response($this->repo->select()->limit(10)->get(), 200);
+
             $total = count($userSiblings);
             $index = array_search($username, $userSiblings);
             $nav = array(
@@ -98,7 +102,7 @@ class User extends Controller
             );
         }
 
-        $user = $userProvider->buildOneByUsername($username,
+        $user = $this->repo->buildOneByUsername($username,
             [
                 'first_name',
                 'last_name',
@@ -106,7 +110,7 @@ class User extends Controller
                 'username',
                 'full_name',
                 'entity_type_id'
-            ])->entityType()->first();
+            ])->scopes(['entityType'])->first();
         if (is_null($user)) {
             return response(trans('error.http.500.user_not_found'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -114,7 +118,7 @@ class User extends Controller
         unset($user['entity_type_id']);
         return [
             'user' => $user->toArray(),
-            'permissions' => $userProvider->getAllUserPermissions($entityTypeId),
+            'permissions' => $this->repo->getAllUserPermissions($entityTypeId),
             'nav' => $nav,
             'intended' => null
         ];
@@ -122,18 +126,16 @@ class User extends Controller
 
     /**
      * @param $username
-     * @param \App\Http\Requests\Admin\UpdateUser $request
-     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
+     * @param \Naraki\System\Requests\UpdateUser $request
      * @param \App\Contracts\Models\Permission|\App\Support\Providers\Permission $permissionProvider
      * @return \Illuminate\Http\Response
      */
     public function update(
         $username,
         UpdateUser $request,
-        UserProvider $userProvider,
         PermissionProvider $permissionProvider
     ) {
-        $user = $userProvider->updateOneByUsername($username, $request->all());
+        $user = $this->repo->updateOneByUsername($username, $request->all());
         $permissions = $request->getPermissions();
 
         if (!is_null($permissions)) {
@@ -145,13 +147,12 @@ class User extends Controller
 
     /**
      * @param string $search
-     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
      * @return \Illuminate\Http\Response
      */
-    public function search($search, $limit, UserProvider $userProvider)
+    public function search($search, $limit)
     {
         return response(
-            $userProvider->search(
+            $this->repo->search(
                 preg_replace('/[^\w\s\-\']/', '', strip_tags($search)),
                 $this->user->getAttribute('entity_type_id'),
                 intval($limit)
@@ -160,37 +161,32 @@ class User extends Controller
 
     /**
      * @param string $username
-     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy($username, UserProvider $userProvider)
+    public function destroy($username)
     {
-        $userProvider->deleteByUsername($username);
+        $this->repo->deleteByUsername($username);
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function batchDestroy(Request $request, UserProvider $userProvider)
+    public function batchDestroy(Request $request)
     {
-        $userProvider->deleteByUsername($request->only('users'));
+        $this->repo->deleteByUsername($request->only('users'));
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
     /**
-     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
-     * @return array
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function profile(UserProvider $userProvider)
+    public function profile()
     {
-        $f = app()->make(RawQueries::class);
-        return [
+        return response([
             'user' => $this->user->only([
                 'first_name',
                 'last_name',
@@ -198,8 +194,8 @@ class User extends Controller
                 'username',
                 'full_name',
             ]),
-            'avatars' => $userProvider->getAvatars($this->user->getKey())
-        ];
+            'avatars' => $this->repo->getAvatars($this->user->getKey())
+        ], Response::HTTP_OK);
     }
 
 

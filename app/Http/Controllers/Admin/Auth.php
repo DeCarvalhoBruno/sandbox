@@ -15,13 +15,4 @@ class Auth
         return view('admin.login');
     }
 
-    /**
-     * Get the post register / login redirect path.
-     *
-     * @return string
-     */
-    public function redirectPath()
-    {
-        return route_18n('admin.dashboard');
-    }
 }

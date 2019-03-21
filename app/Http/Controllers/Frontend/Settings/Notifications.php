@@ -25,6 +25,7 @@ class Notifications extends Controller
         $user = auth()->user();
         return view('frontend.site.settings.panes.notifications', [
             'user' => $user,
+            'title' => trans('pages.profile.settings_title'),
             'breadcrumbs' => Breadcrumbs::render([
                 [
                     'label' => trans('titles.routes.notifications'),

@@ -4,7 +4,7 @@ if (!function_exists('media_entity_path')) {
     /**
      * Retrieves the path of an image relative to the public folder
      *
-     * @see \App\Models\SystemEntity
+     * @see \App\Models\Entity
      * @see \Naraki\Media\Models\MediaCategory
      *
      * @param string|int $entity

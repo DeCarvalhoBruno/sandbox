@@ -82,7 +82,7 @@ class Permissions extends Migration
 
     private function seedPermissions()
     {
-        (new \App\Models\Permission())->insert([
+        (new \Naraki\Permission\Models\Permission())->insert([
             [
                 'entity_type_id' => 4,
                 'entity_id' => \App\Models\Entity::USERS,
@@ -129,7 +129,7 @@ class Permissions extends Migration
 
     private function seedPermissionActions()
     {
-        (new \App\Models\PermissionAction())->insert([
+        (new \Naraki\Permission\Models\PermissionAction())->insert([
             [
                 'entity_id' => \App\Models\Entity::USERS,
                 'permission_action_bits' => 0b1,

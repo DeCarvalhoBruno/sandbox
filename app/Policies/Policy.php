@@ -1,6 +1,6 @@
 <?php namespace App\Policies;
 
-use App\Models\PermissionMask;
+use Naraki\Permission\Models\PermissionMask;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 abstract class Policy

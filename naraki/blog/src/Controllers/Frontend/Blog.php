@@ -6,7 +6,6 @@ use App\Support\Frontend\Breadcrumbs;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller;
 use Naraki\Blog\Facades\Blog as BlogFacade;
-use Naraki\Media\Contracts\Media as MediaProvider;
 use Naraki\Media\Facades\Media;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -37,7 +36,7 @@ class Blog extends Controller
             'full_name as person',
             'unq as page_views',
             'language_id as language',
-            'published_at as date_modified',
+            'updated_at as date_modified',
             'published_at as date_published'
         ])->scopes(['pageViews'])->first();
         if (is_null($post)) {
@@ -92,7 +91,8 @@ class Blog extends Controller
         $this->dispatch(new ProcessPageView($post));
 
         return view('blog::post', compact(
-                'post', 'breadcrumbs', 'media', 'categories', 'tags', 'otherPosts', 'otherPostMedia', 'sources')
+                'post', 'breadcrumbs', 'media', 'categories',
+                'tags', 'otherPosts', 'otherPostMedia', 'sources')
         );
     }
 
@@ -138,6 +138,10 @@ class Blog extends Controller
         );
     }
 
+    /**
+     * @param string $slug
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function tag($slug)
     {
         $posts = BlogFacade::buildWithScopes([
@@ -165,10 +169,9 @@ class Blog extends Controller
 
     /**
      * @param $slug
-     * @param \Naraki\Media\Contracts\Media|\Naraki\Media\Providers\Media $mediaRepo
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function author($slug, MediaProvider $mediaRepo)
+    public function author($slug)
     {
         $posts = BlogFacade::buildWithScopes([
             'blog_post_title as title',
@@ -197,6 +200,10 @@ class Blog extends Controller
         );
     }
 
+    /**
+     * @param \Illuminate\Database\Eloquent\Collection $collection
+     * @return array
+     */
     private function getImages($collection)
     {
         $dbImages = Media::image()->getImages(
@@ -214,6 +221,10 @@ class Blog extends Controller
         return $media;
     }
 
+    /**
+     * @param $slug
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
     private function getMostViewedPosts($slug)
     {
         return BlogFacade::buildWithScopes([

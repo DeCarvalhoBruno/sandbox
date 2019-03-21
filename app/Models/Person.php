@@ -37,7 +37,7 @@ class Person extends Model
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#query-scopes
+     * @link https://laravel.com/docs/eloquent#query-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */

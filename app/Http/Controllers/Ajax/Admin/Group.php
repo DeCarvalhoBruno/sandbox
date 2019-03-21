@@ -1,21 +1,20 @@
-<?php
+<?php namespace App\Http\Controllers\Ajax\Admin;
 
-namespace App\Http\Controllers\Ajax\Admin;
-
-use App\Events\PermissionEntityUpdated;
-use App\Http\Controllers\Admin\Controller;
-use App\Filters\Group as GroupFilter;
 use App\Contracts\Models\Group as GroupProvider;
-use App\Http\Requests\Admin\CreateGroup;
-use App\Http\Requests\Admin\UpdateGroup;
+use App\Contracts\Models\Permission as PermissionProvider;
+use App\Events\PermissionEntityUpdated;
+use App\Filters\Group as GroupFilter;
+use App\Http\Controllers\Admin\Controller;
+use Naraki\System\Requests\CreateGroup;
+use Naraki\System\Requests\UpdateGroup;
 use App\Models\Entity;
 use Illuminate\Http\Response;
-use App\Contracts\Models\Permission as PermissionProvider;
 
 class Group extends Controller
 {
     /**
      * @param \App\Filters\Group $filter
+     * @param \App\Contracts\Models\Group $groupProvider
      * @return array
      */
     public function index(GroupFilter $filter, GroupProvider $groupProvider)
@@ -53,7 +52,6 @@ class Group extends Controller
      * @param \App\Contracts\Models\Group|\App\Support\Providers\\Group $groupProvider
      * @param \App\Contracts\Models\Permission|\App\Support\Providers\\Permission $permissionProvider
      * @return array
-     * @throws \ReflectionException
      */
     public function edit($groupName, GroupProvider $groupProvider, PermissionProvider $permissionProvider)
     {
@@ -70,7 +68,7 @@ class Group extends Controller
 
     /**
      * @param string $groupName
-     * @param \App\Http\Requests\Admin\UpdateGroup $request
+     * @param \Naraki\System\Requests\UpdateGroup $request
      * @param \App\Contracts\Models\Group|\App\Support\Providers\\Group $groupProvider
      * @param \App\Contracts\Models\Permission|\App\Support\Providers\\Permission $permissionProvider
      * @return \Illuminate\Http\Response
@@ -109,7 +107,6 @@ class Group extends Controller
     /**
      * @param \App\Contracts\Models\Permission|\App\Support\Providers\\Permission $permissionProvider
      * @return array
-     * @throws \ReflectionException
      */
     public function add(PermissionProvider $permissionProvider)
     {
@@ -119,7 +116,7 @@ class Group extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\Admin\CreateGroup $request
+     * @param \Naraki\System\Requests\CreateGroup $request
      * @param \App\Contracts\Models\Group|\App\Support\Providers\\Group $groupProvider
      * @param \App\Contracts\Models\Permission|\App\Support\Providers\\Permission $permissionProvider
      * @return \Illuminate\Http\Response

@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\PermissionMask;
+use Naraki\Permission\Models\PermissionMask;
 
 class User extends Policy
 {

@@ -1,9 +1,9 @@
 <?php namespace App\Support\Permissions;
 
 use App\Models\Entity;
-use App\Models\PermissionMask;
-use App\Models\PermissionRecord;
-use App\Models\PermissionStore;
+use Naraki\Permission\Models\PermissionMask;
+use Naraki\Permission\Models\PermissionRecord;
+use Naraki\Permission\Models\PermissionStore;
 use Illuminate\Support\Arr;
 
 class User extends Permission

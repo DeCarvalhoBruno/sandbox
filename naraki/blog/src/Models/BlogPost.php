@@ -5,6 +5,7 @@ use App\Contracts\HasAnEntity;
 use App\Contracts\HasPermissions as HasPermissionsContract;
 use App\Models\Entity;
 use App\Models\Language;
+use Illuminate\Database\Query\JoinClause;
 use Naraki\Media\Models\MediaEntity;
 use Naraki\Elasticsearch\Searchable;
 use Naraki\Blog\Support\Presenters\BlogPost as BlogPostPresenter;
@@ -84,7 +85,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -99,14 +100,14 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param string $personSlug
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     public function scopePerson(Builder $builder, $personSlug = null): Builder
     {
-        return $builder->join('people', function ($q) use ($personSlug) {
+        return $builder->join('people', function (JoinClause $q) use ($personSlug) {
             $q->on('blog_posts.person_id', '=', 'people.person_id');
             if (!is_null($personSlug)) {
                 $q->where('people.person_slug',
@@ -116,14 +117,14 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int|null $blogPostId
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     public function scopeEntityType(Builder $builder, $blogPostId = null)
     {
-        return $builder->join('entity_types', function ($q) use ($blogPostId) {
+        return $builder->join('entity_types', function (JoinClause $q) use ($blogPostId) {
             $q->on('entity_types.entity_type_target_id', '=', 'blog_posts.blog_post_id')
                 ->where('entity_types.entity_id', '=', Entity::BLOG_POSTS);
             if (!is_null($blogPostId)) {
@@ -134,7 +135,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#query-scopes
+     * @link https://laravel.com/docs/eloquent#query-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -144,7 +145,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -158,15 +159,18 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param string $categorySlug
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     public function scopeCategories(Builder $builder, $categorySlug = null): Builder
     {
-        return $builder->join('blog_categories', function ($q) use ($categorySlug) {
-            $q->on('blog_categories.blog_label_type_id', '=', 'blog_label_types.blog_label_type_id');
+        return $builder->join('blog_categories', function (JoinClause $q) use ($categorySlug) {
+            $q->on('blog_categories.blog_label_type_id',
+                '=',
+                'blog_label_types.blog_label_type_id'
+            );
             if (!is_null($categorySlug)) {
                 $q->where('blog_category_slug', '=', $categorySlug);
             }
@@ -174,7 +178,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param string $categorySlug
      * @return \Illuminate\Database\Eloquent\Builder $builder
@@ -190,7 +194,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -204,7 +208,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param string $tagSlug
      * @return \Illuminate\Database\Eloquent\Builder $builder
@@ -219,15 +223,18 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param string $tagSlug
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     public function scopeTags(Builder $builder, $tagSlug = null): Builder
     {
-        return $builder->join('blog_tags', function ($q) use ($tagSlug) {
-            $q->on('blog_tags.blog_label_type_id', '=', 'blog_label_types.blog_label_type_id');
+        return $builder->join('blog_tags', function (JoinClause $q) use ($tagSlug) {
+            $q->on('blog_tags.blog_label_type_id',
+                '=',
+                'blog_label_types.blog_label_type_id'
+            );
             if (!is_null($tagSlug)) {
                 $q->where('blog_tag_slug', '=', $tagSlug);
             }
@@ -235,7 +242,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
@@ -245,14 +252,17 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     }
 
     /**
-     * @link https://laravel.com/docs/5.8/eloquent#local-scopes
+     * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
     public function scopePageViews(Builder $builder)
     {
-        return $builder->join('stat_page_views', 'entity_types.entity_type_id', '=',
-            'stat_page_views.entity_type_id');
+        return $builder->join('stat_page_views',
+            'entity_types.entity_type_id',
+            '=',
+            'stat_page_views.entity_type_id'
+        );
     }
 
     /**

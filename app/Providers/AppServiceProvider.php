@@ -1,24 +1,17 @@
-<?php
+<?php namespace App\Providers;
 
-namespace App\Providers;
-
+use App\Contracts\Models as Contract;
 use App\Contracts\RawQueries;
 use App\Support\Providers\View;
-use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use App\Contracts\Models as Contract;
 
 class AppServiceProvider extends ServiceProvider
 {
     public $bindings = [
         Contract\Person::class,
         Contract\User::class,
-        Contract\Group::class,
-        Contract\Permission::class,
-        Contract\SystemEventLog::class,
-        Contract\SystemUserSettings::class,
-        Contract\System::class,
+        Contract\Group::class
     ];
 
     /**
@@ -73,9 +66,14 @@ class AppServiceProvider extends ServiceProvider
         );
 
         foreach ($this->bindings as $interface) {
-            $this->app->bind($interface, str_replace('\\Contracts\\Models', '\\Support\\Providers', $interface));
+            $this->app->bind($interface, str_replace(
+                    '\\Contracts\\Models', '\\Support\\Providers', $interface)
+            );
         }
         $dbDefaultEngine = ucfirst(config('database.default'));
-        $this->app->bind(RawQueries::class, sprintf('\\App\\Support\\Database\\%sRawQueries', $dbDefaultEngine));
+        $this->app->bind(
+            RawQueries::class,
+            sprintf('\\App\\Support\\Database\\%sRawQueries', $dbDefaultEngine)
+        );
     }
 }
