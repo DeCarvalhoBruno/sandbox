@@ -75,14 +75,14 @@ trait Enumerable
      * Get the name of a constant by passing its number,
      * i.e. what is the constant whose value is 64?
      *
-     * @param mixed $name
+     * @param mixed $id
      * @return string|null The actual name of the constant as is in the code, uppercase.
      */
-    public static function getConstantNameByID($name)
+    public static function getConstantNameByID($id)
     {
         $constants = array_flip(static::getConstants());
-        if (isset($constants[$name])) {
-            return $constants[$name];
+        if (isset($constants[$id])) {
+            return $constants[$id];
         }
         return null;
     }

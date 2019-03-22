@@ -1,4 +1,4 @@
-<?php namespace App\Traits;
+<?php namespace Naraki\Permission\Traits;
 
 use App\Models\Entity;
 

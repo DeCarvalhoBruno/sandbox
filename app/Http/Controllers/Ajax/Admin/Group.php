@@ -1,14 +1,14 @@
 <?php namespace App\Http\Controllers\Ajax\Admin;
 
 use App\Contracts\Models\Group as GroupProvider;
-use App\Contracts\Models\Permission as PermissionProvider;
 use App\Events\PermissionEntityUpdated;
 use App\Filters\Group as GroupFilter;
 use App\Http\Controllers\Admin\Controller;
-use Naraki\System\Requests\CreateGroup;
-use Naraki\System\Requests\UpdateGroup;
 use App\Models\Entity;
 use Illuminate\Http\Response;
+use Naraki\Permission\Contracts\Permission as PermissionProvider;
+use App\Http\Requests\Admin\CreateGroup;
+use App\Http\Requests\Admin\UpdateGroup;
 
 class Group extends Controller
 {
@@ -50,7 +50,7 @@ class Group extends Controller
     /**
      * @param string $groupName
      * @param \App\Contracts\Models\Group|\App\Support\Providers\\Group $groupProvider
-     * @param \App\Contracts\Models\Permission|\App\Support\Providers\\Permission $permissionProvider
+     * @param \Naraki\Permission\Contracts\Permission|\App\Support\Providers\\Permission $permissionProvider
      * @return array
      */
     public function edit($groupName, GroupProvider $groupProvider, PermissionProvider $permissionProvider)
@@ -68,9 +68,9 @@ class Group extends Controller
 
     /**
      * @param string $groupName
-     * @param \Naraki\System\Requests\UpdateGroup $request
+     * @param \App\Http\Requests\Admin\UpdateGroup $request
      * @param \App\Contracts\Models\Group|\App\Support\Providers\\Group $groupProvider
-     * @param \App\Contracts\Models\Permission|\App\Support\Providers\\Permission $permissionProvider
+     * @param \Naraki\Permission\Contracts\Permission|\App\Support\Providers\\Permission $permissionProvider
      * @return \Illuminate\Http\Response
      */
     public function update(
@@ -105,7 +105,7 @@ class Group extends Controller
     }
 
     /**
-     * @param \App\Contracts\Models\Permission|\App\Support\Providers\\Permission $permissionProvider
+     * @param \Naraki\Permission\Contracts\Permission|\App\Support\Providers\\Permission $permissionProvider
      * @return array
      */
     public function add(PermissionProvider $permissionProvider)
@@ -116,9 +116,9 @@ class Group extends Controller
     }
 
     /**
-     * @param \Naraki\System\Requests\CreateGroup $request
+     * @param \App\Http\Requests\Admin\CreateGroup $request
      * @param \App\Contracts\Models\Group|\App\Support\Providers\\Group $groupProvider
-     * @param \App\Contracts\Models\Permission|\App\Support\Providers\\Permission $permissionProvider
+     * @param \Naraki\Permission\Contracts\Permission|\App\Support\Providers\\Permission $permissionProvider
      * @return \Illuminate\Http\Response
      */
     public function create(CreateGroup $request, GroupProvider $groupProvider, PermissionProvider $permissionProvider)

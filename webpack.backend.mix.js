@@ -59,7 +59,8 @@ mix.browserSync({
   files: [
     `public/${folderName}/**/*`,
     'app/**/*',
-    'resources/assets/**/*'
+    'resources/assets/**/*',
+    'naraki/**/*'
   ]
 })
 mix.webpackConfig({

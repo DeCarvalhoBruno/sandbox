@@ -160,6 +160,7 @@ return [
         Naraki\Mail\ServiceProvider::class,
         Naraki\Sitemap\ServiceProvider::class,
         Naraki\System\ServiceProvider::class,
+        Naraki\Permission\ServiceProvider::class,
 
         /*
          * Application Service Providers...

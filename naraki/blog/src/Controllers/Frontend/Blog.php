@@ -36,7 +36,7 @@ class Blog extends Controller
             'full_name as person',
             'unq as page_views',
             'language_id as language',
-            'updated_at as date_modified',
+            'blog_posts.updated_at as date_modified',
             'published_at as date_published'
         ])->scopes(['pageViews'])->first();
         if (is_null($post)) {

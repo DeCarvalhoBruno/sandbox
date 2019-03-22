@@ -8,6 +8,7 @@ class Purify
      *  Strip tags from the given string.
      *
      * @param  string $value
+     * @param array $options
      * @return string
      */
     public function apply($value, $options = [])

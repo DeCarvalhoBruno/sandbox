@@ -1,5 +1,4 @@
-<?php namespace App\Traits\Models;
-
+<?php namespace Naraki\Permission\Traits;
 
 trait HasPermissions
 {

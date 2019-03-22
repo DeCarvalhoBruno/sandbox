@@ -28,6 +28,12 @@ $fa-font-path2: "../../_fonts/vendor" !default;
 @import "~font-awesome/scss/icons";
 @import "~font-awesome/scss/screen-reader";
 
+@import "vendor/tiptap/variables";
+@import "vendor/tiptap/editor";
+@import "vendor/tiptap/menubar";
+@import "vendor/tiptap/menububble";
+@import "vendor/tippy";
+
 // Bootstrap
 //@import "~bootstrap/scss/bootstrap";
 @import "~bootstrap/scss/functions";

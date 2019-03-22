@@ -69,9 +69,9 @@ class EntityType extends Model
     /**
      * @param $entityID
      * @param $entityTypeID
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function buildQueryFromEntity($entityID, $entityTypeID)
+    public static function buildQueryFromEntity($entityID, $entityTypeID = null): Builder
     {
         $class = Entity::getModelClassNamespace($entityID);
         $baseBuilder = new $class();
@@ -82,12 +82,13 @@ class EntityType extends Model
                 $baseBuilder->getQualifiedKeyName(), '=',
                 'entity_types.entity_type_target_id'
             )->where('entity_types.entity_id', $entityID);
-        if (is_array($entityTypeID)) {
-            $builderWithEntity->whereIn('entity_type_id', $entityTypeID);
-        } else {
-            $builderWithEntity->where('entity_type_id', $entityTypeID);
+        if (!is_null($entityTypeID)) {
+            if (is_array($entityTypeID)) {
+                $builderWithEntity->whereIn('entity_type_id', $entityTypeID);
+            } else {
+                $builderWithEntity->where('entity_type_id', $entityTypeID);
+            }
         }
-
         return $builderWithEntity;
     }
 
@@ -108,7 +109,7 @@ class EntityType extends Model
         $entityId = $et->newQuery()->select('entity_id')
             ->where($et->getKeyName(), $entityTypeID)->get()->pluck('entity_id')->first();
         if (!is_null($entityId)) {
-            return (object)['query'=>self::buildQueryFromEntity($entityId, $entityTypeID),'entity'=>$entityId];
+            return (object)['query' => self::buildQueryFromEntity($entityId, $entityTypeID), 'entity' => $entityId];
         } else {
             return null;
         }

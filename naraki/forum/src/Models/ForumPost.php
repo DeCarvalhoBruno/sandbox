@@ -9,7 +9,7 @@ class ForumPost extends Model
     protected $primaryKey = 'forum_post_id';
 
     protected $fillable = [
-        'forum_thread_id',
+        'entity_type_id',
         'post_user_id',
         'forum_post'
     ];

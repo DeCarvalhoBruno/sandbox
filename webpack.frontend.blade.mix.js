@@ -45,7 +45,8 @@ mix.browserSync({
   files: [
     `public/${folderName}/**/*`,
     'resources/views/**/*',
-    'app/**/*'
+    'app/**/*',
+    'naraki/**/*'
   ]
 })
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Ajax\Admin;
 
 use App\Http\Controllers\Admin\Controller;
-use Naraki\System\Requests\UpdateMember;
+use App\Http\Requests\Admin\UpdateMember;
 use App\Support\Providers\Group as GroupProvider;
 use Illuminate\Http\Response;
 
@@ -34,7 +34,7 @@ class GroupMember extends Controller
     /**
      * @param string $groupName
      * @param \App\Contracts\Models\Group|\App\Support\Providers\Group $groupProvider
-     * @param \Naraki\System\Requests\UpdateMember $request
+     * @param \App\Http\Requests\Admin\UpdateMember $request
      * @return \Illuminate\Http\Response
      */
     public function update($groupName, GroupProvider $groupProvider, UpdateMember $request)

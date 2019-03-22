@@ -25,9 +25,12 @@ return [
         'default' => [
             'HTML.Doctype' => 'HTML 4.01 Transitional',
             'HTML.Allowed' => 'div,b,strong,i,em,u,a,ul,ol,li,p,br,span,img',
-            'HTML.AllowedAttributes' => 'class,href,title,style,width,height,alt,src',
-            'AutoFormat.AutoParagraph' => true,
+            'HTML.AllowedAttributes' => 'class,href,alt,src',
+            'AutoFormat.AutoParagraph' => false,
             'AutoFormat.RemoveEmpty' => true,
+            'Core.HiddenElements'=>[
+                'script' => true
+            ]
         ],
         'test' => [
             'Attr.EnableID' => 'true',

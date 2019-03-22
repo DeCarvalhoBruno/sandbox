@@ -83,6 +83,9 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <forum-comment></forum-comment>
+        </div>
         <div id="blog-post-other" class="row">
             @foreach($otherPosts as $otherPost)
                 <div class="col-lg-3 col-md-6 col-sm-12 post-other-item">

@@ -1,9 +1,7 @@
-<?php
-
-namespace Naraki\System\Requests;
+<?php namespace App\Http\Requests\Admin;
 
 use App\Support\Requests\FormRequest;
-use App\Traits\ProcessesPermissions;
+use Naraki\Permission\Traits\ProcessesPermissions;
 
 class CreateGroup extends FormRequest
 {

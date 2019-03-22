@@ -1,5 +1,6 @@
 <?php namespace Naraki\Forum;
 
+use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
 class ServiceProvider extends LaravelServiceProvider
@@ -25,6 +26,16 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function boot()
     {
+        $this->app['router']->group([
+            'prefix' => '/ajax/',
+            'namespace' => 'Naraki\Forum\Controllers',
+            'middleware' => ['frontend_auth'],
+            'guard' => 'web'
+        ], function (Router $r) {
+            $r->get('forum/{entity_type}/{slug}/comment', 'Post@getComments');
+            $r->post('forum/{entity_type}/{slug}/comment', 'Post@postComment');
+
+        });
 
 
     }

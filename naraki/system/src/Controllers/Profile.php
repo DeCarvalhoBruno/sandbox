@@ -1,7 +1,7 @@
 <?php namespace Naraki\System\Controllers;
 
 use App\Http\Controllers\Admin\Controller;
-use Naraki\System\Requests\UpdateUser;
+use App\Http\Requests\Admin\UpdateUser;
 use App\Models\Entity;
 use App\Support\Providers\User as UserProvider;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ class Profile extends Controller
     /**
      * Update the user's profile information.
      *
-     * @param \Naraki\System\Requests\UpdateUser $request
+     * @param \App\Http\Requests\Admin\UpdateUser $request
      * @param \App\Support\Providers\User $user
      * @return \Illuminate\Http\Response
      */

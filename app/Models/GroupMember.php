@@ -4,7 +4,7 @@ use App\Contracts\HasAnEntity;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
-use App\Traits\Models\HasPermissions;
+use Naraki\Permission\Traits\HasPermissions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\JoinClause;

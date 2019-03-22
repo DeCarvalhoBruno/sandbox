@@ -53,7 +53,8 @@
             "Naraki\\Media\\": "naraki/media/src/",
             "Naraki\\Mail\\": "naraki/mail/src/",
             "Naraki\\Sitemap\\": "naraki/sitemap/src/",
-            "Naraki\\Forum\\": "naraki/forum/src/"
+            "Naraki\\Forum\\": "naraki/forum/src/",
+            "Naraki\\Permission\\": "naraki/permission/src/"
         },
         "files": [
             "app/Support/helpers.php"

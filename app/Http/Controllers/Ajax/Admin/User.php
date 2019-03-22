@@ -1,10 +1,10 @@
 <?php namespace App\Http\Controllers\Ajax\Admin;
 
-use App\Contracts\Models\Permission as PermissionProvider;
+use Naraki\Permission\Contracts\Permission as PermissionProvider;
 use App\Events\PermissionEntityUpdated;
 use App\Filters\User as UserFilter;
 use App\Http\Controllers\Admin\Controller;
-use Naraki\System\Requests\UpdateUser;
+use App\Http\Requests\Admin\UpdateUser;
 use App\Models\Entity;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -126,8 +126,8 @@ class User extends Controller
 
     /**
      * @param $username
-     * @param \Naraki\System\Requests\UpdateUser $request
-     * @param \App\Contracts\Models\Permission|\App\Support\Providers\Permission $permissionProvider
+     * @param \App\Http\Requests\Admin\UpdateUser $request
+     * @param \Naraki\Permission\Contracts\Permission|\App\Support\Providers\Permission $permissionProvider
      * @return \Illuminate\Http\Response
      */
     public function update(

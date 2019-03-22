@@ -112,6 +112,26 @@ abstract class Model
 
     /**
      * @param array $columns
+     * @param array $scopes
+     * @param array $wheres
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function buildOneWithScopes(array $columns, array $scopes, array $wheres): Builder
+    {
+        $q = $this->select($columns)->scopes($scopes);
+        foreach ($wheres as $where) {
+            list($column, $value) = $where;
+            if (!is_array($value)) {
+                $q->where($column, $value);
+            } else {
+                $q->whereIn($column, $value);
+            }
+        }
+        return $q;
+    }
+
+    /**
+     * @param array $columns
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function select($columns = ['*'])

@@ -2,12 +2,12 @@
 
 use App\Contracts\Enumerable as EnumerableContract;
 use App\Contracts\HasAnEntity;
-use App\Contracts\HasPermissions;
+use Naraki\Permission\Contracts\HasPermissions;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\HasASlugColumn;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
-use App\Traits\Models\HasPermissions as HasPermissionsTrait;
+use Naraki\Permission\Traits\HasPermissions as HasPermissionsTrait;
 use App\Traits\Models\Presentable;
 use Carbon\Carbon;
 use Illuminate\Bus\Dispatcher;

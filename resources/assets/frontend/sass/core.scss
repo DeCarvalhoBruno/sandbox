@@ -70,6 +70,7 @@ img[data-src] {
   bottom: 2rem;
   right: 2rem;
   text-align: center;
+  z-index:99;
 
   &:hover {
     background-color: lighten($primary, 10%);

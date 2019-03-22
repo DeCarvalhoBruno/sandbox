@@ -2,23 +2,23 @@
 
 use App\Contracts\Enumerable as EnumerableContract;
 use App\Contracts\HasAnEntity;
-use App\Contracts\HasPermissions as HasPermissionsContract;
 use App\Models\Entity;
 use App\Models\Language;
-use Illuminate\Database\Query\JoinClause;
-use Naraki\Media\Models\MediaEntity;
-use Naraki\Elasticsearch\Searchable;
-use Naraki\Blog\Support\Presenters\BlogPost as BlogPostPresenter;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
-use App\Traits\Models\HasPermissions;
 use App\Traits\Models\Presentable;
 use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 use CyrildeWit\EloquentViewable\Viewable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\JoinClause;
+use Naraki\Blog\Support\Presenters\BlogPost as BlogPostPresenter;
 use Naraki\Elasticsearch\Contracts\Searchable as SearchableContract;
+use Naraki\Elasticsearch\Searchable;
+use Naraki\Media\Models\MediaEntity;
+use Naraki\Permission\Contracts\HasPermissions as HasPermissionsContract;
+use Naraki\Permission\Traits\HasPermissions;
 
 class BlogPost extends Model implements HasPermissionsContract, EnumerableContract, HasAnEntity, ViewableContract, SearchableContract
 {

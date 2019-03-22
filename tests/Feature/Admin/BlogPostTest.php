@@ -17,6 +17,16 @@ class BlogPostTest extends TestCase
 {
     use DatabaseMigrations, WithoutMiddleware;
 
+    public function test_blog_post_no_auth(){
+        $this->withMiddleware();
+        $response = $this->postJson(
+            "/ajax/admin/blog/post/create",
+            [
+                'blog_post_title' => "dads",
+            ]);
+        $response->assertStatus(401);
+    }
+
     public function test_blog_post_create_non_existing_user()
     {
         $this->withExceptionHandling();
@@ -29,7 +39,6 @@ class BlogPostTest extends TestCase
                 'blog_post_person' => "john_doe",
                 'published_at' => "201902051959",
             ]);
-
         $response->assertStatus(500);
         $this->assertEquals('Person for blog post creation not found.', $response->content());
         $this->assertEquals(BlogPost::query()->get()->count(), 0);
@@ -38,7 +47,6 @@ class BlogPostTest extends TestCase
     public function test_blog_post_create_normal()
     {
         $u = $this->createUser();
-        $this->signIn($u);
 
         $this->assertEquals(BlogPost::query()->get()->count(), 0);
         ElasticSearchIndex::shouldReceive('index')->times(1);
@@ -61,7 +69,6 @@ class BlogPostTest extends TestCase
     {
         $this->withExceptionHandling();
         $u = $this->createUser();
-        $this->signIn($u);
         ElasticSearchIndex::shouldReceive('index')->times(0);
         $response = $this->postJson(
             "/ajax/admin/blog/post/create",
@@ -78,7 +85,6 @@ class BlogPostTest extends TestCase
     public function test_blog_post_edit()
     {
         $u = $this->createUser();
-        $this->signIn($u);
         ElasticSearchIndex::shouldReceive('index')->times(1);
         $this->postJson(
             "/ajax/admin/blog/post/create",
@@ -112,7 +118,6 @@ class BlogPostTest extends TestCase
     public function test_blog_post_modify_tags()
     {
         $u = $this->createUser();
-        $this->signIn($u);
         ElasticSearchIndex::shouldReceive('index')->times(6);
         $this->postJson(
             "/ajax/admin/blog/post/create",
@@ -144,7 +149,6 @@ class BlogPostTest extends TestCase
     public function test_blog_post_delete_post()
     {
         $u = $this->createUser();
-        $this->signIn($u);
         ElasticSearchIndex::shouldReceive('index')->times(1);
         $this->postJson(
             "/ajax/admin/blog/post/create",
@@ -168,7 +172,6 @@ class BlogPostTest extends TestCase
     public function test_blog_post_upload_image()
     {
         $u = $this->createUser();
-        $this->signIn($u);
 
         $postTitle = 'This is the title of my post';
         ElasticSearchIndex::shouldReceive('index')->times(1);
@@ -212,7 +215,7 @@ class BlogPostTest extends TestCase
     public function test_blog_post_upload_image_too_big()
     {
         $u = $this->createUser();
-        $this->signIn($u);
+
         $postTitle = 'This is the title of my post';
         ElasticSearchIndex::shouldReceive('index')->times(1);
         $this->postJson(
@@ -246,7 +249,7 @@ class BlogPostTest extends TestCase
     public function test_blog_post_upload_image_without_file()
     {
         $u = $this->createUser();
-        $this->signIn($u);
+
         $postTitle = 'This is the title of my post';
         ElasticSearchIndex::shouldReceive('index')->times(1);
         $this->postJson(
@@ -279,7 +282,7 @@ class BlogPostTest extends TestCase
     public function test_delete_blog_post_image()
     {
         $u = $this->createUser();
-        $this->signIn($u);
+
         $postTitle = 'This is the title of my post';
         ElasticSearchIndex::shouldReceive('index')->times(1);
         $this->postJson(

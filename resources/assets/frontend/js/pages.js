@@ -75,8 +75,13 @@ export default {
     page: [
       'plugins/vendor/twitterLoader.js',
       'plugins/vendor/prettify.js',
-      'pages/blog.js'],
-    components: {}
+      'pages/blog.js'
+    ],
+    components: {
+      frontend: [
+        'ForumComment'
+      ]
+    }
   },
   // Search
   '06a943c59f': {

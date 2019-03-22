@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Blog extends Migration
+class Forum extends Migration
 {
     /**
      * Run the migrations.
@@ -47,18 +47,16 @@ class Blog extends Migration
 
         Schema::create('forum_posts', function (Blueprint $table) {
             $table->increments('forum_post_id');
-            $table->unsignedInteger('forum_thread_id');
+            $table->unsignedInteger('entity_type_id');
             $table->unsignedInteger('post_user_id');
 
             $table->text('forum_post')->nullable();
-            $table->boolean('forum_post_moderated')->nullable()->default(false);
-            $table->text('forum_post_moderation_message')->nullable();
 
             $table->timestamps();
             $table->index(array('forum_post_id', 'post_user_id'), 'idx_post_user');
 
-            $table->foreign('forum_thread_id')
-                ->references('forum_thread_id')->on('forum_threads')
+            $table->foreign('entity_type_id')
+                ->references('entity_type_id')->on('entity_types')
                 ->onDelete('cascade');
             $table->foreign('post_user_id')
                 ->references('user_id')->on('users');

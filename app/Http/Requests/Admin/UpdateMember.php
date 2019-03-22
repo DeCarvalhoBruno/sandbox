@@ -1,6 +1,4 @@
-<?php
-
-namespace Naraki\System\Requests;
+<?php namespace App\Http\Requests\Admin;
 
 use App\Support\Requests\FormRequest;
 
