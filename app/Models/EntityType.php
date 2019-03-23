@@ -52,6 +52,9 @@ class EntityType extends Model
     public static function getEntityInfo($entityID, $filter)
     {
         $baseBuilder = static::query();
+        /**
+         * @var \Illuminate\Database\Eloquent\Builder $builderWithEntity
+         */
         $builderWithEntity = call_user_func([$baseBuilder, 'entityType'], $entityID)
             ->where('entity_id', $entityID);
 
@@ -63,6 +66,31 @@ class EntityType extends Model
             $builderWithEntity->where(static::getEntitySlugColumn($entityID), '=', $filter);
         }
 
+        return $builderWithEntity;
+    }
+
+    /**
+     * @param $entityID
+     * @param $filter
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function getEntityInfoFromSlug($entityID, $filter)
+    {
+        $class = Entity::getModelClassNamespace($entityID);
+        $baseBuilder = new $class();
+
+        $builderWithEntity = $baseBuilder->newQuery()
+            ->join(
+                'entity_types',
+                $baseBuilder->getQualifiedKeyName(), '=',
+                'entity_types.entity_type_target_id'
+            )->where('entity_types.entity_id', $entityID);
+
+        if (is_array($filter)) {
+            $builderWithEntity->whereIn(static::getEntitySlugColumn($entityID), $filter);
+        } else {
+            $builderWithEntity->where(static::getEntitySlugColumn($entityID), '=', $filter);
+        }
         return $builderWithEntity;
     }
 

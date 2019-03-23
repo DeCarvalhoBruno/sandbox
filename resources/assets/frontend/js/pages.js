@@ -79,7 +79,7 @@ export default {
     ],
     components: {
       frontend: [
-        'ForumComment'
+        'Comments'
       ]
     }
   },

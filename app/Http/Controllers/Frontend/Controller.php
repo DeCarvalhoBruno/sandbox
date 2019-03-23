@@ -13,6 +13,7 @@ class Controller extends BaseController
 
     public function __construct()
     {
+        //So testing works without middleware
         auth()->setDefaultDriver('web');
     }
 

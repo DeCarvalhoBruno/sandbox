@@ -73,11 +73,12 @@ if (!function_exists('makeHexUuid')) {
     /**
      *
      * @return string The 32 character UUID
-     * @throws \Exception
      */
     function makeHexUuid()
     {
-        return \Ramsey\Uuid\Uuid::uuid4()->getHex();
+        try {
+            return \Ramsey\Uuid\Uuid::uuid4()->getHex();
+        } catch (\Exception $e) {}
     }
 }
 
@@ -153,7 +154,7 @@ if (!function_exists('is_img_uuid_string')) {
      */
     function is_img_uuid_string($v)
     {
-        return is_string($v) && strlen($v) <= 64 && ctype_xdigit(substr($v,-32));
+        return is_string($v) && strlen($v) <= 64 && ctype_xdigit(substr($v, -32));
     }
 }
 
@@ -211,7 +212,6 @@ if (!function_exists('placeholder_image_black')) {
         return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAAO0lEQVR42u3OMQEAAAwCIO0feovhAwloLlMVEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQWAce/hlAAXSB6WIAAAAASUVORK5CYII=';
     }
 }
-
 
 
 if (!function_exists('format_duration')) {

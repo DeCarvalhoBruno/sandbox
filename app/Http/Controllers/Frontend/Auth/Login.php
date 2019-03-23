@@ -105,6 +105,7 @@ class Login extends Controller
     public function logout(Request $request)
     {
         $this->guard()->logout();
+        \Auth::guard('jwt')->logout();
         $request->session()->invalidate();
         return redirect(route_i18n('home'));
     }

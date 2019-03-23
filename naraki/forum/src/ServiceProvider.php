@@ -29,8 +29,7 @@ class ServiceProvider extends LaravelServiceProvider
         $this->app['router']->group([
             'prefix' => '/ajax/',
             'namespace' => 'Naraki\Forum\Controllers',
-            'middleware' => ['frontend_auth'],
-            'guard' => 'web'
+            'middleware' => ['web', 'frontend_auth']
         ], function (Router $r) {
             $r->get('forum/{entity_type}/{slug}/comment', 'Post@getComments');
             $r->post('forum/{entity_type}/{slug}/comment', 'Post@postComment');

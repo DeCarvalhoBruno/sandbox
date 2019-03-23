@@ -19,7 +19,7 @@
   /**
    * We grab every component, both from the backend and frontend, because we use backend components in the frontend.
    */
-  const frontendContext = require.context('./', false, /.*\.vue$/)
+  const frontendContext = require.context('./', false, /[^App]\.vue$/)
   const backendContext = require.context('back_path/components', false, /[^App]\.vue$/)
 
   const frontend = frontendContext.keys()

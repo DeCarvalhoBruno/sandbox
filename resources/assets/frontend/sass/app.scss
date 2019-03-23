@@ -28,12 +28,6 @@ $fa-font-path2: "../../_fonts/vendor" !default;
 @import "~font-awesome/scss/icons";
 @import "~font-awesome/scss/screen-reader";
 
-@import "vendor/tiptap/variables";
-@import "vendor/tiptap/editor";
-@import "vendor/tiptap/menubar";
-@import "vendor/tiptap/menububble";
-@import "vendor/tippy";
-
 // Bootstrap
 //@import "~bootstrap/scss/bootstrap";
 @import "~bootstrap/scss/functions";
@@ -79,6 +73,12 @@ $fa-font-path2: "../../_fonts/vendor" !default;
 @import "./blocks/header";
 @import "./blocks/footer";
 
+@import "vendor/tiptap/variables";
+@import "vendor/tiptap/editor";
+@import "vendor/tiptap/menubar";
+@import "vendor/tiptap/menububble";
+@import "vendor/tippy";
+
 //**********************************************
 @import "pages/blog/general";
 @import "pages/blog/post";
@@ -87,6 +87,7 @@ $fa-font-path2: "../../_fonts/vendor" !default;
 @import "pages/blog/tag";
 @import "pages/blog/featured";
 @import "pages/blog/spotlight";
+@import "pages/blog/comments";
 @import "pages/search";
 @import "snippets/code";
 @import "./snippets/breadcrumbs";

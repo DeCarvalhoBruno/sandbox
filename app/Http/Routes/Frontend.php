@@ -98,6 +98,8 @@ class Frontend extends Routes
                 ->name(self::i18nRouteNames($locale, 'notifications'));
             $r->get(trans('routes.settings_account', [], $locale), 'Settings\Account@edit')
                 ->name(self::i18nRouteNames($locale, 'account'));
+            $r->get(trans('routes.user', [], $locale), 'User@show')
+                ->name(self::i18nRouteNames($locale, 'user'));
         };
     }
 

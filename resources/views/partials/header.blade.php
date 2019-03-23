@@ -19,6 +19,7 @@
                         <div class="dropdown-divider"></div>
                         <form id="logout_form" accept-charset="UTF-8" action="{{route('logout')}}" method="POST">
                             <input type="hidden" value="{{csrf_token()}}" name="_token">
+                            <input type="hidden" value="{{\Session::get('jwt_token')}}" name="token">
                         </form>
                         <a onclick="document.querySelector('#logout_form').submit()" href="#" class="dropdown-item">Logout</a>
                     </div>

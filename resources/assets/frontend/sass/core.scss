@@ -35,12 +35,35 @@ img[data-src] {
 }
 
 .btn-primary {
+  font-family: $font-family-title;
   background-color: $primary;
-  border:none;
+  border: none;
 
-  &:hover {
+  &:hover, &:active, &:not(:disabled):not(.disabled):active {
     transition: background-color 350ms;
     background-color: #000;
+  }
+
+  &:focus, &:not(:disabled):not(.disabled):active:focus {
+    box-shadow: 0 0 0 0.1rem rgba(75, 15, 9, 0.2);
+  }
+}
+
+.btn-outline-primary {
+  font-family: $font-family-title;
+  color: $primary;
+  background-color: #fff;
+  border-color: $primary;
+
+  &:hover, &:active, &:not(:disabled):not(.disabled):active {
+    //transition: background-color 350ms;
+    background-color: #aa5585;
+    color: #fff;
+    border: 1px solid transparent;
+  }
+
+  &:focus, &:not(:disabled):not(.disabled):active:focus {
+    box-shadow: 0 0 0 0.1rem rgba(192, 83, 66, 0.2);
   }
 
 }
@@ -70,7 +93,7 @@ img[data-src] {
   bottom: 2rem;
   right: 2rem;
   text-align: center;
-  z-index:99;
+  z-index: 99;
 
   &:hover {
     background-color: lighten($primary, 10%);

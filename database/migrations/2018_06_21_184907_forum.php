@@ -50,9 +50,15 @@ class Forum extends Migration
             $table->unsignedInteger('entity_type_id');
             $table->unsignedInteger('post_user_id');
 
+            $table->unsignedInteger('parent_id')->nullable();
+            $table->unsignedInteger('lft')->default(0);
+            $table->unsignedInteger('rgt')->default(0);
+
             $table->text('forum_post')->nullable();
+            $table->string('forum_post_slug',64)->nullable();
 
             $table->timestamps();
+            $table->index(array('lft', 'rgt', 'parent_id'));
             $table->index(array('forum_post_id', 'post_user_id'), 'idx_post_user');
 
             $table->foreign('entity_type_id')

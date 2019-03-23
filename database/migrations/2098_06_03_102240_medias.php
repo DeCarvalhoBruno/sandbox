@@ -292,7 +292,7 @@ class Medias extends Migration
     private function mediaInUseProcedure()
     {
         $sql = <<<SQL
-CREATE PROCEDURE sp_update_media_type_in_use(IN in_media_uuid VARCHAR(32))
+CREATE PROCEDURE sp_update_media_type_in_use(IN in_media_uuid VARCHAR(64))
 MODIFIES SQL DATA
   BEGIN
     UPDATE media_types

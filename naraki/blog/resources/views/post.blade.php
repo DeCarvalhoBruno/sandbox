@@ -84,7 +84,7 @@
             </div>
         </div>
         <div class="row">
-            <forum-comment></forum-comment>
+            <comments :slug="'{{$post->getAttribute('slug')}}'"></comments>
         </div>
         <div id="blog-post-other" class="row">
             @foreach($otherPosts as $otherPost)

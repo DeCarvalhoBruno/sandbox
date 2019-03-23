@@ -70,6 +70,33 @@ class MediaEntity extends Model
     }
 
     /**
+     * @param int $entityId
+     * @param int $mediaId
+     * @param string $uuid
+     * @param string $ext
+     * @param int $mediaImgFormatId
+     * @return string
+     */
+    public static function assetStatic(
+        int $entityId,
+        int $mediaId,
+        string $uuid,
+        string $ext,
+        int $mediaImgFormatId = MediaImgFormat::THUMBNAIL
+    ): string {
+        return media_entity_path(
+            $entityId,
+            $mediaId,
+            sprintf(
+                '%s_%s.%s',
+                $uuid,
+                MediaImgFormat::getFormatAcronyms($mediaImgFormatId),
+                $ext
+            )
+        );
+    }
+
+    /**
      * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param int|array $entityTypeId
@@ -123,12 +150,20 @@ class MediaEntity extends Model
     /**
      * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param bool $inUse
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    public static function scopeMediaType(Builder $builder)
+    public static function scopeMediaType(Builder $builder, $inUse = false)
     {
-        return $builder->join('media_types',
-            'media_types.media_type_id', '=', 'media_records.media_type_id');
+        return $builder->join('media_types', function (JoinClause $q) use ($inUse) {
+            $q->on('media_types.media_type_id',
+                '=',
+                'media_records.media_type_id'
+            );
+            if ($inUse) {
+                $q->where('media_types.media_in_use', '=', 1);
+            }
+        });
     }
 
     /**
@@ -159,15 +194,16 @@ class MediaEntity extends Model
     /**
      * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param bool $inUse
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    public static function scopeImage($builder)
+    public static function scopeImage($builder, $inUse = false)
     {
         return self::scopeMediaDigital(
             self::scopeMediaType(
                 self::scopeMediaRecord(
                     self::scopeMediaCategoryRecord(
-                        self::scopeMediaEntities($builder))))
+                        self::scopeMediaEntities($builder))), $inUse)
         );
     }
 }

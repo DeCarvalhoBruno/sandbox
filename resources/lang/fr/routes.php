@@ -15,6 +15,7 @@
     'blog_cat' => 'categories/{slug}',
     'blog_tag' => 'tag/{slug}',
     'blog_author' => 'author/{slug}',
+    'user' => 'utilisateur/{slug}',
     'search' => 'recherche/{q?}',
     'privacy' => 'privacy',
     'terms_service' => 'terms-of-service'
