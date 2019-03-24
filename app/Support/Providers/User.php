@@ -286,7 +286,7 @@ class User extends Model implements UserProvider, UserInterface
     {
         return $this->buildWithScopes(
             ['media_uuid as uuid', 'media_extension as ext', 'media_in_use as used'],
-            ['entityType' => $userId, 'avatars'])
+            ['entityType' => $userId, 'avatars' => false])
             ->get()->toArray();
     }
 

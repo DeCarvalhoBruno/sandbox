@@ -6,11 +6,10 @@ use App\Models\EntityType;
 use App\Support\Providers\User as UserProvider;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
-use Naraki\Media\Contracts\Media as MediaInterface;
+use Naraki\Media\Facades\Media as MediaProvider;
 use Naraki\Media\Models\Media as MediaModel;
 use Naraki\Media\Models\MediaDigital;
 use Naraki\Media\Models\MediaImgFormat;
-use Naraki\Media\Facades\Media as MediaProvider;
 use Naraki\Media\Requests\Update as UpdateMedia;
 use Naraki\Media\Support\UploadedAvatar;
 use Naraki\Media\Support\UploadedImage;
@@ -208,7 +207,8 @@ class Media extends Controller
         /**
          * @var \Naraki\Media\Support\SimpleImage $avatarInfo
          */
-        $avatarInfo = Cache::get('temporary_avatars')->pull($input->uuid);
+        $avatarInfo = Cache::get('temporary_avatars')->pull(
+            substr($input->uuid, 0, strrpos($input->uuid, '.')));
         try {
             $avatarInfo->cropAvatar($input);
             MediaProvider::image()->saveAvatar($avatarInfo);

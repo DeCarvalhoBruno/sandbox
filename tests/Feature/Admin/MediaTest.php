@@ -108,7 +108,7 @@ class MediaTest extends TestCase
             [
                 'height' => 864,
                 'width' => 1224,
-                'uuid' => substr($imageDiskFilename,0,-4),
+                'uuid' => $imageDiskFilename,
                 'x' => 250,
                 'y' => 320
             ]

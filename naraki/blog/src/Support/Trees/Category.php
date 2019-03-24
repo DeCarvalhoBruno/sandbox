@@ -51,7 +51,7 @@ class Category
     }
 
     /**
-     * @param \App\Support\Trees\BlogCategory $node
+     * @param \Naraki\Blog\Support\Trees\Category $node
      * @param int $level
      * @return object
      */
@@ -71,7 +71,7 @@ class Category
      * @param string $label
      * @param string $id
      * @param bool $selected
-     * @return \App\Support\Trees\BlogCategory
+     * @return \Naraki\Blog\Support\Trees\Category
      */
     public function addChild($label, $id, $selected)
     {
@@ -81,7 +81,6 @@ class Category
     }
 
     /**
-     * @param int $postId
      * @return array
      */
     public static function getTree()

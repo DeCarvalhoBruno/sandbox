@@ -34,8 +34,14 @@ img[data-src] {
   font-weight: 300;
 }
 
-.btn-primary {
+button{
   font-family: $font-family-title;
+}
+.btn-sm, .btn-group-sm > .btn{
+  padding:0.3rem 0.5rem 0.25rem;
+}
+
+.btn-primary {
   background-color: $primary;
   border: none;
 
@@ -65,7 +71,24 @@ img[data-src] {
   &:focus, &:not(:disabled):not(.disabled):active:focus {
     box-shadow: 0 0 0 0.1rem rgba(192, 83, 66, 0.2);
   }
+}
 
+.btn-outline-info {
+  font-family: $font-family-title;
+  color: #226666;
+  background-color: #fff;
+  border-color: #226666;
+
+  &:hover, &:active, &:not(:disabled):not(.disabled):active {
+    //transition: background-color 350ms;
+    background-color: #226666;
+    color: #fff;
+    border: 1px solid transparent;
+  }
+
+  &:focus, &:not(:disabled):not(.disabled):active:focus {
+    box-shadow: 0 0 0 0.1rem rgba(154, 84, 40, 0.2);
+  }
 }
 
 #app {

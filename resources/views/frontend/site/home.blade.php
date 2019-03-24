@@ -3,6 +3,7 @@
 @section('content')
     <section id="blog-featured">
         <div class="row">
+            @if(isset($posts['featured'][0]))
             <div id="blog-featured-carousel" class="col-lg-7 col-md-12">
                 <div id="carousel-home" class="carousel slide carousel-fade" data-ride="carousel">
                     <ol class="carousel-indicators">
@@ -42,6 +43,8 @@
                     </a>
                 </div>
             </div>
+            @endif
+                @if(isset($posts['featured'][3]))
             <div id="blog-featured-right" class="col-lg-5 col-md-12">
                 <div class="container p-0">
                     <div class="row">
@@ -100,6 +103,7 @@
                     </div>
                 </div>
             </div>
+                @endif
         </div>
     </section>
     <section id="blog-spotlight" class="container">

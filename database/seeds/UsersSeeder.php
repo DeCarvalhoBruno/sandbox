@@ -13,7 +13,6 @@ class UsersSeeder extends Seeder
     {
         $logging = DB::connection()->logging();
         DB::connection()->disableQueryLog();
-        $this->avatar = Media::image();
         $pwd = bcrypt('secret');
         $u = factory(App\Models\User::class)->create([
             'username' => 'john_doe',
@@ -137,7 +136,7 @@ class UsersSeeder extends Seeder
                 'created_at' => $faker->dateTimeBetween('-2 years')
             ]);
 
-//            $this->createAvatar($username, sprintf('%s %s', $fn, $ln));
+            $this->createAvatar($username, sprintf('%s %s', $fn, $ln));
 
             if ($i % 50 == 0) {
                 $groupID = 3;
@@ -168,7 +167,7 @@ class UsersSeeder extends Seeder
             \Naraki\Media\Models\Media::IMAGE_AVATAR
         );
         $f->processAvatar();
-        $this->avatar->saveAvatar($f);
+        Media::image()->saveAvatar($f);
 
     }
 }

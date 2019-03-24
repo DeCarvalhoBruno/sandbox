@@ -14,7 +14,6 @@ class ForumPost extends Model
     use HasASlugColumn, Presentable, NodeTrait;
 
     protected $primaryKey = 'forum_post_id';
-    protected $slugColumn = 'forum_post_slug';
     protected $presenter = null;
 
     protected $fillable = [
@@ -23,6 +22,7 @@ class ForumPost extends Model
         'forum_post',
         'forum_post_slug'
     ];
+    public static $slugColumn = 'forum_post_slug';
 
     public function getUpdatedAtAttribute($value)
     {
@@ -98,6 +98,19 @@ class ForumPost extends Model
         return $query->join('users',
             'users.user_id', '=', 'forum_posts.post_user_id')
             ->join('people', 'people.user_id', '=', 'users.user_id');
+    }
+
+    /**
+     * @link https://laravel.com/docs/eloquent#query-scopes
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder $query
+     */
+    public function scopeTree(Builder $query)
+    {
+        return $query->join('forum_post_tree',
+            'forum_post_tree.id', '=', 'forum_posts.forum_post_id');
     }
 
 

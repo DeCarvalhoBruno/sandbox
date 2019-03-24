@@ -109,7 +109,9 @@
       EditorMenuBubble
     },
     props: {
-      editMode: {required: true, type: Boolean}
+      editMode: {required: true},
+      isRootElem: {type: Boolean},
+      content: {type: String, default: () => null}
     },
     data () {
       return {
@@ -127,10 +129,7 @@
             new Strike(),
             new Underline(),
             new Mention(this.getMentionAttrs())
-          ],
-          content: `
-
-        `
+          ]
         }),
         linkUrl: null,
         linkMenuIsActive: false,
@@ -146,8 +145,15 @@
       }
     },
     mounted () {
+      let vm = this
       this.$nextTick(() => {
-        this.$emit('is-mounted')
+        if (this.isRootElem) {
+          this.$root.$emit('tiptapIsMounted')
+        }
+        if (this.content !== null) {
+          this.editor.setContent(this.content)
+        }
+        this.properFocus()
       })
 
     },
@@ -161,11 +167,19 @@
     },
     watch: {
       editMode () {
-        if (this.editMode)
-          this.editor.focus()
+        this.properFocus()
+      },
+      content () {
+        this.editor.setContent(this.content)
       }
     },
     methods: {
+      properFocus () {
+        if (this.editMode!==false) {
+          this.editor.focus()
+        }
+
+      },
       showLinkMenu (attrs) {
         this.linkUrl = attrs.href
         this.linkMenuIsActive = true
@@ -306,22 +320,13 @@
 
             return false
           },
-          // is called when a suggestion has changed
-          // this function is optional because there is basic filtering built-in
-          // you can overwrite it if you prefer your own filtering
-          // in this example we use fuse.js with support for fuzzy search
           onFilter: async (items, query) => {
             if (!query) {
               return items
             }
 
-            const {data} = await axios.post('http://lumen.local/search/sister')
-            console.log(data)
-            // const fuse = new Fuse(items, {
-            //   threshold: 0.2,
-            //   keys: ['name']
-            // })
-            // return fuse.search(query)
+            const {data} = await axios.post('http://lumen.local/search/')
+            //return array of values
           }
         }
       }

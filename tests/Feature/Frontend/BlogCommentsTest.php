@@ -63,7 +63,7 @@ class BlogCommentsTest extends TestCase
         );
         $posts = ForumPost::query()->get();
         $this->assertEquals(1, $posts->count());
-        $this->assertNotContains('myalternatesite.com',$posts[0]->getAttribute('forum_post'));
+        $this->assertNotContains('myalternatesite.com', $posts[0]->getAttribute('forum_post'));
     }
 
     public function test_blog_comments_post_comment_too_long()
@@ -72,8 +72,22 @@ class BlogCommentsTest extends TestCase
         $this->signIn($u);
         $this->expectException(ValidationException::class);
         $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
-            ['txt' => str_repeat('string',CreateComment::$characterLimit/5)]
+            ['txt' => str_repeat('string', CreateComment::$characterLimit / 5)]
         );
+    }
+
+    public function test_blog_comments_post_comment_reply()
+    {
+        $this->createBlogPost();
+        $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
+            ['txt' => 'my comment']
+        );
+        $commentSlug = ForumPost::query()->first()->getSlugColumn();
+        $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
+            ['txt' => 'my comment in reply to', 'reply_to' => $commentSlug]
+        );
+        $this->assertEquals(2, ForumPost::query()->count());
+        $this->assertNotNull(ForumPost::query()->get()->last()->getParentId());
     }
 
 }

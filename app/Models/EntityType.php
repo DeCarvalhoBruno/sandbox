@@ -79,6 +79,10 @@ class EntityType extends Model
         $class = Entity::getModelClassNamespace($entityID);
         $baseBuilder = new $class();
 
+        /**
+         * @var \Illuminate\Database\Eloquent\Model $baseBuilder
+         * @var \Illuminate\Database\Eloquent\Builder $builderWithEntity
+         */
         $builderWithEntity = $baseBuilder->newQuery()
             ->join(
                 'entity_types',
@@ -104,6 +108,10 @@ class EntityType extends Model
         $class = Entity::getModelClassNamespace($entityID);
         $baseBuilder = new $class();
 
+        /**
+         * @var \Illuminate\Database\Eloquent\Model $baseBuilder
+         * @var \Illuminate\Database\Eloquent\Builder $builderWithEntity
+         */
         $builderWithEntity = $baseBuilder->newQuery()
             ->join(
                 'entity_types',
@@ -153,6 +161,10 @@ class EntityType extends Model
         $class = Entity::getModelClassNamespace($entityID);
         $baseBuilder = new $class();
 
+        /**
+         * @var \Illuminate\Database\Eloquent\Model $baseBuilder
+         * @var \Illuminate\Database\Eloquent\Builder $builderWithEntity
+         */
         $builderWithEntity = $baseBuilder->newQuery()
             ->join(
                 'entity_types',
@@ -178,6 +190,9 @@ class EntityType extends Model
      */
     public static function getEntitySlugColumn($entityID)
     {
+        /**
+         * @var \App\Traits\Models\HasASlugColumn $targetType
+         */
         $targetType = Entity::getModelClassNamespace($entityID);
 
         return $targetType::$slugColumn;
@@ -207,7 +222,12 @@ class EntityType extends Model
     public function scopeEntityType(Builder $query, $entityID)
     {
         $class = Entity::getModelClassNamespace($entityID);
-        $primaryKey = (new $class)->getQualifiedKeyName();
+        /**
+         * @var \Illuminate\Database\Eloquent\Model $instance
+         */
+        $instance = new $class();
+
+        $primaryKey = $instance->getQualifiedKeyName();
 
         return $query->join(
             Entity::getConstantName($entityID),

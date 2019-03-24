@@ -87,10 +87,16 @@ class MediaEntity extends Model
         return media_entity_path(
             $entityId,
             $mediaId,
-            sprintf(
+            ($mediaImgFormatId !== MediaImgFormat::ORIGINAL)
+                ? sprintf(
                 '%s_%s.%s',
                 $uuid,
                 MediaImgFormat::getFormatAcronyms($mediaImgFormatId),
+                $ext
+            )
+                : sprintf(
+                '%s.%s',
+                $uuid,
                 $ext
             )
         );

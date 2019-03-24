@@ -12,6 +12,7 @@
                         <span class="author-label"><i class="fa fa-user-circle-o"></i><a
                                     href="{{route_i18n('blog.author',$post->getAttribute('author'))}}">{{$post->getAttribute('person')}}</a></span>
                         <span class="page-views-label"><i title="{{trans('pages.blog.page_view_count')}}"
+                                                          aria-label="{{trans('pages.blog.page_view_count')}}"
                                                           class="fa fa-eye"></i>{{$post->getAttribute('page_views')}}
                         </span>
                     </div>
@@ -26,7 +27,8 @@
             <div class="share-container">
                 <div id="blog-share-buttons" class="share-buttons">
                     <a class="stacked" href="#"
-                       title="{{trans('pages.blog.share_facebook')}}">
+                       title="{{trans('pages.blog.share_facebook')}}"
+                       aria-label="{{trans('pages.blog.share_facebook')}}">
                         <span class="fa fa-stack-1x facebook">
                             <i class="fa fa-circle fa-stack-1x circle"></i>
                             <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
