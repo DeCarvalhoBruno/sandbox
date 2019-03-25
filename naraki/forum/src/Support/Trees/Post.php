@@ -14,10 +14,6 @@ class Post
      * @var array
      */
     private $children = [];
-    /**
-     * @var int
-     */
-    private static $userId;
 
     /**
      *
@@ -34,13 +30,13 @@ class Post
      * @param int $level
      * @return \stdClass
      */
-    public function toArray($userId, $level = 1): \stdClass
+    public function toArray($level = 1): \stdClass
     {
-        $ar = $this->getNewRoot($this, $userId);
+        $ar = $this->getNewRoot($this);
 
         $level++;
         foreach ($this->children as $child) {
-            $ar->children[] = $child->toArray($userId, $level);
+            $ar->children[] = $child->toArray($level);
         }
         return $ar;
     }
@@ -49,12 +45,10 @@ class Post
      * @param self $node
      * @return object
      */
-    private function getNewRoot($node, $userId): \stdClass
+    private function getNewRoot($node): \stdClass
     {
         $data = $node->getData();
         unset($data['id']);
-        $data['edit_mode'] = false;
-        $data['owns'] = $data['user_id'] == $userId;
         $data['children'] = [];
         return (object)$data;
     }
@@ -73,15 +67,13 @@ class Post
 
     /**
      * @param array $posts
-     * @param int $userId
      * @return array
      */
-    public static function getTree($posts, $userId): array
+    public static function getTree($posts): array
     {
         if (empty($posts)) {
             return [];
         }
-        static::$userId = $userId;
         return static::makeTree($posts);
     }
 
@@ -118,7 +110,7 @@ class Post
         }
         $tree = [];
         foreach ($l as $node) {
-            $tree[] = $node[0]->toArray(static::$userId);
+            $tree[] = $node[0]->toArray();
         }
         return $tree;
     }

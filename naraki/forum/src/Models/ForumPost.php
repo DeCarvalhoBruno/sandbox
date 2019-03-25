@@ -20,7 +20,8 @@ class ForumPost extends Model
         'entity_type_id',
         'post_user_id',
         'forum_post',
-        'forum_post_slug'
+        'forum_post_slug',
+        'forum_post_fav_cnt as cnt'
     ];
     public static $slugColumn = 'forum_post_slug';
 

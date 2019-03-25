@@ -292,26 +292,28 @@ class Medias extends Migration
     private function mediaInUseProcedure()
     {
         $sql = <<<SQL
-CREATE PROCEDURE sp_update_media_type_in_use(IN in_media_uuid VARCHAR(64))
-MODIFIES SQL DATA
-  BEGIN
-    UPDATE media_types
-    SET media_in_use = 0
-    WHERE media_type_id in (
-      select mti
-      from (
-             select media_types.media_type_id as mti
-             from media_types
-               join media_records on media_types.media_type_id = media_records.media_type_id
-               join media_category_records
-                 on media_category_records.media_record_target_id = media_records.media_record_id
-               join media_entities
-                 on media_entities.media_category_record_id = media_category_records.media_category_record_id
-             where media_uuid != in_media_uuid) as mt);
-    UPDATE media_types
-      SET media_in_use=1
-    where media_uuid=in_media_uuid;
-  END;
+CREATE PROCEDURE sp_update_media_type_in_use(IN in_media_uuid VARCHAR(64), IN in_entity_type_id INTEGER)
+  MODIFIES SQL DATA
+BEGIN
+  UPDATE media_types
+  SET media_in_use = 0
+  WHERE media_type_id in (
+    select mti
+    from (
+           select media_types.media_type_id as mti
+           from media_types
+                  join media_records on media_types.media_type_id = media_records.media_type_id
+                  join media_category_records
+                       on media_category_records.media_record_target_id = media_records.media_record_id
+                  join media_entities
+                       on media_entities.media_category_record_id = media_category_records.media_category_record_id
+          where media_entities.entity_type_id=in_entity_type_id
+           and media_uuid != in_media_uuid
+      ) as mt);
+  UPDATE media_types
+  SET media_in_use=1
+  WHERE media_uuid=in_media_uuid;
+END;
 SQL;
         \DB::connection()->getPdo()->exec($sql);
     }

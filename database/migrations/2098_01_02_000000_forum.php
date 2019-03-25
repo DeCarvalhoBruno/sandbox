@@ -55,7 +55,8 @@ class Forum extends Migration
             $table->unsignedInteger('rgt')->default(0);
 
             $table->text('forum_post')->nullable();
-            $table->string('forum_post_slug',64)->nullable();
+            $table->string('forum_post_slug', 64)->nullable();
+            $table->unsignedInteger('forum_post_fav_cnt')->default(0);
 
             $table->timestamps();
             $table->index(array('lft', 'rgt', 'parent_id'));
@@ -67,8 +68,52 @@ class Forum extends Migration
             $table->foreign('post_user_id')
                 ->references('user_id')->on('users');
         });
+        $this->createView();
+        if (App::environment() !== 'testing') {
+            $this->incrementFavoriteCounterProcedure();
+            $this->decrementFavoriteCounterProcedure();
+        }
+    }
 
+    private function createView()
+    {
+        $sql = <<<SQL
+create view forum_post_tree as
+SELECT
+  node.forum_post_id as id,
+  (COUNT(parent.forum_post_id) - 1) AS lvl,
+  parent.updated_at as root_updated_at
+FROM forum_posts AS node, forum_posts AS parent
+WHERE node.lft BETWEEN parent.lft AND parent.rgt
+GROUP BY node.forum_post_slug
+order by node.lft asc;
+SQL;
+        \DB::unprepared($sql);
 
+    }
+
+    private function incrementFavoriteCounterProcedure()
+    {
+        $sql = <<<SQL
+CREATE PROCEDURE sp_increment_forum_post_favorite_count(IN in_slug VARCHAR(64))
+MODIFIES SQL DATA
+BEGIN
+update forum_posts set forum_post_fav_cnt = forum_post_fav_cnt+1 where forum_post_slug=in_slug;
+END;
+SQL;
+        \DB::connection()->getPdo()->exec($sql);
+    }
+
+    private function decrementFavoriteCounterProcedure()
+    {
+        $sql = <<<SQL
+CREATE PROCEDURE sp_decrement_forum_post_favorite_count(IN in_slug VARCHAR(64))
+MODIFIES SQL DATA
+BEGIN
+update forum_posts set forum_post_fav_cnt = forum_post_fav_cnt-1 where forum_post_slug=in_slug;
+END;
+SQL;
+        \DB::connection()->getPdo()->exec($sql);
     }
 
     /**

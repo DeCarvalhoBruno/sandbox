@@ -55,6 +55,20 @@ button{
   }
 }
 
+.btn-success {
+  background-color: #2D882D;
+  border: none;
+
+  &:hover, &:active, &:not(:disabled):not(.disabled):active {
+    transition: background-color 350ms;
+    background-color: #004400;
+  }
+
+  &:focus, &:not(:disabled):not(.disabled):active:focus {
+    box-shadow: 0 0 0 0.1rem rgba(120, 100, 26, 0.2);
+  }
+}
+
 .btn-outline-primary {
   font-family: $font-family-title;
   color: $primary;

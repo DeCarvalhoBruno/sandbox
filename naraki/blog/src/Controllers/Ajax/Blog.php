@@ -6,15 +6,16 @@ use App\Models\Entity;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Naraki\Blog\Contracts\Blog as BlogProvider;
+use Naraki\Blog\Facades\Blog as BlogRepo;
 use Naraki\Blog\Filters\Blog as BlogFilter;
 use Naraki\Blog\Job\DeleteElasticsearch;
 use Naraki\Blog\Job\UpdateElasticsearch;
 use Naraki\Blog\Models\BlogStatus;
 use Naraki\Blog\Requests\CreateBlogPost;
 use Naraki\Blog\Requests\UpdateBlogPost;
-use Naraki\Media\Facades\Media as MediaProvider;
+use Naraki\Media\Facades\Media as MediaRepo;
 use Naraki\Media\Models\MediaImgFormat;
+
 
 class Blog extends Controller
 {
@@ -22,19 +23,18 @@ class Blog extends Controller
 
     /**
      * @param \Naraki\Blog\Filters\Blog $filter
-     * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
      * @return array
      */
-    public function index(BlogFilter $filter, BlogProvider $blogRepo): array
+    public function index(BlogFilter $filter): array
     {
         return [
-            'table' => $blogRepo->buildList([
+            'table' => BlogRepo::buildList([
                 \DB::raw('null as selected'),
                 'blog_post_title',
                 'full_name',
                 'blog_post_slug'
             ])->filter($filter)->paginate(25),
-            'columns' => $blogRepo->createModel()->getColumnInfo([
+            'columns' => BlogRepo::createModel()->getColumnInfo([
                 'blog_post_title' => (object)[
                     'name' => trans('js-backend.db.blog_post_title'),
                     'width' => '50%'
@@ -68,12 +68,11 @@ class Blog extends Controller
 
     /**
      * @param $slug
-     * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
      * @return array
      */
-    public function edit($slug, BlogProvider $blogRepo): array
+    public function edit($slug): array
     {
-        $record = $blogRepo->buildOneBySlug(
+        $record = BlogRepo::buildOneBySlug(
             $slug,
             [
                 'blog_posts.blog_post_id',
@@ -93,44 +92,43 @@ class Blog extends Controller
         $blogPost = $record->toArray();
         $categories = \Naraki\Blog\Support\Trees\Category::getTreeWithSelected($blogPost['blog_post_id']);
         $blogPost['categories'] = $categories->categories;
-        $blogPost['tags'] = $blogRepo->tag()->getByPost($blogPost['blog_post_id']);
+        $blogPost['tags'] = BlogRepo::tag()->getByPost($blogPost['blog_post_id']);
         unset($blogPost['entity_type_id'], $blogPost['blog_post_id']);
         return [
             'record' => $blogPost,
             'status_list' => BlogStatus::getConstants('BLOG'),
             'blog_categories' => $categories->tree,
             'url' => $this->getPostUrl($record),
-            'source_types' => $blogRepo->source()->listTypes(),
-            'sources' => $blogRepo->source()
+            'source_types' => BlogRepo::source()->listTypes(),
+            'sources' => BlogRepo::source()
                 ->buildByBlogSlug(
                     $record->getAttribute('blog_post_slug')
                 )->get()->toArray(),
             'blog_post_slug' => $record->getAttribute('blog_post_slug'),
-            'thumbnails' => MediaProvider::image()->getImages(
+            'thumbnails' => MediaRepo::image()->getImages(
                 $record->getAttribute('entity_type_id'))
         ];
     }
 
     /**
      * @param \Naraki\Blog\Requests\CreateBlogPost $request
-     * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
      * @return \Illuminate\Http\Response
      */
-    public function create(CreateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo)
+    public function create(CreateBlogPost $request, UserProvider $userRepo)
     {
         try {
             $person = $userRepo->person()->buildOneBySlug(
                 $request->getPersonSlug(),
                 [$userRepo->person()->getKeyName()]
             )->first();
-            $post = $blogRepo->createOne(
+            $post = BlogRepo::createOne(
                 $request->all(),
                 $person
             );
             $request->setPersonSlug($person->getKey());
-            $blogRepo->category()->attachToPost($request->getCategories(), $post);
-            $blogRepo->tag()->attachToPost($request->getTags(), $post);
+            BlogRepo::category()->attachToPost($request->getCategories(), $post);
+            BlogRepo::tag()->attachToPost($request->getTags(), $post);
         } catch (\Exception $e) {
             return response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -152,11 +150,10 @@ class Blog extends Controller
     /**
      * @param $slug
      * @param \Naraki\Blog\Requests\UpdateBlogPost $request
-     * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
      * @return array
      */
-    public function update($slug, UpdateBlogPost $request, BlogProvider $blogRepo, UserProvider $userRepo): array
+    public function update($slug, UpdateBlogPost $request, UserProvider $userRepo): array
     {
         $person = $request->getPersonSlug();
 
@@ -169,9 +166,9 @@ class Blog extends Controller
                 $request->setPersonSlug($query->getKey());
             }
         }
-        $post = $blogRepo->updateOne($slug, $request->all());
-        $blogRepo->category()->updatePost($request->getCategories(), $post);
-        $updatedTags = $blogRepo->tag()->updatePost($request->getTags(), $post);
+        $post = BlogRepo::updateOne($slug, $request->all());
+        BlogRepo::category()->updatePost($request->getCategories(), $post);
+        $updatedTags = BlogRepo::tag()->updatePost($request->getTags(), $post);
         $this->dispatch(new UpdateElasticsearch(
             UpdateElasticsearch::WRITE_MODE_UPDATE,
             $post,
@@ -188,23 +185,22 @@ class Blog extends Controller
 
     /**
      * @param $slug
-     * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Exception
      * @throws \Throwable
      */
-    public function destroy($slug, BlogProvider $blogRepo): Response
+    public function destroy($slug): Response
     {
         try {
-            $mediaUuids = MediaProvider::image()
+            $mediaUuids = MediaRepo::image()
                 ->getImagesFromSlug(
                     $slug,
                     Entity::BLOG_POSTS,
                     ['media_uuid']
                 )->pluck('media_uuid')->all();
-            $deleteResult = \DB::transaction(function () use ($slug, $blogRepo, $mediaUuids) {
-                MediaProvider::image()->delete($mediaUuids, Entity::BLOG_POSTS);
-                return $blogRepo->deleteBySlug($slug);
+            $deleteResult = \DB::transaction(function () use ($slug, $mediaUuids) {
+                MediaRepo::image()->delete($mediaUuids, Entity::BLOG_POSTS);
+                return BlogRepo::deleteBySlug($slug);
             });
         } catch (\Exception $e) {
             return response(trans('error.http.500.general_error'), Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -215,27 +211,26 @@ class Blog extends Controller
     }
 
     /**
-     * @param \Naraki\Blog\Contracts\Blog|\Naraki\Blog\Providers\Blog $blogRepo
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Throwable
      */
-    public function batchDestroy(BlogProvider $blogRepo, Request $request): Response
+    public function batchDestroy(Request $request): Response
     {
         $input = $request->only('posts');
         if (isset($input['posts'])) {
             $postSlugs = $input['posts'];
             $mediaUuids = [];
             foreach ($postSlugs as $slug) {
-                $uuids = MediaProvider::image()->getImagesFromSlug($slug, Entity::BLOG_POSTS, ['media_uuid'])
+                $uuids = MediaRepo::image()->getImagesFromSlug($slug, Entity::BLOG_POSTS, ['media_uuid'])
                     ->pluck('media_uuid')->all();
                 if (!empty($uuids) && !is_null($uuids)) {
                     $mediaUuids = array_merge($mediaUuids, $uuids);
                 }
             }
-            $deleteResult = \DB::transaction(function () use ($postSlugs, $mediaUuids, $blogRepo) {
-                MediaProvider::image()->delete($mediaUuids, Entity::BLOG_POSTS);
-                return $blogRepo->deleteBySlug($postSlugs);
+            $deleteResult = \DB::transaction(function () use ($postSlugs, $mediaUuids) {
+                MediaRepo::image()->delete($mediaUuids, Entity::BLOG_POSTS);
+                return BlogRepo::deleteBySlug($postSlugs);
             });
             $this->dispatch(new DeleteElasticsearch(
                 $deleteResult
@@ -252,10 +247,15 @@ class Blog extends Controller
      */
     public function setFeaturedImage($slug, $uuid): array
     {
-        MediaProvider::image()->setAsUsed($uuid);
-        $media = MediaProvider::image()->getOne($uuid, ['media_extension']);
+        $entityTypeId = BlogRepo::buildOneBySlug($slug, ['entity_type_id'])
+            ->value('entity_type_id');
+        MediaRepo::image()->setAsUsed(
+            $uuid,
+            intval($entityTypeId)
+        );
+        $media = MediaRepo::image()->getOne($uuid, ['media_extension']);
         if (!is_null($media)) {
-            MediaProvider::image()->cropImageToFormat(
+            MediaRepo::image()->cropImageToFormat(
                 $uuid,
                 Entity::BLOG_POSTS,
                 \Naraki\Media\Models\Media::IMAGE,
@@ -263,7 +263,9 @@ class Blog extends Controller
                 MediaImgFormat::FEATURED
             );
         }
-        return MediaProvider::image()->getImagesFromSlug($slug, Entity::BLOG_POSTS)->toArray();
+        return MediaRepo::image()
+            ->getImagesFromSlug($slug, Entity::BLOG_POSTS, null, $entityTypeId)
+            ->toArray();
     }
 
     /**
@@ -274,10 +276,10 @@ class Blog extends Controller
      */
     public function deleteImage($slug, $uuid): array
     {
-        MediaProvider::image()->delete(
+        MediaRepo::image()->delete(
             $uuid,
             Entity::BLOG_POSTS);
-        return MediaProvider::image()->getImagesFromSlug($slug, Entity::BLOG_POSTS)->toArray();
+        return MediaRepo::image()->getImagesFromSlug($slug, Entity::BLOG_POSTS)->toArray();
     }
 
     /**

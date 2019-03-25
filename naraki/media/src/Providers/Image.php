@@ -79,14 +79,13 @@ class Image extends Model implements ImageInterface
     /**
      * @param \App\Contracts\Image $image
      * @return int
-     * @throws \Exception
      * @throws \Throwable
      */
     public function saveAvatar(ImageContract $image)
     {
         $targetEntityTypeId = $this->saveImageDb($image);
         if (env('APP_ENV') !== 'testing') {
-            $this->setAsUsed($image->getUuid());
+            $this->setAsUsed($image->getUuid(), $targetEntityTypeId);
         }
         return $targetEntityTypeId;
     }
@@ -184,9 +183,9 @@ class Image extends Model implements ImageInterface
      * @param array $columns
      * @return \Naraki\Media\Models\MediaEntity
      */
-    public function getImagesFromSlug($slug, $entityId = Entity::BLOG_POSTS, $columns = ['*'])
+    public function getImagesFromSlug($slug, $entityId = Entity::BLOG_POSTS, $columns = null, $entityTypeId = null)
     {
-        if ($columns[0] == '*') {
+        if (is_null($columns)) {
             $columns = [
                 'media_uuid as uuid',
                 'media_in_use as used',
@@ -200,17 +199,21 @@ class Image extends Model implements ImageInterface
                 )
             ];
         }
-        return $this->getImages(EntityType::getEntityTypeID($entityId, $slug), $columns);
+        if (is_null($entityTypeId)) {
+            $entityTypeId = EntityType::getEntityTypeID($entityId, $slug);
+        }
+        return $this->getImages($entityTypeId, $columns);
     }
 
     /**
      * @param string $uuid
+     * @param int $entityTypeId
      * @return bool
      */
-    public static function setAsUsed($uuid)
+    public static function setAsUsed($uuid, $entityTypeId)
     {
         if (is_img_uuid_string($uuid)) {
-            return \DB::unprepared(sprintf('CALL sp_update_media_type_in_use("%s")', $uuid));
+            return \DB::unprepared(sprintf('CALL sp_update_media_type_in_use("%s",%s)', $uuid, $entityTypeId));
         }
         throw new \UnexpectedValueException('uuid is not valid');
     }

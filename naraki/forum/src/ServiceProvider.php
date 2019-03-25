@@ -31,8 +31,11 @@ class ServiceProvider extends LaravelServiceProvider
             'namespace' => 'Naraki\Forum\Controllers',
             'middleware' => ['web', 'frontend_auth']
         ], function (Router $r) {
-            $r->post('forum/{entity_type}/{slug}/comment', 'Post@postComment');
-
+            $r->post('forum/{entity_type}/{slug}/comment', 'Post@createComment');
+            $r->patch('forum/{entity_type}/{slug}/comment', 'Post@updateComment');
+            $r->delete('forum/{entity_type}/{slug}/comment/{comment}', 'Post@deleteComment');
+            $r->patch('forum/{entity_type}/{slug}/favorite/{comment}', 'Post@favorite');
+            $r->delete('forum/{entity_type}/{slug}/favorite/{comment}', 'Post@unfavorite');
         });
 
         $this->app['router']->group([

@@ -4,7 +4,7 @@ use App\Http\Controllers\Admin\Controller;
 use Illuminate\Http\Response;
 use Naraki\Blog\Facades\Blog;
 
-class BlogCategory extends Controller
+class Category extends Controller
 {
     public function index()
     {

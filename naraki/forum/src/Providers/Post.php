@@ -4,6 +4,7 @@ use App\Support\Providers\Model;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Naraki\Forum\Contracts\Post as PostInterface;
+use Naraki\Forum\Support\Trees\Post as PostTree;
 
 /**
  * @method \Naraki\Forum\Models\ForumPost createModel(array $attributes = [])
@@ -29,8 +30,9 @@ class Post extends Model implements PostInterface
                 'post_user_id as user_id',
                 'full_name as name',
                 'forum_posts.updated_at',
+                'forum_post_fav_cnt as cnt'
             ],
-            ['entityType', 'user','tree'])
+            ['entityType', 'user', 'tree'])
             ->where('entity_types.entity_type_id', $entityTypeId);
     }
 
@@ -40,7 +42,7 @@ class Post extends Model implements PostInterface
      * @param \Illuminate\Contracts\Auth\Authenticatable|\App\Models\User $user
      * @return void
      */
-    public function addComment(\stdClass $commentData, int $entityTypeId, Authenticatable $user)
+    public function createComment(\stdClass $commentData, int $entityTypeId, Authenticatable $user)
     {
         try {
             $parentPost = null;
@@ -50,7 +52,7 @@ class Post extends Model implements PostInterface
                  * @var \Naraki\Forum\Models\ForumPost $parentPost
                  */
                 $parentPost = $model->newQuery()
-                    ->select([$model->getKeyName(),$model->getRgtName(),$model->getLftName()])
+                    ->select([$model->getKeyName(), $model->getRgtName(), $model->getLftName()])
                     ->where($model->getSlugColumnName(), $commentData->reply_to)
                     ->first();
             }
@@ -74,14 +76,92 @@ class Post extends Model implements PostInterface
             }
         } catch (\Exception $e) {
         }
+    }
 
+    /**
+     * @param \stdClass $data
+     * @param \Illuminate\Contracts\Auth\Authenticatable|\App\Models\User $user
+     * @return void
+     */
+    public function updateComment($data, Authenticatable $user)
+    {
+        if (!isset($data->reply_to)) {
+            return;
+        }
+        $model = $this->createModel();
+        $q = $model->newQuery()->scopes(['entityType', 'user'])
+            ->select([
+                'post_user_id',
+                $model->getKeyName(),
+                $model->getParentIdName(),
+                $model->getLftName(),
+                $model->getRgtName()
+            ])
+            ->where($model->getSlugColumnName(), $data->reply_to)->first();
+        if (!is_null($q)) {
+            if ($user->getKey() == $q->getAttribute('post_user_id')) {
+                $q->update(['forum_post' => $data->txt]);
+            }
+        }
 
     }
 
-    public function getTree()
+    /**
+     * @param array $posts
+     * @param Authenticatable|\App\Models\User $user
+     * @param arrray $favorites
+     * @return array
+     */
+    public function getTree(array $posts, ?Authenticatable $user, $favorites): array
     {
+        return PostTree::getTree(
+            $posts,
+            !is_null($user) ? $user->getKey() : null,
+            !is_null($favorites) ? $favorites : []);
+    }
 
+    /**
+     * @param string $slug
+     * @param Authenticatable|\App\Models\User $user
+     * @return int
+     * @throws \Exception
+     */
+    public function deleteComment(string $slug, Authenticatable $user)
+    {
+        $model = $this->createModel();
+        $q = $model->newQuery()->scopes(['entityType', 'user'])
+            ->select([
+                'post_user_id',
+                $model->getKeyName(),
+                $model->getParentIdName(),
+                $model->getLftName(),
+                $model->getRgtName()
+            ])
+            ->where($model->getSlugColumnName(), $slug)->first();
+        if (!is_null($q)) {
+            if ($user->getKey() == $q->getAttribute('post_user_id')) {
+                return $q->delete();
+            }
+        }
+        return 0;
+    }
 
+    /**
+     * @param string $slug
+     * @return bool
+     */
+    public function favorite(string $slug)
+    {
+        return \DB::unprepared(sprintf('CALL sp_increment_forum_post_favorite_count("%s")', $slug));
+    }
+
+    /**
+     * @param string $slug
+     * @return bool
+     */
+    public function unfavorite(string $slug)
+    {
+        return \DB::unprepared(sprintf('CALL sp_decrement_forum_post_favorite_count("%s")', $slug));
     }
 
 }

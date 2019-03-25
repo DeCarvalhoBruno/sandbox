@@ -25,12 +25,13 @@ return [
         'default' => [
             'HTML.Doctype' => 'HTML 4.01 Transitional',
             'HTML.Allowed' => 'div,b,strong,i,em,u,a,ul,ol,li,p,br,span,img',
-            'HTML.AllowedAttributes' => 'class,href,alt,src',
+            'HTML.AllowedAttributes' => 'class,href,alt,src,rel',
             'AutoFormat.AutoParagraph' => false,
             'AutoFormat.RemoveEmpty' => true,
-            'Core.HiddenElements'=>[
+            'Core.HiddenElements' => [
                 'script' => true
-            ]
+            ],
+            'Attr.AllowedRel' => ['noopener', 'noreferrer', 'nofollow']
         ],
         'test' => [
             'Attr.EnableID' => 'true',
@@ -110,7 +111,7 @@ return [
             ],
         ],
         'custom_attributes' => [
-            ['a', 'target', 'Enum#_blank,_self,_target,_top'],
+            ['a', 'target', 'rel', 'Enum#_blank,_self,_target,_top'],
         ],
         'custom_elements' => [
             ['u', 'Inline', 'Inline', 'Common'],

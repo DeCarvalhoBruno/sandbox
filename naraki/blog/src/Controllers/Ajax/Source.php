@@ -4,7 +4,7 @@ use Naraki\Blog\Contracts\Source as BlogSourceProvider;
 use App\Http\Controllers\Admin\Controller;
 use Illuminate\Http\Response;
 
-class BlogSource extends Controller
+class Source extends Controller
 {
     /**
      * @param \Naraki\Blog\Contracts\Source|\Naraki\Blog\Providers\Source $sourceRepo

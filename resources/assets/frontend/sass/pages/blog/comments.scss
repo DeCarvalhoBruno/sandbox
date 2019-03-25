@@ -3,10 +3,11 @@
     margin: 0;
     position: relative;
 
-    .btn {
+    .button-group {
       position: absolute;
       top: 0.5rem;
       right: 3rem;
+
     }
   }
 }
@@ -53,18 +54,39 @@
         float: right;
         text-align: center;
 
-        i.fa-star-o {
+        i.fa-star,i.fa-star-o {
           font-size: 1.5rem;
           line-height: 1.5rem;
-          padding: 0.3rem;
+          padding: 0.5rem;
           color: $primary;
 
-          &:hover {
+          &.auth:hover {
             cursor: pointer;
             color: $primary;
+          }
+        }
 
+        i.flip{
+          backface-visibility: visible;
+          animation-name: flip;
+        }
+
+        i.flip.animate{
+          animation-duration: 1s;
+        }
+
+        i.fa-star-o {
+          &.auth:hover {
             &:before {
               content: "\F005";
+            }
+          }
+        }
+
+        i.fa-star {
+          &:hover {
+            &:before {
+              content: "\F006";
             }
           }
         }
@@ -95,8 +117,30 @@
   }
 
   .comment-body {
+    pre{
+      padding: 0.7rem 1rem;
+      border-radius: 5px;
+      background: $color-black;
+      color: $color-white;
+      font-size: 0.8rem;
+      overflow-x: auto;
+      code {
+        display: block;
+      }
+    }
+
     p {
       margin: 0;
+
+      code {
+        display: inline-block;
+        padding: 0 0.4rem;
+        border-radius: 5px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        background: rgba($color-black, 0.1);
+        color: rgba($color-black, 0.8);
+      }
 
       &:hover {
         cursor: default;
@@ -106,12 +150,12 @@
 
   .comment-footer {
     margin: 0.5rem 0 0;
-    min-height:2rem;
+    min-height: 2rem;
 
     button {
       &.pull-left {
         font-size: 0.8rem;
-        padding:0.2rem 0.5rem;
+        padding: 0.2rem 0.5rem;
       }
 
       &.pull-right {
@@ -120,5 +164,35 @@
 
       }
     }
+  }
+}
+
+@keyframes flip {
+  from {
+    transform: perspective(32px) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, -360deg);
+    animation-timing-function: ease-out;
+  }
+
+  40% {
+    transform: perspective(32px) scale3d(1, 1, 1) translate3d(0, 0, 0)
+    rotate3d(0, 1, 0, -190deg);
+    animation-timing-function: ease-out;
+  }
+
+  50% {
+    transform: perspective(32px) scale3d(1, 1, 1) translate3d(0, 0, 0)
+    rotate3d(0, 1, 0, -170deg);
+    animation-timing-function: ease-in;
+  }
+
+  80% {
+    transform: perspective(32px) scale3d(0.95, 0.95, 0.95) translate3d(0, 0, 0)
+    rotate3d(0, 1, 0, 0deg);
+    animation-timing-function: ease-in;
+  }
+
+  to {
+    transform: perspective(32px) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, 0deg);
+    animation-timing-function: ease-in;
   }
 }

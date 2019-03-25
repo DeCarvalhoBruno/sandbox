@@ -45,7 +45,10 @@ class Profile extends Controller
      */
     public function setAvatar(Request $request, UserProvider $user)
     {
-        MediaProvider::image()->setAsUsed($request->get('uuid'));
+        MediaProvider::image()->setAsUsed(
+            $request->get('uuid'),
+            intval(auth()->user()->getAttribute('entity_type_id'))
+        );
         return response($this->getAvatars($user), Response::HTTP_OK);
     }
 

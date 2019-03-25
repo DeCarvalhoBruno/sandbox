@@ -21,10 +21,10 @@ class Admin
     public static function routes()
     {
         return function (Router $r) {
-            $r->get('blog/categories', 'BlogCategory@index');
-            $r->post('blog/categories', 'BlogCategory@create');
-            $r->patch('blog/categories/{id}', 'BlogCategory@update');
-            $r->delete('blog/categories/{id}', 'BlogCategory@delete');
+            $r->get('blog/categories', 'Category@index');
+            $r->post('blog/categories', 'Category@create');
+            $r->patch('blog/categories/{id}', 'Category@update');
+            $r->delete('blog/categories/{id}', 'Category@delete');
 
             $r->get('blog/posts', 'Blog@index')
                 ->middleware('can:view,Naraki\Blog\Models\BlogPost');
@@ -38,8 +38,8 @@ class Admin
                 ->middleware('can:edit,Naraki\Blog\Models\BlogPost');
             $r->delete('blog/post/{slug}', 'Blog@destroy');
             $r->post('blog/post/batch/delete', 'Blog@batchDestroy');
-            $r->post('blog/post/source/create', 'BlogSource@create');
-            $r->delete('blog/post/source/delete/{id}/{slug}', 'BlogSource@destroy');
+            $r->post('blog/post/source/create', 'Source@create');
+            $r->delete('blog/post/source/delete/{id}/{slug}', 'Source@destroy');
 
             $r->patch('blog/post/edit/{slug}/image/{uuid}', 'Blog@setFeaturedImage')
                 ->middleware('can:edit,Naraki\Blog\Models\BlogPost');

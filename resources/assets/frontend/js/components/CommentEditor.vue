@@ -51,14 +51,15 @@
         this.$emit('cancelled')
       },
       save () {
+        let txt = this.$refs.tiptap.getData()
         this.$root.$emit('submitComment', {
           comment: {
             reply_to: this.slug,
-            txt: this.$refs.tiptap.getData(),
+            txt: txt,
             mode: this.currentEditMode === 1 || this.currentEditMode === true ? 'create' : 'edit'
           }
         })
-        this.$emit('submitted')
+        this.$emit('submitted',{txt:txt})
       }
     }
   }

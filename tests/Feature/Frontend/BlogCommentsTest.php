@@ -66,6 +66,31 @@ class BlogCommentsTest extends TestCase
         $this->assertNotContains('myalternatesite.com', $posts[0]->getAttribute('forum_post'));
     }
 
+    public function test_blog_comments_update()
+    {
+        $this->createBlogPost();
+        $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
+            ['txt' => 'my comment']
+        );
+        $commentSlug = ForumPost::query()->first()->getSlugColumn();
+        $txt = 'my updated comment';
+        $this->patchJson('/ajax/forum/blog_posts/my-blog-post/comment',
+            ['txt' => $txt, 'reply_to' => $commentSlug]
+        );
+        $this->assertEquals($txt,$commentSlug = ForumPost::query()->first()->getAttribute('forum_post'));
+
+    }
+
+    public function test_blog_comments_favorite()
+    {
+        $this->createBlogPost();
+        $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
+            ['txt' => 'my comment']
+        );
+        $comment = ForumPost::query()->select(['forum_post_slug','forum_post_fav_cnt as cnt'])->first();
+        $this->assertEquals(0,$comment->getAttribute('cnt'));
+    }
+
     public function test_blog_comments_post_comment_too_long()
     {
         $u = $this->createUser();
@@ -88,6 +113,18 @@ class BlogCommentsTest extends TestCase
         );
         $this->assertEquals(2, ForumPost::query()->count());
         $this->assertNotNull(ForumPost::query()->get()->last()->getParentId());
+    }
+
+    public function test_blog_comments_post_comment_delete()
+    {
+        $this->createBlogPost();
+        $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
+            ['txt' => 'my comment']
+        );
+        $commentSlug = ForumPost::query()->first()->getSlugColumn();
+        $this->assertEquals(1, ForumPost::query()->count());
+        $this->deleteJson('/ajax/forum/blog_posts/my-blog-post/comment/'.$commentSlug);
+        $this->assertEquals(0, ForumPost::query()->count());
     }
 
 }

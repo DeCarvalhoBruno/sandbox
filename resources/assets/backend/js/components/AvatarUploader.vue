@@ -6,7 +6,7 @@
           <p v-show="avatars.length>0" class="font-italic">{{$t('avatar-uploader.click_default')}}</p>
           <div class="thumbnail-group" :class="{'thumbnail-loading':ajaxIsLoading}">
             <div v-show="ajaxIsLoading" class="fa-5x sync-icon">
-              <i class="fa fa-spinner fa-pulse"></i>
+              <i class="fa fa-refresh fa-pulse"></i>
             </div>
             <ul class="p-0">
               <li class="thumbnail-container"
