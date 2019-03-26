@@ -11,5 +11,28 @@ return [
         'no_result' => 'NO RESULTS',
         'more_results' => 'MORE RESULTS FOR {0}',
         'rss' => 'SEARCH RSS FEED'
+    ],
+    'wysiwyg' => [
+        'delete_link' => 'Remove link',
+        'update_link' => 'Update link',
+        'add_link' => 'Add link',
+        'no_results' => 'No results found.'
+    ],
+    'comments' => [
+        'discussion' => 'Discussion',
+        'comment' => 'Comment',
+        'login_comment' => 'Log in to comment',
+        'refresh' => 'Refresh',
+        'cancel' => 'Cancel',
+        'submit' => 'Submit',
+        'recommend' => 'Recommend',
+        'recommend-cancel' => 'Cancel recommendation',
+        'reply' => 'Reply',
+        'edit' => 'Edit comment',
+        'delete' => 'Delete comment',
+        'delete_confirm_h' => 'Comment deletion',
+        'delete_confirm_t' => 'Do you really want to delete this comment?',
+        'delete_confirm_c' => 'Go ahead',
+        'posting_warning' => 'We enforce a two minute delay between postings.'
     ]
 ];

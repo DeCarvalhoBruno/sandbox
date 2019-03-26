@@ -53,6 +53,11 @@ button{
   &:focus, &:not(:disabled):not(.disabled):active:focus {
     box-shadow: 0 0 0 0.1rem rgba(75, 15, 9, 0.2);
   }
+
+  &.disabled, &:disabled{
+    background-color: $primary;
+    border: none;
+  }
 }
 
 .btn-success {
@@ -66,6 +71,11 @@ button{
 
   &:focus, &:not(:disabled):not(.disabled):active:focus {
     box-shadow: 0 0 0 0.1rem rgba(120, 100, 26, 0.2);
+  }
+
+  &.disabled, &:disabled{
+    background-color: #2D882D;
+    border: none;
   }
 }
 
@@ -85,6 +95,11 @@ button{
   &:focus, &:not(:disabled):not(.disabled):active:focus {
     box-shadow: 0 0 0 0.1rem rgba(192, 83, 66, 0.2);
   }
+
+  &.disabled, &:disabled{
+    background-color: #fff;
+    border-color: $primary;
+  }
 }
 
 .btn-outline-info {
@@ -102,6 +117,11 @@ button{
 
   &:focus, &:not(:disabled):not(.disabled):active:focus {
     box-shadow: 0 0 0 0.1rem rgba(154, 84, 40, 0.2);
+  }
+
+  &.disabled, &:disabled{
+    background-color: #fff;
+    border-color: #226666;
   }
 }
 
@@ -146,5 +166,9 @@ button{
 .fontawesome-i2svg-active body {
   display: initial;
   transition: all 0.5s ease-in-out;
+}
+
+.min-height-2{
+  min-height:2.3rem;
 }
 

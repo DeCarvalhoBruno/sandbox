@@ -2,34 +2,42 @@
   <div id="comments-wrapper" class="container">
     <template v-if="scrolledPast">
       <div class="row" v-if="loaded">
-        <div id="comments-header" class="col-lg-8 mx-md-auto">
+        <div id="comments-header" class="col-lg-8 col-sm-12 mx-md-auto">
           <div class="w-100">
-            <h5 class="bordered"><span>Discussion</span></h5>
-            <div class="button-group">
-              <submit-button :native-type="'button'"
+            <h5 class="bordered"><span>{{$t('comments.discussion')}}</span></h5>
+            <div class="button-group" v-if="userIsAuthenticated">
+              <submit-button :native-type="'button'" v-if="userIsAuthenticated"
                              :type="'success'"
                              :loading="refreshLoading"
-                             @click="refreshComments"><i class="fa fa-refresh"></i> Refresh
+                             @click="refreshComments"><i class="fa fa-refresh"></i> {{$t('comments.refresh')}}
               </submit-button>
+              <button type="button" :disabled="!commentIsOK"
+                      class="btn btn-primary"
+                      @click="editMode=true"><i class="fa fa-reply fa-rotate-180"></i> {{$t('comments.comment')}}
+              </button>
+            </div>
+            <div class="button-group" v-else>
               <button type="button"
                       class="btn btn-primary"
-                      @click="editMode=true"><i class="fa fa-reply fa-rotate-180"></i> Comment
+                      @click="login"><i class="fa fa-reply fa-rotate-180"></i> {{$t('comments.login_comment')}}
               </button>
             </div>
           </div>
         </div>
       </div>
-      <div v-show="editMode" class="row">
-        <div class="col-lg-8 mx-md-auto">
-          <comment-editor :is-root-elem="true"
-                          :edit-mode="editMode"
-                          :slug="slug"
-                          @cancelled="editMode = false"
-                          @submitted="editMode = false"></comment-editor>
+      <transition name="fade">
+        <div v-show="editMode" class="row">
+          <div class="col-lg-8 col-sm-12 mx-md-auto mb-3">
+            <comment-editor :is-root-elem="true"
+                            :edit-mode="editMode"
+                            :slug="slug"
+                            @cancelled="editMode = false"
+                            @submitted="editMode = false"></comment-editor>
+          </div>
         </div>
-      </div>
+      </transition>
       <div class="row">
-        <div class="col-lg-8 mx-md-auto">
+        <div class="col-lg-8 col-sm-12 mx-md-auto">
           <div v-if="!loaded" class="fa-3x">
             <i class="fa fa-refresh fa-pulse"></i>
           </div>
@@ -42,7 +50,6 @@
 <script>
   import SubmitButton from 'back_path/components/SubmitButton'
   import initIntersection from 'front_path/plugins/vendor/intersection.js'
-  import swal from 'sweetalert2/dist/sweetalert2.min.js'
   import axios from 'axios'
 
   export default {
@@ -64,8 +71,10 @@
         favorites: null,
         refreshLoading: false,
         refreshIsOK: true,
-        refreshTriggerDelay: 2000,
-        userIsAuthenticated:false
+        commentIsOK: true,
+        refreshDelay: 5000,
+        commentDelay: 120000,
+        userIsAuthenticated: false
       }
     },
     components: {
@@ -81,32 +90,20 @@
       }
       this.getData()
       let vm = this
+      this.$root.$on('tiptapIsMounted', () => {
+        vm.loaded = true
+      })
       this.$root.$on('commentFavorited', (comment) => {
         axios.patch(`/ajax/forum/blog_posts/${vm.slug}/favorite/${comment.slug}`)
       })
       this.$root.$on('commentUnfavorited', (comment) => {
         axios.delete(`/ajax/forum/blog_posts/${vm.slug}/favorite/${comment.slug}`)
       })
-      this.$root.$on('tiptapIsMounted', () => {
-        vm.loaded = true
+      this.$root.$on('commentSubmitted', () => {
+          this.commentIsOK=false
+          this.commentSetDelay()
       })
-      this.$root.$on('submitComment', async ({comment}) => {
-        let response
-        if (comment.mode === 'create') {
-          response = await axios.post(`/ajax/forum/blog_posts/${vm.slug}/comment`, comment)
-        } else {
-          response = await axios.patch(`/ajax/forum/blog_posts/${vm.slug}/comment`, comment)
-        }
-        swal.fire({
-          type: response.data.type,
-          title: response.data.title,
-          position: 'top-end',
-          toast: true,
-          showConfirmButton: false,
-          timer: 8000
-        })
-      })
-      this.$root.$on('deleteComment', async ({slug}) => {
+      this.$root.$on('commentDeleted', async ({slug}) => {
         await axios.delete(`/ajax/forum/blog_posts/${vm.slug}/comment/${slug}`)
       })
       // if (!window.IntersectionObserver) {
@@ -122,11 +119,20 @@
       // this.io.observe(this.container)
     },
     methods: {
+      login(){
+
+      },
       async refreshSetDelay () {
         let vm = this
         setTimeout(async function () {
           vm.refreshIsOK = true
-        }, this.refreshTriggerDelay)
+        }, this.refreshDelay)
+      },
+      async commentSetDelay () {
+        let vm = this
+        setTimeout(async function () {
+          vm.commentIsOK = true
+        }, this.commentDelay)
       },
       async refreshComments () {
         if (this.refreshIsOK) {
@@ -144,8 +150,8 @@
     },
     beforeDestroy () {
       this.$root.$off('tiptapIsMounted')
-      this.$root.$off('submitComment')
-      this.$root.$off('deleteComment')
+      this.$root.$off('commentSubmitted')
+      this.$root.$off('commentDeleted')
       this.$root.$off('commentFavorited')
       this.$root.$off('commentUnfavorited')
     }

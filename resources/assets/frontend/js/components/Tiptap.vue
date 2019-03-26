@@ -11,15 +11,16 @@
           <input class="menububble__input" type="text" v-model="linkUrl"
                  placeholder="https://" ref="linkInput"
                  @keydown.esc="hideLinkMenu"/>
-          <button class="menububble__button" @click="setLinkUrl(commands.link, null)" type="button">
-            <i class="fa fa-strikethrough"></i>
+          <button class="menububble__button" @click="setLinkUrl(commands.link, null)"
+                  type="button" :title="$t('wysiwyg.delete_link')" :aria-label="$t('wysiwyg.delete_link')">
+            <i class="fa fa-trash"></i>
           </button>
         </form>
         <template v-else>
           <button class="menububble__button"
                   @click="showLinkMenu(getMarkAttrs('link'))"
                   :class="{ 'is-active': isActive.link() }">
-            <span>{{ isActive.link() ? 'Update Link' : 'Add Link'}}</span>
+            <span>{{ isActive.link() ? $t('wysiwyg.update_link') : $t('wysiwyg.add_link')}}</span>
             <i class="fa fa-link"></i>
           </button>
         </template>
@@ -76,7 +77,7 @@
         </div>
       </template>
       <div v-else class="suggestion-list__item is-empty">
-        No users found
+        {{$t('wysiwyg.no_results')}}
       </div>
     </div>
     <editor-content class="editor__content" :editor="editor"></editor-content>
@@ -175,10 +176,9 @@
     },
     methods: {
       properFocus () {
-        if (this.editMode!==false) {
+        if (this.editMode !== false) {
           this.editor.focus()
         }
-
       },
       showLinkMenu (attrs) {
         this.linkUrl = attrs.href
@@ -261,6 +261,9 @@
       },
       getData () {
         return this.editor.getHTML()
+      },
+      clearContent () {
+        this.editor.clearContent()
       },
       getMentionAttrs () {
         return {

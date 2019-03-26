@@ -5,18 +5,26 @@
               :edit-mode="currentEditMode"
               :is-root-elem="isRootElem"
               :content="txtContent"></tiptap>
-      <div class="w-100">
+      <div class="comment-editor-footer">
+        <div class="pull-left"><p>{{$t('comments.posting_warning')}}</p></div>
         <div class="pull-right p-2">
           <button type="button" class="btn btn-outline-primary"
-                  @click="cancelEditing">Cancel
+                  @click="cancelEditing">{{$t('comments.cancel')}}
           </button>
-          <button type="button" class="btn btn-primary" @click="save">Submit</button>
+          <submit-button :native-type="'button'"
+                         @click="save"
+                         :loading="isLoading">{{$t('comments.submit')}}
+          </submit-button>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+  import SubmitButton from 'back_path/components/SubmitButton'
+  import swal from 'sweetalert2/dist/sweetalert2.js'
+  import axios from 'axios'
+
   export default {
     name: 'comment-editor',
     props: {
@@ -26,7 +34,8 @@
       slug: {type: String}
     },
     components: {
-      Tiptap: () => import('front_path/components/Tiptap')
+      Tiptap: () => import('front_path/components/Tiptap'),
+      SubmitButton
     },
     watch: {
       watch: {
@@ -44,22 +53,52 @@
       }
     },
     data () {
-      return {}
+      return {
+        isLoading: false
+      }
+    },
+    mounted () {
     },
     methods: {
       cancelEditing () {
         this.$emit('cancelled')
       },
-      save () {
+      async save () {
+        let vm = this
+        this.isLoading = true
         let txt = this.$refs.tiptap.getData()
-        this.$root.$emit('submitComment', {
-          comment: {
-            reply_to: this.slug,
-            txt: txt,
-            mode: this.currentEditMode === 1 || this.currentEditMode === true ? 'create' : 'edit'
+        let mode = this.currentEditMode === 1 || this.currentEditMode === true ? 'create' : 'edit'
+        let response
+        if (mode === 'create') {
+          await axios.post(`/ajax/forum/blog_posts/${vm.slug}/comment`, {
+            txt: txt
+          }).then((response) => {
+            vm.fireModal(response.data)
+            vm.$refs.tiptap.clearContent()
+            vm.$root.$emit('commentSubmitted')
+            vm.$emit('submitted', {txt: txt})
+          }).catch(() => null)
+        } else {
+          response = await axios.patch(`/ajax/forum/blog_posts/${vm.slug}/comment`, {
+            reply_to: vm.slug,
+            txt: txt
+          })
+          if (typeof response.data != 'undefined') {
+            vm.fireModal(response.data)
           }
+          this.$emit('submitted', {txt: txt})
+        }
+        this.isLoading = false
+      },
+      fireModal (data) {
+        swal.fire({
+          type: data.type,
+          title: data.title,
+          position: 'top-end',
+          toast: true,
+          showConfirmButton: false,
+          timer: 8000
         })
-        this.$emit('submitted',{txt:txt})
       }
     }
   }

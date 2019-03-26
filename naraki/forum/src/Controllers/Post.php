@@ -3,6 +3,7 @@
 use App\Http\Controllers\Frontend\Controller;
 use App\Models\Entity;
 use App\Models\EntityType;
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Session;
@@ -21,6 +22,7 @@ class Post extends Controller
      */
     public function getComments($type, $slug)
     {
+//        Session::forget('last_comment');
         $entityTypeId = EntityType::getEntityTypeID(Entity::getConstant($type), $slug);
         $favorites = Session::get('favorite_list');
         $postCollection = Forum::post()->buildComments($entityTypeId)
@@ -31,15 +33,15 @@ class Post extends Controller
             $userId = !is_null(auth()->user()) ? auth()->user()->getKey() : null;
             $userMedia = EntityType::getEntityInfoFromSlug(Entity::USERS, $postUsers->toArray())
                 ->scopes(['avatars'])->select(['username', 'media_uuid as uuid', 'media_extension as ext'])->get();
-            unset($postCollection,$postUsers);
+            unset($postCollection, $postUsers);
             $media = [];
             foreach ($userMedia as $m) {
                 $media[$m->getAttribute('username')] = $m;
             }
             foreach ($dbPosts as $key => $user) {
                 $dbPosts[$key]['name'] = route_i18n('user', ['slug' => $dbPosts[$key]['username']]);
-                $dbPosts[$key]['owns'] = $dbPosts[$key]['user_id']==$userId;
-                $dbPosts[$key]['fav'] = isset($favorites[ $dbPosts[$key]['slug']]);
+                $dbPosts[$key]['owns'] = $dbPosts[$key]['user_id'] == $userId;
+                $dbPosts[$key]['fav'] = isset($favorites[$dbPosts[$key]['slug']]);
                 $dbPosts[$key]['edit_mode'] = false;
 
                 if (isset($media[$user['username']])) {
@@ -71,6 +73,7 @@ class Post extends Controller
         Forum::post()->createComment(
             (object)$request->all(), $entityTypeId, auth()->user()
         );
+        Session::put('last_comment', Carbon::now());
 
         return response([
             'type' => 'success',
@@ -92,6 +95,7 @@ class Post extends Controller
         Forum::post()->updateComment(
             (object)$request->all(), auth()->user()
         );
+        Session::put('last_comment', Carbon::now());
         return response([
             'type' => 'success',
             'title' => trans('messages.comment_update_success')

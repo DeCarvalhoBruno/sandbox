@@ -1,4 +1,9 @@
 #comments-wrapper {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+
   #comments-header {
     margin: 0;
     position: relative;
@@ -7,7 +12,6 @@
       position: absolute;
       top: 0.5rem;
       right: 3rem;
-
     }
   }
 }
@@ -15,15 +19,40 @@
 .comment-editor-container {
   margin: 0 auto;
   border: none;
+  border-radius: 3px;
+  box-shadow: #3333332b 2px 2px 8px 1px;
+
+  #tiptap-editor {
+    .menubar {
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px;
+    }
+  }
 
   .btn {
     font-size: 0.85rem;
     padding: 0.2rem 0.4rem;
     line-height: 1.4rem;
   }
+
+  .comment-editor-footer {
+    width:100%;
+    p {
+      color: #4b4b4b;
+      font-family: $font-family-title;
+      margin: 0.7rem 0.8rem 0;
+      font-size: 0.85rem;
+      font-style: italic;
+    }
+  }
 }
 
 #comments-container {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+
   .comment-item {
     margin: 0.25rem 0;
     border: none;
@@ -54,7 +83,7 @@
         float: right;
         text-align: center;
 
-        i.fa-star,i.fa-star-o {
+        i.fa-star, i.fa-star-o {
           font-size: 1.5rem;
           line-height: 1.5rem;
           padding: 0.5rem;
@@ -66,12 +95,12 @@
           }
         }
 
-        i.flip{
+        i.flip {
           backface-visibility: visible;
           animation-name: flip;
         }
 
-        i.flip.animate{
+        i.flip.animate {
           animation-duration: 1s;
         }
 
@@ -117,21 +146,21 @@
   }
 
   .comment-body {
-    pre{
-      padding: 0.7rem 1rem;
+    pre {
+      margin: 0.5rem 0;
+      padding: 0.5rem;
       border-radius: 5px;
       background: $color-black;
       color: $color-white;
       font-size: 0.8rem;
       overflow-x: auto;
+
       code {
         display: block;
       }
     }
 
     p {
-      margin: 0;
-
       code {
         display: inline-block;
         padding: 0 0.4rem;
@@ -174,25 +203,57 @@
   }
 
   40% {
-    transform: perspective(32px) scale3d(1, 1, 1) translate3d(0, 0, 0)
-    rotate3d(0, 1, 0, -190deg);
+    transform: perspective(32px) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, -190deg);
     animation-timing-function: ease-out;
   }
 
   50% {
-    transform: perspective(32px) scale3d(1, 1, 1) translate3d(0, 0, 0)
-    rotate3d(0, 1, 0, -170deg);
+    transform: perspective(32px) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, -170deg);
     animation-timing-function: ease-in;
   }
 
   80% {
-    transform: perspective(32px) scale3d(0.95, 0.95, 0.95) translate3d(0, 0, 0)
-    rotate3d(0, 1, 0, 0deg);
+    transform: perspective(32px) scale3d(0.95, 0.95, 0.95) translate3d(0, 0, 0) rotate3d(0, 1, 0, 0deg);
     animation-timing-function: ease-in;
   }
 
   to {
     transform: perspective(32px) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, 0deg);
     animation-timing-function: ease-in;
+  }
+}
+
+//.fade-enter-active, .fadeIn {
+//  -webkit-animation-name: fadeIn;
+//  animation-name: fadeIn;
+//}
+
+.fade-leave-active {
+  animation-name: fadeOut;
+  animation-duration: 0.3s;
+}
+
+.fade-enter-active {
+  animation-name: fadeIn;
+  animation-duration: 0.5s;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }

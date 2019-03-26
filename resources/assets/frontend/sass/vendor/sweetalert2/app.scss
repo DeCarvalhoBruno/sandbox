@@ -4,10 +4,14 @@
 @import './toasts';
 @import "./sweetalert2";
 
-.swal2-popup .swal2-title {
-  font-family: $font-family-title;
-  font-weight: 400;
-  color: $primary;
+.swal2-popup {
+  .swal2-title {
+    font-family: $font-family-title;
+    font-weight: 400;
+  }
+  .swal2-content{
+    font-weight: 400;
+  }
 }
 
 .swal2-popup.swal2-toast .swal2-title {

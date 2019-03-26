@@ -18,7 +18,8 @@ return [
     ],
     'form' => [
         'identical_passwords' => 'The password you entered is identical to your previous password! Please enter a different password.',
-        'wrong_password' => 'The current password you entered does not match what we have on record.'
+        'wrong_password' => 'The current password you entered does not match what we have on record.',
+        'posting_delay'=>'We enforce a two minute delay between posts. Please try again in a few moments.'
     ],
     'media' => [
         'no_file' => 'No file to process.',

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import swal from 'sweetalert2'
+import swal from 'sweetalert2/dist/sweetalert2.js'
 import i18n from 'front_path/plugins/i18n'
 
 axios.interceptors.request.use(request => {
@@ -53,6 +53,20 @@ axios.interceptors.response.use(response => response, error => {
       reverseButtons: true,
       confirmButtonText: i18n.t('general.ok')
     })
+  }
+
+  if (status === 422) {
+    if (error.response.data.hasOwnProperty('errors')) {
+      swal.fire({
+        type: 'error',
+        title: i18n.t('modal.error.h'),
+        text: Object.keys(error.response.data.errors)
+          .map(function (k) { return error.response.data.errors[k] })
+          .join('<br/>'),
+        reverseButtons: true,
+        confirmButtonText: i18n.t('general.ok')
+      })
+    }
   }
 
   return Promise.reject(error)

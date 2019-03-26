@@ -25,8 +25,10 @@ import { loadMessages } from './plugins/i18n'
           scrollTop: 0
         }, 500)
       })
-      this.offsetTop = this.$refs.wrapper.clientHeight
-      window.addEventListener('scroll', this.handleScroll)
+      if (this.$refs.hasOwnProperty('wrapper')) {
+        this.offsetTop = this.$refs.wrapper.clientHeight
+        window.addEventListener('scroll', this.handleScroll)
+      }
     },
     methods: {
       handleScroll () {

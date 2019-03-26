@@ -5,6 +5,7 @@ namespace Tests\Feature\Frontend;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Naraki\Elasticsearch\Facades\ElasticSearchIndex;
 use Naraki\Forum\Models\ForumPost;
@@ -69,6 +70,8 @@ class BlogCommentsTest extends TestCase
     public function test_blog_comments_update()
     {
         $this->createBlogPost();
+        Session::shouldReceive('get')->times(2);
+        Session::shouldReceive('put')->times(2);
         $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
             ['txt' => 'my comment']
         );
@@ -104,6 +107,8 @@ class BlogCommentsTest extends TestCase
     public function test_blog_comments_post_comment_reply()
     {
         $this->createBlogPost();
+        Session::shouldReceive('get')->times(2);
+        Session::shouldReceive('put')->times(2);
         $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
             ['txt' => 'my comment']
         );
