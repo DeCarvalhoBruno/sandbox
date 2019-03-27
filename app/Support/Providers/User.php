@@ -348,8 +348,8 @@ class User extends Model implements UserProvider, UserInterface
         }
 
         $user = $model->newQuery()->select(['email'])
-            ->where('email', $socialiteUser->getEmail());
-        if (!$user->exists()) {
+            ->where('email', $socialiteUser->getEmail())->first();
+        if (is_null($user)) {
             $nickname = $socialiteUser->getNickname();
             if (is_null($nickname)) {
                 $nickname = $socialiteUser->getName();

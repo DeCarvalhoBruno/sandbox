@@ -108,10 +108,6 @@ var handleSingleClickSignOn = function (googleyolo) {
       ]
     }).then(function (credentials) {
       axios.post('/oauth-yolo', {
-        domain: credentials.authDomain,
-        full_name: credentials.displayName,
-        email: credentials.id,
-        avatar: credentials.profilePicture,
         google_token: credentials.idToken
       }).then(function (data) {
 

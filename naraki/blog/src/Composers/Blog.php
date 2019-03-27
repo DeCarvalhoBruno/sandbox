@@ -22,9 +22,8 @@ class Blog extends Composer
                 'post' => $data['post'],
                 'media' => $data['media']
             ]);
-            $data['breadcrumbs'] = Breadcrumbs::render($data['breadcrumbs']);
         }
-
+        $data['breadcrumbs'] = Breadcrumbs::render($data['breadcrumbs']);
         $hasFacebook = \Cache::get('settings_has_facebook');
         $socialSettings = \Cache::get('settings_social');
         $socialTagManager = new \Naraki\Blog\Support\Social\Blog();

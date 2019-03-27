@@ -8,7 +8,6 @@ use Firebase\JWT\JWT;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\User;
@@ -63,7 +62,7 @@ class OAuth extends Controller
     public function googleYolo(Request $request, UserProvider $userRepo)
     {
         $provider = 'google';
-        $input = $request->only(['domain', 'full_name', 'email', 'avatar', 'google_token']);
+        $input = $request->only(['google_token']);
         $jwt = new JWT();
         //Default leeway defaults to 1 second which is insufficient to do the token check in time.
         $jwt::$leeway = 10;
@@ -71,19 +70,12 @@ class OAuth extends Controller
             'client_id' => config('services.google.client_id'),
             'jwt' => $jwt
         ]);
-
         $tokenContents = $client->verifyIdToken($input['google_token']);
         if ($tokenContents !== false) {
-            $socialiteUser = (new User)->setRaw($input)->map([
-                'id' => $tokenContents['sub'],
-                'nickname' => Arr::get($tokenContents, 'full_name'),
-                'name' => Arr::get($tokenContents, 'full_name'),
-                'email' => Arr::get($tokenContents, 'email'),
-                'avatar' => Arr::get($tokenContents, 'avatar'),
-            ]);
-//            $socialiteUser->setExpiresIn($tokenContents['exp']);
+            $socialiteUser = (new User)->setRaw($tokenContents);
+            $socialiteUser->setExpiresIn($tokenContents['exp']);
             $this->processUser($request, $userRepo, $provider, $socialiteUser);
-            \Cookie::queue('google_verified',true,(60*60*24*365/60));
+            \Cookie::queue('google_verified', true, 60 * 60 * 24 * 365);
             return response(null, Response::HTTP_NO_CONTENT);
         } else {
             return response(null, Response::HTTP_INTERNAL_SERVER_ERROR);
