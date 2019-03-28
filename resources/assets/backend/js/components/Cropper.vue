@@ -74,7 +74,7 @@
           this.$emit(
             'cropper_cropped',
             this.cropper.getData(true),
-            this.cropper.getCroppedCanvas({imageSmoothingQuality: 'high', width: 128, height: 128})
+            this.cropper.getCroppedCanvas({imageSmoothingQuality: 'high', width: 256, height: 256})
           )
         }
       },

@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Http\Controllers\Frontend\Auth;
+<?php namespace Naraki\Oauth\Controllers;
 
 use App\Contracts\Models\User as UserProvider;
 use App\Http\Controllers\Frontend\Controller;
@@ -10,7 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
-use Laravel\Socialite\Two\User;
+use Laravel\Socialite\Two\User as SocialiteUser;
+use Naraki\Oauth\Exceptions\EmailNotVerified;
+use Naraki\Oauth\Socialite\GoogleUser;
 
 class OAuth extends Controller
 {
@@ -50,8 +50,9 @@ class OAuth extends Controller
     {
         $socialiteUser = Socialite::driver($provider)->stateless()->user();
         $this->processUser($request, $userRepo, $provider, $socialiteUser);
+        \Cookie::queue('google_verified', true, 60 * 60 * 24 * 365);
 
-        return view('frontend.oauth.callback');
+        return view('oauth::callback');
     }
 
     /**
@@ -62,7 +63,7 @@ class OAuth extends Controller
     public function googleYolo(Request $request, UserProvider $userRepo)
     {
         $provider = 'google';
-        $input = $request->only(['google_token']);
+        $input = $request->only(['google_token','avatar']);
         $jwt = new JWT();
         //Default leeway defaults to 1 second which is insufficient to do the token check in time.
         $jwt::$leeway = 10;
@@ -72,9 +73,12 @@ class OAuth extends Controller
         ]);
         $tokenContents = $client->verifyIdToken($input['google_token']);
         if ($tokenContents !== false) {
-            $socialiteUser = (new User)->setRaw($tokenContents);
-            $socialiteUser->setExpiresIn($tokenContents['exp']);
-            $this->processUser($request, $userRepo, $provider, $socialiteUser);
+            $tokenContents['picture'] = $input['avatar'];
+            try {
+                $this->processUserYolo($request, $userRepo, $provider, new GoogleUser($tokenContents));
+            } catch (EmailNotVerified $e) {
+                return response('email not verified', Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
             \Cookie::queue('google_verified', true, 60 * 60 * 24 * 365);
             return response(null, Response::HTTP_NO_CONTENT);
         } else {
@@ -86,13 +90,36 @@ class OAuth extends Controller
      * @param \Illuminate\Http\Request $request
      * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
      * @param string $provider
+     * @param \Naraki\Oauth\Socialite\GoogleUser $socialiteUser
+     */
+    private function processUserYolo($request, $userRepo, $provider, GoogleUser $socialiteUser)
+    {
+        $user = $userRepo->processViaYolo($provider, $socialiteUser);
+        $this->login($request, $user);
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
+     * @param string $provider
      * @param \Laravel\Socialite\Two\User $socialiteUser
      */
-    private function processUser($request, $userRepo, $provider, $socialiteUser)
+    private function processUser($request, $userRepo, $provider, SocialiteUser $socialiteUser)
     {
         $user = $userRepo->processViaOAuth($provider, $socialiteUser);
+        $this->login($request, $user);
 
-        $request->session()->regenerate();
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param $user
+     */
+    private function login($request, $user)
+    {
+        if (env('APP_ENV') !== 'testing') {
+            $request->session()->regenerate();
+        }
 
         \Auth::guard('jwt')->login($user);
         \Session::put('jwt_token', \Auth::guard('jwt')->login($user));

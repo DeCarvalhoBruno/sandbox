@@ -29,7 +29,7 @@ class ImageUpload
 
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getTargetName()
     {
@@ -37,7 +37,7 @@ class ImageUpload
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getTargetSlug()
     {

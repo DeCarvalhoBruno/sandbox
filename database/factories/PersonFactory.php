@@ -9,7 +9,6 @@ $factory->define(App\Models\Person::class, function (Faker $faker) {
     return [
         'email' => $faker->unique()->email,
         'first_name' => $fn,
-        'last_name' => $ln,
-        'person_slug' => slugify($fn . ' ' . $ln)
+        'last_name' => $ln
     ];
 });

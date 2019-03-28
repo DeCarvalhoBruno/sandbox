@@ -49,7 +49,7 @@ class Search extends Blog implements RssFeedable
         $client = new Client();
         $request = new \GuzzleHttp\Psr7\Request(
             'POST',
-            sprintf('http://lumen.local/search/?q=%s&size=15&sort=title&order=asc', $slug)
+            sprintf('%s/search/?q=%s&size=15&sort=title&order=asc', env('ELASTIC_SEARCH_URL'), $slug)
         );
 
         $instance = $this;

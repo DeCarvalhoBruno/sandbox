@@ -6,14 +6,14 @@ use Intervention\Image\ImageManagerStatic;
 
 class ImageProcessor extends InterventionImage
 {
-    public static $thumbnailHeight = 128;
-    public static $thumbnailWidth = 128;
+    public static $thumbnailHeight = 256;
+    public static $thumbnailWidth = 256;
     public static $imageDriver = 'imagick';
     public static $quality = 80;
 
 
     /**
-     * @param string $path
+     * @param string|\Psr\Http\Message\StreamInterface $path
      * @return \Intervention\Image\Image
      */
     public static function makeImg($path)

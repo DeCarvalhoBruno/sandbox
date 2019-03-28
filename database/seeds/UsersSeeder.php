@@ -76,7 +76,7 @@ class UsersSeeder extends Seeder
             'last_name' => env('MAIN_ACCOUNT_LAST_NAME'),
             'person_slug' => slugify(
                 env('MAIN_ACCOUNT_FIRST_NAME') . ' ' .
-                env('MAIN_ACCOUNT_LAST_NAME')
+                env('MAIN_ACCOUNT_LAST_NAME'), '_'
             ),
             'user_id' => $u->getAttribute('user_id')
         ]);
@@ -94,7 +94,7 @@ class UsersSeeder extends Seeder
         ]);
 
         $locales = ['fi_FI', 'fr_FR', 'en_US', 'hu_HU', 'pt_PT', 'es_ES'];
-        $usernames =$slugs = [];
+        $usernames = $slugs = [];
         $faker = Faker\Factory::create();
 
         for ($i = 1; $i <= 500; $i++) {
@@ -103,8 +103,12 @@ class UsersSeeder extends Seeder
             }
             $fn = ($faker->unique()->firstName);
             $ln = ($faker->unique()->lastName);
-            $ps =  slugify($fn . ' ' . $ln);
-            $username = (substr(slugify(strtolower(substr($fn, 0, 1)) . '_' . slugify($ln)), 0, 15));
+            $ps = slugify($fn . ' ' . $ln);
+            $username = substr(
+                slugify(strtolower(substr($fn, 0, 1)) . '_' . slugify($ln), '_'),
+                0,
+                15
+            );
 
             if (isset($usernames[$username])) {
                 $usernames[$username]++;
@@ -131,7 +135,7 @@ class UsersSeeder extends Seeder
                 ),
                 'first_name' => $fn,
                 'last_name' => $ln,
-                'person_slug' =>($slugs[$ps] == 0) ? $ps : $ps . $slugs[$ps],
+                'person_slug' => ($slugs[$ps] == 0) ? $ps : $ps . $slugs[$ps],
                 'user_id' => $u->getAttribute('user_id'),
                 'created_at' => $faker->dateTimeBetween('-2 years')
             ]);

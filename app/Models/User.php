@@ -2,12 +2,10 @@
 
 use App\Contracts\Enumerable as EnumerableContract;
 use App\Contracts\HasAnEntity;
-use Naraki\Permission\Contracts\HasPermissions;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
-use App\Traits\Models\HasASlugColumn;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
-use Naraki\Permission\Traits\HasPermissions as HasPermissionsTrait;
+use App\Traits\Models\HasASlugColumn;
 use App\Traits\Models\Presentable;
 use Carbon\Carbon;
 use Illuminate\Bus\Dispatcher;
@@ -18,11 +16,15 @@ use Illuminate\Notifications\Notifiable;
 use Naraki\Mail\Emails\User\PasswordReset;
 use Naraki\Mail\Jobs\SendMail;
 use Naraki\Media\Models\MediaEntity;
+use Naraki\Oauth\Contracts\HasOauthScope as HasOauthScopeInterface;
+use Naraki\Oauth\Traits\HasOauthScope;
+use Naraki\Permission\Contracts\HasPermissions;
+use Naraki\Permission\Traits\HasPermissions as HasPermissionsTrait;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermissions, EnumerableContract
+class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermissions, EnumerableContract, HasOauthScopeInterface
 {
-    use Notifiable, HasAnEntityTrait, HasASlugColumn, DoesSqlStuff, Enumerable, Presentable, HasPermissionsTrait;
+    use Notifiable, HasAnEntityTrait, HasASlugColumn, DoesSqlStuff, Enumerable, Presentable, HasPermissionsTrait,HasOauthScope;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;
@@ -329,18 +331,6 @@ class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermission
     public function scopeAvatars(Builder $builder, $inUse = true)
     {
         return MediaEntity::scopeImage($builder, $inUse);
-    }
-
-    /**
-     * @link https://laravel.com/docs/eloquent#local-scopes
-     * @param \Illuminate\Database\Eloquent\Builder $builder
-     * @param array $wheres
-     * @return \Illuminate\Database\Eloquent\Builder $builder
-     */
-    public function scopeOauth(Builder $builder, $wheres = null)
-    {
-        return $this->joinWithWheres($builder, OAuthProvider::class, $wheres);
-
     }
 
 }

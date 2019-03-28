@@ -40,6 +40,16 @@ class SimpleImage extends ImageUpload implements Image
 
     }
 
+    /**
+     * @param \Psr\Http\Message\StreamInterface $stream
+     */
+    public function cropAvatarFromStream($stream){
+        ImageProcessor::saveImg(
+            ImageProcessor::makeCroppedImage($stream),
+            media_entity_root_path($this->targetType, Media::IMAGE_AVATAR, $this->hddFilename)
+        );
+    }
+
 
 
 }

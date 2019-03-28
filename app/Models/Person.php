@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\Models\HasASlugColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Person extends Model
 {
@@ -24,6 +25,44 @@ class Person extends Model
         'created_at',
         'updated_at'
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(
+            function ($model) {
+                $model->person_slug = slugify(
+                    substr(sprintf('%s %s', $model->first_name, $model->last_name), 0, 150)
+                );
+                if (empty($model->person_slug)) {
+                    $model->person_slug = slugify(
+                        substr($model->full_name, 0, 150)
+                    );
+                }
+                if (empty($model->person_slug)) {
+                    $model->person_slug = Str::random(15);
+                }
+
+                $latestSlug =
+                    static::select(['person_slug'])
+                        ->whereRaw(sprintf(
+                                'person_slug = "%s" or person_slug LIKE "%s-%%"',
+                                $model->person_slug,
+                                $model->person_slug)
+                        )
+                        ->latest($model->getKeyName())
+                        ->value('person_slug');
+                if ($latestSlug) {
+                    $pieces = explode('-', $latestSlug);
+
+                    $number = intval(end($pieces));
+
+                    $model->person_slug .= sprintf('-%s', ($number + 1));
+                }
+            }
+        );
+    }
 
     /**
      * @param string $email

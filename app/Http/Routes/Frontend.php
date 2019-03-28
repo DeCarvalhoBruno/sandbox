@@ -49,9 +49,6 @@ class Frontend extends Routes
                 ->name(self::i18nRouteNames($locale, 'activate'));
 
             $r->post('login', 'Auth\Login@login')->name('login.post');
-            $r->post('oauth/{driver}', 'Auth\OAuth@redirectToProvider')->name('oauth');
-            $r->get('oauth/{driver}/callback', 'Auth\OAuth@handleProviderCallback')->name('oauth.callback');
-            $r->post('oauth-yolo', 'Auth\OAuth@googleYolo');
 
             $r->get(trans('routes.register', [], $locale), 'Auth\Register@showRegistrationForm')
                 ->name(self::i18nRouteNames($locale, 'register'));

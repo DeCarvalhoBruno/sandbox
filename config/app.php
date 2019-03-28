@@ -161,6 +161,7 @@ return [
         Naraki\Sitemap\ServiceProvider::class,
         Naraki\System\ServiceProvider::class,
         Naraki\Permission\ServiceProvider::class,
+        Naraki\Oauth\ServiceProvider::class,
 
         /*
          * Application Service Providers...

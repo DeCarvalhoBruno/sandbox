@@ -1,7 +1,6 @@
-<?php
+<?php namespace Naraki\Oauth\Models;
 
-namespace App\Models;
-
+use App\Models\User;
 use App\Traits\Models\DoesSqlStuff;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -13,9 +12,13 @@ class OAuthProvider extends Model
     protected $table = 'system_oauth_providers';
     protected $primaryKey = 'oauth_provider_id';
     protected $guarded = ['oauth_provider_id'];
-    protected $hidden = [
+    protected $fillable = [
+        'user_id',
+        'provider_user_id',
+        'provider',
         'access_token',
         'refresh_token',
+        'created_at'
     ];
 
     /**

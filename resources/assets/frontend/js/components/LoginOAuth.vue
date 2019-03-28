@@ -14,7 +14,9 @@
       provider: {required: true, type: String}
     },
     mounted () {
-      window.addEventListener('message', this.onMessage, false)
+      this.$nextTick(() => {
+        window.addEventListener('message', this.onMessage, false)
+      })
     },
     beforeDestroy () {
       window.removeEventListener('message', this.onMessage)

@@ -3,7 +3,6 @@
 use App\Contracts\Image as ImageContract;
 use App\Models\Entity;
 use App\Models\EntityType;
-use Naraki\Media\Models\Views\EntitiesWithMedia;
 use App\Support\Providers\Model;
 use Naraki\Media\Contracts\Avatar as AvatarInterface;
 use Naraki\Media\Contracts\Image as ImageInterface;
@@ -15,6 +14,7 @@ use Naraki\Media\Models\MediaImgFormat;
 use Naraki\Media\Models\MediaImgFormatType;
 use Naraki\Media\Models\MediaRecord;
 use Naraki\Media\Models\MediaType;
+use Naraki\Media\Models\Views\EntitiesWithMedia;
 use Naraki\Media\Support\ImageProcessor;
 
 /**
@@ -79,7 +79,6 @@ class Image extends Model implements ImageInterface
     /**
      * @param \App\Contracts\Image $image
      * @return int
-     * @throws \Throwable
      */
     public function saveAvatar(ImageContract $image)
     {
@@ -90,6 +89,10 @@ class Image extends Model implements ImageInterface
         return $targetEntityTypeId;
     }
 
+    /**
+     * @param \App\Contracts\Image $image
+     * @return array|int
+     */
     private function getTargetEntity(ImageContract $image)
     {
         return EntityType::getEntityTypeID($image->getTargetType(), $image->getTargetSlug());
@@ -99,7 +102,6 @@ class Image extends Model implements ImageInterface
      * @param \App\Contracts\Image $image
      * @param array $formats
      * @return array|int
-     * @throws \Throwable
      */
     public function saveImageDb(ImageContract $image, $formats = null)
     {
@@ -117,7 +119,6 @@ class Image extends Model implements ImageInterface
      * @param bool $setAsUsed
      * @param array $formats
      * @return void
-     * @throws \Throwable
      */
     public function createImage($media, $entityTypeID, $setAsUsed = true, $formats = null)
     {

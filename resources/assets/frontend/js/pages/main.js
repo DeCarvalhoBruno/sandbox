@@ -83,7 +83,6 @@ import swal from 'sweetalert2/dist/sweetalert2.js'
 })(jQuery)
 
 var handleSingleClickSignOn = function (googleyolo) {
-  // if (window.location.href.match(/localhost/)===null) {
   googleyolo.retrieve({
     supportedAuthMethods: [
       'https://accounts.google.com'
@@ -108,12 +107,14 @@ var handleSingleClickSignOn = function (googleyolo) {
       ]
     }).then(function (credentials) {
       axios.post('/oauth-yolo', {
-        google_token: credentials.idToken
+        google_token: credentials.idToken,
+        avatar: credentials.profilePicture
       }).then(function (data) {
-
+        window.location.href = window.location.pathname +
+          window.location.search + window.location.hash
       })
     }).catch(function (error) {
-
+      //@TODO: handle 422s
     })
   })
 }

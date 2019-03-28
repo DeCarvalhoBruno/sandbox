@@ -2,15 +2,17 @@
 
 use App\Contracts\Models\Person as PersonInterface;
 use App\Contracts\Models\User as UserInterface;
-use App\Models\OAuthProvider;
+
 use App\Models\Stats\StatUser;
 use App\Models\User as UserModel;
 use App\Models\UserActivation;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Hashing\BcryptHasher;
 use Illuminate\Support\Str;
-use Laravel\Socialite\Two\User as SocialiteUser;
+use Naraki\Oauth\Contracts\OauthProcessable as OauthProcessableInterface;
+use Naraki\Oauth\Traits\OauthProcessable;
 use Tymon\JWTAuth\JWTGuard;
 
 /**
@@ -19,8 +21,10 @@ use Tymon\JWTAuth\JWTGuard;
  * @method \App\Models\User createModel(array $attributes = [])
  * @method \App\Models\User getOne($id, $columns = ['*'])
  */
-class User extends Model implements UserProvider, UserInterface
+class User extends Model implements UserProvider, UserInterface, OauthProcessableInterface
 {
+    use OauthProcessable, DispatchesJobs;
+
     protected $model = \App\Models\User::class;
     /**
      * @var \Illuminate\Contracts\Hashing\Hasher
@@ -320,85 +324,6 @@ class User extends Model implements UserProvider, UserInterface
             StatUser::query()->where('user_id', $user->getKey())
                 ->update(['stat_user_timezone' => intval($values['stat_user_timezone'])]);
         }
-    }
-
-    /**
-     * @param string $provider
-     * @param \Laravel\Socialite\Two\User $socialiteUser
-     * @return \App\Models\User
-     */
-    public function processViaOAuth(string $provider, SocialiteUser $socialiteUser): UserModel
-    {
-        $model = $this->createModel();
-        $user = $model->newQuery()
-            ->oauth([
-                'provider' => $provider,
-                'provider_user_id' => $socialiteUser->getId()
-            ])
-            ->first();
-        if (!is_null($user)) {
-            OAuthProvider::query()
-                ->where('oauth_provider_id', $user->getAttribute('oauth_provider_id'))
-                ->update([
-                    'access_token' => $socialiteUser->token,
-                    'refresh_token' => $socialiteUser->refreshToken,
-                ]);
-
-            return $user;
-        }
-
-        $user = $model->newQuery()->select(['email'])
-            ->where('email', $socialiteUser->getEmail())->first();
-        if (is_null($user)) {
-            $nickname = $socialiteUser->getNickname();
-            if (is_null($nickname)) {
-                $nickname = $socialiteUser->getName();
-            }
-            $username = substr(slugify($nickname, '_'), 0, 15);
-
-            if ($model->newQueryWithoutScopes()->select(['username'])
-                ->where('username', $username)->exists()) {
-                $latestUsername =
-                    $model->newQueryWithoutScopes()->select(['username'])
-                        ->whereRaw(sprintf(
-                                'blog_post_slug = "%s" or blog_post_slug LIKE "%s-%%"',
-                                $username,
-                                $username)
-                        )
-                        ->latest($model->getKeyName())
-                        ->value('username');
-                if ($latestUsername) {
-                    $pieces = explode('-', $latestUsername);
-
-                    $number = intval(end($pieces));
-
-                    $suffix = sprintf('-%s', ($number + 1));
-                    $username = substr($username, 0, -(strlen($suffix))) . $suffix;
-                }
-            }
-
-            $user = $this->createModel([
-                'username' => $username,
-                'activated' => true
-            ]);
-            $user->save();
-            $this->person->createModel([
-                    'user_id' => $user->getKey(),
-                    'email' => $socialiteUser->getEmail(),
-                    'full_name' => $socialiteUser->getName()
-                ]
-            )->save();
-        }
-        OAuthProvider::query()->create([
-            'user_id' => $user->getKey(),
-            'provider' => $provider,
-            'provider_user_id' => $socialiteUser->getId(),
-            'access_token' => $socialiteUser->token,
-            'refresh_token' => $socialiteUser->refreshToken,
-        ]);
-
-        return $user;
-
     }
 
     /**

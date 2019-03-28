@@ -28,10 +28,10 @@ return [
     'shape' => 'square',
 
     // Image width, in pixel
-    'width'    => 128,
+    'width'    => 256,
 
     // Image height, in pixel
-    'height'   => 128,
+    'height'   => 256,
 
     // Number of characters used as initials. If name consists of single word, the first N character will be used
     'chars'    => 2,
