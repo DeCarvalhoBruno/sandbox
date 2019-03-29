@@ -9,7 +9,8 @@
     font-family: $font-family-title;
     font-weight: 400;
   }
-  .swal2-content{
+
+  .swal2-content {
     font-weight: 400;
   }
 }
@@ -18,8 +19,6 @@
   font-size: 1.2rem;
 }
 
-body.swal2-toast-shown.swal2-shown {
-  .swal2-header {
-    padding: 0.3rem 2.5rem;
-  }
+.swal2-popup.swal2-toast.swal2-show {
+  padding: 2rem;
 }

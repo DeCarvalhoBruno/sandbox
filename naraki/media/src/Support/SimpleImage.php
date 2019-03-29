@@ -21,7 +21,7 @@ class SimpleImage extends ImageUpload implements Image
         $this->hddFilename = sprintf('%s.%s', $uuid, $extension);
         $this->filename = $filename;
         $this->fileExtension = $extension;
-        $this->uuid =$uuid;
+        $this->uuid = $uuid;
         $this->targetType = $type;
         $this->mediaType = $mediaType;
     }
@@ -42,14 +42,16 @@ class SimpleImage extends ImageUpload implements Image
 
     /**
      * @param \Psr\Http\Message\StreamInterface $stream
+     * @return \Naraki\Media\Support\SimpleImage
      */
-    public function cropAvatarFromStream($stream){
+    public function cropAvatarFromStream($stream)
+    {
         ImageProcessor::saveImg(
             ImageProcessor::makeCroppedImage($stream),
             media_entity_root_path($this->targetType, Media::IMAGE_AVATAR, $this->hddFilename)
         );
+        return $this;
     }
-
 
 
 }

@@ -8,6 +8,10 @@ return [
             'user_not_found' => 'We could not find a user by that username.',
             'blog_post_not_found' => 'We could not find a blog post by that name.'
         ],
+        '422'=>[
+          'oauth_email_unverif'=>'The email address used to log in is not verified, therefore we cannot create an account 
+          on this platform. We require a verified email address to get in touch with you if needed.'
+        ],
         '403' => "Access to this resource is forbidden.",
         '404' => "Looks like we weren't able to locate that resource. Our apologies.",
         '405' => "The platform cannot process a request with that method.",

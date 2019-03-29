@@ -1,7 +1,7 @@
 <?php namespace Naraki\Oauth\Traits;
 
 use App\Models\User as UserModel;
-use Laravel\Socialite\Two\User as SocialiteUser;
+use Laravel\Socialite\Contracts\User as SocialiteUser;
 use Naraki\Media\Jobs\ProcessAvatar;
 use Naraki\Oauth\Models\OAuthProvider;
 use Naraki\Oauth\Socialite\GoogleUser;
@@ -67,9 +67,8 @@ trait OauthProcessable
                 'full_name' => $socialiteUser->getAttribute('fullName')
             ])->save();
             $avatarUrl = $socialiteUser->getAttribute('avatar');
-            if (!is_null($avatarUrl) && !empty($avatarUrl)) {
-                $this->dispatch(new ProcessAvatar($avatarUrl, $username));
-            }
+
+            $this->dispatch(new ProcessAvatar($avatarUrl, $username));
             $user = $model->newQuery()
                 ->select(['users.*', 'people.*', 'entity_type_id'])
                 ->scopes(['entityType'])
@@ -88,7 +87,7 @@ trait OauthProcessable
 
     /**
      * @param string $provider
-     * @param \Laravel\Socialite\Two\User $socialiteUser
+     * @param \Laravel\Socialite\Contracts\User $socialiteUser
      * @return \App\Models\User
      */
     public function processViaOAuth(string $provider, SocialiteUser $socialiteUser): UserModel
@@ -111,7 +110,7 @@ trait OauthProcessable
                 ->where('oauth_provider_id', $user->getAttribute('oauth_provider_id'))
                 ->update([
                     'access_token' => $socialiteUser->token,
-                    'refresh_token' => $socialiteUser->refreshToken,
+                    'refresh_token' => $socialiteUser->refreshToken ?? null,
                 ]);
             return $user;
         } else {
@@ -141,9 +140,7 @@ trait OauthProcessable
                 ]
             )->save();
             $avatarUrl = $socialiteUser->getAvatar();
-            if (!is_null($avatarUrl) && !empty($avatarUrl)) {
-                $this->dispatch(new ProcessAvatar($avatarUrl, $username));
-            }
+            $this->dispatch(new ProcessAvatar($avatarUrl, $username));
             $user = $model->newQuery()
                 ->select(['users.*', 'people.*', 'entity_type_id'])
                 ->scopes(['entityType'])
@@ -155,7 +152,7 @@ trait OauthProcessable
             'provider' => $provider,
             'provider_user_id' => $socialiteUser->getId(),
             'access_token' => $socialiteUser->token,
-            'refresh_token' => $socialiteUser->refreshToken,
+            'refresh_token' => $socialiteUser->refreshToken ?? null,
         ]);
 
         return $user;

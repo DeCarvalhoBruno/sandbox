@@ -112,9 +112,25 @@ var handleSingleClickSignOn = function (googleyolo) {
       }).then(function (data) {
         window.location.href = window.location.pathname +
           window.location.search + window.location.hash
+      }).catch(function (error) {
+        if (error.hasOwnProperty('response')) {
+          if (error.response.hasOwnProperty('data')) {
+            swal.fire({
+              type: 'warning',
+              title: error.response.data,
+              position: 'top-end',
+              toast: true,
+              showConfirmButton: false,
+              timer: 16000
+            })
+          }
+        }
+
       })
-    }).catch(function (error) {
-      //@TODO: handle 422s
+    }).catch(function (e) {
+      if (e.type === 'userCanceled') {
+        axios.post('/oauth-yolo-dismiss')
+      }
     })
   })
 }

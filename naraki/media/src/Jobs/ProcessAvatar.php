@@ -53,40 +53,63 @@ class ProcessAvatar extends Job
 
     public function processAvatar()
     {
-        $contentTypes = [
-            'image/gif' => 'gif',
-            'image/jpeg' => 'jpg',
-            'image/jpg' => 'jpg',
-            'image/png' => 'png',
-        ];
-        $url = vsprintf('%s://%s%s', parse_url($this->url));
-        $fileStream = null;
-        try {
-            $client = new Client();
-            $response = $client->get($url);
-            $status = $response->getStatusCode();
-            $headers = $response->getHeaders();
-            if ($status === 200) {
-                if (isset($headers['Content-Type'])) {
-                    if (isset($contentTypes[$headers['Content-Type'][0]])) {
-                        $extension = $contentTypes[$headers['Content-Type'][0]];
-                        $avatarInfo = new SimpleImage(
-                            $this->username,
-                            $this->username,
-                            Entity::USERS,
-                            Media::IMAGE_AVATAR,
-                            $extension,
-                            sprintf('%s_%s', $this->username, makeHexUuid())
-                        );
-                        $avatarInfo->cropAvatarFromStream($response->getBody());
-                        MediaProvider::image()->saveAvatar($avatarInfo);
+        if (!is_null($this->url) && !empty($this->url)) {
+            $contentTypes = [
+                'image/gif' => 'gif',
+                'image/jpeg' => 'jpg',
+                'image/jpg' => 'jpg',
+                'image/png' => 'png',
+            ];
+            $url = vsprintf('%s://%s%s', parse_url($this->url));
+            $fileStream = null;
+            try {
+                $client = new Client();
+                $response = $client->get($url);
+                $status = $response->getStatusCode();
+                $headers = $response->getHeaders();
+                if ($status === 200) {
+                    if (isset($headers['Content-Type'])) {
+                        if (isset($contentTypes[$headers['Content-Type'][0]])) {
+                            $avatarInfo = $this->makeSimpleImage($contentTypes[$headers['Content-Type'][0]])
+                                ->cropAvatarFromStream($response->getBody());
+                        }
                     }
                 }
+                unset($response);
+            } catch (\Exception $e) {
+                Log::critical('Error in Job ProcessAvatar',
+                    [
+                        'message' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString()
+                    ]);
             }
-            unset($response);
-        } catch (\Exception $e) {
-dd($e);
+        } else {
+            $avatarInfo = $this->makeGeneratedAvatar()->processAvatar();
         }
+        MediaProvider::image()->saveAvatar($avatarInfo);
+    }
+
+    public function makeGeneratedAvatar()
+    {
+        return new \Naraki\Media\Support\GeneratedAvatar(
+            $this->username,
+            $this->username,
+            Entity::USERS,
+            Media::IMAGE_AVATAR
+        );
+    }
+
+    public function makeSimpleImage($extension)
+    {
+        return new SimpleImage(
+            $this->username,
+            $this->username,
+            Entity::USERS,
+            Media::IMAGE_AVATAR,
+            $extension,
+            sprintf('%s_%s', $this->username, makeHexUuid())
+        );
+
     }
 
     public function __get($value)

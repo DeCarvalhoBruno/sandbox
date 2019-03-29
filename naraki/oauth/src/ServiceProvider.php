@@ -30,6 +30,7 @@ class ServiceProvider extends LaravelServiceProvider
             $r->post('oauth/{driver}', 'OAuth@redirectToProvider')->name('oauth');
             $r->get('oauth/{driver}/callback', 'OAuth@handleProviderCallback')->name('oauth.callback');
             $r->post('oauth-yolo', 'OAuth@googleYolo');
+            $r->post('oauth-yolo-dismiss', 'OAuth@googleYoloDismiss');
         });
 
     }

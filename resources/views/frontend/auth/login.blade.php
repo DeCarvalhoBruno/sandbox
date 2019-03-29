@@ -81,6 +81,7 @@
                                         <div class="form-group row mt-2 min-height-2">
                                             <div class="m-auto min-height-2">
                                                 <login-o-auth :provider="'google'"></login-o-auth>
+                                                <login-o-auth :provider="'twitter'"></login-o-auth>
                                             </div>
                                         </div>
                                         <div class="form-group row mt-5 min-height-2">

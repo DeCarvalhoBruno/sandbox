@@ -6,6 +6,10 @@ use Laravolt\Avatar\Avatar;
 class GeneratedAvatar extends ImageUpload implements Image
 {
     protected $fileExtension = 'png';
+    /**
+     * @var \Laravolt\Avatar\Avatar
+     */
+    private $avatar;
 
     /**
      *
@@ -13,7 +17,6 @@ class GeneratedAvatar extends ImageUpload implements Image
      * @param $targetName
      * @param $targetType
      * @param $mediaType
-     * @throws \Exception
      */
     public function __construct($targetSlug, $targetName, $targetType, $mediaType)
     {
@@ -24,13 +27,18 @@ class GeneratedAvatar extends ImageUpload implements Image
         $this->path = media_entity_root_path($targetType, $mediaType);
         $this->targetType = $targetType;
         $this->mediaType = $mediaType;
+        $this->avatar = new Avatar(app('config')->get('laravolt.avatar'));
     }
 
-    public function processAvatar()
+    /**
+     * @return \Naraki\Media\Support\GeneratedAvatar
+     */
+    public function processAvatar(): self
     {
-        (new Avatar(app('config')->get('laravolt.avatar')))
+        $this->avatar
             ->create(strtoupper($this->targetName))
             ->save($this->path . $this->filename);
+        return $this;
     }
 
 

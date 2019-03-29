@@ -63,35 +63,7 @@ class UsersSeeder extends Seeder
             'user_id' => $u->getAttribute('user_id')
         ]);
 
-        $u = factory(App\Models\User::class)->create([
-            'username' => env('MAIN_ACCOUNT_USERNAME'),
-            'password' => $pwd,
-            'activated' => true,
-            'remember_token' => null,
-        ]);
-
-        factory(App\Models\Person::class)->create([
-            'email' => env('MAIN_ACCOUNT_EMAIL'),
-            'first_name' => env('MAIN_ACCOUNT_FIRST_NAME'),
-            'last_name' => env('MAIN_ACCOUNT_LAST_NAME'),
-            'person_slug' => slugify(
-                env('MAIN_ACCOUNT_FIRST_NAME') . ' ' .
-                env('MAIN_ACCOUNT_LAST_NAME'), '_'
-            ),
-            'user_id' => $u->getAttribute('user_id')
-        ]);
-
-        $this->createAvatar(env('MAIN_ACCOUNT_USERNAME'),
-            env('MAIN_ACCOUNT_FIRST_NAME') . ' ' . env('MAIN_ACCOUNT_LAST_NAME'));
-
-        factory(App\Models\GroupMember::class)->create([
-            "group_id" => 2,
-            'user_id' => $u->getAttribute('user_id')
-        ]);
-        factory(App\Models\GroupMember::class)->create([
-            "group_id" => 4,
-            'user_id' => $u->getAttribute('user_id')
-        ]);
+        $this->makeDevAccount($pwd);
 
         $locales = ['fi_FI', 'fr_FR', 'en_US', 'hu_HU', 'pt_PT', 'es_ES'];
         $usernames = $slugs = [];
@@ -172,6 +144,40 @@ class UsersSeeder extends Seeder
         );
         $f->processAvatar();
         Media::image()->saveAvatar($f);
+
+    }
+
+    private function makeDevAccount($pwd)
+    {
+        $u = factory(App\Models\User::class)->create([
+            'username' => env('MAIN_ACCOUNT_USERNAME'),
+            'password' => $pwd,
+            'activated' => true,
+            'remember_token' => null,
+        ]);
+
+        factory(App\Models\Person::class)->create([
+            'email' => env('MAIN_ACCOUNT_EMAIL'),
+            'first_name' => env('MAIN_ACCOUNT_FIRST_NAME'),
+            'last_name' => env('MAIN_ACCOUNT_LAST_NAME'),
+            'person_slug' => slugify(
+                env('MAIN_ACCOUNT_FIRST_NAME') . ' ' .
+                env('MAIN_ACCOUNT_LAST_NAME'), '_'
+            ),
+            'user_id' => $u->getAttribute('user_id')
+        ]);
+
+        $this->createAvatar(env('MAIN_ACCOUNT_USERNAME'),
+            env('MAIN_ACCOUNT_FIRST_NAME') . ' ' . env('MAIN_ACCOUNT_LAST_NAME'));
+
+        factory(App\Models\GroupMember::class)->create([
+            "group_id" => 2,
+            'user_id' => $u->getAttribute('user_id')
+        ]);
+        factory(App\Models\GroupMember::class)->create([
+            "group_id" => 4,
+            'user_id' => $u->getAttribute('user_id')
+        ]);
 
     }
 }
