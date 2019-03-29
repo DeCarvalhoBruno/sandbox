@@ -37,7 +37,8 @@
                           @cancelled="updateEditMode(idx)"
                           @submitted="updateComment(idx,$event)"
                           :contents="comment.txt"
-                          :slug="comment.slug"></comment-editor>
+                          :entity-slug="slug"
+                          :comment-slug="comment.slug"></comment-editor>
         </div>
         <div class="comment-footer" v-if="authCheck">
           <button v-if="!comment.edit_mode" type="button"
@@ -61,9 +62,10 @@
           <comment-editor v-if="comment.edit_mode===1" :edit-mode="comment.edit_mode"
                           @cancelled="updateEditMode(idx)"
                           @submitted="updateEditMode(idx)"
-                          :slug="comment.slug"></comment-editor>
+                          :entity-slug="slug"
+                          :comment-slug="comment.slug"></comment-editor>
         </div>
-        <comment-list :comments="comment.children" :auth-check="authCheck"></comment-list>
+        <comment-list :comments="comment.children" :auth-check="authCheck" :slug="slug"></comment-list>
       </div>
     </div>
   </transition-group>
@@ -76,7 +78,8 @@
     name: 'comment-list',
     props: {
       comments: {required: true},
-      authCheck: {required: true, type: Boolean}
+      authCheck: {required: true, type: Boolean},
+      slug: {required: true, type: String}
     },
     components: {
       CommentEditor: () => import('front_path/components/CommentEditor')
@@ -121,7 +124,7 @@
           confirmButtonText: vm.$root.$t('comments.delete_confirm_c')
         }).then(async (result) => {
           if (result.value) {
-            this.comments.splice(index,1)
+            this.comments.splice(index, 1)
             vm.$root.$emit('commentDeleted', {slug: slug})
           }
         })

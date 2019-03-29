@@ -110,8 +110,7 @@ var handleSingleClickSignOn = function (googleyolo) {
         google_token: credentials.idToken,
         avatar: credentials.profilePicture
       }).then(function (data) {
-        window.location.href = window.location.pathname +
-          window.location.search + window.location.hash
+        window.location.reload(true)
       }).catch(function (error) {
         if (error.hasOwnProperty('response')) {
           if (error.response.hasOwnProperty('data')) {
@@ -136,7 +135,7 @@ var handleSingleClickSignOn = function (googleyolo) {
 }
 if (window.hasOwnProperty('config')) {
   if (window.config.auth_check === false &&
-    window.config.google_verified === false) {
+    window.config.oauth_verified === false) {
     window.onGoogleYoloLoad = handleSingleClickSignOn
   }
 }

@@ -150,6 +150,10 @@ label.field-required {
     padding: 3px;
     cursor: default;
     user-select:none;
+
+    i{
+      padding-top:1px;
+    }
   }
 
   .password-badge-error {

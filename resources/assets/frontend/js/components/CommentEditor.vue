@@ -31,7 +31,8 @@
       editMode: {required: true},
       contents: {type: String, default: () => null},
       isRootElem: {type: Boolean},
-      slug: {type: String}
+      commentSlug: {type: String, default: () => null},
+      entitySlug: {type: String}
     },
     components: {
       Tiptap: () => import('front_path/components/Tiptap'),
@@ -70,7 +71,8 @@
         let mode = this.currentEditMode === 1 || this.currentEditMode === true ? 'create' : 'edit'
         let response
         if (mode === 'create') {
-          await axios.post(`/ajax/forum/blog_posts/${vm.slug}/comment`, {
+          await axios.post(`/ajax/forum/blog_posts/${vm.entitySlug}/comment`, {
+            reply_to: vm.commentSlug,
             txt: txt
           }).then((response) => {
             vm.fireModal(response.data)
@@ -79,8 +81,8 @@
             vm.$emit('submitted', {txt: txt})
           }).catch(() => null)
         } else {
-          response = await axios.patch(`/ajax/forum/blog_posts/${vm.slug}/comment`, {
-            reply_to: vm.slug,
+          response = await axios.patch(`/ajax/forum/blog_posts/${vm.entitySlug}/comment`, {
+            reply_to: vm.commentSlug,
             txt: txt
           })
           if (typeof response.data != 'undefined') {

@@ -19,7 +19,7 @@
             <div class="button-group" v-else>
               <button type="button"
                       class="btn btn-primary"
-                      @click="login"><i class="fa fa-reply fa-rotate-180"></i> {{$t('comments.login_comment')}}
+                      @click="goToLoginPage"><i class="fa fa-reply fa-rotate-180"></i> {{$t('comments.login_comment')}}
               </button>
             </div>
           </div>
@@ -30,7 +30,7 @@
           <div class="col-lg-8 col-sm-12 mx-md-auto mb-3">
             <comment-editor :is-root-elem="true"
                             :edit-mode="editMode"
-                            :slug="slug"
+                            :entity-slug="slug"
                             @cancelled="editMode = false"
                             @submitted="editMode = false"></comment-editor>
           </div>
@@ -41,7 +41,7 @@
           <div v-if="!loaded" class="fa-3x">
             <i class="fa fa-refresh fa-pulse"></i>
           </div>
-          <comment-list :comments="comments" :auth-check="userIsAuthenticated"></comment-list>
+          <comment-list :comments="comments" :auth-check="userIsAuthenticated" :slug="slug"></comment-list>
         </div>
       </div>
     </template>
@@ -56,6 +56,10 @@
     name: 'comments',
     props: {
       slug: {
+        required: true,
+        type: String
+      },
+      login: {
         required: true,
         type: String
       }
@@ -100,8 +104,8 @@
         axios.delete(`/ajax/forum/blog_posts/${vm.slug}/favorite/${comment.slug}`)
       })
       this.$root.$on('commentSubmitted', () => {
-          this.commentIsOK=false
-          this.commentSetDelay()
+        this.commentIsOK = false
+        this.commentSetDelay()
       })
       this.$root.$on('commentDeleted', async ({slug}) => {
         await axios.delete(`/ajax/forum/blog_posts/${vm.slug}/comment/${slug}`)
@@ -119,8 +123,8 @@
       // this.io.observe(this.container)
     },
     methods: {
-      login(){
-
+      goToLoginPage () {
+        window.location.href = this.login
       },
       async refreshSetDelay () {
         let vm = this

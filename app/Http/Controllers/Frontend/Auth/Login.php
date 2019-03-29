@@ -7,6 +7,7 @@ use App\Support\Providers\User as UserProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 
 class Login extends Controller
@@ -23,20 +24,28 @@ class Login extends Controller
         return Auth::guard('web');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
-        $status = \Session::get('status');
+        $status = Session::get('status');
         return view('frontend.auth.login', compact('status'));
     }
 
     /**
-     * Show the application's login form.
+     * In cases where we click on the login button from a particular page
+     * so we can get back to it when we're logged in.
      *
-     * @return \Illuminate\Http\Response
+     * @param string $type
+     * @param string $slug
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function showLoginForm()
+    public function loginRedirect($type, $slug)
     {
-        return view('auth.login');
+        Session::put('url.intended', route_i18n($type, ['slug' => $slug]));
+        return redirect(route_i18n('login'));
+
     }
 
     /**
@@ -50,7 +59,7 @@ class Login extends Controller
         $token = \Auth::guard('jwt')->attempt($this->credentials($request));
 
         if ($token) {
-            \Session::put('jwt_token', $token);
+            Session::put('jwt_token', $token);
             return true;
         }
         return false;
@@ -76,10 +85,9 @@ class Login extends Controller
     /**
      * Get the failed login response instance.
      *
-     * @param  \Illuminate\Http\Request $request
      * @return void
      */
-    protected function sendFailedLoginResponse(Request $request)
+    protected function sendFailedLoginResponse()
     {
         throw ValidationException::withMessages([
             $this->username() => [trans('auth.failed')],
@@ -107,7 +115,7 @@ class Login extends Controller
         $this->guard()->logout();
         \Auth::guard('jwt')->logout();
         $request->session()->invalidate();
-        return redirect(route_i18n('home'));
+        return redirect()->back();
     }
 
     public function activate($token, UserProvider $userRepo)

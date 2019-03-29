@@ -2,7 +2,10 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center mt-5">
-            <img src="{{asset(sprintf('media/img/site/%s',env('APP_LOGO_FILENAME')))}}">
+
+            <figure>
+                <img src="{{asset(sprintf('media/img/site/%s',env('APP_LOGO_FILENAME')))}}">
+            </figure>
         </div>
         @if(is_null($status))
             <div class="row justify-content-md-center mt-5">
@@ -82,9 +85,10 @@
                                             <div class="m-auto min-height-2">
                                                 <login-o-auth :provider="'google'"></login-o-auth>
                                                 <login-o-auth :provider="'twitter'"></login-o-auth>
+                                                <login-o-auth :provider="'github'"></login-o-auth>
                                             </div>
                                         </div>
-                                        <div class="form-group row mt-5 min-height-2">
+                                        <div class="form-group row mt-4 min-height-2">
                                             <div class="col-xl-8 offset-xl-2 col-lg-6 offset-lg-3 min-height-2">
                                                 <submit-button ref="submitButton"
                                                                :block="true"

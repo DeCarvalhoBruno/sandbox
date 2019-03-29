@@ -46,7 +46,7 @@ class Post extends Model implements PostInterface
     {
         try {
             $parentPost = null;
-            if (isset($commentData->reply_to)) {
+            if (isset($commentData->reply_to) && !is_null($commentData->reply_to)) {
                 $model = $this->createModel();
                 /**
                  * @var \Naraki\Forum\Models\ForumPost $parentPost

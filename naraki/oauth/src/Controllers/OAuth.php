@@ -35,11 +35,10 @@ class OAuth extends Controller
      */
     public function redirectToProvider($provider)
     {
-        $facade = Socialite::driver($provider);
         if ($provider == 'twitter') {
-            return $facade->redirect()->getTargetUrl();
+            return Socialite::driver($provider)->redirect()->getTargetUrl();
         }
-        return $facade->stateless()->redirect()->getTargetUrl();
+        return Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
     }
 
     /**
@@ -52,15 +51,15 @@ class OAuth extends Controller
      */
     public function handleProviderCallback($provider, Request $request, UserProvider $userRepo)
     {
-        $facade = Socialite::driver($provider);
         if ($provider !== 'twitter') {
-            $facade->stateless();
+            $socialiteUser = Socialite::driver($provider)->stateless()->user();
+        } else {
+            $socialiteUser = Socialite::driver($provider)->user();
         }
-        $socialiteUser = Socialite::driver($provider)->user();
         $this->processUser($request, $userRepo, $provider, $socialiteUser);
-        \Cookie::queue('google_verified', true, 60 * 24 * 365);
+        \Cookie::queue('oauth_verified', true, 60 * 24 * 365);
 
-        return view('oauth::callback');
+        return view('oauth::callback', ['route' => route_i18n('home')]);
     }
 
     /**
@@ -71,7 +70,7 @@ class OAuth extends Controller
      */
     public function googleYoloDismiss()
     {
-        \Cookie::queue('google_verified', true, 60 * 24 * 15);
+        \Cookie::queue('oauth_verified', true, 60 * 24 * 15);
     }
 
     /**
@@ -98,7 +97,7 @@ class OAuth extends Controller
             } catch (EmailNotVerified $e) {
                 return response(trans('error.http.422.oauth_email_unverif'), Response::HTTP_UNPROCESSABLE_ENTITY);
             }
-            \Cookie::queue('google_verified', true, 60 * 60 * 24 * 365);
+            \Cookie::queue('oauth_verified', true, 60 * 60 * 24 * 365);
             return response(null, Response::HTTP_NO_CONTENT);
         } else {
             return response(null, Response::HTTP_INTERNAL_SERVER_ERROR);

@@ -11,8 +11,8 @@
           'btn-lg': this.large,
           'btn-loading': this.isLoading
         },
-        on:{
-          click:()=>this.$emit('click')
+        on: {
+          click: () => this.$emit('click')
         },
         attrs: {
           type: this.nativeType,
@@ -56,6 +56,11 @@
     watch: {
       loading () {
         this.isLoading = this.loading
+      }
+    },
+    methods: {
+      toggleLoad () {
+        this.isLoading = !this.isLoading
       }
     }
   }

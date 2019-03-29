@@ -45,6 +45,13 @@ return [
         'client_id' => env('OAUTH_TWITTER_CLIENT_ID'),
         'client_secret' => env('OAUTH_TWITTER_CLIENT_SECRET'),
         'redirect' => env('OAUTH_TWITTER_REDIRECT_URL')
+    ],
+
+    'github' => [
+        'client_id' => env('OAUTH_GITHUB_CLIENT_ID'),
+        'client_secret' => env('OAUTH_GITHUB_CLIENT_SECRET'),
+        'redirect' => env('OAUTH_GITHUB_REDIRECT_URL')
     ]
+
 
 ];

@@ -75,27 +75,27 @@ h5.bordered {
         }
 
         &.fa-rss {
-          background: #FA9B39;
+          background: $rss-color;
         }
 
         &.fa-facebook {
-          background: #3B5998;
+          background: $facebook-color;
         }
 
         &.fa-twitter {
-          background: #00aced;
+          background: $twitter-color;
         }
 
         &.fa-instagram {
-          background: #515BD4;
+          background: $instagram-color;
         }
 
         &.fa-vimeo {
-          background: #7FC400;
+          background: $vimeo-color;
         }
 
         &.fa-youtube {
-          background: #bb0000;
+          background: $youtube-color;
         }
 
         &:hover {

@@ -32,7 +32,6 @@ class OAuthTest extends TestCase
             ->andReturn(Str::random(15));
         Socialite::shouldReceive('driver->stateless->user')->andReturn($mockSocialiteUser);
 
-
         $this->get('/oauth/google/callback');
         $this->assertEquals(3, User::query()->get()->count());
         $this->assertEquals(1, OAuthProvider::query()->get()->count());
@@ -129,7 +128,8 @@ class OAuthTest extends TestCase
                 'jti' => 'ff32ffb749f70cdf420a9582fff7d463b371c960'
             ]);
         $this->post('/oauth-yolo', [
-            'google_token' => 'ciOiJSUzI1NiIsImtpZCI6IjA5MDVkNmY5Y2Q5'
+            'google_token' => 'ciOiJSUzI1NiIsImtpZCI6IjA5MDVkNmY5Y2Q5',
+            'avatar'=>'avatar'
         ]);
         $this->assertTrue(auth()->check());
         $this->assertEquals('user_email@gmail.com', auth()->user()->getAttribute('email'));

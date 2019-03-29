@@ -3,7 +3,7 @@
     <meta charset="utf-8">
     <title>{{ config('app.name') }}</title>
     <script>
-      window.opener.postMessage({route: "{{ route_i18n('home') }}"}, '*')
+      window.opener.postMessage({route: "{{ $route }}"}, '*')
       window.close()
     </script>
 </head>

@@ -113,6 +113,8 @@ class BlogCommentsTest extends TestCase
             ['txt' => 'my comment']
         );
         $commentSlug = ForumPost::query()->first()->getSlugColumn();
+        $u = $this->createUser();
+        $this->signIn($u);
         $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
             ['txt' => 'my comment in reply to', 'reply_to' => $commentSlug]
         );

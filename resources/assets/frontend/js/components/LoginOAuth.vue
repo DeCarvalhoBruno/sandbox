@@ -1,5 +1,5 @@
 <template>
-  <button class="btn btn-dark" type="button" @click="login">
+  <button class="btn btn-dark" :class="[provider+'-bg']" type="button" @click="login">
     <i :class="`fa fa-${provider}`"></i>
     {{ $t(`login-o-auth.login_with_${provider}`) }}
   </button>

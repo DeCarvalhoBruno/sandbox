@@ -1,7 +1,7 @@
 <?php namespace Naraki\Mail\Emails;
 
 use Naraki\Mail\Contracts\Mailer;
-use App\Support\Email\ViewData;
+use Naraki\Mail\Support\ViewData;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 

@@ -2,7 +2,8 @@
 return [
     'login-o-auth' => [
         'login_with_google' => 'Login with Google',
-        'login_with_twitter' => 'Login with Twitter'
+        'login_with_twitter' => 'Login with Twitter',
+        'login_with_github' => 'Login with Github',
     ],
     'search' => [
         'articles' => 'ARTICLES',
