@@ -38,7 +38,8 @@
                           @submitted="updateComment(idx,$event)"
                           :contents="comment.txt"
                           :entity-slug="slug"
-                          :comment-slug="comment.slug"></comment-editor>
+                          :comment-slug="comment.slug"
+                          :search-url="searchUrl"></comment-editor>
         </div>
         <div class="comment-footer" v-if="authCheck">
           <button v-if="!comment.edit_mode" type="button"
@@ -63,9 +64,13 @@
                           @cancelled="updateEditMode(idx)"
                           @submitted="updateEditMode(idx)"
                           :entity-slug="slug"
-                          :comment-slug="comment.slug"></comment-editor>
+                          :comment-slug="comment.slug"
+                          :search-url="searchUrl"></comment-editor>
         </div>
-        <comment-list :comments="comment.children" :auth-check="authCheck" :slug="slug"></comment-list>
+        <comment-list :comments="comment.children"
+                      :auth-check="authCheck"
+                      :slug="slug"
+                      :search-url="searchUrl"></comment-list>
       </div>
     </div>
   </transition-group>
@@ -79,7 +84,8 @@
     props: {
       comments: {required: true},
       authCheck: {required: true, type: Boolean},
-      slug: {required: true, type: String}
+      slug: {required: true, type: String},
+      searchUrl: {required: true, type: String}
     },
     components: {
       CommentEditor: () => import('front_path/components/CommentEditor')

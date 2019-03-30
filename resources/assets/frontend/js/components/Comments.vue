@@ -32,7 +32,8 @@
                             :edit-mode="editMode"
                             :entity-slug="slug"
                             @cancelled="editMode = false"
-                            @submitted="editMode = false"></comment-editor>
+                            @submitted="editMode = false"
+                            :search-url="searchUrl"></comment-editor>
           </div>
         </div>
       </transition>
@@ -41,7 +42,10 @@
           <div v-if="!loaded" class="fa-3x">
             <i class="fa fa-refresh fa-pulse"></i>
           </div>
-          <comment-list :comments="comments" :auth-check="userIsAuthenticated" :slug="slug"></comment-list>
+          <comment-list :comments="comments"
+                        :auth-check="userIsAuthenticated"
+                        :slug="slug"
+                        :search-url="searchUrl"></comment-list>
         </div>
       </div>
     </template>
@@ -60,6 +64,10 @@
         type: String
       },
       login: {
+        required: true,
+        type: String
+      },
+      searchUrl: {
         required: true,
         type: String
       }

@@ -21,7 +21,7 @@
    ],
    'create_account' => '__Create an account',
    'login_account' => '__Log in to your account',
-   'register_username_help' => '__Can contains letters, numbers and underscores. Must be no more than 15 characters long.',
+   'register_username_help' => '__Can contains letters, numbers and underscores. Must be no more than 25 characters long.',
    'email_address' => '__E-Mail Address',
    'password' => '__Password',
    'login' => '__Log In',

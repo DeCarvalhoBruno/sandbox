@@ -31,7 +31,9 @@ class BlogSeeder extends Seeder
                 }
                 continue;
             }
+            DB::beginTransaction();
             $this->seedChunk($modelData->data, $modelData->model);
+            DB::commit();
         }
 
         $faker = Faker\Factory::create();
@@ -58,7 +60,9 @@ and entity_types.entity_id = 300'
                 'cnt' => $num,
                 'unq' => round($num * (rand(90, 97) / 100))
             ];
+            DB::beginTransaction();
             $this->seedChunk($viewsRecords, \App\Models\Stats\StatPageView::class, 10);
+            DB::commit();
         }
         if ($logging) {
             DB::connection()->enableQueryLog();

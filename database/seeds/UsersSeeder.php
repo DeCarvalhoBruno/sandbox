@@ -77,9 +77,9 @@ class UsersSeeder extends Seeder
             $ln = ($faker->unique()->lastName);
             $ps = slugify($fn . ' ' . $ln);
             $username = substr(
-                slugify(strtolower(substr($fn, 0, 1)) . '_' . slugify($ln), '_'),
+                slugify(strtolower($fn . '_' . $ln), '_'),
                 0,
-                15
+                25
             );
 
             if (isset($usernames[$username])) {

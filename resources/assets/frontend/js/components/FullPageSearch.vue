@@ -140,7 +140,7 @@
     },
     computed: {
       searchUrl () {
-        return `${this.searchHostUrl}/search/paginate`
+        return `${this.searchHostUrl}/search/blog/paginate`
       },
       rssUrl () {
         return this.rssRootUrl + '/' + this.lastInput

@@ -185,7 +185,8 @@ class Blog extends Migration
 
     public function createViews()
     {
-        \DB::unprepared('CREATE VIEW blog_category_tree AS
+        \DB::connection('mysql_seed')->
+        unprepared('CREATE VIEW blog_category_tree AS
         SELECT
             node.lft,
             node.rgt,

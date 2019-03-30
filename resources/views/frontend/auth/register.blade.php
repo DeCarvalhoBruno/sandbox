@@ -76,7 +76,7 @@
                                            class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }}"
                                            name="username"
                                            value="{{ old('username') }}"
-                                           maxlength="15"
+                                           maxlength="25"
                                            autocomplete="username"
                                            required>
                                     @if ($errors->has('username'))

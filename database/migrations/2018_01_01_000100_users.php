@@ -16,13 +16,13 @@ class Users extends Migration
         Schema::enableForeignKeyConstraints();
         Schema::create('users', function (Blueprint $table) {
             $table->increments('user_id');
-            $table->string('username',15)->unique()->nullable();
+            $table->string('username', 25)->unique()->nullable();
             $table->string('password')->nullable();
             $table->boolean('activated')->default(false);
             $table->rememberToken()->nullable();
-            $table->index('remember_token','idx_users_remember_token');
+            $table->index('remember_token', 'idx_users_remember_token');
 //            $table->unique(['user_id','email'],'idx_user_id_email');
-            $table->unique(['user_id','username'],'idx_user_id_username');
+            $table->unique(['user_id', 'username'], 'idx_user_id_username');
         });
 
         Schema::create('stat_users', function (Blueprint $table) {
@@ -39,13 +39,13 @@ class Users extends Migration
 
         Schema::create('user_activations', function (Blueprint $table) {
             $table->unsignedInteger('user_id');
-            $table->string('activation_token',32);
+            $table->string('activation_token', 32);
 
             $table->foreign('user_id')
                 ->references('user_id')->on('users')
                 ->onDelete('cascade');
 
-            $table->unique(['user_id','activation_token'],'idx_activations_remember_token');
+            $table->unique(['user_id', 'activation_token'], 'idx_activations_remember_token');
         });
 
         Schema::create('system_oauth_providers', function (Blueprint $table) {

@@ -112,7 +112,8 @@
     props: {
       editMode: {required: true},
       isRootElem: {type: Boolean},
-      content: {type: String, default: () => null}
+      content: {type: String, default: () => null},
+      searchUrl: {required: true, type: String}
     },
     data () {
       return {
@@ -328,8 +329,8 @@
               return items
             }
 
-            const {data} = await axios.post('http://lumen.local/search/')
-            //return array of values
+            const {data} = await axios.post(`${this.searchUrl}/search/user`,{q:query})
+
           }
         }
       }

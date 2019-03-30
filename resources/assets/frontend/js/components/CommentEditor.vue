@@ -4,6 +4,7 @@
       <tiptap ref="tiptap"
               :edit-mode="currentEditMode"
               :is-root-elem="isRootElem"
+              :search-url="searchUrl"
               :content="txtContent"></tiptap>
       <div class="comment-editor-footer">
         <div class="pull-left"><p>{{$t('comments.posting_warning')}}</p></div>
@@ -32,7 +33,8 @@
       contents: {type: String, default: () => null},
       isRootElem: {type: Boolean},
       commentSlug: {type: String, default: () => null},
-      entitySlug: {type: String}
+      entitySlug: {type: String},
+      searchUrl: {required: true, type: String}
     },
     components: {
       Tiptap: () => import('front_path/components/Tiptap'),

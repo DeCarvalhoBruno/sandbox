@@ -126,7 +126,7 @@
           clearTimeout(this.timer)
           let vm = this
           this.timer = setTimeout(async function () {
-            const {data} = await axios.post(`${vm.searchHostUrl}/search`, {q: e.target.value})
+            const {data} = await axios.post(`${vm.searchHostUrl}/search/blog/`, {q: e.target.value})
             vm.searchData = data
             vm.activated = true
             vm.toggleLoading(false)

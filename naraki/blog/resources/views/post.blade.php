@@ -86,7 +86,9 @@
             </div>
         </div>
         <div class="row">
-            <comments :slug="'{{$post->getAttribute('slug')}}'" :login="'{{route('login_redirect',['type'=>'blog','slug'=>$post->getAttribute('slug')])}}'"></comments>
+            <comments :slug="'{{$post->getAttribute('slug')}}'"
+                      :login="'{{route('login_redirect',['type'=>'blog','slug'=>$post->getAttribute('slug')])}}'"
+                      :search-url="'{{env('ELASTIC_SEARCH_URL')}}'"></comments>
         </div>
         <div id="blog-post-other" class="row">
             @foreach($otherPosts as $otherPost)

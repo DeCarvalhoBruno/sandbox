@@ -88,7 +88,7 @@ WHERE node.lft BETWEEN parent.lft AND parent.rgt
 GROUP BY node.forum_post_slug
 order by node.lft asc;
 SQL;
-        \DB::unprepared($sql);
+        \DB::connection('mysql_seed')->unprepared($sql);
 
     }
 
