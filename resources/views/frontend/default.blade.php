@@ -63,9 +63,9 @@
     <script src="{{ mix('js/manifest.js','6aa0e') }}"></script>
     <script src="{{ mix('js/vendor.js','6aa0e') }}"></script>
     <script src="{{ mix('js/app.js','6aa0e') }}"></script>
+    <script src="https://smartlock.google.com/client" async defer></script>
 @else
     <script src="{{ mix('js/app.js','6aa0e') }}"></script>
-    <script src="https://smartlock.google.com/client" async defer></script>
 @endif
 </body>
 </html>

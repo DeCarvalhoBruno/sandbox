@@ -3,6 +3,8 @@
 use Naraki\Elasticsearch\Index\Seeder;
 use Naraki\Elasticsearch\Index\Mapping;
 use Naraki\Elasticsearch\Index\Indexer as ElasticSearchIndexer;
+use Naraki\Media\Models\Media;
+use Naraki\Media\Models\MediaImgFormat;
 
 class UserIndexer extends ElasticSearchIndexer
 {
@@ -38,8 +40,8 @@ class UserIndexer extends ElasticSearchIndexer
 
     private function indexData($data)
     {
-            $seeder = new Seeder(sprintf('%s.en', $this->getIndexName()));
-            $seeder->bulk($data);
+        $seeder = new Seeder(sprintf('%s.en', $this->getIndexName()));
+        $seeder->bulk($data);
     }
 
     private function prepareData()
@@ -62,17 +64,17 @@ class UserIndexer extends ElasticSearchIndexer
             'entity_id'
         ])->where('entity_types.entity_id', \App\Models\Entity::USERS)
             ->where('media_in_use', '1')
-//            ->limit($limit)
             ->get();
         $images = [];
         foreach ($dbImages as $image) {
-            $images[$image->getAttribute('id')] = $image->present('thumbnail');
+            $images[$image->getAttribute('id')] = $image->present('thumbnail',
+                [Media::IMAGE_AVATAR, MediaImgFormat::ORIGINAL]);
         }
 
         $users = [];
-        foreach($dbUser as $v){
+        foreach ($dbUser as $v) {
             $val = $v->toArray();
-            if(isset($images[$val['id']])){
+            if (isset($images[$val['id']])) {
                 $val['avatar'] = $images[$val['id']];
             }
             unset($val['id']);
@@ -103,7 +105,7 @@ class UserIndexer extends ElasticSearchIndexer
                 'analyzer' => 'std_autocomplete_string',
                 'search_analyzer' => 'standard'
             ],
-            'avatar'=>[
+            'avatar' => [
                 'enabled' => false
             ]
         ];

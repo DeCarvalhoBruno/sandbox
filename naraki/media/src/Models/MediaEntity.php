@@ -57,13 +57,24 @@ class MediaEntity extends Model
      */
     public function asset(int $entityId, int $mediaId, int $mediaImgFormatId): string
     {
+        if ($mediaImgFormatId !== MediaImgFormat::ORIGINAL) {
+            return media_entity_path(
+                $entityId,
+                $mediaId,
+                sprintf(
+                    '%s_%s.%s',
+                    $this->getAttribute('uuid'),
+                    MediaImgFormat::getFormatAcronyms($mediaImgFormatId),
+                    $this->getAttribute('ext')
+                )
+            );
+        }
         return media_entity_path(
             $entityId,
             $mediaId,
             sprintf(
-                '%s_%s.%s',
+                '%s.%s',
                 $this->getAttribute('uuid'),
-                MediaImgFormat::getFormatAcronyms($mediaImgFormatId),
                 $this->getAttribute('ext')
             )
         );

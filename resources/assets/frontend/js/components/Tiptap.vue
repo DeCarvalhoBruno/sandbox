@@ -69,11 +69,15 @@
     <div class="suggestion-list" v-show="showSuggestions" ref="suggestions">
       <template v-if="hasResults">
         <div v-for="(user, index) in filteredUsers"
-             :key="user.id"
+             :key="user.name"
              class="suggestion-list__item"
              :class="{ 'is-selected': navigatedUserIndex === index }"
              @click="selectUser(user)">
-          {{ user.name }}
+          <figure>
+            <img v-if="user.avatar" :src="user.avatar"/>
+            <img v-else src="/media/img/site/placeholder_tb.png"/>
+          </figure>
+          <span class="label-name">{{ user.full_name }} (@{{user.name}})</span>
         </div>
       </template>
       <div v-else class="suggestion-list__item is-empty">
@@ -143,6 +147,7 @@
         searchTriggerDelay: 200,
         searchTriggerLength: 1,
         timer: 0,
+        lastInput: null,
         insertMention: () => {}
       }
     },
@@ -239,11 +244,12 @@
           trigger: 'mouseenter',
           interactive: true,
           theme: 'dark',
-          placement: 'top-start',
+          placement: 'bottom-start',
           inertia: true,
           duration: [400, 200],
           showOnInit: true,
           arrow: true,
+          lazy: false,
           arrowType: 'round',
           ignoreAttributes: true
         })
@@ -285,14 +291,36 @@
             this.insertMention = command
           },
           // is called when a suggestion has changed
-          onChange: ({
-                       items, query, range, virtualNode
-                     }) => {
+          onChange: async ({
+                             items, query, range, virtualNode
+                           }) => {
             this.query = query
-            this.filteredUsers = items
-            this.suggestionRange = range
-            this.navigatedUserIndex = 0
-            this.renderPopup(virtualNode)
+
+            if (!query) {
+              return items
+            }
+            if (query.length > this.searchTriggerLength && query !== this.lastInput) {
+              this.lastInput = query
+              clearTimeout(this.timer)
+              let vm = this
+              this.timer = setTimeout(async function () {
+                let {data} = await axios.post(`${vm.searchUrl}/search/user`, {q: query})
+                let results = []
+                if (data !== null) {
+                  data.forEach((val) => {
+                    val.id = val.username
+                    val.name = val.username
+                    delete val.username
+                    results.push(val)
+                  })
+                }
+                vm.filteredUsers = results
+                vm.suggestionRange = range
+                vm.navigatedUserIndex = 0
+                vm.renderPopup(virtualNode)
+              }, this.searchTriggerDelay)
+            }
+
           },
           // is called when a suggestion is cancelled
           onExit: () => {
@@ -323,15 +351,10 @@
             }
 
             return false
-          },
-          onFilter: async (items, query) => {
-            if (!query) {
-              return items
-            }
-
-            const {data} = await axios.post(`${this.searchUrl}/search/user`,{q:query})
-
           }
+          // onFilter: (items, query) => {
+          //   return []
+          // }
         }
       }
     },

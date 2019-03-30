@@ -88,6 +88,10 @@ WHERE node.lft BETWEEN parent.lft AND parent.rgt
 GROUP BY node.forum_post_slug
 order by node.lft asc;
 SQL;
+        if (env('APP_ENV') == 'testing') {
+            DB::unprepared($sql);
+            return;
+        }
         \DB::connection('mysql_seed')->unprepared($sql);
 
     }

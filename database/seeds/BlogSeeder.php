@@ -43,15 +43,14 @@ inner join entity_types on entity_types.entity_type_target_id = blog_posts.blog_
 and entity_types.entity_id = 300'
         );
         $bpes = [8689 => 1, 1220 => 1, 3477 => 1, 12339 => 1, 4086 => 1, 1799 => 1];
-        $viewsRecords = [];
         foreach ($blogPostEntityIds as $bpe) {
-            $viewsRecords = [];
-            $num = rand(118, 670);
+//            $viewsRecords = [];
+            $num = rand(118, 350);
             if (isset($images[$bpe->slug])) {
                 if (isset($bpes[intval($bpe->blog_post_id)])) {
-                    $num = rand(901, 1100);
+                    $num = rand(600, 12000);
                 } else {
-                    $num = rand(700, 900);
+                    $num = rand(350, 500);
                 }
             }
 
@@ -60,10 +59,10 @@ and entity_types.entity_id = 300'
                 'cnt' => $num,
                 'unq' => round($num * (rand(90, 97) / 100))
             ];
-            DB::beginTransaction();
-            $this->seedChunk($viewsRecords, \App\Models\Stats\StatPageView::class, 10);
-            DB::commit();
         }
+        DB::beginTransaction();
+        $this->seedChunk($viewsRecords, \App\Models\Stats\StatPageView::class, 40);
+        DB::commit();
         if ($logging) {
             DB::connection()->enableQueryLog();
         }

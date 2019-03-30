@@ -185,8 +185,7 @@ class Blog extends Migration
 
     public function createViews()
     {
-        \DB::connection('mysql_seed')->
-        unprepared('CREATE VIEW blog_category_tree AS
+        $view = 'CREATE VIEW blog_category_tree AS
         SELECT
             node.lft,
             node.rgt,
@@ -198,7 +197,12 @@ class Blog extends Migration
           WHERE node.lft BETWEEN parent.lft AND parent.rgt
           GROUP BY node.blog_category_slug,node.blog_category_id,node.blog_category_name
           ORDER BY node.lft;
-        ');
+        ';
+        if (env('APP_ENV') == 'testing') {
+            DB::unprepared($view);
+            return;
+        }
+        DB::connection('mysql_seed')->unprepared($view);
     }
 
     private function extractLanguages()

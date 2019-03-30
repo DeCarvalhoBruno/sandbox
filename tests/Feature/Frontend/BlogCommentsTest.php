@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Frontend;
 
-use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Session;
@@ -53,6 +52,9 @@ class BlogCommentsTest extends TestCase
               With regular items
             </li>
           </ul>
+          <p>It\'s a lot of <span class="mention" 
+          data-mention-id="armin_virag" 
+          contenteditable="false">@armin_virag</span> for the rest of us. I don\'t</p>
           <script>window.location.href=\'http://www.myalternatesite.com\'</script>
           <blockquote>
             It\'s amazing

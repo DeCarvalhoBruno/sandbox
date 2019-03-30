@@ -17,16 +17,17 @@ trait Presentable
      *
      * @param string $method
      *
+     * @param array $params
      * @return mixed
      */
-    public function present($method = null)
+    public function present($method = null, $params = [])
     {
-        if ( ! $this->presenterInstance) {
+        if (!$this->presenterInstance) {
             $this->presenterInstance = new $this->presenter($this);
         }
 
-        if ( ! is_null($method)) {
-            return call_user_func([$this->presenterInstance, $method]);
+        if (!is_null($method)) {
+            return call_user_func([$this->presenterInstance, $method], ...$params);
         }
 
         return $this->presenterInstance;

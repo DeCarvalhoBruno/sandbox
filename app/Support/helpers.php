@@ -23,7 +23,7 @@ if (!function_exists('media_entity_path')) {
         }
 
         if (is_null($image)) {
-            return getImagePlaceholderPath();
+            return placeholder_image();
         }
 
         return sprintf('/media/%s/%s/%s', $entity, $media_type, $image);
