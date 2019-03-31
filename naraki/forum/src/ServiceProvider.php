@@ -33,6 +33,7 @@ class ServiceProvider extends LaravelServiceProvider
         ], function (Router $r) {
             $r->post('forum/{entity_type}/{slug}/comment', 'Post@createComment');
             $r->patch('forum/{entity_type}/{slug}/comment', 'Post@updateComment');
+            $r->patch('forum/{entity_type}/options', 'Post@updateNotifications');
             $r->delete('forum/{entity_type}/{slug}/comment/{comment}', 'Post@deleteComment');
             $r->patch('forum/{entity_type}/{slug}/favorite/{comment}', 'Post@favorite');
             $r->delete('forum/{entity_type}/{slug}/favorite/{comment}', 'Post@unfavorite');

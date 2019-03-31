@@ -1,5 +1,5 @@
 import * as types from '../mutation-types'
-import swal from 'sweetalert2'
+import swal from 'sweetalert2/dist/sweetalert2.js'
 
 export const state = {
   flashMessage: null,

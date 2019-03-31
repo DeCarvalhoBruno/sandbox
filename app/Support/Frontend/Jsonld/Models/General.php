@@ -14,7 +14,7 @@ class General
 
     public function __construct()
     {
-        $this->settings = \Cache::get('settings_general');
+        $this->settings = \Cache::get('settings_general')??[];
     }
 
     public function makeStructuredData($data): string

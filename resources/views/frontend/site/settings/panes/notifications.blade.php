@@ -15,9 +15,7 @@
                         </div>
                         <div class="form-group row">
                             <label class="col-lg-4 col-form-label text-lg-right">
-                                <span class="form-has-help"
-                                      data-toggle="tooltip"
-                                      data-placement="top">{{trans('pages.profile.new_email_address')}}</span>
+                                <span>{{trans('pages.profile.new_email_address')}}</span>
                             </label>
                             <div class="col-lg-6">
                                 <input type="text"

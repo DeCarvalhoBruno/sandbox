@@ -14,7 +14,7 @@
         'profile_title' => ' Profile',
         'notifications_title' => 'Notifications',
         'notifications_heading' => 'E-mail notification options',
-        'notifications_help' => 'Please choose the types of e-mails you would like to receive from us:',
+        'notifications_help' => 'Please choose the types of e-mails you would like to receive:',
         'account_title' => 'Account',
         'first_name' => 'First name',
         'last_name' => 'Last name',

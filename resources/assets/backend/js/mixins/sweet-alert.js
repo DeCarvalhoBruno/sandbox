@@ -1,4 +1,4 @@
-import swal from 'sweetalert2'
+import swal from 'sweetalert2/dist/sweetalert2.js'
 
 export default {
   name: 'swal',

@@ -54,9 +54,6 @@ return [
             'prefix_indexes' => true,
             'strict' => false,
             'engine' => 'InnoDB',
-            'options' => array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]),
         ],
         'mysql_seed' => [
             'driver' => 'mysql',

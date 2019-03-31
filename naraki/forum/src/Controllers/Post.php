@@ -6,8 +6,10 @@ use App\Models\EntityType;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
 use Naraki\Forum\Facades\Forum;
+use Naraki\Forum\Jobs\NotifyMentionees;
 use Naraki\Forum\Requests\CreateComment;
 use Naraki\Media\Models\Media;
 use Naraki\Media\Models\MediaEntity;
@@ -58,7 +60,8 @@ class Post extends Controller
             }
         }
         $posts = Forum::post()->getTree($dbPosts, auth()->user(), $favorites);
-        return response(compact('posts'), 200);
+        $notification_options = Redis::hgetall(sprintf('comment_notif_opt.%s', auth()->user()->getKey()));
+        return response(compact('posts', 'notification_options'), 200);
     }
 
     /**
@@ -69,11 +72,19 @@ class Post extends Controller
      */
     public function createComment($type, $slug, CreateComment $request)
     {
-        $entityTypeId = EntityType::getEntityTypeID(Entity::getConstant($type), $slug);
+        $entityId = Entity::getConstant($type);
+        $entityTypeId = EntityType::getEntityTypeID($entityId, $slug);
+
         Forum::post()->createComment(
             (object)$request->all(), $entityTypeId, auth()->user()
         );
         Session::put('last_comment', Carbon::now());
+
+        if ($request->hasMentions()) {
+            $this->dispatch(new NotifyMentionees(
+                    $request->getMentions(), $request->getComment(), auth()->user(), $entityId, $entityTypeId)
+            );
+        }
 
         return response([
             'type' => 'success',
@@ -126,11 +137,11 @@ class Post extends Controller
     {
         $userFavoriteList = Session::get('favorite_list');
         if (is_null($userFavoriteList)) {
-            Session::put('favorite_list', new Collection([$commentSlug => true]));
+            $userFavoriteList = new Collection([$commentSlug => true]);
         } else {
             $userFavoriteList->put($commentSlug, true);
-            Session::put('favorite_list', $userFavoriteList);
         }
+        Session::put('favorite_list', $userFavoriteList);
         Forum::post()->favorite($commentSlug);
         return response(null, Response::HTTP_NO_CONTENT);
     }
@@ -149,6 +160,22 @@ class Post extends Controller
             Session::put('favorite_list', $userFavoriteList);
             Forum::post()->unfavorite($commentSlug);
         }
+        return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function updateNotifications($type)
+    {
+        $requestOptions = app('request')->only(['option', 'flag']);
+        $redisKey = sprintf('comment_notif_opt.%s', auth()->user()->getKey());
+        $notificationOptions = Redis::hgetall($redisKey);
+
+        if (is_null($notificationOptions)) {
+            $notificationOptions = [$requestOptions['option'] => $requestOptions['flag']];
+        } else {
+            $notificationOptions[$requestOptions['option']] = $requestOptions['flag'];
+        }
+        Redis::hmset($redisKey, $notificationOptions);
+//        Session::put('notification_options', $notificationOptions);
         return response(null, Response::HTTP_NO_CONTENT);
     }
 

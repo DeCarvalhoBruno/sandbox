@@ -231,7 +231,7 @@
       getInfo (data) {
         this.websiteTypes = data.websites
         this.orgTypes = data.organizations
-        if (data.settings != null) {
+        if (data.settings.length) {
           this.form = new Form(data.settings)
           this.organizationLogo = this.form.fields.logo
           this.form.fields.logo = null

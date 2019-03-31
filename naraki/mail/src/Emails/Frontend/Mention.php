@@ -3,10 +3,10 @@
 use Naraki\Mail\Contracts\Mailer;
 use Naraki\Mail\Emails\Email;
 
-class Contact extends Email
+class Mention extends Email
 {
     protected $taskedMailer = Mailer::DRIVER_SMTP;
-    protected $viewName = 'mail::contact';
+    protected $viewName = 'mail::mention';
 
     public function prepareViewData()
     {

@@ -6,7 +6,7 @@ use Naraki\Mail\Emails\Email;
 class Welcome extends Email
 {
     protected $taskedMailer = Mailer::DRIVER_SMTP;
-    protected $viewName = 'emails.website.welcome';
+    protected $viewName = 'mail::welcome';
 
     public function prepareViewData()
     {

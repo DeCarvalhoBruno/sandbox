@@ -15,12 +15,32 @@
                       class="btn btn-primary"
                       @click="editMode=true"><i class="fa fa-reply fa-rotate-180"></i> {{$t('comments.comment')}}
               </button>
+              <div class="dropdown d-inline">
+                <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fa fa-cog"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-header" href="#">I get an email when: (click/tap to toggle)</a>
+                  <a class="dropdown-item"
+                     href.prevent="#"
+                     @click="changeNotifications('reply')"><i
+                      v-if="notificationOptions.reply" class="fa fa-check"></i><i v-else class="fa fa-times"></i>
+                    Someone replies to one of my comments</a>
+                  <a class="dropdown-item"
+                     href.prevent="#"
+                     @click="changeNotifications('mention')"><i
+                      v-if="notificationOptions.mention" class="fa fa-check"></i><i v-else class="fa fa-times"></i>
+                    Someone mentions me</a>
+                </div>
+              </div>
             </div>
             <div class="button-group" v-else>
               <button type="button"
                       class="btn btn-primary"
                       @click="goToLoginPage"><i class="fa fa-reply fa-rotate-180"></i> {{$t('comments.login_comment')}}
               </button>
+
             </div>
           </div>
         </div>
@@ -86,7 +106,11 @@
         commentIsOK: true,
         refreshDelay: 5000,
         commentDelay: 120000,
-        userIsAuthenticated: false
+        userIsAuthenticated: false,
+        notificationOptions: {
+          reply: false,
+          mention: false
+        }
       }
     },
     components: {
@@ -131,6 +155,10 @@
       // this.io.observe(this.container)
     },
     methods: {
+      changeNotifications (type) {
+        this.notificationOptions[type] = !this.notificationOptions[type]
+        axios.patch(`/ajax/forum/blog_posts/options`, {option: type, flag: this.notificationOptions[type]})
+      },
       goToLoginPage () {
         window.location.href = this.login
       },
@@ -158,6 +186,9 @@
       async getData () {
         const {data} = await axios.get(`/ajax/forum/blog_posts/${this.slug}/comment`)
         this.comments = data.posts
+        if (data.notification_options!==null) {
+          this.notificationOptions = data.notification_options
+        }
       }
     },
     beforeDestroy () {

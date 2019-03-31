@@ -18,6 +18,10 @@ class CreateComment extends FormRequest
      * @var array
      */
     private $mentions;
+    /**
+     * @var string
+     */
+    private $comment;
 
     public function rules()
     {
@@ -37,10 +41,10 @@ class CreateComment extends FormRequest
     {
         $input = $this->input();
         preg_match_all('/(?<=\>\@)([a-z\_0-9]+)(?=\<)/', $input['txt'], $m);
-        if (isset($m[0])) {
+        if (isset($m[0]) && !empty($m[0])) {
             $this->mentions = $m[0];
         }
-
+        $this->comment = $input['txt'];
         /**
          * @var $lastCommentDate \Carbon\Carbon
          */
@@ -66,6 +70,11 @@ class CreateComment extends FormRequest
     public function hasMentions()
     {
         return is_array($this->mentions);
+    }
+
+    public function getComment()
+    {
+        return $this->comment;
     }
 
 }

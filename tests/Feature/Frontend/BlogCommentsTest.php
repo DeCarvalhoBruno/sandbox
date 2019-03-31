@@ -4,9 +4,11 @@ namespace Tests\Feature\Frontend;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Naraki\Elasticsearch\Facades\ElasticSearchIndex;
+use Naraki\Forum\Facades\Forum;
 use Naraki\Forum\Models\ForumPost;
 use Naraki\Forum\Requests\CreateComment;
 use Tests\TestCase;
@@ -82,7 +84,7 @@ class BlogCommentsTest extends TestCase
         $this->patchJson('/ajax/forum/blog_posts/my-blog-post/comment',
             ['txt' => $txt, 'reply_to' => $commentSlug]
         );
-        $this->assertEquals($txt,$commentSlug = ForumPost::query()->first()->getAttribute('forum_post'));
+        $this->assertEquals($txt, $commentSlug = ForumPost::query()->first()->getAttribute('forum_post'));
 
     }
 
@@ -92,8 +94,12 @@ class BlogCommentsTest extends TestCase
         $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
             ['txt' => 'my comment']
         );
-        $comment = ForumPost::query()->select(['forum_post_slug','forum_post_fav_cnt as cnt'])->first();
-        $this->assertEquals(0,$comment->getAttribute('cnt'));
+        $commentSlug = ForumPost::query()->first()->getSlugColumn();
+
+        Forum::shouldReceive('post->favorite')->with($commentSlug);
+        $this->patchJson('/ajax/forum/blog_posts/my-blog-post/favorite/' . $commentSlug,
+            ['txt' => 'my comment']
+        );
     }
 
     public function test_blog_comments_post_comment_too_long()
@@ -132,8 +138,22 @@ class BlogCommentsTest extends TestCase
         );
         $commentSlug = ForumPost::query()->first()->getSlugColumn();
         $this->assertEquals(1, ForumPost::query()->count());
-        $this->deleteJson('/ajax/forum/blog_posts/my-blog-post/comment/'.$commentSlug);
+        $this->deleteJson('/ajax/forum/blog_posts/my-blog-post/comment/' . $commentSlug);
         $this->assertEquals(0, ForumPost::query()->count());
+    }
+
+    public function test_blog_comments_update_notifications()
+    {
+        $this->signIn($this->createUser());
+        $this->patchJson('/ajax/forum/blog_posts/options',
+            [
+                'option' => 'reply',
+                'flag' => true
+            ]
+        );
+        $this->assertTrue(Session::has('notification_options'));
+        $options = Session::get('notification_options');
+        $this->assertTrue($options->get('reply'));
     }
 
 }

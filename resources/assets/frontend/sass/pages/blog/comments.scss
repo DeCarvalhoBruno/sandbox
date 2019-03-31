@@ -12,6 +12,27 @@
       position: absolute;
       top: 0.5rem;
       right: 3rem;
+
+      .btn {
+        max-height: 2.25rem;
+      }
+
+      .dropdown-item {
+        i {
+          opacity: 0.6;
+        }
+      }
+
+      a.dropdown-item {
+        cursor:pointer;
+        &:active {
+          background-color: #eeeff0;
+        }
+      }
+
+      a.dropdown-header {
+        pointer-events: none;
+      }
     }
   }
 }
@@ -36,7 +57,8 @@
   }
 
   .comment-editor-footer {
-    width:100%;
+    width: 100%;
+
     p {
       color: #4b4b4b;
       font-family: $font-family-title;

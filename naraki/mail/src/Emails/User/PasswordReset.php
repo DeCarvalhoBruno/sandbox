@@ -6,7 +6,7 @@ use Naraki\Mail\Emails\Email;
 class PasswordReset extends Email
 {
     protected $taskedMailer = Mailer::DRIVER_SMTP;
-    protected $viewName = 'emails.website.password_reset';
+    protected $viewName = 'mail::password_reset';
 
     public function prepareViewData()
     {

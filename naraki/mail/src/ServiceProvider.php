@@ -31,6 +31,8 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function boot()
     {
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'mail');
+
         $this->app->singleton('command.naraki.test_email', function () {
             return new SendTestEmail();
         });

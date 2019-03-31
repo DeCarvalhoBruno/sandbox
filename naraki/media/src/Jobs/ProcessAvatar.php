@@ -32,7 +32,6 @@ class ProcessAvatar extends Job
         $this->username = $username;
     }
 
-
     /**
      * Execute the job.
      *
@@ -47,8 +46,8 @@ class ProcessAvatar extends Job
         } catch (\Exception $e) {
             \Log::critical($e->getMessage(), ['trace' => $e->getTraceAsString()]);
 //            app('bugsnag')->notifyException($e, ['mailData'=>$this->email->getData()], "error");
-            $this->release(60);
         }
+        $this->delete();
     }
 
     public function processAvatar()
