@@ -68,6 +68,18 @@ class SendTestEmail extends Command
         ];
     }
 
+    public function mention()
+    {
+        return [
+            'user' => $this->getUser(),
+            'slug'=>'this-is-the-blog-slug',
+            'comment_slug'=>'john_doe-fsjddfa32h3kk44',
+            'mention_user'=>'Tim Horndahl',
+            'post_title'=>'This is the blog post title'
+        ];
+
+    }
+
     private function getUser()
     {
         return (new User())->newQuery()->where('users.user_id', '=', 2)->first();

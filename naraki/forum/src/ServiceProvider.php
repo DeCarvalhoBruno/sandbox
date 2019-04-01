@@ -26,6 +26,8 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function boot()
     {
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'forum');
+
         $this->app['router']->group([
             'prefix' => '/ajax/',
             'namespace' => 'Naraki\Forum\Controllers',

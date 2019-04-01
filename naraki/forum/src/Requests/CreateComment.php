@@ -45,13 +45,16 @@ class CreateComment extends FormRequest
             $this->mentions = $m[0];
         }
         $this->comment = $input['txt'];
-        /**
-         * @var $lastCommentDate \Carbon\Carbon
-         */
-        $lastCommentDate = Session::get('last_comment');
-        if (!is_null($lastCommentDate)) {
-            if ($lastCommentDate->addMinutes(2)->gt(Carbon::now())) {
-                $this->getValidatorInstance()->errors()->add('_', trans('error.form.posting_delay'));
+
+        if (Session::has('last_comment')) {
+            /**
+             * @var $lastCommentDate \Carbon\Carbon
+             */
+            $lastCommentDate = clone(Session::get('last_comment'));
+            if (!is_null($lastCommentDate)) {
+                if ($lastCommentDate->addMinutes(2)->gt(Carbon::now())) {
+                    $this->getValidatorInstance()->errors()->add('_', trans('error.form.posting_delay'));
+                }
             }
         }
     }

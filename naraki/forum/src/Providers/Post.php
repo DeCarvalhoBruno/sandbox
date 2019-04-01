@@ -40,7 +40,7 @@ class Post extends Model implements PostInterface
      * @param \stdClass $commentData
      * @param int $entityTypeId
      * @param \Illuminate\Contracts\Auth\Authenticatable|\App\Models\User $user
-     * @return void
+     * @return \Naraki\Forum\Models\ForumPost
      */
     public function createComment(\stdClass $commentData, int $entityTypeId, Authenticatable $user)
     {
@@ -76,6 +76,7 @@ class Post extends Model implements PostInterface
             }
         } catch (\Exception $e) {
         }
+        return $post;
     }
 
     /**

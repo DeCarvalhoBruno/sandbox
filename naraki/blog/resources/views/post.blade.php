@@ -85,7 +85,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div id="discussion" class="row">
             <comments :slug="'{{$post->getAttribute('slug')}}'"
                       :login="'{{route('login_redirect',['type'=>'blog','slug'=>$post->getAttribute('slug')])}}'"
                       :search-url="'{{env('ELASTIC_SEARCH_URL')}}'"></comments>

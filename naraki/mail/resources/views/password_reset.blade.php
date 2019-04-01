@@ -1,4 +1,4 @@
-@extends('emails.default')
+@extends('mail::default')
 @section('content')
 
       <!--[if mso | IE]>
@@ -122,7 +122,7 @@
                             >
 
                                 <div
-                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1;text-align:left;color:#000000;"
+                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1.5;text-align:left;color:#000000;"
                                 >
                                     {!! trans('email.password_reset.body1') !!}
                                 </div>
@@ -136,7 +136,7 @@
                             >
 
                                 <div
-                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:13px;line-height:1;text-align:left;color:#000000;"
+                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:13px;line-height:1.5;text-align:left;color:#000000;"
                                 >
                                     {!! trans('email.password_reset.body2') !!}
                                 </div>

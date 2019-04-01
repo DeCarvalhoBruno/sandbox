@@ -39,7 +39,7 @@ class Email
      * @param array $data
      * @param array $files
      */
-    public function __construct($data, $files = null)
+    public function __construct(array $data, $files = null)
     {
         $this->parseFiles($files);
         $this->data = (object)$data;
@@ -53,7 +53,7 @@ class Email
             'timezone' => config('app.timezone'),
             'private_key' => config('mail.mailgun.keys.private')
         ]);
-        $this->viewData = new ViewData();
+        $this->viewData = new ViewData($data);
         $this->prepareViewData();
     }
 

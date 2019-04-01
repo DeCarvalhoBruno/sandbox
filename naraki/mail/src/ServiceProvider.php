@@ -10,11 +10,11 @@ class ServiceProvider extends LaravelServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function boot()
     {
         $this->publishes([
-            __DIR__.'/../config/rss.php' => config_path('mail.php'),
-        ], 'mail-naraki');
+            __DIR__.'/../resources/config/mail.php' => config_path('mail-naraki.php'),
+        ], 'config');
 
         $this->app->singleton(Contracts\Listing::class, Providers\Listing::class);
         $this->app->singleton(Contracts\UserEvent::class, Providers\UserEvent::class);
@@ -29,7 +29,7 @@ class ServiceProvider extends LaravelServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function register()
     {
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'mail');
 

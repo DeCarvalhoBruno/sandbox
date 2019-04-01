@@ -1,4 +1,4 @@
-@extends('emails.default')
+@extends('mail::default')
 @section('content')
 <!--[if mso | IE]>
 </td>
@@ -121,10 +121,10 @@
                             >
 
                                 <div
-                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1;text-align:left;color:#000000;"
+                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1.5;text-align:left;color:#000000;"
                                 >
                                     {!! trans('email.contact.email') !!} <a
-                                            href="mailto:{!! $contact_email !!}?subject={!! rawurlencode($contact_subject) !!}" style="background:#efd6ce;color:#2a3bc6;font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1;Margin:0;text-decoration:underline;text-transform:none;" target="_blank"
+                                            href="mailto:{!! $contact_email !!}?subject={!! rawurlencode($contact_subject) !!}" style="background:#efd6ce;color:#2a3bc6;font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1.5;Margin:0;text-decoration:underline;text-transform:none;" target="_blank"
                                     >
                                         {!! $contact_email !!}
                                     </a>
@@ -139,7 +139,7 @@
                             >
 
                                 <div
-                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1;text-align:left;color:#000000;"
+                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1.5;text-align:left;color:#000000;"
                                 >
                                     {!! trans('email.contact.subject') !!} {!! $contact_subject !!}
                                 </div>
@@ -153,7 +153,7 @@
                             >
 
                                 <div
-                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:16px;line-height:1;text-align:left;color:#000000;"
+                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:16px;line-height:1.5;text-align:left;color:#000000;"
                                 >
                                     {!! trans('email.contact.message_body') !!} {!! $message_body !!}
                                 </div>

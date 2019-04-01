@@ -4,7 +4,7 @@
                     class="container" v-if="comments!==null&&comments.length">
     <div v-for="(comment,idx) in comments" :key="comment.slug"
          class="row comment-item"
-         :class="[comment.lvl==0?'card mb-2':'']">
+         :class="[comment.lvl==0?'card mb-2':'',hash==comment.slug?'highlight':'']">
       <div class="col">
         <div class="comment-header">
           <figure class="comment-header-item">
@@ -31,7 +31,7 @@
             </div>
           </div>
         </div>
-        <div class="comment-body">
+        <div :id="comment.slug" class="comment-body">
           <span v-if="comment.edit_mode!==2" v-html="comment.txt"></span>
           <comment-editor v-else :edit-mode="comment.edit_mode"
                           @cancelled="updateEditMode(idx)"
@@ -92,10 +92,16 @@
     },
     data () {
       return {
-        cssAnimationsActivated: false
+        cssAnimationsActivated: false,
+        hash: window.location.hash.substr(1)
       }
     },
     mounted () {
+      let el = document.getElementById(this.hash)
+      if (el) {
+        el.scrollIntoView()
+      }
+
       let vm = this
       //making sure css animations don't trigger on load
       setTimeout(() => {

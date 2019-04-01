@@ -12,12 +12,7 @@ class Contact extends Email
     {
         $this->viewData->add([
             'title' => trans('email.contact.title'),
-            'subject' => sprintf(
-                '[%s] %s', config('app.name'), trans('email.contact.email_subject')
-            ),
-            'contact_email' => $this->data->contact_email,
-            'contact_subject' => $this->data->contact_subject,
-            'message_body' => $this->data->message_body,
+            'subject' => trans('email.contact.email_subject', ['app_name' => config('app.name')]),
             'recipient_email' => $this->config->get('from.address'),
             'recipient_name' => $this->config->get('from.name')
         ]);

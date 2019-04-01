@@ -28,7 +28,7 @@
                     padding-top="50px" border-radius="0px 0px 16px 16px" align="center">
             <mj-column vertical-align="top" width="100%" align="center">
                 <mj-text font-size="15px" padding-top="15px">{!! trans('email.contact.email') !!} <a
-                    href="mailto:{!! $contact_email !!}?subject={!! rawurlencode($contact_subject) !!}" style="background:#efd6ce;color:#2a3bc6;font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1;Margin:0;text-decoration:underline;text-transform:none;" target="_blank"
+                    href="mailto:{!! $contact_email !!}?subject={!! rawurlencode($contact_subject) !!}" style="background:#efd6ce;color:#2a3bc6;font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1.5;Margin:0;text-decoration:underline;text-transform:none;" target="_blank"
                 >{!! $contact_email !!}
                 </a>
                 </mj-text>

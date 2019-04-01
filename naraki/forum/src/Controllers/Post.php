@@ -60,7 +60,10 @@ class Post extends Controller
             }
         }
         $posts = Forum::post()->getTree($dbPosts, auth()->user(), $favorites);
-        $notification_options = Redis::hgetall(sprintf('comment_notif_opt.%s', auth()->user()->getKey()));
+        $notification_options = null;
+        if (auth()->check()) {
+            $notification_options = Redis::hgetall(sprintf('comment_notif_opt.%s', auth()->user()->getKey()));
+        }
         return response(compact('posts', 'notification_options'), 200);
     }
 
@@ -73,16 +76,27 @@ class Post extends Controller
     public function createComment($type, $slug, CreateComment $request)
     {
         $entityId = Entity::getConstant($type);
-        $entityTypeId = EntityType::getEntityTypeID($entityId, $slug);
+        $entity = EntityType::getEntityInfoFromSlug($entityId, $slug)
+            ->select(['entity_type_id', 'blog_post_title as title','blog_post_slug as slug'])->first();
 
-        Forum::post()->createComment(
+        if (is_null($entity)) {
+            return response(sprintf('%s %s not found.', $type, $slug), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $entityTypeId = $entity->getAttribute('entity_type_id');
+
+        $comment = Forum::post()->createComment(
             (object)$request->all(), $entityTypeId, auth()->user()
         );
         Session::put('last_comment', Carbon::now());
 
         if ($request->hasMentions()) {
             $this->dispatch(new NotifyMentionees(
-                    $request->getMentions(), $request->getComment(), auth()->user(), $entityId, $entityTypeId)
+                    $request->getMentions(),
+                    auth()->user(),
+                    (object)$entity->toArray(),
+                    $comment->getAttribute('forum_post_slug')
+                )
             );
         }
 
@@ -175,7 +189,6 @@ class Post extends Controller
             $notificationOptions[$requestOptions['option']] = $requestOptions['flag'];
         }
         Redis::hmset($redisKey, $notificationOptions);
-//        Session::put('notification_options', $notificationOptions);
         return response(null, Response::HTTP_NO_CONTENT);
     }
 

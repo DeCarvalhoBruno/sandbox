@@ -5,6 +5,7 @@ namespace Tests\Feature\Frontend;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Naraki\Elasticsearch\Facades\ElasticSearchIndex;
@@ -21,7 +22,6 @@ class BlogCommentsTest extends TestCase
     {
         $u = $this->createUser();
         $this->signIn($u);
-        ElasticSearchIndex::shouldReceive('index')->times(1);
         $this->postJson(
             "/ajax/admin/blog/post/create",
             [
@@ -32,11 +32,13 @@ class BlogCommentsTest extends TestCase
                 'published_at' => "201902051959",
                 'tags' => []
             ]);
+
         return $u;
     }
 
     public function test_blog_comments_post_comment()
     {
+        $this->withoutJobs();
         $this->createBlogPost();
         $this->assertEquals(0, ForumPost::query()->count());
         $txt = '<h2 style="font-size: 3rem;padding: 3rem;color:#fff">
@@ -63,6 +65,9 @@ class BlogCommentsTest extends TestCase
             <br />
             – mom
           </blockquote>';
+
+        Session::shouldReceive('has')->times(1);
+        Session::shouldReceive('put')->times(1);
         $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
             ['txt' => $txt]
         );
@@ -73,8 +78,9 @@ class BlogCommentsTest extends TestCase
 
     public function test_blog_comments_update()
     {
+        $this->withoutJobs();
         $this->createBlogPost();
-        Session::shouldReceive('get')->times(2);
+        Session::shouldReceive('has')->times(2);
         Session::shouldReceive('put')->times(2);
         $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
             ['txt' => 'my comment']
@@ -90,6 +96,7 @@ class BlogCommentsTest extends TestCase
 
     public function test_blog_comments_favorite()
     {
+        $this->withoutJobs();
         $this->createBlogPost();
         $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
             ['txt' => 'my comment']
@@ -114,8 +121,9 @@ class BlogCommentsTest extends TestCase
 
     public function test_blog_comments_post_comment_reply()
     {
+        $this->withoutJobs();
         $this->createBlogPost();
-        Session::shouldReceive('get')->times(2);
+        Session::shouldReceive('has')->times(2);
         Session::shouldReceive('put')->times(2);
         $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
             ['txt' => 'my comment']
@@ -132,6 +140,7 @@ class BlogCommentsTest extends TestCase
 
     public function test_blog_comments_post_comment_delete()
     {
+        $this->withoutJobs();
         $this->createBlogPost();
         $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
             ['txt' => 'my comment']
@@ -144,16 +153,18 @@ class BlogCommentsTest extends TestCase
 
     public function test_blog_comments_update_notifications()
     {
-        $this->signIn($this->createUser());
+        $u = $this->createUser();
+        $this->signIn($u);
+        Redis::shouldReceive('hgetall')->shouldReceive('hmset')->with(
+            sprintf('comment_notif_opt.%s', $u->getKey()),
+            ['reply' => true]
+        );
         $this->patchJson('/ajax/forum/blog_posts/options',
             [
                 'option' => 'reply',
                 'flag' => true
             ]
         );
-        $this->assertTrue(Session::has('notification_options'));
-        $options = Session::get('notification_options');
-        $this->assertTrue($options->get('reply'));
     }
 
 }

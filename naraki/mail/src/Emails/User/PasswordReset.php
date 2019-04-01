@@ -17,7 +17,6 @@ class PasswordReset extends Email
                 'email.password_reset.subject',
                 ['app_name' => config('app.name')]
             ),
-            'token' => $this->data->token,
             'email' => $this->data->user->getAttribute('email')
         ]);
     }

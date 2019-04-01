@@ -2,7 +2,7 @@
 
 return [
     'welcome' => [
-        'subject' => ':app_name - Your registration',
+        'subject' => '[:app_name] Your registration',
         'title' => 'You registered to our website. This pleases us.',
         'body1' => 'You can use your e-mail address and the password entered during registration to log in.',
         'body2' => 'If you don\'t remember your password, please click on the \'forgot password\' button below the login form and set a new password.',
@@ -10,7 +10,7 @@ return [
         'cta' => 'Activate Account'
     ],
     'password_reset' => [
-        'subject' => ':app_name - Resetting your password',
+        'subject' => '[:app_name] Resetting your password',
         'title' => 'Resetting your password',
         'body1' => 'You are receiving this e-mail because a password reset request was sent to us. Please click on the button below to change your password.',
         'body2' => 'If you did not request a password reset, you can just delete this e-mail.',
@@ -18,10 +18,17 @@ return [
     ],
     'contact' => [
         'title' => 'A message was sent through the contact form.',
-        'email_subject' => 'Contact form message received',
+        'email_subject' => '[:app_name] Contact form message received',
         'email' => 'E-mail address:',
         'subject' => 'Subject:',
         'message_body' => 'Message body:'
+    ],
+    'mention' => [
+        'title' => 'Someone mentioned you in a comment',
+        'subject'=>'[:app_name] Someone mentioned you in a comment',
+        'body1' => 'You were mentioned by :user in the ":post" post.',
+        'body2'=>'If you do not wish to receive such emails, notification settings can be modified by clicking on the cog icon in the comments section of a blog post.',
+        'cta' => 'Go to discussion'
     ],
     'origin' => 'This email originates from the :app_name platform and is addressed to :name (:email)',
 ];

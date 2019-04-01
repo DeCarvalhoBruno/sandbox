@@ -5,6 +5,7 @@ use App\Models\Language;
 use App\Support\Frontend\Breadcrumbs;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Session;
 use Naraki\Blog\Facades\Blog as BlogFacade;
 use Naraki\Media\Facades\Media;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -89,7 +90,6 @@ class Blog extends Controller
             ];
         }
         $this->dispatch(new ProcessPageView($post));
-
         return view('blog::post', compact(
                 'post', 'breadcrumbs', 'media', 'categories',
                 'tags', 'otherPosts', 'otherPostMedia', 'sources')

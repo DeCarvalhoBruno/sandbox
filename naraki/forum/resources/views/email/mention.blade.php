@@ -1,6 +1,6 @@
 @extends('mail::default')
 @section('content')
-    <!--[if mso | IE]>
+<!--[if mso | IE]>
 </td>
 </tr>
 </table>
@@ -43,29 +43,13 @@
 
                         <tr>
                             <td
-                                    align="center" style="font-size:0px;padding:10px 25px;padding-top:20px;padding-right:0px;padding-bottom:0px;padding-left:0px;word-break:break-word;"
-                            >
-
-                                <div
-                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:25px;line-height:27px;text-align:center;color:#ffffff;"
-                                >
-                                    <span style="padding-bottom: 15px">{!! trans('email.welcome.title') !!}</span>
-                                </div>
-
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td
-                                    align="center" style="font-size:0px;padding:10px 25px;padding-top:20px;padding-right:0px;padding-bottom:10px;padding-left:0px;word-break:break-word;"
+                                    align="center" style="font-size:0px;padding:10px 25px;padding-top:20px;padding-right:0px;padding-bottom:25px;padding-left:0px;word-break:break-word;"
                             >
 
                                 <div
                                         style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:20px;line-height:22px;text-align:center;color:#ffffff;"
                                 >
-                                    <span
-                                            style="padding-bottom: 15px"><a href="{!! route_i18n('home') !!}"
-                                                                            style="color:inherit;text-decoration:underline;">{!! route_i18n('home') !!}</a></span>
+                                    <span style="padding-bottom: 15px">{!! trans('email.mention.title') !!}</span>
                                 </div>
 
                             </td>
@@ -139,7 +123,7 @@
                                 <div
                                         style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1.5;text-align:left;color:#000000;"
                                 >
-                                    {!! trans('email.welcome.body1') !!}
+                                    {!! trans('email.mention.body1',['user'=>$mention_user,'post'=>$post_title]) !!}
                                 </div>
 
                             </td>
@@ -151,23 +135,9 @@
                             >
 
                                 <div
-                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:13px;line-height:1.5;text-align:left;color:#000000;"
+                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1.5;text-align:left;color:#000000;"
                                 >
-                                    {!! trans('email.welcome.body2') !!}
-                                </div>
-
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td
-                                    align="left" style="font-size:0px;padding:10px 25px;padding-top:15px;word-break:break-word;"
-                            >
-
-                                <div
-                                        style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:16px;font-weight:bold;line-height:1.5;text-align:left;color:#000000;"
-                                >
-                                    {!! trans('email.welcome.body3') !!}
+                                    {!! trans('email.mention.body2') !!}
                                 </div>
 
                             </td>
@@ -246,9 +216,9 @@
                                                 align="center" bgcolor="#024944" role="presentation" style="border:none;border-radius:3px;cursor:auto;padding:10px 25px;background:#024944;" valign="middle"
                                         >
                                             <a
-                                                    href="{!! route_i18n('activate',$activation_token) !!}" style="background:#024944;color:white;font-family:Lato, Helvetica, Arial, sans-serif;font-size:18px;font-weight:bold;line-height:23px;Margin:0;text-decoration:none;text-transform:none;" target="_blank"
+                                                    href="{!! route_i18n('blog', ['slug'=> $slug, $comment_slug]) !!}" style="background:#024944;color:white;font-family:Lato, Helvetica, Arial, sans-serif;font-size:18px;font-weight:bold;line-height:23px;Margin:0;text-decoration:none;text-transform:none;" target="_blank"
                                             >
-                                                {!! trans('email.welcome.cta') !!}
+                                                {!! trans('email.mention.cta') !!}
                                             </a>
                                         </td>
                                     </tr>
@@ -277,8 +247,8 @@
 
 
 <!--[if mso | IE]>
-</td>
-</tr>
+    </td>
+  </tr>
 </table>
 
 

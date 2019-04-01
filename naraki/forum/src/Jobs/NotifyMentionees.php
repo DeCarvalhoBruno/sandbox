@@ -3,33 +3,47 @@
 use App\Jobs\Job;
 use App\Models\User;
 use Illuminate\Bus\Dispatcher;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Redis;
+use Naraki\Forum\Emails\Mention;
 use Naraki\Mail\Jobs\SendMail;
 
 class NotifyMentionees extends Job
 {
-    private $mentions;
-    private $comment;
+    /**
+     * @var array
+     */
+    private $mentioned_usernames;
+    /**
+     * @var \Illuminate\Contracts\Auth\Authenticatable
+     */
     private $user;
-    private $entityId;
-    private $entityTypeId;
+    /**
+     * @var \stdClass
+     */
+    private $entityData;
+    /**
+     * @var string
+     */
+    private $commentSlug;
 
     /**
      *
-     * @param $mentions
-     * @param $comment
+     * @param $mentioned_usernames
      * @param $user
-     * @param $entityId
-     * @param $entityTypeId
+     * @param $entityData
+     * @param $commentSlug
      */
-    public function __construct($mentions, $comment, $user, $entityId, $entityTypeId)
-    {
-        $this->mentions = $mentions;
-        $this->comment = $comment;
+    public function __construct(
+        array $mentioned_usernames,
+        Authenticatable $user,
+        \stdClass $entityData,
+        string $commentSlug
+    ) {
+        $this->mentioned_usernames = $mentioned_usernames;
         $this->user = $user;
-        $this->entityId = $entityId;
-        $this->entityTypeId = $entityTypeId;
+        $this->entityData = $entityData;
+        $this->commentSlug = $commentSlug;
     }
 
     /**
@@ -54,19 +68,26 @@ class NotifyMentionees extends Job
     {
         $user = new User();
         $users = $user->newQueryWithoutScopes()->select([$user->getKeyName(), 'username'])
-            ->whereIn('username', $this->mentions)->pluck($user->getKeyName(), 'username');
-        foreach ($this->mentions as $mention) {
-            $userNotifOptions = Redis::hgetall(sprintf('comment_notif_opt.%s', $users));
-            if (isset($userNotifOptions['mention'])) {
+            ->whereIn('username', $this->mentioned_usernames)->pluck($user->getKeyName(), 'username');
+
+        foreach ($this->mentioned_usernames as $username) {
+            $userNotifOptions = Redis::hgetall(sprintf('comment_notif_opt.%s', $users[$username]));
+
+            if (is_array($userNotifOptions) && isset($userNotifOptions['mention'])) {
                 if ($userNotifOptions['mention'] == true) {
                     app(Dispatcher::class)
-                        ->dispatch(new SendMail());
+                        ->dispatch(new SendMail(new Mention([
+                            'user' => $this->user,
+                            'slug' => $this->entityData->slug,
+                            'comment_slug' => $this->commentSlug,
+                            'mention_user' => $username,
+                            'post_title' => $this->entityData->title
+                        ])));
 
                 }
             }
 
         }
-
     }
 
 
