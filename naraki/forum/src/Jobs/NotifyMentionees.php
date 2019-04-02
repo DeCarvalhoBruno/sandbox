@@ -3,47 +3,22 @@
 use App\Jobs\Job;
 use App\Models\User;
 use Illuminate\Bus\Dispatcher;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Redis;
 use Naraki\Forum\Emails\Mention;
+use Naraki\Forum\Events\PostCreated;
+use Naraki\Forum\Facades\Forum;
 use Naraki\Mail\Jobs\SendMail;
 
 class NotifyMentionees extends Job
 {
     /**
-     * @var array
+     * @var PostCreated
      */
-    private $mentioned_usernames;
-    /**
-     * @var \Illuminate\Contracts\Auth\Authenticatable
-     */
-    private $user;
-    /**
-     * @var \stdClass
-     */
-    private $entityData;
-    /**
-     * @var string
-     */
-    private $commentSlug;
+    private $event;
 
-    /**
-     *
-     * @param $mentioned_usernames
-     * @param $user
-     * @param $entityData
-     * @param $commentSlug
-     */
-    public function __construct(
-        array $mentioned_usernames,
-        Authenticatable $user,
-        \stdClass $entityData,
-        string $commentSlug
-    ) {
-        $this->mentioned_usernames = $mentioned_usernames;
-        $this->user = $user;
-        $this->entityData = $entityData;
-        $this->commentSlug = $commentSlug;
+    public function __construct(PostCreated $event)
+    {
+        $this->event = $event;
     }
 
     /**
@@ -66,22 +41,56 @@ class NotifyMentionees extends Job
 
     private function processMentions()
     {
-        $user = new User();
-        $users = $user->newQueryWithoutScopes()->select([$user->getKeyName(), 'username'])
-            ->whereIn('username', $this->mentioned_usernames)->pluck($user->getKeyName(), 'username');
+        $userModel = new User();
+        $mentionedUsernames = $this->event->request->getMentions();
+        $userDb = $userModel->newQuery()->select([$userModel->getQualifiedKeyName(), 'username', 'email', 'full_name'])
+            ->whereIn('username', $mentionedUsernames)->get();
+        $usersInConversationDb = Forum::post()->getUserPostTreeBySlug($this->event->commentData->forum_post_slug);
 
-        foreach ($this->mentioned_usernames as $username) {
-            $userNotifOptions = Redis::hgetall(sprintf('comment_notif_opt.%s', $users[$username]));
+        $users = [];
+        foreach ($userDb as $user) {
+            $users[$user->getAttribute('username')] = $user;
+        }
+        $usersInConversation = [];
+        foreach ($usersInConversationDb as $user) {
+            $usersInConversation[$user->username] = true;
+        }
 
-            if (is_array($userNotifOptions) && isset($userNotifOptions['mention'])) {
+        foreach ($mentionedUsernames as $user) {
+            $notifiedUserKey = $users[$user]->getKey();
+            $userNotifOptions = Redis::hgetall(sprintf('comment_notif_opt.%s', $notifiedUserKey));
+
+            //The user has to have set notification preferences
+            //Also we don't need to notify the person who's posting if the person includes a mention to itself.
+            if (
+                is_array($userNotifOptions) && isset($userNotifOptions['mention'])
+                && $notifiedUserKey != $this->event->user->getKey()
+            ) {
                 if ($userNotifOptions['mention'] == true) {
+                    $commentPosterInfo = $userModel->newQuery()
+                        ->select(['username', 'full_name'])
+                        ->where('users.user_id', $this->event->commentData->post_user_id)
+                        ->first();
+                    if (isset($userNotifOptions['reply']) && $userNotifOptions['reply'] == true) {
+                        if (isset($usersInConversation[$users[$user]->username])) {
+                            //If the user is mentioned and he's also subscribed to replies, he'll be notified twice:
+                            //once for being mentioned, another for having subscribed to new replies
+                            //the above tests avoid this double notification.
+                            //In this case, only the reply notification will be sent.
+                            return;
+                        }
+                    }
                     app(Dispatcher::class)
                         ->dispatch(new SendMail(new Mention([
-                            'user' => $this->user,
-                            'slug' => $this->entityData->slug,
-                            'comment_slug' => $this->commentSlug,
-                            'mention_user' => $username,
-                            'post_title' => $this->entityData->title
+                            'user' => $users[$user],
+                            'slug' => $this->event->entityData->slug,
+                            'comment_slug' => $this->event->commentData->forum_post_slug,
+                            'mention_user' => sprintf(
+                                '%s (@%s)',
+                                $commentPosterInfo->getAttribute('full_name'),
+                                $commentPosterInfo->getAttribute('username')
+                            ),
+                            'post_title' => $this->event->entityData->title
                         ])));
 
                 }

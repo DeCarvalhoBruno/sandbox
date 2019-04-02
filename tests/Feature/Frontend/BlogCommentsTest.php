@@ -4,7 +4,6 @@ namespace Tests\Feature\Frontend;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
@@ -18,10 +17,13 @@ class BlogCommentsTest extends TestCase
 {
     use DatabaseMigrations, WithoutMiddleware;
 
-    private function createBlogPost()
+    private function createBlogPost($withJobs = false)
     {
         $u = $this->createUser();
         $this->signIn($u);
+        if ($withJobs) {
+            ElasticSearchIndex::shouldReceive('index')->times(1);
+        }
         $this->postJson(
             "/ajax/admin/blog/post/create",
             [
@@ -38,10 +40,10 @@ class BlogCommentsTest extends TestCase
 
     public function test_blog_comments_post_comment()
     {
-        $this->withoutJobs();
-        $this->createBlogPost();
+        $this->createBlogPost(true);
         $this->assertEquals(0, ForumPost::query()->count());
-        $txt = '<h2 style="font-size: 3rem;padding: 3rem;color:#fff">
+        $u = $this->createUser();
+        $txt = sprintf('<h2 style="font-size: 3rem;padding: 3rem;color:#fff">
             Hi there,
           </h2>
           <p>
@@ -57,17 +59,23 @@ class BlogCommentsTest extends TestCase
             </li>
           </ul>
           <p>It\'s a lot of <span class="mention" 
-          data-mention-id="armin_virag" 
-          contenteditable="false">@armin_virag</span> for the rest of us. I don\'t</p>
+          data-mention-id="%1$s" 
+          contenteditable="false">@%1$s</span> for the rest of us. I don\'t</p>
           <script>window.location.href=\'http://www.myalternatesite.com\'</script>
           <blockquote>
             It\'s amazing
             <br />
             – mom
-          </blockquote>';
+          </blockquote>', $u->getAttribute('username'));
 
         Session::shouldReceive('has')->times(1);
         Session::shouldReceive('put')->times(1);
+        Redis::shouldReceive('hgetall')->andReturns([
+            'reply' => true,
+            'mention' => true
+        ]);
+
+//        Bus::shouldReceive('dispatch');
         $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
             ['txt' => $txt]
         );

@@ -82,11 +82,12 @@ create view forum_post_tree as
 SELECT
   node.forum_post_id as id,
   (COUNT(parent.forum_post_id) - 1) AS lvl,
-  parent.updated_at as root_updated_at
+  node.lft,
+  node.rgt,
+  node.forum_post_slug as slug
 FROM forum_posts AS node, forum_posts AS parent
 WHERE node.lft BETWEEN parent.lft AND parent.rgt
-GROUP BY node.forum_post_slug
-order by node.lft asc;
+GROUP BY node.forum_post_slug;
 SQL;
         if (env('APP_ENV') == 'testing') {
             DB::unprepared($sql);

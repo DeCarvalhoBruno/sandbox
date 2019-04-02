@@ -25,10 +25,16 @@ return [
     ],
     'mention' => [
         'title' => 'Someone mentioned you in a comment',
-        'subject'=>'[:app_name] Someone mentioned you in a comment',
+        'subject' => '[:app_name] Someone mentioned you in a comment',
         'body1' => 'You were mentioned by :user in the ":post" post.',
-        'body2'=>'If you do not wish to receive such emails, notification settings can be modified by clicking on the cog icon in the comments section of a blog post.',
+        'body2' => 'If you do not wish to receive such emails, notification settings can be modified by clicking on the cog icon in the comments section of a blog post.',
         'cta' => 'Go to discussion'
+    ],
+    'reply' => [
+        'title' => 'Someone replied to one of your comments',
+        'subject'=>'[:app_name] Someone replied to one of your comments',
+        'body1' => ':user replied to one of your comments in the ":post" post.',
+        'body2' => 'If you do not wish to receive such emails, notification settings can be modified by clicking on the cog icon in the comments section of a blog post.',
     ],
     'origin' => 'This email originates from the :app_name platform and is addressed to :name (:email)',
 ];

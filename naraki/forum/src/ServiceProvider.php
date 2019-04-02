@@ -26,9 +26,11 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function boot()
     {
+        app('events')->listen(Events\PostCreated::class,Listeners\PostCreated::class);
+
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'forum');
 
-        $this->app['router']->group([
+        app('router')->group([
             'prefix' => '/ajax/',
             'namespace' => 'Naraki\Forum\Controllers',
             'middleware' => ['web', 'frontend_auth']
@@ -46,7 +48,7 @@ class ServiceProvider extends LaravelServiceProvider
             'namespace' => 'Naraki\Forum\Controllers',
             'middleware' => ['web']
         ], function (Router $r) {
-            $r->get('forum/{entity_type}/{slug}/comment', 'Post@getComments');
+            $r->get('forum/{entity_type}/{slug}/comment/{sort?}/{order?}', 'Post@getComments');
         });
     }
 

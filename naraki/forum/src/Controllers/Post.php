@@ -8,8 +8,8 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
+use Naraki\Forum\Events\PostCreated;
 use Naraki\Forum\Facades\Forum;
-use Naraki\Forum\Jobs\NotifyMentionees;
 use Naraki\Forum\Requests\CreateComment;
 use Naraki\Media\Models\Media;
 use Naraki\Media\Models\MediaEntity;
@@ -20,15 +20,15 @@ class Post extends Controller
     /**
      * @param string $type
      * @param string $slug
+     * @param string $sort
+     * @param string $order
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function getComments($type, $slug)
+    public function getComments($type, $slug, $sort = 'updated_at', $order = 'desc')
     {
-//        Session::forget('last_comment');
         $entityTypeId = EntityType::getEntityTypeID(Entity::getConstant($type), $slug);
         $favorites = Session::get('favorite_list');
-        $postCollection = Forum::post()->buildComments($entityTypeId)
-            ->orderBy('root_updated_at', 'desc')->get();
+        $postCollection = Forum::post()->buildComments($entityTypeId)->get();
         $postUsers = $postCollection->pluck('username')->unique();
         $dbPosts = $postCollection->toArray();
         if (!empty($dbPosts)) {
@@ -59,10 +59,13 @@ class Post extends Controller
                 }
             }
         }
-        $posts = Forum::post()->getTree($dbPosts, auth()->user(), $favorites);
+        $posts = Forum::post()->getTree($dbPosts, $sort, $order);
         $notification_options = null;
         if (auth()->check()) {
             $notification_options = Redis::hgetall(sprintf('comment_notif_opt.%s', auth()->user()->getKey()));
+            if (empty($notification_options)) {
+                $notification_options = null;
+            }
         }
         return response(compact('posts', 'notification_options'), 200);
     }
@@ -77,28 +80,29 @@ class Post extends Controller
     {
         $entityId = Entity::getConstant($type);
         $entity = EntityType::getEntityInfoFromSlug($entityId, $slug)
-            ->select(['entity_type_id', 'blog_post_title as title','blog_post_slug as slug'])->first();
+            ->select(['entity_type_id', 'blog_post_title as title', 'blog_post_slug as slug', 'person_id'])
+            ->first();
 
         if (is_null($entity)) {
-            return response(sprintf('%s %s not found.', $type, $slug), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response(
+                sprintf('%s %s not found.', $type, $slug),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
 
         $entityTypeId = $entity->getAttribute('entity_type_id');
-
         $comment = Forum::post()->createComment(
             (object)$request->all(), $entityTypeId, auth()->user()
         );
         Session::put('last_comment', Carbon::now());
 
-        if ($request->hasMentions()) {
-            $this->dispatch(new NotifyMentionees(
-                    $request->getMentions(),
-                    auth()->user(),
-                    (object)$entity->toArray(),
-                    $comment->getAttribute('forum_post_slug')
-                )
-            );
-        }
+        event(new PostCreated(
+                $request,
+                auth()->user(),
+                (object)$entity->toArray(),
+                (object)$comment->toArray()
+            )
+        );
 
         return response([
             'type' => 'success',
@@ -189,7 +193,7 @@ class Post extends Controller
             $notificationOptions[$requestOptions['option']] = $requestOptions['flag'];
         }
         Redis::hmset($redisKey, $notificationOptions);
-        return response(null, Response::HTTP_NO_CONTENT);
+        return response(null, Response::HTTP_OK);
     }
 
 }

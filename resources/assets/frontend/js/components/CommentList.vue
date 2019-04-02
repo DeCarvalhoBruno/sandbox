@@ -5,7 +5,7 @@
     <div v-for="(comment,idx) in comments" :key="comment.slug"
          class="row comment-item"
          :class="[comment.lvl==0?'card mb-2':'',hash==comment.slug?'highlight':'']">
-      <div class="col">
+      <div class="col" style="border-left:2px solid #f7f7f7;">
         <div class="comment-header">
           <figure class="comment-header-item">
             <img v-if="comment.media!==null" :src="comment.media"/>
@@ -17,17 +17,29 @@
               <div class="date">{{comment.updated_at}}</div>
             </div>
           </div>
-          <div class="comment-header-item favorite">
-            <div class="d-block">
-              <div><i class="fa" :class="{
+          <div class="comment-header-item actions">
+            <div class="favorite">
+              <i class="fa" :class="{
               'fa-star':comment.fav,
               'fa-star-o':!comment.fav,
               auth:authCheck,
               flip:comment.fav,animate:cssAnimationsActivated}"
-                      :aria-label="comment.fav?$t('comments.recommend-cancel'):$t('comments.recommend')"
-                      :title="comment.fav?$t('comments.recommend-cancel'):$t('comments.recommend')"
-                      @click="recommend(comment,idx)"></i></div>
+                 :aria-label="comment.fav?$t('comments.recommend-cancel'):$t('comments.recommend')"
+                 :title="comment.fav?$t('comments.recommend-cancel'):$t('comments.recommend')"
+                 @click="recommend(comment,idx)"></i>
               <div class="fav-count">{{(comment.cnt>0?comment.cnt:'')}}</div>
+            </div>
+            <div class="expand">
+              <i class="fa" :class="[
+              comment.children.length
+              ?
+              expanded
+                ?'fa-chevron-left fa-rotate-90'
+                :'fa-chevron-right fa-rotate-90'
+              :'']"
+                 @click="toggleExpanded"
+              :title="expanded?$t('comments.collapse'):$t('comments.expand')"
+              :aria-label="expanded?$t('comments.collapse'):$t('comments.expand')"></i>
             </div>
           </div>
         </div>
@@ -67,7 +79,7 @@
                           :comment-slug="comment.slug"
                           :search-url="searchUrl"></comment-editor>
         </div>
-        <comment-list :comments="comment.children"
+        <comment-list :comments="comment.children" v-if="expanded"
                       :auth-check="authCheck"
                       :slug="slug"
                       :search-url="searchUrl"></comment-list>
@@ -93,7 +105,8 @@
     data () {
       return {
         cssAnimationsActivated: false,
-        hash: window.location.hash.substr(1)
+        hash: window.location.hash.substr(1),
+        expanded: true
       }
     },
     mounted () {
@@ -110,6 +123,9 @@
 
     },
     methods: {
+      toggleExpanded () {
+        this.expanded = !this.expanded
+      },
       recommend (comment, index) {
         if (!this.authCheck) {
           return

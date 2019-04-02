@@ -49,7 +49,7 @@
                                 <div
                                         style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:20px;line-height:22px;text-align:center;color:#ffffff;"
                                 >
-                                    <span style="padding-bottom: 15px">{!! trans('email.mention.title') !!}</span>
+                                    <span style="padding-bottom: 15px">{!! trans('email.reply.title') !!}</span>
                                 </div>
 
                             </td>
@@ -123,7 +123,7 @@
                                 <div
                                         style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1.5;text-align:left;color:#000000;"
                                 >
-                                    {!! trans('email.mention.body1',['user'=>$mention_user,'post'=>$post_title]) !!}
+                                    {!! trans('email.reply.body1',['user'=>$reply_user,'post'=>$post_title]) !!}
                                 </div>
 
                             </td>
@@ -137,7 +137,7 @@
                                 <div
                                         style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1.5;text-align:left;color:#000000;"
                                 >
-                                    {!! trans('email.mention.body2') !!}
+                                    {!! trans('email.reply.body2') !!}
                                 </div>
 
                             </td>

@@ -5,7 +5,6 @@ use App\Models\Language;
 use App\Support\Frontend\Breadcrumbs;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Session;
 use Naraki\Blog\Facades\Blog as BlogFacade;
 use Naraki\Media\Facades\Media;
 use Symfony\Component\HttpKernel\Exception\HttpException;

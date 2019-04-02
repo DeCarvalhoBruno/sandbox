@@ -27,6 +27,8 @@ return [
         'cancel' => 'Cancel',
         'submit' => 'Submit',
         'recommend' => 'Recommend',
+        'collapse' => 'Collapse',
+        'expand' => 'Expand',
         'recommend-cancel' => 'Cancel recommendation',
         'reply' => 'Reply',
         'edit' => 'Edit comment',

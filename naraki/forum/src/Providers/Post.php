@@ -20,6 +20,9 @@ class Post extends Model implements PostInterface
      */
     public function buildComments(int $entityTypeId): Builder
     {
+        //This query has to be sorted by the parent't left node, otherwise the tree won't render properly
+        //Nodes have to be ordered from root to lowest children for every branch.
+        //The ordering of the tree is done recursively via php.
         return $this->buildWithScopes(
             [
                 'forum_posts.forum_post_id as id',
@@ -33,7 +36,19 @@ class Post extends Model implements PostInterface
                 'forum_post_fav_cnt as cnt'
             ],
             ['entityType', 'user', 'tree'])
-            ->where('entity_types.entity_type_id', $entityTypeId);
+            ->where('entity_types.entity_type_id', $entityTypeId)
+            ->orderBy('forum_post_tree.lft', 'asc');
+    }
+
+    public function getUserPostTreeBySlug($slug)
+    {
+        return \DB::select('select users.user_id,username,full_name,email
+from forum_post_tree, forum_post_tree as fp
+join forum_posts on fp.id = forum_posts.forum_post_id
+join users on forum_posts.post_user_id = users.user_id
+join people on users.user_id = people.user_id
+where forum_post_tree.lft between fp.lft and fp.rgt
+and forum_post_tree.slug = ?', [$slug]);
     }
 
     /**
@@ -109,16 +124,16 @@ class Post extends Model implements PostInterface
 
     /**
      * @param array $posts
-     * @param Authenticatable|\App\Models\User $user
-     * @param arrray $favorites
+     * @param string $sortColumn
+     * @param string $order
      * @return array
      */
-    public function getTree(array $posts, ?Authenticatable $user, $favorites): array
+    public function getTree(array $posts, $sortColumn = 'updated_at', $order = 'desc'): array
     {
         return PostTree::getTree(
             $posts,
-            !is_null($user) ? $user->getKey() : null,
-            !is_null($favorites) ? $favorites : []);
+            $sortColumn,
+            $order);
     }
 
     /**

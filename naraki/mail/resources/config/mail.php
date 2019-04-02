@@ -11,7 +11,6 @@
         [
             'welcome' => \Naraki\Mail\Emails\User\Welcome::class,
             'contact' => \Naraki\Mail\Emails\Frontend\Contact::class,
-            'password_reset' => \Naraki\Mail\Emails\User\PasswordReset::class,
-            'mention' => \Naraki\Forum\Emails\Mention::class
+            'password_reset' => \Naraki\Mail\Emails\User\PasswordReset::class
         ]
 ];

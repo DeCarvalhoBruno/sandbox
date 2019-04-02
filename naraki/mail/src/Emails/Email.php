@@ -75,8 +75,8 @@ class Email
     public function prepareViewData()
     {
         $this->viewData->add([
-            'recipient_email' => $this->data->user->getAttribute('email'),
-            'recipient_name' => $this->data->user->getFullname()
+            'recipient_email' => $this->data->user->email,
+            'recipient_name' => $this->data->user->full_name
         ]);
     }
 

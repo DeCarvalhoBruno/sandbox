@@ -25,10 +25,10 @@ class ForumPost extends Model
     ];
     public static $slugColumn = 'forum_post_slug';
 
-    public function getUpdatedAtAttribute($value)
-    {
-        return Carbon::createFromFormat('Y-m-d H:i:s', $value)->diffForHumans();
-    }
+//    public function getUpdatedAtAttribute($value)
+//    {
+//        return Carbon::createFromFormat('Y-m-d H:i:s', $value)->diffForHumans();
+//    }
 
     /**
      * @link https://laravel.com/docs/eloquent#query-scopes
@@ -112,6 +112,20 @@ class ForumPost extends Model
     {
         return $query->join('forum_post_tree',
             'forum_post_tree.id', '=', 'forum_posts.forum_post_id');
+    }
+
+    /**
+     * @param string $slug
+     * @return array
+     */
+    public function getHierarchy($slug)
+    {
+        return \DB::select('
+            select bct.label,bct.id,bct.lvl from blog_category_tree, blog_category_tree as bct
+            where blog_category_tree.id=?
+            and blog_category_tree.lft between bct.lft and bct.rgt
+        ', [$slug]);
+
     }
 
 

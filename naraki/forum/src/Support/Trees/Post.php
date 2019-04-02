@@ -1,5 +1,7 @@
 <?php namespace Naraki\Forum\Support\Trees;
 
+use Carbon\Carbon;
+
 class Post
 {
     /**
@@ -14,6 +16,8 @@ class Post
      * @var array
      */
     private $children = [];
+    private static $sortColumn;
+    private static $order;
 
     /**
      *
@@ -35,9 +39,26 @@ class Post
         $ar = $this->getNewRoot($this);
 
         $level++;
+        $children = [];
         foreach ($this->children as $child) {
-            $ar->children[] = $child->toArray($level);
+            $children[] = $child->toArray($level);
         }
+        $column = static::$sortColumn;
+        $order = static::$order;
+
+        usort($children, function ($a, $b) use ($column, $order) {
+            if ($order === 'asc') {
+                return strcmp($a->{$column}, $b->{$column});
+            } else {
+                return strcmp($b->{$column}, $a->{$column});
+            }
+        });
+        foreach ($children as $child) {
+            $child->updated_at = Carbon::createFromFormat(
+                'Y-m-d H:i:s',
+                $child->updated_at)->diffForHumans();
+        }
+        $ar->children = $children;
         return $ar;
     }
 
@@ -61,6 +82,8 @@ class Post
     public function addChild($id, $data): self
     {
         $new = new static($id, $data);
+        $new::$sortColumn = static::$sortColumn;
+        $new::$order = static::$order;
         array_push($this->children, $new);
         return $new;
     }
@@ -69,11 +92,14 @@ class Post
      * @param array $posts
      * @return array
      */
-    public static function getTree($posts): array
+    public static function getTree($posts, $sortColumn, $order): array
     {
         if (empty($posts)) {
             return [];
         }
+
+        static::$sortColumn = $sortColumn;
+        static::$order = $order;
         return static::makeTree($posts);
     }
 
@@ -109,6 +135,15 @@ class Post
             }
         }
         $tree = [];
+        $column = static::$sortColumn;
+        $order = static::$order;
+        usort($l, function ($a, $b) use ($column, $order) {
+            if ($order === 'asc') {
+                return strcmp($a[0]->{$column}, $b[0]->{$column});
+            } else {
+                return strcmp($b[0]->{$column}, $a[0]->{$column});
+            }
+        });
         foreach ($l as $node) {
             $tree[] = $node[0]->toArray();
         }
@@ -137,5 +172,15 @@ class Post
     public function getData()
     {
         return $this->data;
+    }
+
+    public function __get($name)
+    {
+        return $this->data[$name];
+    }
+
+    private function sort($column)
+    {
+
     }
 }

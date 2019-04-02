@@ -72,10 +72,21 @@ class SendTestEmail extends Command
     {
         return [
             'user' => $this->getUser(),
-            'slug'=>'this-is-the-blog-slug',
-            'comment_slug'=>'john_doe-fsjddfa32h3kk44',
-            'mention_user'=>'Tim Horndahl',
-            'post_title'=>'This is the blog post title'
+            'slug' => 'this-is-the-blog-slug',
+            'comment_slug' => 'john_doe-fsjddfa32h3kk44',
+            'mention_user' => 'Tim Horndahl (tim_horndahl)',
+            'post_title' => 'This is the blog post title'
+        ];
+    }
+
+    public function reply()
+    {
+        return [
+            'user' => $this->getUser(),
+            'slug' => 'this-is-the-blog-slug',
+            'comment_slug' => 'john_doe-fsjddfa32h3kk44',
+            'reply_user' => 'Tim Horndahl (tim_horndahl)',
+            'post_title' => 'This is the blog post title'
         ];
 
     }
