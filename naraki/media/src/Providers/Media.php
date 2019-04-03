@@ -1,11 +1,11 @@
 <?php namespace Naraki\Media\Providers;
 
 use App\Support\Providers\Model;
-use Naraki\Media\Contracts\Media as MediaInterface;
 use Naraki\Media\Contracts\File as FileInterface;
+use Naraki\Media\Contracts\Media as MediaInterface;
 
 /**
- * @method \Naraki\Media\Models\Media createModel(array $attributes = [])
+ * @method \Naraki\Media\Models\MediaEntity createModel(array $attributes = [])
  */
 class Media extends Model implements MediaInterface
 {
@@ -13,11 +13,11 @@ class Media extends Model implements MediaInterface
      * @var \Naraki\Media\Contracts\File|\Naraki\Media\Providers\File
      */
     protected $file;
-    
+
     /**
      * @var string This provider's model class
      */
-    protected $model = \Naraki\Media\Models\Media::class;
+    protected $model = \Naraki\Media\Models\MediaEntity::class;
 
     /**
      * Media constructor.
@@ -28,7 +28,7 @@ class Media extends Model implements MediaInterface
     public function __construct(FileInterface $fi, $model = null)
     {
         parent::__construct($model);
-        $this->file          = $fi;
+        $this->file = $fi;
     }
 
     /**
@@ -54,7 +54,6 @@ class Media extends Model implements MediaInterface
     {
         return $this->file->text();
     }
-    
 
     /**
      * @param int $mediaId
@@ -68,5 +67,30 @@ class Media extends Model implements MediaInterface
                 return 'JPG, PNG';
                 break;
         }
+    }
+
+    /**
+     * @param array $columns
+     * @param int $entityTypeId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getMedia($columns=['*'], $entityTypeId = null)
+    {
+        $model = $this->build()->select($columns);
+        $scopes = [
+            '',
+            'mediaCategoryRecord',
+            'mediaRecord',
+            'mediaType',
+            'mediaDigital',
+            'media'
+        ];
+        if (!is_array($entityTypeId)) {
+            $scopes[0] = 'entityType';
+            return $model->scopes($scopes)->applyScopes();
+        }
+        array_shift($scopes);
+        return $model->entityType($entityTypeId)->scopes($scopes);
+
     }
 }

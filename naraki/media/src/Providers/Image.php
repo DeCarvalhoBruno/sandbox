@@ -1,6 +1,6 @@
 <?php namespace Naraki\Media\Providers;
 
-use App\Contracts\Image as ImageContract;
+use Naraki\Media\Contracts\UploadedImage as ImageContract;
 use App\Models\Entity;
 use App\Models\EntityType;
 use App\Support\Providers\Model;
@@ -77,7 +77,7 @@ class Image extends Model implements ImageInterface
     }
 
     /**
-     * @param \App\Contracts\Image $image
+     * @param \Naraki\Media\Contracts\UploadedImage $image
      * @return int
      */
     public function saveAvatar(ImageContract $image)
@@ -90,7 +90,7 @@ class Image extends Model implements ImageInterface
     }
 
     /**
-     * @param \App\Contracts\Image $image
+     * @param \Naraki\Media\Contracts\UploadedImage $image
      * @return array|int
      */
     private function getTargetEntity(ImageContract $image)
@@ -99,7 +99,7 @@ class Image extends Model implements ImageInterface
     }
 
     /**
-     * @param \App\Contracts\Image $image
+     * @param \Naraki\Media\Contracts\UploadedImage $image
      * @param array $formats
      * @return array|int
      */
@@ -114,7 +114,7 @@ class Image extends Model implements ImageInterface
     }
 
     /**
-     * @param \App\Contracts\Image|\Naraki\Media\Support\UploadedAvatar $media
+     * @param \Naraki\Media\Contracts\UploadedImage|\Naraki\Media\Support\UploadedAvatar $media
      * @param int $entityTypeID
      * @param bool $setAsUsed
      * @param array $formats

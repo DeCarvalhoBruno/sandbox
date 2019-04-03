@@ -10,6 +10,7 @@ return [
         'group_index' => 'Listing groups',
         'members' => 'Managing group members',
         'media_edit' => 'Editing a media',
+        'media_index' => 'Managing media',
         'settings' => 'Settings - General',
         'settings_password' => 'Settings - Change my password',
         'settings_profile' => 'Settings - Modify my profile',
@@ -33,6 +34,7 @@ return [
         'admin-blog_posts-edit' => 'Edit',
         'admin-blog_posts-category' => 'Categories',
         'admin-media-edit' => 'Edit Image',
+        'admin-media-index' => 'Manage media',
         'admin-user-password' => 'Your password',
         'admin-user-profile' => 'Your profile',
         'admin-user-general' => 'Your general settings',
@@ -106,6 +108,8 @@ return [
         'member_count' => 'Number of members',
         'blog_post_title' => 'Post title',
         'media_title' => 'Title',
+        'media_created_at'=>'Creation date',
+        'media' => 'Media|Medias',
         'media_alt' => 'Alt text',
         'media_description' => 'Description',
         'media_caption' => 'Caption',
@@ -117,7 +121,9 @@ return [
         'email' => 'email',
         'group_name' => 'group_name',
         'created_at' => 'created_at',
-        'blog_post_title' => 'blog_post_title'
+        'blog_post_title' => 'blog_post_title',
+        'media_title' => 'media_title',
+        'created_ago'=>'created_at'
     ],
     'db_raw_inv' => [
         'full_name' => 'full_name',
@@ -125,7 +131,9 @@ return [
         'email' => 'email',
         'group_name' => 'group_name',
         'created_at' => 'created_at',
-        'blog_post_title' => 'blog_post_title'
+        'blog_post_title' => 'blog_post_title',
+        'media_title' => 'media_title',
+        'media_uuid'=>'media_uuid'
     ],
     'filters' => [
         'sortBy' => 'sortBy',
@@ -134,6 +142,8 @@ return [
         'users_group' => 'group',
         'users_created' => 'created',
         'blog_posts_title' => 'title',
+        'media_title' => 'title',
+        'created_ago'=>'created',
         'asc' => 'asc',
         'desc' => 'desc',
         'day' => 'day',
@@ -145,6 +155,7 @@ return [
         'users_group' => 'Group:',
         'users_name' => 'Full name:',
         'blog_posts_title' => 'Post title:',
+        'media_title'=>'Media title:',
         'users_created' => 'Registration period:',
         'created_today' => 'Registered today',
         'created_week' => 'Less than a week ago',

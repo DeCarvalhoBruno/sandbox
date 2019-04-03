@@ -1,9 +1,9 @@
 <?php namespace Naraki\Media\Support;
 
-use App\Contracts\Image;
+use Naraki\Media\Contracts\UploadedImage;
 use Naraki\Media\Models\Media;
 
-class SimpleImage extends ImageUpload implements Image
+class SimpleUploadedImage extends ImageUpload implements UploadedImage
 {
 
     /**
@@ -42,7 +42,7 @@ class SimpleImage extends ImageUpload implements Image
 
     /**
      * @param \Psr\Http\Message\StreamInterface $stream
-     * @return \Naraki\Media\Support\SimpleImage
+     * @return \Naraki\Media\Support\SimpleUploadedImage
      */
     public function cropAvatarFromStream($stream)
     {

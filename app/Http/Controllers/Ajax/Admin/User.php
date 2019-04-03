@@ -28,7 +28,7 @@ class User extends Controller
      */
     public function index(UserFilter $userFilter)
     {
-        $this->repo->setStoredFilter($this->user->getKey(), $userFilter);
+        $this->repo->setStoredFilter(Entity::USERS, $this->user->getKey(), $userFilter);
         $users = $this->repo
             ->buildWithScopes([
                 \DB::raw('null as selected'),
@@ -74,7 +74,7 @@ class User extends Controller
      */
     public function edit($username)
     {
-        $filter = $this->repo->getStoredFilter($this->user->getKey(), Entity::USERS);
+        $filter = $this->repo->getStoredFilter(Entity::USERS, $this->user->getKey());
         $nav = [];
         if (!is_null($filter)) {
             $userSiblings = $this->repo->buildWithScopes([

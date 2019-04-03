@@ -21,7 +21,8 @@ class Admin
     public static function routes()
     {
         return function (Router $r) {
-            $r->get('media/{media}', 'Media@edit');
+            $r->get('media/{entity}/{media}', 'Media@edit');
+            $r->get('media', 'Media@index');
             $r->patch('media/{media}', 'Media@update');
             $r->post('media/add', 'Media@add')->middleware('can:edit,App\Models\User');
             $r->post('media/crop', 'Media@crop')->middleware('can:edit,App\Models\User');

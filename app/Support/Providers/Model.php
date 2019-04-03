@@ -1,7 +1,7 @@
 <?php namespace App\Support\Providers;
 
 use App\Contracts\RawQueries;
-use App\Models\Entity;
+use App\Filters\Filters;
 use Illuminate\Database\Eloquent\Builder;
 
 abstract class Model
@@ -28,11 +28,11 @@ abstract class Model
 
     /**
      * Create a new instance of the model.
-     * @see Model::__construct
-     *
      * @param array $attributes
      *
      * @return \Illuminate\Database\Eloquent\Model
+     * @see Model::__construct
+     *
      */
     public function createModel(array $attributes = [])
     {
@@ -162,7 +162,7 @@ abstract class Model
      * @param \Illuminate\Database\Eloquent\Model|null $model
      * @return array
      */
-    public function filterFillables($data, $model = null)
+    public function filterFillables(array $data, $model = null): array
     {
         if (is_null($model)) {
             $model = $this->createModel();
@@ -178,7 +178,7 @@ abstract class Model
      * @param string $model
      * @return int|null
      */
-    public static function getRowCount($model)
+    public static function getRowCount(string $model): ?int
     {
         /** @var \Illuminate\Database\Eloquent\Model $m */
         $m = new $model;
@@ -187,60 +187,82 @@ abstract class Model
         return !empty($result) ? $result[0]->c : null;
     }
 
-    public function getKeyName()
+    /**
+     * @return string
+     */
+    public function getKeyName(): string
     {
         return $this->createModel()->getKeyName();
     }
 
-    public function getQualifiedKeyName()
+    /**
+     * @return string
+     */
+    public function getQualifiedKeyName(): string
     {
         return $this->createModel()->getQualifiedKeyName();
     }
 
     /**
+     * Stores the filters the user applied on a particular back office list,
+     * i.e. sorting users by name.
+     * The stored filters are used to build navigation arrows
+     * to move between records without having to go back to the list.
+     *
+     * @param int $entityID
      * @param $userID
      * @param \App\Filters\Filters $filter
+     * @return void
      */
-    public function setStoredFilter($userID, $filter)
+    public function setStoredFilter(int $entityID, int $userID, Filters $filter)
     {
         if ($filter->hasFilters()) {
-            \Cache::put($this->getStoredFilterKey($userID), $filter, 1800);
+            \Cache::put($this->getStoredFilterKey($entityID, $userID), $filter, 60 * 60);
         } else {
-            \Cache::forget($this->getStoredFilterKey($userID));
+            //If there are no filters, we make sure to erase any filters we kept that are no longer up to date
+            \Cache::forget($this->getStoredFilterKey($entityID, $userID));
         }
     }
 
     /**
-     * @param $userID
-     * @param $entityID
+     * @param int $entityID
+     * @param int $userID
+     * @return void
+     */
+    public function resetStoredFilter(int $entityID, int $userID)
+    {
+        \Cache::forget($this->getStoredFilterKey($entityID, $userID));
+    }
+
+    /**
+     * @param int $entityID
+     * @param int $userID
      * @return \App\Filters\Filters|\null
      */
-    public function getStoredFilter($userID, $entityID)
+    public function getStoredFilter(int $entityID, int $userID): ?Filters
     {
-        $filterID = $this->getStoredFilterKey($userID);
+        $filterID = $this->getStoredFilterKey($entityID, $userID);
         if (\Cache::has($filterID)) {
-            $filter = \Cache::get($filterID);
-            if (Entity::getModelClassNamespace($entityID, false) === $filter->getFiltersFor()) {
-                return $filter;
-            }
+            return \Cache::get($filterID);
         }
         return null;
     }
 
     /**
+     * @param $entityID
      * @param int $userID
      * @return string
      */
-    private function getStoredFilterKey($userID)
+    private function getStoredFilterKey(int $entityID, int $userID): string
     {
-        return sprintf('backend_filter_%s', $userID);
+        return sprintf('filter_%s_%s', $entityID, $userID);
     }
 
     /**
      * @param int $entityTypeID
      * @return mixed
      */
-    public function getAllUserPermissions($entityTypeID)
+    public function getAllUserPermissions(int $entityTypeID)
     {
         return (app(RawQueries::class))->getAllUserPermissions($entityTypeID);
     }

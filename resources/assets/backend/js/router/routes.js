@@ -118,7 +118,7 @@ let routes = [
     component: MediaEdit
   },
   {
-    name: 'admin.medias.index',
+    name: 'admin.media.index',
     meta: {parent: 'admin.dashboard'},
     component: Media
   },

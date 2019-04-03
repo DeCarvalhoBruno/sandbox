@@ -1,10 +1,10 @@
 <?php namespace Naraki\Media\Support;
 
-use App\Contracts\Image;
+use Naraki\Media\Contracts\UploadedImage;
 use App\Models\Entity;
 use Naraki\Media\Models\Media;
 
-class UploadedImage extends ImageUpload implements Image
+class UploadedUploadedImage extends ImageUpload implements UploadedImage
 {
     /**
      *

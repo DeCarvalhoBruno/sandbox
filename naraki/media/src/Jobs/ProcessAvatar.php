@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 use Naraki\Media\Facades\Media as MediaProvider;
 use Naraki\Media\Models\Media;
-use Naraki\Media\Support\SimpleImage;
+use Naraki\Media\Support\SimpleUploadedImage;
 
 class ProcessAvatar extends Job
 {
@@ -100,7 +100,7 @@ class ProcessAvatar extends Job
 
     public function makeSimpleImage($extension)
     {
-        return new SimpleImage(
+        return new SimpleUploadedImage(
             $this->username,
             $this->username,
             Entity::USERS,

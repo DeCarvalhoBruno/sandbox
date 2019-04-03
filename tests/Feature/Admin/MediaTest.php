@@ -16,7 +16,16 @@ class MediaTest extends TestCase
     use DatabaseMigrations, WithoutMiddleware;
 
 
-    //@TODO: Make a thorough file upload series of tests once the feature is more solicited in the future.
+    public function test_media_show()
+    {
+        $u = $this->createUser();
+        $this->signIn($u);
+
+        $response = $this->getJson(
+            "/ajax/admin/media"
+        );
+        $response->assertStatus(200);
+    }
 
 
     public function test_media_edit()

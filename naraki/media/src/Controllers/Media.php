@@ -7,18 +7,45 @@ use App\Support\Providers\User as UserProvider;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Naraki\Media\Facades\Media as MediaProvider;
+use Naraki\Media\Filters\Media as MediaFilter;
 use Naraki\Media\Models\Media as MediaModel;
 use Naraki\Media\Models\MediaDigital;
 use Naraki\Media\Models\MediaImgFormat;
 use Naraki\Media\Requests\Update as UpdateMedia;
 use Naraki\Media\Support\UploadedAvatar;
-use Naraki\Media\Support\UploadedImage;
+use Naraki\Media\Support\UploadedUploadedImage;
 
 class Media extends Controller
 {
-    public function __construct()
+
+    public function index(MediaFilter $filter)
     {
-        parent::__construct();
+        MediaProvider::setStoredFilter(Entity::SYSTEM, $this->user->getKey(), $filter);
+
+        $media = MediaProvider::getMedia([
+            'media_title',
+            'media_extension',
+            'media_uuid',
+            'media_digital.created_at as created_ago',
+            'media_digital.created_at'
+        ])->whereNotIn('media.media_id', [MediaModel::IMAGE_AVATAR])
+            ->filter($filter);
+
+        return response([
+            'table' => $media->paginate(25),
+            'sorted' => $filter->getFilter('sortBy'),
+            'columns' => MediaProvider::createModel()->getColumnInfo(
+                [
+                    'media_title' => (object)[
+                        'name' => trans('js-backend.db.media_title'),
+                    ],
+                    'created_ago' => (object)[
+                        'name' => trans('js-backend.db.media_created_at'),
+                    ]
+                ]
+                , $filter)
+        ], Response::HTTP_OK);
+
     }
 
     /**
@@ -60,7 +87,7 @@ class Media extends Controller
                             $media->saveTemporaryAvatar();
                             break;
                         case "image":
-                            $media = new UploadedImage(
+                            $media = new UploadedUploadedImage(
                                 $file,
                                 $input->target,
                                 $input->type,
@@ -101,7 +128,7 @@ class Media extends Controller
 
     }
 
-    public function edit($uuid)
+    public function edit($entity, $uuid)
     {
         $query = MediaProvider::image()->getOne($uuid,
             [
@@ -120,7 +147,17 @@ class Media extends Controller
         }
         $media = $query->toArray();
 
-        $data = MediaProvider::image()->getSiblings($uuid, ['media_uuid', 'entity_type_id'])->get();
+        if ($entity === 'media') {
+            $filter = MediaProvider::getStoredFilter(Entity::SYSTEM, $this->user->getKey());
+            $data = MediaProvider::getMedia([
+                'media_uuid',
+                'entity_types.entity_type_id'
+            ])->whereNotIn('media.media_id', [MediaModel::IMAGE_AVATAR])
+                ->filter($filter)->get();
+        } else {
+            $data = MediaProvider::image()->getSiblings($uuid, ['media_uuid', 'entity_type_id'])->get();
+        }
+
         $navData = $data->pluck('media_uuid')->all();
         $fromEntity = $data->pluck('entity_type_id')->first();
         $entityInfo = EntityType::buildQueryFromUnknownEntity($fromEntity);
@@ -162,7 +199,7 @@ class Media extends Controller
     }
 
     /**
-     * @param \Naraki\Media\Support\UploadedImage $media
+     * @param \Naraki\Media\Support\UploadedUploadedImage $media
      * @return int
      * @throws \Exception
      * @throws \Throwable
@@ -205,7 +242,7 @@ class Media extends Controller
         $input = (object)app('request')->only(['uuid', 'height', 'width', 'x', 'y']);
 
         /**
-         * @var \Naraki\Media\Support\SimpleImage $avatarInfo
+         * @var \Naraki\Media\Support\SimpleUploadedImage $avatarInfo
          */
         $avatarInfo = Cache::get('temporary_avatars')->pull(
             substr($input->uuid, 0, strrpos($input->uuid, '.')));

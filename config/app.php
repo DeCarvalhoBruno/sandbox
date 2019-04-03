@@ -223,7 +223,8 @@ return [
         'JavaScript' => App\Facades\JavaScript::class,
         'Media' => \Naraki\Media\Facades\Media::class,
         'Blog' => \Naraki\Blog\Facades\Blog::class,
-        'Forum' => \Naraki\Forum\Facades\Forum::class
+        'Forum' => \Naraki\Forum\Facades\Forum::class,
+        'NarakiMail' => \Naraki\Mail\Facades\Email::class
     ],
 
 ];

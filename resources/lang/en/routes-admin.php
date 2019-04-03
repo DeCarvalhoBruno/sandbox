@@ -12,7 +12,8 @@ return [
     'admin.settings.social' => 'admin/settings/social',
     'admin.settings.sitemap' => 'admin/settings/sitemap',
     'admin.system.log' => 'admin/system/log',
-    'admin.media.edit' => 'admin/media/edit/:media',
+    'admin.media.edit' => 'admin/media/edit/:entity/:media',
+    'admin.media.index' => 'admin/media',
     'admin.login' => 'admin/login',
     'admin.groups.members' => 'admin/group/:group/members',
     'admin.groups.index' => 'admin/groups',
@@ -23,6 +24,5 @@ return [
     'admin.blog_posts.edit' => 'admin/blog/post/edit/:slug',
     'admin.blog_posts.delete' => 'admin/blog/post/:slug',
     'admin.blog_posts.category' => 'admin/blog/category',
-    'admin.blog_posts.add' => 'admin/blog/post/add',
-    'admin.medias.index' => 'admin/media'
+    'admin.blog_posts.add' => 'admin/blog/post/add'
 ];

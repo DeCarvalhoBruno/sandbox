@@ -187,7 +187,7 @@
         }
       },
       goToEditImagePage (uuid) {
-        this.$router.push({name: 'admin.media.edit', params: {media: uuid}})
+        this.$router.push({name: 'admin.media.edit', params: {entity:this.type, media: uuid}})
       },
       triggerBrowse () {
         if (!this.isActive) {

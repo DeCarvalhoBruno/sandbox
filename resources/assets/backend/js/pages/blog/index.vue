@@ -70,14 +70,12 @@
                                 <router-link :to="{
                                                 name: 'admin.blog_posts.edit',
                                                 params: { slug: props.row.blog_post_slug }}">
-                                    <button
-                                            class="btn btn-sm btn-info"
+                                    <button class="btn btn-sm btn-info"
                                             :title="$t(
                                                             'tables.edit_item',{
                                                             name:props.row[$t('db_raw_inv.blog_post_title')]
-                                                            })">
-                                        <i class="fa fa-pencil"></i>
-                                    </button>
+                                                            })"><i
+                                        class="fa fa-pencil"></i></button>
                                 </router-link>
                                 <button type="button" class="btn btn-sm btn-danger"
                                         :title="$t('tables.delete_item',{name:props.row[$t('db_raw_inv.blog_post_title')]})"
@@ -139,31 +137,14 @@
         this.setFilterButton('title')
       },
       async applyToSelected () {
-        let posts = this.$refs.table.getSelectedRows('blog_post_slug')
-        if (posts.length > 0) {
-          switch (this.selectApply) {
-            case 'del':
-              this.swalDeleteWarning(
-                this.$t('modal.blog_post_delete.h'),
-                this.$tc('modal.blog_post_delete.t', 2, {number: posts.length}),
-                this.$t('general.delete')
-              ).then(async (result) => {
-                if (result.value) {
-                  await axios.post('/ajax/admin/blog/post/batch/delete', {posts: posts})
-                  this.refreshTableData()
-                  this.swalNotification('success', this.$tc('message.blog_post_delete_ok', 2))
-                }
-              })
-              break
-          }
-        }
+
       },
       filterBlogTitle () {
         this.applyFilter('title')
       },
     },
     metaInfo () {
-      return {title: this.$t('title.blog_index')}
+      return {title: this.$t('title.media_index')}
     }
   }
 </script>

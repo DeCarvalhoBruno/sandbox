@@ -1,9 +1,9 @@
 <?php namespace Naraki\Media\Support;
 
-use App\Contracts\Image;
+use Naraki\Media\Contracts\UploadedImage;
 use Laravolt\Avatar\Avatar;
 
-class GeneratedAvatar extends ImageUpload implements Image
+class GeneratedAvatar extends ImageUpload implements UploadedImage
 {
     protected $fileExtension = 'png';
     /**

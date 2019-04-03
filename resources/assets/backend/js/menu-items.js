@@ -86,7 +86,7 @@ export default [
     icon: 'image',
     name: 'sidebar.media',
     router: {
-      name: 'admin.medias.index'
+      name: 'admin.media.index'
     }
   }
 ]

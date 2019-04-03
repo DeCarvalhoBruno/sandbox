@@ -1,6 +1,6 @@
-<?php namespace App\Contracts;
+<?php namespace Naraki\Media\Contracts;
 
-interface Image
+interface UploadedImage
 {
     public function getUuid();
 

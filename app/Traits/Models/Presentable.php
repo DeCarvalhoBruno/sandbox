@@ -61,9 +61,12 @@ trait Presentable
      * @param \App\Filters\Filters $filters
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeFilter($query, Filters $filters): Builder
+    public function scopeFilter($query, ?Filters $filters): Builder
     {
-        return $filters->apply($query);
+        if (!is_null($filters)) {
+            return $filters->apply($query);
+        }
+        return $query;
     }
 
 }

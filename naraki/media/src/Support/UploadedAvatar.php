@@ -1,11 +1,11 @@
 <?php namespace Naraki\Media\Support;
 
-use App\Contracts\Image;
+use Naraki\Media\Contracts\UploadedImage;
 use App\Models\Entity;
 use Naraki\Media\Models\Media;
 use Illuminate\Support\Collection;
 
-class UploadedAvatar extends ImageUpload implements Image
+class UploadedAvatar extends ImageUpload implements UploadedImage
 {
 
     /**
@@ -44,7 +44,7 @@ class UploadedAvatar extends ImageUpload implements Image
             $data = new Collection();
         }
         $data->put($this->uuid,
-            new SimpleImage(
+            new SimpleUploadedImage(
                 $this->filename,
                 $this->targetSlug,
                 $this->targetType,

@@ -2,6 +2,7 @@
 
 use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\Presentable;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\JoinClause;
@@ -16,11 +17,24 @@ class MediaEntity extends Model
     protected $table = 'media_entities';
     protected $primaryKey = 'media_entity_id';
     protected $fillable = ['entity_type_id', 'media_category_record_id'];
+    protected $sortable = ['media_title', 'created_ago'];
+
+    /**
+     * Presentable created_at column
+     *
+     * @param $value
+     * @return string
+     */
+    public function getCreatedAgoAttribute($value)
+    {
+        return Carbon::createFromFormat('Y-m-d H:i:s', $value)->diffForHumans();
+    }
 
     /**
      * Sets the media as being used by a specific entity (user, forum thread etc.)
-     * We call a stored procedure that sets all other media from that entity to "not used", because this method is called by entities
-     * that can only use one media at a time (i.e profile picture in users, logo in owners or websites, etc.)
+     * We call a stored procedure that sets all other media from that entity to "not used",
+     * because this method is called by entities that can only use one media at a time
+     * (i.e profile picture in users, featured image in blog posts, etc.)
      *
      * @param $mediaEntityId
      */
@@ -205,6 +219,20 @@ class MediaEntity extends Model
             'media_entities.entity_type_id',
             '=',
             'entity_types.entity_type_id'
+        );
+    }
+
+    /**
+     * @link https://laravel.com/docs/eloquent#local-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public static function scopeMedia(Builder $builder)
+    {
+        return $builder->join('media',
+            'media_types.media_id',
+            '=',
+            'media.media_id'
         );
     }
 

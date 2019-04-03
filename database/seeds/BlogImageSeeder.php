@@ -33,21 +33,23 @@ class ImageSeeder extends Seeder
                 'post' => $slug['blog_post_id']
             ];
         }
-
-//        $f = array_chunk($posts, 100, true);
-//        dd(($f[0]));
-
+        $p = 0;
         foreach ($images as $image => $extension) {
             if (isset($posts[$image])) {
+                if($p>50){
+                    return;
+                }
+                $p++;
                 $uuid = makeHexUuid();
-                \DB::beginTransaction();
+                $uuid=sprintf('%s_%s', substr($image, 0, 31), makeHexUuid());
                 $this->saveImage(
                     sprintf('%s/%s.%s', $this->origDir, $image, $extension),
                     $extension,
                     $uuid
                 );
+                \DB::beginTransaction();
                 $this->saveDb($uuid, $extension, $posts[$image]->entity,
-                    [MediaImgFormat::FEATURED]);
+                    [MediaImgFormat::FEATURED,MediaImgFormat::ORIGINAL]);
                 \DB::commit();
             }
         }
@@ -134,14 +136,14 @@ class ImageSeeder extends Seeder
 //            )
 //        );
 
-//        ImageProcessor::copyImg(
-//            $path,
-//            media_entity_root_path(
-//                \App\Models\Entity::BLOG_POSTS,
-//                \Naraki\Media\Models\Media::IMAGE,
-//                ImageProcessor::makeFormatFilename($uuid, $fileExtension, \Naraki\Media\Models\MediaImgFormat::ORIGINAL)
-//            )
-//        );
+        ImageProcessor::copyImg(
+            $path,
+            media_entity_root_path(
+                \App\Models\Entity::BLOG_POSTS,
+                \Naraki\Media\Models\Media::IMAGE,
+                ImageProcessor::makeFormatFilename($uuid, $fileExtension, \Naraki\Media\Models\MediaImgFormat::ORIGINAL)
+            )
+        );
 
     }
 
