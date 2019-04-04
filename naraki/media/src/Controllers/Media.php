@@ -12,8 +12,9 @@ use Naraki\Media\Models\Media as MediaModel;
 use Naraki\Media\Models\MediaDigital;
 use Naraki\Media\Models\MediaImgFormat;
 use Naraki\Media\Requests\Update as UpdateMedia;
+use Naraki\Media\Support\ImageProcessor;
 use Naraki\Media\Support\UploadedAvatar;
-use Naraki\Media\Support\UploadedUploadedImage;
+use Naraki\Media\Support\UploadedImage;
 
 class Media extends Controller
 {
@@ -87,7 +88,7 @@ class Media extends Controller
                             $media->saveTemporaryAvatar();
                             break;
                         case "image":
-                            $media = new UploadedUploadedImage(
+                            $media = new UploadedImage(
                                 $file,
                                 $input->target,
                                 $input->type,
@@ -135,7 +136,7 @@ class Media extends Controller
                 'media_uuid',
                 'media_title',
                 'media_alt',
-                'created_at',
+                'created_at as created_at_pretty',
                 'media_description',
                 'media_caption',
                 'media_id',
@@ -147,41 +148,40 @@ class Media extends Controller
         }
         $media = $query->toArray();
 
+
         if ($entity === 'media') {
             $filter = MediaProvider::getStoredFilter(Entity::SYSTEM, $this->user->getKey());
             $data = MediaProvider::getMedia([
                 'media_uuid',
-                'entity_types.entity_type_id'
+                'entity_types.entity_type_id',
+                'entity_id'
             ])->whereNotIn('media.media_id', [MediaModel::IMAGE_AVATAR])
+                ->where('media_uuid', '!=', $uuid)
                 ->filter($filter)->get();
         } else {
-            $data = MediaProvider::image()->getSiblings($uuid, ['media_uuid', 'entity_type_id'])->get();
+            $data = MediaProvider::image()
+                ->getSiblings($uuid, ['media_uuid', 'entity_type_id', 'entity_id'])
+                ->get();
         }
 
+        $formats = MediaProvider::image()->getAvailableFormats($uuid);
+
         $navData = $data->pluck('media_uuid')->all();
-        $fromEntity = $data->pluck('entity_type_id')->first();
-        $entityInfo = EntityType::buildQueryFromUnknownEntity($fromEntity);
-        $type = null;
-        if (!is_null($entityInfo)) {
-            $media['media'] = MediaModel::getConstantName($media['media_id']);
-            $media['type'] = $type;
-            $media['suffix'] = MediaImgFormat::getFormatAcronyms(MediaImgFormat::THUMBNAIL);
-        }
+        $media['media'] = MediaModel::getConstantName($media['media_id']);
+        $media['entity'] = Entity::getConstantName($data->pluck('entity_id')->first());
+        $media['suffix'] = MediaImgFormat::getFormatAcronyms(MediaImgFormat::THUMBNAIL);
 
         $index = array_search($uuid, $navData);
         $total = count($navData);
-        $nav = array(
+        $nav = [
             'total' => $total,
             'idx' => ($index + 1),
             'first' => isset($navData[0]) ? $navData[0] : null,
             'last' => $navData[($total - 1)],
             'prev' => isset($navData[$index - 1]) ? ($navData[$index - 1] ?? null) : null,
             'next' => isset($navData[$index + 1]) ? ($navData[$index + 1] ?? null) : null
-        );
-        return [
-            'media' => $media,
-            'nav' => $nav,
         ];
+        return response(compact('media', 'nav', 'formats'));
     }
 
     /**
@@ -199,7 +199,7 @@ class Media extends Controller
     }
 
     /**
-     * @param \Naraki\Media\Support\UploadedUploadedImage $media
+     * @param \Naraki\Media\Support\UploadedImage $media
      * @return int
      * @throws \Exception
      * @throws \Throwable
@@ -237,7 +237,7 @@ class Media extends Controller
      * @throws \Exception
      * @throws \Throwable
      */
-    public function crop(UserProvider $user)
+    public function cropAvatar(UserProvider $user)
     {
         $input = (object)app('request')->only(['uuid', 'height', 'width', 'x', 'y']);
 
@@ -256,6 +256,50 @@ class Media extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         return response($user->getAvatars($this->user->getKey()), Response::HTTP_OK);
+    }
+
+    public function crop()
+    {
+        $input = (object)app('request')->only(['uuid', 'format', 'height', 'width', 'x', 'y']);
+
+        $data = MediaProvider::getMedia([
+            'entity_types.entity_type_id',
+            'entity_id',
+            'media_extension'
+        ])->where('media_uuid', $input->uuid)->first();
+        if (!is_null($data)) {
+            $imagePath = media_entity_root_path(
+                $data->getAttribute('entity_id'),
+                'image',
+                sprintf(
+                    '%s_%s.%s',
+                    $input->uuid,
+                    MediaImgFormat::getFormatAcronyms($input->format),
+                    $data->getAttribute('media_extension')
+                )
+            );
+            $sourceImageForCroppingPath = media_entity_root_path(
+                $data->getAttribute('entity_id'),
+                'image',
+                sprintf(
+                    '%s.%s',
+                    $input->uuid,
+                    $data->getAttribute('media_extension')
+                )
+            );
+
+            if (is_file($sourceImageForCroppingPath)) {
+                ImageProcessor::saveImg(
+                    ImageProcessor::nipNTuck($sourceImageForCroppingPath, $input, $input->format),
+                    $imagePath
+                );
+            }else{
+                throw new \UnexpectedValueException('The original image used for cropping does not exist: '.$sourceImageForCroppingPath);
+            }
+        }
+
+        $formats = MediaProvider::image()->getAvailableFormats($input->uuid);
+        return response(compact('formats'));
     }
 
 

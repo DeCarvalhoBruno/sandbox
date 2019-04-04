@@ -1,10 +1,10 @@
 <?php namespace Naraki\Media\Support;
 
-use Naraki\Media\Contracts\UploadedImage;
+use Naraki\Media\Contracts\UploadedImage as UploadedImageContract;
 use App\Models\Entity;
 use Naraki\Media\Models\Media;
 
-class UploadedUploadedImage extends ImageUpload implements UploadedImage
+class UploadedImage extends ImageUpload implements UploadedImageContract
 {
     /**
      *
@@ -18,7 +18,7 @@ class UploadedUploadedImage extends ImageUpload implements UploadedImage
     {
         $this->filename = $fileObject->getClientOriginalName();
         $this->targetSlug = $targetName;
-        $this->uuid = sprintf('%s_%s', substr($targetName, 0, 31), makeHexUuid());
+        $this->uuid = sprintf('%s_%s', trim(substr($targetName, 0, 31),'-'), makeHexUuid());
         $this->fileExtension = $fileObject->getClientOriginalExtension();
         $this->hddFilename = sprintf('%s.%s', $this->uuid, $this->fileExtension);
         $this->hddPath = media_entity_root_path($targetType, $mediaType);

@@ -22,7 +22,11 @@ class GeneratedAvatar extends ImageUpload implements UploadedImage
     {
         $this->targetName = $targetName;
         $this->targetSlug = $targetSlug;
-        $this->uuid = sprintf('%s_%s', substr(slugify($targetName), 0, 31), makeHexUuid());
+        $this->uuid = sprintf(
+            '%s_%s',
+            substr(trim(slugify($targetName), '-'), 0, 31),
+            makeHexUuid()
+        );
         $this->filename = sprintf('%s.%s', $this->uuid, $this->fileExtension);
         $this->path = media_entity_root_path($targetType, $mediaType);
         $this->targetType = $targetType;

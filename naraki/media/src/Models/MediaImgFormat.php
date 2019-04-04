@@ -22,58 +22,67 @@ class MediaImgFormat extends Model
         'media_img_format_height'
     ];
 
+    /**
+     * @param int $formatID
+     * @return array|\stdClass
+     */
     public static function getFormatDimensions($formatID = null)
     {
-        switch ($formatID) {
-            case static::ORIGINAL:
-                return (object)['width' => '0', 'height' => '0'];
-            case static::THUMBNAIL:
-                return (object)[
-                    'width' => ImageProcessor::$thumbnailWidth,
-                    'height' => ImageProcessor::$thumbnailHeight
-                ];
-            case static::FEATURED:
-                return (object)['width' => 720, 'height' => 540];
-            case static::HD:
-                return (object)['width' => 1280, 'height' => 720];
-            case static::FHD:
-                return (object)['width' => 1920, 'height' => 1080];
-            default:
-                return [
-                    static::ORIGINAL => (object)['width' => 0, 'height' => 0],
-                    static::THUMBNAIL => (object)[
-                        'width' => ImageProcessor::$thumbnailWidth,
-                        'height' => ImageProcessor::$thumbnailHeight
-                    ],
-                    static::FEATURED => (object)['width' => 500, 'height' => 300],
-                    static::HD => (object)['width' => 1280, 'height' => 720],
-                    static::FHD => (object)['width' => 1920, 'height' => 1080],
-                ];
+        $formats = static::getDimensions();
+        if (is_null($formatID)) {
+            return $formats;
+        } else {
+            return $formats[$formatID];
         }
     }
 
+    /**
+     * @param bool $pretty
+     * @return array
+     */
+    public static function getDimensions($pretty = false)
+    {
+        return [
+            (($pretty ? self::getConstantName(static::ORIGINAL, $pretty) : static::ORIGINAL)) => (object)[
+                'width' => 0,
+                'height' => 0
+            ],
+            (($pretty ? self::getConstantName(static::THUMBNAIL, $pretty) : static::THUMBNAIL)) => (object)[
+                'width' => ImageProcessor::$thumbnailWidth,
+                'height' => ImageProcessor::$thumbnailHeight
+            ],
+            (($pretty ? self::getConstantName(static::FEATURED, $pretty) : static::FEATURED)) => (object)[
+                'width' => 500,
+                'height' => 300
+            ],
+            (($pretty ? self::getConstantName(static::HD, $pretty) : static::HD)) => (object)[
+                'width' => 1280,
+                'height' => 720
+            ],
+            (($pretty ? self::getConstantName(static::FHD, $pretty) : static::FHD)) => (object)[
+                'width' => 1920,
+                'height' => 1080
+            ],
+        ];
+    }
+
+    /**
+     * @param int $formatID
+     * @return array|string
+     */
     public static function getFormatAcronyms($formatID = null)
     {
-        switch ($formatID) {
-            case static::ORIGINAL:
-                return '';
-            case static::THUMBNAIL:
-                return 'tb';
-            case static::FEATURED:
-                return 'ft';
-            case static::HD:
-                return 'hd';
-            case static::FHD:
-                return 'hf';
-            default:
-                return [
-                    static::ORIGINAL => '',
-                    static::THUMBNAIL => 'tb',
-                    static::FEATURED => 'ft',
-                    static::HD => 'hd',
-                    static::FHD => 'hf',
-                ];
+        $formats = [
+            static::ORIGINAL => '',
+            static::THUMBNAIL => 'tb',
+            static::FEATURED => 'ft',
+            static::HD => 'hd',
+            static::FHD => 'hf',
+        ];
+        if (is_null($formatID)) {
+            return $formats;
         }
+        return $formats[$formatID];
     }
 
 }

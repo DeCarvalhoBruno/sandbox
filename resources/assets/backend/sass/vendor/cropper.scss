@@ -328,7 +328,7 @@
 .cropper {
   visibility: visible;
   display: block;
-  margin: 0 auto !important;
+  margin: 0 auto;
   //width: 500px;
   //height: 300px;
 }
@@ -336,18 +336,18 @@
 .cropper-preview, .cropper-preview-wrapper {
   visibility: visible;
   display: inline-block;
-  margin: 0 auto !important;
-  width: 300px;
-  height: 300px;
-  max-width: 600px !important;
-  max-height: 300px !important;
+  margin: 0 auto;
+  width: 256px;
+  height: 256px;
+  max-width: 600px ;
+  max-height: 300px;
   overflow: hidden;
 }
 
 .cropper-preview img {
   overflow: hidden;
-  max-width: 600px !important;
-  max-height: 300px !important;
+  max-width: 600px;
+  max-height: 300px;
 }
 
 .cropper-img {

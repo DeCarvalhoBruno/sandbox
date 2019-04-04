@@ -31,8 +31,9 @@ export default {
     setFilterButtons () {
     },
     setIntendedRoute () {
+      let route = this.$router.currentRoute
       return this.$store.dispatch('session/setIntendedUrl',
-        {url: this.$router.currentRoute})
+        {url: {name: route.name, query: route.query, params: route.params}})
     },
     removeFilter (obj) {
       this.filterButtons = obj

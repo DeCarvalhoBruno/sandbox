@@ -1,5 +1,5 @@
 <?php return [
-    'general'=>[
+    'general' => [
         'ok' => 'Ok',
         'next' => 'Next',
         'prev' => 'Previous',
@@ -46,15 +46,17 @@
         'resize_image' => 'Use handles to resize image',
         'preview' => 'Cropped preview',
         'crop_upload' => 'Crop & Upload',
+        'crop' => 'Crop',
         'cancel' => 'Cancel',
-        'reload' => 'Reset cropper to original state'
+        'reload' => 'Reset cropper to original state',
+        'original_size' => 'Original size:'
     ],
     'wizard' => [
         'back' => 'Back',
         'next' => 'Next',
         'save' => 'Save'
     ],
-    'modal'=>[
+    'modal' => [
         'error' => [
             'h' => 'Oops...',
             't' => 'Something went wrong! Please try again.'

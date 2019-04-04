@@ -19,7 +19,7 @@ class MediaDigital extends Model
      * @param string $value
      * @return string
      */
-    public function getCreatedAtAttribute($value)
+    public function getCreatedAtPrettyAttribute($value)
     {
         return \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(get_locale_date_format());
     }
@@ -32,6 +32,16 @@ class MediaDigital extends Model
     public function scopeMediaType(Builder $builder)
     {
         return $this->joinReverse($builder, MediaType::class);
+    }
+
+    /**
+     * @link https://laravel.com/docs/eloquent#local-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeFormats(Builder $builder)
+    {
+        return $this->join($builder, MediaImgFormatType::class);
     }
 
 }

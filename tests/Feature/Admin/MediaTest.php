@@ -113,7 +113,7 @@ class MediaTest extends TestCase
         $responseArray = $response->json();
         $imageDiskFilename = $responseArray['filename'];
         $this->postJson(
-            '/ajax/admin/media/crop',
+            '/ajax/admin/media/crop/avatar',
             [
                 'height' => 864,
                 'width' => 1224,

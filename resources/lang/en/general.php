@@ -11,6 +11,11 @@
         'blog_source_record_url' => 'Link',
         'blog_source_record_img' => 'Image',
         'blog_source_record_file' => 'File',
+        'original' => 'Original',
+        'thumbnail' => 'Thumbnail',
+        'featured' => 'Featured',
+        'hd' => 'HD',
+        'fhd' => 'Full HD'
     ],
     'mailing_lists' => [
         'newsletters' => 'Newsletter',

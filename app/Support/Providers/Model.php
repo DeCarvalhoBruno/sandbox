@@ -120,9 +120,14 @@ abstract class Model
     {
         $q = $this->select($columns)->scopes($scopes);
         foreach ($wheres as $where) {
-            list($column, $value) = $where;
+            $operator = '=';
+            if (count($where) === 3) {
+                list($column, $operator, $value) = $where;
+            } else {
+                list($column, $value) = $where;
+            }
             if (!is_array($value)) {
-                $q->where($column, $value);
+                $q->where($column, $operator, $value);
             } else {
                 $q->whereIn($column, $value);
             }

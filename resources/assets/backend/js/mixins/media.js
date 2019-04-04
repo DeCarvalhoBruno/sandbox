@@ -5,7 +5,7 @@ export default {
       if (typeof uuid === 'undefined') {
         return null
       }
-      let string = `/media/${this.type}/${this.media}/${uuid}`
+      let string = `/media/${this.entity}/${this.media}/${uuid}`
       if (suffix !== null) {
         string += `_${suffix}.${ext}`
       } else {

@@ -20,7 +20,7 @@ class UploadedAvatar extends ImageUpload implements UploadedImage
     {
         $this->filename = $fileObject->getClientOriginalName();
         $this->targetSlug = $targetName;
-        $this->uuid = sprintf('%s_%s', substr($targetName, 0, 31), makeHexUuid());
+        $this->uuid = sprintf('%s_%s', trim(substr($targetName, 0, 31), '-'), makeHexUuid());
         $this->fileExtension = $fileObject->getClientOriginalExtension();
         $this->hddFilename = sprintf('%s.%s', $this->uuid, $this->fileExtension);
 //        $this->hddPath = media_entity_root_path(Entity::getConstant($targetType), Media::getConstant($mediaType));

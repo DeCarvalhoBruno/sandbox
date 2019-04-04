@@ -25,7 +25,8 @@ class Admin
             $r->get('media', 'Media@index');
             $r->patch('media/{media}', 'Media@update');
             $r->post('media/add', 'Media@add')->middleware('can:edit,App\Models\User');
-            $r->post('media/crop', 'Media@crop')->middleware('can:edit,App\Models\User');
+            $r->post('media/crop/avatar', 'Media@cropAvatar')->middleware('can:edit,App\Models\User');
+            $r->post('media/crop/image', 'Media@crop');
         };
     }
 }

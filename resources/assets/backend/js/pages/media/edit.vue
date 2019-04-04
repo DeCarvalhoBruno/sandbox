@@ -7,16 +7,17 @@
             <div class="form-group row">
               <div class="col-md-9 offset-md-3">
                 <div class="col-md-6 offset-md-3">
-                  <img :src="getImageUrl(form.media_uuid, form.suffix, form.media_extension)"></img>
+                  <img class="thumbnail"
+                       :src="getImageUrl(form.fields.media_uuid, form.fields.suffix, form.fields.media_extension)"></img>
                 </div>
               </div>
             </div>
             <div class="form-group row">
-              <label for="created_at"
+              <label for="created_at_pretty"
                      class="col-md-3 col-form-label">{{$t('general.uploaded_on')}}</label>
               <div class="col-md-9">
-                <input v-model="form.fields.created_at" type="text"
-                       id="created_at" class="form-control" disabled>
+                <input v-model="form.fields.created_at_pretty" type="text"
+                       id="created_at_pretty" class="form-control" disabled>
               </div>
             </div>
             <div class="form-group row">
@@ -53,14 +54,14 @@
             <div class="form-group row">
               <label for="media_description" class="col-md-3 col-form-label">{{$t('db.media_description')}}</label>
               <div class="col-md-9">
-                                <textarea v-model="form.fields.media_description"
-                                          name="media_description" id="media_description"
-                                          class="form-control txtarea-noresize"
-                                          :class="{ 'is-invalid': form.errors.has('media_description') }"
-                                          :placeholder="$t('db.media_description')"
-                                          aria-describedby="help_media_description"
-                                          rows="4"
-                                          @change="changedField('media_description')"></textarea>
+                  <textarea v-model="form.fields.media_description"
+                            name="media_description" id="media_description"
+                            class="form-control txtarea-noresize"
+                            :class="{ 'is-invalid': form.errors.has('media_description') }"
+                            :placeholder="$t('db.media_description')"
+                            aria-describedby="help_media_description"
+                            rows="4"
+                            @change="changedField('media_description')"></textarea>
                 <has-error :form="form" field="media_description"></has-error>
                 <small id="help_media_description"
                        class="text-muted">
@@ -72,13 +73,13 @@
               <label for="media_caption"
                      class="col-md-3 col-form-label">{{$t('db.media_caption')}}</label>
               <div class="col-md-9">
-                                <textarea v-model="form.fields.media_caption"
-                                          name="media_caption" id="media_caption" class="form-control txtarea-noresize"
-                                          :class="{ 'is-invalid': form.errors.has('media_caption') }"
-                                          :placeholder="$t('db.media_caption')"
-                                          aria-describedby="help_media_caption"
-                                          rows="4"
-                                          @change="changedField('media_caption')"></textarea>
+                  <textarea v-model="form.fields.media_caption"
+                            name="media_caption" id="media_caption" class="form-control txtarea-noresize"
+                            :class="{ 'is-invalid': form.errors.has('media_caption') }"
+                            :placeholder="$t('db.media_caption')"
+                            aria-describedby="help_media_caption"
+                            rows="4"
+                            @change="changedField('media_caption')"></textarea>
                 <has-error :form="form" field="media_caption"></has-error>
                 <small id="help_media_caption"
                        class="text-muted">{{$t('form.description.media_caption',[form.media_caption])}}
@@ -107,17 +108,30 @@
             </div>
           </div>
         </b-tab>
-        <b-tab :title="$t('general.crop')" @click="cropperActive=true">
-          <cropper :cropper-active="cropperActive" :container-width="containerWidth"
-                   :src="getImageUrl(form.media_uuid, null, form.media_extension)">
+        <b-tab :title="$t('general.crop')" active>
+          <div v-html="$t('pages.media.formats_help')" class="py-2"></div>
+          <button-group @active-changed="editCropperDimensions" class="py-2" ref="btnGroupDimensions"
+                        :field-name="'formats'"
+                        :choices="imgFormats">
+            <template
+                #choice="props">{{props.row.label}} <span v-if="props.row.dimensions.width>0">({{props.row.dimensions.width}}x{{props.row.dimensions.height}})</span>
+              <i
+                  class="fa" :class="[props.row.exists?'fa-check':'fa-times']"></i></template>
+          </button-group>
+          <cropper v-if="cropper.active" ref="cropper" class="py-3"
+                   :cropper-active="cropper.active"
+                   :container-width="containerWidth"
+                   :cropped="cropWasTriggered"
+                   :crop-width="cropper.width"
+                   :crop-height="cropper.height"
+                   @cropper-mounted="addCropperListeners"
+                   :src="getImageUrl(form.fields.media_uuid, null, form.fields.media_extension)">
             <template #cropper-actions>
               <div class="col align-self-center">
-                <button class="btn btn-primary" @click="crop()" type="button"
-                >{{$t('media.cropper_crop_upload')}}
-                </button>
-                <button class="btn btn-primary btn-light" @click="cancel()" type="button"
-                >{{$t('general.cancel')}}
-                </button>
+                <submit-button @click="crop()"
+                               native-type="button"
+                               :loading="ajaxIsLoading">{{$t('cropper.crop')}}
+                </submit-button>
               </div>
             </template>
           </cropper>
@@ -136,6 +150,7 @@
   import RecordPaginator from 'back_path/components/RecordPaginator'
   import MediaMixin from 'back_path/mixins/media'
   import FormMixin from 'back_path/mixins/form'
+  import ButtonGroup from 'back_path/components/ButtonGroup'
 
   Vue.use(Tabs)
 
@@ -148,7 +163,8 @@
       HasError,
       Form,
       RecordPaginator,
-      Cropper
+      Cropper,
+      ButtonGroup
     },
     mixins: [
       MediaMixin,
@@ -163,10 +179,18 @@
         media: null,
         ajaxIsLoading: false,
         containerWidth: 0,
-        cropperActive: false,
-        entity: 'media',
-        fromEntity: null,
-        fromPage: null
+        cropper: {
+          active: false,
+          height: 0,
+          width: 0,
+          filename: null
+        },
+        entity: '',
+        fromEntity: 'media',
+        fromPage: null,
+        imgFormats: null,
+        cropWasTriggered: false,
+        selectedImageFormat: 1
       }
     },
     mounted () {
@@ -174,20 +198,59 @@
     },
     watch: {
       '$route' () {
+        this.cropper.active = false
+        this.$refs.btnGroupDimensions.reset()
         this.ajaxIsLoading = true
-        axios.get(`/ajax/admin/media/${this.entity}/${this.$router.currentRoute.params.media}`).then(({data}) => {
+        axios.get(`/ajax/admin/media/${this.fromEntity}/${this.$router.currentRoute.params.media}`).then(({data}) => {
           this.getInfo(data)
           this.ajaxIsLoading = false
         })
       }
     },
     methods: {
+      addCropperListeners () {
+        let vm = this
+        this.$refs.cropper.$on('cropper_cropped', function (cp) {
+          vm.ajaxIsLoading = true
+          axios.post('/ajax/admin/media/crop/image', {
+            uuid: vm.form.fields.media_uuid,
+            format: parseInt(vm.selectedImageFormat),
+            height: cp.height,
+            width: cp.width,
+            x: cp.x,
+            y: cp.y
+          }).then(({data}) => {
+            vm.imgFormats = data.formats
+            vm.ajaxIsLoading = false
+            vm.cropWasTriggered = false
+          }).catch(e => {
+            vm.ajaxIsLoading = false
+          })
+        })
+      },
+      crop () {
+        this.cropWasTriggered = true
+      },
+      editCropperDimensions (index) {
+        this.selectedImageFormat = index
+        this.cropper.active = true
+        if (this.imgFormats[index].dimensions.height > 0) {
+          this.cropper.height = this.imgFormats[index].dimensions.height
+          this.cropper.width = this.imgFormats[index].dimensions.width
+        }
+      },
       returnToPage () {
         if (this.fromPage) {
-          this.$router.push(this.fromPage.path)
+          this.$router.push(this.fromPage)
+          return
         } else {
-          this.$router.push({name:'admin.media.index'})
+          let intended = this.$store.getters['session/intendedUrl']
+          if (intended) {
+            this.$router.push(intended)
+            return
+          }
         }
+        this.$router.push({name: 'admin.media.index'})
       },
       async save () {
         await this.form.patch(`/ajax/admin/media/${this.form.fields.media_uuid}`)
@@ -202,8 +265,10 @@
         this.media = this.form.fields.media
         this.type = this.form.fields.type
         this.nav = data.nav
+        this.imgFormats = data.formats
+        this.entity = this.form.fields.entity
         if (fromEntity !== null && fromEntity !== undefined) {
-          this.entity = fromEntity
+          this.fromEntity = fromEntity
         }
         if (from !== undefined && from.name !== null) {
           this.fromPage = from
@@ -217,7 +282,7 @@
         fromEntity = routeConstituents[1]
       }
       axios.get(`/ajax/admin/media/${fromEntity}/${to.params.media}`).then(({data}) => {
-        next(vm => vm.getInfo(data, fromEntity, from))
+        next(vm => vm.getInfo(data, fromEntity, {name: from.name, query: from.query, params: from.params}))
       })
     }
   }

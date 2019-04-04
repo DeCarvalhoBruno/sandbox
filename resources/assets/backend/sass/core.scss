@@ -32,15 +32,22 @@ body {
   position: relative;
   width: 2rem;
   height: 2rem;
-  padding:0 1rem;
-  .fa-circle{
+  padding: 0 1rem;
+
+  .fa-circle {
     color: #ad0000;
-    padding:0.2rem;
-    font-size:1.5rem;
+    padding: 0.2rem;
+    font-size: 1.5rem;
   }
-  .fa-info{
-    color:#fff;
+
+  .fa-info {
+    color: #fff;
   }
+}
+
+.thumbnail {
+  width: 128px;
+  height: 128px;
 }
 
 /*
@@ -58,6 +65,7 @@ body {
   .layout-top-nav & {
     margin-left: 0;
   }
+
   @media (max-width: $screen-xs-max) {
     margin-left: 0;
   }
@@ -67,6 +75,7 @@ body {
       margin-left: 0;
     }
   }
+
   // When opening the sidebar on small screens
   .sidebar-open & {
     @media (max-width: $screen-xs-max) {
@@ -94,11 +103,13 @@ body {
   .left-side {
     position: fixed;
   }
+
   .main-header {
     top: 0;
     right: 0;
     left: 0;
   }
+
   .content-wrapper,
   .right-side {
     padding-top: 50px;

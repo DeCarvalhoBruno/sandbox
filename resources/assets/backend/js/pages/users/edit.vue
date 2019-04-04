@@ -147,7 +147,6 @@
   import ButtonCircle from 'back_path/components/ButtonCircle'
   import RecordPaginator from 'back_path/components/RecordPaginator'
   import axios from 'axios'
-  import { deepCopy } from 'back_path/components/form/util'
 
   Vue.use(Tabs)
 
@@ -196,9 +195,9 @@
         this.nav = data.nav
         let intended = this.$store.getters['session/intendedUrl']
         if (intended === null) {
-          this.intended = deepCopy(this.$router.resolve({name: 'admin.users.index'}).resolved)
+          this.intended = {name: 'admin.users.index'}
         } else {
-          this.intended = deepCopy(this.$store.getters['session/intendedUrl'])
+          this.intended = this.$store.getters['session/intendedUrl']
         }
       },
       async save () {

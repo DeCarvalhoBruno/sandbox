@@ -322,7 +322,7 @@ SQL;
     {
         \DB::unprepared('create view entities_with_media as
             select media_entities.entity_type_id, media_types.media_type_id,media_types.media_id,
-            media_types.media_in_use,media_types.media_uuid
+            media_types.media_in_use,media_types.media_uuid,entity_types.entity_id
             from media_entities
            join entity_types on media_entities.entity_type_id = entity_types.entity_type_id
            join media_category_records on media_entities.media_category_record_id = media_category_records.media_category_record_id

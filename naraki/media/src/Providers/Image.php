@@ -45,15 +45,44 @@ class Image extends Model implements ImageInterface
     /**
      * @param string $uuid
      * @param array $columns
-     * @return mixed
+     * @return \Naraki\Media\Models\MediaDigital
      */
     public function getOne($uuid, $columns = ['*'])
     {
-        return $this
-            ->select($columns)
-            ->mediaType()->where('media_uuid', '=', $uuid)->first();
+        return $this->buildOneWithScopes($columns, ['mediaType'], [['media_uuid', $uuid]])->first();
     }
 
+    /**
+     * Gets the image formats that have a record in the database
+     * Every formatted image should leave a trace in the db except for the thumbnail and the original files
+     * which are always present.
+     * As of this writing, avatars are the only image whose originals we don't keep.
+     *
+     * @param string $uuid
+     * @return array
+     */
+    public function getAvailableFormats($uuid)
+    {
+        $available = $this->buildOneWithScopes(['media_img_format_id'], ['mediaType', 'formats'],
+            [['media_uuid', $uuid]])
+            ->pluck('media_img_format_id')->flip()->toArray();
+
+        $defaults = MediaImgFormat::getDimensions();
+        $formats = [];
+        foreach ($defaults as $const => $dimensions) {
+            $formats[$const] = [
+                'label' => MediaImgFormat::getConstantName($const,true),
+                'dimensions'=>$dimensions,
+                'exists' => isset($available[$const])||$const==MediaImgFormat::THUMBNAIL||$const==MediaImgFormat::ORIGINAL
+            ];
+        }
+        return $formats;
+    }
+
+    /**
+     * @param string $uuid
+     * @param array $data
+     */
     public function updateOne($uuid, $data)
     {
         $mediaTypeModel = new MediaType();
@@ -317,7 +346,7 @@ class Image extends Model implements ImageInterface
      *
      * @param $uuid
      * @param array $columns
-     * @return \Naraki\Media\Models\Views\EntitiesWithMedia
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function getSiblings($uuid, $columns = ['*'])
     {

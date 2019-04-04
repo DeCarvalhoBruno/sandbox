@@ -153,7 +153,7 @@
           <div class="card-body">
             <image-uploader
                 :target="form.fields.blog_post_slug"
-                type="blog_posts"
+                entity="blog_posts"
                 media="image"
                 :is-active="this.saveMode==='edit'"
                 :thumbnails-parent="thumbnails"

@@ -47,7 +47,7 @@
                           :adapter-options="{
                       url: '/ajax/admin/media/add',
                         params:{
-                            type:this.type,
+                            type:this.entity,
                             target:this.target,
                             media:this.media
                         }
@@ -140,7 +140,7 @@
     ],
     props: {
       target: {required: true},
-      type: {required: true},
+      entity: {required: true},
       media: {required: true},
       isActive: {default: true},
       thumbnailsParent: {required: true}
@@ -187,7 +187,7 @@
         }
       },
       goToEditImagePage (uuid) {
-        this.$router.push({name: 'admin.media.edit', params: {entity:this.type, media: uuid}})
+        this.$router.push({name: 'admin.media.edit', params: {entity:this.entity, media: uuid}})
       },
       triggerBrowse () {
         if (!this.isActive) {
