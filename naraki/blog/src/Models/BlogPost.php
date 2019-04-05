@@ -7,6 +7,7 @@ use App\Models\Language;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
+use App\Traits\Models\HasASlug;
 use App\Traits\Models\Presentable;
 use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 use CyrildeWit\EloquentViewable\Viewable;
@@ -22,7 +23,7 @@ use Naraki\Permission\Traits\HasPermissions;
 
 class BlogPost extends Model implements HasPermissionsContract, EnumerableContract, HasAnEntity, ViewableContract, SearchableContract
 {
-    use Presentable, Enumerable, HasPermissions, DoesSqlStuff, HasAnEntityTrait, Viewable, Searchable;
+    use Presentable, Enumerable, HasPermissions, DoesSqlStuff, HasAnEntityTrait, Viewable, Searchable, HasASlug;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;
@@ -52,6 +53,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
         'blog_post_title'
     ];
     public static $slugColumn = 'blog_post_slug';
+    public static $prettyColumn = 'blog_post_title';
     public static $entityID = \App\Models\Entity::BLOG_POSTS;
 
     public static function boot()

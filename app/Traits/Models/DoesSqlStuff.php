@@ -135,5 +135,22 @@ trait DoesSqlStuff
         );
     }
 
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param string $tableOne
+     * @param string $tableTwo
+     * @param string $column
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function joinScope($builder, $tableOne, $tableTwo, $column)
+    {
+        return $builder->join(
+            $tableOne,
+            sprintf('%s.%s', $tableOne, $column),
+            '=',
+            sprintf('%s.%s', $tableTwo, $column)
+        );
+    }
+
 
 }

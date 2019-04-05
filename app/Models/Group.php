@@ -3,7 +3,7 @@
 use App\Contracts\HasAnEntity;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
-use App\Traits\Models\HasASlugColumn;
+use App\Traits\Models\HasASlug;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use Naraki\Permission\Traits\HasPermissions as HasPermissionsTrait;
 use Naraki\Permission\Contracts\HasPermissions;
@@ -15,7 +15,7 @@ use Illuminate\Database\Query\JoinClause;
 
 class Group extends Model implements HasAnEntity, HasPermissions, EnumerableContract
 {
-    use HasAnEntityTrait, HasASlugColumn, Enumerable, Presentable, DoesSqlStuff, HasPermissionsTrait;
+    use HasAnEntityTrait, HasASlug, Enumerable, Presentable, DoesSqlStuff, HasPermissionsTrait;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;

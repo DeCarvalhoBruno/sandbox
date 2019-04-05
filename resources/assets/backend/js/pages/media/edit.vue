@@ -21,6 +21,16 @@
               </div>
             </div>
             <div class="form-group row">
+              <label for="title"
+                     class="col-md-3 col-form-label">{{$t('pages.media.attached_to')}}</label>
+              <div class="col-md-9">
+                <input type="text"
+                       id="title" class="form-control"
+                       :value="`${form.fields.entity_pretty} - ${form.fields.title}`"
+                       disabled>
+              </div>
+            </div>
+            <div class="form-group row">
               <label for="media_title" class="col-md-3 col-form-label">{{$t('db.media_title')}}</label>
               <div class="col-md-9">
                 <input v-model="form.fields.media_title" type="text"
@@ -108,15 +118,16 @@
             </div>
           </div>
         </b-tab>
-        <b-tab :title="$t('general.crop')" active>
+        <b-tab :title="$t('general.crop')">
           <div v-html="$t('pages.media.formats_help')" class="py-2"></div>
           <button-group @active-changed="editCropperDimensions" class="py-2" ref="btnGroupDimensions"
                         :field-name="'formats'"
                         :choices="imgFormats">
             <template
-                #choice="props">{{props.row.label}} <span v-if="props.row.dimensions.width>0">({{props.row.dimensions.width}}x{{props.row.dimensions.height}})</span>
-              <i
-                  class="fa" :class="[props.row.exists?'fa-check':'fa-times']"></i></template>
+                #choice="props">{{props.row.label}} <span
+                v-if="props.row.dimensions.width>0">({{props.row.dimensions.width}}x{{props.row.dimensions.height}})</span>
+              <i class="fa"
+                 :class="[props.row.exists?'fa-check':'fa-times']"></i></template>
           </button-group>
           <cropper v-if="cropper.active" ref="cropper" class="py-3"
                    :cropper-active="cropper.active"
@@ -127,11 +138,11 @@
                    @cropper-mounted="addCropperListeners"
                    :src="getImageUrl(form.fields.media_uuid, null, form.fields.media_extension)">
             <template #cropper-actions>
-              <div class="col align-self-center">
+              <div class="col-md-4 offset-md-4">
                 <submit-button @click="crop()"
                                native-type="button"
-                               :loading="ajaxIsLoading">{{$t('cropper.crop')}}
-                </submit-button>
+                               :block="true"
+                               :loading="ajaxIsLoading">{{$t('cropper.crop')}}</submit-button>
               </div>
             </template>
           </cropper>

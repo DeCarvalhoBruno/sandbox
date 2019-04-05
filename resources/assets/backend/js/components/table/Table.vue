@@ -9,7 +9,7 @@
                     <thead>
                     <tr>
                         <slot name="header-select-all">
-                            <th v-show="isMultiSelect">
+                            <th v-show="isMultiSelect" class="column-header">
                                 <div class="form-check">
                                     <input class="form-check-input position-static"
                                            type="checkbox"
@@ -22,15 +22,17 @@
                         <th v-for="(info, index) in table.columns"
                             :key="index"
                             @click="sort(info)"
+                            class="column-header"
                             :style="{
                             'width': info.hasOwnProperty('width')?info.width:'auto'}">{{info.label}}<span
                                 v-if="info.sortable"
+                                class="sort-header"
                                 :title="$t('tables.sort_'+getOrder(info.order))"><i
-                                class="fa float-right"
+                                class="fa"
                                 :class="'fa-'+getColumnHeaderIcon(info)"></i></span>
                         </th>
                         <slot name="header-action">
-                            <th>
+                            <th class="column-header">
                                 {{$t('general.actions')}}
                             </th>
                         </slot>

@@ -191,7 +191,7 @@ class EntityType extends Model
     public static function getEntitySlugColumn($entityID)
     {
         /**
-         * @var \App\Traits\Models\HasASlugColumn $targetType
+         * @var \App\Traits\Models\HasASlug $targetType
          */
         $targetType = Entity::getModelClassNamespace($entityID);
 

@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Traits\Models\HasASlugColumn;
+use App\Traits\Models\HasASlug;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Person extends Model
 {
-    use HasASlugColumn;
+    use HasASlug;
 
     public $table = 'people';
     public $primaryKey = 'person_id';

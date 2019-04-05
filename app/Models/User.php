@@ -5,7 +5,7 @@ use App\Contracts\HasAnEntity;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
-use App\Traits\Models\HasASlugColumn;
+use App\Traits\Models\HasASlug;
 use App\Traits\Models\Presentable;
 use Carbon\Carbon;
 use Illuminate\Bus\Dispatcher;
@@ -24,7 +24,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermissions, EnumerableContract, HasOauthScopeInterface
 {
-    use Notifiable, HasAnEntityTrait, HasASlugColumn, DoesSqlStuff, Enumerable, Presentable, HasPermissionsTrait,HasOauthScope;
+    use Notifiable, HasAnEntityTrait, HasASlug, DoesSqlStuff, Enumerable, Presentable, HasPermissionsTrait,HasOauthScope;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;

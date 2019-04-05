@@ -22,7 +22,6 @@ class Media extends Controller
     public function index(MediaFilter $filter)
     {
         MediaProvider::setStoredFilter(Entity::SYSTEM, $this->user->getKey(), $filter);
-
         $media = MediaProvider::getMedia([
             'media_title',
             'media_extension',
@@ -140,14 +139,15 @@ class Media extends Controller
                 'media_description',
                 'media_caption',
                 'media_id',
-                'media_extension'
+                'media_extension',
+                'entity_id',
+                'entity_types.entity_type_id'
             ]
         );
         if (is_null($query)) {
             return response(trans('error.http.500.general_retrieval_error'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         $media = $query->toArray();
-
 
         if ($entity === 'media') {
             $filter = MediaProvider::getStoredFilter(Entity::SYSTEM, $this->user->getKey());
@@ -156,7 +156,6 @@ class Media extends Controller
                 'entity_types.entity_type_id',
                 'entity_id'
             ])->whereNotIn('media.media_id', [MediaModel::IMAGE_AVATAR])
-                ->where('media_uuid', '!=', $uuid)
                 ->filter($filter)->get();
         } else {
             $data = MediaProvider::image()
@@ -168,9 +167,18 @@ class Media extends Controller
 
         $navData = $data->pluck('media_uuid')->all();
         $media['media'] = MediaModel::getConstantName($media['media_id']);
-        $media['entity'] = Entity::getConstantName($data->pluck('entity_id')->first());
+        $entityId = $query->getAttribute('entity_id');
+        $media['entity'] = Entity::getConstantName($entityId);
+        $media['entity_pretty'] = Entity::getConstantName($entityId, true);
         $media['suffix'] = MediaImgFormat::getFormatAcronyms(MediaImgFormat::THUMBNAIL);
+        $entityModel = Entity::createModel($entityId);
+        $entityData = EntityType::buildQueryFromEntity($entityId, $media['entity_type_id'])
+            ->select([$entityModel->getPrettyName(), $entityModel->getSlugName()])
+            ->first();
+        $media['title'] = $entityData->getPretty();
+        $media['slug'] = $entityData->getSlug();
 
+        unset($media['entity_type_id'], $media['media_id'], $media['entity_id']);
         $index = array_search($uuid, $navData);
         $total = count($navData);
         $nav = [
@@ -258,11 +266,15 @@ class Media extends Controller
         return response($user->getAvatars($this->user->getKey()), Response::HTTP_OK);
     }
 
+    /**
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function crop()
     {
         $input = (object)app('request')->only(['uuid', 'format', 'height', 'width', 'x', 'y']);
 
         $data = MediaProvider::getMedia([
+            'media_digital.media_digital_id',
             'entity_types.entity_type_id',
             'entity_id',
             'media_extension'
@@ -293,8 +305,14 @@ class Media extends Controller
                     ImageProcessor::nipNTuck($sourceImageForCroppingPath, $input, $input->format),
                     $imagePath
                 );
-            }else{
-                throw new \UnexpectedValueException('The original image used for cropping does not exist: '.$sourceImageForCroppingPath);
+                MediaProvider::image()->addFormatReferences(
+                    [$input->format],
+                    $data->getAttribute('media_digital_id')
+                );
+            } else {
+                throw new \UnexpectedValueException(
+                    'The original image used for cropping does not exist: ' . $sourceImageForCroppingPath
+                );
             }
         }
 

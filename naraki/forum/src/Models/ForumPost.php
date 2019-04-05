@@ -2,7 +2,7 @@
 
 use App\Models\Entity;
 use App\Support\NestedSet\NodeTrait;
-use App\Traits\Models\HasASlugColumn;
+use App\Traits\Models\HasASlug;
 use App\Traits\Models\Presentable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,7 +11,7 @@ use Illuminate\Database\Query\JoinClause;
 
 class ForumPost extends Model
 {
-    use HasASlugColumn, Presentable, NodeTrait;
+    use HasASlug, Presentable, NodeTrait;
 
     protected $primaryKey = 'forum_post_id';
     protected $presenter = null;

@@ -5,6 +5,7 @@
     'search' => 'Search...',
     'enumerables' => [
         'users' => 'User|Users',
+        'blog_posts'=>'Blog Post',
         'newsletters' => 'Newsletter|Newsletter',
         'newsletter_subscription' => 'Newsletter subscription',
         'contact_form_message' => 'Contact form message',

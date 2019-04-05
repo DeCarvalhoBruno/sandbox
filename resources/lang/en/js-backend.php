@@ -337,7 +337,8 @@ return [
             'notifications' => 'No new notifications|1 new notification|{number} new notifications'
         ],
         'media' => [
-            'formats_help' => 'Formats marked with <i class="fa fa-check"></i> have already been created and are ready to be served. Click on a format to create an image file with the associated dimensions.'
+            'formats_help' => 'Formats marked with <i class="fa fa-check"></i> have already been created and are ready to be served. Click on a format to create an image file with the associated dimensions.',
+            'attached_to'=>'Attached to'
         ]
     ],
     'tables' => [

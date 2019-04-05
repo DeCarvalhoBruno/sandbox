@@ -91,6 +91,6 @@ class Media extends Model implements MediaInterface
         }
         array_shift($scopes);
         return $model->entityType($entityTypeId)->scopes($scopes);
-
     }
+
 }

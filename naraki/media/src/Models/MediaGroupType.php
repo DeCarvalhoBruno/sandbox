@@ -1,11 +1,11 @@
 <?php namespace Naraki\Media\Models;
 
-use App\Traits\Models\HasASlugColumn;
+use App\Traits\Models\HasASlug;
 use Illuminate\Database\Eloquent\Model;
 
 class MediaGroupType extends Model
 {
-    use HasASlugColumn;
+    use HasASlug;
 
     protected $primaryKey = 'media_group_type_id';
     protected $fillable = [

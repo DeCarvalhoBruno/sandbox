@@ -93,7 +93,7 @@ class BlogCommentsTest extends TestCase
         $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
             ['txt' => 'my comment']
         );
-        $commentSlug = ForumPost::query()->first()->getSlugColumn();
+        $commentSlug = ForumPost::query()->first()->getSlug();
         $txt = 'my updated comment';
         $this->patchJson('/ajax/forum/blog_posts/my-blog-post/comment',
             ['txt' => $txt, 'reply_to' => $commentSlug]
@@ -109,7 +109,7 @@ class BlogCommentsTest extends TestCase
         $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
             ['txt' => 'my comment']
         );
-        $commentSlug = ForumPost::query()->first()->getSlugColumn();
+        $commentSlug = ForumPost::query()->first()->getSlug();
 
         Forum::shouldReceive('post->favorite')->with($commentSlug);
         $this->patchJson('/ajax/forum/blog_posts/my-blog-post/favorite/' . $commentSlug,
@@ -136,7 +136,7 @@ class BlogCommentsTest extends TestCase
         $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
             ['txt' => 'my comment']
         );
-        $commentSlug = ForumPost::query()->first()->getSlugColumn();
+        $commentSlug = ForumPost::query()->first()->getSlug();
         $u = $this->createUser();
         $this->signIn($u);
         $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
@@ -153,7 +153,7 @@ class BlogCommentsTest extends TestCase
         $this->postJson('/ajax/forum/blog_posts/my-blog-post/comment',
             ['txt' => 'my comment']
         );
-        $commentSlug = ForumPost::query()->first()->getSlugColumn();
+        $commentSlug = ForumPost::query()->first()->getSlug();
         $this->assertEquals(1, ForumPost::query()->count());
         $this->deleteJson('/ajax/forum/blog_posts/my-blog-post/comment/' . $commentSlug);
         $this->assertEquals(0, ForumPost::query()->count());

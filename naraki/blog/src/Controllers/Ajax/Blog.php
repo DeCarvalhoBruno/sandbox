@@ -253,7 +253,7 @@ class Blog extends Controller
             $uuid,
             intval($entityTypeId)
         );
-        $media = MediaRepo::image()->getOne($uuid, ['media_extension']);
+        $media = MediaRepo::image()->getOneSimple($uuid, ['media_extension']);
         if (!is_null($media)) {
             MediaRepo::image()->cropImageToFormat(
                 $uuid,

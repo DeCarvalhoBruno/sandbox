@@ -10,19 +10,17 @@
           <div class="cropper-commands row">
             <div class="container p-0">
               <div class="row">
-                <div class="col align-self-center">
+                  <div class="col-md-4 offset-md-4">
                   <button type="button" :title="$t('cropper.reload')"
                           class="btn btn-primary cropper-reset" @click="resetCropper()">
                     <i class="fa fa-refresh"></i>
                   </button>
-                </div>
+                  </div>
               </div>
             </div>
           </div>
           <div class="row">
-            <div class="row">
               <p class="cropper-errors text-danger"></p>
-            </div>
           </div>
         </div>
       </div>
@@ -30,12 +28,15 @@
         <h5 class="text-center">{{$t('cropper.preview')}}</h5>
         <div class="col-xs-12 container-fluid">
           <div class="cropper-preview-wrapper">
-            <div class="cropper-preview" ref="cropperPreview">
+            <div class="justify-content-center">
+              <figure class="cropper-preview">
+
+              </figure>
             </div>
           </div>
         </div>
       </div>
-      <div class="row mt-5">
+      <div class="row mt-2">
         <div class="container">
           <div class="row">
             <slot name="cropper-actions">
@@ -145,20 +146,15 @@
           if (this.cropHeight <= this.imgData.height) {
             cropboxData.height = this.imgData.height
             cropboxData.width = cropboxData.height * aspectRatio
-          }
-          if (cropboxData.height * aspectRatio >= this.imgData.width) {
+            if (cropboxData.height * aspectRatio >= this.imgData.width) {
+              cropboxData.width = this.imgData.width
+              cropboxData.height = Math.round(this.imgData.width / aspectRatio)
+            }
+          } else {
             cropboxData.width = this.imgData.width
             cropboxData.height = Math.round(this.imgData.width / aspectRatio)
           }
           this.cropper.setCropBoxData(cropboxData)
-          // console.log({
-          //   finalData: this.cropper.getData(true),
-          //   finalCropbox: cropboxData,
-          //   canvasWidth: this.imgData.width, canvasHeight: this.imgData.height,
-          //   // proportionalWidth: proportionalCropWidth, proportionalHeight: proportionalCropHeight,
-          //   aR: aspectRatio
-          // })
-
         } else {
           this.cropper.setAspectRatio(1)
         }

@@ -47,9 +47,25 @@ class Image extends Model implements ImageInterface
      * @param array $columns
      * @return \Naraki\Media\Models\MediaDigital
      */
-    public function getOne($uuid, $columns = ['*'])
+    public function getOneSimple($uuid, $columns = ['*'])
     {
         return $this->buildOneWithScopes($columns, ['mediaType'], [['media_uuid', $uuid]])->first();
+    }
+
+    /**
+     * @param string $uuid
+     * @param array $columns
+     * @return \Naraki\Media\Models\MediaDigital
+     */
+    public function getOne($uuid, $columns = ['*'])
+    {
+        return $this->buildOneWithScopes($columns, [
+            'mediaType',
+            'mediaRecord',
+            'mediaCategoryRecord',
+            'mediaEntity',
+            'entityType'
+        ], [['media_uuid', $uuid]])->first();
     }
 
     /**
@@ -71,9 +87,9 @@ class Image extends Model implements ImageInterface
         $formats = [];
         foreach ($defaults as $const => $dimensions) {
             $formats[$const] = [
-                'label' => MediaImgFormat::getConstantName($const,true),
-                'dimensions'=>$dimensions,
-                'exists' => isset($available[$const])||$const==MediaImgFormat::THUMBNAIL||$const==MediaImgFormat::ORIGINAL
+                'label' => MediaImgFormat::getConstantName($const, true),
+                'dimensions' => $dimensions,
+                'exists' => isset($available[$const]) || $const == MediaImgFormat::THUMBNAIL || $const == MediaImgFormat::ORIGINAL
             ];
         }
         return $formats;
@@ -148,50 +164,58 @@ class Image extends Model implements ImageInterface
      * @param bool $setAsUsed
      * @param array $formats
      * @return void
+     * @throws \Throwable
      */
-    public function createImage($media, $entityTypeID, $setAsUsed = true, $formats = null)
+    public function createImage($media, $entityTypeID, $setAsUsed = true, $formats = [])
     {
         \DB::transaction(function () use ($media, $entityTypeID, $setAsUsed, $formats) {
             //For now the title of the image is the entity's slug, so we have an idea of which is which in mysql
-            $mediaType = MediaType::create([
+            $mediaType = MediaType::query()->create([
                 'media_title' => $media->getFilename(),
                 'media_uuid' => $media->getUuid(),
                 'media_id' => $media->getMediaType(),
                 'media_in_use' => $setAsUsed
             ]);
 
-            $mediaDigital = MediaDigital::create([
+            $mediaDigital = MediaDigital::query()->create([
                 'media_type_id' => $mediaType->getKey(),
                 'media_extension' => $media->getFileExtension(),
                 'media_filename' => $media->getFilename(),
             ]);
 
-            $mediaRecord = MediaRecord::create([
+            $mediaRecord = MediaRecord::query()->create([
                 'media_type_id' => $mediaType->getKey(),
             ]);
 
-            $mediaCategoryRecord = MediaCategoryRecord::create([
+            $mediaCategoryRecord = MediaCategoryRecord::query()->create([
                 'media_record_target_id' => $mediaRecord->getKey(),
             ]);
 
-            MediaEntity::create([
+            MediaEntity::query()->create([
                 'entity_type_id' => $entityTypeID,
                 'media_category_record_id' => $mediaCategoryRecord->getKey(),
             ]);
 
-            MediaImg::create([
+            MediaImg::query()->create([
                 'media_digital_id' => $mediaDigital->getKey()
             ]);
-
-            if (!is_null($formats)) {
-                foreach ($formats as $format) {
-                    MediaImgFormatType::create([
-                        'media_digital_id' => $mediaDigital->getKey(),
-                        'media_img_format_id' => $format
-                    ]);
-                }
-            }
+            $this->addFormatReferences($formats, $mediaDigital->getKey());
         });
+    }
+
+    /**
+     * @param array $formats
+     * @param int $mediaDigitalId
+     * @return void
+     */
+    public function addFormatReferences(array $formats, int $mediaDigitalId)
+    {
+        foreach ($formats as $format) {
+            MediaImgFormatType::query()->create([
+                'media_digital_id' => $mediaDigitalId,
+                'media_img_format_id' => $format
+            ]);
+        }
     }
 
     /**
@@ -351,7 +375,6 @@ class Image extends Model implements ImageInterface
     public function getSiblings($uuid, $columns = ['*'])
     {
         return EntitiesWithMedia::getSiblings($uuid, $columns);
-
     }
 
     public function getDefaultImageColumns()

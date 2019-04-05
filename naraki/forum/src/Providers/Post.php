@@ -68,7 +68,7 @@ and forum_post_tree.slug = ?', [$slug]);
                  */
                 $parentPost = $model->newQuery()
                     ->select([$model->getKeyName(), $model->getRgtName(), $model->getLftName()])
-                    ->where($model->getSlugColumnName(), $commentData->reply_to)
+                    ->where($model->getSlugName(), $commentData->reply_to)
                     ->first();
             }
             /**
@@ -113,7 +113,7 @@ and forum_post_tree.slug = ?', [$slug]);
                 $model->getLftName(),
                 $model->getRgtName()
             ])
-            ->where($model->getSlugColumnName(), $data->reply_to)->first();
+            ->where($model->getSlugName(), $data->reply_to)->first();
         if (!is_null($q)) {
             if ($user->getKey() == $q->getAttribute('post_user_id')) {
                 $q->update(['forum_post' => $data->txt]);
@@ -153,7 +153,7 @@ and forum_post_tree.slug = ?', [$slug]);
                 $model->getLftName(),
                 $model->getRgtName()
             ])
-            ->where($model->getSlugColumnName(), $slug)->first();
+            ->where($model->getSlugName(), $slug)->first();
         if (!is_null($q)) {
             if ($user->getKey() == $q->getAttribute('post_user_id')) {
                 return $q->delete();
