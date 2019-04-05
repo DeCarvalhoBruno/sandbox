@@ -252,7 +252,7 @@
   import fr from 'dayjs/locale/fr'
   import SubmitButton from 'back_path/components/SubmitButton'
   import Trumbowyg from 'back_path/components/wysiwyg/Trumbowyg'
-  import { Form, HasError, AlertForm } from 'back_path/components/form'
+  import { Form, HasError } from 'back_path/components/form'
   import TreeList from 'back_path/components/tree-list/TreeList'
   import InputTagSearch from 'back_path/components/InputTagSearch'
   import Datepicker from 'back_path/components/Datepicker'

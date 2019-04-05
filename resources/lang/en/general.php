@@ -5,7 +5,7 @@
     'search' => 'Search...',
     'enumerables' => [
         'users' => 'User|Users',
-        'blog_posts'=>'Blog Post',
+        'blog_posts' => 'Blog Post',
         'newsletters' => 'Newsletter|Newsletter',
         'newsletter_subscription' => 'Newsletter subscription',
         'contact_form_message' => 'Contact form message',
@@ -16,7 +16,7 @@
         'thumbnail' => 'Thumbnail',
         'featured' => 'Featured',
         'hd' => 'HD',
-        'fhd' => 'Full HD'
+        'fhd' => 'Full HD',
     ],
     'mailing_lists' => [
         'newsletters' => 'Newsletter',

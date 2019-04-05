@@ -88,8 +88,6 @@ class User extends Controller
                 ->filter($filter)
                 ->pluck('username')->all();
 
-            return response($this->repo->select()->limit(10)->get(), 200);
-
             $total = count($userSiblings);
             $index = array_search($username, $userSiblings);
             $nav = array(
@@ -101,7 +99,6 @@ class User extends Controller
                 'next' => ($userSiblings[$index + 1] ?? null)
             );
         }
-
         $user = $this->repo->buildOneByUsername($username,
             [
                 'first_name',

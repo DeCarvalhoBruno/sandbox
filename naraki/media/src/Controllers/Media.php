@@ -315,9 +315,12 @@ class Media extends Controller
                 );
             }
         }
-
+        $msg = trans(
+            'messages.media_crop_success',
+            ['format' => MediaImgFormat::getConstantName($input->format, true)]
+        );
         $formats = MediaProvider::image()->getAvailableFormats($input->uuid);
-        return response(compact('formats'));
+        return response(compact('formats', 'msg'));
     }
 
 

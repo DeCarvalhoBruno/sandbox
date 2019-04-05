@@ -1,10 +1,10 @@
 <template>
-    <div id="app">
-        <loading ref="loading"/>
-        <transition name="page" mode="out-in">
-            <component v-if="layout" :is="layout"></component>
-        </transition>
-    </div>
+  <div id="app">
+    <loading ref="loading"/>
+    <transition name="page" mode="out-in">
+      <component v-if="layout" :is="layout"></component>
+    </transition>
+  </div>
 </template>
 
 <script>
@@ -25,17 +25,17 @@
   export default {
     el: '#app',
     components: {
-      Loading,
+      Loading
     },
     data: () => ({
       layout: null,
-      defaultLayout: 'default',
+      defaultLayout: 'default'
     }),
     metaInfo () {
       const {appName} = window.config
       return {
         title: appName,
-        titleTemplate: `%s · ${appName}`,
+        titleTemplate: `%s · ${appName}`
       }
     },
     mounted () {
@@ -49,7 +49,11 @@
        */
       setLayout (layout) {
         if (!layout || !layouts[layout]) {
-          layout = this.defaultLayout
+          if (this.$store.getters['auth/check']) {
+            layout = 'basic'
+          } else {
+            layout = this.defaultLayout
+          }
         }
 
         this.layout = layouts[layout]

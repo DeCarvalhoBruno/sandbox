@@ -44,7 +44,7 @@ class Entity extends Model
             if (!is_null($testContract) && !($o instanceof $testContract)) {
                 throw new \UnexpectedValueException(
                     sprintf(
-                        'Model %s is supposed to be an instance of %s' . !($class instanceof $testContract),
+                        'Model %s is supposed to be an instance of %s',
                         $class,
                         $testContract)
                 );

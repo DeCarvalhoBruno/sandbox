@@ -14,7 +14,7 @@
                     @click="removeFilter(idx)"
             >{{$t(`filter_labels.${entity}_${idx}`)}} {{button}}<button
                     type="button"
-                    class="close button-list-close"
+                    class="close button-list-close ml-2"
                     aria-label="Close"><span
                     aria-hidden="true">&times;</span></button>
             </span>

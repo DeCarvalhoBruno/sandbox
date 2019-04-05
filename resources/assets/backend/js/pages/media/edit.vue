@@ -142,7 +142,8 @@
                 <submit-button @click="crop()"
                                native-type="button"
                                :block="true"
-                               :loading="ajaxIsLoading">{{$t('cropper.crop')}}</submit-button>
+                               :loading="ajaxIsLoading">{{$t('cropper.crop')}}
+                </submit-button>
               </div>
             </template>
           </cropper>
@@ -156,12 +157,13 @@
   import SubmitButton from 'back_path/components/SubmitButton'
   import axios from 'axios'
   import Cropper from 'back_path/components/Cropper'
-  import { Form, HasError, AlertForm } from 'back_path/components/form'
+  import { Form, HasError } from 'back_path/components/form'
   import { Tabs } from 'bootstrap-vue/es/components'
   import RecordPaginator from 'back_path/components/RecordPaginator'
   import MediaMixin from 'back_path/mixins/media'
   import FormMixin from 'back_path/mixins/form'
   import ButtonGroup from 'back_path/components/ButtonGroup'
+  import swal from 'sweetalert2/dist/sweetalert2.js'
 
   Vue.use(Tabs)
 
@@ -209,9 +211,12 @@
     },
     watch: {
       '$route' () {
+        this.ajaxIsLoading = true
+        if (this.form.hasDetectedChanges()) {
+          this.sendRequest()
+        }
         this.cropper.active = false
         this.$refs.btnGroupDimensions.reset()
-        this.ajaxIsLoading = true
         axios.get(`/ajax/admin/media/${this.fromEntity}/${this.$router.currentRoute.params.media}`).then(({data}) => {
           this.getInfo(data)
           this.ajaxIsLoading = false
@@ -219,6 +224,17 @@
       }
     },
     methods: {
+      async save () {
+        this.sendRequest()
+        this.returnToPage()
+        this.$store.dispatch(
+          'session/setFlashMessage',
+          {msg: {type: 'success', text: this.$t('message.media_update_ok')}}
+        )
+      },
+      async sendRequest () {
+        await this.form.patch(`/ajax/admin/media/${this.form.fields.media_uuid}`)
+      },
       addCropperListeners () {
         let vm = this
         this.$refs.cropper.$on('cropper_cropped', function (cp) {
@@ -234,6 +250,14 @@
             vm.imgFormats = data.formats
             vm.ajaxIsLoading = false
             vm.cropWasTriggered = false
+            swal.fire({
+              position: 'top-end',
+              toast: true,
+              type: 'success',
+              title: data.msg,
+              showConfirmButton: false,
+              timer: 4000
+            })
           }).catch(e => {
             vm.ajaxIsLoading = false
           })
@@ -262,14 +286,6 @@
           }
         }
         this.$router.push({name: 'admin.media.index'})
-      },
-      async save () {
-        await this.form.patch(`/ajax/admin/media/${this.form.fields.media_uuid}`)
-        this.$store.dispatch(
-          'session/setFlashMessage',
-          {msg: {type: 'success', text: this.$t('message.media_update_ok')}}
-        )
-        this.returnToPage()
       },
       getInfo (data, fromEntity, from) {
         this.form = new Form(data.media, true)

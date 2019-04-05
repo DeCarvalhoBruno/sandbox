@@ -2,7 +2,7 @@
 
 use App\Models\Entity;
 use App\Models\EntityType;
-use App\Contracts\HasPermissions;
+use Naraki\Permission\Contracts\HasPermissions;
 use App\Contracts\RawQueries as RawQueriesInterface;
 
 abstract class RawQueries implements RawQueriesInterface
