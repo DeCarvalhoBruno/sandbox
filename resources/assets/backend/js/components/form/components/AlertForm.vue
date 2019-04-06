@@ -70,7 +70,7 @@
     },
     computed: {
       classObject () {
-        return ['alert', this.alertVariant, this.dismissible ? 'alert-dismissible' : '',(this.showable)?'show':'']
+        return ['alert', this.alertVariant, this.dismissible ? 'alert-dismissible' : '',(this.showable)?'show':null]
       },
       alertVariant () {
         let variant

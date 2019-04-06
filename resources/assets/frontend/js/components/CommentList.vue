@@ -4,7 +4,7 @@
                     class="container" v-if="comments!==null&&comments.length">
     <div v-for="(comment,idx) in comments" :key="comment.slug"
          class="row comment-item"
-         :class="[comment.lvl==0?'card mb-2':'',hash==comment.slug?'highlight':'']">
+         :class="[comment.lvl==0?'card mb-2':null,hash==comment.slug?'highlight':null]">
       <div class="col" style="border-left:2px solid #f7f7f7;">
         <div class="comment-header">
           <figure class="comment-header-item">
@@ -27,7 +27,7 @@
                  :aria-label="comment.fav?$t('comments.recommend-cancel'):$t('comments.recommend')"
                  :title="comment.fav?$t('comments.recommend-cancel'):$t('comments.recommend')"
                  @click="recommend(comment,idx)"></i>
-              <div class="fav-count">{{(comment.cnt>0?comment.cnt:'')}}</div>
+              <div class="fav-count">{{(comment.cnt>0?comment.cnt:null)}}</div>
             </div>
             <div class="expand">
               <i class="fa" :class="[
@@ -36,7 +36,7 @@
               expanded
                 ?'fa-chevron-left fa-rotate-90'
                 :'fa-chevron-right fa-rotate-90'
-              :'']"
+              :null]"
                  @click="toggleExpanded"
               :title="expanded?$t('comments.collapse'):$t('comments.expand')"
               :aria-label="expanded?$t('comments.collapse'):$t('comments.expand')"></i>

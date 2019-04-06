@@ -54,7 +54,7 @@
     ],
     data: () => ({
       form: new Form({
-        current_password:'',
+        current_password: '',
         password: '',
         password_confirmation: ''
       })

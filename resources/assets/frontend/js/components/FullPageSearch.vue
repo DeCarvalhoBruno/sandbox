@@ -50,7 +50,7 @@
                class="row" id="paginator-wrapper">
             <nav aria-label="Page navigation example" id="paginator">
               <ul class="pagination">
-                <li class="page-item" :class="[searchData.articles.current_page===1?'disabled':'']">
+                <li class="page-item" :class="[searchData.articles.current_page===1?'disabled':null]">
                   <a class="page-link" href="#" @click.prevent="goToPage(false)"
                      :aria-label="$t('general.prev')">
                     <span aria-hidden="true"><i class="fa fa-angle-left"></i></span>
@@ -59,12 +59,12 @@
                 <li v-for="n in searchData.articles.last_page"
                     class="page-item"
                     :class="[n===searchData.articles.current_page
-                    ?'active':'']"><a class="page-link"
+                    ?'active':null]"><a class="page-link"
                                       href="#"
                                       @click.prevent="goToPage(n)">{{n}}</a>
                 </li>
                 <li class="page-item"
-                    :class="[searchData.articles.current_page===searchData.articles.last_page?'disabled':'']">
+                    :class="[searchData.articles.current_page===searchData.articles.last_page?'disabled':null]">
                   <a class="page-link" href="#"
                      @click.prevent="goToPage(true)"
                      :aria-label="$t('general.next')">

@@ -8,6 +8,7 @@ use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Routing\Router;
+use Illuminate\Support\ViewErrorBag;
 use Illuminate\Validation\ValidationException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -88,17 +89,13 @@ class Handler extends ExceptionHandler
         } elseif ($e instanceof AccessDeniedHttpException) {
             return response_json(['msg' => trans('error.http.403')], 403);
         }
-        elseif ($e instanceof HttpException) {
-//            if ($request->expectsJson()) {
-//                return response_json(['msg' => trans('error.http.419')], 419);
-//            }
-//            if(strpos($request->route()->getName(),'admin')===false)
-//            return response()->view(sprintf(
-//                'frontend.errors.%s',
-//                $e->getStatusCode()), [
-//                'errors' => new ViewErrorBag,
-//                'exception' => $e->getMessage(),
-//            ]);
+        elseif ($e instanceof HttpException&&!$request->expectsJson()) {
+            return response()->view(sprintf(
+                'frontend.errors.%s',
+                $e->getStatusCode()), [
+                'errors' => new ViewErrorBag(),
+                'exception' => $e->getMessage(),
+            ]);
         }
 
         return $request->expectsJson()

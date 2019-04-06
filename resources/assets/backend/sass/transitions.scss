@@ -1,6 +1,6 @@
 .page-enter-active,
 .page-leave-active {
-  transition: opacity .2s;
+  transition: opacity 0.2s;
 }
 
 .page-enter,
@@ -8,17 +8,32 @@
   opacity: 0;
 }
 
-.fade-enter-active,
 .fade-leave-active {
-  transition: opacity 1s ease-in;
+  animation-name: fadeOut;
+  animation-duration: 1s;
 }
 
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
+.fade-enter-active {
+  animation-name: fadeIn;
+  animation-duration: 1s;
 }
 
-.fade-leave,
-.fade-enter-to {
-  opacity: 1;
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }

@@ -1,37 +1,34 @@
 <template>
-    <div class="tree-list container">
-        <div class="row mb-3">
-            <div class="col-lg">
-                <search :terms="searchTerms" @show="searchEvent"/>
-            </div>
-        </div>
-        <div class="row p-0 m-0">
-            <button v-if="editMode" type="button"
-                    class="btn btn-primary"
-                    @click="addRoot">{{addRootButtonLabel}}
-            </button>
-            <button type="button"
-                    class="btn btn-primary"
-                    @click="toggleExpand">{{treeExpanded?$t('general.expand_all'):$t('general.collapse_all')}}
-            </button>
-        </div>
-        <div class="row p-0 mt-3 ml-1 tree-container">
-            <transition-group name="fade" tag="ul">
-                <tree-list-item v-for="(node,idx) in treeData"
-                                :key="'v'+idx"
-                                :node="node"
-                                @event="handleEvent"
-                                @category-selected="categorySelected"
-                                :edit-mode="editMode">
-                </tree-list-item>
-            </transition-group>
-        </div>
+  <div class="tree-list container">
+    <div class="row mb-3">
+      <div class="col-lg">
+        <search :terms="searchTerms" @show="searchEvent"/>
+      </div>
     </div>
+    <div class="row p-0 m-0">
+      <button v-if="editMode" type="button"
+              class="btn btn-primary"
+              @click="addRoot">{{addRootButtonLabel}}
+      </button>
+      <button type="button"
+              class="btn btn-primary"
+              @click="toggleExpand">{{treeExpanded?$t('general.expand_all'):$t('general.collapse_all')}}
+      </button>
+    </div>
+    <div class="row p-0 mt-3 ml-1 tree-container">
+      <tree-list-item v-for="(node,idx) in treeData"
+                      :key="node.label+idx"
+                      :node="node"
+                      @event="handleEvent"
+                      @category-selected="categorySelected"
+                      :edit-mode="editMode" :last="idx===treeData.length-1">
+      </tree-list-item>
+    </div>
+  </div>
 </template>
 <script>
   import TreeListItem from 'back_path/components/tree-list/TreeListItem'
   import Search from 'back_path/components/tree-list/Search'
-  import axios from 'axios'
 
   export default {
     name: 'tree-list',
