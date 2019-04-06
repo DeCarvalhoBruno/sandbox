@@ -3,11 +3,12 @@ import Cookies from 'js-cookie'
 import * as types from '../mutation-types'
 import store from 'back_path/store'
 
-const {user} = window.config
+const {user, permissions} = window.config
 
 // state
 export const state = {
   user,
+  permissions,
   token: Cookies.get('token'),
   remember: false
 }
@@ -23,7 +24,8 @@ export const getters = {
       return state.user.system_events_subscribed.includes(id)
     }
     return false
-  }
+  },
+  permissions: state => state.permissions
 }
 
 // mutations

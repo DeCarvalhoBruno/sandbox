@@ -148,7 +148,7 @@ class Image extends Model implements ImageInterface
      * @param array $formats
      * @return array|int
      */
-    public function saveImageDb(ImageContract $image, $formats = null)
+    public function saveImageDb(ImageContract $image, $formats = [])
     {
         $targetEntityTypeId = $this->getTargetEntity($image);
         if (is_null($targetEntityTypeId)) {
@@ -164,7 +164,6 @@ class Image extends Model implements ImageInterface
      * @param bool $setAsUsed
      * @param array $formats
      * @return void
-     * @throws \Throwable
      */
     public function createImage($media, $entityTypeID, $setAsUsed = true, $formats = [])
     {
@@ -221,14 +220,26 @@ class Image extends Model implements ImageInterface
     /**
      * @param int|array $entityTypeId
      * @param array $columns
-     * @return \Naraki\Media\Models\MediaEntity
+     * @param bool $inUse
+     * @return \Naraki\Media\Models\MediaEntity[]
      */
-    public function getImages($entityTypeId, $columns = null)
+    public function getImages($entityTypeId, $columns = null, $inUse = false)
+    {
+        return $this->buildImages($entityTypeId, $columns, $inUse)->get();
+    }
+
+    /**
+     * @param $entityTypeId
+     * @param null $columns
+     * @param bool $inUse
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function buildImages($entityTypeId, $columns = null, $inUse = false)
     {
         if (is_null($columns)) {
             $columns = $this->getDefaultImageColumns();
         }
-        return MediaEntity::buildImages($entityTypeId, $columns)->get();
+        return MediaEntity::buildImages($entityTypeId, $columns, $inUse);
     }
 
     /**

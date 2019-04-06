@@ -3,7 +3,6 @@
     <div class="col-lg-5 m-auto">
       <div class="card">
         <div class="card-body p-5">
-          <alert-form :form="form" :show-errors="false"/>
           <form @submit.prevent="login" @keydown="form.onKeydown($event)">
             <div class="form-group row">
               <label class="col-md-3 col-form-label text-md-right">{{ $t('general.email') }}</label>
@@ -51,7 +50,7 @@
 <script>
   import SubmitButton from 'back_path/components/SubmitButton'
   import Checkbox from 'back_path/components/Checkbox'
-  import { Form, HasError, AlertForm } from 'back_path/components/form'
+  import { Form, HasError } from 'back_path/components/form'
 
   export default {
     middleware: 'guest',
@@ -61,8 +60,7 @@
     components: {
       SubmitButton,
       Checkbox,
-      HasError,
-      AlertForm
+      HasError
     },
     data: () => ({
       form: new Form({

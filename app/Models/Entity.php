@@ -3,6 +3,10 @@
 use App\Traits\Enumerable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Naraki\Blog\Models\BlogPost;
+use Naraki\Mail\Models\Email;
+use Naraki\Media\Models\MediaEntity;
+use Naraki\System\Models\System;
 
 class Entity extends Model
 {
@@ -12,6 +16,7 @@ class Entity extends Model
     const EMAILS = 0x2d0;               //720
     const GROUPS = 0x44c;               //1100
     const GROUP_MEMBERS = 0x44d;        //1101
+    const MEDIA = 0x76c;                //1900
     const PEOPLE = 0x8fc;               //2300
     const SYSTEM = 0xaf0;               //2800
     const USERS = 0xc1c;                //3100
@@ -24,8 +29,10 @@ class Entity extends Model
      * @var array Used in case a specific model isn't in \App\Models
      */
     public static $classMap = [
-        'BlogPost' => 'Naraki\Blog\Models\BlogPost',
-        'Email' => 'Naraki\Mail\Models\Email'
+        'BlogPost' => BlogPost::class,
+        'Email' => Email::class,
+        'System' => System::class,
+        'Medium' => MediaEntity::class
     ];
 
     /**
@@ -70,6 +77,8 @@ class Entity extends Model
             : sprintf('\App\Models\%s', $className);
         if (class_exists($classNamespace)) {
             return ($prefixWithBackslash) ? $classNamespace : substr($classNamespace, 1);
+        }else{
+
         }
         throw new \UnexpectedValueException(sprintf('Class %s does not exist. (%s)', $className, $entityID));
     }

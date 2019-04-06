@@ -1,7 +1,8 @@
 <?php namespace Naraki\Permission\Jobs;
 
 use App\Jobs\Job;
-use App\Support\Permissions\Permission;
+use Illuminate\Support\Facades\Log;
+use Naraki\Permission\Support\Permission;
 use Naraki\Permission\Models\PermissionStore;
 
 class Update extends Job
@@ -21,7 +22,7 @@ class Update extends Job
                 Permission::assignToAll();
             });
         } catch (\Exception $e) {
-            \Log::critical($e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            Log::critical($e->getMessage(), ['trace' => $e->getTraceAsString()]);
         }
         $this->delete();
     }

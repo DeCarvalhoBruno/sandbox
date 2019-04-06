@@ -106,6 +106,7 @@ class Email extends Migration
                 ->onDelete('cascade');
         });
 
+        \DB::beginTransaction();
         \Naraki\Mail\Models\EmailUserEventType::insert([
                 [
                     'email_user_event_type_id' => \Naraki\Mail\Models\EmailUserEventType::OPENED,
@@ -140,7 +141,7 @@ class Email extends Migration
             ];
         }
         \Naraki\Mail\Models\EmailList::insert($emailEvents);
-
+        \DB::commit();
     }
 
     /**

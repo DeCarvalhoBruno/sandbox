@@ -1,11 +1,11 @@
-<?php namespace App\Support\Permissions;
+<?php namespace Naraki\Permission\Support;
 
 class PermissionStoreData
 {
     const DEFAULT = 1;
     const COMPUTED = 2;
     /**
-     * @var \App\Support\Permissions\PermissionData[]|array
+     * @var \Naraki\Permission\Support\PermissionData[]|array
      */
     private $permissions;
     /**
@@ -43,7 +43,7 @@ class PermissionStoreData
 
     /**
      * @param string $item
-     * @return \App\Support\Permissions\PermissionData|\App\Support\Permissions\PermissionData[]
+     * @return \Naraki\Permission\Support\PermissionData|\Naraki\Permission\Support\PermissionData[]
      */
     public function get($item = null)
     {
@@ -51,7 +51,7 @@ class PermissionStoreData
     }
 
     /**
-     * @return \App\Support\Permissions\PermissionData[]|array
+     * @return \Naraki\Permission\Support\PermissionData[]|array
      */
     public function getPermissions()
     {

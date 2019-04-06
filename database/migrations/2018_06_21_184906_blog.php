@@ -147,6 +147,7 @@ class Blog extends Migration
             $table->index(array('blog_post_id', 'blog_label_type_id'), 'idx_blog_post_type');
         });
 
+        \DB::beginTransaction();
         $label_types = [
             ['blog_label_name' => \Naraki\Blog\Models\BlogLabel::getConstantByID(\Naraki\Blog\Models\BlogLabel::BLOG_TAG)],
             ['blog_label_name' => \Naraki\Blog\Models\BlogLabel::getConstantByID(\Naraki\Blog\Models\BlogLabel::BLOG_CATEGORY)],
@@ -180,7 +181,11 @@ class Blog extends Migration
             'blog_label_type_id' => $newLabelType->getKey()
         ]);
         $this->createViews();
+        \DB::commit();
+        \DB::beginTransaction();
         $this->extractLanguages();
+        \DB::commit();
+
     }
 
     public function createViews()

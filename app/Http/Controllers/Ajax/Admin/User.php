@@ -8,6 +8,7 @@ use App\Models\Entity;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Naraki\Permission\Contracts\Permission as PermissionProvider;
+use Naraki\Media\Facades\Media as MediaProvider;
 
 class User extends Controller
 {
@@ -112,12 +113,17 @@ class User extends Controller
             return response(trans('error.http.500.user_not_found'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         $entityTypeId = $user['entity_type_id'];
+        $media = MediaProvider::image()
+            ->buildImages($entityTypeId, null, true)
+            ->first();
+
         unset($user['entity_type_id']);
         return [
             'user' => $user->toArray(),
             'permissions' => $this->repo->getAllUserPermissions($entityTypeId),
             'nav' => $nav,
-            'intended' => null
+            'intended' => null,
+            'media' => $media
         ];
     }
 

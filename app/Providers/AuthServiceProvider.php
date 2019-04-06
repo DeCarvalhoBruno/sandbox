@@ -16,7 +16,9 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         \App\Models\User::class => \App\Policies\User::class,
         \App\Models\Group::class => \App\Policies\Group::class,
-        \Naraki\Blog\Models\BlogPost::class => \Naraki\Blog\Policies\BlogPost::class
+        \Naraki\Blog\Models\BlogPost::class => \Naraki\Blog\Policies\BlogPost::class,
+        \Naraki\System\Models\System::class => \Naraki\System\Policies\System::class,
+        \Naraki\Media\Models\MediaEntity::class => \Naraki\Media\Policies\Media::class
     ];
 
     /**

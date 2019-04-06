@@ -2,7 +2,6 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center mt-5">
-
             <figure>
                 <img src="{{asset(sprintf('media/img/site/%s',env('APP_LOGO_FILENAME')))}}">
             </figure>

@@ -4,10 +4,16 @@ use App\Http\Controllers\Admin\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Validation\ValidationException;
+use Naraki\System\Facades\System;
 
 class Login extends Controller
 {
     use AuthenticatesUsers;
+
+    private $permissions;
+    private $entity;
 
     protected function guard()
     {
@@ -21,6 +27,14 @@ class Login extends Controller
 //        }
         $token = $this->guard()->attempt($this->credentials($request));
 
+        $this->setEntity($this->guard()->user()->getAttribute('entity_type_id'));
+        $this->setPermissions(System::getAllUserPermissions($this->entity));
+        if (!isset($this->permissions->computed['system']['Login'])) {
+            throw ValidationException::withMessages([
+                $this->username() => [trans('auth.failed_not_allowed')],
+            ]);
+        }
+
         if ($token) {
             $this->guard()->setToken($token);
             return true;
@@ -33,6 +47,8 @@ class Login extends Controller
         $this->clearLoginAttempts($request);
         $token = (string)$this->guard()->getToken();
         $expiration = $this->guard()->getPayload()->get('exp');
+        Redis::set('permissions.' . $this->entity, serialize((object)$this->permissions->computed));
+
         return [
             'user' => $this->guard()->user()->only([
                 'username',
@@ -48,7 +64,7 @@ class Login extends Controller
     /**
      * Validate the user login request.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return void
      */
     protected function validateLogin(Request $request)
@@ -69,4 +85,22 @@ class Login extends Controller
         $this->guard()->logout();
         return response(null, Response::HTTP_NO_CONTENT);
     }
+
+    /**
+     * @param $value
+     */
+    private function setPermissions($value): void
+    {
+        $this->permissions = $value;
+    }
+
+    /**
+     * @param mixed $entity
+     */
+    public function setEntity($entity): void
+    {
+        $this->entity = $entity;
+    }
+
+
 }

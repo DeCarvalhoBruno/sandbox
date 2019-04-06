@@ -12,7 +12,7 @@ class EntityType extends Model
     protected $fillable = ['entity_id', 'entity_type_target_id', 'entity_type_id'];
     //We hard code database ids here so we don't have to make the query. Those IDs will never change so we can do this.
     const ROOT_ENTITY_TYPE_ID = 2;
-    const ROOT_GROUP_ENTITY_TYPE_ID = 3;
+    const ROOT_GROUP_ENTITY_TYPE_ID = 4;
 
     /**
      * Gets the entity type ID with an entity ID

@@ -1,4 +1,4 @@
-<?php namespace App\Support\Permissions;
+<?php namespace Naraki\Permission\Support;
 
 use App\Models\Entity;
 use Naraki\Permission\Models\PermissionMask;

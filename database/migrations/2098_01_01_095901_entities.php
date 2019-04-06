@@ -31,8 +31,8 @@ class Entities extends Migration
             $table->foreign('entity_id')
                 ->references('entity_id')->on('entities');
 
-            $table->unique(['entity_id','entity_type_target_id'],'idx_entity_target');
-            $table->unique(['entity_id','entity_type_id'],'idx_entity_type');
+            $table->unique(['entity_id', 'entity_type_target_id'], 'idx_entity_target');
+            $table->unique(['entity_id', 'entity_type_id'], 'idx_entity_type');
         });
 
         Schema::create('email_recipient_types', function (Blueprint $table) {
@@ -54,11 +54,13 @@ class Entities extends Migration
                 ->onDelete('cascade');
         });
 
+        \DB::beginTransaction();
         $this->addEntities();
         $this->entityTypes();
         $this->createEntities();
         $this->createTriggers();
         $this->createGroups();
+        \DB::commit();
     }
 
     private static function createGroups()
@@ -126,7 +128,7 @@ class Entities extends Migration
         $entities = \DB::select('
             SELECT entity_id,entity_name AS name
             FROM entities
-            WHERE entity_name != "system" ORDER BY entity_id ASC');
+            WHERE entity_name not in ("system","media") ORDER BY entity_id ASC');
         $k = 1;
 
         //We keep track of each entity's ID

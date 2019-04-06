@@ -21,10 +21,14 @@ class Admin
     public static function routes()
     {
         return function (Router $r) {
-            $r->get('blog/categories', 'Category@index');
-            $r->post('blog/categories', 'Category@create');
-            $r->patch('blog/categories/{id}', 'Category@update');
-            $r->delete('blog/categories/{id}', 'Category@delete');
+            $r->get('blog/categories', 'Category@index')
+                ->middleware('can:edit,Naraki\Blog\Models\BlogPost');
+            $r->post('blog/categories', 'Category@create')
+                ->middleware('can:edit,Naraki\Blog\Models\BlogPost');
+            $r->patch('blog/categories/{id}', 'Category@update')
+                ->middleware('can:edit,Naraki\Blog\Models\BlogPost');
+            $r->delete('blog/categories/{id}', 'Category@delete')
+                ->middleware('can:edit,Naraki\Blog\Models\BlogPost');
 
             $r->get('blog/posts', 'Blog@index')
                 ->middleware('can:view,Naraki\Blog\Models\BlogPost');

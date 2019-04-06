@@ -194,6 +194,7 @@ class Medias extends Migration
                 'media_category_name' => 'MEDIA_GROUP'
             ]
         ];
+        \DB::beginTransaction();
         \Naraki\Media\Models\MediaCategory::insert($categories);
 
         $this->addMediaGroups();
@@ -203,6 +204,7 @@ class Medias extends Migration
             $this->mediaInUseProcedure();
         }
         $this->createViews();
+        \DB::commit();
     }
 
     private function addMedia()

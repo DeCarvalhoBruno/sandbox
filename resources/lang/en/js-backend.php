@@ -100,7 +100,7 @@ return [
         'group_name' => 'Group name',
         'groups' => 'Group|Groups',
         'last_name' => 'Last name',
-        'media' => 'Media|Medias',
+        'media' => 'Media|Media',
         'media_alt' => 'Alt text',
         'media_caption' => 'Caption',
         'media_created_at' => 'Creation date',
@@ -114,6 +114,7 @@ return [
         'user_created_at' => 'Registration date',
         'username' => 'Username',
         'users' => 'User|Users',
+        'system'=>'System'
     ],
     'db_raw' => [
         'full_name' => 'full_name',

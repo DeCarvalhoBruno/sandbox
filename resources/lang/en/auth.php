@@ -2,6 +2,7 @@
 
 return [
     'failed' => 'Either these credentials do not match our records, or your account hasn\'t been activated yet.',
+    'failed_not_allowed' => 'Your account is not permitted to access the backoffice. Please contact your system administrator.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'alerts' => [
         'registered_title' => 'Registration complete',
@@ -28,7 +29,7 @@ return [
     'password' => 'Password',
     'login' => 'Log In',
     'register_account' => 'Register an account',
-    'remember_me'=>'Remember me',
+    'remember_me' => 'Remember me',
     'forgot_password' => 'Forgot Your Password?',
     'password_help' => 'Must have a minimum of 6 characters.',
     'hide_password' => 'Hide password',

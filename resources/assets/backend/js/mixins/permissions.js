@@ -29,6 +29,15 @@ export default {
     permissionIsCurrentlyEnabled (el) {
       // class name is btn btn-circle btn-danger/btn-success
       return el.className.match(/d/) == null
+    },
+    checkPermissions () {
+      let permissions = this.$store.getters['auth/permissions']
+      if (permissions.hasOwnProperty('system')) {
+        if (permissions.system.hasOwnProperty('Permissions')) {
+          return false
+        }
+      }
+      return true
     }
   }
 }

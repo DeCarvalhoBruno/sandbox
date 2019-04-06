@@ -1,16 +1,27 @@
 <?php namespace Naraki\Media\Models;
 
+use App\Contracts\HasAnEntity as HasAnEntityContract;
+use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
+use App\Traits\Models\HasAnEntity as HasAnEntity;
 use App\Traits\Models\Presentable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\JoinClause;
 use Naraki\Media\Support\Presenters\MediaEntity as MediaEntityPresenter;
+use App\Contracts\Enumerable as EnumerableContract;
+use Naraki\Permission\Contracts\HasPermissions as HasPermissionsContract;
+use Naraki\Permission\Traits\HasPermissions;
 
-class MediaEntity extends Model
+class MediaEntity extends Model implements EnumerableContract, HasPermissionsContract, HasAnEntityContract
 {
-    use DoesSqlStuff, Presentable;
+    use DoesSqlStuff, Presentable, Enumerable, HasPermissions, HasAnEntity;
+
+    const PERMISSION_VIEW = 0b1;
+    const PERMISSION_ADD = 0b10;
+    const PERMISSION_EDIT = 0b100;
+    const PERMISSION_DELETE = 0b1000;
 
     public $timestamps = false;
     protected $presenter = MediaEntityPresenter::class;
@@ -18,6 +29,7 @@ class MediaEntity extends Model
     protected $primaryKey = 'media_entity_id';
     protected $fillable = ['entity_type_id', 'media_category_record_id'];
     protected $sortable = ['media_title', 'created_ago'];
+    public static $entityID = \App\Models\Entity::MEDIA;
 
     /**
      * Presentable created_at column
@@ -48,17 +60,17 @@ class MediaEntity extends Model
     /**
      * @param int $entityTypeId
      * @param array $columns
-     * @param array $mediaImgTypes
+     * @param array $inUse
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function buildImages($entityTypeId = null, $columns = ['*'], $mediaImgTypes = null)
+    public static function buildImages($entityTypeId = null, $columns = ['*'], $inUse = null)
     {
         return static::query()->select($columns)
             ->entityType($entityTypeId)
             ->scopes([
                 'mediaCategoryRecord',
                 'mediaRecord',
-                'mediaType',
+                'mediaType' => $inUse,
                 'mediaDigital'
             ]);
     }

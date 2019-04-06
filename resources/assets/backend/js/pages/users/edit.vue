@@ -1,10 +1,13 @@
 <template>
   <div class="card">
     <form @submit.prevent="save" @keydown="form.onKeydown($event)">
-      <b-tabs card>
+      <b-tabs card lazy>
         <b-tab :title="form.fields.full_name" active>
           <alert-form :form="form" :fade="true" :dismiss-label="$t('general.close')"></alert-form>
           <div class="col-md-8 offset-md-2">
+            <div v-if="mediaData" class="form-group row justify-content-center">
+              <img :src="getImageUrl(mediaData.uuid,null,mediaData.ext)"/>
+            </div>
             <div class="form-group row">
               <label for="new_username"
                      class="col-md-3 col-form-label"
@@ -68,7 +71,7 @@
             </div>
           </div>
         </b-tab>
-        <b-tab :title="$tc('general.permission',2)">
+        <b-tab :title="$tc('general.permission',2)" :disabled="checkPermissions()">
           <div class="container">
             <div class="callout callout-warning">
               <p><span class="callout-tag callout-tag-warning">
@@ -142,6 +145,7 @@
   import Checkbox from 'back_path/components/Checkbox'
   import PermissionMixin from 'back_path/mixins/permissions'
   import FormMixin from 'back_path/mixins/form'
+  import MediaMixin from 'back_path/mixins/media'
   import { Form, HasError, AlertForm } from 'back_path/components/form'
   import { Tabs } from 'bootstrap-vue/es/components'
   import ButtonCircle from 'back_path/components/ButtonCircle'
@@ -169,12 +173,16 @@
         permissions: {},
         nav: {},
         ajaxIsLoading: false,
-        intended: null
+        intended: null,
+        mediaData:null,
+        entity:'users',
+        media:'image_avatar'
       }
     },
     mixins: [
       PermissionMixin,
-      FormMixin
+      FormMixin,
+      MediaMixin,
     ],
     watch: {
       '$route' () {
@@ -193,6 +201,7 @@
         this.form = new Form(data.user, true)
         this.permissions = data.permissions
         this.nav = data.nav
+        this.mediaData = data.media
         let intended = this.$store.getters['session/intendedUrl']
         if (intended === null) {
           this.intended = {name: 'admin.users.index'}

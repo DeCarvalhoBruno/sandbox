@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <form @submit.prevent="save" @keydown="form.onKeydown($event)">
-            <b-tabs card>
+            <b-tabs card lazy>
                 <b-tab :title="form.fields.group_name">
                     <div class="col-md-8 offset-md-2">
                         <div class="form-group row">
@@ -34,7 +34,7 @@
                         </div>
                     </div>
                 </b-tab>
-                <b-tab :title="$tc('general.permission',2)">
+                <b-tab :title="$tc('general.permission',2)" :disabled="checkPermissions()">
                     <div class="container">
                         <div class="callout callout-info">
                             <p>{{$t('pages.groups.info1')}}</p>

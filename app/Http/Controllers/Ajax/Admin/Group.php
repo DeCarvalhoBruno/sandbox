@@ -49,8 +49,8 @@ class Group extends Controller
 
     /**
      * @param string $groupName
-     * @param \App\Contracts\Models\Group|\App\Support\Providers\\Group $groupProvider
-     * @param \Naraki\Permission\Contracts\Permission|\App\Support\Providers\\Permission $permissionProvider
+     * @param \App\Contracts\Models\Group|\App\Support\Providers\Group $groupProvider
+     * @param \Naraki\Permission\Contracts\Permission|\Naraki\Permission\Providers\Permission $permissionProvider
      * @return array
      */
     public function edit($groupName, GroupProvider $groupProvider, PermissionProvider $permissionProvider)
@@ -59,7 +59,6 @@ class Group extends Controller
             ->entityType()->first()->toArray();
         $entityType_id = $group['entity_type_id'];
         unset($group['entity_type_id']);
-
         return [
             'group' => $group,
             'permissions' => $permissionProvider->getRootAndGroupPermissions($entityType_id)

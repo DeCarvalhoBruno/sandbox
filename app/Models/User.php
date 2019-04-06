@@ -1,11 +1,11 @@
 <?php namespace App\Models;
 
 use App\Contracts\Enumerable as EnumerableContract;
-use App\Contracts\HasAnEntity;
+use App\Contracts\HasAnEntity as HasAnEntityContract;
 use App\Traits\Enumerable;
 use App\Traits\Models\DoesSqlStuff;
 use App\Traits\Models\HasASlug;
-use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
+use App\Traits\Models\HasAnEntity as HasAnEntity;
 use App\Traits\Models\Presentable;
 use Carbon\Carbon;
 use Illuminate\Bus\Dispatcher;
@@ -18,13 +18,13 @@ use Naraki\Mail\Jobs\SendMail;
 use Naraki\Media\Models\MediaEntity;
 use Naraki\Oauth\Contracts\HasOauthScope as HasOauthScopeInterface;
 use Naraki\Oauth\Traits\HasOauthScope;
-use Naraki\Permission\Contracts\HasPermissions;
-use Naraki\Permission\Traits\HasPermissions as HasPermissionsTrait;
+use Naraki\Permission\Contracts\HasPermissions as HasPermissionsContract;
+use Naraki\Permission\Traits\HasPermissions as HasPermissions;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends LaravelUser implements JWTSubject, HasAnEntity, HasPermissions, EnumerableContract, HasOauthScopeInterface
+class User extends LaravelUser implements JWTSubject, HasAnEntityContract, HasPermissionsContract, EnumerableContract, HasOauthScopeInterface
 {
-    use Notifiable, HasAnEntityTrait, HasASlug, DoesSqlStuff, Enumerable, Presentable, HasPermissionsTrait, HasOauthScope;
+    use Notifiable, HasAnEntity, HasASlug, DoesSqlStuff, Enumerable, Presentable, HasPermissions, HasOauthScope;
 
     const PERMISSION_VIEW = 0b1;
     const PERMISSION_ADD = 0b10;

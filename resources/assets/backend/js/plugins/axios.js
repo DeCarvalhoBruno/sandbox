@@ -27,6 +27,8 @@ axios.interceptors.response.use(response => response, error => {
   } else {
     text = i18n.t('modal.error.t')
   }
+  router.app.$loading.fail()
+  router.app.$loading.finish()
 
   if (status >= 500) {
     let settings = {

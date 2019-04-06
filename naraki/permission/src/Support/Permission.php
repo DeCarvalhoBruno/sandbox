@@ -1,4 +1,4 @@
-<?php namespace App\Support\Permissions;
+<?php namespace Naraki\Permission\Support;
 
 use App\Models\Entity;
 use App\Models\EntityType;
@@ -32,7 +32,9 @@ abstract class Permission
     private static $permissionBoundEntities = [
         Entity::USERS,
         Entity::GROUPS,
-        Entity::BLOG_POSTS
+        Entity::BLOG_POSTS,
+        Entity::MEDIA,
+        Entity::SYSTEM
     ];
 
     protected function __construct($entityId)

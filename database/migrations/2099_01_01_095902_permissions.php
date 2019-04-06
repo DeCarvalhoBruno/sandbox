@@ -76,8 +76,10 @@ class Permissions extends Migration
                 ->onDelete('cascade');
             $table->index(['entity_id', 'permission_target_id', 'permission_store_id'], 'idx_permission_store_records');
         });
+        \DB::beginTransaction();
         $this->seedPermissions();
         $this->seedPermissionActions();
+        \DB::commit();
     }
 
     private function seedPermissions()
@@ -99,6 +101,16 @@ class Permissions extends Migration
                 'permission_mask' => 0b1111
             ],
             [
+                'entity_type_id' => 4,
+                'entity_id' => \App\Models\Entity::MEDIA,
+                'permission_mask' => 0b1111
+            ],
+            [
+                'entity_type_id' => 4,
+                'entity_id' => \App\Models\Entity::SYSTEM,
+                'permission_mask' => 0b1111
+            ],
+            [
                 'entity_type_id' => 5,
                 'entity_id' => \App\Models\Entity::USERS,
                 'permission_mask' => 0b1111
@@ -111,6 +123,16 @@ class Permissions extends Migration
             [
                 'entity_type_id' => 5,
                 'entity_id' => \App\Models\Entity::BLOG_POSTS,
+                'permission_mask' => 0b1111
+            ],
+            [
+                'entity_type_id' => 5,
+                'entity_id' => \App\Models\Entity::MEDIA,
+                'permission_mask' => 0b1111
+            ],
+            [
+                'entity_type_id' => 5,
+                'entity_id' => \App\Models\Entity::SYSTEM,
                 'permission_mask' => 0b1111
             ],
             [
@@ -123,6 +145,16 @@ class Permissions extends Migration
                 'entity_id' => \App\Models\Entity::BLOG_POSTS,
                 'permission_mask' => 0b1111
             ],
+            [
+                'entity_type_id' => 6,
+                'entity_id' => \App\Models\Entity::MEDIA,
+                'permission_mask' => 0b1111
+            ],
+            [
+                'entity_type_id' => 6,
+                'entity_id' => \App\Models\Entity::SYSTEM,
+                'permission_mask' => 0b1001
+            ],
         ]);
 
     }
@@ -131,6 +163,26 @@ class Permissions extends Migration
     {
         (new \Naraki\Permission\Models\PermissionAction())->insert([
             [
+                'entity_id' => \App\Models\Entity::SYSTEM,
+                'permission_action_bits' => 0b1,
+                'permission_action_name' => 'login'
+            ],
+            [
+                'entity_id' => \App\Models\Entity::SYSTEM,
+                'permission_action_bits' => 0b10,
+                'permission_action_name' => 'settings'
+            ],
+            [
+                'entity_id' => \App\Models\Entity::SYSTEM,
+                'permission_action_bits' => 0b100,
+                'permission_action_name' => 'permissions'
+            ],
+            [
+                'entity_id' => \App\Models\Entity::SYSTEM,
+                'permission_action_bits' => 0b1000,
+                'permission_action_name' => 'notifications'
+            ],
+            [
                 'entity_id' => \App\Models\Entity::USERS,
                 'permission_action_bits' => 0b1,
                 'permission_action_name' => 'view'
@@ -190,6 +242,26 @@ class Permissions extends Migration
                 'permission_action_bits' => 0b1000,
                 'permission_action_name' => 'delete'
             ],
+            [
+                'entity_id' => \App\Models\Entity::MEDIA,
+                'permission_action_bits' => 0b1,
+                'permission_action_name' => 'view'
+            ],
+            [
+                'entity_id' => \App\Models\Entity::MEDIA,
+                'permission_action_bits' => 0b10,
+                'permission_action_name' => 'add'
+            ],
+            [
+                'entity_id' => \App\Models\Entity::MEDIA,
+                'permission_action_bits' => 0b100,
+                'permission_action_name' => 'edit'
+            ],
+            [
+                'entity_id' => \App\Models\Entity::MEDIA,
+                'permission_action_bits' => 0b1000,
+                'permission_action_name' => 'delete'
+            ]
         ]);
 
     }
