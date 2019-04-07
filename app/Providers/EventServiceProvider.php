@@ -26,7 +26,6 @@ class EventServiceProvider extends ServiceProvider
             UpdatePermissions::class,
         ],
         UserRegistered::class => [
-            UpdatePermissions::class,
             UserRegisteredListener::class
         ],
         PersonSentContactRequest::class => [

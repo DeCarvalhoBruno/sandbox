@@ -1,6 +1,5 @@
 <template>
     <form @submit.prevent="update" @keydown="form.onKeydown($event)">
-        <alert-form :form="form" :dismiss-label="$t('general.close')"></alert-form>
         <div class="form-group row">
             <label class="col-md-3 col-form-label text-md-right">{{ $t('pages.auth.current_password') }}</label>
             <div class="col-md-7">
@@ -39,15 +38,14 @@
 <script>
   import SubmitButton from 'back_path/components/SubmitButton'
   import Swal from 'back_path/mixins/sweet-alert'
-  import { Form, HasError, AlertForm } from 'back_path/components/form'
+  import { Form, HasError } from 'back_path/components/form'
   import { mapGetters } from 'vuex'
 
   export default {
     scrollToTop: false,
     components: {
       SubmitButton,
-      HasError,
-      AlertForm
+      HasError
     },
     mixins:[
       Swal

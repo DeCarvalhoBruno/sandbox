@@ -7,9 +7,10 @@ class Blog
 {
     /**
      * @param \stdClass $data
+     * @param \Naraki\System\Support\Settings $settings
      * @return string
      */
-    public function getFacebookTagList(\stdClass $data): string
+    public function getFacebookTagList(\stdClass $data, $settings): string
     {
         $tagList = [
             'og:title' => $data->post->getAttribute('title'),
@@ -22,8 +23,8 @@ class Blog
             'og:article:published_time' => (new Carbon($data->post->getAttribute('date_published')))
                 ->format('Y-m-d\TH:i:s'),
         ];
-        if (!is_null($data->settings['facebook_app_id']) && !empty($data->settings['facebook_app_id'])) {
-            $tagList['fb:app_id'] = $data->settings['facebook_app_id'];
+        if (!is_null($settings->get('facebook_app_id')) && !empty($settings->get('facebook_app_id'))) {
+            $tagList['fb:app_id'] = $settings->get('facebook_app_id');
         }
         if (!is_null($data->media)) {
             $tagList['og:image'] = asset($data->media->present('asset'));
@@ -38,14 +39,15 @@ class Blog
 
     /**
      * @param \stdClass $data
+     * @param \Naraki\System\Support\Settings $settings
      * @return string
      */
-    public function getTwitterTagList(\stdClass $data): string
+    public function getTwitterTagList(\stdClass $data, $settings): string
     {
         $tagList = [
             'twitter:title' => $data->post->getAttribute('title'),
             'twitter:description' => $data->post->getAttribute('excerpt'),
-            'twitter:site' => $data->settings['twitter_publisher'],
+            'twitter:site' => $settings->get('twitter_publisher'),
             'twitter:card' => 'summary_large_image'
         ];
         if (!is_null($data->media)) {

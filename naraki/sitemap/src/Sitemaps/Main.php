@@ -16,7 +16,8 @@ class Main extends Sitemap implements Sitemapable
     public function __toString(): string
     {
         $smIndex = new SitemapIndex();
-        $lastModified = Carbon::make(BlogRepo::getNth(0, 'updated_at'));
+        $date = BlogRepo::getNth(0, 'updated_at');
+        $lastModified = Carbon::make($date ?? Carbon::now());
 
         $this->addSitemap($smIndex, route('sitemap', ['type' => 'pages']),
             Pages::homePageLastModified()

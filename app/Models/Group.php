@@ -28,6 +28,7 @@ class Group extends Model implements HasAnEntity, HasPermissions, EnumerableCont
     protected $fillable = [
         'group_name',
         'group_mask',
+        'group_slug'
     ];
     protected $sortable = [
         'group_name',

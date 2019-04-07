@@ -2,7 +2,7 @@
 
 use App\Facades\JavaScript;
 use App\Models\User;
-use Illuminate\Support\Facades\Redis;
+use Naraki\Permission\Facades\Permission;
 
 class Admin extends Composer
 {
@@ -23,7 +23,7 @@ class Admin extends Composer
             'locale' => app()->getLocale(),
             'user' => $user,
             'permissions' => auth('jwt')->check()
-                ? unserialize(Redis::get('permissions.' . auth()->user()->getAttribute('entity_type_id')))
+                ? Permission::cacheUserPermissions(auth('jwt')->user()->getAttribute('entity_type_id'))
                 : null
         ]);
 

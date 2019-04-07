@@ -7,7 +7,7 @@ use Carbon\Carbon;
 
 class Blog extends General
 {
-    public function makeStructuredData($data): string
+    public static function makeStructuredData($data, $settings): string
     {
         $structuredData = [];
         $class = BreadcrumbList::class;
@@ -43,13 +43,13 @@ class Blog extends General
                 asset($data->media->present('thumbnail')),
             ];
         }
-        if ($this->settings['entity_type'] === 'person') {
+        if ($settings->get('entity_type') === 'person') {
             $jsonld['publisher'] = [
-                '@id' => sprintf('%s#%s', $this->settings['person_url'], 'person')
+                '@id' => sprintf('%s#%s',$settings->get('person_url'), 'person')
             ];
         } else {
             $jsonld['publisher'] = [
-                '@id' => sprintf('%s#%s', $this->settings['org_url'], strtolower($this->settings['org_type']))
+                '@id' => sprintf('%s#%s',$settings->get('org_url'), strtolower($settings->get('org_type')))
             ];
         }
         $structuredData[] = (object)compact('class', 'jsonld');

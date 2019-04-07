@@ -2,17 +2,17 @@
     <div class="card">
         <form @submit.prevent="save">
             <b-tabs card>
-            <alert-form :form="form" :dismiss-label="$t('general.close')"></alert-form>
                 <b-tab :title="$t('breadcrumb.admin-groups-add')">
                     <div class="col-md-8 offset-md-2">
                         <div class="form-group row">
                             <label for="group_name"
                                    class="col-md-3 col-form-label">{{$t('db.group_name')}}</label>
                             <div class="col-md-9">
-                                <input v-model="form.fields.group_name" type="text"
+                                <input v-model="form.fields.group_name" type="text" autocomplete="off"
                                        name="group_name" id="group_name" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('group_name') }"
                                        :placeholder="$t('db.group_name')"
+                                       maxlength="60"
                                        aria-describedby="help_group_name">
                                 <has-error :form="form" field="group_name"></has-error>
                                 <small id="help_group_name" class="text-muted">
@@ -23,9 +23,10 @@
                         <div class="form-group row">
                             <label for="group_mask" class="col-md-3 col-form-label">{{$t('db.group_mask')}}</label>
                             <div class="col-md-9">
-                                <input v-model="form.fields.group_mask" type="text"
+                                <input v-model="form.fields.group_mask" type="text" autocomplete="off"
                                        name="group_mask" id="group_mask" class="form-control"
                                        :class="{ 'is-invalid': form.errors.has('group_mask') }"
+                                       maxlength="5"
                                        :placeholder="$t('db.group_mask')"
                                        aria-describedby="help_group_mask">
                                 <has-error :form="form" field="group_mask"></has-error>
@@ -94,7 +95,7 @@
 
   import SubmitButton from 'back_path/components/SubmitButton'
   import Checkbox from 'back_path/components/Checkbox'
-  import { Form, HasError, AlertForm } from 'back_path/components/form'
+  import { Form, HasError } from 'back_path/components/form'
   import ButtonCircle from 'back_path/components/ButtonCircle'
   import PermissionMixin from 'back_path/mixins/permissions'
 
@@ -106,7 +107,6 @@
       SubmitButton,
       Checkbox,
       HasError,
-      AlertForm,
       Tabs,
       ButtonCircle
     },

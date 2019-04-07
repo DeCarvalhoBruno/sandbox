@@ -3,7 +3,6 @@
     <form @submit.prevent="save" @keydown="form.onKeydown($event)">
       <b-tabs card lazy>
         <b-tab :title="form.fields.full_name" active>
-          <alert-form :form="form" :fade="true" :dismiss-label="$t('general.close')"></alert-form>
           <div class="col-md-8 offset-md-2">
             <div v-if="mediaData" class="form-group row justify-content-center">
               <img :src="getImageUrl(mediaData.uuid,null,mediaData.ext)"/>
@@ -18,6 +17,7 @@
                        name="new_username" id="new_username" class="form-control"
                        :class="{ 'is-invalid': form.errors.has('new_username') }"
                        :placeholder="$t('db.new_username')"
+                       maxlength="25"
                        aria-describedby="help_new_username"
                        @change="changedField('new_username')">
                 <has-error :form="form" field="new_username"></has-error>

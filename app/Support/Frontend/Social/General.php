@@ -5,7 +5,7 @@ use App\Models\Language;
 class General
 {
 
-    public function getFacebookTagList(string $title, string $description, array $input): string
+    public static function getFacebookTagList(string $title, string $description, array $input): string
     {
         $logoFilename = env('APP_LOGO_FILENAME');
         $tagList = [
@@ -27,7 +27,7 @@ class General
         return $tags;
     }
 
-    public function getTwitterTagList(string $title, string $description, array $input): string
+    public static function getTwitterTagList(string $title, string $description, array $input): string
     {
         $tagList = [
             'twitter:title' => $title,

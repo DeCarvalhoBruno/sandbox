@@ -83,21 +83,25 @@ class Entities extends Migration
         (new \App\Models\Group)->insert([
             [
                 'group_name' => 'root',
+                'group_slug' => 'root',
                 'group_id' => 1,
                 'group_mask' => 1
             ],
             [
                 'group_name' => 'Super Admins',
+                'group_slug' => 'super-admins',
                 'group_id' => 2,
                 'group_mask' => 2
             ],
             [
                 'group_name' => 'Admins',
+                'group_slug' => 'admins',
                 'group_id' => 3,
                 'group_mask' => 2000
             ],
             [
                 'group_name' => 'Users',
+                'group_slug' => 'users',
                 'group_id' => 4,
                 'group_mask' => 5000
             ],

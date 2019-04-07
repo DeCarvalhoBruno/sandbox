@@ -39,12 +39,13 @@
                             </div>
                             <ul v-if="removedUsers.length>0" class="list-group col-md-6">
                                 <li v-for="(removedUser,idx) in removedUsers" :key="idx"
-                                    class="list-group-item list-group-item-action list-group-item-danger member-tag-wrapper">
+                                    class="list-group-item list-group-item-action list-group-item-danger member-tag-wrapper"
+                                    @click="returnToUsersList(removedUser,idx)">
                                     <div>
                                         <div class="member-tag-text">{{removedUser.text}}</div>
                                         <div class="member-tag-btn">
-                                            <i v-if="userCount<=userCountThreshold" href="#" class="button-list-close"
-                                               @click="returnToUsersList(removedUser,idx)"></i>
+                                            <i v-if="userCount<=userCountThreshold"
+                                               href="#" class="button-list-close"></i>
                                         </div>
                                     </div>
                                 </li>
@@ -83,12 +84,12 @@
                         </div>
                         <div id="group-members-list" class="container row">
                             <div v-for="(member,idx) in members" :key="idx" class="col-md-3">
-                                <div class="list-group-item list-group-item-action list-group-item-primary member-tag-wrapper">
+                                <div class="list-group-item list-group-item-action member-tag-wrapper"
+                                     @click="addToRemoveUsersList(member,idx)">
                                     <div>
                                         <div class="member-tag-text">{{member.text}}</div>
                                         <div class="member-tag-btn"><i
-                                                href="#" class="button-list-close"
-                                                @click="addToRemoveUsersList(member,idx)"></i>
+                                                href="#" class="button-list-close"></i>
                                         </div>
                                     </div>
                                 </div>

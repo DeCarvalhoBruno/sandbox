@@ -19,8 +19,8 @@ class MediaTest extends TestCase
     public function test_media_show()
     {
         $u = $this->createUser();
-        $this->signIn($u);
 
+        $this->signIn($u,'jwt');
         $response = $this->getJson(
             "/ajax/admin/media"
         );

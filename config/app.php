@@ -224,7 +224,9 @@ return [
         'Media' => \Naraki\Media\Facades\Media::class,
         'Blog' => \Naraki\Blog\Facades\Blog::class,
         'Forum' => \Naraki\Forum\Facades\Forum::class,
-        'NarakiMail' => \Naraki\Mail\Facades\Email::class
+        'NarakiMail' => \Naraki\Mail\Facades\NarakiMail::class,
+        'System' => \Naraki\System\Facades\System::class,
+        'Permission' => \Naraki\Permission\Facades\Permission::class
     ],
 
 ];

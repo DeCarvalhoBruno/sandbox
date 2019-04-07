@@ -1,6 +1,5 @@
 <template>
     <form @submit.prevent="update" @keydown="form.onKeydown($event)">
-        <alert-form :form="form" :dismiss-label="$t('general.close')"></alert-form>
         <div class="form-group row">
             <label for="new_username" class="col-md-3 col-form-label">{{$t('db.new_username')}}</label>
             <div class="col-md-9">
@@ -78,7 +77,7 @@
   import Forms from 'back_path/mixins/form'
   import axios from 'axios'
 
-  import { Form, HasError, AlertForm } from 'back_path/components/form'
+  import { Form, HasError } from 'back_path/components/form'
   import { mapGetters } from 'vuex'
 
   export default {
@@ -86,7 +85,6 @@
     components: {
       SubmitButton,
       HasError,
-      AlertForm,
       AvatarUploader
     },
     mixins: [

@@ -118,7 +118,7 @@ abstract class Model
      */
     public function buildOneWithScopes(array $columns, array $scopes, array $wheres): Builder
     {
-        $q = $this->select($columns)->scopes($scopes);
+        $q = $this->buildWithScopes($columns,$scopes);
         foreach ($wheres as $where) {
             $operator = '=';
             if (count($where) === 3) {
@@ -261,15 +261,6 @@ abstract class Model
     private function getStoredFilterKey(int $entityID, int $userID): string
     {
         return sprintf('filter_%s_%s', $entityID, $userID);
-    }
-
-    /**
-     * @param int $entityTypeID
-     * @return mixed
-     */
-    public function getAllUserPermissions(int $entityTypeID)
-    {
-        return (app(RawQueries::class))->getAllUserPermissions($entityTypeID);
     }
 
 }

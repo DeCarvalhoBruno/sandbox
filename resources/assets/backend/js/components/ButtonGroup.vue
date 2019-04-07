@@ -16,6 +16,11 @@
       fieldName: {required: true, type: String},
       choices: {}
     },
+    watch: {
+      active () {
+        this.activeItem = this.active
+      }
+    },
     data () {
       return {
         activeItem: null

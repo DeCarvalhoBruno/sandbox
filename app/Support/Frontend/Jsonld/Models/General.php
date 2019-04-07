@@ -7,17 +7,7 @@ use App\Support\Frontend\Jsonld\Schemas\Thing\Person;
 
 class General
 {
-    /**
-     * @var array
-     */
-    protected $settings = [];
-
-    public function __construct()
-    {
-        $this->settings = \Cache::get('settings_general')??[];
-    }
-
-    public function makeStructuredData($data): string
+    public static function makeStructuredData($data): string
     {
         $structuredData = [];
         switch ($data['entity_type']) {
@@ -81,7 +71,7 @@ class General
         return JsonLd::generate($structuredData);
     }
 
-    public function organizationList(): array
+    public static function organizationList(): array
     {
         $orgs = [];
         foreach (Organization::$organizationList as $org => $v) {
@@ -90,7 +80,7 @@ class General
         return $orgs;
     }
 
-    public function websiteList(): array
+    public static function websiteList(): array
     {
         $ws = [];
         foreach (CreativeWork::$websiteList as $w => $v) {
@@ -99,13 +89,7 @@ class General
         return $ws;
     }
 
-    /**
-     * @return array
-     */
-    public function getSettings(): array
-    {
-        return $this->settings;
-    }
+
 
 
 }

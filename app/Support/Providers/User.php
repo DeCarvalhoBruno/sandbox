@@ -96,14 +96,14 @@ class User extends Model implements UserProvider, UserInterface, OauthProcessabl
     }
 
     /**
-     * @param \App\Models\User $model
      * @param string $field
      * @param mixed $value
      * @param array $data
      * @return \App\Models\User
      */
-    public function updateOne($model, $field, $value, $data)
+    public function updateOne($field, $value, $data)
     {
+        $model = $this->createModel();
         $user = $model->newQuery()->where($field, $value)->scopes(['entityType'])->first();
 
         $this->person->build()
@@ -131,8 +131,7 @@ class User extends Model implements UserProvider, UserInterface, OauthProcessabl
      */
     public function updateOneById($id, $data)
     {
-        $model = $this->createModel();
-        return $this->updateOne($model, $model->getKeyName(), $id, $data);
+        return $this->updateOne($this->createModel()->getKeyName(), $id, $data);
     }
 
     /**
@@ -142,7 +141,7 @@ class User extends Model implements UserProvider, UserInterface, OauthProcessabl
      */
     public function updateOneByUsername($username, $data)
     {
-        return $this->updateOne($this->createModel(), 'username', $username, $data);
+        return $this->updateOne('username', $username, $data);
     }
 
     /**

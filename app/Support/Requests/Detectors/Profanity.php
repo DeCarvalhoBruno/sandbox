@@ -2,7 +2,6 @@
 
 class Profanity
 {
-    private static $instance;
     private $string;
     private $locale;
     private $badWords;
@@ -17,10 +16,7 @@ class Profanity
 
     public static function detect($string, $locale)
     {
-        if (is_null(self::$instance)) {
-            self::$instance = new self($string, $locale);
-        }
-        return self::$instance->check();
+        return (new self($string, $locale))->check();
     }
 
     private function check()

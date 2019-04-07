@@ -5,8 +5,9 @@ use Naraki\System\Requests\UpdateSettings;
 use Naraki\System\Requests\UpdateSitemapSettings;
 use Naraki\System\Requests\UpdateSocialSettings;
 use App\Support\Frontend\Jsonld\Models\General as GeneralJsonldManager;
-use App\Support\Frontend\Social\General as GeneralSocialTagManager;
+use App\Support\Frontend\Social\General as SocialTagManager;
 use Illuminate\Http\Response;
+use Naraki\System\Support\Settings as SettingsDataObject;
 
 class Settings extends Controller
 {
@@ -16,11 +17,10 @@ class Settings extends Controller
      */
     public function edit()
     {
-        $jsonldMgr = new GeneralJsonldManager();
         return response([
-            'settings' => $jsonldMgr->getSettings(),
-            'websites' => $jsonldMgr->websiteList(),
-            'organizations' => $jsonldMgr->organizationList()
+            'settings' => SettingsDataObject::general(false),
+            'websites' => GeneralJsonldManager::websiteList(),
+            'organizations' => GeneralJsonldManager::organizationList()
         ], Response::HTTP_OK);
     }
 
@@ -30,26 +30,30 @@ class Settings extends Controller
      */
     public function update(UpdateSettings $request)
     {
-        $jsonldMgr = new GeneralJsonldManager();
         $input = $request->all();
+        $settings = new SettingsDataObject();
         if (!is_null($input['logo'])) {
             $file = $request->file('logo');
             $filename = sprintf('logo_jld.%s', $file->getClientOriginalExtension());
             $file->move(sprintf('%s/media/img/site', public_path()), $filename);
-            $input['logo'] = asset('media/img/site/logo_jld.jpg');
+            $input['logo'] = asset(sprintf('media/img/site/%s', $filename));
         }
-        \Cache::forever('settings_general', $input);
-        \Cache::forever('settings_has_jsonld', $input['jsonld']);
+        if (!is_array($input['links'])) {
+            $input['links'] = explode(',', $input['links']);
+        }
 
-        if ($input['jsonld'] === true) {
-            \Cache::forever('meta_jsonld', $jsonldMgr->makeStructuredData($input));
-        } else {
-            \Cache::forever('meta_jsonld', '');
-        }
-        \Cache::forever('meta_robots', $input['robots'] === true ? 'index, follow' : 'noindex, nofollow');
-        \Cache::forever('meta_description', $input['site_description']);
-        \Cache::forever('meta_keywords', $input['site_keywords']);
-        \Cache::forever('meta_title', $input['site_title']);
+        SettingsDataObject::saveSettings('general', $input);
+        $settings->put('has_jsonld', $input['jsonld']);
+        $settings->put('meta_jsonld',
+            ($input['jsonld'] === true)
+                ? GeneralJsonldManager::makeStructuredData($input)
+                : ''
+        );
+        $settings->put('meta_robots', $input['robots'] === true ? 'index, follow' : 'noindex, nofollow');
+        $settings->put('meta_description', $input['site_description']);
+        $settings->put('meta_keywords', $input['site_keywords']);
+        $settings->put('meta_title', $input['site_title']);
+        $settings->save('general_formatted');
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
@@ -60,7 +64,7 @@ class Settings extends Controller
     public function editSocial()
     {
         return response([
-            'settings' => \Cache::get('settings_social'),
+            'settings' => SettingsDataObject::social(false),
         ], Response::HTTP_OK);
     }
 
@@ -70,19 +74,23 @@ class Settings extends Controller
      */
     public function updateSocial(UpdateSocialSettings $request)
     {
-        $socialTagManager = new GeneralSocialTagManager();
+        $settings = new SettingsDataObject();
+        $generalSettings = new SettingsDataObject('general');
         $input = $request->all();
-        \Cache::forever('settings_social', $input);
-        $description = \Cache::get('meta_description');
-        $title = \Cache::get('meta_title');
-        \Cache::forever('settings_has_facebook', $input['open_graph']);
-        \Cache::forever('settings_has_twitter', $input['twitter_cards']);
+        SettingsDataObject::saveSettings('social', $input);
+
+        $description = $generalSettings->get('site_description');
+        $title = $generalSettings->get('site_title');
+        $settings->put('has_facebook', $input['open_graph']);
+        $settings->put('has_twitter', $input['twitter_cards']);
         if ($input['open_graph'] === true) {
-            \Cache::forever('meta_facebook', $socialTagManager->getFacebookTagList($title, $description, $input));
+            $settings->put('meta_facebook', SocialTagManager::getFacebookTagList($title, $description, $input));
         }
         if ($input['twitter_cards'] === true) {
-            \Cache::forever('meta_twitter', $socialTagManager->getTwitterTagList($title, $description, $input));
+            $settings->put('meta_twitter', SocialTagManager::getTwitterTagList($title, $description, $input));
         }
+        $settings->save('social_formatted');
+
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
@@ -92,7 +100,7 @@ class Settings extends Controller
     public function editSitemap()
     {
         return response([
-            'settings' => \Cache::get('settings_sitemap'),
+            'settings' => SettingsDataObject::sitemap(false),
         ], Response::HTTP_OK);
     }
 
@@ -102,8 +110,7 @@ class Settings extends Controller
      */
     public function updateSitemap(UpdateSitemapSettings $request)
     {
-        $input = $request->all();
-        \Cache::forever('settings_sitemap', $input);
+        SettingsDataObject::saveSettings('sitemap', $request->all());
         return response(null, Response::HTTP_NO_CONTENT);
     }
 

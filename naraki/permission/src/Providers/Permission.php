@@ -1,8 +1,12 @@
 <?php namespace Naraki\Permission\Providers;
 
+use App\Contracts\RawQueries;
 use App\Models\Entity;
 use App\Models\EntityType;
 use App\Support\Providers\Model;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Session;
 use Naraki\Permission\Contracts\HasPermissions;
 use Naraki\Permission\Contracts\Permission as PermissionInterface;
 use Naraki\Permission\Models\Permission as PermissionModel;
@@ -81,6 +85,36 @@ class Permission extends Model implements PermissionInterface
             $permission['computed'] = [];
         }
         return $permission;
+    }
+
+    /**
+     * @param int $entityTypeID
+     * @return mixed
+     */
+    public function getAllUserPermissions(int $entityTypeID)
+    {
+        return (app(RawQueries::class))->getAllUserPermissions($entityTypeID);
+    }
+
+    /**
+     * @param int $entityTypeID
+     * @return \stdClass
+     */
+    public function cacheUserPermissions(int $entityTypeID): ?\stdClass
+    {
+        $cacheKey = 'permissions.' . $entityTypeID;
+        $permissionsObj = Cache::get($cacheKey);
+        if (is_null($permissionsObj)) {
+            $permissionsObj = $this->getAllUserPermissions($entityTypeID);
+            $permissions = (object)$permissionsObj->computed;
+            if (!isset($permissions->system) && !isset($permissions->system['Login'])) {
+                return null;
+            }
+            Cache::put($cacheKey, serialize($permissions), 60 * 30);
+        } else {
+            $permissions = unserialize($permissionsObj);
+        }
+        return $permissions;
     }
 
 }

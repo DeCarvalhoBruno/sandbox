@@ -2,8 +2,11 @@ export default {
   name: 'permission-mixin',
   methods: {
     getPermissions (permissions) {
-      let permissionsLength = permissions.length
       let savedPermissions = {hasChanged: false}
+      if (!permissions) {
+        return savedPermissions
+      }
+      let permissionsLength = permissions.length
       for (let i = 0; i < permissionsLength; i++) {
         let p = permissions[i].$attrs.entity
         if (!savedPermissions.hasOwnProperty(p)) {
@@ -19,7 +22,6 @@ export default {
           savedPermissions.hasChanged = true
         }
       }
-      // console.log(savedPermissions)
       return savedPermissions
     },
     hasPermission (permissions, entity, type) {

@@ -4,7 +4,6 @@ use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
 class ServiceProvider extends LaravelServiceProvider
 {
-    protected $defer = true;
     public function register()
     {
         $this->publishes([
@@ -19,7 +18,7 @@ class ServiceProvider extends LaravelServiceProvider
         $this->app['router']->group([
             'middleware' => 'misc',
         ], function ($r) {
-            $r->get('sitemap/{type}/{slug?}', ['uses' => __NAMESPACE__ . '\Controllers\Sitemap'])->name('sitemap');
+            $r->get('sitemap/{type?}/{slug?}', ['uses' => __NAMESPACE__ . '\Controllers\Sitemap'])->name('sitemap');
         });
     }
 

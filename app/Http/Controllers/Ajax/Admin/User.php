@@ -7,8 +7,8 @@ use App\Http\Requests\Admin\UpdateUser;
 use App\Models\Entity;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Naraki\Permission\Contracts\Permission as PermissionProvider;
 use Naraki\Media\Facades\Media as MediaProvider;
+use Naraki\Permission\Facades\Permission;
 
 class User extends Controller
 {
@@ -120,7 +120,7 @@ class User extends Controller
         unset($user['entity_type_id']);
         return [
             'user' => $user->toArray(),
-            'permissions' => $this->repo->getAllUserPermissions($entityTypeId),
+            'permissions' => Permission::getAllUserPermissions($entityTypeId),
             'nav' => $nav,
             'intended' => null,
             'media' => $media
@@ -130,19 +130,18 @@ class User extends Controller
     /**
      * @param $username
      * @param \App\Http\Requests\Admin\UpdateUser $request
-     * @param \Naraki\Permission\Contracts\Permission|\App\Support\Providers\Permission $permissionProvider
      * @return \Illuminate\Http\Response
      */
     public function update(
         $username,
-        UpdateUser $request,
-        PermissionProvider $permissionProvider
+        UpdateUser $request
     ) {
         $user = $this->repo->updateOneByUsername($username, $request->all());
         $permissions = $request->getPermissions();
 
         if (!is_null($permissions)) {
-            $permissionProvider->updateIndividual($permissions, $user->getEntityType(), Entity::USERS);
+            Permission::updateIndividual($permissions, $user->getEntityType(), Entity::USERS);
+            Permission::cacheUserPermissions($user->getEntityType());
             event(new PermissionEntityUpdated);
         }
         return response(null, Response::HTTP_NO_CONTENT);

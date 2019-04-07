@@ -3,6 +3,7 @@
 use App\Composers\Composer;
 use App\Support\Frontend\Breadcrumbs;
 use App\Support\Frontend\Jsonld\Models\Blog as JsonldBlog;
+use Naraki\System\Support\Settings;
 
 class Blog extends Composer
 {
@@ -11,34 +12,35 @@ class Blog extends Composer
      */
     public function compose($view)
     {
-        $jsonldManager = new JsonldBlog();
         $data = $view->getData();
         $data['title'] = page_title($data['post']->getAttribute('title'));
+        $generalSettings = new Settings('general_formatted');
 
-        $hasJsonld = \Cache::get('settings_has_jsonld');
+        $hasJsonld = $generalSettings->get('has_jsonld');
         if (!is_null($hasJsonld) && $hasJsonld === true) {
-            $data['meta_jsonld'] = $jsonldManager->makeStructuredData((object)[
+            $data['meta_jsonld'] = JsonldBlog::makeStructuredData((object)[
                 'breadcrumbs' => $data['breadcrumbs'],
                 'post' => $data['post'],
                 'media' => $data['media']
-            ]);
+            ], $generalSettings);
         }
         $data['breadcrumbs'] = Breadcrumbs::render($data['breadcrumbs']);
-        $hasFacebook = \Cache::get('settings_has_facebook');
-        $socialSettings = \Cache::get('settings_social');
+        $socialSettings = new Settings('social_formatted');
+
         $socialTagManager = new \Naraki\Blog\Support\Social\Blog();
         $socialData = (object)[
             'post' => $data['post'],
             'media' => $data['media'],
-            'settings' => $socialSettings
         ];
+
+        $hasFacebook = $socialSettings->get('has_facebook');
         if (!is_null($hasFacebook) && $hasFacebook === true) {
-            $data['meta_facebook'] = $socialTagManager->getFacebookTagList($socialData);
+            $data['meta_facebook'] = $socialTagManager->getFacebookTagList($socialData,$socialSettings);
         }
 
-        $hasTwitter = \Cache::get('settings_has_twitter');
+        $hasTwitter = $socialSettings->get('has_twitter');
         if (!is_null($hasTwitter) && $hasTwitter === true) {
-            $data['meta_twitter'] = $socialTagManager->getTwitterTagList($socialData);
+            $data['meta_twitter'] = $socialTagManager->getTwitterTagList($socialData,$socialSettings);
         }
         $this->addVarsToView($data, $view);
     }

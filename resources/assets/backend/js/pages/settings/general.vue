@@ -121,7 +121,7 @@
                   </div>
                   <div>
                     <img v-if="organizationLogo!==null" :src="organizationLogo"
-                         class="w-50 mt-3 image-fluid img-thumbnail rounded mx-auto d-block">
+                         class="w-25 mt-3 image-fluid img-thumbnail rounded mx-auto d-block">
                   </div>
                 </div>
               </div>
@@ -231,7 +231,8 @@
       getInfo (data) {
         this.websiteTypes = data.websites
         this.orgTypes = data.organizations
-        if (data.settings.length) {
+
+        if (data.settings.length===undefined) {
           this.form = new Form(data.settings)
           this.organizationLogo = this.form.fields.logo
           this.form.fields.logo = null

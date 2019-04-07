@@ -4,11 +4,11 @@ use App\Contracts\Models\Group as GroupProvider;
 use App\Events\PermissionEntityUpdated;
 use App\Filters\Group as GroupFilter;
 use App\Http\Controllers\Admin\Controller;
-use App\Models\Entity;
-use Illuminate\Http\Response;
-use Naraki\Permission\Contracts\Permission as PermissionProvider;
 use App\Http\Requests\Admin\CreateGroup;
 use App\Http\Requests\Admin\UpdateGroup;
+use App\Models\Entity;
+use Illuminate\Http\Response;
+use Naraki\Permission\Facades\Permission;
 
 class Group extends Controller
 {
@@ -24,6 +24,8 @@ class Group extends Controller
                 ->select([
                     'groups.group_id',
                     'group_name',
+                    'group_slug',
+                    'group_mask',
                     'permission_mask',
                     \DB::raw('count(group_members.user_id) as member_count')
                 ])->leftGroupMember()->entityType()
@@ -38,9 +40,13 @@ class Group extends Controller
             'columns' => (new \App\Models\Group)->getColumnInfo([
                 'group_name' => (object)[
                     'name' => trans('js-backend.db.group_name'),
-                    'width' => '80%'
+                    'width' => '60%'
+                ],
+                'group_mask' => (object)[
+                    'name' => trans('js-backend.db.group_mask'),
+                    'width' => '20%'
                 ]
-            ],$filter),
+            ], $filter),
             'member_count' => trans('js-backend.db.member_count'),
 
         ];
@@ -50,39 +56,36 @@ class Group extends Controller
     /**
      * @param string $groupName
      * @param \App\Contracts\Models\Group|\App\Support\Providers\Group $groupProvider
-     * @param \Naraki\Permission\Contracts\Permission|\Naraki\Permission\Providers\Permission $permissionProvider
      * @return array
      */
-    public function edit($groupName, GroupProvider $groupProvider, PermissionProvider $permissionProvider)
+    public function edit($groupName, GroupProvider $groupProvider)
     {
-        $group = $groupProvider->getOneByName($groupName, ['group_name', 'group_mask', 'entity_type_id'])
-            ->entityType()->first()->toArray();
+        $group = $groupProvider->getOneByName($groupName, ['group_slug', 'group_name', 'group_mask', 'entity_type_id'])
+            ->scopes(['entityType'])->first()->toArray();
         $entityType_id = $group['entity_type_id'];
         unset($group['entity_type_id']);
         return [
             'group' => $group,
-            'permissions' => $permissionProvider->getRootAndGroupPermissions($entityType_id)
+            'permissions' => Permission::getRootAndGroupPermissions($entityType_id)
         ];
     }
 
     /**
      * @param string $groupName
      * @param \App\Http\Requests\Admin\UpdateGroup $request
-     * @param \App\Contracts\Models\Group|\App\Support\Providers\\Group $groupProvider
-     * @param \Naraki\Permission\Contracts\Permission|\App\Support\Providers\\Permission $permissionProvider
+     * @param \App\Contracts\Models\Group|\App\Support\Providers\Group $groupProvider
      * @return \Illuminate\Http\Response
      */
     public function update(
         $groupName,
         UpdateGroup $request,
-        GroupProvider $groupProvider,
-        PermissionProvider $permissionProvider
+        GroupProvider $groupProvider
     ) {
         $group = $groupProvider->updateOneByName($groupName, $request->all());
         $permissions = $request->getPermissions();
 
         if (!is_null($permissions)) {
-            $permissionProvider->updateIndividual(
+            Permission::updateIndividual(
                 $permissions,
                 $group->getAttribute('entity_type_id'),
                 Entity::GROUPS);
@@ -94,7 +97,7 @@ class Group extends Controller
 
     /**
      * @param string $groupName
-     * @param \App\Contracts\Models\Group|\App\Support\Providers\\Group $groupProvider
+     * @param \App\Contracts\Models\Group|\App\Support\Providers\Group $groupProvider
      * @return \Illuminate\Http\Response
      */
     public function destroy($groupName, GroupProvider $groupProvider)
@@ -107,31 +110,31 @@ class Group extends Controller
      * @param \Naraki\Permission\Contracts\Permission|\App\Support\Providers\\Permission $permissionProvider
      * @return array
      */
-    public function add(PermissionProvider $permissionProvider)
+    public function add()
     {
         return [
-            'permissions' => $permissionProvider->getRootAndGroupPermissions()
+            'permissions' => Permission::getRootAndGroupPermissions()
         ];
     }
 
     /**
      * @param \App\Http\Requests\Admin\CreateGroup $request
-     * @param \App\Contracts\Models\Group|\App\Support\Providers\\Group $groupProvider
-     * @param \Naraki\Permission\Contracts\Permission|\App\Support\Providers\\Permission $permissionProvider
+     * @param \App\Contracts\Models\Group|\App\Support\Providers\Group $groupProvider
      * @return \Illuminate\Http\Response
      */
-    public function create(CreateGroup $request, GroupProvider $groupProvider, PermissionProvider $permissionProvider)
+    public function create(CreateGroup $request, GroupProvider $groupProvider)
     {
 
         $group = $groupProvider->createOne($request->all());
         $permissions = $request->getPermissions();
 
         if (!is_null($permissions)) {
-            $permissionProvider->updateIndividual(
+            Permission::updateIndividual(
                 $permissions,
-                $group->getAttribute('entity_type_id'), Entity::GROUPS);
+                $group->getAttribute('entity_type_id'),
+                Entity::GROUPS);
+            event(new PermissionEntityUpdated);
         }
-        event(new PermissionEntityUpdated);
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }

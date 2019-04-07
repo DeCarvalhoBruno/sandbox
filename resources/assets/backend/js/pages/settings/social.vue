@@ -95,7 +95,7 @@
         this.swalNotification('success', this.$t('message.settings_updated'))
       },
       getInfo (data) {
-        if (data.settings != null) {
+        if (data.settings.length===undefined) {
           this.form = new Form(data.settings)
         }
       }

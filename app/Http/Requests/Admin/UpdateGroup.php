@@ -10,7 +10,7 @@ class UpdateGroup extends FormRequest
     public function rules()
     {
         return [
-            'new_group_name' => 'regex:/^(\w){1,15}$/|unique:groups,group_name',
+            'new_group_name' => 'max:60|unique:groups,group_name',
             'group_mask' => 'required|integer|min:100',
         ];
     }

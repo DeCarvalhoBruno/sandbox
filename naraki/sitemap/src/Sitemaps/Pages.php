@@ -1,9 +1,8 @@
 <?php namespace Naraki\Sitemap\Sitemaps;
 
 use Carbon\Carbon;
-use Naraki\Blog\Facades\Blog as BlogRepo;
 use Naraki\Sitemap\Contracts\Sitemapable;
-use Thepixeldeveloper\Sitemap\SitemapIndex;
+use Naraki\System\Support\Settings;
 use Thepixeldeveloper\Sitemap\Urlset;
 
 class Pages extends Sitemap implements Sitemapable
@@ -27,7 +26,8 @@ class Pages extends Sitemap implements Sitemapable
             'freq' => $this->changeFrequency,
             'priority' => $this->priority,
         ]);
-        $sitemaps = \Cache::get('settings_sitemap');
+
+        $sitemaps = Settings::sitemap(false);
         if (!is_null($sitemaps)) {
             if ($sitemaps['sitemap'] === true) {
                 foreach ($sitemaps['links'] as $sitemap) {

@@ -1,23 +1,34 @@
 <?php namespace App\Composers\Frontend;
 
 use App\Composers\Composer;
+use Naraki\System\Support\Settings;
 
 class Home extends Composer
 {
+    /**
+     * @var array
+     */
     private $data;
+    /**
+     * @var \Naraki\System\Support\Settings
+     */
+    private $settings;
 
     /**
      * @param \Illuminate\View\View $view
      */
     public function compose($view)
     {
+        $this->settings = new Settings('general_formatted');
         $this->setVar('meta_description');
         $this->setVar('meta_jsonld');
         $this->setVar('meta_robots');
+        $this->setVar('meta_keywords');
+        $this->data['title'] = $this->settings->get('meta_title');
+
+        $this->settings = new Settings('social_formatted');
         $this->setVar('meta_facebook');
         $this->setVar('meta_twitter');
-        $this->setVar('meta_keywords');
-        $this->data['title'] = \Cache::get('meta_title');
         if (!is_null($this->data)) {
             $this->addVarsToView($this->data, $view);
         }
@@ -25,7 +36,7 @@ class Home extends Composer
 
     public function setVar($var)
     {
-        $cVar = \Cache::get($var);
+        $cVar = $this->settings->get($var);
         if (!is_null($cVar) && !empty($cVar)) {
             $this->data[$var] = $cVar;
         }

@@ -4,22 +4,22 @@ use App\Http\Controllers\Admin\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Validation\ValidationException;
-use Naraki\System\Facades\System;
+use Naraki\Permission\Facades\Permission;
 
 class Login extends Controller
 {
     use AuthenticatesUsers;
-
-    private $permissions;
-    private $entity;
 
     protected function guard()
     {
         return \Auth::guard('jwt');
     }
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return bool
+     */
     protected function attemptLogin(Request $request)
     {
 //        if ($request->get('remember')) {
@@ -27,9 +27,8 @@ class Login extends Controller
 //        }
         $token = $this->guard()->attempt($this->credentials($request));
 
-        $this->setEntity($this->guard()->user()->getAttribute('entity_type_id'));
-        $this->setPermissions(System::getAllUserPermissions($this->entity));
-        if (!isset($this->permissions->computed['system']['Login'])) {
+        $permissions = Permission::cacheUserPermissions($this->guard()->user()->getEntityType());
+        if (is_null($permissions)) {
             throw ValidationException::withMessages([
                 $this->username() => [trans('auth.failed_not_allowed')],
             ]);
@@ -42,12 +41,15 @@ class Login extends Controller
         return false;
     }
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return array
+     */
     protected function sendLoginResponse(Request $request)
     {
         $this->clearLoginAttempts($request);
         $token = (string)$this->guard()->getToken();
         $expiration = $this->guard()->getPayload()->get('exp');
-        Redis::set('permissions.' . $this->entity, serialize((object)$this->permissions->computed));
 
         return [
             'user' => $this->guard()->user()->only([
@@ -77,30 +79,12 @@ class Login extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function logout(Request $request)
+    public function logout()
     {
         $this->guard()->logout();
         return response(null, Response::HTTP_NO_CONTENT);
     }
-
-    /**
-     * @param $value
-     */
-    private function setPermissions($value): void
-    {
-        $this->permissions = $value;
-    }
-
-    /**
-     * @param mixed $entity
-     */
-    public function setEntity($entity): void
-    {
-        $this->entity = $entity;
-    }
-
 
 }

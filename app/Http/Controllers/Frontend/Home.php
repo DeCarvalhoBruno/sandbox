@@ -57,6 +57,11 @@ class Home extends Controller
                 }
             }
         }
+        $posts = [
+            'featured' => [],
+            'most_viewed_cat' => [],
+            'most_viewed' => []
+        ];
         unset($dbResult);
         return view('frontend.site.home', compact('posts', 'media'));
     }

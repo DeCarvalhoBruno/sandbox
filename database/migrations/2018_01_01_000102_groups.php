@@ -16,8 +16,9 @@ class Groups extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->smallIncrements('group_id');
 
-            $table->string('group_name', 75)->nullable();
-            $table->integer('group_mask')->unsigned();
+            $table->string('group_name', 60)->nullable();
+            $table->string('group_slug', 75)->nullable();
+            $table->smallInteger('group_mask')->unsigned();
         });
 
         Schema::create('group_members', function (Blueprint $table) {

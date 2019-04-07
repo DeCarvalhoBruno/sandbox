@@ -181,13 +181,13 @@ return [
     ],
     'form' => [
         'description' => [
-            'username' => 'The user\'s shorthand name.',
+            'username' => 'The user\'s shorthand name. Limited to 25 characters, and may only contain letters and underscores.',
             'first_name' => 'The user\'s first (given) name.',
             'last_name' => 'The user\'s last (family) name.',
             'new_email' => '"{0}" is the current e-mail address.',
-            'new_username' => '"{0}" is the current username.',
-            'group_name' => 'The group name can only contain alphanumeric characters and underscores.',
-            'new_group_name' => '"{0}" is the current group name. The group name can only contain alphanumeric characters and underscores.',
+            'new_username' => '"{0}" is the current username. Limited to 25 characters, and may only contain letters and underscores.',
+            'group_name' => 'The group name.',
+            'new_group_name' => '"{0}" is the current group name.',
             'group_mask' => 'Determines the group\'s position in its hierarchy. The lower the mask, the higher the group status.',
             'media_title' => 'Title of the media',
             'media_alt' => 'A text alternative to the image for screen readers or when the image does not load.',
@@ -265,6 +265,7 @@ return [
             'filter_created_at' => 'Filter by registration date',
         ],
         'groups' => [
+            'add_group'=>'Add group',
             'info1' => 'Permissions for all members of the group are defined here.',
             'info2' => 'Individual permissions can also be set at the user level,
             in which case user permissions will override permissions set here.'
@@ -273,7 +274,6 @@ return [
             'language' => 'Language',
             'notifications' => 'Choose the events for which you would like to receive live notifications:',
             'settings' => 'Your settings',
-
         ],
         'settings' => [
             'allow_robots' => 'Allow search engine bots to crawl pages',

@@ -14,130 +14,146 @@ class Group extends Model implements GroupInterface
     protected $model = \App\Models\Group::class;
 
     /**
-     * @param string $groupName
+     * @param string $slug
      * @param array $columns
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function getOneByName($groupName, $columns = ['*'])
+    public function getOneByName($slug, $columns = ['*'])
     {
-        return $this->select($columns)->where('group_name', '=', $groupName);
+        return $this->select($columns)->where('group_slug', '=', $slug);
     }
 
     /**
-     * @param string $groupName
+     * @param string $slug
      * @param array $data
-     * @return int
+     * @return \App\Models\Group
      */
-    public function updateOneByName($groupName, $data)
+    public function updateOneByName($slug, $data)
     {
-        return $this->updateOneGroup($this->createModel(), 'group_name', $groupName, $data);
+        return $this->updateOneGroup('group_slug', $slug, $data);
     }
 
     /**
      * @param int $id
      * @param array $data
-     * @return int
+     * @return \App\Models\Group
      */
     public function updateOneById($id, $data)
     {
-        $model = $this->createModel();
-        return $this->updateOneGroup($model, $model->getKeyName(), $id, $data);
+        return $this->updateOneGroup($this->createModel()->getKeyName(), $id, $data);
     }
 
     /**
-     * @param \App\Models\Group $model
      * @param string $field
      * @param string $value
      * @param array $data
-     * @return int
+     * @return \App\Models\Group
      */
-    public function updateOneGroup($model, $field, $value, $data)
+    public function updateOneGroup($field, $value, $data)
     {
-        $group = $model->newQuery()->select(['group_id', 'entity_type_id'])
-            ->where($field, $value)->entityType()->first();
+        $group = $this->buildOneWithScopes(
+            ['group_id', 'entity_type_id'],
+            ['entityType'],
+            [[$field, $value]])
+            ->first();
 
-        $model->newQuery()->where($field, $value)
+        $this->build()->where($field, $value)
             ->update($this->filterFillables($data));
         return $group;
     }
 
     /**
-     * @param $data
+     * @param array $data
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function createOne($data)
     {
-        $this->createModel()->insert($data);
-        return $this
-            ->select(['entity_type_id'])
-            ->where('group_name','=',$data['group_name'])
-            ->entityType()->first();
+        $data['group_slug'] = slugify($data['group_name']);
+        $this->createModel($data)->save();
+        event(new PermissionEntityUpdated);
+        return $this->buildOneWithScopes(
+            ['entity_type_id'],
+            ['entityType'],
+            [['group_slug', $data['group_slug']]])
+            ->first();
     }
 
-    public function deleteByName($groupName)
+    /**
+     * @param string $slug
+     */
+    public function deleteByName(string $slug)
     {
-        $this->build()->where('group_name','=',$groupName)->delete();
+        $this->build()->where('group_slug', '=', $slug)->delete();
         event(new PermissionEntityUpdated);
     }
 
     /**
-     * @param $groupName
+     * @param string $slug
      * @return array
      */
-    public function getMembers($groupName)
+    public function getMembers(string $slug)
     {
-        $model = $this->createModel();
-        $count = $model->newQuery()->select(\DB::raw('count(group_members.user_id) as c'))
-            ->groupMember()->user()->where('group_name', '=', $groupName)->pluck('c')->pop();
+        list($select, $scopes, $wheres) = [
+            [\DB::raw('count(group_members.user_id) as c')],
+            ['groupMember', 'user'],
+            [['group_slug', '=', $slug]]
+        ];
+        $count = $this->buildOneWithScopes($select, $scopes, $wheres)->pluck('c')->pop();
+
         if ($count > 25) {
             return ['count' => $count];
         } else {
             return [
                 'count' => $count,
-                'users' =>
-                    $this->select(['full_name as text', 'username as id'])
-                        ->groupMember()->user()->where('group_name', '=', $groupName)
-                        ->orderBy('last_name', 'asc')->get()
+                'users' => $this->buildOneWithScopes(['full_name as text', 'username as id'], $scopes, $wheres)
+                    ->orderBy('last_name', 'asc')->get()
             ];
         }
     }
 
     /**
-     * @param string $groupName
+     * @param $slug
      * @param string $search
      * @param int $limit
      * @return \App\Models\Group[]
      */
-    public function searchMembers($groupName, $search, $limit = 10)
+    public function searchMembers(string $slug, $search, $limit = 10)
     {
-        return $this->select(['full_name as text', 'username as id'])
-            ->groupMember()->user()->where('group_name', '=', strip_tags($groupName))
-            ->where('full_name', 'like', sprintf('%%%s%%', strip_tags($search)))
+        return $this->buildOneWithScopes(
+            ['full_name as text', 'username as id'],
+            ['groupMember', 'user'],
+            [
+                ['group_slug', strip_tags($slug)],
+                ['full_name', 'like', sprintf('%%%s%%', strip_tags($search))]
+            ])
             ->limit($limit)->get();
     }
 
     /**
-     * @param string $groupName
+     * @param $slug
      * @param \StdClass $data
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function updateMembers($groupName, $data)
+    public function updateMembers($slug, $data)
     {
         if (empty($data->added) && empty($data->removed)) {
             return;
         }
-        $model = $this->createModel();
-        $groupId = $model->newQuery()->select('group_id')
-            ->where('group_name', '=', $groupName)->pluck('group_id')->pop();
+
+        $groupId = $this->select('group_id')
+            ->where('group_slug', '=', $slug)
+            ->pluck('group_id')->first();
+
         if (!empty($data->added) && is_int($groupId)) {
             /** @var \App\Support\Database\MysqlRawQueries $rawQueries */
             $rawQueries = app()->make(RawQueries::class);
-            $userIds = $rawQueries->getUsersInArrayNotInGroup($data->added, $groupName);
+            $userIds = $rawQueries->getUsersInArrayNotInGroup($data->added, $slug);
             if (is_int($groupId)) {
                 $groupMembers = [];
                 foreach ($userIds as $userId) {
                     $groupMembers[] = ['user_id' => $userId, 'group_id' => $groupId];
                 }
-                (new GroupMember())->insert($groupMembers);
+                GroupMember::query()->insert($groupMembers);
             }
         }
 
@@ -149,6 +165,5 @@ class Group extends Model implements GroupInterface
                 GroupMember::query()->whereIn('user_id', $userIds)->delete();
             }
         }
-        event(new PermissionEntityUpdated);
     }
 }

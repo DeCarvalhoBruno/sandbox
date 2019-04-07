@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ajax\Admin;
 
+use App\Events\PermissionEntityUpdated;
 use App\Http\Controllers\Admin\Controller;
 use App\Http\Requests\Admin\UpdateMember;
 use App\Support\Providers\Group as GroupProvider;
@@ -11,35 +12,37 @@ class GroupMember extends Controller
 {
 
     /**
-     * @param string $groupName
+     * @param string $slug
      * @param \App\Contracts\Models\Group|\App\Support\Providers\Group $groupProvider
      * @return \Illuminate\Http\Response
      */
-    public function index($groupName, GroupProvider $groupProvider)
+    public function index($slug, GroupProvider $groupProvider)
     {
-        return response($groupProvider->getMembers($groupName), Response::HTTP_OK);
+        return response($groupProvider->getMembers($slug), Response::HTTP_OK);
     }
 
     /**
-     * @param string $groupName
+     * @param string $slug
      * @param string $search
      * @param \App\Contracts\Models\Group|\App\Support\Providers\Group $groupProvider
      * @return \Illuminate\Http\Response
      */
-    public function search($groupName, $search, GroupProvider $groupProvider)
+    public function search($slug, $search, GroupProvider $groupProvider)
     {
-        return response($groupProvider->searchMembers($groupName, $search), Response::HTTP_OK);
+        return response($groupProvider->searchMembers($slug, $search), Response::HTTP_OK);
     }
 
     /**
-     * @param string $groupName
+     * @param string $slug
      * @param \App\Contracts\Models\Group|\App\Support\Providers\Group $groupProvider
      * @param \App\Http\Requests\Admin\UpdateMember $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function update($groupName, GroupProvider $groupProvider, UpdateMember $request)
+    public function update($slug, GroupProvider $groupProvider, UpdateMember $request)
     {
-        $groupProvider->updateMembers($groupName, (object)$request->input());
+        $groupProvider->updateMembers($slug, (object)$request->input());
+        event(new PermissionEntityUpdated);
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
