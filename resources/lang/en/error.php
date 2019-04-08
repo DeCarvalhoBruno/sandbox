@@ -6,6 +6,7 @@ return [
             'general_error' => 'The operation caused an error. We\'ll be tracking the source of the problem shortly.',
             'general_retrieval_error' => 'The requested resource could not be retrieved. It may have been deleted.',
             'user_not_found' => 'We could not find a user by that username.',
+            'group_not_found' => 'We could not find a group by that slug.',
             'blog_post_not_found' => 'We could not find a blog post by that name.'
         ],
         '422'=>[

@@ -54,14 +54,19 @@ class Group extends Controller
     }
 
     /**
-     * @param string $groupName
+     * @param string $groupSlug
      * @param \App\Contracts\Models\Group|\App\Support\Providers\Group $groupProvider
      * @return array
      */
-    public function edit($groupName, GroupProvider $groupProvider)
+    public function edit($groupSlug, GroupProvider $groupProvider)
     {
-        $group = $groupProvider->getOneByName($groupName, ['group_slug', 'group_name', 'group_mask', 'entity_type_id'])
-            ->scopes(['entityType'])->first()->toArray();
+        $groupDb = $groupProvider->getOneBySlug($groupSlug,
+            ['group_slug', 'group_name', 'group_mask', 'entity_type_id'])
+            ->scopes(['entityType'])->first();
+        if (is_null($groupDb)) {
+            return response(trans('error.http.500.user_not_found'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        $group = $groupDb->toArray();
         $entityType_id = $group['entity_type_id'];
         unset($group['entity_type_id']);
         return [
@@ -81,7 +86,7 @@ class Group extends Controller
         UpdateGroup $request,
         GroupProvider $groupProvider
     ) {
-        $group = $groupProvider->updateOneByName($groupName, $request->all());
+        $group = $groupProvider->updateOneBySlug($groupName, $request->all());
         $permissions = $request->getPermissions();
 
         if (!is_null($permissions)) {

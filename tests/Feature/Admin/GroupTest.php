@@ -10,14 +10,14 @@ class GroupTest extends TestCase
 {
     use DatabaseMigrations, WithoutMiddleware;
 
-    public function test_show()
+    public function test_backend_group_show()
     {
         $this->signIn();
         $user = $this->createUser();
         $group = $this->create('Group');
         $this->assignUserToGroup($user, $group);
 
-        $response = $this->getJson('/ajax/admin/groups/' . $group->group_name);
+        $response = $this->getJson('/ajax/admin/groups/' . $group->group_slug);
 
         $response->assertStatus(200);
         $jsonResponse = $response->json();
@@ -26,7 +26,7 @@ class GroupTest extends TestCase
         $this->assertArrayHasKey('permissions', $jsonResponse);
     }
 
-    public function test_update_without_data()
+    public function test_backend_group_update_without_data()
     {
         $this->withExceptionHandling();
         $this->signIn()->createUser();
@@ -40,7 +40,7 @@ class GroupTest extends TestCase
         $this->assertArrayHasKey('group_mask', $json['errors']);
     }
 
-    public function test_update_with_bad_name()
+    public function test_backend_group_update_with_bad_name()
     {
         $this->withExceptionHandling();
         $this->signIn()->createUser();

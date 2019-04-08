@@ -3,8 +3,10 @@
 use Faker\Generator as Faker;
 
 $factory->define(App\Models\Group::class, function (Faker $faker) {
+    $name = $faker->word;
     return [
-        'group_name' =>  $faker->word,
-        'group_mask'=>0x00001
+        'group_name' => $name,
+        'group_slug' => slugify($name),
+        'group_mask' => 0x00001
     ];
 });

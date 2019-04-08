@@ -18,7 +18,7 @@ class Group extends Model implements GroupInterface
      * @param array $columns
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function getOneByName($slug, $columns = ['*'])
+    public function getOneBySlug($slug, $columns = ['*'])
     {
         return $this->select($columns)->where('group_slug', '=', $slug);
     }
@@ -28,7 +28,7 @@ class Group extends Model implements GroupInterface
      * @param array $data
      * @return \App\Models\Group
      */
-    public function updateOneByName($slug, $data)
+    public function updateOneBySlug($slug, $data)
     {
         return $this->updateOneGroup('group_slug', $slug, $data);
     }
