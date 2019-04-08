@@ -17,7 +17,8 @@ export default {
     components: {
       frontend: [
         'PasswordStrength',
-        'InlineForm'
+        'InlineForm',
+        'InputValidator'
       ],
       backend: [
         'SubmitButton'

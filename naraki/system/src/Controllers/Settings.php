@@ -75,7 +75,7 @@ class Settings extends Controller
     public function updateSocial(UpdateSocialSettings $request)
     {
         $settings = new SettingsDataObject();
-        $generalSettings = new SettingsDataObject('general');
+        $generalSettings = SettingsDataObject::getSettings('general');
         $input = $request->all();
         SettingsDataObject::saveSettings('social', $input);
 

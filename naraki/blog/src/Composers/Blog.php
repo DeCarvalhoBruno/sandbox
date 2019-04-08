@@ -14,7 +14,7 @@ class Blog extends Composer
     {
         $data = $view->getData();
         $data['title'] = page_title($data['post']->getAttribute('title'));
-        $generalSettings = new Settings('general_formatted');
+        $generalSettings = Settings::getSettings('general_formatted');
 
         $hasJsonld = $generalSettings->get('has_jsonld');
         if (!is_null($hasJsonld) && $hasJsonld === true) {
@@ -25,7 +25,7 @@ class Blog extends Composer
             ], $generalSettings);
         }
         $data['breadcrumbs'] = Breadcrumbs::render($data['breadcrumbs']);
-        $socialSettings = new Settings('social_formatted');
+        $socialSettings = Settings::getSettings('social_formatted');
 
         $socialTagManager = new \Naraki\Blog\Support\Social\Blog();
         $socialData = (object)[

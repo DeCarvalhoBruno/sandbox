@@ -19,14 +19,14 @@ class Home extends Composer
      */
     public function compose($view)
     {
-        $this->settings = new Settings('general_formatted');
+        $this->settings = Settings::getSettings('general_formatted');
         $this->setVar('meta_description');
         $this->setVar('meta_jsonld');
         $this->setVar('meta_robots');
         $this->setVar('meta_keywords');
         $this->data['title'] = $this->settings->get('meta_title');
 
-        $this->settings = new Settings('social_formatted');
+        $this->settings = Settings::getSettings('social_formatted');
         $this->setVar('meta_facebook');
         $this->setVar('meta_twitter');
         if (!is_null($this->data)) {

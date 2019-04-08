@@ -68,7 +68,7 @@
                                         :name="'password'"
                                         :label-hide="'{{trans('auth.hide_password')}}'"
                                         :label-show="'{{trans('auth.show_password')}}'"
-                                        :secure-length="6"
+                                        :secure-length="8"
                                         :required="false">
                                 </password-strength>
                             </div>

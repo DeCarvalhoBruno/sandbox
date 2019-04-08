@@ -91,11 +91,16 @@ class UserIndexer extends ElasticSearchIndexer
 
     private function up()
     {
+        //For username searches, we have the suggester by default when we query against the "username" field
+        //or an exact search when we query against the field "username.exact"
         $mapping = [
             'username' => [
                 'type' => 'text',
                 'analyzer' => 'std_autocomplete_slug',
-                'search_analyzer' => 'standard'
+                'search_analyzer' => 'standard',
+                'fields' => [
+                    'exact' => ['type' => 'keyword']
+                ]
             ],
             'email' => [
                 'type' => 'keyword',
@@ -106,6 +111,7 @@ class UserIndexer extends ElasticSearchIndexer
                 'search_analyzer' => 'standard'
             ],
             'avatar' => [
+                'type' => 'object',
                 'enabled' => false
             ]
         ];

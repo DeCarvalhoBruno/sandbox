@@ -61,18 +61,28 @@ class User extends Model implements UserProvider, UserInterface, OauthProcessabl
      */
     public function createOne($data)
     {
+        $existingPerson = $this->person
+            ->select(['user_id'])
+            ->where('email', $data['email'])->first();
+
         $user = $this->createModel([
             'username' => $data['username'],
             'password' => bcrypt($data['password'])
         ]);
         $user->save();
-        $this->person->createModel([
+
+        if (!is_null($existingPerson)) {
+            $existingPerson->fill($this->person->filterFillables($data, $this->person->createModel()))
+                ->save();
+        } else {
+            $this->person->createModel([
                 'user_id' => $user->getKey(),
                 'email' => $data['email'],
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name']
-            ]
-        )->save();
+            ])->save();
+        }
+
 
         return $user->newQuery()->whereKey($user->getKey())->first();
     }
@@ -174,7 +184,7 @@ class User extends Model implements UserProvider, UserInterface, OauthProcessabl
     /**
      * Retrieve a user by their unique identifier.
      *
-     * @param  mixed $identifier
+     * @param mixed $identifier
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function retrieveById($identifier)
@@ -191,8 +201,8 @@ class User extends Model implements UserProvider, UserInterface, OauthProcessabl
     /**
      * Retrieve a user by their unique identifier and "remember me" token.
      *
-     * @param  mixed $identifier
-     * @param  string $token
+     * @param mixed $identifier
+     * @param string $token
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function retrieveByToken($identifier, $token)
@@ -214,8 +224,8 @@ class User extends Model implements UserProvider, UserInterface, OauthProcessabl
     /**
      * Update the "remember me" token for the given user in storage.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable $user
-     * @param  string $token
+     * @param \Illuminate\Contracts\Auth\Authenticatable $user
+     * @param string $token
      * @return void
      */
     public function updateRememberToken(UserContract $user, $token)
@@ -226,7 +236,7 @@ class User extends Model implements UserProvider, UserInterface, OauthProcessabl
     /**
      * Retrieve a user by the given credentials.
      *
-     * @param  array $credentials
+     * @param array $credentials
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function retrieveByCredentials(array $credentials)
@@ -254,8 +264,8 @@ class User extends Model implements UserProvider, UserInterface, OauthProcessabl
     /**
      * Validate a user against the given credentials.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable $user
-     * @param  array $credentials
+     * @param \Illuminate\Contracts\Auth\Authenticatable $user
+     * @param array $credentials
      * @return bool
      */
     public function validateCredentials(UserContract $user, array $credentials)

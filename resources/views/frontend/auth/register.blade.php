@@ -69,16 +69,23 @@
                                     <span class="form-has-help"
                                           data-toggle="tooltip"
                                           data-placement="top"
-                                          data-original-title="{{trans('auth.register_username_help')}}">{{trans('pages.profile.username')}}</span>
+                                          data-original-title="{{
+                                          trans('auth.register_username_help')
+                                          }}">{{
+                                          trans('pages.profile.username')
+                                    }}</span>
                                 </label>
-                                <div class="col-lg-6">
-                                    <input type="text"
-                                           class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }}"
-                                           name="username"
-                                           value="{{ old('username') }}"
-                                           maxlength="25"
-                                           autocomplete="username"
-                                           required>
+                                <div class="col-lg-6 validator-wrapper">
+                                    <input-validator
+                                            :name="'username'"
+                                            :maxlength="25"
+                                            :minlength="5"
+                                            :classes="'form-control {!!
+                                            $errors->has('username') ? ' is-invalid' : ''
+                                            !!}'"
+                                            :value="'{!! old('username') !!}'"
+                                            :search-field="'username.exact'"
+                                            search-host-url="{{env('ELASTIC_SEARCH_URL')}}"></input-validator>
                                     @if ($errors->has('username'))
                                         <div class="invalid-feedback">
                                             <strong>{{ $errors->first('username') }}</strong>
@@ -88,12 +95,18 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-4 col-form-label text-lg-right field-required">{{trans('auth.email_address')}}</label>
-                                <div class="col-lg-6">
-                                    <input type="email"
-                                           class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                                           name="email"
-                                           value="{{ old('email') }}"
-                                           required>
+                                <div class="col-lg-6 validator-wrapper">
+                                    <input-validator
+                                            :type="'email'"
+                                            :name="'email'"
+                                            :maxlength="25"
+                                            :classes="'form-control {!!
+                                            $errors->has('email') ? ' is-invalid' : ''
+                                            !!}'"
+                                            :value="'{!! old('email') !!}'"
+                                            :search-field="'email'"
+                                            :regex-pattern="'[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*'"
+                                            search-host-url="{{env('ELASTIC_SEARCH_URL')}}"></input-validator>
                                     @if ($errors->has('email'))
                                         <div class="invalid-feedback">
                                             <strong>{{ $errors->first('email') }}</strong>
@@ -114,7 +127,7 @@
                                             :name="'password'"
                                             :label-hide="'{{trans('auth.hide_password')}}'"
                                             :label-show="'{{trans('auth.show_password')}}'"
-                                            :secure-length="6"
+                                            :secure-length="8"
                                             :required="true">
                                     </password-strength>
                                 </div>
@@ -152,5 +165,5 @@
     </div>
 @endsection
 @section('scripts')
-    @include('frontend.scripts.google-recaptcha', ['action'=>'register'])
+{{--    @include('frontend.scripts.google-recaptcha', ['action'=>'register'])--}}
 @endsection

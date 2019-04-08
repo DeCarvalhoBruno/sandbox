@@ -18,6 +18,7 @@ import { loadMessages } from './plugins/i18n'
       }
     },
     mounted () {
+      $('[data-toggle="tooltip"]').tooltip()
       // Action for the "back to top" button
       $('#scroll-up').click(function (e) {
         e.preventDefault()

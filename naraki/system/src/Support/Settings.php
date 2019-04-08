@@ -17,18 +17,11 @@ class Settings
 //    protected $formattedSettings = [];
     protected $settings = [];
 
-    public function __construct($type = null)
-    {
-        if (!is_null($type)) {
-            $this->settings = self::$type();
-        }
-    }
-
     /**
      * @param string $type
      * @return self
      */
-    private static function getSettings(string $type): self
+    public static function getSettings(string $type): self
     {
         return unserialize(Redis::get(sprintf('settings_%s', $type))) ?: new self();
     }
@@ -106,6 +99,14 @@ class Settings
     {
         $this->settings = $settings;
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getArraySettings()
+    {
+        return $this->settings;
     }
 
 }

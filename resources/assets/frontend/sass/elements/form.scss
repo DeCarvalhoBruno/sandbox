@@ -1,5 +1,5 @@
 .card.card-shadow {
-  border:none;
+  border: none;
   box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
 }
 
@@ -13,13 +13,13 @@
   }
 }
 
-.form-heading-wrapper{
+.form-heading-wrapper {
   margin-bottom: 1rem;
 
-  .form-heading{
-    padding-bottom:.4rem;
+  .form-heading {
+    padding-bottom: .4rem;
     font-weight: 300;
-    border-bottom:1px solid #e1e4e8;
+    border-bottom: 1px solid #e1e4e8;
   }
 
 }
@@ -27,6 +27,44 @@
 #user_register_container {
   .form-group .form-has-help {
     border-bottom: 1px dashed #cc0f00;
+  }
+
+  .validator-wrapper {
+    position: relative;
+
+    .validator-valid {
+      position: absolute;
+      right: 0.5rem;
+      top: 0;
+
+      .icon {
+        height: 2.3rem;
+        width: 2.3rem;
+
+        i {
+          &.fa-circle {
+            font-size: 2.3rem;
+            line-height: 2.3rem;
+
+            &.danger {
+              color: $danger;
+            }
+
+            &.success {
+              color: $success;
+            }
+          }
+
+          &.status {
+            font-size: 1.5rem;
+            line-height: 2.3rem;
+            color: #fff;
+
+          }
+        }
+      }
+
+    }
   }
 }
 
@@ -50,7 +88,7 @@ label.field-required {
   }
 }
 
-#avatar-uploader{
+#avatar-uploader {
   padding: 0 1.5rem;
 }
 
@@ -149,10 +187,10 @@ label.field-required {
     height: 24px;
     padding: 3px;
     cursor: default;
-    user-select:none;
+    user-select: none;
 
-    i{
-      padding-top:1px;
+    i {
+      padding-top: 1px;
     }
   }
 

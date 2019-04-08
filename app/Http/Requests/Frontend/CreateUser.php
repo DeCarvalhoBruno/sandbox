@@ -12,7 +12,7 @@ class CreateUser extends FormRequest
         return [
             'first_name' => 'string|max:75',
             'last_name' => 'string|max:75',
-            'username' => 'required|string|max:15|regex:/^(\w){1,}$/|unique:users',
+            'username' => 'required|string|min:5|max:25|regex:/^(\w){1,}$/|unique:users',
             'email' => 'required|string|email|max:255|unique:people',
             'password' => 'required|string|min:8|confirmed',
             'stat_user_timezone' => 'nullable',

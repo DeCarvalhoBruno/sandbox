@@ -9,7 +9,7 @@
                       method="POST">
                     {{csrf_field()}}
                     <div class="form-group">
-                        <input type="text" autocomplete="name"
+                        <input type="text" autocomplete="off"
                                name="full_name"
                                class="form-control text-center"
                                placeholder="{{trans('titles.subscribe_fullname')}}">
