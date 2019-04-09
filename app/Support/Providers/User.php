@@ -57,34 +57,32 @@ class User extends Model implements UserProvider, UserInterface, OauthProcessabl
 
     /**
      * @param $data
+     * @param bool $activate
      * @return \App\Models\User
      */
-    public function createOne($data)
+    public function createOne($data, $activate = false)
     {
         //Looking for a person without user_id so we can reuse the email
         $existingPerson = $this->person
-            ->select(['user_id','person_id'])
+            ->select(['user_id', 'person_id'])
             ->where('email', $data['email'])
             ->where('user_id', 0)->first();
         $user = $this->createModel([
             'username' => $data['username'],
-            'password' => bcrypt($data['password'])
+            'password' => bcrypt($data['password']),
+            'activated' => $activate
         ]);
         $user->save();
+        $person = $this->person->createModel();
+        $fillables = $this->person->filterFillables($data, $person);
+        $fillables['user_id'] = $user->getKey();
         if (!is_null($existingPerson)) {
-            $fillables = $this->person->filterFillables($data, $this->person->createModel());
-            $fillables['user_id'] = $user->getKey();
             $existingPerson->fill($fillables)->save();
         } else {
-            $this->person->createModel([
-                'user_id' => $user->getKey(),
-                'email' => $data['email'],
-                'first_name' => $data['first_name']??null,
-                'last_name' => $data['last_name']??null
-            ])->save();
+            $person->fill($fillables)->save();
         }
 
-        return $user->newQuery()->whereKey($user->getKey())->first();
+        return $user->newQuery()->whereKey($user->getKey())->scopes(['entityType'])->first();
     }
 
 

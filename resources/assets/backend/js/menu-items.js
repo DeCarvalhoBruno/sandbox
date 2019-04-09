@@ -24,6 +24,14 @@ export default [
         router: {
           name: 'admin.users.index'
         }
+      },
+      {
+        type: 'item',
+        icon: 'plus',
+        name: 'sidebar.add',
+        router: {
+          name: 'admin.users.add'
+        }
       }
     ]
   },

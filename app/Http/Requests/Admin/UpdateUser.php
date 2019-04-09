@@ -10,8 +10,8 @@ class UpdateUser extends FormRequest
     public function rules()
     {
         return [
-            'new_email' => 'email|unique:people,email',
-            'new_username' => 'regex:/^\w+$/|min:5|max:25|unique:users,username',
+            'email' => 'email|unique:people,email',
+            'username' => 'regex:/^\w+$/|min:5|max:25|unique:users,username'
         ];
     }
 
@@ -23,17 +23,7 @@ class UpdateUser extends FormRequest
             $this->processPermissions($input['permissions']);
         }
 
-        if (isset($input['new_email'])) {
-            $input['email'] = $input['new_email'];
-        } else {
-            unset($input['email']);
-        }
-        if (isset($input['new_username'])) {
-            $input['username'] = $input['new_username'];
-        }else{
-            unset($input['username']);
-        }
-        unset($input['new_email'], $input['new_username'], $input['permissions']);
+        unset($input['permissions']);
         $this->replace($input);
     }
 }

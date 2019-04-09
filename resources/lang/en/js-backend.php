@@ -26,6 +26,7 @@ return [
         'admin-users-index' => 'Users',
         'admin-groups-index' => 'Groups',
         'admin-users-edit' => 'Edit',
+        'admin-users-add' => 'Add',
         'admin-groups-edit' => 'Edit',
         'admin-groups-add' => 'New Group',
         'admin-groups-members' => 'Edit Members',
@@ -109,12 +110,13 @@ return [
         'medias' => 'Media',
         'member_count' => 'Number of members',
         'new_email' => 'New e-mail',
+        'email' => 'E-mail',
         'new_group_name' => 'New group name',
         'new_username' => 'New username',
         'user_created_at' => 'Registration date',
         'username' => 'Username',
         'users' => 'User|Users',
-        'system'=>'System'
+        'system' => 'System'
     ],
     'db_raw' => [
         'full_name' => 'full_name',
@@ -182,10 +184,11 @@ return [
     'form' => [
         'description' => [
             'username' => 'The user\'s shorthand name. Limited to 25 characters, and may only contain letters and underscores.',
+            'username_help'=>'Limited to 25 characters, and may only contain letters and underscores.',
             'first_name' => 'The user\'s first (given) name.',
             'last_name' => 'The user\'s last (family) name.',
             'new_email' => '"{0}" is the current e-mail address.',
-            'new_username' => '"{0}" is the current username. Limited to 25 characters, and may only contain letters and underscores.',
+            'new_username' => '"{0}" is the current username.',
             'group_name' => 'The group name.',
             'new_group_name' => '"{0}" is the current group name.',
             'group_mask' => 'Determines the group\'s position in its hierarchy. The lower the mask, the higher the group status.',
@@ -225,6 +228,7 @@ return [
         'settings_updated' => 'Your general settings were updated.',
         'password_updated' => 'Your password has been updated.',
         'user_update_ok' => 'The user was updated.',
+        'user_create_ok' => 'The user was created.',
         'user_delete_ok' => 'User {name} was deleted.|The users were deleted.',
         'group_update_ok' => 'The group was updated.',
         'group_delete_ok' => 'Group {group} was deleted.',
@@ -263,9 +267,10 @@ return [
             'filter_full_name' => 'Filter by full name',
             'filter_group' => 'Filter by group',
             'filter_created_at' => 'Filter by registration date',
+            'new_user' => 'New User'
         ],
         'groups' => [
-            'add_group'=>'Add group',
+            'add_group' => 'Add group',
             'info1' => 'Permissions for all members of the group are defined here.',
             'info2' => 'Individual permissions can also be set at the user level,
             in which case user permissions will override permissions set here.'
@@ -339,7 +344,7 @@ return [
         ],
         'media' => [
             'formats_help' => 'Formats marked with <i class="fa fa-check"></i> have already been created and are ready to be served. Click on a format to create an image file with the associated dimensions.',
-            'attached_to'=>'Attached to'
+            'attached_to' => 'Attached to'
         ]
     ],
     'tables' => [

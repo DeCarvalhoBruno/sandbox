@@ -3,6 +3,7 @@ return [
     'admins' => 'admin',
     'admin.users.index' => 'admin/users',
     'admin.users.edit' => 'admin/users/:user',
+    'admin.users.add' => 'admin/user/add',
     'admin.user.profile' => 'admin/user/profile',
     'admin.user.password' => 'admin/user/password',
     'admin.user.general' => 'admin/user/general',

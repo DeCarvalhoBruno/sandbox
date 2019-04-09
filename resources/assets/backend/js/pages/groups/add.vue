@@ -50,8 +50,8 @@
                                     <table class="table table-sm">
                                         <thead>
                                         <tr>
-                                            <th>{{$tc('general.permission',1)}}</th>
-                                            <th>{{$t('general.toggle')}}</th>
+                                            <th class="w-50">{{$tc('general.permission',1)}}</th>
+                                            <th class="w-50">{{$t('general.toggle')}}</th>
                                         </tr>
                                         </thead>
                                         <tbody>

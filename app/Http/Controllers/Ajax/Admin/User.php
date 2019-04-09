@@ -36,17 +36,22 @@ class User extends Controller
                 'full_name',
                 'email',
                 'created_at',
-                'permission_mask',
+//                'permission_mask',
                 'username'
             ], [
                 'entityType',
-                'permissionRecord',
-                'permissionStore',
-                'permissionMask' => $this->user->getEntityType(),
-                'activated'
+//                'permissionRecord',
+//                'permissionStore',
+//                'permissionMask' => $this->user->getEntityType(),
+                'activated',
             ])
             ->where('username', '!=', $this->user->getAttribute('username'))
             ->filter($userFilter);
+
+        if(!$userFilter->hasFilters()){
+            $users->orderBy('users.user_id','desc');
+        }
+
         $groups = (clone $users)->select('group_name')->groupBy('group_name');
         if (!$userFilter->hasFilter('group')) {
             $groups->groupMember();
@@ -67,6 +72,30 @@ class User extends Controller
                 ]
             ], $userFilter)
         ];
+    }
+
+    public function add()
+    {
+        return [
+            'user' => [],
+            'permissions' => Permission::getAllUserPermissions(0),
+            'nav' => [],
+            'intended' => null,
+            'media' => []
+        ];
+    }
+
+    public function create(UpdateUser $request)
+    {
+        $user = $this->repo->createOne($request->all(),true);
+        $permissions = $request->getPermissions();
+
+        if (!is_null($permissions)) {
+            Permission::updateIndividual($permissions, $user->getEntityType(), Entity::USERS);
+            Permission::cacheUserPermissions($user->getEntityType());
+            event(new PermissionEntityUpdated);
+        }
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 
     /**

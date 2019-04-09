@@ -24,6 +24,10 @@ class Admin
             $r->get('users', 'User@index')
                 ->middleware('can:view,App\Models\User');
             $r->get('users/profile', 'User@profile');
+            $r->get('user/add', 'User@add')
+                ->middleware('can:add,App\Models\User');
+            $r->post('user/create', 'User@create')
+                ->middleware('can:add,App\Models\User');
             $r->get('users/{user}', 'User@edit')
                 ->middleware('can:edit,App\Models\User');
             $r->patch('users/{user}', 'User@update')

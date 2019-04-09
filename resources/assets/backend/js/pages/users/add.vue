@@ -1,29 +1,47 @@
 <template>
   <div class="card">
-    <form @submit.prevent="save" @keydown="form.onKeydown($event)">
-      <b-tabs card lazy>
-        <b-tab :title="form.fields.full_name" active>
+    <form @submit.prevent="mode==='edit'?save():create()" @keydown="form.onKeydown($event)">
+      <b-tabs card>
+        <b-tab :title="form.fields.full_name?form.fields.full_name:$t('pages.users.new_user')" active>
           <div class="col-md-8 offset-md-2">
             <div v-if="mediaData" class="form-group row justify-content-center">
               <img :src="getImageUrl(mediaData.uuid,null,mediaData.ext)"/>
             </div>
             <div class="form-group row">
-              <label for="new_username"
+              <label for="username"
                      class="col-md-3 col-form-label"
-                     :class="{ 'is-invalid': form.errors.has('new_username') }"
-              >{{$t('db.new_username')}}</label>
+                     :class="{ 'is-invalid': form.errors.has('username') }"
+              >{{$t('db.username')}}</label>
               <div class="col-md-9">
-                <input v-model="form.fields.new_username" type="text" autocomplete="off"
-                       name="new_username" id="new_username" class="form-control"
-                       :class="{ 'is-invalid': form.errors.has('new_username') }"
-                       :placeholder="$t('db.new_username')"
+                <input v-model="form.fields.username" type="text" autocomplete="off"
+                       name="username" id="username" class="form-control"
+                       :class="{ 'is-invalid': form.errors.has('username') }"
+                       :placeholder="$t('db.username')"
                        maxlength="25"
-                       aria-describedby="help_new_username"
-                       @change="changedField('new_username')">
-                <has-error :form="form" field="new_username"></has-error>
-                <small id="help_new_username" class="text-muted">
-                  {{$t('form.description.new_username',[form.fields.username])}}
+                       aria-describedby="help_username"
+                       @change="changedField('username')">
+                <has-error :form="form" field="username"></has-error>
+                <small id="help_username" class="text-muted">
+                  <template v-if="mode==='edit'">{{$t('form.description.new_username',[form.fields.username])}}&nbsp;
+                  </template>
+                  {{$t('form.description.username',[form.fields.email])}}
                 </small>
+              </div>
+            </div>
+            <div class="form-group row" v-if="mode==='add'">
+              <label for="password"
+                     class="col-md-3 col-form-label"
+                     :class="{ 'is-invalid': form.errors.has('password') }"
+              >{{$t('general.password')}}</label>
+              <div class="col-md-9">
+                <input v-model="form.fields.password" type="password" autocomplete="off"
+                       name="password" id="password" class="form-control"
+                       :class="{ 'is-invalid': form.errors.has('password') }"
+                       :placeholder="$t('general.password')"
+                       minlength="8"
+                       maxlength="255"
+                       aria-describedby="help_password">
+                <has-error :form="form" field="password"></has-error>
               </div>
             </div>
             <div class="form-group row">
@@ -55,17 +73,19 @@
               </div>
             </div>
             <div class="form-group row">
-              <label for="new_email" class="col-md-3 col-form-label">{{$t('db.new_email')}}</label>
+              <label for="email" class="col-md-3 col-form-label">{{$t('db.email')}}</label>
               <div class="col-md-9">
-                <input v-model="form.fields.new_email" type="text" autocomplete="off"
-                       name="new_email" id="new_email" class="form-control"
-                       :class="{ 'is-invalid': form.errors.has('new_email') }"
-                       :placeholder="$t('db.new_email')"
-                       aria-describedby="help_new_email"
-                       @change="changedField('new_email')">
-                <has-error :form="form" field="new_email"></has-error>
+                <input v-model="form.fields.email" type="text" autocomplete="off"
+                       name="email" id="email" class="form-control"
+                       :class="{ 'is-invalid': form.errors.has('email') }"
+                       :placeholder="$t('db.email')"
+                       aria-describedby="help_email"
+                       @change="changedField('email')">
+                <has-error :form="form" field="email"></has-error>
                 <small id="help_new_email" class="text-muted">
-                  {{$t('form.description.new_email',[form.fields.email])}}
+                  <template v-if="mode==='edit'">
+                    {{$t('form.description.new_email',[form.fields.email])}}
+                  </template>
                 </small>
               </div>
             </div>
@@ -90,8 +110,8 @@
                   <table class="table table-sm">
                     <thead>
                     <tr>
-                      <th>{{$tc('general.permission',1)}}</th>
-                      <th>{{$t('general.toggle')}}</th>
+                      <th class="w-50">{{$tc('general.permission',1)}}</th>
+                      <th class="w-50">{{$t('general.toggle')}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -174,21 +194,22 @@
         nav: {},
         ajaxIsLoading: false,
         intended: null,
-        mediaData:null,
-        entity:'users',
-        media:'image_avatar'
+        mediaData: null,
+        entity: 'users',
+        media: 'image_avatar',
+        mode: null
       }
     },
     mixins: [
       PermissionMixin,
       FormMixin,
-      MediaMixin,
+      MediaMixin
     ],
     watch: {
       '$route' () {
         this.ajaxIsLoading = true
         axios.get(`/ajax/admin/users/${this.$router.currentRoute.params.user}`).then(({data}) => {
-          this.getInfo(data)
+          this.getInfo(data, 'edit')
           this.ajaxIsLoading = false
         })
       }
@@ -197,8 +218,13 @@
       redirect () {
         this.$router.push(this.intended)
       },
-      getInfo (data) {
-        this.form = new Form(data.user, true)
+      getInfo (data, mode) {
+        this.mode = mode
+        if (mode === 'edit') {
+          this.form = new Form(data.user, true)
+        } else {
+          this.form = new Form(data.user)
+        }
         this.permissions = data.permissions
         this.nav = data.nav
         this.mediaData = data.media
@@ -215,12 +241,25 @@
         this.$store.dispatch('session/setFlashMessage',
           {msg: {type: 'success', text: this.$t('message.user_update_ok')}})
         this.$router.push({name: 'admin.users.index'})
+      },
+      async create () {
+        this.form.addField('permissions', this.getPermissions(this.$refs.buttonCircle))
+        await this.form.post(`/ajax/admin/user/create`)
+        this.$store.dispatch('session/setFlashMessage',
+          {msg: {type: 'success', text: this.$t('message.user_create_ok')}})
+        this.$router.push({name: 'admin.users.index'})
       }
     },
     beforeRouteEnter (to, from, next) {
-      axios.get(`/ajax/admin/users/${to.params.user}`).then(({data}) => {
-        next(vm => vm.getInfo(data))
-      })
+      if (to.name === 'admin.users.add') {
+        axios.get(`/ajax/admin/user/add`).then(({data}) => {
+          next(vm => vm.getInfo(data, 'add'))
+        })
+      } else {
+        axios.get(`/ajax/admin/users/${to.params.user}`).then(({data}) => {
+          next(vm => vm.getInfo(data, 'edit'))
+        })
+      }
     },
     metaInfo () {
       return {title: this.$t('title.user_edit')}

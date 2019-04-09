@@ -5,7 +5,7 @@ const Dashboard = () => import('back_path/pages/dashboard').then(
 
 const Users = () => import('back_path/pages/users/index').then(
   m => m.default || m)
-const UserEdit = () => import('back_path/pages/users/edit').then(
+const UserAdd = () => import('back_path/pages/users/add').then(
   m => m.default || m)
 
 const Groups = () => import('back_path/pages/groups/index').then(
@@ -68,9 +68,14 @@ let routes = [
     component: Users
   },
   {
+    name: 'admin.users.add',
+    meta: {parent: 'admin.users.index'},
+    component: UserAdd
+  },
+  {
     name: 'admin.users.edit',
     meta: {parent: 'admin.users.index'},
-    component: UserEdit
+    component: UserAdd
   },
   {
     name: 'admin.groups.index',

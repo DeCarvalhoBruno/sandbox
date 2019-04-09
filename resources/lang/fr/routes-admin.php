@@ -2,6 +2,7 @@
    'admins' => 'admin',
    'admin.users.index' => 'admin/utilisateurs',
    'admin.users.edit' => 'admin/utilisateurs/:user',
+   'admin.users.add' => 'admin/utilisateur/ajouter',
    'admin.user.profile' => 'admin/utilisateur/profil',
    'admin.user.password' => 'admin/utilisateur/mot-de-passe',
    'admin.user.general' => 'admin/utilisateur/general',
