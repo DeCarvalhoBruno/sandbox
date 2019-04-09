@@ -4,14 +4,14 @@ if (!function_exists('media_entity_path')) {
     /**
      * Retrieves the path of an image relative to the public folder
      *
-     * @see \App\Models\Entity
-     * @see \Naraki\Media\Models\MediaCategory
-     *
      * @param string|int $entity
      * @param string|int $media_type
      * @param string $image The image file name
      *
      * @return string
+     * @see \App\Models\Entity
+     * @see \Naraki\Media\Models\MediaCategory
+     *
      */
     function media_entity_path($entity, $media_type, $image)
     {
@@ -59,7 +59,7 @@ if (!function_exists('encrypt')) {
     /**
      * Encrypt the given value.
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -78,7 +78,8 @@ if (!function_exists('makeHexUuid')) {
     {
         try {
             return \Ramsey\Uuid\Uuid::uuid4()->getHex();
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
     }
 }
 
@@ -110,9 +111,9 @@ if (!function_exists('route_i18n')) {
     /**
      * Generate the URL to a named route.
      *
-     * @param  array|string $name
-     * @param  mixed $parameters
-     * @param  bool $absolute
+     * @param array|string $name
+     * @param mixed $parameters
+     * @param bool $absolute
      * @return string
      */
     function route_i18n($name, $parameters = [], $absolute = true)
@@ -130,7 +131,12 @@ if (!function_exists('get_page_id')) {
     {
         $router = app('router')->getCurrentRoute();
         if (!is_null($router)) {
-            return substr(md5($router->getName()), 0, 10);
+            $locale = app()->getLocale();
+            $routeName = $router->getName();
+            if (strpos($routeName, $locale) === 0) {
+                $routeName = substr($routeName, 3);
+            }
+            return substr(md5($routeName), 0, 10);
         }
         return 'undefined';
     }

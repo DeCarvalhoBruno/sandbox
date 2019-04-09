@@ -4,9 +4,9 @@
             <a class="nav-link" href="{{route_i18n('contact')}}">{{env('APP_EMAIL')}}</a>
         </nav>
         <nav class="nav nav-lang ml-auto">
-            <a class="nav-link" href="javascript:void(0)">EN</a>
+            <a class="nav-link" href="{{route('home.locale',['locale'=>'en'])}}">EN</a>
             <a class="nav-link pipe">|</a>
-            <a class="nav-link" href="javascript:void(0)">FR</a>
+            <a class="nav-link" href="{{route('home.locale',['locale'=>'fr'])}}">FR</a>
         </nav>
         <ul class="nav">
             @if(Auth::check())

@@ -14,11 +14,11 @@
    'blog_slug' => 'blog/{slug}',
    'blog_cat' => 'categories/{slug}',
    'blog_tag' => 'tag/{slug}',
-   'blog_author' => 'author/{slug}',
+   'blog_author' => 'auteur/{slug}',
    'user' => 'utilisateur/{slug}',
    'search' => 'recherche/{q?}',
    'privacy' => 'privacy',
    'terms_service' => 'terms-of-service',
-   'rss' => '__rss',
+   'rss' => 'rss',
 
 ];

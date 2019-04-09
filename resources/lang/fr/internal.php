@@ -4,6 +4,10 @@
       'PERMISSION_ADD' => 'Ajouter',
       'PERMISSION_EDIT' => 'Éditer',
       'PERMISSION_DELETE' => 'Supprimer',
+      'PERMISSION_LOGIN' => '__Login',
+      'PERMISSION_SETTINGS' => '__Settings',
+      'PERMISSION_PERMISSIONS' => '__Permissions',
+      'PERMISSION_NOTIFICATIONS' => '__Notifications',
    ],
    'date' => [
       'pretty' => '__F jS, Y',

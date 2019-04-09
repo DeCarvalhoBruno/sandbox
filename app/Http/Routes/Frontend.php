@@ -43,6 +43,9 @@ class Frontend extends Routes
             $r->get(trans('routes.home', [], $locale), 'Home@index')
                 ->name(self::i18nRouteNames($locale, 'home'));
 
+            $r->get('lc/{locale}', 'Home@setLocale')
+                ->name('home.locale');
+
             $r->get(trans('routes.login', [], $locale), 'Auth\Login@index')
                 ->name(self::i18nRouteNames($locale, 'login'))->middleware('frontend_guest');
             $r->get('login/redirect/{type}/{slug}', 'Auth\Login@loginRedirect')

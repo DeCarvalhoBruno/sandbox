@@ -2,6 +2,7 @@
    'login-o-auth' => [
       'login_with_google' => '__Login with Google',
       'login_with_twitter' => '__Login with Twitter',
+      'login_with_github' => '__Login with Github',
    ],
    'search' => [
       'articles' => '__ARTICLES',
@@ -25,6 +26,8 @@
       'cancel' => '__Cancel',
       'submit' => '__Submit',
       'recommend' => '__Recommend',
+      'collapse' => '__Collapse',
+      'expand' => '__Expand',
       'recommend-cancel' => '__Cancel recommendation',
       'reply' => '__Reply',
       'edit' => '__Edit comment',

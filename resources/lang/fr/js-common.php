@@ -46,8 +46,10 @@
       'resize_image' => '__Use handles to resize image',
       'preview' => '__Cropped preview',
       'crop_upload' => '__Crop & Upload',
+      'crop' => '__Crop',
       'cancel' => '__Cancel',
       'reload' => '__Reset cropper to original state',
+      'original_size' => '__Original size:',
    ],
    'wizard' => [
       'back' => '__Back',
