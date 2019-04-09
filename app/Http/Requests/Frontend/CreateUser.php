@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Frontend;
 
+use App\Contracts\Models\Person;
 use App\Support\Requests\FormRequest;
 use Illuminate\Support\Facades\Validator;
 
@@ -10,11 +11,11 @@ class CreateUser extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'string|max:75',
-            'last_name' => 'string|max:75',
-            'username' => 'required|string|min:5|max:25|regex:/^(\w){1,}$/|unique:users',
-            'email' => 'required|string|email|max:255|unique:people',
-            'password' => 'required|string|min:8|confirmed',
+            'first_name' => 'max:75',
+            'last_name' => 'max:75',
+            'username' => 'required|string|min:5|max:25|regex:/^\w+$/|unique:users',
+            'email' => 'required|uniq|email|max:255',
+            'password' => 'required|min:8|confirmed',
             'stat_user_timezone' => 'nullable',
             'g-recaptcha' => 'captcha'
         ];
@@ -30,7 +31,15 @@ class CreateUser extends FormRequest
 
     public function prepareForValidation()
     {
-        Validator::extend('captcha', ['\App\Support\Vendor\GoogleRecaptcha', 'validate']);
+        Validator::extend('uniq', function ($attribute, $value, $parameters, $validator) {
+            $user = app(Person::class)->select('user_id')->where('email', $value)->first();
+            if (!is_null($user) && intval($user->getAttribute('user_id')) > 0) {
+                $validator->errors()->add('email', trans('validation.unique', ['attribute' => 'email']));
+                return false;
+            }
+            return true;
+        });
+        Validator::extend('captcha', [\App\Support\Vendor\GoogleRecaptcha::class, 'validate']);
         parent::prepareForValidation();
     }
 }

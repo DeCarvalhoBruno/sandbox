@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Frontend\Controller;
 use App\Http\Requests\Frontend\UpdateUser;
+use App\Jobs\UpdateUserElasticsearch;
 use App\Support\Frontend\Breadcrumbs;
 use App\Contracts\Models\User as UserProvider;
 
@@ -50,6 +51,10 @@ class Profile extends Controller
                 $userRepo->updateOneByUsername(
                     auth()->user()->getAttribute('username'),
                     $rest
+                );
+                $this->dispatch(new UpdateUserElasticsearch(
+                        UpdateUserElasticsearch::WRITE_MODE_UPDATE,
+                        auth()->user()->getKey())
                 );
             }
         }

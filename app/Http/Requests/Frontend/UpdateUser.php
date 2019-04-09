@@ -13,7 +13,7 @@ class UpdateUser extends FormRequest
         return [
             'first_name' => 'max:75',
             'last_name' => 'max:75',
-            'username' => 'nullable|regex:/^(\w){1,}$/|min:5|max:25|unique:users',
+            'username' => 'nullable|regex:/^\w+$/|min:5|max:25|unique:users',
             'email' => 'nullable|email|unique:people',
             'password' => 'confirmed|same_password',
             'current_password' => 'current_password',

@@ -11,7 +11,7 @@ class UpdateUser extends FormRequest
     {
         return [
             'new_email' => 'email|unique:people,email',
-            'new_username' => 'regex:/^(\w){1,15}$/|unique:users,username',
+            'new_username' => 'regex:/^\w+$/|min:5|max:25|unique:users,username',
         ];
     }
 

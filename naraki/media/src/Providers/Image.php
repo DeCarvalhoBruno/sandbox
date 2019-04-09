@@ -135,6 +135,23 @@ class Image extends Model implements ImageInterface
     }
 
     /**
+     * @param string $username
+     * @param string $filename
+     */
+    public function createAvatar($username, $filename)
+    {
+        $f = new \Naraki\Media\Support\GeneratedAvatar(
+            $username,
+            $filename,
+            \App\Models\Entity::USERS,
+            \Naraki\Media\Models\Media::IMAGE_AVATAR
+        );
+        $f->processAvatar();
+        $this->saveAvatar($f);
+
+    }
+
+    /**
      * @param \Naraki\Media\Contracts\UploadedImage $image
      * @return array|int
      */

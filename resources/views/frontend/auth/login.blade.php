@@ -14,7 +14,7 @@
                 @else
                     <div class="row justify-content-md-center mt-3">
                         <div class="col-md-8">
-                            <div class="alert alert-success" role="alert">
+                            <div class="alert alert-{{strpos($status,'error')===false?'success':'danger'}}" role="alert">
                                 <h4 class="alert-heading">{{ trans(sprintf('auth.alerts.%s_title', $status)) }}</h4>
                                 <p>{{ trans(sprintf('auth.alerts.%s_body', $status)) }}</p>
                             </div>

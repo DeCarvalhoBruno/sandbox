@@ -14,7 +14,9 @@
                     <span v-else><i class="fa fa-check"></i></span>
                 </div>
                 <div class="password-toggle">
-                    <button type="button" :aria-label="passwordLabel" class="btn-clean" @click="togglePassword">
+                    <button tabindex="-1" type="button"
+                            :aria-label="passwordLabel" class="btn-clean"
+                            @click="togglePassword">
                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                              viewBox="0 0 24 24">
                             <title>{{passwordLabel}}</title>
@@ -27,10 +29,13 @@
         <div class="row password-strength-meter">
             <div class="password-strength-meter-fill" :data-score="passwordScore"></div>
         </div>
-        <div v-show="passwordRecommends.length&&passwordCount" class="row password-recommends">
-            <p v-show="passwordRecommends.length&&passwordCount" class="pl-1">Password strength recommendations:</p>
+        <div v-show="passwordRecommends.length&&passwordCount"
+             class="row password-recommends">
+            <p v-show="passwordRecommends.length&&passwordCount"
+               class="pl-1">Password strength recommendations:</p>
             <transition-group name="fade" tag="ul">
-                <li v-for="(val,index) in passwordRecommends" :key="`rec${index}`">{{$t(`pwd-strength.${val}`)}}</li>
+                <li v-for="(val,index) in passwordRecommends"
+                    :key="`rec${index}`">{{$t(`pwd-strength.${val}`)}}</li>
             </transition-group>
         </div>
     </div>

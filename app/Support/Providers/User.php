@@ -61,28 +61,28 @@ class User extends Model implements UserProvider, UserInterface, OauthProcessabl
      */
     public function createOne($data)
     {
+        //Looking for a person without user_id so we can reuse the email
         $existingPerson = $this->person
-            ->select(['user_id'])
-            ->where('email', $data['email'])->first();
-
+            ->select(['user_id','person_id'])
+            ->where('email', $data['email'])
+            ->where('user_id', 0)->first();
         $user = $this->createModel([
             'username' => $data['username'],
             'password' => bcrypt($data['password'])
         ]);
         $user->save();
-
         if (!is_null($existingPerson)) {
-            $existingPerson->fill($this->person->filterFillables($data, $this->person->createModel()))
-                ->save();
+            $fillables = $this->person->filterFillables($data, $this->person->createModel());
+            $fillables['user_id'] = $user->getKey();
+            $existingPerson->fill($fillables)->save();
         } else {
             $this->person->createModel([
                 'user_id' => $user->getKey(),
                 'email' => $data['email'],
-                'first_name' => $data['first_name'],
-                'last_name' => $data['last_name']
+                'first_name' => $data['first_name']??null,
+                'last_name' => $data['last_name']??null
             ])->save();
         }
-
 
         return $user->newQuery()->whereKey($user->getKey())->first();
     }

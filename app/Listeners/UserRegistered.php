@@ -1,8 +1,10 @@
 <?php namespace App\Listeners;
 
+use App\Jobs\UpdateUserElasticsearch;
 use Naraki\Mail\Emails\User\Welcome as WelcomeEmail;
 use App\Events\UserRegistered as UserRegisteredEvent;
 use Naraki\Mail\Jobs\SendMail;
+use Naraki\Media\Jobs\CreateAvatar;
 
 class UserRegistered extends Listener
 {
@@ -22,6 +24,13 @@ class UserRegistered extends Listener
                 ])
             )
         );
+        CreateAvatar::withChain([
+            new UpdateUserElasticsearch(
+                UpdateUserElasticsearch::WRITE_MODE_CREATE,
+                $event->getUser()->getKey()
+            )
+        ])->dispatch($event->getUser()->getAttribute('username'),
+            $event->getUser()->getAttribute('full_name'));
     }
 
 }

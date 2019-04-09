@@ -2,14 +2,17 @@
 
 use App\Http\Controllers\Admin\Controller;
 use App\Http\Requests\Admin\UpdateUser;
+use App\Jobs\UpdateUserElasticsearch;
 use App\Models\Entity;
 use App\Support\Providers\User as UserProvider;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Naraki\Media\Facades\Media as MediaProvider;
 
 class Profile extends Controller
 {
+    use DispatchesJobs;
     /**
      * Update the user's profile information.
      *
@@ -48,6 +51,10 @@ class Profile extends Controller
         MediaProvider::image()->setAsUsed(
             $request->get('uuid'),
             intval(auth()->user()->getAttribute('entity_type_id'))
+        );
+        $this->dispatch(new UpdateUserElasticsearch(
+                UpdateUserElasticsearch::WRITE_MODE_UPDATE,
+                auth()->user()->getKey())
         );
         return response($this->getAvatars($user), Response::HTTP_OK);
     }

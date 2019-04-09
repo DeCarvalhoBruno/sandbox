@@ -9,7 +9,7 @@
             <h3 class="font-light mb-0">{{trans('auth.register_account')}}</h3>
         </div>
         <div class="row justify-content-md-center mt-3">
-            @if($errors->has('recaptcha'))
+            @if($errors->has('g-recaptcha'))
                 <div class="row justify-content-md-center mt-3">
                     <div class="col-md-8">
                         <div class="alert alert-danger" role="alert">
@@ -31,15 +31,15 @@
                                      :method="'POST'">
                             {!! csrf_field() !!}
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label text-lg-right">{{trans('pages.profile.first_name')}}</label>
+                                <label class="col-lg-4 col-form-label text-lg-right">{{
+                                trans('pages.profile.first_name')}}</label>
                                 <div class="col-lg-6">
                                     <input type="text"
                                            class="form-control{{ $errors->has('first_name') ? ' is-invalid' : '' }}"
                                            name="first_name"
                                            value="{{ old('first_name') }}"
                                            maxlength="75"
-                                           autocomplete="given-name"
-                                           required>
+                                           autocomplete="given-name">
                                     @if ($errors->has('first_name'))
                                         <div class="invalid-feedback">
                                             <strong>{{ $errors->first('first_name') }}</strong>
@@ -48,17 +48,17 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label text-lg-right">{{trans('pages.profile.last_name')}}</label>
+                                <label class="col-lg-4 col-form-label text-lg-right">{{
+                                trans('pages.profile.last_name')}}</label>
                                 <div class="col-lg-6">
                                     <input type="text"
                                            class="form-control{{ $errors->has('last_name') ? ' is-invalid' : '' }}"
                                            name="last_name"
                                            value="{{ old('last_name') }}"
                                            maxlength="75"
-                                           autocomplete="family-name"
-                                           required>
+                                           autocomplete="family-name">
                                     @if ($errors->has('last_name'))
-                                        <div class="invalid-feedback">
+                                        <div class="invalid-feedback d-block">
                                             <strong>{{ $errors->first('last_name') }}</strong>
                                         </div>
                                     @endif
@@ -80,17 +80,14 @@
                                             :name="'username'"
                                             :maxlength="25"
                                             :minlength="5"
-                                            :classes="'form-control {!!
-                                            $errors->has('username') ? ' is-invalid' : ''
-                                            !!}'"
-                                            :value="'{!! old('username') !!}'"
+                                            :classes="{'form-control':true,'is-invalid':{{
+                                            $errors->has('username')?'true':'false'
+                                            }} }"
+                                            :value="'{{ old('username') }}'"
+                                            :validation-type="'username'"
                                             :search-field="'username.exact'"
+                                            :errors="'{{$errors->has('username')?$errors->first('username'):''}}'"
                                             search-host-url="{{env('ELASTIC_SEARCH_URL')}}"></input-validator>
-                                    @if ($errors->has('username'))
-                                        <div class="invalid-feedback">
-                                            <strong>{{ $errors->first('username') }}</strong>
-                                        </div>
-                                    @endif
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -99,19 +96,17 @@
                                     <input-validator
                                             :type="'email'"
                                             :name="'email'"
+                                            :validation-type="'email'"
                                             :maxlength="25"
-                                            :classes="'form-control {!!
-                                            $errors->has('email') ? ' is-invalid' : ''
-                                            !!}'"
-                                            :value="'{!! old('email') !!}'"
+                                            :classes="{'form-control':true,'is-invalid':{{
+                                            $errors->has('email')?'true':'false'
+                                            }} }"
+                                            :value="'{{ old('email') }}'"
                                             :search-field="'email'"
-                                            :regex-pattern="'[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*'"
-                                            search-host-url="{{env('ELASTIC_SEARCH_URL')}}"></input-validator>
-                                    @if ($errors->has('email'))
-                                        <div class="invalid-feedback">
-                                            <strong>{{ $errors->first('email') }}</strong>
-                                        </div>
-                                    @endif
+                                            search-host-url="{{env('ELASTIC_SEARCH_URL')}}"
+                                            :errors="'{{
+                                            $errors->has('email')?$errors->first('email'):''
+                                            }}'"></input-validator>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -134,8 +129,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-4 col-form-label text-lg-right field-required">{{
-                                                                                    trans('pages.profile.confirm_password')
-                                                                                }}</label>
+                                    trans('pages.profile.confirm_password')
+                                 }}</label>
                                 <div class="col-lg-6">
                                     <input type="password"
                                            class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"
@@ -165,5 +160,5 @@
     </div>
 @endsection
 @section('scripts')
-{{--    @include('frontend.scripts.google-recaptcha', ['action'=>'register'])--}}
+    @include('frontend.scripts.google-recaptcha', ['action'=>'register'])
 @endsection

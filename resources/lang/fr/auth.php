@@ -28,7 +28,7 @@
    'register_account' => '__Register an account',
    'remember_me' => '__Remember me',
    'forgot_password' => '__Forgot Your Password?',
-   'password_help' => '__Must have a minimum of 6 characters.',
+   'password_help' => '__Must have a minimum of 8 characters.',
    'hide_password' => '__Hide password',
    'show_password' => '__Show password',
    'required_fields' => '__Fields marked with an asterisk (*) are mandatory.',

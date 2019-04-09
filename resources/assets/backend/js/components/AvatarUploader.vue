@@ -253,7 +253,7 @@
           vm.cropperOptions.croppedImageData.dataURI = croppedCanvas.toDataURL()
           vm.currentStep = 3
           vm.ajaxIsLoading = true
-          axios.post('/ajax/admin/media/crop', {
+          axios.post('/ajax/admin/media/crop/avatar', {
             uuid: vm.cropperOptions.croppedImageData.filename,
             height: cp.height,
             width: cp.width,

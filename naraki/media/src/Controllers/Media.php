@@ -1,9 +1,11 @@
 <?php namespace Naraki\Media\Controllers;
 
 use App\Http\Controllers\Admin\Controller;
+use App\Jobs\UpdateUserElasticsearch;
 use App\Models\Entity;
 use App\Models\EntityType;
 use App\Support\Providers\User as UserProvider;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Naraki\Media\Facades\Media as MediaProvider;
@@ -18,6 +20,7 @@ use Naraki\Media\Support\UploadedImage;
 
 class Media extends Controller
 {
+    use DispatchesJobs;
 
     public function index(MediaFilter $filter)
     {
@@ -263,6 +266,10 @@ class Media extends Controller
                 'error' => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+        $this->dispatch(new UpdateUserElasticsearch(
+                UpdateUserElasticsearch::WRITE_MODE_UPDATE,
+                $this->user->getKey())
+        );
         return response($user->getAvatars($this->user->getKey()), Response::HTTP_OK);
     }
 

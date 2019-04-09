@@ -20,6 +20,7 @@ class UserProfileTest extends TestCase
      */
     public function test_avatar_add()
     {
+        $this->withoutJobs();
         $u = $this->createUser();
         $this->signIn($u);
         $imageTitle = 'mean_mug';
@@ -47,6 +48,7 @@ class UserProfileTest extends TestCase
 
     public function test_set_new_password_with_wrong_current_password()
     {
+        $this->withoutJobs();
         $this->withExceptionHandling();
         $this->signIn($this->createUser(),'jwt');
 
@@ -63,6 +65,7 @@ class UserProfileTest extends TestCase
 
     public function test_set_new_password_same_password()
     {
+        $this->withoutJobs();
         $this->withExceptionHandling();
         $this->signIn($this->createUser(),'jwt')->createUser();
         $response = $this->patchJson(
@@ -78,6 +81,7 @@ class UserProfileTest extends TestCase
 
     public function test_set_new_password()
     {
+        $this->withoutJobs();
         $this->withExceptionHandling();
         $u = $this->createUser();
         $this->signIn($u,'jwt');
@@ -97,6 +101,7 @@ class UserProfileTest extends TestCase
 
     public function test_update_profile()
     {
+        $this->withoutJobs();
         $this->withExceptionHandling();
         $response = $this->signIn($this->createUser(),'jwt')->patchJson(
             '/ajax/admin/user/profile',

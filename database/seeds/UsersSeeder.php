@@ -20,7 +20,7 @@ class UsersSeeder extends Seeder
             'activated' => true,
             'remember_token' => null,
         ]);
-        $this->createAvatar('john_doe', 'John Doe');
+        Media::image()->createAvatar('john_doe', 'John Doe');
         factory(App\Models\Person::class)->create([
             'email' => 'john.doe@example.com',
             'first_name' => 'John',
@@ -52,7 +52,7 @@ class UsersSeeder extends Seeder
             'user_id' => $u->getAttribute('user_id')
         ]);
 
-        $this->createAvatar('jane_doe', 'Jane Doe');
+        Media::image()->createAvatar('jane_doe', 'Jane Doe');
 
         factory(App\Models\GroupMember::class)->create([
             "group_id" => 2,
@@ -112,7 +112,7 @@ class UsersSeeder extends Seeder
                 'created_at' => $faker->dateTimeBetween('-2 years')
             ]);
 
-            $this->createAvatar($username, sprintf('%s %s', $fn, $ln));
+            Media::image()->createAvatar($username, sprintf('%s %s', $fn, $ln));
 
             if ($i % 50 == 0) {
                 $groupID = 3;
@@ -132,19 +132,6 @@ class UsersSeeder extends Seeder
         if ($logging) {
             DB::connection()->enableQueryLog();
         }
-    }
-
-    public function createAvatar($username, $name)
-    {
-        $f = new \Naraki\Media\Support\GeneratedAvatar(
-            $username,
-            $name,
-            \App\Models\Entity::USERS,
-            \Naraki\Media\Models\Media::IMAGE_AVATAR
-        );
-        $f->processAvatar();
-        Media::image()->saveAvatar($f);
-
     }
 
     private function makeDevAccount($pwd)
@@ -167,7 +154,7 @@ class UsersSeeder extends Seeder
             'user_id' => $u->getAttribute('user_id')
         ]);
 
-        $this->createAvatar(env('MAIN_ACCOUNT_USERNAME'),
+        Media::image()->createAvatar(env('MAIN_ACCOUNT_USERNAME'),
             env('MAIN_ACCOUNT_FIRST_NAME') . ' ' . env('MAIN_ACCOUNT_LAST_NAME'));
 
         factory(App\Models\GroupMember::class)->create([

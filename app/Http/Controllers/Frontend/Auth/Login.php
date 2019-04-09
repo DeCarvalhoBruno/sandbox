@@ -126,7 +126,7 @@ class Login extends Controller
                 return redirect(route_i18n('login'))->with('status', 'activated');
             }
         }
-        return view('frontend.auth.activation_error');
+        return redirect(route_i18n('login'))->with('status', 'activation_error');
     }
 
 }

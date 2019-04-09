@@ -248,5 +248,4 @@ class UpdateElasticsearch extends Job
     {
         return $this->{$value};
     }
-
 }
