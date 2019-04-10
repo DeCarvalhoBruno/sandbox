@@ -17,13 +17,21 @@
                             <label class="col-lg-4 col-form-label text-lg-right">
                                 <span>{{trans('pages.profile.new_email_address')}}</span>
                             </label>
-                            <div class="col-lg-6">
-                                <input type="text"
-                                       class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                                       name="email"
-                                       value="{{ old('email') }}"
-                                       maxlength="15"
-                                       autocomplete="email">
+                            <div class="col-lg-6 validator-wrapper">
+                                <input-validator
+                                        :type="'email'"
+                                        :name="'email'"
+                                        :validation-type="'email'"
+                                        :maxlength="25"
+                                        :classes="{'form-control':true,'is-invalid':{{
+                                            $errors->has('email')?'true':'false'
+                                            }} }"
+                                        :value="'{{ old('email') }}'"
+                                        :search-field="'email'"
+                                        search-host-url="{{env('ELASTIC_SEARCH_URL')}}"
+                                        :errors="'{{
+                                            $errors->has('email')?$errors->first('email'):''
+                                            }}'"></input-validator>
                                 @if ($errors->has('email'))
                                     <div class="invalid-feedback">
                                         <strong>{{ $errors->first('email') }}</strong>

@@ -81,7 +81,7 @@ class Group extends Model implements GroupInterface
     /**
      * @param string $slug
      */
-    public function deleteByName(string $slug)
+    public function deleteBySlug(string $slug)
     {
         $this->build()->where('group_slug', '=', $slug)->delete();
         event(new PermissionEntityUpdated);
@@ -165,5 +165,44 @@ class Group extends Model implements GroupInterface
                 GroupMember::query()->whereIn('user_id', $userIds)->delete();
             }
         }
+    }
+
+    /**
+     * @param int $userId
+     * @param array $groups
+     */
+    public function updateSingleMemberGroups($userId, $groups)
+    {
+        $existingUserGroups = GroupMember::query()->select(['groups.group_id', 'group_slug'])
+            ->scopes(['group'])->where('user_id', $userId)->pluck('group_id', 'group_slug');
+        $groupInfo = $this->select(['group_id', 'group_slug'])->pluck('group_id', 'group_slug');
+
+        $groupsToAdd = $groupsToRemove = [];
+        foreach ($groups as $group) {
+            if (!isset($existingUserGroups[$group])) {
+                $groupsToAdd[] = ['user_id' => $userId, 'group_id' => $groupInfo[$group]];
+            }
+        }
+
+        $groupsFlipped = array_flip($groups);
+        foreach ($existingUserGroups as $existing => $id) {
+            if (!isset($groupsFlipped[$existing])) {
+                if (isset($groupInfo[$existing])) {
+                    $groupsToRemove[] = $groupInfo[$existing];
+                }
+            }
+        }
+
+        if(!empty($groupsToAdd)){
+            GroupMember::query()->insert($groupsToAdd);
+        }
+
+        if(!empty($groupsToRemove))
+        {
+            GroupMember::query()->whereIn('group_id',$groupsToRemove)
+                ->where('user_id',$userId)
+                ->delete();
+        }
+
     }
 }

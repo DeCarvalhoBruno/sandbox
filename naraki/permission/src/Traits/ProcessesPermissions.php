@@ -4,7 +4,7 @@ use App\Models\Entity;
 
 trait ProcessesPermissions
 {
-    private $permissions=null;
+    private $permissions = null;
 
     /**
      * @param array $input
@@ -29,6 +29,14 @@ trait ProcessesPermissions
     public function getPermissions()
     {
         return $this->permissions;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPermissions()
+    {
+        return !is_null($this->permissions);
     }
 
 }

@@ -18,20 +18,32 @@
                                 <span class="form-has-help"
                                       data-toggle="tooltip"
                                       data-placement="top"
-                                      data-original-title="{{trans('auth.register_username_help')}}">{{trans('pages.profile.new_username')}}</span>
+                                      data-original-title="{{
+                                      trans('auth.register_username_help')}}">{{
+                                      trans('pages.profile.new_username')}}</span>
                             </label>
-                            <div class="col-lg-6">
-                                <input type="text"
-                                       class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }}"
-                                       name="username"
-                                       value="{{ old('username') }}"
-                                       maxlength="15">
+                            <div class="col-lg-6 validator-wrapper">
+                                <input-validator
+                                        :name="'username'"
+                                        :maxlength="25"
+                                        :minlength="5"
+                                        :classes="{'form-control':true,'is-invalid':{{
+                                            $errors->has('username')?'true':'false'
+                                            }} }"
+                                        :value="'{{ old('username') }}'"
+                                        :validation-type="'username'"
+                                        :search-field="'username.exact'"
+                                        :errors="'{{$errors->has('username')?$errors->first('username'):''}}'"
+                                        search-host-url="{{env('ELASTIC_SEARCH_URL')}}"></input-validator>
                                 @if ($errors->has('username'))
                                     <div class="invalid-feedback">
                                         <strong>{{ $errors->first('username') }}</strong>
                                     </div>
                                 @else
-                                    <small class="form-text text-muted">{{trans('pages.profile.username_help',['username'=>$user->getAttribute('username')])}}</small>
+                                    <small class="form-text text-muted">{{
+                                    trans('pages.profile.username_help',[
+                                    'username'=>$user->getAttribute('username')
+                                    ])}}</small>
                                 @endif
                             </div>
                         </div>
@@ -60,7 +72,8 @@
                                 <span class="form-has-help"
                                       data-toggle="tooltip"
                                       data-placement="top"
-                                      data-original-title="{{trans('auth.password_help')}}">{{trans('pages.profile.new_password')}}</span>
+                                      data-original-title="{{trans('auth.password_help')}}">{{
+                                      trans('pages.profile.new_password')}}</span>
                             </label>
                             <div class="col-lg-6">
                                 <password-strength
@@ -75,7 +88,8 @@
                         </div>
                         <div class="form-group row">
                             <label
-                                    class="col-lg-4 col-form-label text-lg-right">{{ trans('pages.profile.new_password_confirm') }}</label>
+                                    class="col-lg-4 col-form-label text-lg-right">{{
+                                    trans('pages.profile.new_password_confirm') }}</label>
                             <div class="col-lg-6">
                                 <input type="password"
                                        class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"
@@ -91,7 +105,8 @@
                             <div class="col-xl-8 offset-xl-2 col-lg-6 offset-lg-3">
                                 <submit-button
                                         ref="submitButton"
-                                        :block="true" :value="'{{trans('js-backend.general.save')}}'"></submit-button>
+                                        :block="true"
+                                        :value="'{{trans('js-backend.general.save')}}'"></submit-button>
                             </div>
                         </div>
                     </inline-form>

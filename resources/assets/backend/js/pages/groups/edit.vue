@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <form @submit.prevent="save" @keydown="form.onKeydown($event)">
-            <b-tabs card lazy>
+            <b-tabs card>
                 <b-tab :title="form.fields.group_name">
                     <div class="col-md-8 offset-md-2">
                         <div class="form-group row">

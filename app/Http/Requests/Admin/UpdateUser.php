@@ -7,6 +7,11 @@ class UpdateUser extends FormRequest
 {
     use ProcessesPermissions;
 
+    /**
+     * @var array
+     */
+    private $groups;
+
     public function rules()
     {
         return [
@@ -23,7 +28,28 @@ class UpdateUser extends FormRequest
             $this->processPermissions($input['permissions']);
         }
 
+        if (isset($input['groups'])) {
+            $this->groups = $input['groups'];
+        }
+
         unset($input['permissions']);
         $this->replace($input);
     }
+
+    /**
+     * @return array
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasGroups()
+    {
+        return !is_null($this->groups);
+    }
+
 }

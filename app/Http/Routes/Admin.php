@@ -1,7 +1,6 @@
 <?php namespace App\Http\Routes;
 
 use Illuminate\Routing\Router;
-use Illuminate\Broadcasting\BroadcastController;
 
 class Admin extends Routes
 {

@@ -2,6 +2,7 @@
 
 use App\Contracts\Models\Group as GroupProvider;
 use App\Events\PermissionEntityUpdated;
+use App\Events\UserRegistered;
 use App\Filters\User as UserFilter;
 use App\Http\Controllers\Admin\Controller;
 use App\Http\Requests\Admin\UpdateUser;
@@ -37,13 +38,14 @@ class User extends Controller
                 'username',
                 'full_name',
                 'email',
+                'created_at as created_ago',
                 'created_at'
             ])
             ->where('username', '!=', $this->user->getAttribute('username'))
             ->filter($userFilter);
 
         if (!$userFilter->hasFilters()) {
-            $usersDb->orderBy('users.user_id', 'asc');
+            $usersDb->orderBy('users.user_id', 'desc');
         }
 
         $groups = (clone $usersDb)->select('group_name')
@@ -98,7 +100,7 @@ class User extends Controller
                 'email' => (object)[
                     'name' => trans('js-backend.general.email'),
                 ],
-                'created_at' => (object)[
+                'created_ago' => (object)[
                     'name' => trans('js-backend.db.user_created_at'),
                 ]
             ], $userFilter)
@@ -134,16 +136,29 @@ class User extends Controller
         ];
     }
 
-    public function create(UpdateUser $request)
+    /**
+     * @param \App\Http\Requests\Admin\UpdateUser $request
+     * @param \App\Contracts\Models\Group|\App\Support\Providers\Group $groupProvider
+     * @return \Illuminate\Http\Response
+     */
+    public function create(UpdateUser $request, GroupProvider $groupProvider)
     {
         $user = $this->repo->createOne($request->all(), true);
-        $permissions = $request->getPermissions();
 
-        if (!is_null($permissions)) {
-            Permission::updateIndividual($permissions, $user->getEntityType(), Entity::USERS);
+        if ($request->hasGroups()) {
+            $groupProvider->updateSingleMemberGroups($user->getKey(), $request->getGroups());
+        }
+
+        if ($request->hasPermissions()) {
+            Permission::updateIndividual($request->getPermissions(), $user->getEntityType(), Entity::USERS);
             Permission::cacheUserPermissions($user->getEntityType());
+        }
+
+        if ($request->hasPermissions() || $request->hasGroups()) {
             event(new PermissionEntityUpdated);
         }
+        event(new UserRegistered($user));
+
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
@@ -210,14 +225,16 @@ class User extends Controller
             ->groupBy([
                 'group_slug',
             ])->get();
-        $userGroupsDb = $this->repo->buildOneWithScopes(['groups.group_id as id',
-            'group_slug as slug'],['groupMember'],[['username',$username]])->pluck('id','slug');
+        $userGroupsDb = $this->repo->buildOneWithScopes([
+            'groups.group_id as id',
+            'group_slug as slug'
+        ], ['groupMember'], [['username', $username]])->pluck('id', 'slug');
         $userGroups = $userGroupsDb->toArray();
-        foreach($allVisibleGroups as $grp){
-            if(isset($userGroups[$grp->getAttribute('slug')])){
-                $grp->setAttribute('isMember',true);
-            }else{
-                $grp->setAttribute('isMember',false);
+        foreach ($allVisibleGroups as $grp) {
+            if (isset($userGroups[$grp->getAttribute('slug')])) {
+                $grp->setAttribute('isMember', true);
+            } else {
+                $grp->setAttribute('isMember', false);
             }
         }
 
@@ -225,7 +242,7 @@ class User extends Controller
         return [
             'user' => $user->toArray(),
             'permissions' => Permission::getAllUserPermissions($entityTypeId),
-            'groups'=>$allVisibleGroups->toArray(),
+            'groups' => $allVisibleGroups->toArray(),
             'nav' => $nav,
             'intended' => null,
             'media' => $media
@@ -235,25 +252,37 @@ class User extends Controller
     /**
      * @param $username
      * @param \App\Http\Requests\Admin\UpdateUser $request
+     * @param \App\Contracts\Models\Group|\App\Support\Providers\Group $groupProvider
      * @return \Illuminate\Http\Response
      */
     public function update(
         $username,
-        UpdateUser $request
+        UpdateUser $request,
+        GroupProvider $groupProvider
     ) {
         $user = $this->repo->updateOneByUsername($username, $request->all());
-        $permissions = $request->getPermissions();
 
-        if (!is_null($permissions)) {
-            Permission::updateIndividual($permissions, $user->getEntityType(), Entity::USERS);
+        if ($request->hasGroups()) {
+            $groupProvider->updateSingleMemberGroups($user->getKey(), $request->getGroups());
+        }
+
+        if ($request->hasPermissions()) {
+            Permission::updateIndividual($request->getPermissions(), $user->getEntityType(), Entity::USERS);
             Permission::cacheUserPermissions($user->getEntityType());
+        }
+
+        if ($request->hasPermissions() || $request->hasGroups()) {
             event(new PermissionEntityUpdated);
         }
+
+        event(new UserRegistered($user));
+
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
     /**
      * @param string $search
+     * @param $limit
      * @return \Illuminate\Http\Response
      */
     public function search($search, $limit)

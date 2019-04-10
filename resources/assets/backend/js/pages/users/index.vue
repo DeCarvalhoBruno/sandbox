@@ -88,16 +88,17 @@
           <td>
             <div class="inline">
               <template v-if="props.row.username">
-                <router-link :to="{ name: 'admin.users.edit', params: { user: props.row.username } }">
+                <router-link v-if="(props.row.acl&4)!==0||props.row.acl===0"
+                             :to="{ name: 'admin.users.edit', params: { user: props.row.username } }">
                   <button type="button" class="btn btn-sm btn-info"
-                          :class="{disabled:(props.row.acl&2)===0&&props.row.acl>0}"
                           :title="$t('tables.edit_item',{name:props.row[$t('db_raw_inv.full_name')]})">
                     <i class="fa fa-pencil"></i>
                   </button>
                 </router-link>
               </template>
-              <button type="button" class="btn btn-sm btn-danger"
-                      :class="{disabled:((props.row.acl&8)===0&&props.row.acl>0)}"
+              <button v-if="(props.row.acl&8)!==0||props.row.acl===0"
+                  type="button"
+                      class="btn btn-sm btn-danger"
                       :title="$t('tables.delete_item',{name:props.row[$t('db_raw_inv.full_name')]})"
                       @click="deleteRow(props.row,'user','username','full_name','/ajax/admin/users')">
                 <i class="fa fa-trash"></i>

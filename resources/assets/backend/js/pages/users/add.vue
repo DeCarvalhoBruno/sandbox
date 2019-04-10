@@ -89,7 +89,7 @@
                 </small>
               </div>
             </div>
-            <div class="form-group row">
+            <div v-if="groups.length" class="form-group row">
               <label class="col-md-3 col-form-label">{{$tc('db.groups',2)}}</label>
               <div class="col-md-9">
                 <ul class="form-groups-list">
@@ -103,6 +103,7 @@
                           <button-circle
                               ref="buttonCircleGroups"
                               :enabled="group.isMember===true"
+                              @clicked="changedField('groups')"
                               :slug="group.slug">
                           </button-circle>
                         </div>
@@ -160,7 +161,7 @@
       </b-tabs>
       <div class="row justify-content-center">
         <div class="col-md-6 offset-md-3 mb-4">
-          <submit-button :loading="form.busy" :value="$t('general.update')">
+          <submit-button :loading="form.busy" :value="mode==='edit'?$t('general.update'):$t('general.create')">
           </submit-button>
           <button v-if="intended!==null"
                   type="button"
@@ -221,7 +222,7 @@
         entity: 'users',
         media: 'image_avatar',
         mode: null,
-        groups: null
+        groups: []
       }
     },
     mixins: [
@@ -263,26 +264,32 @@
         }
       },
       async save () {
-        this.form.addField('permissions', this.getPermissions(this.$refs.buttonCirclePermissions))
+        this.addFormFields()
         await this.form.patch(`/ajax/admin/users/${this.$router.currentRoute.params.user}`)
-        this.$store.dispatch('session/setFlashMessage',
-          {msg: {type: 'success', text: this.$t('message.user_update_ok')}})
-        this.$router.push({name: 'admin.users.index'})
+        this.backToIndex('user_update_ok')
       },
       async create () {
+        this.addFormFields()
+        await this.form.post(`/ajax/admin/user/create`)
+        this.backToIndex('user_create_ok')
+      },
+      addFormFields () {
         let groupBtnList = this.$refs.buttonCircleGroups
         let groupList = []
         if (groupBtnList.length) {
           groupBtnList.forEach((vueBtn) => {
-            groupList.push(vueBtn.$attrs.slug)
+            if (vueBtn.buttonEnabled === true) {
+              groupList.push(vueBtn.$attrs.slug)
+            }
           })
         }
         this.form.addField('groups', groupList)
         this.form.addField('permissions', this.getPermissions(this.$refs.buttonCirclePermissions))
-        await this.form.post(`/ajax/admin/user/create`)
+      },
+      backToIndex (msgIdx) {
         this.$store.dispatch('session/setFlashMessage',
-          {msg: {type: 'success', text: this.$t('message.user_create_ok')}})
-        this.$router.push({name: 'admin.users.index'})
+          {msg: {type: 'success', text: this.$t(`message.${msgIdx}`)}})
+        this.redirect()
       }
     },
     beforeRouteEnter (to, from, next) {

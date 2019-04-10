@@ -49,7 +49,8 @@ class User extends LaravelUser implements JWTSubject, HasAnEntityContract, HasPe
     ];
     protected $sortable = [
         'full_name',
-        'email'
+        'email',
+        'created_ago'
     ];
 
     public static $entityID = \App\Models\Entity::USERS;
@@ -63,7 +64,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntityContract, HasPe
         });
     }
 
-    public function getCreatedAtAttribute($value)
+    public function getCreatedAgoAttribute($value)
     {
         return Carbon::createFromFormat('Y-m-d H:i:s', $value)->diffForHumans();
     }

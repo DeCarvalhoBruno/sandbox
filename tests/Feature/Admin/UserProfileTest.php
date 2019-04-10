@@ -18,7 +18,7 @@ class UserProfileTest extends TestCase
      * The avatar uploading process is done through a wizard. The image is stored in a tmp folder first.
      * It's only when the user decides how to crop the file that it is uploaded and its reference stored in the DB.
      */
-    public function test_avatar_add()
+    public function test_user_profile_avatar_add()
     {
         $this->withoutJobs();
         $u = $this->createUser();
@@ -46,7 +46,7 @@ class UserProfileTest extends TestCase
         $this->assertFileExists($path);
     }
 
-    public function test_set_new_password_with_wrong_current_password()
+    public function test_user_profile_set_new_password_with_wrong_current_password()
     {
         $this->withoutJobs();
         $this->withExceptionHandling();
@@ -63,7 +63,7 @@ class UserProfileTest extends TestCase
         $response->assertStatus(422);
     }
 
-    public function test_set_new_password_same_password()
+    public function test_user_profile_set_new_password_same_password()
     {
         $this->withoutJobs();
         $this->withExceptionHandling();
@@ -79,7 +79,7 @@ class UserProfileTest extends TestCase
         $response->assertStatus(422);
     }
 
-    public function test_set_new_password()
+    public function test_user_profile_set_new_password()
     {
         $this->withoutJobs();
         $this->withExceptionHandling();
@@ -99,7 +99,7 @@ class UserProfileTest extends TestCase
         $this->assertTrue(Hash::check('dfsdfsfsdfds', $freshPassword));
     }
 
-    public function test_update_profile()
+    public function test_user_profile_update_profile()
     {
         $this->withoutJobs();
         $this->withExceptionHandling();
@@ -109,8 +109,8 @@ class UserProfileTest extends TestCase
                 'first_name' => 'Jane',
                 'full_name' => 'Jane Doe',
                 'last_name' => 'Doe',
-                'new_username' => 'jane_doe',
-                'new_email' => 'jane.doe@example.com'
+                'username' => 'jane_doe',
+                'email' => 'jane.doe@example.com'
             ]);
         $response->assertStatus(200);
         $this->assertNotNull(User::query()->where('email', '=', 'jane.doe@example.com')->first());

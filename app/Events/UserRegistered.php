@@ -13,13 +13,11 @@ class UserRegistered extends Event
      */
     private $user;
 
-
     /**
-     *
      * @param \App\Models\User $user
      * @param string $token
      */
-    public function __construct(User $user, $token)
+    public function __construct(User $user, $token = null)
     {
         $this->user = $user;
         $this->token = $token;
@@ -41,9 +39,11 @@ class UserRegistered extends Event
         return $this->token;
     }
 
-
-
-
-
-
+    /**
+     * @return bool
+     */
+    public function hasToken()
+    {
+        return !is_null($this->token);
+    }
 }

@@ -107,7 +107,7 @@ class Group extends Controller
      */
     public function destroy($groupName, GroupProvider $groupProvider)
     {
-        $groupProvider->deleteByName($groupName);
+        $groupProvider->deleteBySlug($groupName);
         return response(null, Response::HTTP_NO_CONTENT);
     }
 

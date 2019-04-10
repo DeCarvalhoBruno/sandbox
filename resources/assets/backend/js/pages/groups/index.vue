@@ -48,6 +48,7 @@
   import Table from 'back_path/components/table/table'
   import axios from 'axios'
   import TableMixin from 'back_path/mixins/tables'
+  import Swal from 'back_path/mixins/sweet-alert'
 
   Vue.use(Table)
 
@@ -67,19 +68,20 @@
       }
     },
     mixins: [
-      TableMixin
+      TableMixin,
+      Swal
     ],
     methods: {
       async deleteRow (data) {
         this.swalDeleteWarning(
           this.$t('modal.group_delete.h'),
-          this.$tc('modal.group_delete.t', 1, {name: data.group_name}),
+          this.$tc('modal.group_delete.t', 1, {name: data.group_slug}),
           this.$t('general.delete')
         ).then(async (result) => {
           if (result.value) {
-            await axios.delete(`/ajax/admin/groups/${data.group_name}`)
+            await axios.delete(`/ajax/admin/groups/${data.group_slug}`)
             this.refreshTableData()
-            this.swalNotification('success', this.$tc('message.group_delete_ok', 1, {name: data.group_name}))
+            this.swalNotification('success', this.$tc('message.group_delete_ok', 1, {name: data.group_slug}))
           }
         })
       }

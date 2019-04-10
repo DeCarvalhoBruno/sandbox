@@ -5,7 +5,7 @@ use App\Filters\Filters;
 class Media extends Filters
 {
     protected $filters = ['sortBy', 'order', 'title'];
-    protected $acceptedSortColumns = ['media_title','created_at'];
+    protected $acceptedSortColumns = ['media_title', 'created_at'];
 
     /**
      * @param string $name

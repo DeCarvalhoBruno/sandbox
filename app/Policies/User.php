@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Policies;
+<?php namespace App\Policies;
 
 use Naraki\Permission\Models\PermissionMask;
 
@@ -8,13 +6,35 @@ class User extends Policy
 {
     protected $model = \App\Models\User::class;
 
+    /**
+     * @return bool
+     */
     public function edit()
     {
-        $model = $this->model;
-        $constant = constant(
+        return $this->checkPermissions(constant(
             sprintf('%s::PERMISSION_EDIT',
                 $this->model)
-        );
+        ));
+    }
+
+    /**
+     * @return bool
+     */
+    public function delete()
+    {
+        return $this->checkPermissions(constant(
+            sprintf('%s::PERMISSION_DELETE',
+                $this->model)
+        ));
+    }
+
+    /**
+     * @param $constant
+     * @return bool
+     */
+    private function checkPermissions($constant)
+    {
+        $model = $this->model;
         //the default permissions are used to assess the permission of a user against
         //all other users. We do a bitwise comparison versus the edit permission bitmask
         if (($this->defaultPermissions & $constant) !== 0) {
@@ -23,7 +43,8 @@ class User extends Policy
             $targetPermission = PermissionMask::getTargetPermission(
                 auth()->user()->getAttribute('entity_type_id'),
                 $model::$entityID,
-                app('router')->getCurrentRoute()->parameter('user'));
+                app('router')->getCurrentRoute()->parameter('user')
+            );
             //If the query returns null, there are no particular permissions set, we can defer
             //to the default permission, which in this case is true.
             if (is_int($targetPermission)) {

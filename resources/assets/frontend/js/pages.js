@@ -42,7 +42,8 @@ export default {
     components: {
       frontend: [
         'InlineForm',
-        'PasswordStrength'
+        'PasswordStrength',
+        'InputValidator'
       ],
       backend: [
         'SubmitButton'
@@ -53,7 +54,8 @@ export default {
   'f37bd2f666': {
     components: {
       frontend: [
-        'InlineForm'
+        'InlineForm',
+        'InputValidator'
       ],
       backend: [
         'SubmitButton'

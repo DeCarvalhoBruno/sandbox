@@ -1,78 +1,78 @@
 <template>
-    <div class="card col-lg p-0 m-0">
-        <div class="table-container table-responsive">
-            <template v-if="table.total===0">
-                <h3>{{$t('tables.empty')}}</h3>
-            </template>
-            <template v-else>
-                <table class="table table-hover table-striped">
-                    <thead>
-                    <tr>
-                        <slot name="header-select-all">
-                            <th v-show="isMultiSelect" class="column-header">
-                                <div class="form-check">
-                                    <input class="form-check-input position-static"
-                                           type="checkbox"
-                                           :aria-label="$t('general.select_all')"
-                                           :title="$t('general.select_all')"
-                                           @click="toggleSelectAll">
-                                </div>
-                            </th>
-                        </slot>
-                        <th v-for="(info, index) in table.columns"
-                            :key="index"
-                            @click="sort(info)"
-                            class="column-header"
-                            :style="{
-                            'width': info.hasOwnProperty('width')?info.width:'auto'}">{{info.label}}<span
-                                v-if="info.sortable"
-                                class="sort-header"
-                                :title="$t('tables.sort_'+getOrder(info.order))"><i
-                                class="fa"
-                                :class="'fa-'+getColumnHeaderIcon(info)"></i></span>
-                        </th>
-                        <slot name="header-action">
-                            <th class="column-header">
-                                {{$t('general.actions')}}
-                            </th>
-                        </slot>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="(row,rowIdx) in table.rows"
-                        :key="rowIdx">
-                        <slot name="body-select-row" :row="row">
-                            <td v-show="isMultiSelect">
-                                <div class="form-check">
-                                    <input class="form-check-input position-static"
-                                           type="checkbox"
-                                           :aria-label="$t('tables.select_item',{name:row[$t(`db_raw_inv.${selectColumnName}`)]})"
-                                           :title="$t('tables.select_item',{name:row[$t(`db_raw_inv.${selectColumnName}`)]})"
-                                           v-model="row.selected">
-                                </div>
-                            </td>
-                        </slot>
-                        <td v-for="(info,colIdx) in table.columns" :key="colIdx">
-                            {{row[info.name]}}
-                        </td>
-                        <slot name="body-action" :row="row">
-                        </slot>
-                    </tr>
-                    </tbody>
-                </table>
-                <div id="paginator_container" class="container mt-4">
-                    <div class="row justify-content-md-center">
-                        <div class="paginator col-lg-6">
-                            <b-pagination-nav v-if="table.lastPage>1" :link-gen="linkGen" :total-rows="table.total"
-                                              :value="table.currentPage"
-                                              :per-page="table.perPage" :limit="10" :number-of-pages="table.lastPage">
-                            </b-pagination-nav>
-                        </div>
-                    </div>
+  <div class="card col-lg p-0 m-0">
+    <div class="table-container table-responsive">
+      <template v-if="table.total===0">
+        <h3>{{$t('tables.empty')}}</h3>
+      </template>
+      <template v-else>
+        <table class="table table-hover table-striped">
+          <thead>
+          <tr>
+            <slot name="header-select-all">
+              <th v-show="isMultiSelect" class="column-header">
+                <div class="form-check">
+                  <input class="form-check-input position-static"
+                         type="checkbox"
+                         :aria-label="$t('general.select_all')"
+                         :title="$t('general.select_all')"
+                         @click="toggleSelectAll">
                 </div>
-            </template>
+              </th>
+            </slot>
+            <th v-for="(info, index) in table.columns"
+                :key="index"
+                @click="sort(info)"
+                class="column-header"
+                :style="{
+                            'width': info.hasOwnProperty('width')?info.width:'auto'}">{{info.label}}<span
+                v-if="info.sortable"
+                class="sort-header"
+                :title="$t('tables.sort_'+getOrder(info.order))"><i
+                class="fa"
+                :class="'fa-'+getColumnHeaderIcon(info)"></i></span>
+            </th>
+            <slot name="header-action">
+              <th class="column-header">
+                {{$t('general.actions')}}
+              </th>
+            </slot>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(row,rowIdx) in table.rows"
+              :key="rowIdx">
+            <slot name="body-select-row" :row="row">
+              <td v-show="isMultiSelect">
+                <div class="form-check">
+                  <input class="form-check-input position-static"
+                         type="checkbox"
+                         :aria-label="$t('tables.select_item',{name:row[$t(`db_raw_inv.${selectColumnName}`)]})"
+                         :title="$t('tables.select_item',{name:row[$t(`db_raw_inv.${selectColumnName}`)]})"
+                         v-model="row.selected">
+                </div>
+              </td>
+            </slot>
+            <td v-for="(info,colIdx) in table.columns" :key="colIdx">
+              {{row[info.name]}}
+            </td>
+            <slot name="body-action" :row="row">
+            </slot>
+          </tr>
+          </tbody>
+        </table>
+        <div id="paginator_container" class="container mt-4">
+          <div class="row justify-content-md-center">
+            <div class="paginator col-lg-6">
+              <b-pagination-nav v-if="table.lastPage>1" :link-gen="linkGen" :total-rows="table.total"
+                                :value="table.currentPage"
+                                :per-page="table.perPage" :limit="10" :number-of-pages="table.lastPage">
+              </b-pagination-nav>
+            </div>
+          </div>
         </div>
+      </template>
     </div>
+  </div>
 </template>
 
 <script>
@@ -89,7 +89,7 @@
     data: function () {
       return {
         sortOrder: 'desc',
-        allSelected: false,
+        allSelected: false
       }
     },
     props: {
@@ -115,7 +115,7 @@
         return this.data
       }
     },
-    updated(){
+    updated () {
       //Triggering a jquery fix defined in plugins/jquery/Layout that fixes the height of the sidebar
       //to match the size of this table, which can get pretty large
       $('body').trigger('sidebar-fix')
@@ -149,7 +149,11 @@
         this.$router.push({query: obj})
       },
       getColumnHeaderIcon (info) {
-        return (!info.hasOwnProperty('order'))?'sort':(info.order==='asc')?'angle-double-up':'angle-double-down'
+        return (!info.hasOwnProperty('order'))
+          ? 'sort'
+          : (info.order === 'asc')
+            ? 'angle-double-up'
+            : 'angle-double-down'
       },
       toggleSortOrder () {
         this.sortOrder = this.getOrder(this.sortOrder)
@@ -166,7 +170,7 @@
         let asc = this.$t('filters.asc')
         let desc = this.$t('filters.desc')
         return val === asc ? desc : asc
-      },
+      }
 
     }
   }

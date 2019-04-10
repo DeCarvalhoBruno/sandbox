@@ -5,8 +5,6 @@ use App\Models\Entity;
 use App\Models\EntityType;
 use App\Support\Providers\Model;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\Session;
 use Naraki\Permission\Contracts\HasPermissions;
 use Naraki\Permission\Contracts\Permission as PermissionInterface;
 use Naraki\Permission\Models\Permission as PermissionModel;
