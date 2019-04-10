@@ -258,9 +258,12 @@ class User extends LaravelUser implements JWTSubject, HasAnEntityContract, HasPe
     public static function scopePermissionMask(Builder $builder, $userId)
     {
         return $builder->join('permission_masks', function (JoinClause $q) use ($userId) {
-            $q->on('permission_masks.permission_store_id', '=', 'permission_records.permission_store_id')
-                ->where('permission_masks.permission_holder_id', '=', $userId)
-                ->where('permission_mask', '>', 0);
+            $q->on(
+                'permission_masks.permission_store_id',
+                '=',
+                'permission_records.permission_store_id')
+                ->where('permission_masks.permission_holder_id', '=', $userId);
+//                ->where('permission_mask', '>', 0);
         });
     }
 

@@ -14,7 +14,7 @@ class Group extends Controller
 {
     /**
      * @param \App\Filters\Group $filter
-     * @param \App\Contracts\Models\Group $groupProvider
+     * @param \App\Contracts\Models\Group|\App\Support\Providers\Group $groupProvider
      * @return array
      */
     public function index(GroupFilter $filter, GroupProvider $groupProvider)

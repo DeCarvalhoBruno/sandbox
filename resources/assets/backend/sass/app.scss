@@ -79,7 +79,9 @@ $fa-font-path2: "../../_fonts/vendor" !default;
 @import "skin";
 @import "transitions";
 @import "content";
-@import "pages";
+
+@import "pages/blog";
+@import "pages/user";
 
 @import "elements/submit-button";
 @import "elements/buttons";

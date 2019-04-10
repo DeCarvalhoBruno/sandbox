@@ -89,9 +89,32 @@
                 </small>
               </div>
             </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label">{{$tc('db.groups',2)}}</label>
+              <div class="col-md-9">
+                <ul class="form-groups-list">
+                  <li v-for="(group,idx) in groups" :key="group+idx" :class="[idx%2===0?'odd':'even']">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-md-6 align-middle">
+                          <span class="group-name">{{group.name}}</span>
+                        </div>
+                        <div class="col-md-6 group-button-wrapper align-middle">
+                          <button-circle
+                              ref="buttonCircleGroups"
+                              :enabled="group.isMember===true"
+                              :slug="group.slug">
+                          </button-circle>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </b-tab>
-        <b-tab :title="$tc('general.permission',2)" :disabled="checkPermissions()">
+        <b-tab v-if="mode==='edit'" :title="$tc('general.permission',2)" :disabled="checkPermissions()">
           <div class="container">
             <div class="callout callout-warning">
               <p><span class="callout-tag callout-tag-warning">
@@ -119,7 +142,7 @@
                       <td>{{type}}</td>
                       <td>
                         <button-circle
-                            ref="buttonCircle"
+                            ref="buttonCirclePermissions"
                             :maskval="maskValue"
                             :entity="entity"
                             :enabled="hasPermission(permissions.computed,entity,type)"
@@ -197,7 +220,8 @@
         mediaData: null,
         entity: 'users',
         media: 'image_avatar',
-        mode: null
+        mode: null,
+        groups: null
       }
     },
     mixins: [
@@ -228,6 +252,9 @@
         this.permissions = data.permissions
         this.nav = data.nav
         this.mediaData = data.media
+        if (data.hasOwnProperty('groups')) {
+          this.groups = data.groups
+        }
         let intended = this.$store.getters['session/intendedUrl']
         if (intended === null) {
           this.intended = {name: 'admin.users.index'}
@@ -236,14 +263,22 @@
         }
       },
       async save () {
-        this.form.addField('permissions', this.getPermissions(this.$refs.buttonCircle))
+        this.form.addField('permissions', this.getPermissions(this.$refs.buttonCirclePermissions))
         await this.form.patch(`/ajax/admin/users/${this.$router.currentRoute.params.user}`)
         this.$store.dispatch('session/setFlashMessage',
           {msg: {type: 'success', text: this.$t('message.user_update_ok')}})
         this.$router.push({name: 'admin.users.index'})
       },
       async create () {
-        this.form.addField('permissions', this.getPermissions(this.$refs.buttonCircle))
+        let groupBtnList = this.$refs.buttonCircleGroups
+        let groupList = []
+        if (groupBtnList.length) {
+          groupBtnList.forEach((vueBtn) => {
+            groupList.push(vueBtn.$attrs.slug)
+          })
+        }
+        this.form.addField('groups', groupList)
+        this.form.addField('permissions', this.getPermissions(this.$refs.buttonCirclePermissions))
         await this.form.post(`/ajax/admin/user/create`)
         this.$store.dispatch('session/setFlashMessage',
           {msg: {type: 'success', text: this.$t('message.user_create_ok')}})
