@@ -168,7 +168,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
      */
     public function scopeCategories(Builder $builder, $categorySlug = null): Builder
     {
-        return $builder->join('blog_categories', function (JoinClause $q) use ($categorySlug) {
+        return $builder->leftJoin('blog_categories', function (JoinClause $q) use ($categorySlug) {
             $q->on('blog_categories.blog_label_type_id',
                 '=',
                 'blog_label_types.blog_label_type_id'
@@ -260,7 +260,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
      */
     public function scopePageViews(Builder $builder)
     {
-        return $builder->join('stat_page_views',
+        return $builder->leftJoin('stat_page_views',
             'entity_types.entity_type_id',
             '=',
             'stat_page_views.entity_type_id'

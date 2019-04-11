@@ -120,6 +120,9 @@ abstract class Model
     {
         $q = $this->buildWithScopes($columns,$scopes);
         foreach ($wheres as $where) {
+            if(!is_array($where)){
+                throw new \UnexpectedValueException('Where clause must be enclosed in an array');
+            }
             $operator = '=';
             if (count($where) === 3) {
                 list($column, $operator, $value) = $where;

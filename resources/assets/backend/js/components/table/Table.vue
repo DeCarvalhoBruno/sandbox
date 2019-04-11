@@ -23,13 +23,11 @@
                 :key="index"
                 @click="sort(info)"
                 class="column-header"
+                :class="[info.sortable?'sort-header':'']"
                 :style="{
-                            'width': info.hasOwnProperty('width')?info.width:'auto'}">{{info.label}}<span
-                v-if="info.sortable"
-                class="sort-header"
-                :title="$t('tables.sort_'+getOrder(info.order))"><i
-                class="fa"
-                :class="'fa-'+getColumnHeaderIcon(info)"></i></span>
+                  'width': info.hasOwnProperty('width')?info.width:'auto'
+                }">{{info.label}}<span :title="$t('tables.sort_'+getOrder(info.order))"><i v-if="info.sortable"
+                :class="[info.sortable?'fa fa-'+getColumnHeaderIcon(info):null]"></i></span>
             </th>
             <slot name="header-action">
               <th class="column-header">

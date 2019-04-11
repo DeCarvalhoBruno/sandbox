@@ -27,6 +27,7 @@
 }
 
 .btn-add {
+  font-family:$be-font-buttons;
   color: #fff;
   background-color: #007b00;
 
@@ -37,6 +38,9 @@
 }
 
 button {
+  &.btn-primary {
+    font-family:$be-font-buttons;
+  }
   &.btn-sm {
     width: 30px;
     height: 30px;

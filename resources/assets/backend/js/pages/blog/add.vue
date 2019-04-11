@@ -2,24 +2,45 @@
   <div id="blog-post" class="container p-0 m-0">
     <div id="trumbowyg-icons" v-html="require('trumbowyg/dist/ui/icons.svg')"></div>
     <form @submit.prevent="save" id="form_edit_blog">
-      <div class="row p-0 m-0 mt-1">
+      <div class="row p-0 m-0 my-1">
         <div class="card col-lg">
           <div class="container">
-            <div class="form-group row col-lg mt-1">
+            <div class="form-group row col-lg mt-3">
               <div class="col-lg-10">
                 <input v-model="form.fields.blog_post_title" type="text" required autocomplete="off"
-                       name="blog_post_title" id="blog_post_title"
+                       name="blog_post_title"
+                       id="blog-post-title"
                        class="form-control" maxlength="255"
                        :class="{ 'is-invalid': form.errors.has('blog_post_title') }"
                        :placeholder="$t('db.blog_post_title')"
                        aria-describedby="help_blog_post_title"
                        @change="changedField('blog_post_title')">
-                <small class="text-muted" v-show="url"><a :href="url" target="_blank">{{url}}</a></small>
+                <div class="blog-post-title-length">{{form.fields.blog_post_title.length}}</div>
+                <small class="text-muted blog-post-url d-block mt-1" v-show="url">
+                  <template v-if="!form_url_editing">
+                    <template v-if="saveMode!=='create'">
+                      <button type="button" class="btn btn-sm" @click="toggleEditing('form_url_editing')">
+                        <i class="fa fa-pencil"></i>
+                      </button>
+                      <a :href="url" target="_blank">{{url}}</a>
+                    </template>
+                  </template>
+                  <template v-else>
+                    <button type="button" class="btn btn-sm" @click="toggleEditing('form_url_editing')">
+                      <i class="fa fa-ban"></i>
+                    </button>
+                    <submit-button native-type="button" class="btn-sm" @click="saveUrl">
+                      <i class="fa fa-check"></i>
+                    </submit-button>
+                    <input type="text" v-model="form.fields.blog_post_slug"
+                           class="w-75 ml-2"
+                           @change="changedField('blog_post_slug')">
+                  </template>
+                </small>
               </div>
               <div class="col-lg-2">
                 <submit-button :loading="form.busy"
-                               class="float-lg-right"
-                               @click="save">{{$t('general.save')}}
+                               class="float-lg-right">{{$t('general.save')}}
                 </submit-button>
               </div>
             </div>
@@ -123,7 +144,7 @@
           </div>
         </div>
       </div>
-      <div class="row p-0 m-0 mb-1">
+      <div class="row p-0 m-0 my-1">
         <div class="card col-lg p-0 m-0">
           <div class="row p-0 m-0">
             <trumbowyg v-model="form.fields.blog_post_content" :config="editorConfig"
@@ -207,7 +228,7 @@
           </div>
         </div>
       </div>
-      <div class="row p-0 m-0 mb-1">
+      <div class="row p-0 m-0 my-1">
         <div class="card col-lg-6 p-0 m-0">
           <div class="card-header bg-transparent">{{$t('pages.blog.blog_post_excerpt')}}</div>
           <div class="card-body">
@@ -238,10 +259,6 @@
         </div>
       </div>
     </form>
-    <div class="row p-0 mt-5 mb-5">
-      <div class="row p-0 mt-5 mb-5">
-      </div>
-    </div>
   </div>
 </template>
 
@@ -288,6 +305,7 @@
       return {
         modal_show: false,
         form_status_editing: false,
+        form_url_editing: false,
         form_user_editing: false,
         form_publish_date_editing: false,
         modal: false,
@@ -437,6 +455,18 @@
           this.blog_post_person = people[0].text
           this.changedField('blog_post_person')
         }
+      },
+      async saveUrl () {
+        if (this.form.hasFieldChanged('blog_post_slug')) {
+          let {data} = await this.form.post(
+            `/ajax/admin/blog/post/url/edit/${this.$route.params.slug}`,
+            {blog_post_url: this.form.fields.blog_post_slug}
+          )
+          this.url = data.url
+          window.history.replaceState({}, null, this.$router.resolve(
+            {name: 'admin.blog_posts.edit', params: {slug: this.form.fields.blog_post_slug}}).resolved.fullPath)
+        }
+        this.toggleEditing('form_url_editing')
       },
       toggleEditing (value) {
         this[value] = !this[value]

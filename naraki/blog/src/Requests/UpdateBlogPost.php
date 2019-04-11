@@ -71,6 +71,7 @@ class UpdateBlogPost extends FormRequest
             $input['published_at'] = date_create_from_format('YmdHi', $input['published_at'])
                 ->format('Y-m-d H:i:s');
         }
+        unset($input['blog_post_slug']);
 
         $this->replace($input);
     }

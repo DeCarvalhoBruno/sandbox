@@ -1,4 +1,8 @@
 #app_backend_wrapper {
+  .pagination {
+    font-family:$be-font-buttons;
+  }
+
   .card {
     box-shadow: 0 1px 6px 0 rgba(117, 117, 117, .15)
   }

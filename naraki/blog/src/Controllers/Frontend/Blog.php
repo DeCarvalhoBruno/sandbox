@@ -61,19 +61,22 @@ class Blog extends Controller
             ->get();
 
         $sources = BlogFacade::source()->buildByBlogSlug($slug)->get();
-        $otherPosts = BlogFacade::buildWithScopes([
-            'blog_post_title as title',
-            'blog_post_slug as slug',
-            'published_at as date',
-            'entity_types.entity_type_id as type',
-            'person_slug as author',
-            'full_name as person',
-            'unq as page_views'
-        ], ['entityType', 'pageViews', 'person', 'language', 'category' => $firstCategory->getAttribute('cat')])
-            ->where('blog_post_slug', '!=', $slug)
-            ->orderBy('published_at', 'desc')->limit(4)->get();
+        $otherPosts = $otherPostMedia = [];
+        if (!is_null($firstCategory)) {
+            $otherPosts = BlogFacade::buildWithScopes([
+                'blog_post_title as title',
+                'blog_post_slug as slug',
+                'published_at as date',
+                'entity_types.entity_type_id as type',
+                'person_slug as author',
+                'full_name as person',
+                'unq as page_views'
+            ], ['entityType', 'pageViews', 'person', 'language', 'category' => $firstCategory->getAttribute('cat')])
+                ->where('blog_post_slug', '!=', $slug)
+                ->orderBy('published_at', 'desc')->limit(4)->get();
+            $otherPostMedia = $this->getImages($otherPosts);
+        }
 
-        $otherPostMedia = $this->getImages($otherPosts);
         $media = null;
         foreach ($dbImages as $image) {
             if ($image->featured == 1) {

@@ -38,6 +38,7 @@ class Admin
                 ->middleware('can:add,Naraki\Blog\Models\BlogPost');
             $r->get('blog/post/edit/{slug}', 'Blog@edit')
                 ->middleware('can:edit,Naraki\Blog\Models\BlogPost');
+            $r->post('blog/post/url/edit/{slug}', 'Blog@updateUrl');
             $r->post('blog/post/edit/{slug}', 'Blog@update')
                 ->middleware('can:edit,Naraki\Blog\Models\BlogPost');
             $r->delete('blog/post/{slug}', 'Blog@destroy');

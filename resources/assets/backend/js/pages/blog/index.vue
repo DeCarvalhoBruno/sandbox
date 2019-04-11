@@ -44,7 +44,8 @@
                     <div class="col-md-4">
                         <div class="float-right row align-items-center">
                             <div class="col">
-                                <span class="mr-2" v-if="data.total">{{data.total}}&nbsp;{{$tc(`db.${entity}`,data.total)}}</span>
+                                <span class="mr-2"
+                                      v-if="data.total">{{data.total}}&nbsp;{{$tc(`db.${entity}`,data.total)}}</span>
                                 <router-link :to="{name: 'admin.blog_posts.add'}">
                                     <button class="btn btn-add"
                                             type="button">{{$t('pages.blog.add_post')}}
@@ -60,9 +61,6 @@
             <v-table ref="table"
                      :entity="entity" :data="computedTable"
                      :is-multi-select="true" select-column-name="blog_post_title">
-                <template #header-action>
-                    <th>{{$t('general.actions')}}</th>
-                </template>
                 <template #body-action="props">
                     <td>
                         <div class="inline">
@@ -137,7 +135,24 @@
         this.setFilterButton('title')
       },
       async applyToSelected () {
-
+        let posts = this.$refs.table.getSelectedRows('blog_post_slug')
+        if (posts.length > 0) {
+          switch (this.selectApply) {
+            case 'del':
+              this.swalDeleteWarning(
+                this.$t('modal.blog_post_delete.h'),
+                this.$tc('modal.blog_post_delete.t', 2, {number: posts.length}),
+                this.$t('general.delete')
+              ).then(async (result) => {
+                if (result.value) {
+                  await axios.post('/ajax/admin/blog/post/batch/delete', {posts: posts})
+                  this.refreshTableData()
+                  this.swalNotification('success', this.$tc('message.blog_post_delete_ok', posts.length))
+                }
+              })
+              break
+          }
+        }
       },
       filterBlogTitle () {
         this.applyFilter('title')

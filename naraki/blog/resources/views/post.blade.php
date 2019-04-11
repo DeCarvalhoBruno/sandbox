@@ -10,11 +10,17 @@
                         <span class="date-label"><i
                                     class="fa fa-clock-o"></i>{{new \Carbon\Carbon($post->getAttribute('date'))}}</span>
                         <span class="author-label"><i class="fa fa-user-circle-o"></i><a
-                                    href="{{route_i18n('blog.author',$post->getAttribute('author'))}}">{{$post->getAttribute('person')}}</a></span>
-                        <span class="page-views-label"><i title="{{trans('pages.blog.page_view_count')}}"
-                                                          aria-label="{{trans('pages.blog.page_view_count')}}"
-                                                          class="fa fa-eye"></i>{{$post->getAttribute('page_views')}}
-                        </span>
+                                    href="{{route_i18n(
+                                    'blog.author',
+                                    $post->getAttribute('author'
+                                    ))}}">{{$post->getAttribute('person')}}</a></span>
+                        @if(!is_null($post->getAttribute('page_views')))
+                            <span class="page-views-label"><i title="{{trans('pages.blog.page_view_count')}}"
+                                                              aria-label="{{trans('pages.blog.page_view_count')}}"
+                                                              class="fa fa-eye"></i>{{
+                                                              $post->getAttribute('page_views')
+                                                              }}</span>
+                        @endif
                     </div>
                 </div>
             </div>

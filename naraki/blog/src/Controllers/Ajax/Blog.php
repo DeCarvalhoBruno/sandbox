@@ -57,6 +57,7 @@ class Blog extends Controller
                 'blog_status' => BlogStatus::getConstantByID(BlogStatus::BLOG_STATUS_DRAFT),
                 'blog_post_person' => $this->user->getAttribute('full_name'),
                 'person_slug' => $this->user->getAttribute('person_slug'),
+                'blog_post_content'=>'',
                 'categories' => [],
                 'tags' => [],
             ],
@@ -181,6 +182,14 @@ class Blog extends Controller
             'url' => $this->getPostUrl($post),
             'blog_post_slug' => $post->getAttribute('blog_post_slug'),
         ];
+    }
+
+    public function updateUrl($slug, Request $request)
+    {
+        $post = BlogRepo::updateOne($slug, $request->all());
+        return response([
+            'url' => $this->getPostUrl($post),
+        ], 200);
     }
 
     /**

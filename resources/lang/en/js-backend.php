@@ -209,7 +209,7 @@ return [
         ],
         'blog_post_delete' => [
             'h' => 'Confirm blog deletion',
-            't' => 'Do you really want to delete blog post {name}?|Do you really want to delete those {number} blog posts?'
+            't' => 'Do you really want to delete blog post "{name}"?|Do you really want to delete those {number} blog posts?'
         ],
         'user_profile_updated' => [
             'h' => 'About to log you out...',
@@ -232,7 +232,7 @@ return [
         'user_delete_ok' => 'User {name} was deleted.|The users were deleted.',
         'group_update_ok' => 'The group was updated.',
         'group_delete_ok' => 'Group {group} was deleted.',
-        'blog_post_delete_ok' => 'Blog post {name} was deleted.',
+        'blog_post_delete_ok' => 'The blog post was deleted.|The {number} blog posts were deleted.',
         'group_create_ok' => 'The group was created.',
         'media_update_ok' => 'The media was updated.'
     ],
