@@ -39,6 +39,9 @@ export default {
   },
   // Settings: Account
   'e268443e43': {
+    page: [
+      'pages/account.js'
+    ],
     components: {
       frontend: [
         'InlineForm',

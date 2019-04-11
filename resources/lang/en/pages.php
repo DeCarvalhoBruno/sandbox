@@ -3,6 +3,8 @@
         'email_help' => 'Your current e-mail address: :email',
         'username_help' => 'Your current username: :username',
         'new_password_heading' => 'Change your password',
+        'account_delete_heading' => 'Delete account',
+        'account_delete_button' => 'Delete your account',
         'new_email_heading' => 'Change your e-mail',
         'new_email_address' => 'New E-Mail Address',
         'current_password' => 'Current Password',

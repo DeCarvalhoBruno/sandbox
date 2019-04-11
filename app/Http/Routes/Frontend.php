@@ -102,6 +102,7 @@ class Frontend extends Routes
                 ->name(self::i18nRouteNames($locale, 'account'));
             $r->get(trans('routes.user', [], $locale), 'User@show')
                 ->name(self::i18nRouteNames($locale, 'user'));
+            $r->delete('user/delete', 'User@delete');
         };
     }
 

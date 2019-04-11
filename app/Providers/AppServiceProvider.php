@@ -24,7 +24,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->make('view')->composer('admin.default', \App\Composers\Admin::class);
         $this->app->make('view')->composer(
-            'frontend.site.settings.panes.profile',
+            ['frontend.site.settings.panes.profile',
+            'frontend.site.settings.panes.account'
+            ],
             \App\Composers\Frontend\Profile::class
         );
         $this->app->make('view')->composer(

@@ -21,6 +21,6 @@ class Auth
         if ($request->wantsJson()) {
             return response(null, 401);
         }
-        return redirect()->guest(route_i18n('login'));
+        return redirect()->guest(route_i18n('home'));
     }
 }

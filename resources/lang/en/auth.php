@@ -11,6 +11,8 @@ return [
         'activated_body' => 'Great! We have activated your account, please log in!',
         'activation_error_title'=>'Account activation error',
         'activation_error_body'=>'It looks like the activation link isn\'t valid anymore. Has the account not been activated already? Try logging in.',
+        'account_deleted_title' => 'Account deleted',
+        'account_deleted_body' => 'Your account was deleted.',
         'email_title' => 'Resetting your password',
         'email_body' => 'Please provide your e-mail below. We\'ll send you a link by e-mail allowing you to set a new password.',
         'reset_title' => 'Your password has been reset!',

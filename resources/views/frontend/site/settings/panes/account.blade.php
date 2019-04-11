@@ -101,6 +101,23 @@
                                 @endif
                             </div>
                         </div>
+                        <div class="row form-heading-wrapper">
+                            <div class="col-lg-10 offset-lg-1">
+                                <h4 class="form-heading text-danger">{{trans('pages.profile.account_delete_heading')}}</h4>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-6 offset-md-3 text-center">
+                                        <button type="button"
+                                                id="btn-account-delete" class="btn btn-outline-danger">{{
+                                        trans('pages.profile.account_delete_button')
+                                        }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group row mt-5">
                             <div class="col-xl-8 offset-xl-2 col-lg-6 offset-lg-3">
                                 <submit-button

@@ -60,7 +60,6 @@ return [
         'actions' => 'Actions',
         'apply' => 'Apply',
         'back' => 'Back',
-        'cancel' => 'Cancel',
         'choose_file' => 'Choose file',
         'close' => 'Close',
         'collapse_all' => 'Collapse all',

@@ -37,5 +37,14 @@ return [
         'delete_confirm_t' => 'Do you really want to delete this comment?',
         'delete_confirm_c' => 'Go ahead',
         'posting_warning' => 'We enforce a two minute delay between postings.'
+    ],
+    'modal' => [
+        'user_delete' => [
+            'h' => 'Confirm user deletion',
+            't' => 'Do you really want to delete your account? This action is irreversible.'
+        ],
+        'user_delete_confirm' => [
+            't' => 'Your request for account deletion will be processed shortly. We will log you out now.'
+        ]
     ]
 ];
