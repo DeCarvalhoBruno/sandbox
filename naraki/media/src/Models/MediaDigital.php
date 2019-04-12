@@ -1,6 +1,6 @@
 <?php namespace Naraki\Media\Models;
 
-use App\Traits\Models\DoesSqlStuff;
+use Naraki\Core\Traits\Models\DoesSqlStuff;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 

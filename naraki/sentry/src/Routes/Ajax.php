@@ -8,7 +8,7 @@ class Ajax
     {
         $router->group([
             'prefix' => '/ajax/admin',
-            'namespace' => 'Naraki\Blog\Controllers\Ajax',
+            'namespace' => 'Naraki\Sentry\Controllers\Ajax',
         ],
             function (Router $r) {
                 $r->group([
@@ -42,24 +42,24 @@ class Ajax
                 ->middleware('can:view,Naraki\Sentry\Models\User');
 
             $r->get('groups', 'Group@index')
-                ->middleware('can:view,App\Models\Group');
+                ->middleware('can:view,Naraki\Sentry\Models\Group');
             $r->get('groups/create', 'Group@add')
-                ->middleware('can:add,App\Models\Group');
+                ->middleware('can:add,Naraki\Sentry\Models\Group');
             $r->post('groups', 'Group@create')
-                ->middleware('can:add,App\Models\Group');
+                ->middleware('can:add,Naraki\Sentry\Models\Group');
             $r->get('groups/{group}', 'Group@edit')
-                ->middleware('can:edit,App\Models\Group');
+                ->middleware('can:edit,Naraki\Sentry\Models\Group');
             $r->patch('groups/{group}', 'Group@update')
-                ->middleware('can:edit,App\Models\Group');
+                ->middleware('can:edit,Naraki\Sentry\Models\Group');
             $r->delete('groups/{group}', 'Group@destroy')
-                ->middleware('can:delete,App\Models\Group');
+                ->middleware('can:delete,Naraki\Sentry\Models\Group');
 
             $r->get('members/{group}/search/{search}/{limit}', 'GroupMember@search')
-                ->middleware('can:view,App\Models\Group');
+                ->middleware('can:view,Naraki\Sentry\Models\Group');
             $r->get('members/{group}', 'GroupMember@index')
-                ->middleware('can:view,App\Models\Group');
+                ->middleware('can:view,Naraki\Sentry\Models\Group');
             $r->patch('members/{group}', 'GroupMember@update')
-                ->middleware('can:view,App\Models\Group');
+                ->middleware('can:view,Naraki\Sentry\Models\Group');
         };
     }
 }

@@ -1,6 +1,6 @@
 <?php namespace Naraki\Blog\Routes;
 
-use App\Http\Routes\Routes;
+use Naraki\Core\Routes\Routes;
 use Illuminate\Routing\Router;
 
 class Frontend extends Routes

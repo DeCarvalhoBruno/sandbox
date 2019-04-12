@@ -1,6 +1,6 @@
 <?php namespace Naraki\Blog\Support\Rss;
 
-use App\Models\Language;
+use Naraki\Core\Models\Language;
 use Carbon\Carbon;
 use Naraki\Rss\Feeds\Feed as AbstractFeed;
 

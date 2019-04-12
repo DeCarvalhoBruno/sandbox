@@ -233,9 +233,9 @@ class Blog extends Migration
         }
 
         if (App::environment() !== 'testing') {
-            $this->seedChunk($lang, \App\Models\Language::class, 5);
+            $this->seedChunk($lang, \Naraki\Core\Models\Language::class, 5);
         } else {
-            \App\Models\Language::insert([
+            \Naraki\Core\Models\Language::insert([
                 array_combine($languageDBColumns, [
                     '1',
                     'English',

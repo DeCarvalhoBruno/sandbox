@@ -1,6 +1,6 @@
 <?php namespace Naraki\System\Models;
 
-use App\Traits\Enumerable;
+use Naraki\Core\Traits\Enumerable;
 use Illuminate\Database\Eloquent\Model;
 
 class SystemEvent extends Model

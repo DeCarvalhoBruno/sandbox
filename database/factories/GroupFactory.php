@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\Models\Group::class, function (Faker $faker) {
+$factory->define(Naraki\Sentry\Models\Group::class, function (Faker $faker) {
     $name = $faker->word;
     return [
         'group_name' => $name,

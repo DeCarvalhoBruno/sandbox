@@ -1,6 +1,6 @@
 <?php namespace Naraki\Mail\Models;
 
-use App\Models\Entity;
+use Naraki\Core\Models\Entity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\JoinClause;

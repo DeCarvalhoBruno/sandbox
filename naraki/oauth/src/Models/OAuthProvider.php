@@ -1,7 +1,7 @@
 <?php namespace Naraki\Oauth\Models;
 
 use Naraki\Sentry\Models\User;
-use App\Traits\Models\DoesSqlStuff;
+use Naraki\Core\Traits\Models\DoesSqlStuff;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 

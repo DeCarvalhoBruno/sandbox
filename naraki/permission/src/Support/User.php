@@ -1,6 +1,6 @@
 <?php namespace Naraki\Permission\Support;
 
-use App\Models\Entity;
+use Naraki\Core\Models\Entity;
 use Naraki\Permission\Models\PermissionMask;
 use Naraki\Permission\Models\PermissionRecord;
 use Naraki\Permission\Models\PermissionStore;

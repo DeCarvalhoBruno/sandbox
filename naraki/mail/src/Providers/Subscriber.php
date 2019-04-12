@@ -2,8 +2,8 @@
 
 use Naraki\Mail\Models\EmailList;
 use Naraki\Mail\Models\EmailSubscriber as SubscriberModel;
-use App\Models\Entity;
-use App\Models\EntityType;
+use Naraki\Core\Models\Entity;
+use Naraki\Core\Models\EntityType;
 use Naraki\Sentry\Models\Person;
 use Naraki\Core\EloquentProvider;
 use Illuminate\Database\Eloquent\Builder;

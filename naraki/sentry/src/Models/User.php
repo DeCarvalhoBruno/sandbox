@@ -1,18 +1,19 @@
 <?php namespace Naraki\Sentry\Models;
 
-use App\Contracts\Enumerable as EnumerableContract;
-use App\Contracts\HasAnEntity as HasAnEntityContract;
-use App\Traits\Enumerable;
-use App\Traits\Models\DoesSqlStuff;
-use App\Traits\Models\HasASlug;
-use App\Traits\Models\HasAnEntity as HasAnEntity;
-use App\Traits\Models\Presentable;
 use Carbon\Carbon;
 use Illuminate\Bus\Dispatcher;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Foundation\Auth\User as LaravelUser;
 use Illuminate\Notifications\Notifiable;
+use Naraki\Core\Contracts\Enumerable as EnumerableContract;
+use Naraki\Core\Contracts\HasAnEntity as HasAnEntityContract;
+use Naraki\Core\Models\Entity;
+use Naraki\Core\Traits\Enumerable;
+use Naraki\Core\Traits\Models\DoesSqlStuff;
+use Naraki\Core\Traits\Models\HasASlug;
+use Naraki\Core\Traits\Models\HasAnEntity as HasAnEntity;
+use Naraki\Core\Traits\Models\Presentable;
 use Naraki\Mail\Emails\User\PasswordReset;
 use Naraki\Mail\Jobs\SendMail;
 use Naraki\Media\Models\MediaEntity;
@@ -53,7 +54,7 @@ class User extends LaravelUser implements JWTSubject, HasAnEntityContract, HasPe
         'created_ago'
     ];
 
-    public static $entityID = \App\Models\Entity::USERS;
+    public static $entityID = \Naraki\Core\Models\Entity::USERS;
     public $timestamps = false;
 
     protected static function boot()

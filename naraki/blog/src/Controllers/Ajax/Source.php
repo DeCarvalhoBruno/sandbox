@@ -1,7 +1,7 @@
 <?php namespace Naraki\Blog\Controllers\Ajax;
 
 use Naraki\Blog\Contracts\Source as BlogSourceProvider;
-use App\Http\Controllers\Admin\Controller;
+use Naraki\Core\Controllers\Admin\Controller;
 use Illuminate\Http\Response;
 
 class Source extends Controller

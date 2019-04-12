@@ -1,7 +1,7 @@
 <?php namespace Naraki\Blog\Models;
 
-use App\Support\NestedSet\NodeTrait;
-use App\Traits\Models\DoesSqlStuff;
+use Naraki\Core\Support\NestedSet\NodeTrait;
+use Naraki\Core\Traits\Models\DoesSqlStuff;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\JoinClause;

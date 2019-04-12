@@ -1,7 +1,7 @@
 <?php namespace Naraki\Oauth\Controllers;
 
 use Naraki\Sentry\Contracts\User as UserProvider;
-use App\Http\Controllers\Frontend\Controller;
+use Naraki\Core\Controllers\Frontend\Controller;
 use Firebase\JWT\JWT;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;

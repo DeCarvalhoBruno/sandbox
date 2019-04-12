@@ -25,23 +25,23 @@ class ProductsSeeder extends Seeder
         $data = $this->initSeeding();
         $this->seedPackagers($data->packagers);
         unset($data->packagers);
-        $this->seedChunk($data->productBrands, \App\Models\Shop\ProductBrand::class);
-        $this->seedChunk($data->productCategories, \App\Models\Shop\ProductCategory::class);
-        $this->seedChunk($data->productIngredients, \App\Models\Shop\ProductIngredient::class, 100);
-        $this->seedChunk($data->productPackages, \App\Models\Shop\ProductPackage::class, 25);
-        $this->seedChunk($data->productNutriments, \App\Models\Shop\ProductNutriment::class, 15);
-        $this->seedChunk($data->productNutrientLevels, \App\Models\Shop\ProductNutrientLevel::class, 1);
+        $this->seedChunk($data->productBrands, \Naraki\Shop\Models\ProductBrand::class);
+        $this->seedChunk($data->productCategories, \Naraki\Shop\Models\ProductCategory::class);
+        $this->seedChunk($data->productIngredients, \Naraki\Shop\Models\ProductIngredient::class, 100);
+        $this->seedChunk($data->productPackages, \Naraki\Shop\Models\ProductPackage::class, 25);
+        $this->seedChunk($data->productNutriments, \Naraki\Shop\Models\ProductNutriment::class, 15);
+        $this->seedChunk($data->productNutrientLevels, \Naraki\Shop\Models\ProductNutrientLevel::class, 1);
     }
 
     private function insertProducts(DBEntries $DBEntries)
     {
-        $this->seedChunk($DBEntries->productNutritionInfo,\App\Models\Shop\ProductNutritionInfo::class,15);
-        $this->seedChunk($DBEntries->productBrandRecords,\App\Models\Shop\ProductBrandRecord::class,15);
-        $this->seedChunk($DBEntries->productCategoryRecords,\App\Models\Shop\ProductCategoryRecord::class,25);
-        $this->seedChunk($DBEntries->productIngredientRecords,\App\Models\Shop\ProductIngredientRecord::class,50);
-        $this->seedChunk($DBEntries->productPackageRecords,\App\Models\Shop\ProductPackageRecord::class,25);
-        $this->seedChunk($DBEntries->productNutrimentRecords,\App\Models\Shop\ProductNutrimentRecord::class,60);
-        $this->seedChunk($DBEntries->productNutrientLevelRecords,\App\Models\Shop\ProductNutrientLevelRecord::class,25);
+        $this->seedChunk($DBEntries->productNutritionInfo,\Naraki\Shop\Models\ProductNutritionInfo::class,15);
+        $this->seedChunk($DBEntries->productBrandRecords,\Naraki\Shop\Models\ProductBrandRecord::class,15);
+        $this->seedChunk($DBEntries->productCategoryRecords,\Naraki\Shop\Models\ProductCategoryRecord::class,25);
+        $this->seedChunk($DBEntries->productIngredientRecords,\Naraki\Shop\Models\ProductIngredientRecord::class,50);
+        $this->seedChunk($DBEntries->productPackageRecords,\Naraki\Shop\Models\ProductPackageRecord::class,25);
+        $this->seedChunk($DBEntries->productNutrimentRecords,\Naraki\Shop\Models\ProductNutrimentRecord::class,60);
+        $this->seedChunk($DBEntries->productNutrientLevelRecords,\Naraki\Shop\Models\ProductNutrientLevelRecord::class,25);
     }
 
     private function seedProducts()
@@ -50,7 +50,7 @@ class ProductsSeeder extends Seeder
         $size = filesize($fullPath);
         $handle = fopen($fullPath, "r");
         $products = unserialize(fread($handle, ($size + 128)));
-        $this->seedChunk($products,\App\Models\Shop\Product::class,15);
+        $this->seedChunk($products,\Naraki\Shop\Models\Product::class,15);
         fclose($handle);
     }
 
@@ -88,9 +88,9 @@ class ProductsSeeder extends Seeder
 
     private function seedPackagers($packagers)
     {
-        $this->seedChunk($packagers, \App\Models\Shop\ProductPackager::class);
+        $this->seedChunk($packagers, \Naraki\Shop\Models\ProductPackager::class);
 
-        $entity = \App\Models\Shop\ProductPackager::create([
+        $entity = \Naraki\Shop\Models\ProductPackager::create([
             'product_packager_name' => 'FOR SYSTEM USE'
         ]);
         $entity->save();

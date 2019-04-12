@@ -28,11 +28,11 @@ class UsersSeeder extends Seeder
             'person_slug' => 'john-doe',
             'user_id' => $u->getAttribute('user_id')
         ]);
-        factory(App\Models\GroupMember::class)->create([
+        factory(Naraki\Sentry\Models\GroupMember::class)->create([
             "group_id" => 2,
             'user_id' => $u->getAttribute('user_id')
         ]);
-        factory(App\Models\GroupMember::class)->create([
+        factory(Naraki\Sentry\Models\GroupMember::class)->create([
             "group_id" => 4,
             'user_id' => $u->getAttribute('user_id')
         ]);
@@ -54,11 +54,11 @@ class UsersSeeder extends Seeder
 
         Media::image()->createAvatar('jane_doe', 'Jane Doe');
 
-        factory(App\Models\GroupMember::class)->create([
+        factory(Naraki\Sentry\Models\GroupMember::class)->create([
             "group_id" => 2,
             'user_id' => $u->getAttribute('user_id')
         ]);
-        factory(App\Models\GroupMember::class)->create([
+        factory(Naraki\Sentry\Models\GroupMember::class)->create([
             "group_id" => 4,
             'user_id' => $u->getAttribute('user_id')
         ]);
@@ -116,14 +116,14 @@ class UsersSeeder extends Seeder
 
             if ($i % 50 == 0) {
                 $groupID = 3;
-                factory(App\Models\GroupMember::class)->create([
+                factory(Naraki\Sentry\Models\GroupMember::class)->create([
                     "group_id" => 4,
                     'user_id' => $u->getAttribute('user_id')
                 ]);
             } else {
                 $groupID = 4;
             }
-            factory(App\Models\GroupMember::class)->create([
+            factory(Naraki\Sentry\Models\GroupMember::class)->create([
                 "group_id" => $groupID,
                 'user_id' => $u->getAttribute('user_id')
             ]);
@@ -157,11 +157,11 @@ class UsersSeeder extends Seeder
         Media::image()->createAvatar(env('MAIN_ACCOUNT_USERNAME'),
             env('MAIN_ACCOUNT_FIRST_NAME') . ' ' . env('MAIN_ACCOUNT_LAST_NAME'));
 
-        factory(App\Models\GroupMember::class)->create([
+        factory(Naraki\Sentry\Models\GroupMember::class)->create([
             "group_id" => 2,
             'user_id' => $u->getAttribute('user_id')
         ]);
-        factory(App\Models\GroupMember::class)->create([
+        factory(Naraki\Sentry\Models\GroupMember::class)->create([
             "group_id" => 4,
             'user_id' => $u->getAttribute('user_id')
         ]);

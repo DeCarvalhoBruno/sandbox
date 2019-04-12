@@ -1,7 +1,7 @@
 <?php namespace Naraki\Media\Jobs;
 
-use App\Jobs\Job;
-use App\Models\Entity;
+use Naraki\Core\Job;
+use Naraki\Core\Models\Entity;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 use Naraki\Media\Facades\Media as MediaProvider;

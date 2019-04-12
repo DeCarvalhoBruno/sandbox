@@ -65,12 +65,12 @@ class BlogTagIndexer extends ElasticSearchIndexer
             }
         }
         unset($dbTags);
-//        $f = array_chunk($tags[\App\Models\Language::DB_LANGUAGE_ENGLISH_ID],50,true);
+//        $f = array_chunk($tags[\Naraki\Core\Models\Language::DB_LANGUAGE_ENGLISH_ID],50,true);
 //        dd($f[0]);
 
         return [
-            'en' => $tags[\App\Models\Language::DB_LANGUAGE_ENGLISH_ID],
-            'fr' => $tags[\App\Models\Language::DB_LANGUAGE_FRENCH_ID]
+            'en' => $tags[\Naraki\Core\Models\Language::DB_LANGUAGE_ENGLISH_ID],
+            'fr' => $tags[\Naraki\Core\Models\Language::DB_LANGUAGE_FRENCH_ID]
         ];
     }
 

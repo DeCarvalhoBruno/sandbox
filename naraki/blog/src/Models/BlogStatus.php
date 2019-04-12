@@ -1,7 +1,7 @@
 <?php namespace Naraki\Blog\Models;
 
-use App\Contracts\Enumerable;
-use App\Traits\Enumerable as EnumerableTrait;
+use Naraki\Core\Contracts\Enumerable;
+use Naraki\Core\Traits\Enumerable as EnumerableTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class BlogStatus extends Model implements Enumerable

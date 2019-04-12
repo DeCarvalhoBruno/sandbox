@@ -1,6 +1,6 @@
 <?php namespace Naraki\Media\Models;
 
-use App\Traits\Models\HasASlug;
+use Naraki\Core\Traits\Models\HasASlug;
 use Illuminate\Database\Eloquent\Model;
 
 class MediaGroupType extends Model

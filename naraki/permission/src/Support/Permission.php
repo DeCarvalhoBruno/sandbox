@@ -1,8 +1,8 @@
 <?php namespace Naraki\Permission\Support;
 
-use App\Models\Entity;
-use App\Models\EntityType;
-use App\Models\GroupMember;
+use Naraki\Core\Models\Entity;
+use Naraki\Core\Models\EntityType;
+use Naraki\Sentry\Models\GroupMember;
 
 abstract class Permission
 {
@@ -149,7 +149,7 @@ abstract class Permission
     /**
      * @param null|array $userIdList
      * @return mixed
-     * @see \App\Models\EntityType::scopeHighestGroup()
+     * @see \Naraki\Core\Models\EntityType::scopeHighestGroup()
      * @see \Naraki\Sentry\Models\User::queryHighestRankedGroup
      */
     protected function sqlGetUsersAndHighestGroup($userIdList = null)

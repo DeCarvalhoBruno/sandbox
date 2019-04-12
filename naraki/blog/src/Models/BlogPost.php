@@ -1,14 +1,14 @@
 <?php namespace Naraki\Blog\Models;
 
-use App\Contracts\Enumerable as EnumerableContract;
-use App\Contracts\HasAnEntity;
-use App\Models\Entity;
-use App\Models\Language;
-use App\Traits\Enumerable;
-use App\Traits\Models\DoesSqlStuff;
-use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
-use App\Traits\Models\HasASlug;
-use App\Traits\Models\Presentable;
+use Naraki\Core\Contracts\Enumerable as EnumerableContract;
+use Naraki\Core\Contracts\HasAnEntity;
+use Naraki\Core\Models\Entity;
+use Naraki\Core\Models\Language;
+use Naraki\Core\Traits\Enumerable;
+use Naraki\Core\Traits\Models\DoesSqlStuff;
+use Naraki\Core\Traits\Models\HasAnEntity as HasAnEntityTrait;
+use Naraki\Core\Traits\Models\HasASlug;
+use Naraki\Core\Traits\Models\Presentable;
 use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 use CyrildeWit\EloquentViewable\Viewable;
 use Illuminate\Database\Eloquent\Builder;
@@ -54,7 +54,7 @@ class BlogPost extends Model implements HasPermissionsContract, EnumerableContra
     ];
     public static $slugColumn = 'blog_post_slug';
     public static $prettyColumn = 'blog_post_title';
-    public static $entityID = \App\Models\Entity::BLOG_POSTS;
+    public static $entityID = \Naraki\Core\Models\Entity::BLOG_POSTS;
 
     public static function boot()
     {

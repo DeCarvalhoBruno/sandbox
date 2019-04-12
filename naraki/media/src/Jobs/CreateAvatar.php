@@ -1,6 +1,6 @@
 <?php namespace Naraki\Media\Jobs;
 
-use App\Jobs\Job;
+use Naraki\Core\Job;
 use Naraki\Media\Facades\Media as MediaProvider;
 
 class CreateAvatar extends Job

@@ -1,7 +1,7 @@
 <?php namespace Naraki\Media\Models;
 
-use App\Support\NestedSet\NodeTrait;
-use App\Traits\Enumerable;
+use Naraki\Core\Support\NestedSet\NodeTrait;
+use Naraki\Core\Traits\Enumerable;
 use Illuminate\Database\Eloquent\Model;
 
 class Media extends Model

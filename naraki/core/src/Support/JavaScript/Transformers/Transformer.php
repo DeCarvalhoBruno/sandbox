@@ -1,6 +1,6 @@
-<?php namespace Naraki\Core\JavaScript\Transformers;
+<?php namespace Naraki\Core\Support\JavaScript\Transformers;
 
-use Naraki\Core\JavaScript\ViewBinder;
+use Naraki\Core\Support\JavaScript\ViewBinder;
 use Exception;
 
 class Transformer
@@ -86,11 +86,12 @@ class Transformer
     /**
      * Translate a single PHP var to JS.
      *
-     * @param  string $key
-     * @param  string $value
+     * @param string $key
+     * @param string $value
      * @return string
+     * @throws \Exception
      */
-    protected function initializeVariable($key, $value)
+    private function initializeVariable($key, $value)
     {
         return "{$this->namespace}.{$key} = {$this->convertToJavaScript($value)};";
     }

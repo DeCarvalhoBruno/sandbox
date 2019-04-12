@@ -1,8 +1,8 @@
 <?php namespace Naraki\Blog\Controllers\Frontend;
 
-use App\Jobs\ProcessPageView;
-use App\Models\Language;
-use App\Support\Frontend\Breadcrumbs;
+use Naraki\Core\Support\Viewable\Jobs\ProcessPageView;
+use Naraki\Core\Models\Language;
+use Naraki\Core\Support\Frontend\Breadcrumbs;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller;
 use Naraki\Blog\Facades\Blog as BlogFacade;

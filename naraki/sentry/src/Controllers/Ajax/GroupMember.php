@@ -1,8 +1,8 @@
 <?php namespace Naraki\Sentry\Controllers\Ajax;
 
 use Naraki\Permission\Events\PermissionEntityUpdated;
-use App\Http\Controllers\Admin\Controller;
-use App\Http\Requests\Admin\UpdateMember;
+use Naraki\Core\Controllers\Admin\Controller;
+use Naraki\Sentry\Requests\Admin\UpdateMember;
 use Naraki\Sentry\Providers\Group as GroupProvider;
 use Illuminate\Http\Response;
 
@@ -33,7 +33,7 @@ class GroupMember extends Controller
     /**
      * @param string $slug
      * @param \Naraki\Sentry\Contracts\Group|\Naraki\Sentry\Providers\Group $groupProvider
-     * @param \App\Http\Requests\Admin\UpdateMember $request
+     * @param \Naraki\Sentry\Requests\Admin\UpdateMember $request
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */

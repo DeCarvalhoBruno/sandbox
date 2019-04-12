@@ -1,6 +1,6 @@
 <?php namespace Naraki\Forum\Listeners;
 
-use App\Listeners\Listener;
+use Naraki\Core\Listener;
 use Naraki\Forum\Events\PostCreated as PostCreatedEvent;
 use Naraki\Forum\Jobs\NotifyMentionees;
 use Naraki\Forum\Jobs\NotifyReplySubscribers;

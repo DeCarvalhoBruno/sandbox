@@ -1,8 +1,8 @@
 <?php namespace Naraki\Media\Providers;
 
 use Naraki\Media\Contracts\UploadedImage as ImageContract;
-use App\Models\Entity;
-use App\Models\EntityType;
+use Naraki\Core\Models\Entity;
+use Naraki\Core\Models\EntityType;
 use Naraki\Core\EloquentProvider;
 use Naraki\Media\Contracts\Avatar as AvatarInterface;
 use Naraki\Media\Contracts\Image as ImageInterface;
@@ -143,7 +143,7 @@ class Image extends EloquentProvider implements ImageInterface
         $f = new \Naraki\Media\Support\GeneratedAvatar(
             $username,
             $filename,
-            \App\Models\Entity::USERS,
+            \Naraki\Core\Models\Entity::USERS,
             \Naraki\Media\Models\Media::IMAGE_AVATAR
         );
         $f->processAvatar();

@@ -2,8 +2,8 @@
 
 use Naraki\Mail\Models\Email as EmailModel;
 use Naraki\Mail\Models\EmailSchedule as EmailScheduleModel;
-use App\Models\Entity;
-use App\Models\EntityType;
+use Naraki\Core\Models\Entity;
+use Naraki\Core\Models\EntityType;
 use Naraki\Core\EloquentProvider;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;

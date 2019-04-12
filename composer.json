@@ -47,7 +47,7 @@
         ],
         "psr-4": {
             "App\\": "app/",
-            "Naraki\\Core\\": "naraki/sentry/src/",
+            "Naraki\\Core\\": "naraki/core/src/",
             "Naraki\\Sentry\\": "naraki/sentry/src/",
             "Naraki\\System\\": "naraki/system/src/",
             "Naraki\\Blog\\": "naraki/blog/src/",
@@ -60,7 +60,7 @@
             "Naraki\\Oauth\\": "naraki/oauth/src/"
         },
         "files": [
-            "app/Support/helpers.php"
+            "naraki/core/src/helpers.php"
         ]
     },
     "autoload-dev": {

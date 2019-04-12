@@ -1,7 +1,7 @@
 <?php namespace Naraki\Media\Support;
 
 use Naraki\Media\Contracts\UploadedImage;
-use App\Models\Entity;
+use Naraki\Core\Models\Entity;
 use Naraki\Media\Models\Media;
 use Illuminate\Support\Collection;
 

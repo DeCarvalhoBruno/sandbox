@@ -2,7 +2,7 @@
 
 use Naraki\Core\Controllers\Frontend\Controller;
 use Naraki\Mail\Models\EmailList;
-use App\Support\Frontend\Breadcrumbs;
+use Naraki\Core\Support\Frontend\Breadcrumbs;
 
 class Notifications extends Controller
 {

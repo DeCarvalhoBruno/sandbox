@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Support\Requests\Detectors\Profanity;
+use Naraki\Core\Support\Requests\Detectors\Profanity;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;

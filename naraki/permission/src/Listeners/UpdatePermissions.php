@@ -1,6 +1,6 @@
 <?php namespace Naraki\Permission;
 
-use App\Listeners\Listener;
+use Naraki\Core\Listener;
 
 class UpdatePermissions extends Listener
 {

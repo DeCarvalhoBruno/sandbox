@@ -1,8 +1,8 @@
 <?php namespace Naraki\Forum\Controllers;
 
-use App\Http\Controllers\Frontend\Controller;
-use App\Models\Entity;
-use App\Models\EntityType;
+use Naraki\Core\Controllers\Frontend\Controller;
+use Naraki\Core\Models\Entity;
+use Naraki\Core\Models\EntityType;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;

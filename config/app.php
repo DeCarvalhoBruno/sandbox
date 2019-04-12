@@ -151,8 +151,6 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
-        Naraki\Core\JavaScript\JavaScriptServiceProvider::class,
-        App\Support\View\EloquentViewableServiceProvider::class,
         Naraki\Core\ServiceProvider::class,
         Naraki\Sentry\ServiceProvider::class,
         Naraki\Media\ServiceProvider::class,
@@ -164,12 +162,14 @@ return [
         Naraki\System\ServiceProvider::class,
         Naraki\Permission\ServiceProvider::class,
         Naraki\Oauth\ServiceProvider::class,
+        Naraki\Core\Support\JavaScript\ServiceProvider::class,
+        Naraki\Core\Support\Viewable\ServiceProvider::class,
 
         /*
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
+        Illuminate\Foundation\Support\Providers\AuthServiceProvider::class,
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class
@@ -222,15 +222,15 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        'User' => \Naraki\Sentry\Facades\User::class,
-        'Group' => \Naraki\Sentry\Facades\Group::class,
         'JavaScript' => Naraki\Core\Facades\JavaScript::class,
-        'Media' => \Naraki\Media\Facades\Media::class,
-        'Blog' => \Naraki\Blog\Facades\Blog::class,
-        'Forum' => \Naraki\Forum\Facades\Forum::class,
-        'NarakiMail' => \Naraki\Mail\Facades\NarakiMail::class,
-        'System' => \Naraki\System\Facades\System::class,
-        'Permission' => \Naraki\Permission\Facades\Permission::class
+        'User' => Naraki\Sentry\Facades\User::class,
+        'Group' => Naraki\Sentry\Facades\Group::class,
+        'Media' => Naraki\Media\Facades\Media::class,
+        'Blog' => Naraki\Blog\Facades\Blog::class,
+        'Forum' => Naraki\Forum\Facades\Forum::class,
+        'NarakiMail' => Naraki\Mail\Facades\NarakiMail::class,
+        'System' => Naraki\System\Facades\System::class,
+        'Permission' => Naraki\Permission\Facades\Permission::class
     ],
 
 ];

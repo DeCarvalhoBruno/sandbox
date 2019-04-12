@@ -1,9 +1,10 @@
 <?php namespace Naraki\Sentry\Models;
 
-use App\Contracts\HasAnEntity;
-use App\Traits\Enumerable;
-use App\Traits\Models\DoesSqlStuff;
-use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
+use Naraki\Core\Contracts\HasAnEntity;
+use Naraki\Core\Models\Entity;
+use Naraki\Core\Traits\Enumerable;
+use Naraki\Core\Traits\Models\DoesSqlStuff;
+use Naraki\Core\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use Naraki\Permission\Traits\HasPermissions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +17,7 @@ class GroupMember extends Model implements HasAnEntity
     const PERMISSION_ADD = 0b10;
     const PERMISSION_DELETE = 0b1000;
 
-    public static $entityID = \App\Models\Entity::GROUP_MEMBERS;
+    public static $entityID = \Naraki\Core\Models\Entity::GROUP_MEMBERS;
 
     public $timestamps = false;
 

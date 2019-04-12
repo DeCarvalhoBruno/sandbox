@@ -1,9 +1,9 @@
 <?php namespace Naraki\Core\Controllers\Frontend\Settings;
 
 use Naraki\Core\Controllers\Frontend\Controller;
-use App\Http\Requests\Frontend\UpdateUser;
-use App\Jobs\UpdateUserElasticsearch;
-use App\Support\Frontend\Breadcrumbs;
+use Naraki\Sentry\Requests\Frontend\UpdateUser;
+use Naraki\Sentry\Jobs\UpdateUserElasticsearch;
+use Naraki\Core\Support\Frontend\Breadcrumbs;
 use Naraki\Sentry\Contracts\User as UserProvider;
 
 class Profile extends Controller
@@ -36,7 +36,7 @@ class Profile extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\Frontend\UpdateUser $request
+     * @param \Naraki\Sentry\Requests\Frontend\UpdateUser $request
      * @param \Naraki\Sentry\Contracts\User|\Naraki\Sentry\Providers\User $userRepo
      * @return \Illuminate\Http\RedirectResponse
      */

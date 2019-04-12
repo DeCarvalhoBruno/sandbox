@@ -1,7 +1,8 @@
 <?php namespace Naraki\Core;
 
-use App\Contracts\RawQueries;
-use App\Support\Providers\View;
+use Naraki\Core\Contracts\RawQueries;
+use Naraki\Core\Support\Viewable\View;
+use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
 class ServiceProvider extends LaravelServiceProvider
@@ -10,7 +11,14 @@ class ServiceProvider extends LaravelServiceProvider
         Commands\ConvertLangFilesToJs::class,
         Commands\CreateRootAssetDirectories::class,
         Commands\GenerateLangFiles::class,
-        Commands\Maintenance::class
+        Commands\Maintenance::class,
+        \App\Console\TestStuff::class
+    ];
+
+    private $routeSets = [
+        Routes\Ajax::class,
+        Routes\Admin::class,
+        Routes\Frontend::class,
     ];
 
     /**
@@ -23,6 +31,10 @@ class ServiceProvider extends LaravelServiceProvider
     {
         $this->registerComposers();
         $this->registerCommands();
+        $router = $this->app->make(Router::class);
+        foreach ($this->routeSets as $binder) {
+            $this->app->make($binder)->bind($router);
+        }
     }
 
     /**
@@ -35,7 +47,7 @@ class ServiceProvider extends LaravelServiceProvider
         $dbDefaultEngine = ucfirst(config('database.default'));
         $this->app->bind(
             RawQueries::class,
-            sprintf('\\App\\Support\\Database\\%sRawQueries', $dbDefaultEngine)
+            sprintf('\\Naraki\\Core\\Support\\Database\\%sRawQueries', $dbDefaultEngine)
         );
 
         $this->app->singleton(\CyrildeWit\EloquentViewable\Contracts\View::class, View::class);

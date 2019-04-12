@@ -16,27 +16,27 @@ class PermissionsSeeder extends Seeder
         (new \Naraki\Permission\Models\Permission())->insert([
             [
                 'entity_type_id' => 8,
-                'entity_id' => \App\Models\Entity::USERS,
+                'entity_id' => \Naraki\Core\Models\Entity::USERS,
                 'permission_mask' => 0b1101,
             ],
             [
                 'entity_type_id' => 100,
-                'entity_id' => \App\Models\Entity::USERS,
+                'entity_id' => \Naraki\Core\Models\Entity::USERS,
                 'permission_mask' => 0b111,
             ],
             [
                 'entity_type_id' => 100,
-                'entity_id' => \App\Models\Entity::GROUPS,
+                'entity_id' => \Naraki\Core\Models\Entity::GROUPS,
                 'permission_mask' => 0b1101,
             ],
             [
                 'entity_type_id' => 100,
-                'entity_id' => \App\Models\Entity::BLOG_POSTS,
+                'entity_id' => \Naraki\Core\Models\Entity::BLOG_POSTS,
                 'permission_mask' => 0b1010,
             ],
             [
                 'entity_type_id' => 101,
-                'entity_id' => \App\Models\Entity::BLOG_POSTS,
+                'entity_id' => \Naraki\Core\Models\Entity::BLOG_POSTS,
                 'permission_mask' => 0b1010,
             ],
         ]);

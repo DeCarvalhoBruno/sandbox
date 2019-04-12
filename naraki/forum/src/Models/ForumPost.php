@@ -1,9 +1,9 @@
 <?php namespace Naraki\Forum\Models;
 
-use App\Models\Entity;
-use App\Support\NestedSet\NodeTrait;
-use App\Traits\Models\HasASlug;
-use App\Traits\Models\Presentable;
+use Naraki\Core\Models\Entity;
+use Naraki\Core\Support\NestedSet\NodeTrait;
+use Naraki\Core\Traits\Models\HasASlug;
+use Naraki\Core\Traits\Models\Presentable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;

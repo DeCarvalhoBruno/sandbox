@@ -1,6 +1,6 @@
 <?php namespace Naraki\System\Controllers;
 
-use App\Http\Controllers\Admin\Controller;
+use Naraki\Core\Controllers\Admin\Controller;
 use Naraki\Sentry\Providers\User as UserProvider;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

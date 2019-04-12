@@ -1,8 +1,8 @@
 <?php namespace Naraki\Blog\Controllers\Ajax;
 
 use Naraki\Sentry\Contracts\User as UserProvider;
-use App\Http\Controllers\Admin\Controller;
-use App\Models\Entity;
+use Naraki\Core\Controllers\Admin\Controller;
+use Naraki\Core\Models\Entity;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

@@ -36,7 +36,7 @@ class UserEvent extends EloquentProvider implements EmailUserEventInterface
             $tmp = (object)$event->toArray();
             $tmp->entity = trans(sprintf(
                     'common.%s',
-                    \App\Models\Entity::getModelPresentableName($tmp->entity))
+                    \Naraki\Core\Models\Entity::getModelPresentableName($tmp->entity))
             );
             $tmp->url = sprintf('https://%s/%s/%s', env('APP_DOMAIN'), $tmp->slug,
                 $tmp->url);

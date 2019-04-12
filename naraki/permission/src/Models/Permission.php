@@ -1,8 +1,8 @@
 <?php namespace Naraki\Permission\Models;
 
-use App\Models\Entity;
-use App\Models\EntityType;
-use App\Traits\Models\DoesSqlStuff;
+use Naraki\Core\Models\Entity;
+use Naraki\Core\Models\EntityType;
+use Naraki\Core\Traits\Models\DoesSqlStuff;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Str;

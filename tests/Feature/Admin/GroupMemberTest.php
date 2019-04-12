@@ -14,7 +14,7 @@ class GroupMemberTest extends TestCase
     {
         $this->signIn();
         $users = $this->createUser(3);
-        $group = $this->create('Group');
+        $group = $this->createGroup();
         $this->assignUserToGroup($users, $group);
 
         $user = $this->createUser();
@@ -22,13 +22,13 @@ class GroupMemberTest extends TestCase
 
         $this->assertCount(
             3,
-            \App\Models\GroupMember::query()->where('group_id', $group->group_id)->get());
+            \Naraki\Sentry\Models\GroupMember::query()->where('group_id', $group->group_id)->get());
 
         $response = $this->patchJson("/ajax/admin/members/{$group->group_name}", $data);
 
         $this->assertCount(
             4,
-            \App\Models\GroupMember::query()->where('group_id', $group->group_id)->get());
+            \Naraki\Sentry\Models\GroupMember::query()->where('group_id', $group->group_id)->get());
         $response->assertStatus(204);
     }
 
@@ -36,14 +36,14 @@ class GroupMemberTest extends TestCase
     {
         $this->signIn();
         $users = $this->createUser(3);
-        $group = $this->create('Group');
+        $group = $this->createGroup();
         $this->assignUserToGroup($users, $group);
 
         $data = ['removed' => [['id' => $users[2]->username]]];
 
         $this->assertCount(
             3,
-            \App\Models\GroupMember::query()->where('group_id', $group->group_id)->get());
+            \Naraki\Sentry\Models\GroupMember::query()->where('group_id', $group->group_id)->get());
 
         $response = $this->patchJson(
             "/ajax/admin/members/{$group->group_name}",
@@ -52,7 +52,7 @@ class GroupMemberTest extends TestCase
 
         $this->assertCount(
             2,
-            \App\Models\GroupMember::query()->where('group_id', $group->group_id)->get());
+            \Naraki\Sentry\Models\GroupMember::query()->where('group_id', $group->group_id)->get());
         $response->assertStatus(204);
     }
 }

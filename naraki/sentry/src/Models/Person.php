@@ -2,7 +2,7 @@
 
 namespace Naraki\Sentry\Models;
 
-use App\Traits\Models\HasASlug;
+use Naraki\Core\Traits\Models\HasASlug;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;

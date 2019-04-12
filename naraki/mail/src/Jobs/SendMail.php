@@ -1,6 +1,6 @@
 <?php namespace Naraki\Mail\Jobs;
 
-use App\Jobs\Job;
+use Naraki\Core\Job;
 use Naraki\Mail\Contracts\Mailer;
 use Naraki\Mail\Emails\Email;
 

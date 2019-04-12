@@ -66,7 +66,7 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'CustomUserProvider',
+            'driver' => 'NarakiUserProvider',
         ],
 
         // 'users' => [

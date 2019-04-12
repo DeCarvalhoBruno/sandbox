@@ -1,4 +1,4 @@
-<?php namespace Naraki\Core\JavaScript;
+<?php namespace Naraki\Core\Support\JavaScript;
 
 interface ViewBinder
 {

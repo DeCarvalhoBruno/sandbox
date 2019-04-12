@@ -1,4 +1,4 @@
-<?php namespace App\Contracts;
+<?php namespace Naraki\Core\Contracts;
 
 interface Enumerable
 {

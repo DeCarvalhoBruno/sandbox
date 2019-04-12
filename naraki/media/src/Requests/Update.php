@@ -1,6 +1,6 @@
 <?php namespace Naraki\Media\Requests;
 
-use App\Support\Requests\FormRequest;
+use Naraki\Core\Support\Requests\FormRequest;
 
 class Update extends FormRequest
 {

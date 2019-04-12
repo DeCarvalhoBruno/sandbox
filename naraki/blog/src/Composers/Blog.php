@@ -1,8 +1,8 @@
 <?php namespace Naraki\Blog\Composers;
 
 use Naraki\Core\Composer;
-use App\Support\Frontend\Breadcrumbs;
-use App\Support\Frontend\Jsonld\Models\Blog as JsonldBlog;
+use Naraki\Core\Support\Frontend\Breadcrumbs;
+use Naraki\Core\Support\Frontend\Jsonld\Models\Blog as JsonldBlog;
 use Naraki\System\Support\Settings;
 
 class Blog extends Composer

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Models\Entity;
+use Naraki\Core\Models\Entity;
 
 class Entities extends Migration
 {
@@ -80,7 +80,7 @@ class Entities extends Migration
             'user_id' => 1
         ]);
 
-        (new \App\Models\Group)->insert([
+        (new \Naraki\Sentry\Models\Group)->insert([
             [
                 'group_name' => 'root',
                 'group_slug' => 'root',
@@ -106,7 +106,7 @@ class Entities extends Migration
                 'group_mask' => 5000
             ],
         ]);
-        factory(App\Models\GroupMember::class)->create([
+        factory(Naraki\Sentry\Models\GroupMember::class)->create([
             "group_id" => 1,
             'user_id' => 1
         ]);
@@ -156,7 +156,7 @@ class Entities extends Migration
     private function createTriggers()
     {
         $entities = $this->entities;
-        $db = app()->make(\App\Contracts\RawQueries::class);
+        $db = app()->make(\Naraki\Core\Contracts\RawQueries::class);
         foreach ($entities as $entity) {
             if (!isset($this->entityPrimaryKeyColumns[$entity['entity_name']]) || $entity['entity_name'] == 'system') {
                 continue;
@@ -181,7 +181,7 @@ class Entities extends Migration
 
     private function createEntities()
     {
-        $entity = \App\Models\EntityType::create(['entity_type_target_id' => 0]);
+        $entity = \Naraki\Core\Models\EntityType::create(['entity_type_target_id' => 0]);
         $entity->save();
         $pk = $entity->getKeyName();
         $entity->setAttribute($pk, 0);
@@ -192,7 +192,7 @@ class Entities extends Migration
         $pk = $entity->getKeyName();
         $entity->setAttribute($pk, 0);
         $entity->save();
-        (new \App\Models\EntityType)->insert([
+        (new \Naraki\Core\Models\EntityType)->insert([
             'entity_id' => Entity::USERS,
             'entity_type_target_id' => 0,
             'entity_type_id' => 1

@@ -1,6 +1,6 @@
 <?php namespace Naraki\Core\Controllers\Frontend;
 
-use App\Models\Language;
+use Naraki\Core\Models\Language;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;

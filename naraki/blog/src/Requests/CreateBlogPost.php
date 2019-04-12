@@ -1,7 +1,7 @@
 <?php namespace Naraki\Blog\Requests;
 
 use Naraki\Blog\Models\BlogStatus;
-use App\Support\Requests\FormRequest;
+use Naraki\Core\Support\Requests\FormRequest;
 use Illuminate\Support\Facades\Validator;
 
 class CreateBlogPost extends FormRequest

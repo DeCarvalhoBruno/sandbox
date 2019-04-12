@@ -1,6 +1,7 @@
 <?php namespace Naraki\System;
 
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
 class ServiceProvider extends LaravelServiceProvider
@@ -14,6 +15,8 @@ class ServiceProvider extends LaravelServiceProvider
 
     public function boot()
     {
+        Gate::policy(Models\System::class, Policies\System::class);
+
         $this->app['router']->group([
             'prefix' => '/ajax/admin',
             'namespace' => 'Naraki\System\Controllers',

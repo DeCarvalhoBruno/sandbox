@@ -1,7 +1,7 @@
 <?php namespace Naraki\Core\Controllers\Frontend\Settings;
 
 use Naraki\Core\Controllers\Frontend\Controller;
-use App\Support\Frontend\Breadcrumbs;
+use Naraki\Core\Support\Frontend\Breadcrumbs;
 
 class Account extends Controller
 {

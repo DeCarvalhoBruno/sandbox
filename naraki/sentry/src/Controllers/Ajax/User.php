@@ -1,16 +1,16 @@
 <?php namespace Naraki\Sentry\Controllers\Ajax;
 
-use Naraki\Sentry\Contracts\Group as GroupProvider;
-use Naraki\Permission\Events\PermissionEntityUpdated;
-use Naraki\Sentry\Events\UserRegistered;
-use Naraki\Sentry\Models\Filters\User as UserFilter;
-use App\Http\Controllers\Admin\Controller;
-use App\Http\Requests\Admin\UpdateUser;
-use App\Models\Entity;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Naraki\Core\Controllers\Admin\Controller;
+use Naraki\Core\Models\Entity;
 use Naraki\Media\Facades\Media as MediaProvider;
+use Naraki\Permission\Events\PermissionEntityUpdated;
 use Naraki\Permission\Facades\Permission;
+use Naraki\Sentry\Contracts\Group as GroupProvider;
+use Naraki\Sentry\Events\UserRegistered;
+use Naraki\Sentry\Models\Filters\User as UserFilter;
+use Naraki\Sentry\Requests\Admin\UpdateUser;
 
 class User extends Controller
 {
@@ -137,7 +137,7 @@ class User extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\Admin\UpdateUser $request
+     * @param \Naraki\Sentry\Requests\Admin\UpdateUser $request
      * @param \Naraki\Sentry\Contracts\Group|\Naraki\Sentry\Providers\Group $groupProvider
      * @return \Illuminate\Http\Response
      */
@@ -251,7 +251,7 @@ class User extends Controller
 
     /**
      * @param $username
-     * @param \App\Http\Requests\Admin\UpdateUser $request
+     * @param \Naraki\Sentry\Requests\Admin\UpdateUser $request
      * @param \Naraki\Sentry\Contracts\Group|\Naraki\Sentry\Providers\Group $groupProvider
      * @return \Illuminate\Http\Response
      */

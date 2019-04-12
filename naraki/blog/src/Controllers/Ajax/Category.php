@@ -1,6 +1,6 @@
 <?php namespace Naraki\Blog\Controllers\Ajax;
 
-use App\Http\Controllers\Admin\Controller;
+use Naraki\Core\Controllers\Admin\Controller;
 use Illuminate\Http\Response;
 use Naraki\Blog\Facades\Blog;
 

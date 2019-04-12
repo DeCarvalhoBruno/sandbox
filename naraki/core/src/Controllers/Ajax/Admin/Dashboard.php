@@ -3,7 +3,7 @@
 namespace Naraki\Core\Controllers\Ajax\Admin;
 
 use Naraki\Core\Controllers\Admin\Controller;
-use App\Models\Views\EntityCount;
+use Naraki\Core\Models\EntityCount;
 use Illuminate\Http\Response;
 
 class Dashboard extends Controller

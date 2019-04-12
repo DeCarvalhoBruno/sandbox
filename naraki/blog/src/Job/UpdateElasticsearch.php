@@ -1,6 +1,6 @@
 <?php namespace Naraki\Blog\Job;
 
-use App\Jobs\Job;
+use Naraki\Core\Job;
 use Naraki\Sentry\Models\Person;
 use Naraki\Blog\Facades\Blog;
 use Naraki\Blog\Models\BlogPost;

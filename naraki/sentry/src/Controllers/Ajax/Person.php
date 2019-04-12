@@ -1,7 +1,7 @@
 <?php namespace Naraki\Sentry\Controllers\Ajax;
 
 use Naraki\Sentry\Contracts\User as UserProvider;
-use App\Http\Controllers\Admin\Controller;
+use Naraki\Core\Controllers\Admin\Controller;
 use Illuminate\Http\Response;
 
 class Person extends Controller

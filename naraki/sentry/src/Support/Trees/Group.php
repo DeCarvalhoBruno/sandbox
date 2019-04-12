@@ -37,7 +37,7 @@ class Group
 
     /**
      * @param $index
-     * @return \App\Support\Trees\Group|bool
+     * @return \Naraki\Core\Support\Trees\Group|bool
      */
     public function findAtIndex($index)
     {
@@ -53,7 +53,7 @@ class Group
     }
 
     /**
-     * @param \App\Support\Trees\Group $parent
+     * @param \Naraki\Core\Support\Trees\Group $parent
      */
     public function addParent(Group $parent)
     {
@@ -61,7 +61,7 @@ class Group
     }
 
     /**
-     * @param \App\Support\Trees\Group $sibling
+     * @param \Naraki\Core\Support\Trees\Group $sibling
      */
     public function addSibling(Group $sibling)
     {
@@ -70,8 +70,8 @@ class Group
     }
 
     /**
-     * @param \App\Support\Trees\Group $child
-     * @return \App\Support\Trees\Group
+     * @param \Naraki\Core\Support\Trees\Group $child
+     * @return \Naraki\Core\Support\Trees\Group
      */
     public function addChild(Group $child):Group
     {

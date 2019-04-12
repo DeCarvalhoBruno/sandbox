@@ -46,7 +46,7 @@ class BlogPostIndexer extends ElasticSearchIndexer
             'media_extension as ext',
             'entity_types.entity_type_id as type',
             'entity_id'
-        ])->where('entity_types.entity_id', \App\Models\Entity::BLOG_POSTS)
+        ])->where('entity_types.entity_id', \Naraki\Core\Models\Entity::BLOG_POSTS)
             ->where('media_in_use', '1')
 //            ->limit($limit)
             ->get();

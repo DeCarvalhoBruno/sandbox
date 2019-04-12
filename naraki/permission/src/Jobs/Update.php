@@ -1,6 +1,6 @@
 <?php namespace Naraki\Permission\Jobs;
 
-use App\Jobs\Job;
+use Naraki\Core\Job;
 use Illuminate\Support\Facades\Log;
 use Naraki\Permission\Support\Permission;
 use Naraki\Permission\Models\PermissionStore;

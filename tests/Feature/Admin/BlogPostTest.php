@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\Entity;
+use Naraki\Core\Models\Entity;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\UploadedFile;
@@ -47,7 +47,6 @@ class BlogPostTest extends TestCase
     public function test_blog_post_create_normal()
     {
         $u = $this->createUser();
-
         $this->assertEquals(BlogPost::query()->get()->count(), 0);
         ElasticSearchIndex::shouldReceive('index')->times(1);
         $response = $this->postJson(

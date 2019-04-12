@@ -87,72 +87,72 @@ class Permissions extends Migration
         (new \Naraki\Permission\Models\Permission())->insert([
             [
                 'entity_type_id' => 4,
-                'entity_id' => \App\Models\Entity::USERS,
+                'entity_id' => \Naraki\Core\Models\Entity::USERS,
                 'permission_mask' => 0b1111
             ],
             [
                 'entity_type_id' => 4,
-                'entity_id' => \App\Models\Entity::GROUPS,
+                'entity_id' => \Naraki\Core\Models\Entity::GROUPS,
                 'permission_mask' => 0b1111
             ],
             [
                 'entity_type_id' => 4,
-                'entity_id' => \App\Models\Entity::BLOG_POSTS,
+                'entity_id' => \Naraki\Core\Models\Entity::BLOG_POSTS,
                 'permission_mask' => 0b1111
             ],
             [
                 'entity_type_id' => 4,
-                'entity_id' => \App\Models\Entity::MEDIA,
+                'entity_id' => \Naraki\Core\Models\Entity::MEDIA,
                 'permission_mask' => 0b1111
             ],
             [
                 'entity_type_id' => 4,
-                'entity_id' => \App\Models\Entity::SYSTEM,
+                'entity_id' => \Naraki\Core\Models\Entity::SYSTEM,
                 'permission_mask' => 0b1111
             ],
             [
                 'entity_type_id' => 5,
-                'entity_id' => \App\Models\Entity::USERS,
+                'entity_id' => \Naraki\Core\Models\Entity::USERS,
                 'permission_mask' => 0b1111
             ],
             [
                 'entity_type_id' => 5,
-                'entity_id' => \App\Models\Entity::GROUPS,
+                'entity_id' => \Naraki\Core\Models\Entity::GROUPS,
                 'permission_mask' => 0b1111
             ],
             [
                 'entity_type_id' => 5,
-                'entity_id' => \App\Models\Entity::BLOG_POSTS,
+                'entity_id' => \Naraki\Core\Models\Entity::BLOG_POSTS,
                 'permission_mask' => 0b1111
             ],
             [
                 'entity_type_id' => 5,
-                'entity_id' => \App\Models\Entity::MEDIA,
+                'entity_id' => \Naraki\Core\Models\Entity::MEDIA,
                 'permission_mask' => 0b1111
             ],
             [
                 'entity_type_id' => 5,
-                'entity_id' => \App\Models\Entity::SYSTEM,
+                'entity_id' => \Naraki\Core\Models\Entity::SYSTEM,
                 'permission_mask' => 0b1111
             ],
             [
                 'entity_type_id' => 6,
-                'entity_id' => \App\Models\Entity::USERS,
+                'entity_id' => \Naraki\Core\Models\Entity::USERS,
                 'permission_mask' => 0b0101
             ],
             [
                 'entity_type_id' => 6,
-                'entity_id' => \App\Models\Entity::BLOG_POSTS,
+                'entity_id' => \Naraki\Core\Models\Entity::BLOG_POSTS,
                 'permission_mask' => 0b1111
             ],
             [
                 'entity_type_id' => 6,
-                'entity_id' => \App\Models\Entity::MEDIA,
+                'entity_id' => \Naraki\Core\Models\Entity::MEDIA,
                 'permission_mask' => 0b1111
             ],
             [
                 'entity_type_id' => 6,
-                'entity_id' => \App\Models\Entity::SYSTEM,
+                'entity_id' => \Naraki\Core\Models\Entity::SYSTEM,
                 'permission_mask' => 0b1001
             ],
         ]);
@@ -163,102 +163,102 @@ class Permissions extends Migration
     {
         (new \Naraki\Permission\Models\PermissionAction())->insert([
             [
-                'entity_id' => \App\Models\Entity::SYSTEM,
+                'entity_id' => \Naraki\Core\Models\Entity::SYSTEM,
                 'permission_action_bits' => 0b1,
                 'permission_action_name' => 'login'
             ],
             [
-                'entity_id' => \App\Models\Entity::SYSTEM,
+                'entity_id' => \Naraki\Core\Models\Entity::SYSTEM,
                 'permission_action_bits' => 0b10,
                 'permission_action_name' => 'settings'
             ],
             [
-                'entity_id' => \App\Models\Entity::SYSTEM,
+                'entity_id' => \Naraki\Core\Models\Entity::SYSTEM,
                 'permission_action_bits' => 0b100,
                 'permission_action_name' => 'permissions'
             ],
             [
-                'entity_id' => \App\Models\Entity::SYSTEM,
+                'entity_id' => \Naraki\Core\Models\Entity::SYSTEM,
                 'permission_action_bits' => 0b1000,
                 'permission_action_name' => 'notifications'
             ],
             [
-                'entity_id' => \App\Models\Entity::USERS,
+                'entity_id' => \Naraki\Core\Models\Entity::USERS,
                 'permission_action_bits' => 0b1,
                 'permission_action_name' => 'view'
             ],
             [
-                'entity_id' => \App\Models\Entity::USERS,
+                'entity_id' => \Naraki\Core\Models\Entity::USERS,
                 'permission_action_bits' => 0b10,
                 'permission_action_name' => 'add'
             ],
             [
-                'entity_id' => \App\Models\Entity::USERS,
+                'entity_id' => \Naraki\Core\Models\Entity::USERS,
                 'permission_action_bits' => 0b100,
                 'permission_action_name' => 'edit'
             ],
             [
-                'entity_id' => \App\Models\Entity::USERS,
+                'entity_id' => \Naraki\Core\Models\Entity::USERS,
                 'permission_action_bits' => 0b1000,
                 'permission_action_name' => 'delete'
             ],
             [
-                'entity_id' => \App\Models\Entity::GROUPS,
+                'entity_id' => \Naraki\Core\Models\Entity::GROUPS,
                 'permission_action_bits' => 0b1,
                 'permission_action_name' => 'view'
             ],
             [
-                'entity_id' => \App\Models\Entity::GROUPS,
+                'entity_id' => \Naraki\Core\Models\Entity::GROUPS,
                 'permission_action_bits' => 0b10,
                 'permission_action_name' => 'add'
             ],
             [
-                'entity_id' => \App\Models\Entity::GROUPS,
+                'entity_id' => \Naraki\Core\Models\Entity::GROUPS,
                 'permission_action_bits' => 0b100,
                 'permission_action_name' => 'edit'
             ],
             [
-                'entity_id' => \App\Models\Entity::GROUPS,
+                'entity_id' => \Naraki\Core\Models\Entity::GROUPS,
                 'permission_action_bits' => 0b1000,
                 'permission_action_name' => 'delete'
             ],
             [
-                'entity_id' => \App\Models\Entity::BLOG_POSTS,
+                'entity_id' => \Naraki\Core\Models\Entity::BLOG_POSTS,
                 'permission_action_bits' => 0b1,
                 'permission_action_name' => 'view'
             ],
             [
-                'entity_id' => \App\Models\Entity::BLOG_POSTS,
+                'entity_id' => \Naraki\Core\Models\Entity::BLOG_POSTS,
                 'permission_action_bits' => 0b10,
                 'permission_action_name' => 'add'
             ],
             [
-                'entity_id' => \App\Models\Entity::BLOG_POSTS,
+                'entity_id' => \Naraki\Core\Models\Entity::BLOG_POSTS,
                 'permission_action_bits' => 0b100,
                 'permission_action_name' => 'edit'
             ],
             [
-                'entity_id' => \App\Models\Entity::BLOG_POSTS,
+                'entity_id' => \Naraki\Core\Models\Entity::BLOG_POSTS,
                 'permission_action_bits' => 0b1000,
                 'permission_action_name' => 'delete'
             ],
             [
-                'entity_id' => \App\Models\Entity::MEDIA,
+                'entity_id' => \Naraki\Core\Models\Entity::MEDIA,
                 'permission_action_bits' => 0b1,
                 'permission_action_name' => 'view'
             ],
             [
-                'entity_id' => \App\Models\Entity::MEDIA,
+                'entity_id' => \Naraki\Core\Models\Entity::MEDIA,
                 'permission_action_bits' => 0b10,
                 'permission_action_name' => 'add'
             ],
             [
-                'entity_id' => \App\Models\Entity::MEDIA,
+                'entity_id' => \Naraki\Core\Models\Entity::MEDIA,
                 'permission_action_bits' => 0b100,
                 'permission_action_name' => 'edit'
             ],
             [
-                'entity_id' => \App\Models\Entity::MEDIA,
+                'entity_id' => \Naraki\Core\Models\Entity::MEDIA,
                 'permission_action_bits' => 0b1000,
                 'permission_action_name' => 'delete'
             ]

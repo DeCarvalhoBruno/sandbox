@@ -1,6 +1,6 @@
 <?php namespace Naraki\Sentry\Providers;
 
-use App\Contracts\RawQueries;
+use Naraki\Core\Contracts\RawQueries;
 use Naraki\Core\EloquentProvider;
 use Naraki\Permission\Events\PermissionEntityUpdated;
 use Naraki\Sentry\Contracts\Group as GroupInterface;
@@ -146,7 +146,7 @@ class Group extends EloquentProvider implements GroupInterface
             ->pluck('group_id')->first();
 
         if (!empty($data->added) && is_int($groupId)) {
-            /** @var \App\Support\Database\MysqlRawQueries $rawQueries */
+            /** @var \Naraki\Core\Support\Database\MysqlRawQueries $rawQueries */
             $rawQueries = app()->make(RawQueries::class);
             $userIds = $rawQueries->getUsersInArrayNotInGroup($data->added, $slug);
             if (is_int($groupId)) {

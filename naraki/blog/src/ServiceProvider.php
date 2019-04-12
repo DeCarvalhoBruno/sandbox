@@ -1,6 +1,7 @@
 <?php namespace Naraki\Blog;
 
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 use Naraki\Blog\Composers\Blog as BlogComposer;
 
@@ -33,6 +34,7 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function boot()
     {
+        Gate::policy(Models\BlogPost::class, Policies\BlogPost::class);
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'blog');
         $this->app->make('view')->composer(['blog::post'], BlogComposer::class);
 

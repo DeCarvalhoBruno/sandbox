@@ -1,6 +1,6 @@
 <?php namespace Naraki\System\Requests;
 
-use App\Support\Requests\FormRequest;
+use Naraki\Core\Support\Requests\FormRequest;
 
 class UpdateSitemapSettings extends FormRequest
 {

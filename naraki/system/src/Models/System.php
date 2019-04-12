@@ -1,9 +1,9 @@
 <?php namespace Naraki\System\Models;
 
-use App\Contracts\Enumerable as EnumerableContract;
-use App\Contracts\HasAnEntity as HasAnEntityContract;
-use App\Traits\Enumerable;
-use App\Traits\Models\HasAnEntity as HasAnEntity;
+use Naraki\Core\Contracts\Enumerable as EnumerableContract;
+use Naraki\Core\Contracts\HasAnEntity as HasAnEntityContract;
+use Naraki\Core\Traits\Enumerable;
+use Naraki\Core\Traits\Models\HasAnEntity as HasAnEntity;
 use Naraki\Permission\Contracts\HasPermissions as HasPermissionsContract;
 use Naraki\Permission\Traits\HasPermissions as HasPermissions;
 
@@ -14,7 +14,7 @@ class System implements EnumerableContract, HasPermissionsContract, HasAnEntityC
 {
     use Enumerable, HasPermissions, HasAnEntity;
 
-    public static $entityID = \App\Models\Entity::SYSTEM;
+    public static $entityID = \Naraki\Core\Models\Entity::SYSTEM;
 
     const PERMISSION_LOGIN = 0b1;
     const PERMISSION_SETTINGS = 0b10;

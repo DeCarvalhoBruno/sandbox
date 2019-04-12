@@ -69,10 +69,10 @@ class Forum extends Migration
                 ->references('user_id')->on('users');
         });
         $this->createView();
-        $db = app()->make(\App\Contracts\RawQueries::class);
-        $db->triggerDeleteUser();
+        $db = app()->make(\Naraki\Core\Contracts\RawQueries::class);
 
         if (App::environment() !== 'testing') {
+            $db->triggerDeleteUser();
             $this->incrementFavoriteCounterProcedure();
             $this->decrementFavoriteCounterProcedure();
         }

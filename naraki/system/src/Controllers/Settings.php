@@ -1,11 +1,11 @@
 <?php namespace Naraki\System\Controllers;
 
-use App\Http\Controllers\Admin\Controller;
+use Naraki\Core\Controllers\Admin\Controller;
 use Naraki\System\Requests\UpdateSettings;
 use Naraki\System\Requests\UpdateSitemapSettings;
 use Naraki\System\Requests\UpdateSocialSettings;
-use App\Support\Frontend\Jsonld\Models\General as GeneralJsonldManager;
-use App\Support\Frontend\Social\General as SocialTagManager;
+use Naraki\Core\Support\Frontend\Jsonld\Models\General as GeneralJsonldManager;
+use Naraki\Core\Support\Frontend\Social\General as SocialTagManager;
 use Illuminate\Http\Response;
 use Naraki\System\Support\Settings as SettingsDataObject;
 

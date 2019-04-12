@@ -1,16 +1,16 @@
 <?php namespace Naraki\Media\Models;
 
-use App\Contracts\HasAnEntity as HasAnEntityContract;
-use App\Traits\Enumerable;
-use App\Traits\Models\DoesSqlStuff;
-use App\Traits\Models\HasAnEntity as HasAnEntity;
-use App\Traits\Models\Presentable;
+use Naraki\Core\Contracts\HasAnEntity as HasAnEntityContract;
+use Naraki\Core\Traits\Enumerable;
+use Naraki\Core\Traits\Models\DoesSqlStuff;
+use Naraki\Core\Traits\Models\HasAnEntity as HasAnEntity;
+use Naraki\Core\Traits\Models\Presentable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\JoinClause;
 use Naraki\Media\Support\Presenters\MediaEntity as MediaEntityPresenter;
-use App\Contracts\Enumerable as EnumerableContract;
+use Naraki\Core\Contracts\Enumerable as EnumerableContract;
 use Naraki\Permission\Contracts\HasPermissions as HasPermissionsContract;
 use Naraki\Permission\Traits\HasPermissions;
 
@@ -29,7 +29,7 @@ class MediaEntity extends Model implements EnumerableContract, HasPermissionsCon
     protected $primaryKey = 'media_entity_id';
     protected $fillable = ['entity_type_id', 'media_category_record_id'];
     protected $sortable = ['media_title', 'created_ago'];
-    public static $entityID = \App\Models\Entity::MEDIA;
+    public static $entityID = \Naraki\Core\Models\Entity::MEDIA;
 
     /**
      * Presentable created_at column

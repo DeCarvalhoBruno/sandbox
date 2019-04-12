@@ -14,35 +14,18 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $namespace = 'App\Http\Controllers';
-    private $routeSets = [
-        \App\Http\Routes\Ajax\Admin::class,
-        \App\Http\Routes\Admin::class,
-        \App\Http\Routes\Frontend::class,
-    ];
-
-    /**
-     * Define your route model bindings, pattern filters, etc.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        parent::boot();
-    }
+    protected $namespace = 'Naraki\Core\Controllers';
 
     /**
      * Define the routes for the application.
      *
      * @return void
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function map()
     {
-        $router = $this->app->make(Router::class);
-        foreach ($this->routeSets as $binder) {
-            $this->app->make($binder)->bind($router);
-        }
-        if (config('app.env')==='local') {
+        if (config('app.env') === 'local') {
+            $router = $this->app->make(Router::class);
             $router->group(['namespace' => '\Rap2hpoutre\LaravelLogViewer'], function () use ($router) {
                 $router->get('logs', 'LogViewerController@index');
             });

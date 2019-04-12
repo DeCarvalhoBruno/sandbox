@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Jobs\UpdateUserElasticsearch;
+use Naraki\Sentry\Jobs\UpdateUserElasticsearch;
 use Naraki\Sentry\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;

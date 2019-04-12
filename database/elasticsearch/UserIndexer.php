@@ -62,7 +62,7 @@ class UserIndexer extends ElasticSearchIndexer
             'media_extension as ext',
             'entity_types.entity_type_id as id',
             'entity_id'
-        ])->where('entity_types.entity_id', \App\Models\Entity::USERS)
+        ])->where('entity_types.entity_id', \Naraki\Core\Models\Entity::USERS)
             ->where('media_in_use', '1')
             ->get();
         $images = [];

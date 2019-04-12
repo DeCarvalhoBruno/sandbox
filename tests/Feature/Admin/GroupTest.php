@@ -14,7 +14,7 @@ class GroupTest extends TestCase
     {
         $this->signIn();
         $user = $this->createUser();
-        $group = $this->create('Group');
+        $group = $this->createGroup();
         $this->assignUserToGroup($user, $group);
 
         $response = $this->getJson('/ajax/admin/groups/' . $group->group_slug);
@@ -30,7 +30,7 @@ class GroupTest extends TestCase
     {
         $this->withExceptionHandling();
         $this->signIn()->createUser();
-        $group = $this->create('Group');
+        $group = $this->createGroup();
         $response = $this->patchJson(
             "/ajax/admin/groups/{$group->group_name}", ['group_mask' => 'a', 'permissions' => []]
         );
@@ -44,7 +44,7 @@ class GroupTest extends TestCase
     {
         $this->withExceptionHandling();
         $this->signIn()->createUser();
-        $group = $this->create('Group');
+        $group = $this->createGroup();
         $response = $this->patchJson(
             "/ajax/admin/groups/{$group->group_name}", ['new_group_name' => 'root', 'permissions' => []]
         );

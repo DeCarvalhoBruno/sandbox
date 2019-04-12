@@ -1,6 +1,6 @@
 <?php namespace Naraki\Core\Support\Trees;
 
-use App\Traits\Enumerable;
+use Naraki\Core\Traits\Enumerable;
 
 class GroupHierarchy
 {

@@ -1,4 +1,4 @@
-<?php namespace Naraki\Core\JavaScript\Transformers;
+<?php namespace Naraki\Core\Support\JavaScript\Transformers;
 
 class BooleanTransformer
 {

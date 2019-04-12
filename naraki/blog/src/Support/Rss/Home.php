@@ -1,6 +1,6 @@
 <?php namespace Naraki\Blog\Support\Rss;
 
-use App\Models\Language;
+use Naraki\Core\Models\Language;
 use Naraki\Blog\Facades\Blog as BlogRepo;
 use Naraki\Media\Facades\Media;
 use Naraki\Rss\Contracts\RssFeedable;

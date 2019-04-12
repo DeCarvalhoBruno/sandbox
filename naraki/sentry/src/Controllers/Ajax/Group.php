@@ -3,10 +3,10 @@
 use Naraki\Sentry\Contracts\Group as GroupProvider;
 use Naraki\Permission\Events\PermissionEntityUpdated;
 use Naraki\Sentry\Models\Filters\Group as GroupFilter;
-use App\Http\Controllers\Admin\Controller;
-use App\Http\Requests\Admin\CreateGroup;
-use App\Http\Requests\Admin\UpdateGroup;
-use App\Models\Entity;
+use Naraki\Core\Controllers\Admin\Controller;
+use Naraki\Sentry\Requests\Admin\CreateGroup;
+use Naraki\Sentry\Requests\Admin\UpdateGroup;
+use Naraki\Core\Models\Entity;
 use Illuminate\Http\Response;
 use Naraki\Permission\Facades\Permission;
 
@@ -37,7 +37,7 @@ class Group extends Controller
                     'permission_mask',
                 ])
                 ->filter($filter)->paginate(10),
-            'columns' => (new \App\Models\Group)->getColumnInfo([
+            'columns' => (new \Naraki\Sentry\Models\Group)->getColumnInfo([
                 'group_name' => (object)[
                     'name' => trans('js-backend.db.group_name'),
                     'width' => '60%'
@@ -77,7 +77,7 @@ class Group extends Controller
 
     /**
      * @param string $groupName
-     * @param \App\Http\Requests\Admin\UpdateGroup $request
+     * @param \Naraki\Sentry\Requests\Admin\UpdateGroup $request
      * @param \Naraki\Sentry\Contracts\Group|\Naraki\Sentry\Providers\Group $groupProvider
      * @return \Illuminate\Http\Response
      */
@@ -112,7 +112,7 @@ class Group extends Controller
     }
 
     /**
-     * @param \Naraki\Permission\Contracts\Permission|\App\Support\Providers\\Permission $permissionProvider
+     * @param \Naraki\Permission\Contracts\Permission|\Naraki\Core\Support\Providers\\Permission $permissionProvider
      * @return array
      */
     public function add()
@@ -123,7 +123,7 @@ class Group extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\Admin\CreateGroup $request
+     * @param \Naraki\Sentry\Requests\Admin\CreateGroup $request
      * @param \Naraki\Sentry\Contracts\Group|\Naraki\Sentry\Providers\Group $groupProvider
      * @return \Illuminate\Http\Response
      */

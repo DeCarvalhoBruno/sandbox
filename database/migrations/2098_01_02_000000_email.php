@@ -130,7 +130,7 @@ class Email extends Migration
         $entities = \Naraki\Mail\Models\EmailList::getConstants();
 
         $systemEntities = [
-            'NEWSLETTERS' => \App\Models\Entity::SYSTEM,
+            'NEWSLETTERS' => \Naraki\Core\Models\Entity::SYSTEM,
         ];
         $emailEvents = [];
         foreach ($entities as $name => $id) {

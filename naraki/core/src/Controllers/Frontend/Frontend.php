@@ -1,7 +1,7 @@
 <?php namespace Naraki\Core\Controllers\Frontend;
 
 use Naraki\Sentry\Events\PersonSentContactRequest;
-use App\Http\Requests\Frontend\SendContactEmail;
+use Naraki\Mail\Support\Requests\SendContactEmail;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

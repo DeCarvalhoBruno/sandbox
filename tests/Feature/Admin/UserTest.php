@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\Group;
-use App\Models\GroupMember;
+use Naraki\Sentry\Models\Group;
+use Naraki\Sentry\Models\GroupMember;
 use Naraki\Sentry\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -71,7 +71,7 @@ class UserTest extends TestCase
     {
         $user = $this->signIn()->createUser(3);
         $this->assertCount(
-            6,
+            12,
             \Naraki\Sentry\Models\User::all());
         $users = array_map(function ($v) {
             return $v->username;
@@ -88,8 +88,8 @@ class UserTest extends TestCase
 
     public function test_backend_users_create()
     {
-        $group = $this->create('Group');
-        $group2 = $this->create('Group');
+        $group = $this->createGroup();
+        $group2 = $this->createGroup();
 
         $this->assertEquals(1, GroupMember::query()->select(['group_id'])->count());
 
@@ -109,9 +109,9 @@ class UserTest extends TestCase
 
     public function test_backend_users_update_with_groups()
     {
-        $group = $this->create('Group');
-        $group2 = $this->create('Group');
-        $group3 = $this->create('Group');
+        $group = $this->createGroup();
+        $group2 = $this->createGroup();
+        $group3 = $this->createGroup();
 
         $this->postJson(
             '/ajax/admin/user/create',

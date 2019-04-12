@@ -1,7 +1,7 @@
-<?php namespace App\Contracts;
+<?php namespace Naraki\Core\Contracts;
 
 /**
- * @see \App\Support\Database\RawQueries
+ * @see \Naraki\Core\Support\Database\RawQueries
  */
 interface RawQueries
 {

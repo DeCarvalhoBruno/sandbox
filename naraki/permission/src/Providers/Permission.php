@@ -1,8 +1,8 @@
 <?php namespace Naraki\Permission\Providers;
 
-use App\Contracts\RawQueries;
-use App\Models\Entity;
-use App\Models\EntityType;
+use Naraki\Core\Contracts\RawQueries;
+use Naraki\Core\Models\Entity;
+use Naraki\Core\Models\EntityType;
 use Naraki\Core\EloquentProvider;
 use Illuminate\Support\Facades\Cache;
 use Naraki\Permission\Contracts\HasPermissions;

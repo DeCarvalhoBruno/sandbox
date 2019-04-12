@@ -1,6 +1,6 @@
 <?php namespace Naraki\Blog\Support\Social;
 
-use App\Models\Language;
+use Naraki\Core\Models\Language;
 use Carbon\Carbon;
 
 class Blog

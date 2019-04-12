@@ -1,15 +1,13 @@
-<?php
+<?php namespace App\Providers;
 
-namespace App\Providers;
-
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Naraki\Permission\Events\PermissionEntityUpdated;
+use Naraki\Permission\UpdatePermissions;
 use Naraki\Sentry\Events\PersonSentContactRequest;
 use Naraki\Sentry\Events\UserRegistered;
-use App\Listeners\PersonSentContactRequest as PersonSentContactRequestListener;
-use Naraki\Permission\UpdatePermissions;
-use App\Listeners\UserLogin;
-use App\Listeners\UserRegistered as UserRegisteredListener;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Naraki\Sentry\Listeners\PersonSentContactRequest as PersonSentContactRequestListener;
+use Naraki\Sentry\Listeners\UserLogin;
+use Naraki\Sentry\Listeners\UserRegistered as UserRegisteredListener;
 
 class EventServiceProvider extends ServiceProvider
 {

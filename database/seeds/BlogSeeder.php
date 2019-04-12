@@ -61,7 +61,7 @@ and entity_types.entity_id = 300'
             ];
         }
         DB::beginTransaction();
-        $this->seedChunk($viewsRecords, \App\Models\Stats\StatPageView::class, 40);
+        $this->seedChunk($viewsRecords, \Naraki\Core\Support\Viewable\Models\StatPageView::class, 40);
         DB::commit();
         if ($logging) {
             DB::connection()->enableQueryLog();

@@ -15,7 +15,7 @@ class ImageUpload
     /**
      * @var The type of user/feature the media is pertaining to, i.e. a user or a blog post
      * as defined in the Entity model
-     * @var \App\Models\Entity
+     * @var \Naraki\Core\Models\Entity
      */
     protected $targetType;
     /**

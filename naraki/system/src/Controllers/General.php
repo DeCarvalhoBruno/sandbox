@@ -1,6 +1,6 @@
 <?php namespace Naraki\System\Controllers;
 
-use App\Http\Controllers\Admin\Controller;
+use Naraki\Core\Controllers\Admin\Controller;
 use Illuminate\Http\Response;
 use Naraki\System\Facades\System;
 use Naraki\System\Models\SystemSection;

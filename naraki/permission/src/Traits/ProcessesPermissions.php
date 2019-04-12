@@ -1,6 +1,6 @@
 <?php namespace Naraki\Permission\Traits;
 
-use App\Models\Entity;
+use Naraki\Core\Models\Entity;
 
 trait ProcessesPermissions
 {

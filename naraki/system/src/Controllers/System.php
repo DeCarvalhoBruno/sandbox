@@ -1,6 +1,6 @@
 <?php namespace Naraki\System\Controllers;
 
-use App\Http\Controllers\Admin\Controller;
+use Naraki\Core\Controllers\Admin\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
 

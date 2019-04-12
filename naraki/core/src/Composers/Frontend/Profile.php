@@ -1,7 +1,7 @@
 <?php namespace Naraki\Core\Composers\Frontend;
 
 use Naraki\Core\Composer;
-use App\Facades\JavaScript;
+use Naraki\Core\Facades\JavaScript;
 
 class Profile extends Composer
 {

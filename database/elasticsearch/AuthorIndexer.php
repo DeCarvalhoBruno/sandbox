@@ -73,8 +73,8 @@ class AuthorIndexer extends ElasticSearchIndexer
         unset($dbAuthor);
 
         return [
-            'en' => array_values($authors[\App\Models\Language::DB_LANGUAGE_ENGLISH_ID]),
-            'fr' => array_values($authors[\App\Models\Language::DB_LANGUAGE_FRENCH_ID])
+            'en' => array_values($authors[\Naraki\Core\Models\Language::DB_LANGUAGE_ENGLISH_ID]),
+            'fr' => array_values($authors[\Naraki\Core\Models\Language::DB_LANGUAGE_FRENCH_ID])
         ];
     }
 

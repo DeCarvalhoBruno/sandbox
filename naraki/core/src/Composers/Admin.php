@@ -1,6 +1,6 @@
 <?php namespace Naraki\Core\Composers;
 
-use App\Facades\JavaScript;
+use Naraki\Core\Facades\JavaScript;
 use Naraki\Core\Composer;
 use Naraki\Sentry\Models\User;
 use Naraki\Permission\Facades\Permission;

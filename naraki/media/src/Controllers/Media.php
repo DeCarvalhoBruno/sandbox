@@ -1,9 +1,9 @@
 <?php namespace Naraki\Media\Controllers;
 
-use App\Http\Controllers\Admin\Controller;
-use App\Jobs\UpdateUserElasticsearch;
-use App\Models\Entity;
-use App\Models\EntityType;
+use Naraki\Core\Controllers\Admin\Controller;
+use Naraki\Sentry\Jobs\UpdateUserElasticsearch;
+use Naraki\Core\Models\Entity;
+use Naraki\Core\Models\EntityType;
 use Naraki\Sentry\Providers\User as UserProvider;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Response;

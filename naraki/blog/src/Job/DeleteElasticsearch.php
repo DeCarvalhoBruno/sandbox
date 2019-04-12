@@ -1,6 +1,6 @@
 <?php namespace Naraki\Blog\Job;
 
-use App\Jobs\Job;
+use Naraki\Core\Job;
 use Illuminate\Support\Collection;
 use Naraki\Blog\Models\BlogPost;
 use Naraki\Elasticsearch\Facades\ElasticSearchIndex;

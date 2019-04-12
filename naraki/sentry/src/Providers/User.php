@@ -1,6 +1,6 @@
 <?php namespace Naraki\Sentry\Providers;
 
-use App\Models\Stats\StatUser;
+use Naraki\Sentry\Models\StatUser;
 use Naraki\Core\EloquentProvider;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Contracts\Auth\UserProvider;

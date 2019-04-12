@@ -1,9 +1,9 @@
 <?php namespace Naraki\System\Controllers;
 
-use App\Http\Controllers\Admin\Controller;
-use App\Http\Requests\Admin\UpdateUser;
-use App\Jobs\UpdateUserElasticsearch;
-use App\Models\Entity;
+use Naraki\Core\Controllers\Admin\Controller;
+use Naraki\Sentry\Requests\Admin\UpdateUser;
+use Naraki\Sentry\Jobs\UpdateUserElasticsearch;
+use Naraki\Core\Models\Entity;
 use Naraki\Sentry\Providers\User as UserProvider;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ class Profile extends Controller
     /**
      * Update the user's profile information.
      *
-     * @param \App\Http\Requests\Admin\UpdateUser $request
+     * @param \Naraki\Sentry\Requests\Admin\UpdateUser $request
      * @param \Naraki\Sentry\Providers\User $user
      * @return \Illuminate\Http\Response
      */

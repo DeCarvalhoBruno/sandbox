@@ -67,7 +67,7 @@ class Group extends Permission
 
     private function sqlGetGroups()
     {
-        return \App\Models\Group::query()->select(['entity_type_id', 'group_mask'])->entityType()->get();
+        return \Naraki\Sentry\Models\Group::query()->select(['entity_type_id', 'group_mask'])->entityType()->get();
     }
 
 }

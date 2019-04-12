@@ -1,14 +1,14 @@
 <?php namespace Naraki\Mail\Models;
 
-use App\Contracts\HasAnEntity;
-use App\Traits\Models\HasAnEntity as HasAnEntityTrait;
+use Naraki\Core\Contracts\HasAnEntity;
+use Naraki\Core\Traits\Models\HasAnEntity as HasAnEntityTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Email extends Model implements HasAnEntity
 {
     use HasAnEntityTrait;
 
-    public static $entityID =  \App\Models\Entity::EMAILS;
+    public static $entityID =  \Naraki\Core\Models\Entity::EMAILS;
     public $timestamps = false;
     protected $primaryKey = 'email_id';
     protected $fillable = [

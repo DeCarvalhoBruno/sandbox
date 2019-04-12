@@ -1,6 +1,6 @@
 <?php namespace Naraki\Core\Composers;
 
-use App\Facades\JavaScript;
+use Naraki\Core\Facades\JavaScript;
 use Naraki\Core\Composer;
 
 class Frontend extends Composer
@@ -18,7 +18,9 @@ class Frontend extends Composer
                 trans(
                     sprintf(
                         'titles.%s',
-                        (!is_null($view)) ? str_replace('.', '_', $view->getName()) : 'error'
+                        (!is_null($view))
+                            ? str_replace('.', '_', $view->getName())
+                            : 'error'
                     )
                 )
             );
@@ -29,7 +31,7 @@ class Frontend extends Composer
             'locale' => app()->getLocale(),
             'gapi_client' => env('OAUTH_GOOGLE_CLIENT_ID'),
             'auth_check' => auth()->check(),
-            'oauth_verified'=>request()->cookies->has('oauth_verified')
+            'oauth_verified' => request()->cookies->has('oauth_verified')
         ]);
         JavaScript::bindJsVariablesToView();
         $this->addVarsToView($data, $view);

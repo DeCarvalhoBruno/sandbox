@@ -1,7 +1,7 @@
 <?php namespace Naraki\Media\Support;
 
 use Naraki\Media\Contracts\UploadedImage as UploadedImageContract;
-use App\Models\Entity;
+use Naraki\Core\Models\Entity;
 use Naraki\Media\Models\Media;
 
 class UploadedImage extends ImageUpload implements UploadedImageContract

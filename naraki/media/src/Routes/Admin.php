@@ -29,8 +29,7 @@ class Admin
                 ->middleware('can:edit,Naraki\Media\Models\MediaEntity');
             $r->post('media/add', 'Media@add')
                 ->middleware('can:add,Naraki\Media\Models\MediaEntity');
-            $r->post('media/crop/avatar', 'Media@cropAvatar')
-                ->middleware('can:edit,Naraki\Sentry\Models\User');
+            $r->post('media/crop/avatar', 'Media@cropAvatar');
             $r->post('media/crop/image', 'Media@crop');
         };
     }

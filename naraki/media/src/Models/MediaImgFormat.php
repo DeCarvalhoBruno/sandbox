@@ -1,7 +1,7 @@
 <?php namespace Naraki\Media\Models;
 
 use Naraki\Media\Support\ImageProcessor;
-use App\Traits\Enumerable;
+use Naraki\Core\Traits\Enumerable;
 use Illuminate\Database\Eloquent\Model;
 
 class MediaImgFormat extends Model

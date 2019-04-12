@@ -1,6 +1,7 @@
 <?php namespace Naraki\Media;
 
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
 class ServiceProvider extends LaravelServiceProvider
@@ -31,6 +32,11 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function boot()
     {
+        Gate::policy(
+            Models\MediaEntity::class,
+            Policies\Media::class
+        );
+
         $router = $this->app->make(Router::class);
         foreach ($this->routeSets as $binder) {
             $this->app->make($binder)->bind($router);

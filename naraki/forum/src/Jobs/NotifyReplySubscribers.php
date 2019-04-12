@@ -1,6 +1,6 @@
 <?php namespace Naraki\Forum\Jobs;
 
-use App\Jobs\Job;
+use Naraki\Core\Job;
 use Naraki\Sentry\Models\User;
 use Illuminate\Bus\Dispatcher;
 use Illuminate\Support\Facades\Redis;

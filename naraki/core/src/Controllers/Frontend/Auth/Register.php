@@ -4,7 +4,7 @@ namespace Naraki\Core\Controllers\Frontend\Auth;
 
 use Naraki\Sentry\Events\UserRegistered;
 use Naraki\Core\Controllers\Frontend\Controller;
-use App\Http\Requests\Frontend\CreateUser;
+use Naraki\Sentry\Requests\Frontend\CreateUser;
 use Naraki\Sentry\Providers\User as UserProvider;
 
 class Register extends Controller
@@ -22,7 +22,7 @@ class Register extends Controller
     /**
      * Handle a registration request for the application.
      *
-     * @param \App\Http\Requests\Frontend\CreateUser $request
+     * @param \Naraki\Sentry\Requests\Frontend\CreateUser $request
      * @param \Naraki\Sentry\Providers\User $userRepo
      * @return \Illuminate\Http\Response
      */

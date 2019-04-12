@@ -1,9 +1,9 @@
 <?php namespace Naraki\Blog\Models;
 
-use App\Traits\Models\DoesSqlStuff;
+use Naraki\Core\Traits\Models\DoesSqlStuff;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\Enumerable as EnumerableTrait;
-use App\Contracts\Enumerable;
+use Naraki\Core\Traits\Enumerable as EnumerableTrait;
+use Naraki\Core\Contracts\Enumerable;
 
 class BlogSource extends Model implements Enumerable
 {

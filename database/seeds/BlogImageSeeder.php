@@ -104,7 +104,7 @@ class ImageSeeder extends Seeder
         ImageProcessor::saveImg(
             ImageProcessor::makeCroppedImage($path),
             media_entity_root_path(
-                \App\Models\Entity::BLOG_POSTS,
+                \Naraki\Core\Models\Entity::BLOG_POSTS,
                 \Naraki\Media\Models\Media::IMAGE,
                 ImageProcessor::makeFormatFilenameFromImageFilename(
                     sprintf('%s.%s', $uuid, $fileExtension)
@@ -118,7 +118,7 @@ class ImageSeeder extends Seeder
                 \Naraki\Media\Models\MediaImgFormat::FEATURED
             ),
             media_entity_root_path(
-                \App\Models\Entity::BLOG_POSTS,
+                \Naraki\Core\Models\Entity::BLOG_POSTS,
                 \Naraki\Media\Models\Media::IMAGE,
                 ImageProcessor::makeFormatFilename($uuid, $fileExtension, \Naraki\Media\Models\MediaImgFormat::FEATURED)
             )
@@ -130,7 +130,7 @@ class ImageSeeder extends Seeder
 //                \Naraki\Media\Models\MediaImgFormat::HD
 //            ),
 //            media_entity_root_path(
-//                \App\Models\Entity::BLOG_POSTS,
+//                \Naraki\Core\Models\Entity::BLOG_POSTS,
 //                \Naraki\Media\Models\Media::IMAGE,
 //                ImageProcessor::makeFormatFilename($uuid, $fileExtension, \Naraki\Media\Models\MediaImgFormat::HD)
 //            )
@@ -139,7 +139,7 @@ class ImageSeeder extends Seeder
         ImageProcessor::copyImg(
             $path,
             media_entity_root_path(
-                \App\Models\Entity::BLOG_POSTS,
+                \Naraki\Core\Models\Entity::BLOG_POSTS,
                 \Naraki\Media\Models\Media::IMAGE,
                 ImageProcessor::makeFormatFilename($uuid, $fileExtension, \Naraki\Media\Models\MediaImgFormat::ORIGINAL)
             )
