@@ -2,8 +2,8 @@
 
 namespace Tests\Browser\Tests\Admin;
 
-use App\Models\Person;
-use App\Models\User;
+use Naraki\Sentry\Models\Person;
+use Naraki\Sentry\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\CreatesDatabaseResources;

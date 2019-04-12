@@ -14,14 +14,14 @@ class UsersSeeder extends Seeder
         $logging = DB::connection()->logging();
         DB::connection()->disableQueryLog();
         $pwd = bcrypt('secret');
-        $u = factory(App\Models\User::class)->create([
+        $u = factory(Naraki\Sentry\Models\User::class)->create([
             'username' => 'john_doe',
             'password' => $pwd,
             'activated' => true,
             'remember_token' => null,
         ]);
         Media::image()->createAvatar('john_doe', 'John Doe');
-        factory(App\Models\Person::class)->create([
+        factory(Naraki\Sentry\Models\Person::class)->create([
             'email' => 'john.doe@example.com',
             'first_name' => 'John',
             'last_name' => 'Doe',
@@ -37,14 +37,14 @@ class UsersSeeder extends Seeder
             'user_id' => $u->getAttribute('user_id')
         ]);
 
-        $u = factory(App\Models\User::class)->create([
+        $u = factory(Naraki\Sentry\Models\User::class)->create([
             'username' => 'jane_doe',
             'password' => $pwd,
             'activated' => true,
             'remember_token' => null,
         ]);
 
-        factory(App\Models\Person::class)->create([
+        factory(Naraki\Sentry\Models\Person::class)->create([
             'email' => 'jane.doe@example.com',
             'first_name' => 'Jane',
             'last_name' => 'Doe',
@@ -94,12 +94,12 @@ class UsersSeeder extends Seeder
                 $slugs[$ps] = 0;
             }
 
-            $u = factory(App\Models\User::class)->create([
+            $u = factory(Naraki\Sentry\Models\User::class)->create([
                 'username' => ($usernames[$username] == 0) ? $username : $username . $usernames[$username],
                 'activated' => true,
                 'password' => $pwd,
             ]);
-            factory(App\Models\Person::class)->create([
+            factory(Naraki\Sentry\Models\Person::class)->create([
                 'email' => sprintf('%s.%s@%s.%s',
                     slugify(strtolower($fn)),
                     slugify(strtolower($ln)),
@@ -136,14 +136,14 @@ class UsersSeeder extends Seeder
 
     private function makeDevAccount($pwd)
     {
-        $u = factory(App\Models\User::class)->create([
+        $u = factory(Naraki\Sentry\Models\User::class)->create([
             'username' => env('MAIN_ACCOUNT_USERNAME'),
             'password' => $pwd,
             'activated' => true,
             'remember_token' => null,
         ]);
 
-        factory(App\Models\Person::class)->create([
+        factory(Naraki\Sentry\Models\Person::class)->create([
             'email' => env('MAIN_ACCOUNT_EMAIL'),
             'first_name' => env('MAIN_ACCOUNT_FIRST_NAME'),
             'last_name' => env('MAIN_ACCOUNT_LAST_NAME'),

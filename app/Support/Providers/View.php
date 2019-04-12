@@ -1,5 +1,6 @@
 <?php namespace App\Support\Providers;
 
+use Naraki\Core\EloquentProvider;
 use Naraki\System\Models\SystemPageView as ViewModel;
 use App\Support\View\ViewSessionHistory;
 use App\Support\View\VisitorCookieRepository;
@@ -12,8 +13,9 @@ use CyrildeWit\EloquentViewable\Contracts\Viewable as ViewableContract;
 use CyrildeWit\EloquentViewable\Support\Key;
 use CyrildeWit\EloquentViewable\Support\Period;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
+//use CyrildeWit\EloquentViewable\View as CyrildeWitView;
 
-class View extends Model
+class View extends EloquentProvider
 {
     protected $model = ViewModel::class;
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Contracts\Models\User as UserInterface;
+use Naraki\Sentry\Contracts\User as UserInterface;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -14,7 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        \App\Models\User::class => \App\Policies\User::class,
+        \Naraki\Sentry\Models\User::class => \App\Policies\User::class,
         \App\Models\Group::class => \App\Policies\Group::class,
         \Naraki\Blog\Models\BlogPost::class => \Naraki\Blog\Policies\BlogPost::class,
         \Naraki\System\Models\System::class => \Naraki\System\Policies\System::class,
@@ -24,7 +24,7 @@ class AuthServiceProvider extends ServiceProvider
     /**
      * Register any authentication / authorization services.
      *
-     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userProvider
+     * @param \Naraki\Sentry\Contracts\User|\Naraki\Sentry\Providers\User $userProvider
      * @return void
      */
     public function boot(UserInterface $userProvider)

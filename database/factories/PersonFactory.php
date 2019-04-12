@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\Models\Person::class, function (Faker $faker) {
+$factory->define(Naraki\Sentry\Models\Person::class, function (Faker $faker) {
     $fn = $faker->firstName;
     $ln = $faker->lastName;
 

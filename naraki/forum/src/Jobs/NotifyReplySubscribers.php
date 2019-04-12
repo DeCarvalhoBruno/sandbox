@@ -1,7 +1,7 @@
 <?php namespace Naraki\Forum\Jobs;
 
 use App\Jobs\Job;
-use App\Models\User;
+use Naraki\Sentry\Models\User;
 use Illuminate\Bus\Dispatcher;
 use Illuminate\Support\Facades\Redis;
 use Naraki\Forum\Emails\Reply;

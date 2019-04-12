@@ -1,6 +1,6 @@
 <?php namespace Naraki\Forum\Providers;
 
-use App\Support\Providers\Model;
+use Naraki\Core\EloquentProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Naraki\Forum\Contracts\Post as PostInterface;
@@ -10,7 +10,7 @@ use Naraki\Forum\Support\Trees\Post as PostTree;
  * @method \Naraki\Forum\Models\ForumPost createModel(array $attributes = [])
  * @method \Naraki\Forum\Models\ForumPost getOne($id, $columns = ['*'])
  */
-class Post extends Model implements PostInterface
+class Post extends EloquentProvider implements PostInterface
 {
     protected $model = \Naraki\Forum\Models\ForumPost::class;
 
@@ -54,7 +54,7 @@ and forum_post_tree.slug = ?', [$slug]);
     /**
      * @param \stdClass $commentData
      * @param int $entityTypeId
-     * @param \Illuminate\Contracts\Auth\Authenticatable|\App\Models\User $user
+     * @param \Illuminate\Contracts\Auth\Authenticatable|\Naraki\Sentry\Models\User $user
      * @return \Naraki\Forum\Models\ForumPost
      */
     public function createComment(\stdClass $commentData, int $entityTypeId, Authenticatable $user)
@@ -96,7 +96,7 @@ and forum_post_tree.slug = ?', [$slug]);
 
     /**
      * @param \stdClass $data
-     * @param \Illuminate\Contracts\Auth\Authenticatable|\App\Models\User $user
+     * @param \Illuminate\Contracts\Auth\Authenticatable|\Naraki\Sentry\Models\User $user
      * @return void
      */
     public function updateComment($data, Authenticatable $user)
@@ -138,7 +138,7 @@ and forum_post_tree.slug = ?', [$slug]);
 
     /**
      * @param string $slug
-     * @param Authenticatable|\App\Models\User $user
+     * @param Authenticatable|\Naraki\Sentry\Models\User $user
      * @return int
      * @throws \Exception
      */

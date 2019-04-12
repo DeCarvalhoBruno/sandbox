@@ -51,7 +51,7 @@ class UpdateUserElasticsearch extends Job
 
         parent::handle();
         try {
-            $dbUser = \App\Models\User::query()
+            $dbUser = \Naraki\Sentry\Models\User::query()
                 ->select([
                     'entity_type_id as id',
                     'username',

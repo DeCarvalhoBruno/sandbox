@@ -22,7 +22,7 @@ class BroadcastServiceProvider extends ServiceProvider
     public static function notifications()
     {
         /**
-         * @param \App\Models\User $user
+         * @param \Naraki\Sentry\Models\User $user
          * @param int $id
          * @return bool
          */

@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use App\Events\PermissionEntityUpdated;
-use App\Events\PersonSentContactRequest;
-use App\Events\UserRegistered;
+use Naraki\Permission\Events\PermissionEntityUpdated;
+use Naraki\Sentry\Events\PersonSentContactRequest;
+use Naraki\Sentry\Events\UserRegistered;
 use App\Listeners\PersonSentContactRequest as PersonSentContactRequestListener;
-use App\Listeners\UpdatePermissions;
+use Naraki\Permission\UpdatePermissions;
 use App\Listeners\UserLogin;
 use App\Listeners\UserRegistered as UserRegisteredListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;

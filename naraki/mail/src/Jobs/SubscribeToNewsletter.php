@@ -1,6 +1,6 @@
 <?php namespace Naraki\Mail\Jobs;
 
-use App\Events\UserSubscribedToNewsletter;
+use Naraki\Sentry\Events\UserSubscribedToNewsletter;
 use App\Support\Requests\Sanitizer;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

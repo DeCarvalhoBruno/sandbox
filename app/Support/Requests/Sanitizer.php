@@ -100,7 +100,7 @@ class Sanitizer
      * @param  $name
      * @param $value
      * @param array $options
-     * @return \App\Filters\Filters
+     * @return \Naraki\Core\Filters
      */
     protected function applyFilter($name, $value, $options = [])
     {

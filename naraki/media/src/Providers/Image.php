@@ -3,7 +3,7 @@
 use Naraki\Media\Contracts\UploadedImage as ImageContract;
 use App\Models\Entity;
 use App\Models\EntityType;
-use App\Support\Providers\Model;
+use Naraki\Core\EloquentProvider;
 use Naraki\Media\Contracts\Avatar as AvatarInterface;
 use Naraki\Media\Contracts\Image as ImageInterface;
 use Naraki\Media\Models\MediaCategoryRecord;
@@ -20,7 +20,7 @@ use Naraki\Media\Support\ImageProcessor;
 /**
  * @method \Naraki\Media\Models\MediaDigital createModel(array $attributes = [])
  */
-class Image extends Model implements ImageInterface
+class Image extends EloquentProvider implements ImageInterface
 {
     protected $model = \Naraki\Media\Models\MediaDigital::class;
     /**

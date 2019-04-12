@@ -1,12 +1,12 @@
 <?php namespace Naraki\Media\Providers;
 
-use App\Support\Providers\Model;
+use Naraki\Core\EloquentProvider;
 use Naraki\Media\Contracts\Text as TextInterface;
 
 /**
  * @method \Naraki\Media\Models\MediaTxt createModel(array $attributes = [])
  */
-class Text extends Model implements TextInterface
+class Text extends EloquentProvider implements TextInterface
 {
 
     /**

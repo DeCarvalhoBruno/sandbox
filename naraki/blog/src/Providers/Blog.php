@@ -1,7 +1,7 @@
 <?php namespace Naraki\Blog\Providers;
 
-use App\Models\Person;
-use App\Support\Providers\Model;
+use Naraki\Sentry\Models\Person;
+use Naraki\Core\EloquentProvider;
 use Illuminate\Database\Eloquent\Builder;
 use Naraki\Blog\Contracts\Blog as BlogInterface;
 use Naraki\Blog\Models\BlogPost;
@@ -10,7 +10,7 @@ use Naraki\Blog\Contracts\Tag as TagInterface;
 use Naraki\Blog\Contracts\Source as SourceInterface;
 use Naraki\Blog\Contracts\Author as AuthorInterface;
 
-class Blog extends Model implements BlogInterface
+class Blog extends EloquentProvider implements BlogInterface
 {
     protected $model = \Naraki\Blog\Models\BlogPost::class;
 
@@ -132,7 +132,7 @@ class Blog extends Model implements BlogInterface
 
     /**
      * @param array $data
-     * @param \Illuminate\Database\Eloquent\Model|\App\Models\Person $person
+     * @param \Illuminate\Database\Eloquent\Model|\Naraki\Sentry\Models\Person $person
      * @return \Naraki\Blog\Models\BlogPost
      */
     public function createOne(array $data, ?Person $person): BlogPost

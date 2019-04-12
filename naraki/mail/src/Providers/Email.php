@@ -2,14 +2,14 @@
 
 use Naraki\Mail\Models\EmailList;
 use Naraki\Mail\Models\EmailRecipientType;
-use App\Support\Providers\Model;
+use Naraki\Core\EloquentProvider;
 use Illuminate\Support\Str;
 use Naraki\Mail\Contracts\Email as EmailInterface;
 use Naraki\Mail\Contracts\Listing as ListInterface;
 use Naraki\Mail\Contracts\Schedule as ScheduleInterface;
 use Naraki\Mail\Contracts\Subscriber as SubscriberInterface;
 
-class Email extends Model implements EmailInterface
+class Email extends EloquentProvider implements EmailInterface
 {
     protected $model = \Naraki\Mail\Models\Email::class;
     /**

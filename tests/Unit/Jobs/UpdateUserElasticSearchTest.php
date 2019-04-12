@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use App\Jobs\UpdateUserElasticsearch;
-use App\Models\User;
+use Naraki\Sentry\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Naraki\Elasticsearch\Facades\ElasticSearchIndex;

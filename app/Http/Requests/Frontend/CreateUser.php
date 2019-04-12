@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Frontend;
 
-use App\Contracts\Models\Person;
+use Naraki\Sentry\Contracts\Person;
 use App\Support\Requests\FormRequest;
 use Illuminate\Support\Facades\Validator;
 

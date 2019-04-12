@@ -1,6 +1,6 @@
 <?php namespace Naraki\Media\Filters;
 
-use App\Filters\Filters;
+use Naraki\Core\Filters;
 
 class Media extends Filters
 {

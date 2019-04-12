@@ -4,7 +4,7 @@ namespace Tests\Feature\Admin;
 
 use App\Models\Group;
 use App\Models\GroupMember;
-use App\Models\User;
+use Naraki\Sentry\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
@@ -72,7 +72,7 @@ class UserTest extends TestCase
         $user = $this->signIn()->createUser(3);
         $this->assertCount(
             6,
-            \App\Models\User::all());
+            \Naraki\Sentry\Models\User::all());
         $users = array_map(function ($v) {
             return $v->username;
         }, $user);
@@ -82,7 +82,7 @@ class UserTest extends TestCase
         )->assertStatus(204);
         $this->assertCount(
             3,
-            \App\Models\User::all());
+            \Naraki\Sentry\Models\User::all());
 
     }
 

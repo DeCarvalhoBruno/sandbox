@@ -1,6 +1,6 @@
 <?php namespace Naraki\Blog\Controllers\Ajax;
 
-use App\Contracts\Models\User as UserProvider;
+use Naraki\Sentry\Contracts\User as UserProvider;
 use App\Http\Controllers\Admin\Controller;
 use App\Models\Entity;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -113,7 +113,7 @@ class Blog extends Controller
 
     /**
      * @param \Naraki\Blog\Requests\CreateBlogPost $request
-     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
+     * @param \Naraki\Sentry\Contracts\User|\Naraki\Sentry\Providers\User $userRepo
      * @return \Illuminate\Http\Response
      */
     public function create(CreateBlogPost $request, UserProvider $userRepo)
@@ -151,7 +151,7 @@ class Blog extends Controller
     /**
      * @param $slug
      * @param \Naraki\Blog\Requests\UpdateBlogPost $request
-     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
+     * @param \Naraki\Sentry\Contracts\User|\Naraki\Sentry\Providers\User $userRepo
      * @return array
      */
     public function update($slug, UpdateBlogPost $request, UserProvider $userRepo): array

@@ -4,8 +4,8 @@ use Naraki\Mail\Models\EmailList;
 use Naraki\Mail\Models\EmailSubscriber as SubscriberModel;
 use App\Models\Entity;
 use App\Models\EntityType;
-use App\Models\Person;
-use App\Support\Providers\Model;
+use Naraki\Sentry\Models\Person;
+use Naraki\Core\EloquentProvider;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\QueryException;
 use Naraki\Mail\Contracts\Subscriber as SubscriberInterface;
@@ -13,7 +13,7 @@ use Naraki\Mail\Contracts\Subscriber as SubscriberInterface;
 /**
  * @method \Naraki\Mail\Models\EmailSubscriber createModel(array $attributes = [])
  */
-class Subscriber extends Model implements SubscriberInterface
+class Subscriber extends EloquentProvider implements SubscriberInterface
 {
     protected $model = \Naraki\Mail\Models\EmailSubscriber::class;
 

@@ -1,6 +1,6 @@
 <?php namespace Naraki\Forum\Events;
 
-use App\Events\Event;
+use Naraki\Core\Event;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Naraki\Forum\Requests\CreateComment;
 
@@ -11,7 +11,7 @@ class PostCreated extends Event
      */
     public $request;
     /**
-     * @var \Illuminate\Contracts\Auth\Authenticatable|\App\Models\User
+     * @var \Illuminate\Contracts\Auth\Authenticatable|\Naraki\Sentry\Models\User
      */
     public $user;
     /**

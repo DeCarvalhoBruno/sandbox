@@ -10,10 +10,6 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\ConvertLangFilesToJs::class,
-        Commands\CreateRootAssetDirectories::class,
-        Commands\GenerateLangFiles::class,
-        Commands\Maintenance::class,
         Commands\TestStuff::class
     ];
 

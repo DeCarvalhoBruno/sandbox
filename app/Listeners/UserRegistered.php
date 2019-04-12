@@ -2,7 +2,7 @@
 
 use App\Jobs\UpdateUserElasticsearch;
 use Naraki\Mail\Emails\User\Welcome as WelcomeEmail;
-use App\Events\UserRegistered as UserRegisteredEvent;
+use Naraki\Sentry\Events\UserRegistered as UserRegisteredEvent;
 use Naraki\Mail\Jobs\SendMail;
 use Naraki\Media\Jobs\CreateAvatar;
 
@@ -11,7 +11,7 @@ class UserRegistered extends Listener
     /**
      * Deleting all permissions and re-adding them including newly added/removed users
      *
-     * @param \App\Events\UserRegistered $event
+     * @param \Naraki\Sentry\Events\UserRegistered $event
      * @return void
      */
     public function handle(UserRegisteredEvent $event)

@@ -1,6 +1,6 @@
 <?php namespace Naraki\Forum\Presenters;
 
-use App\Support\Presenters\Presenter;
+use Naraki\Core\Presenter;
 
 class Post extends Presenter
 {

@@ -1,12 +1,12 @@
 <?php namespace Naraki\System\Providers;
 
-use App\Support\Providers\Model;
+use Naraki\Core\EloquentProvider;
 use Naraki\System\Contracts\System as SystemInterface;
 use Naraki\System\Contracts\EventLog as SystemEventLogInterface;
 use Naraki\System\Contracts\UserSettings as SystemUserSettingsInterface;
 use Naraki\System\Models\SystemEvent;
 
-class System extends Model implements SystemInterface
+class System extends EloquentProvider implements SystemInterface
 {
     protected $model = \Naraki\System\Models\SystemEvent::class;
 

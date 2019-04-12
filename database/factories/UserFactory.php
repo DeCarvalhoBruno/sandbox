@@ -13,7 +13,7 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\Models\User::class, function (Faker $faker) {
+$factory->define(Naraki\Sentry\Models\User::class, function (Faker $faker) {
     return [
         'username' => str_replace('.','_',$faker->userName),
         'password' => '$2y$10$/hSd.IkT1eE22XjryeAfhOKozVXkYGBPldg4OzeLuFcsE813JNAAO',

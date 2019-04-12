@@ -4,7 +4,7 @@ use App\Http\Controllers\Admin\Controller;
 use App\Jobs\UpdateUserElasticsearch;
 use App\Models\Entity;
 use App\Models\EntityType;
-use App\Support\Providers\User as UserProvider;
+use Naraki\Sentry\Providers\User as UserProvider;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
@@ -243,7 +243,7 @@ class Media extends Controller
     }
 
     /**
-     * @param \App\Support\Providers\User $user
+     * @param \Naraki\Sentry\Providers\User $user
      * @return \Illuminate\Http\Response
      * @throws \Exception
      * @throws \Throwable

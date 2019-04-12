@@ -1,6 +1,6 @@
 <?php namespace Naraki\System\Policies;
 
-use App\Policies\Policy;
+use Naraki\Core\Policy;
 
 class System extends Policy
 {

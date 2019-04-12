@@ -3,7 +3,7 @@
 use App\Contracts\RawQueries;
 use App\Models\Entity;
 use App\Models\EntityType;
-use App\Support\Providers\Model;
+use Naraki\Core\EloquentProvider;
 use Illuminate\Support\Facades\Cache;
 use Naraki\Permission\Contracts\HasPermissions;
 use Naraki\Permission\Contracts\Permission as PermissionInterface;
@@ -13,7 +13,7 @@ use Naraki\Permission\Models\Permission as PermissionModel;
  * @method \Naraki\Permission\Models\Permission createModel(array $attributes = [])
  * @method \Naraki\Permission\Models\Permission getOne($id, $columns = ['*'])
  */
-class Permission extends Model implements PermissionInterface
+class Permission extends EloquentProvider implements PermissionInterface
 {
     protected $model = PermissionModel::class;
 

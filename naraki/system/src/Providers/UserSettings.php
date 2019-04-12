@@ -1,10 +1,10 @@
 <?php namespace Naraki\System\Providers;
 
-use App\Support\Providers\Model;
+use Naraki\Core\EloquentProvider;
 use Naraki\System\Contracts\UserSettings as SystemInterface;
 use Naraki\System\Models\SystemSection;
 
-class UserSettings extends Model implements SystemInterface
+class UserSettings extends EloquentProvider implements SystemInterface
 {
     protected $model = \Naraki\System\Models\SystemUserSettings::class;
 

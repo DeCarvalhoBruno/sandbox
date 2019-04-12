@@ -151,8 +151,10 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
-        App\Support\JavaScript\JavaScriptServiceProvider::class,
+        Naraki\Core\JavaScript\JavaScriptServiceProvider::class,
         App\Support\View\EloquentViewableServiceProvider::class,
+        Naraki\Core\ServiceProvider::class,
+        Naraki\Sentry\ServiceProvider::class,
         Naraki\Media\ServiceProvider::class,
         Naraki\Blog\ServiceProvider::class,
         Naraki\Forum\ServiceProvider::class,
@@ -220,7 +222,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        'JavaScript' => App\Facades\JavaScript::class,
+        'User' => \Naraki\Sentry\Facades\User::class,
+        'Group' => \Naraki\Sentry\Facades\Group::class,
+        'JavaScript' => Naraki\Core\Facades\JavaScript::class,
         'Media' => \Naraki\Media\Facades\Media::class,
         'Blog' => \Naraki\Blog\Facades\Blog::class,
         'Forum' => \Naraki\Forum\Facades\Forum::class,

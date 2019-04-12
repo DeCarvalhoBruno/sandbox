@@ -4,7 +4,7 @@ use Naraki\Mail\Models\Email as EmailModel;
 use Naraki\Mail\Models\EmailSchedule as EmailScheduleModel;
 use App\Models\Entity;
 use App\Models\EntityType;
-use App\Support\Providers\Model;
+use Naraki\Core\EloquentProvider;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Naraki\Mail\Contracts\Schedule as ScheduleInterface;
@@ -12,7 +12,7 @@ use Naraki\Mail\Contracts\Schedule as ScheduleInterface;
 /**
  * @method \Naraki\Mail\Models\EmailSchedule createModel(array $attributes = [])
  */
-class Schedule extends Model implements ScheduleInterface
+class Schedule extends EloquentProvider implements ScheduleInterface
 {
     protected $model = \Naraki\Mail\Models\EmailSchedule::class;
 

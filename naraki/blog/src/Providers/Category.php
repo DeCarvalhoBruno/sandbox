@@ -1,12 +1,12 @@
 <?php namespace Naraki\Blog\Providers;
 
-use App\Support\Providers\Model;
+use Naraki\Core\EloquentProvider;
 use Naraki\Blog\Contracts\Category as BlogCategoryInterface;
 use Naraki\Blog\Models\BlogLabel;
 use Naraki\Blog\Models\BlogLabelRecord;
 use Naraki\Blog\Models\BlogLabelType;
 
-class Category extends Model implements BlogCategoryInterface
+class Category extends EloquentProvider implements BlogCategoryInterface
 {
     protected $model = \Naraki\Blog\Models\BlogCategory::class;
 

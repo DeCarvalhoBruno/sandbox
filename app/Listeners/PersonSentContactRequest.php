@@ -1,7 +1,7 @@
 <?php namespace App\Listeners;
 
 use Naraki\Mail\Emails\Frontend\Contact;
-use App\Events\PersonSentContactRequest as ContactRequestEvent;
+use Naraki\Sentry\Events\PersonSentContactRequest as ContactRequestEvent;
 use Naraki\Mail\Jobs\SendMail;
 use Naraki\System\Facades\System;
 use Naraki\System\Models\SystemEvent;
@@ -10,7 +10,7 @@ class PersonSentContactRequest extends Listener
 {
     /**
      *
-     * @param \App\Events\PersonSentContactRequest $event
+     * @param \Naraki\Sentry\Events\PersonSentContactRequest $event
      * @return void
      */
     public function handle(ContactRequestEvent $event)

@@ -1,6 +1,6 @@
 <?php namespace App\Traits\Models;
 
-use App\Filters\Filters;
+use Naraki\Core\Filters;
 use Illuminate\Database\Eloquent\Builder;
 
 trait Presentable
@@ -35,7 +35,7 @@ trait Presentable
 
     /**
      * @param $columns
-     * @param $filter \App\Filters\Filters
+     * @param $filter \Naraki\Core\Filters
      * @return array
      */
     public function getColumnInfo($columns, $filter): array
@@ -58,7 +58,7 @@ trait Presentable
 
     /**
      * @param mixed $query
-     * @param \App\Filters\Filters $filters
+     * @param \Naraki\Core\Filters $filters
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeFilter($query, ?Filters $filters): Builder

@@ -10,7 +10,7 @@ class AuthorIndexer extends ElasticSearchIndexer
      *
      * @var \Naraki\Blog\Models\BlogPost
      */
-    protected $modelClass = \App\Models\Person::class;
+    protected $modelClass = \Naraki\Sentry\Models\Person::class;
 
     public function __construct()
     {

@@ -1,6 +1,6 @@
 <?php namespace Naraki\Media\Policies;
 
-use App\Policies\Policy;
+use Naraki\Core\Policy;
 
 class Media extends Policy
 {

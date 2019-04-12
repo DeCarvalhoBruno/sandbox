@@ -1,11 +1,11 @@
 <?php namespace Naraki\Blog\Providers;
 
-use App\Support\Providers\Model;
+use Naraki\Core\EloquentProvider;
 use Naraki\Blog\Contracts\Source as BlogSourceInterface;
 use Naraki\Blog\Models\BlogSource as BlogSourceModel;
 use Naraki\Blog\Models\BlogSourceRecord;
 
-class Source extends Model implements BlogSourceInterface
+class Source extends EloquentProvider implements BlogSourceInterface
 {
     protected $model = \Naraki\Blog\Models\BlogSourceRecord::class;
 

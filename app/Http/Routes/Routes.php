@@ -2,7 +2,11 @@
 
 class Routes
 {
-
+    /**
+     * @param string $locale
+     * @param string $name
+     * @return string
+     */
     protected static function i18nRouteNames($locale, $name)
     {
         if ($locale != null) {
@@ -10,5 +14,4 @@ class Routes
         }
         return $name;
     }
-
 }

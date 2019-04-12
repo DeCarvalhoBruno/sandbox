@@ -150,7 +150,7 @@ abstract class Permission
      * @param null|array $userIdList
      * @return mixed
      * @see \App\Models\EntityType::scopeHighestGroup()
-     * @see \App\Models\User::queryHighestRankedGroup
+     * @see \Naraki\Sentry\Models\User::queryHighestRankedGroup
      */
     protected function sqlGetUsersAndHighestGroup($userIdList = null)
     {

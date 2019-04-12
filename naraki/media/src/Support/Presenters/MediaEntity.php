@@ -1,6 +1,6 @@
 <?php namespace Naraki\Media\Support\Presenters;
 
-use App\Support\Presenters\Presenter;
+use Naraki\Core\Presenter;
 use Naraki\Media\Models\Media;
 use Naraki\Media\Models\MediaImgFormat;
 

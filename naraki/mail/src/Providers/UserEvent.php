@@ -1,13 +1,13 @@
 <?php namespace Naraki\Mail\Providers;
 
-use App\Support\Providers\Model;
+use Naraki\Core\EloquentProvider;
 use Naraki\Mail\Contracts\UserEvent as EmailUserEventInterface;
 use Illuminate\Support\Collection;
 
 /**
  * @method \Naraki\Mail\Models\EmailUserEvent createModel(array $attributes = [])
  */
-class UserEvent extends Model implements EmailUserEventInterface
+class UserEvent extends EloquentProvider implements EmailUserEventInterface
 {
 
     protected $model = \Naraki\Mail\Models\EmailUserEvent::class;

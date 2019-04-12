@@ -1,6 +1,6 @@
 <?php namespace Naraki\Oauth\Controllers;
 
-use App\Contracts\Models\User as UserProvider;
+use Naraki\Sentry\Contracts\User as UserProvider;
 use App\Http\Controllers\Frontend\Controller;
 use Firebase\JWT\JWT;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -46,7 +46,7 @@ class OAuth extends Controller
      *
      * @param  string $provider
      * @param \Illuminate\Http\Request $request
-     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
+     * @param \Naraki\Sentry\Contracts\User|\Naraki\Sentry\Providers\User $userRepo
      * @return \Illuminate\Http\Response
      */
     public function handleProviderCallback($provider, Request $request, UserProvider $userRepo)
@@ -75,7 +75,7 @@ class OAuth extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
+     * @param \Naraki\Sentry\Contracts\User|\Naraki\Sentry\Providers\User $userRepo
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function googleYolo(Request $request, UserProvider $userRepo)
@@ -106,7 +106,7 @@ class OAuth extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
+     * @param \Naraki\Sentry\Contracts\User|\Naraki\Sentry\Providers\User $userRepo
      * @param string $provider
      * @param \Naraki\Oauth\Socialite\GoogleUser $socialiteUser
      */
@@ -118,7 +118,7 @@ class OAuth extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param \App\Contracts\Models\User|\App\Support\Providers\User $userRepo
+     * @param \Naraki\Sentry\Contracts\User|\Naraki\Sentry\Providers\User $userRepo
      * @param string $provider
      * @param \Laravel\Socialite\Contracts\User $socialiteUser
      */

@@ -1,7 +1,7 @@
 <?php namespace Naraki\Mail\Commands;
 
 use Naraki\Mail\Jobs\SendMail;
-use App\Models\User;
+use Naraki\Sentry\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 

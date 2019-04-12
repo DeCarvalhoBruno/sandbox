@@ -94,12 +94,12 @@ UNION
     {
         \DB::unprepared(
             sprintf('
-                CREATE TRIGGER t_create_entity_type_%1$s AFTER INSERT ON %1$s
-                FOR EACH ROW
-                BEGIN
-                INSERT into entity_types(entity_id,entity_type_target_id)
-                SELECT entity_id,NEW.%2$s as entity_type_target_id FROM entities WHERE entity_name="%1$s";
-                END
+CREATE TRIGGER t_create_entity_type_%1$s AFTER INSERT ON %1$s
+FOR EACH ROW
+BEGIN
+INSERT into entity_types(entity_id,entity_type_target_id)
+SELECT entity_id,NEW.%2$s as entity_type_target_id FROM entities WHERE entity_name="%1$s";
+END
                 ',
                 $name, $primaryKey
             )
@@ -110,14 +110,14 @@ UNION
     {
         \DB::unprepared(
             '
-                CREATE TRIGGER t_create_entity_type_users AFTER INSERT ON users
-                FOR EACH ROW
-                BEGIN
-                INSERT into entity_types(entity_id,entity_type_target_id)
-                SELECT entity_id,NEW.user_id as entity_type_target_id FROM entities WHERE entity_name="users";
-                INSERT into stat_users(user_id)
-                VALUES(new.user_id);
-                END
+CREATE TRIGGER t_create_entity_type_users AFTER INSERT ON users
+FOR EACH ROW
+BEGIN
+INSERT into entity_types(entity_id,entity_type_target_id)
+SELECT entity_id,NEW.user_id as entity_type_target_id FROM entities WHERE entity_name="users";
+INSERT into stat_users(user_id)
+VALUES(new.user_id);
+END
                 '
         );
     }
@@ -131,11 +131,11 @@ UNION
     {
         \DB::unprepared(
             sprintf('
-                CREATE TRIGGER t_delete_entity_type_%1$s AFTER DELETE ON %1$s
-                FOR EACH ROW
-                BEGIN
-                DELETE FROM entity_types WHERE entity_type_target_id=OLD.%2$s and entity_id=%3$s;
-                END
+CREATE TRIGGER t_delete_entity_type_%1$s AFTER DELETE ON %1$s
+FOR EACH ROW
+BEGIN
+DELETE FROM entity_types WHERE entity_type_target_id=OLD.%2$s and entity_id=%3$s;
+END
                 ',
                 $name, $primaryKey, $entityId
             )
@@ -146,14 +146,32 @@ UNION
     {
         \DB::unprepared(
     '
-        CREATE TRIGGER t_users_update_activated AFTER DELETE ON user_activations
-          FOR EACH ROW
-          BEGIN
-            update users
-            set activated = 1
-            where user_id = old.user_id;
-          END;
+CREATE TRIGGER t_users_update_activated AFTER DELETE ON user_activations
+FOR EACH ROW
+BEGIN
+update users
+set activated = 1
+where user_id = old.user_id;
+END;
         '
         );
+    }
+
+    public function triggerDeleteUser()
+    {
+        \DB::unprepared('
+CREATE TRIGGER t_users_delete BEFORE DELETE ON users
+FOR EACH ROW
+BEGIN
+declare var_user_id INT DEFAULT 0;
+select user_id
+into var_user_id
+from users
+where user_id = old.user_id;
+update forum_posts
+set post_user_id = 0
+where user_id = var_user_id;
+END;
+        ');
     }
 }

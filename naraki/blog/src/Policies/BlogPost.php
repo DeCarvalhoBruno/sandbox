@@ -1,6 +1,6 @@
 <?php namespace Naraki\Blog\Policies;
 
-use App\Policies\Policy;
+use Naraki\Core\Policy;
 
 class BlogPost extends Policy
 {

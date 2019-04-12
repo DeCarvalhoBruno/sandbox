@@ -1,12 +1,12 @@
 <?php namespace Naraki\Forum\Providers;
 
-use App\Support\Providers\Model;
+use Naraki\Core\EloquentProvider;
 use Naraki\Forum\Contracts\Forum as ForumInterface;
 use Naraki\Forum\Contracts\Board as BoardInterface;
 use Naraki\Forum\Contracts\Thread as ThreadInterface;
 use Naraki\Forum\Contracts\Post as PostInterface;
 
-class Forum extends Model implements ForumInterface
+class Forum extends EloquentProvider implements ForumInterface
 {
     /**
      * @var \Naraki\Forum\Contracts\Board|\Naraki\Forum\Providers\Board

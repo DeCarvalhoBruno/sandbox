@@ -4,7 +4,7 @@ use App\Http\Controllers\Admin\Controller;
 use App\Http\Requests\Admin\UpdateUser;
 use App\Jobs\UpdateUserElasticsearch;
 use App\Models\Entity;
-use App\Support\Providers\User as UserProvider;
+use Naraki\Sentry\Providers\User as UserProvider;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,7 +17,7 @@ class Profile extends Controller
      * Update the user's profile information.
      *
      * @param \App\Http\Requests\Admin\UpdateUser $request
-     * @param \App\Support\Providers\User $user
+     * @param \Naraki\Sentry\Providers\User $user
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateUser $request, UserProvider $user)
@@ -33,7 +33,7 @@ class Profile extends Controller
     }
 
     /**
-     * @param \App\Support\Providers\User $user
+     * @param \Naraki\Sentry\Providers\User $user
      * @return \Illuminate\Http\Response
      */
     public function avatar(UserProvider $user)
@@ -43,7 +43,7 @@ class Profile extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param \App\Support\Providers\User $user
+     * @param \Naraki\Sentry\Providers\User $user
      * @return \Illuminate\Http\Response
      */
     public function setAvatar(Request $request, UserProvider $user)
@@ -61,7 +61,7 @@ class Profile extends Controller
 
     /**
      * @param int $uuid
-     * @param \App\Support\Providers\User $user
+     * @param \Naraki\Sentry\Providers\User $user
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
@@ -77,7 +77,7 @@ class Profile extends Controller
     }
 
     /**
-     * @param \App\Support\Providers\User $user
+     * @param \Naraki\Sentry\Providers\User $user
      * @return mixed
      */
     private function getAvatars(UserProvider $user)

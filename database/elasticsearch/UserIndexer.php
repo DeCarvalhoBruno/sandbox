@@ -14,7 +14,7 @@ class UserIndexer extends ElasticSearchIndexer
      *
      * @var \Naraki\Blog\Models\BlogPost
      */
-    protected $modelClass = \App\Models\User::class;
+    protected $modelClass = \Naraki\Sentry\Models\User::class;
 
     public function __construct()
     {
@@ -46,7 +46,7 @@ class UserIndexer extends ElasticSearchIndexer
 
     private function prepareData()
     {
-        $dbUser = \App\Models\User::query()
+        $dbUser = \Naraki\Sentry\Models\User::query()
             ->select([
                 'entity_type_id as id',
                 'username',

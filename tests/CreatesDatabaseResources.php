@@ -1,7 +1,7 @@
 <?php namespace Tests;
 
 use App\Models\GroupMember;
-use App\Models\User;
+use Naraki\Sentry\Models\User;
 
 trait CreatesDatabaseResources
 {
@@ -17,7 +17,7 @@ trait CreatesDatabaseResources
 
     /**
      * @param int $times
-     * @return \App\Models\User|\App\Models\User[]
+     * @return \Naraki\Sentry\Models\User|\Naraki\Sentry\Models\User[]
      */
     protected function createUser($times = 1)
     {
@@ -33,7 +33,7 @@ trait CreatesDatabaseResources
     }
 
     /**
-     * @param \App\Models\User $user
+     * @param \Naraki\Sentry\Models\User $user
      * @param \App\Models\Group $group
      */
     protected function assignUserToGroup($user, $group)

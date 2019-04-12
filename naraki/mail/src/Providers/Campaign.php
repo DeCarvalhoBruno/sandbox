@@ -1,13 +1,13 @@
 <?php namespace Naraki\Mail\Providers;
 
-use App\Support\Providers\Model;
+use Naraki\Core\EloquentProvider;
 use Naraki\Mail\Contracts\Campaign as CampaignInterface;
 use Naraki\Mail\Contracts\UserEvent as EmailUserEventInterface;
 
 /**
  * @method \Naraki\Mail\Models\EmailCampaign createModel(array $attributes = [])
  */
-class Campaign extends Model implements CampaignInterface
+class Campaign extends EloquentProvider implements CampaignInterface
 {
     protected $model = \Naraki\Mail\Models\EmailCampaign::class;
     /**

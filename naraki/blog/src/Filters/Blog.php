@@ -1,6 +1,6 @@
 <?php namespace Naraki\Blog\Filters;
 
-use App\Filters\Filters;
+use Naraki\Core\Filters;
 
 class Blog extends Filters
 {

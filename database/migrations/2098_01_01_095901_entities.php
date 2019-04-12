@@ -65,14 +65,14 @@ class Entities extends Migration
 
     private static function createGroups()
     {
-        $u = factory(App\Models\User::class)->create([
+        $u = factory(Naraki\Sentry\Models\User::class)->create([
             'username' => 'root',
             'password' => bcrypt(config('auth.root_password')),
             'activated' => true,
             'user_id' => 1,
             'remember_token' => null,
         ]);
-        factory(App\Models\Person::class)->create([
+        factory(Naraki\Sentry\Models\Person::class)->create([
             'person_id' => 1,
             'email' => 'system@localhost.local',
             'first_name' => 'root',
@@ -157,7 +157,6 @@ class Entities extends Migration
     {
         $entities = $this->entities;
         $db = app()->make(\App\Contracts\RawQueries::class);
-        //We don't want the first element in that list, it doesn't match a db table.
         foreach ($entities as $entity) {
             if (!isset($this->entityPrimaryKeyColumns[$entity['entity_name']]) || $entity['entity_name'] == 'system') {
                 continue;
@@ -188,7 +187,7 @@ class Entities extends Migration
         $entity->setAttribute($pk, 0);
         $entity->save();
 
-        $entity = \App\Models\User::create([]);
+        $entity = \Naraki\Sentry\Models\User::create([]);
         $entity->save();
         $pk = $entity->getKeyName();
         $entity->setAttribute($pk, 0);
@@ -198,7 +197,7 @@ class Entities extends Migration
             'entity_type_target_id' => 0,
             'entity_type_id' => 1
         ]);
-        $entity = \App\Models\Person::create([$pk => 0]);
+        $entity = \Naraki\Sentry\Models\Person::create([$pk => 0]);
         $entity->save();
         $entity->setAttribute($entity->getKeyName(), 0);
         $entity->save();

@@ -1,12 +1,12 @@
 <?php namespace Naraki\Blog\Providers;
 
-use App\Support\Providers\Model;
+use Naraki\Core\EloquentProvider;
 use Naraki\Blog\Contracts\Tag as BlogTagInterface;
 use Naraki\Blog\Models\BlogLabel;
 use Naraki\Blog\Models\BlogLabelRecord;
 use Naraki\Blog\Models\BlogLabelType;
 
-class Tag extends Model implements BlogTagInterface
+class Tag extends EloquentProvider implements BlogTagInterface
 {
     protected $model = \Naraki\Blog\Models\BlogTag::class;
 

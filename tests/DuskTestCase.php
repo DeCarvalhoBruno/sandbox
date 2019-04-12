@@ -46,14 +46,14 @@ abstract class DuskTestCase extends BaseTestCase
     protected function createManualUser()
     {
         $pwd = bcrypt('secret');
-        $u = factory(\App\Models\User::class)->create([
+        $u = factory(\Naraki\Sentry\Models\User::class)->create([
             'email' => 'john.doe@example.com',
             'username' => 'john_doe',
             'password' => $pwd,
             'activated' => true,
             'remember_token' => null,
         ]);
-        factory(\App\Models\Person::class)->create([
+        factory(\Naraki\Sentry\Models\Person::class)->create([
             'first_name' => 'John',
             'last_name' => 'Doe',
             'user_id' => $u->getAttribute('user_id')

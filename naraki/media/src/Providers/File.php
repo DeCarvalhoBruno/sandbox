@@ -1,6 +1,6 @@
 <?php namespace Naraki\Media\Providers;
 
-use App\Support\Providers\Model;
+use Naraki\Core\EloquentProvider;
 use Naraki\Media\Contracts\File as FileInterface;
 use Naraki\Media\Contracts\Image as ImageInterface;
 use Naraki\Media\Contracts\Text as TextInterface;
@@ -8,7 +8,7 @@ use Naraki\Media\Contracts\Text as TextInterface;
 /**
  * @method \Naraki\Media\Models\MediaType createModel(array $attributes = [])
  */
-class File extends Model implements FileInterface
+class File extends EloquentProvider implements FileInterface
 {
     /**
      * @var string This provider's model class

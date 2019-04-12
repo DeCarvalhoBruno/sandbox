@@ -1,22 +1,22 @@
 <?php namespace Naraki\Oauth\Traits;
 
-use App\Models\User as UserModel;
+use Naraki\Sentry\Models\User as UserModel;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
 use Naraki\Media\Jobs\ProcessAvatar;
 use Naraki\Oauth\Models\OAuthProvider;
 use Naraki\Oauth\Socialite\GoogleUser;
 
 /**
- * @see \App\Support\Providers\User
- * @method \App\Models\User createModel(array $attributes = [])
- * @property \App\Support\Providers\Person $person
+ * @see \Naraki\Sentry\Providers\User
+ * @method \Naraki\Sentry\Models\User createModel(array $attributes = [])
+ * @property \Naraki\Sentry\Providers\Person $person
  */
 trait OauthProcessable
 {
     /**
      * @param string $provider
      * @param \Naraki\Oauth\Socialite\GoogleUser $socialiteUser
-     * @return \App\Models\User
+     * @return \Naraki\Sentry\Models\User
      */
     public function processViaYolo(string $provider, GoogleUser $socialiteUser): UserModel
     {
@@ -88,7 +88,7 @@ trait OauthProcessable
     /**
      * @param string $provider
      * @param \Laravel\Socialite\Contracts\User $socialiteUser
-     * @return \App\Models\User
+     * @return \Naraki\Sentry\Models\User
      */
     public function processViaOAuth(string $provider, SocialiteUser $socialiteUser): UserModel
     {

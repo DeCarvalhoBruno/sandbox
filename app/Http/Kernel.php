@@ -31,7 +31,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
-            \App\Http\Middleware\SetLocale::class,
+            \Naraki\Core\Middleware\SetLocale::class,
 //            \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
@@ -42,7 +42,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
         'admin' => [
-            \App\Http\Middleware\SetLocale::class,
+            \Naraki\Core\Middleware\SetLocale::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
         'misc' => [
@@ -59,11 +59,11 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'frontend_auth' => \App\Http\Middleware\Frontend\Auth::class,
-        'frontend_guest'=> \App\Http\Middleware\Frontend\Guest::class,
-        'admin_auth' => \App\Http\Middleware\Admin\Auth::class,
-        'can' => \App\Http\Middleware\Authorize::class,
+        'frontend_auth' => \Naraki\Core\Middleware\Frontend\Auth::class,
+        'frontend_guest'=> \Naraki\Core\Middleware\Frontend\Guest::class,
+        'admin_auth' => \Naraki\Core\Middleware\Admin\Auth::class,
 
+        'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];

@@ -1,6 +1,6 @@
 <?php namespace Naraki\System\Providers;
 
-use App\Support\Providers\Model;
+use Naraki\Core\EloquentProvider;
 use Naraki\System\Contracts\EventLog as SystemEventLogInterface;
 use Naraki\System\Models\SystemEvent;
 use Carbon\Carbon;
@@ -9,7 +9,7 @@ use Carbon\Carbon;
  * Class SystemEventLog
  * @method \Naraki\System\Models\SystemEventLog createModel(array $attributes = [])
  */
-class EventLog extends Model implements SystemEventLogInterface
+class EventLog extends EloquentProvider implements SystemEventLogInterface
 {
     protected $model = \Naraki\System\Models\SystemEventLog::class;
 

@@ -6,7 +6,6 @@ class Frontend extends Routes
 {
     public function bind(Router $router)
     {
-
         $availableLocales = config('app.locales');
         unset($availableLocales[app()->getLocale()]);
         $availableLocales[''] = '';
@@ -100,9 +99,6 @@ class Frontend extends Routes
                 ->name(self::i18nRouteNames($locale, 'notifications'));
             $r->get(trans('routes.settings_account', [], $locale), 'Settings\Account@edit')
                 ->name(self::i18nRouteNames($locale, 'account'));
-            $r->get(trans('routes.user', [], $locale), 'User@show')
-                ->name(self::i18nRouteNames($locale, 'user'));
-            $r->delete('user/delete', 'User@delete');
         };
     }
 

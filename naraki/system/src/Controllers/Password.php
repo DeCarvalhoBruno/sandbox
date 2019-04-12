@@ -1,7 +1,7 @@
 <?php namespace Naraki\System\Controllers;
 
 use App\Http\Controllers\Admin\Controller;
-use App\Support\Providers\User as UserProvider;
+use Naraki\Sentry\Providers\User as UserProvider;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -12,7 +12,7 @@ class Password extends Controller
      * Update the user's password.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param \App\Support\Providers\User $userRepo
+     * @param \Naraki\Sentry\Providers\User $userRepo
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
      */

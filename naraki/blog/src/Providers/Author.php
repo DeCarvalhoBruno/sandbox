@@ -1,10 +1,10 @@
 <?php namespace Naraki\Blog\Providers;
 
 use Naraki\Blog\Contracts\Author as AuthorInterface;
-use App\Models\Person;
-use App\Support\Providers\Model;
+use Naraki\Sentry\Models\Person;
+use Naraki\Core\EloquentProvider;
 
-class Author extends Model implements AuthorInterface
+class Author extends EloquentProvider implements AuthorInterface
 {
     protected $model = Person::class;
 

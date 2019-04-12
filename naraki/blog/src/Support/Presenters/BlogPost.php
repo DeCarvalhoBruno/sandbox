@@ -1,6 +1,6 @@
 <?php namespace Naraki\Blog\Support\Presenters;
 
-use App\Support\Presenters\Presenter;
+use Naraki\Core\Presenter;
 use Illuminate\Support\Str;
 
 class BlogPost extends Presenter

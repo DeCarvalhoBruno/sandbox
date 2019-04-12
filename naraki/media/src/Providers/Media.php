@@ -1,13 +1,13 @@
 <?php namespace Naraki\Media\Providers;
 
-use App\Support\Providers\Model;
+use Naraki\Core\EloquentProvider;
 use Naraki\Media\Contracts\File as FileInterface;
 use Naraki\Media\Contracts\Media as MediaInterface;
 
 /**
  * @method \Naraki\Media\Models\MediaEntity createModel(array $attributes = [])
  */
-class Media extends Model implements MediaInterface
+class Media extends EloquentProvider implements MediaInterface
 {
     /**
      * @var \Naraki\Media\Contracts\File|\Naraki\Media\Providers\File

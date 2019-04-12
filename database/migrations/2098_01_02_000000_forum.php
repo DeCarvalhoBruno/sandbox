@@ -69,6 +69,9 @@ class Forum extends Migration
                 ->references('user_id')->on('users');
         });
         $this->createView();
+        $db = app()->make(\App\Contracts\RawQueries::class);
+        $db->triggerDeleteUser();
+
         if (App::environment() !== 'testing') {
             $this->incrementFavoriteCounterProcedure();
             $this->decrementFavoriteCounterProcedure();
