@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Facade;
 use Naraki\System\Contracts\System as SystemContract;
 
 /**
- * @method static \Naraki\System\Providers\UserSettings userSettings()
+ * @method static \Naraki\System\Providers\UserSubscriptions subscriptions()
  * @method static \Naraki\System\Providers\EventLog log()
  */
 class System extends Facade

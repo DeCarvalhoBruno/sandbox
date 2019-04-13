@@ -21,8 +21,8 @@ export const getters = {
 
 export const mutations = {
   [types.BROADCAST_INIT] (state, data) {
-    if (data.user.hasOwnProperty('system_events_subscribed') &&
-      data.user.system_events_subscribed && !state.isBroadcasting) {
+    if (data.user.hasOwnProperty('events_subscribed') &&
+      data.user.events_subscribed && !state.isBroadcasting) {
       state.broadcaster = new Echo({
         broadcaster: 'socket.io',
         client: io,
@@ -35,7 +35,7 @@ export const mutations = {
         }
       })
       state.isBroadcasting = true
-      let subs = data.user.system_events_subscribed.split(',')
+      let subs = data.user.events_subscribed
       subs.forEach((id) => {
         state.joinedNotificationChannels.push(parseInt(id))
         state.broadcaster.private(`notifications.${id}`)

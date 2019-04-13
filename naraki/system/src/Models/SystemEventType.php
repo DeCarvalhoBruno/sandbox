@@ -3,18 +3,18 @@
 use Naraki\Core\Traits\Enumerable;
 use Illuminate\Database\Eloquent\Model;
 
-class SystemSection extends Model
+class SystemEventType extends Model
 {
     use Enumerable;
 
-    const BACKEND = 1;
-    const FRONTEND = 2;
+    const BROADCAST = 1;
+    const EMAIL = 2;
 
     public $timestamps = false;
-    protected $primaryKey = 'system_section_id';
+    protected $primaryKey = 'system_event_type_id';
 
     protected $fillable = [
-        'system_section_name'
+        'system_event_type_name'
     ];
 
 }

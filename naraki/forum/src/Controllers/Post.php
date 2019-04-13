@@ -1,19 +1,19 @@
 <?php namespace Naraki\Forum\Controllers;
 
-use Naraki\Core\Controllers\Frontend\Controller;
-use Naraki\Core\Models\Entity;
-use Naraki\Core\Models\EntityType;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
+use Naraki\Core\Controllers\Frontend\Controller;
+use Naraki\Core\Models\Entity;
+use Naraki\Core\Models\EntityType;
 use Naraki\Forum\Events\PostCreated;
 use Naraki\Forum\Facades\Forum;
 use Naraki\Forum\Requests\CreateComment;
 use Naraki\Media\Models\Media;
 use Naraki\Media\Models\MediaEntity;
 use Naraki\Media\Models\MediaImgFormat;
+use Naraki\System\Facades\System;
 
 class Post extends Controller
 {
@@ -63,12 +63,17 @@ class Post extends Controller
         $posts = Forum::post()->getTree($dbPosts, $sort, $order);
         $notification_options = null;
         if (auth()->check()) {
-            $notification_options = Redis::hgetall(sprintf('comment_notif_opt.%s', auth()->user()->getKey()));
+            $notification_options = System::subscriptions()->cacheFrontendSubscriptions(auth()->user()->getKey());
+            $events = System::getFrontendEvents();
+
             if (empty($notification_options)) {
-                $notification_options = null;
+                $notification_options = [];
+                foreach ($events as $event) {
+                    $notification_options[$event['id']] = false;
+                }
             }
         }
-        return response(compact('posts', 'notification_options'), 200);
+        return response(compact('posts', 'notification_options', 'events'), 200);
     }
 
     /**
@@ -182,19 +187,16 @@ class Post extends Controller
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
+    /**.
+     * @param $type
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function updateNotifications($type)
     {
-        $requestOptions = app('request')->only(['option', 'flag']);
-        $redisKey = sprintf('comment_notif_opt.%s', auth()->user()->getKey());
-        $notificationOptions = Redis::hgetall($redisKey);
 
-        if (is_null($notificationOptions)) {
-            $notificationOptions = [$requestOptions['option'] => $requestOptions['flag']];
-        } else {
-            $notificationOptions[$requestOptions['option']] = $requestOptions['flag'];
-        }
-        Redis::hmset($redisKey, $notificationOptions);
-        return response(null, Response::HTTP_OK);
+        System::subscriptions()->saveFrontend(auth()->user()->getKey(), app('request')->get('data'));
+
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 
 }

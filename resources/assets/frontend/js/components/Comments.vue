@@ -22,16 +22,14 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                   <a class="dropdown-header" href="#">I get an email when: (click/tap to toggle)</a>
-                  <a class="dropdown-item"
+                  <a v-for="(event,idx) in notificationEvents"
+                     :key="'events'+idx"
+                     class="dropdown-item"
                      href.prevent="#"
-                     @click="changeNotifications('reply')"><i
-                      v-if="notificationOptions.reply" class="fa fa-check"></i><i v-else class="fa fa-times"></i>
-                    Someone replies to one of my comments</a>
-                  <a class="dropdown-item"
-                     href.prevent="#"
-                     @click="changeNotifications('mention')"><i
-                      v-if="notificationOptions.mention" class="fa fa-check"></i><i v-else class="fa fa-times"></i>
-                    Someone mentions me</a>
+                     @click="changeNotifications(event.id)"><i
+                      v-if="notificationOptions.hasOwnProperty(event.id)&&notificationOptions[event.id]===true"
+                      class="fa fa-check mr-1"></i><i
+                      v-else class="fa fa-times mr-1"></i>{{event.name}}</a>
                 </div>
               </div>
             </div>
@@ -107,10 +105,8 @@
         refreshDelay: 5000,
         commentDelay: 120000,
         userIsAuthenticated: false,
-        notificationOptions: {
-          reply: false,
-          mention: false
-        }
+        notificationOptions: {},
+        notificationEvents: null
       }
     },
     components: {
@@ -156,8 +152,12 @@
     },
     methods: {
       changeNotifications (type) {
-        this.notificationOptions[type] = !this.notificationOptions[type]
-        axios.patch(`/ajax/forum/blog_posts/options`, {option: type, flag: this.notificationOptions[type]})
+        if (this.notificationOptions[type]) {
+          this.notificationOptions[type] = !this.notificationOptions[type]
+        } else {
+          this.notificationOptions[type] = true
+        }
+        axios.patch(`/ajax/forum/blog_posts/options`, {data: this.notificationOptions})
       },
       goToLoginPage () {
         window.location.href = this.login
@@ -186,7 +186,8 @@
       async getData () {
         const {data} = await axios.get(`/ajax/forum/blog_posts/${this.slug}/comment`)
         this.comments = data.posts
-        if (data.notification_options!==null) {
+        this.notificationEvents = data.events
+        if (data.notification_options !== null) {
           this.notificationOptions = data.notification_options
         }
       }

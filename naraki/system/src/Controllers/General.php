@@ -4,7 +4,7 @@ use Naraki\Core\Controllers\Admin\Controller;
 use Illuminate\Http\Response;
 use Naraki\System\Facades\System;
 use Naraki\System\Models\SystemEvent;
-use Naraki\System\Models\SystemSection;
+use Naraki\System\Models\SystemEventType;
 
 class General extends Controller
 {
@@ -15,8 +15,8 @@ class General extends Controller
      */
     public function update()
     {
-        System::userSettings()
-            ->save($this->user->getKey(), SystemSection::BACKEND, app('request')->all());
+        System::subscriptions()
+            ->saveBackend($this->user->getKey(), app('request')->all());
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
@@ -25,17 +25,34 @@ class General extends Controller
      */
     public function edit()
     {
-        $settings = ['events' => null, 'email' => null];
-        $dbSettings = System::userSettings()->getSettings($this->user->getKey())->select('system_events_subscribed as events',
-            'system_email_subscribed as email')->first();
-        if (!is_null($dbSettings)) {
-            $settings = $dbSettings->toArray();
+        $settings = ['events' => [], 'email' => []];
+        $dbSubscriptions = System::subscriptions()
+            ->getSubscriptions($this->user->getKey())
+            ->select(['system_events.system_event_id as event','system_event_type_id as type'])
+            ->get();
+
+        if (!is_null($dbSubscriptions)) {
+            $dbSubArray = $dbSubscriptions->toArray();
+            foreach($dbSubArray as $sub){
+                switch ( $sub['type'] ) {
+                    case SystemEventType::BROADCAST:
+                    $settings['events'][] = $sub['event'];
+                    break;
+                    case SystemEventType::EMAIL:
+                    $settings['email'][] = $sub['event'];
+                    break;
+                }
+            }
         }
+
         $eventsDb = System::getEvents();
 
         $events = [];
         foreach ($eventsDb as $event) {
-            $events[] = ['id' => $event->getKey(), 'name' => SystemEvent::getConstantName($event->getKey(), true)];
+            $events[] = [
+                'id' => $event->getKey(),
+                'name' => SystemEvent::getConstantName($event->getKey(), true)
+            ];
         }
 
         return response([

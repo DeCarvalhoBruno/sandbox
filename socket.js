@@ -13,7 +13,8 @@ const options = {
   databaseConfig: {
     redis: {
       password: env.REDIS_PASSWORD,
-      db: env.BROADCAST_REDIS_DB
+      db: env.BROADCAST_REDIS_DB,
+      port: env.REDIS_PORT
     }
   },
   apiOriginAllow: {

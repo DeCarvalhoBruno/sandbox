@@ -11,8 +11,8 @@ use Naraki\Core\Contracts\HasAnEntity as HasAnEntityContract;
 use Naraki\Core\Models\Entity;
 use Naraki\Core\Traits\Enumerable;
 use Naraki\Core\Traits\Models\DoesSqlStuff;
-use Naraki\Core\Traits\Models\HasASlug;
 use Naraki\Core\Traits\Models\HasAnEntity as HasAnEntity;
+use Naraki\Core\Traits\Models\HasASlug;
 use Naraki\Core\Traits\Models\Presentable;
 use Naraki\Mail\Emails\User\PasswordReset;
 use Naraki\Mail\Jobs\SendMail;
@@ -21,6 +21,7 @@ use Naraki\Oauth\Contracts\HasOauthScope as HasOauthScopeInterface;
 use Naraki\Oauth\Traits\HasOauthScope;
 use Naraki\Permission\Contracts\HasPermissions as HasPermissionsContract;
 use Naraki\Permission\Traits\HasPermissions as HasPermissions;
+use Naraki\System\Facades\System;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends LaravelUser implements JWTSubject, HasAnEntityContract, HasPermissionsContract, EnumerableContract, HasOauthScopeInterface
@@ -119,42 +120,14 @@ class User extends LaravelUser implements JWTSubject, HasAnEntityContract, HasPe
     }
 
     /**
-     * Sets the attribute that stores system event ids for which the user
-     * should be notified in real time.
-     *
-     * @see \Naraki\System\Models\SystemEvent
-     */
-    public function setSubscribedNotifications()
-    {
-        $this->setAttribute(
-            'system_events_subscribed',
-            $this->getSubscribedNotifications()
-        );
-    }
-
-    /**
-     * Retrieves the attribute that stores system event ids for which the user
-     * should be notified in real time.
-     *
-     * @return array
-     * @see \Naraki\System\Models\SystemEvent
-     */
-    public function getSubscribedNotifications()
-    {
-        $f = explode(',', $this->getAttribute('system_events_subscribed'));
-        if ($f[0] === "") {
-            return [];
-        }
-        return $f;
-    }
-
-    /**
      * @param int $systemEventID
      * @return bool
      */
     public function shouldBeNotified(int $systemEventID): bool
     {
-        $notifs = $this->getSubscribedNotifications();
+        $notifs = System::subscriptions()
+            ->cacheLiveNotifications(auth()->user()->getKey());
+
         if (is_array($notifs) && !empty($notifs)) {
             $notifKeys = array_flip($notifs);
             return isset($notifKeys[$systemEventID]);
@@ -318,10 +291,10 @@ class User extends LaravelUser implements JWTSubject, HasAnEntityContract, HasPe
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder $builder
      */
-    public function scopeSettings(Builder $builder)
+    public function scopeSubscriptions(Builder $builder)
     {
-        return $builder->leftJoin('system_user_settings',
-            'system_user_settings.user_id',
+        return $builder->leftJoin('system_user_subscriptions',
+            'system_user_subscriptions.user_id',
             '=',
             'users.user_id'
         );

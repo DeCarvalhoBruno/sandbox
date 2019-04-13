@@ -1,9 +1,10 @@
 <?php namespace Naraki\Core\Composers;
 
-use Naraki\Core\Facades\JavaScript;
 use Naraki\Core\Composer;
-use Naraki\Sentry\Models\User;
+use Naraki\Core\Facades\JavaScript;
 use Naraki\Permission\Facades\Permission;
+use Naraki\Sentry\Models\User;
+use Naraki\System\Facades\System;
 
 class Admin extends Composer
 {
@@ -16,8 +17,11 @@ class Admin extends Composer
         $tmp = auth()->user();
         $user = null;
         if ($tmp instanceof User) {
-            $user = $tmp->only(['username', 'system_events_subscribed']);
+            $user = $tmp->only(['username']);
         }
+        $subs = System::subscriptions()
+            ->cacheLiveNotifications(auth()->user()->getKey());
+        $user['events_subscribed'] = $subs;
 
         JavaScript::putArray([
             'appName' => config('app.name'),

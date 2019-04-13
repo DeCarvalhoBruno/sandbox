@@ -230,9 +230,7 @@ class User extends EloquentProvider implements UserProvider, UserInterface, Oaut
         $model = $this->createModel();
         $builder = $model->newQuery()->scopes(['entityType'])
             ->where($model->getIdentifier($identifier), $identifier);
-        if (auth()->guard() instanceof JWTGuard) {
-            return $builder->scopes(['settings'])->first();
-        }
+
         return $builder->first();
     }
 
@@ -286,9 +284,6 @@ class User extends EloquentProvider implements UserProvider, UserInterface, Oaut
         }
 
         $builder = $this->createModel()->newQuery()->scopes(['entityType']);
-        if (auth()->guard() instanceof JWTGuard) {
-            $builder = $builder->scopes(['settings']);
-        }
 
         foreach ($credentials as $key => $value) {
             if (!Str::contains($key, 'password')) {

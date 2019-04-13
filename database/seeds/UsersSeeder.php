@@ -112,7 +112,7 @@ class UsersSeeder extends Seeder
                 'created_at' => $faker->dateTimeBetween('-2 years')
             ]);
 
-            Media::image()->createAvatar($username, sprintf('%s %s', $fn, $ln));
+//            Media::image()->createAvatar($username, sprintf('%s %s', $fn, $ln));
 
             if ($i % 50 == 0) {
                 $groupID = 3;

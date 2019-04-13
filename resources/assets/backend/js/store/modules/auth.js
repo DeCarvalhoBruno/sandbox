@@ -21,7 +21,7 @@ export const getters = {
   check: state => state.user !== null,
   shouldBeNotified: state => id => {
     if (state.user !== null) {
-      return state.user.system_events_subscribed.includes(id)
+      return state.user.events_subscribed.includes(id)
     }
     return false
   },
@@ -45,7 +45,7 @@ export const mutations = {
   },
 
   [types.PATCH_USER] (state, data) {
-    state.user.system_events_subscribed = data
+    state.user.events_subscribed = data
   },
 
   [types.REFRESH_TOKEN] (state, {token}) {

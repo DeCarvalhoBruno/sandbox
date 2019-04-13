@@ -9,7 +9,7 @@ class ServiceProvider extends LaravelServiceProvider
     public function register()
     {
         $this->app->singleton(Contracts\EventLog::class, Providers\EventLog::class);
-        $this->app->singleton(Contracts\UserSettings::class, Providers\UserSettings::class);
+        $this->app->singleton(Contracts\UserSubscriptions::class, Providers\UserSubscriptions::class);
         $this->app->singleton(Contracts\System::class, Providers\System::class);
     }
 

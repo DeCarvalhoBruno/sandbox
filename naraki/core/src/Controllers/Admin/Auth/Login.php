@@ -1,11 +1,12 @@
 <?php namespace Naraki\Core\Controllers\Admin\Auth;
 
-use Naraki\Core\Controllers\Admin\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
+use Naraki\Core\Controllers\Admin\Controller;
 use Naraki\Permission\Facades\Permission;
+use Naraki\System\Facades\System;
 
 class Login extends Controller
 {
@@ -51,13 +52,16 @@ class Login extends Controller
         $token = (string)$this->guard()->getToken();
         $expiration = $this->guard()->getPayload()->get('exp');
 
+        $user = $this->guard()->user()->only([
+            'username',
+            'first_name',
+            'last_name'
+        ]);
+        $user['events_subscribed'] = System::subscriptions()
+            ->cacheLiveNotifications($this->guard()->user()->getKey());
+
         return [
-            'user' => $this->guard()->user()->only([
-                'username',
-                'first_name',
-                'last_name',
-                'system_events_subscribed'
-            ]),
+            'user' => $user,
             'token' => $token,
             'expires_in' => $expiration - time(),
         ];

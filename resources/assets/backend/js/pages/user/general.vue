@@ -95,7 +95,7 @@
         }
         await this.form.patch('/ajax/admin/user/general')
         this.$store.dispatch('auth/patchUser', this.form.fields.events.join(','))
-        console.log(this.form.getFormData())
+
         this.$store.dispatch('broadcast/updateNotifications', {
             data: {
               token: this.$store.getters['auth/token'],
@@ -110,16 +110,17 @@
       },
       getInfo (data) {
         this.settings = data
+
         if (data.existing.events == null) {
           this.form.fields.events = []
         } else {
-          this.form.fields.events = data.existing.events.split(',')
+          this.form.fields.events = data.existing.events
         }
 
         if (data.existing.email == null) {
           this.form.fields.email = []
         } else {
-          this.form.fields.email = data.existing.email.split(',')
+          this.form.fields.email = data.existing.email
         }
       }
     },
