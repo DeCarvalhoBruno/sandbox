@@ -10,6 +10,7 @@ class SystemUserSettings extends Model
     protected $fillable = [
         'system_section_id',
         'system_events_subscribed',
+        'system_email_subscribed',
         'user_id'
     ];
 

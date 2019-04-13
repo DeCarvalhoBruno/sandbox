@@ -17,4 +17,6 @@ interface RawQueries
 
     public function getAllUserPermissions($entityTypeId);
 
+    public function triggerUsersDelete();
+
 }

@@ -1,18 +1,18 @@
 <?php namespace Naraki\Sentry\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\JoinClause;
+use Naraki\Core\Contracts\Enumerable as EnumerableContract;
 use Naraki\Core\Contracts\HasAnEntity;
 use Naraki\Core\Models\Entity;
 use Naraki\Core\Traits\Enumerable;
 use Naraki\Core\Traits\Models\DoesSqlStuff;
 use Naraki\Core\Traits\Models\HasASlug;
 use Naraki\Core\Traits\Models\HasAnEntity as HasAnEntityTrait;
-use Naraki\Permission\Traits\HasPermissions as HasPermissionsTrait;
-use Naraki\Permission\Contracts\HasPermissions;
 use Naraki\Core\Traits\Models\Presentable;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Naraki\Core\Contracts\Enumerable as EnumerableContract;
-use Illuminate\Database\Query\JoinClause;
+use Naraki\Permission\Contracts\HasPermissions;
+use Naraki\Permission\Traits\HasPermissions as HasPermissionsTrait;
 
 class Group extends Model implements HasAnEntity, HasPermissions, EnumerableContract
 {

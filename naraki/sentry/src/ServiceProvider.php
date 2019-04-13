@@ -32,7 +32,6 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function boot()
     {
-
         Gate::policy(Models\User::class, Policies\User::class);
         Gate::policy(Models\Group::class, Policies\Group::class);
 

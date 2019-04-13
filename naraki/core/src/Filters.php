@@ -1,7 +1,6 @@
 <?php namespace Naraki\Core;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 
 abstract class Filters
 {
@@ -33,16 +32,9 @@ abstract class Filters
      */
     protected $filtersFor;
 
-
-    /**
-     * @param \Illuminate\Http\Request $request
-     */
-    public function __construct(Request $request = null)
+    public function __construct()
     {
-        if (is_null($request)) {
-            return;
-        }
-        $this->parsedFilters = array_filter($request->only($this->getFilters()));
+        $this->parsedFilters = array_filter(app('request')->only($this->getFilters()));
         $this->acceptedSortColumns = array_flip($this->acceptedSortColumns);
     }
 
@@ -102,15 +94,8 @@ abstract class Filters
         return isset($this->parsedFilters[$this->translateFilter($value)]);
     }
 
-    public function hasFilters(){
-        return (!empty($this->parsedFilters));
-    }
-
-    /**
-     * @return String
-     */
-    public function getFiltersFor()
+    public function hasFilters()
     {
-        return $this->filtersFor;
+        return (!empty($this->parsedFilters));
     }
 }

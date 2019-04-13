@@ -30,7 +30,7 @@ class Forum extends Migration
             $table->increments('forum_thread_id');
             $table->unsignedInteger('forum_board_id');
             $table->unsignedInteger('forum_thread_first_post_id');
-            $table->unsignedInteger('thread_user_id');
+            $table->unsignedInteger('thread_user_id')->nullable();
 
             $table->string('forum_thread_title')->nullable();
             $table->dateTime('forum_thread_last_post');
@@ -42,13 +42,14 @@ class Forum extends Migration
                 ->references('forum_board_id')->on('forum_boards')
                 ->onDelete('cascade');
             $table->foreign('thread_user_id')
-                ->references('user_id')->on('users');
+                ->references('user_id')->on('users')
+                ->onDelete('set null');
         });
 
         Schema::create('forum_posts', function (Blueprint $table) {
             $table->increments('forum_post_id');
             $table->unsignedInteger('entity_type_id');
-            $table->unsignedInteger('post_user_id');
+            $table->unsignedInteger('post_user_id')->nullable();
 
             $table->unsignedInteger('parent_id')->nullable();
             $table->unsignedInteger('lft')->default(0);
@@ -66,13 +67,14 @@ class Forum extends Migration
                 ->references('entity_type_id')->on('entity_types')
                 ->onDelete('cascade');
             $table->foreign('post_user_id')
-                ->references('user_id')->on('users');
+                ->references('user_id')->on('users')
+                ->onDelete('set null');
         });
         $this->createView();
         $db = app()->make(\Naraki\Core\Contracts\RawQueries::class);
 
         if (App::environment() !== 'testing') {
-            $db->triggerDeleteUser();
+            $db->triggerUsersDelete();
             $this->incrementFavoriteCounterProcedure();
             $this->decrementFavoriteCounterProcedure();
         }

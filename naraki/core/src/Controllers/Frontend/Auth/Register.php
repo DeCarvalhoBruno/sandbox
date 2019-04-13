@@ -1,11 +1,9 @@
-<?php
-
-namespace Naraki\Core\Controllers\Frontend\Auth;
+<?php namespace Naraki\Core\Controllers\Frontend\Auth;
 
 use Naraki\Sentry\Events\UserRegistered;
 use Naraki\Core\Controllers\Frontend\Controller;
 use Naraki\Sentry\Requests\Frontend\CreateUser;
-use Naraki\Sentry\Providers\User as UserProvider;
+use Naraki\Sentry\Facades\User as UserProvider;
 
 class Register extends Controller
 {
@@ -23,15 +21,14 @@ class Register extends Controller
      * Handle a registration request for the application.
      *
      * @param \Naraki\Sentry\Requests\Frontend\CreateUser $request
-     * @param \Naraki\Sentry\Providers\User $userRepo
      * @return \Illuminate\Http\Response
      */
-    public function register(CreateUser $request, UserProvider $userRepo)
+    public function register(CreateUser $request)
     {
-        $user = $userRepo->createOne($request->except(['timezone']));
-        $userRepo->updateStats($user,$request->only(['stat_user_timezone']));
+        $user = UserProvider::createOne($request->except(['timezone']));
+        UserProvider::updateStats($user,$request->only(['stat_user_timezone']));
 
-        event(new UserRegistered($user, $userRepo->generateActivationToken($user)));
+        event(new UserRegistered($user, UserProvider::generateActivationToken($user)));
         return redirect(route_i18n('login'))->with('status', 'registered');
     }
 

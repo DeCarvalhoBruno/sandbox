@@ -7,40 +7,28 @@ use Naraki\Core\Models\Entity;
 use Naraki\Media\Facades\Media as MediaProvider;
 use Naraki\Permission\Events\PermissionEntityUpdated;
 use Naraki\Permission\Facades\Permission;
-use Naraki\Sentry\Contracts\Group as GroupProvider;
 use Naraki\Sentry\Events\UserRegistered;
-use Naraki\Sentry\Models\Filters\User as UserFilter;
+use Naraki\Sentry\Facades\Group as GroupProvider;
+use Naraki\Sentry\Facades\User as UserProvider;
 use Naraki\Sentry\Requests\Admin\UpdateUser;
 
 class User extends Controller
 {
     /**
-     * @var \Naraki\Sentry\Contracts\User|\Naraki\Sentry\Providers\User $userProvider
-     */
-    private $repo;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->repo = app(\Naraki\Sentry\Contracts\User::class);
-    }
-
-    /**
-     * @param \Naraki\Sentry\Models\Filters\User $userFilter
      * @return array
      */
-    public function index(UserFilter $userFilter)
+    public function index()
     {
-        $this->repo->setStoredFilter(Entity::USERS, $this->user->getKey(), $userFilter);
-        $usersDb = $this->repo
-            ->select([
-                \DB::raw('null as selected'),
-                'username',
-                'full_name',
-                'email',
-                'created_at as created_ago',
-                'created_at'
-            ])
+        $userFilter = UserProvider::newFilter();
+        UserProvider::setStoredFilter(Entity::USERS, $this->user->getKey(), $userFilter);
+        $usersDb = UserProvider::select([
+            \DB::raw('null as selected'),
+            'username',
+            'full_name',
+            'email',
+            'created_at as created_ago',
+            'created_at'
+        ])
             ->where('username', '!=', $this->user->getAttribute('username'))
             ->filter($userFilter);
 
@@ -57,16 +45,15 @@ class User extends Controller
         $usersPaginated = $usersDb->paginate(25);
         unset($usersDb);
 
-        $userPermissions = $this->repo
-            ->buildWithScopes([
-                'username',
-                'permission_mask as acl'
-            ], [
-                'entityType',
-                'permissionRecord',
-                'permissionStore',
-                'permissionMask' => $this->user->getEntityType(),
-            ])
+        $userPermissions = UserProvider::buildWithScopes([
+            'username',
+            'permission_mask as acl'
+        ], [
+            'entityType',
+            'permissionRecord',
+            'permissionStore',
+            'permissionMask' => $this->user->getEntityType(),
+        ])
             ->whereIn('username', $usersPaginated->pluck('username')->all())
             ->orderBy('users.user_id', 'asc')
             ->get();
@@ -93,7 +80,7 @@ class User extends Controller
             'table' => $usersPaginated,
             'groups' => $groups->pluck('group_name'),
             'sorted' => $userFilter->getFilter('sortBy'),
-            'columns' => $this->repo->createModel()->getColumnInfo([
+            'columns' => UserProvider::createModel()->getColumnInfo([
                 'full_name' => (object)[
                     'name' => trans('js-backend.db.full_name'),
                 ],
@@ -108,17 +95,15 @@ class User extends Controller
     }
 
     /**
-     * @param \Naraki\Sentry\Contracts\Group|\Naraki\Sentry\Providers\Group $groupProvider
      * @return array
      */
-    public function add(GroupProvider $groupProvider)
+    public function add()
     {
         return [
             'user' => [],
             'nav' => [],
             'intended' => null,
-            'groups' => $groupProvider
-                ->buildWithScopes([
+            'groups' => GroupProvider::buildWithScopes([
                     'group_name as name',
                     'group_slug as slug',
                     \DB::raw('false as isMember'),
@@ -138,15 +123,14 @@ class User extends Controller
 
     /**
      * @param \Naraki\Sentry\Requests\Admin\UpdateUser $request
-     * @param \Naraki\Sentry\Contracts\Group|\Naraki\Sentry\Providers\Group $groupProvider
      * @return \Illuminate\Http\Response
      */
-    public function create(UpdateUser $request, GroupProvider $groupProvider)
+    public function create(UpdateUser $request)
     {
-        $user = $this->repo->createOne($request->all(), true);
+        $user = UserProvider::createOne($request->all(), true);
 
         if ($request->hasGroups()) {
-            $groupProvider->updateSingleMemberGroups($user->getKey(), $request->getGroups());
+            GroupProvider::updateSingleMemberGroups($user->getKey(), $request->getGroups());
         }
 
         if ($request->hasPermissions()) {
@@ -164,15 +148,14 @@ class User extends Controller
 
     /**
      * @param $username
-     * @param \Naraki\Sentry\Contracts\Group|\Naraki\Sentry\Providers\Group $groupProvider
      * @return mixed
      */
-    public function edit($username, GroupProvider $groupProvider)
+    public function edit($username)
     {
-        $filter = $this->repo->getStoredFilter(Entity::USERS, $this->user->getKey());
+        $filter = UserProvider::getStoredFilter(Entity::USERS, $this->user->getKey());
         $nav = [];
         if (!is_null($filter)) {
-            $userSiblings = $this->repo->buildWithScopes([
+            $userSiblings = UserProvider::buildWithScopes([
                 'username',
             ], [
                 'entityType',
@@ -194,7 +177,7 @@ class User extends Controller
                 'next' => ($userSiblings[$index + 1] ?? null)
             );
         }
-        $user = $this->repo->buildOneByUsername($username,
+        $user = UserProvider::buildOneByUsername($username,
             [
                 'first_name',
                 'last_name',
@@ -211,8 +194,7 @@ class User extends Controller
             ->buildImages($entityTypeId, null, true)
             ->first();
 
-        $allVisibleGroups = $groupProvider
-            ->buildWithScopes([
+        $allVisibleGroups = GroupProvider::buildWithScopes([
                 'group_name as name',
                 'group_slug as slug',
             ], [
@@ -225,7 +207,7 @@ class User extends Controller
             ->groupBy([
                 'group_slug',
             ])->get();
-        $userGroupsDb = $this->repo->buildOneWithScopes([
+        $userGroupsDb = UserProvider::buildOneWithScopes([
             'groups.group_id as id',
             'group_slug as slug'
         ], ['groupMember'], [['username', $username]])->pluck('id', 'slug');
@@ -252,18 +234,16 @@ class User extends Controller
     /**
      * @param $username
      * @param \Naraki\Sentry\Requests\Admin\UpdateUser $request
-     * @param \Naraki\Sentry\Contracts\Group|\Naraki\Sentry\Providers\Group $groupProvider
      * @return \Illuminate\Http\Response
      */
     public function update(
         $username,
-        UpdateUser $request,
-        GroupProvider $groupProvider
+        UpdateUser $request
     ) {
-        $user = $this->repo->updateOneByUsername($username, $request->all());
+        $user = UserProvider::updateOneByUsername($username, $request->all());
 
         if ($request->hasGroups()) {
-            $groupProvider->updateSingleMemberGroups($user->getKey(), $request->getGroups());
+            GroupProvider::updateSingleMemberGroups($user->getKey(), $request->getGroups());
         }
 
         if ($request->hasPermissions()) {
@@ -288,7 +268,7 @@ class User extends Controller
     public function search($search, $limit)
     {
         return response(
-            $this->repo->search(
+            UserProvider::search(
                 preg_replace('/[^\w\s\-\']/', '', strip_tags($search)),
                 $this->user->getAttribute('entity_type_id'),
                 intval($limit)
@@ -302,7 +282,7 @@ class User extends Controller
      */
     public function destroy($username)
     {
-        $this->repo->deleteByUsername($username);
+        UserProvider::deleteByUsername($username);
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
@@ -313,7 +293,7 @@ class User extends Controller
      */
     public function batchDestroy(Request $request)
     {
-        $this->repo->deleteByUsername($request->only('users'));
+        UserProvider::deleteByUsername($request->only('users'));
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
@@ -330,7 +310,7 @@ class User extends Controller
                 'username',
                 'full_name',
             ]),
-            'avatars' => $this->repo->getAvatars($this->user->getKey())
+            'avatars' => UserProvider::getAvatars($this->user->getKey())
         ], Response::HTTP_OK);
     }
 

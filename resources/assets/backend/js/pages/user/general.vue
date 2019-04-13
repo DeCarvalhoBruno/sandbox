@@ -12,13 +12,29 @@
     <div class="form-group row">
       <label class="col-md-3 col-form-label text-md-right"></label>
       <div class="col-md-7">
-        <p>{{$t('pages.user.notifications')}}</p>
+        <h5>{{$t('pages.user.notification_header')}}</h5>
+        <hr class="my-1 mb-3">
+        <p class="mt-3">{{$t('pages.user.notifications')}}</p>
         <div v-for="event in settings.events" :key="'events'+event.id"
              class="custom-control custom-switch m-1">
           <input type="checkbox"
-                 class="custom-control-input" :value="event.id" :id="event.id"
+                 class="custom-control-input" :value="event.id" :id="'events'+event.id"
                  v-model="form.fields.events">
-          <label class="custom-control-label" :for="event.id">{{event.name}}</label>
+          <label class="custom-control-label" :for="'events'+event.id">{{event.name}}</label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-md-3 col-form-label text-md-right"></label>
+      <div class="col-md-7">
+        <h5>{{$t('pages.user.email_header')}}</h5>
+        <hr class="mt-1 mb-3">
+        <div v-for="event in settings.events" :key="'email'+event.id"
+             class="custom-control custom-switch m-1">
+          <input type="checkbox"
+                 class="custom-control-input" :value="event.id" :id="'email'+event.id"
+                 v-model="form.fields.email">
+          <label class="custom-control-label" :for="'email'+event.id">{{event.name}}</label>
         </div>
       </div>
     </div>
@@ -39,7 +55,7 @@
   import swal from 'back_path/mixins/sweet-alert'
 
   export default {
-    name:'settings-general',
+    name: 'settings-general',
     scrollToTop: false,
     components: {
       SubmitButton
@@ -79,11 +95,13 @@
         }
         await this.form.patch('/ajax/admin/user/general')
         this.$store.dispatch('auth/patchUser', this.form.fields.events.join(','))
+        console.log(this.form.getFormData())
         this.$store.dispatch('broadcast/updateNotifications', {
             data: {
               token: this.$store.getters['auth/token'],
               user: this.$store.getters['auth/user'],
-              events: this.form.fields.events
+              events: this.form.fields.events,
+              email: this.form.fields.email
             }
           }
         )
@@ -93,9 +111,15 @@
       getInfo (data) {
         this.settings = data
         if (data.existing.events == null) {
-          data.existing.events = []
+          this.form.fields.events = []
         } else {
           this.form.fields.events = data.existing.events.split(',')
+        }
+
+        if (data.existing.email == null) {
+          this.form.fields.email = []
+        } else {
+          this.form.fields.email = data.existing.email.split(',')
         }
       }
     },

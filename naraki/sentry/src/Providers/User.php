@@ -1,16 +1,22 @@
 <?php namespace Naraki\Sentry\Providers;
 
-use Naraki\Sentry\Models\StatUser;
-use Naraki\Core\EloquentProvider;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Hashing\BcryptHasher;
 use Illuminate\Support\Str;
+use Naraki\Core\EloquentProvider;
+use Naraki\Core\Models\Entity;
+use Naraki\Core\Traits\Filterable;
+use Naraki\Media\Facades\Media as MediaProvider;
+use Naraki\Media\Models\Media;
+use Naraki\Media\Models\MediaGroupType;
+use Naraki\Media\Models\MediaType;
 use Naraki\Oauth\Contracts\OauthProcessable as OauthProcessableInterface;
 use Naraki\Oauth\Traits\OauthProcessable;
 use Naraki\Sentry\Contracts\Person as PersonInterface;
 use Naraki\Sentry\Contracts\User as UserInterface;
+use Naraki\Sentry\Models\StatUser;
 use Naraki\Sentry\Models\User as UserModel;
 use Naraki\Sentry\Models\UserActivation;
 use Tymon\JWTAuth\JWTGuard;
@@ -23,9 +29,16 @@ use Tymon\JWTAuth\JWTGuard;
  */
 class User extends EloquentProvider implements UserProvider, UserInterface, OauthProcessableInterface
 {
-    use OauthProcessable, DispatchesJobs;
+    use OauthProcessable, DispatchesJobs, Filterable;
 
+    /**
+     * @var string
+     */
     protected $model = \Naraki\Sentry\Models\User::class;
+    /**
+     * @var string
+     */
+    protected $filter = \Naraki\Sentry\Models\Filters\User::class;
     /**
      * @var \Illuminate\Contracts\Hashing\Hasher
      */
@@ -153,18 +166,45 @@ class User extends EloquentProvider implements UserProvider, UserInterface, Oaut
     }
 
     /**
+     * We make sure to delete physical images first, because we have to grab image information that won't be present
+     * if we delete users first. The user deletion deletes any entities with a foreign constraint on it, so media
+     * db entries would be deleted and we'd lose the media info we need to fetch the right image for deletion.
+     *
      * @param string|array $username
      * @throws \Exception
      */
     public function deleteByUsername($username)
     {
+        $db = $this->select(['person_id', 'users.user_id', 'entity_types.entity_type_id'])
+            ->scopes(['entityType']);
         if (is_array($username)) {
-            $this->createModel()->newQueryWithoutScopes()
-                ->whereIn('username', $username['users'])->delete();
+            $dbResult = $db->whereIn('username', $username['users'])->get();
+            $people = $dbResult->pluck('person_id');
+            $users = $dbResult->pluck('user_id');
+            $entityType = $dbResult->pluck('entity_type_id')->toArray();
+            MediaProvider::image()->deleteByEntity($entityType, Entity::USERS, Media::IMAGE_AVATAR);
+            $this->person()->select(['person_id'])
+                ->whereIn('person_id', $people)
+                ->delete();
+            $this->createModel()->newQueryWithoutScopes()->select(['user_id'])
+                ->whereIn('user_id', $users)
+                ->delete();
+
         } else {
-            $this->createModel()->newQueryWithoutScopes()
-                ->where('username', '=', $username)->delete();
+            $dbResult = $db->where('username', '=', $username)
+                ->first();
+            $person = $dbResult->getAttribute('person_id');
+            $user = $dbResult->getAttribute('user_id');
+            $entityType = $dbResult->getAttribute('entity_type_id');
+            MediaProvider::image()->deleteByEntity($entityType, Entity::USERS, Media::IMAGE_AVATAR);
+            $this->person()->select(['person_id'])
+                ->whereKey($person)
+                ->delete();
+            $this->createModel()->newQueryWithoutScopes()->select(['users.user_id'])
+                ->whereKey($user)
+                ->delete();
         }
+
     }
 
     /**

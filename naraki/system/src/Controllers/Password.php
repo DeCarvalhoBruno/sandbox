@@ -1,7 +1,7 @@
 <?php namespace Naraki\System\Controllers;
 
 use Naraki\Core\Controllers\Admin\Controller;
-use Naraki\Sentry\Providers\User as UserProvider;
+use Naraki\Sentry\Facades\User as UserProvider;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -12,11 +12,9 @@ class Password extends Controller
      * Update the user's password.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param \Naraki\Sentry\Providers\User $userRepo
      * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, UserProvider $userRepo)
+    public function update(Request $request)
     {
         $user = auth()->user();
         \Validator::make($request->all(), [
@@ -33,7 +31,7 @@ class Password extends Controller
             return true;
         })->validate();
 
-        $userRepo->updateOneByUsername(
+        UserProvider::updateOneByUsername(
             $this->user->getAttribute('username'),
             ['password' => bcrypt($request->get('password'))]
         );

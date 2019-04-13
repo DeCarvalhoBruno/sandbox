@@ -21,7 +21,7 @@ trait CreatesDatabaseResources
         $u = [];
         for ($i = 0; $i < $times; $i++) {
             $u[$i] = factory(User::class)->create([]);
-            factory(Person::class, $times)->create(['user_id' => $u[$i]->getKey()]);
+            factory(Person::class)->create(['user_id' => $u[$i]->getKey()]);
         }
 
         return (count($u) === 1)

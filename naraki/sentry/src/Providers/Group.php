@@ -2,6 +2,7 @@
 
 use Naraki\Core\Contracts\RawQueries;
 use Naraki\Core\EloquentProvider;
+use Naraki\Core\Traits\Filterable;
 use Naraki\Permission\Events\PermissionEntityUpdated;
 use Naraki\Sentry\Contracts\Group as GroupInterface;
 use Naraki\Sentry\Models\GroupMember;
@@ -12,7 +13,15 @@ use Naraki\Sentry\Models\GroupMember;
  */
 class Group extends EloquentProvider implements GroupInterface
 {
+    use Filterable;
+    /**
+     * @var string
+     */
     protected $model = \Naraki\Sentry\Models\Group::class;
+    /**
+     * @var string
+     */
+    protected $filter = \Naraki\Sentry\Models\Filters\Group::class;
 
     /**
      * @param string $slug

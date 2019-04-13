@@ -3,6 +3,7 @@
 use Naraki\Core\Controllers\Admin\Controller;
 use Illuminate\Http\Response;
 use Naraki\System\Facades\System;
+use Naraki\System\Models\SystemEvent;
 use Naraki\System\Models\SystemSection;
 
 class General extends Controller
@@ -24,9 +25,18 @@ class General extends Controller
      */
     public function edit()
     {
-        $settings = [];
-        $settings['events'] = $this->user->getAttribute('system_events_subscribed');
-        $events = System::getEvents();
+        $settings = ['events' => null, 'email' => null];
+        $dbSettings = System::userSettings()->getSettings($this->user->getKey())->select('system_events_subscribed as events',
+            'system_email_subscribed as email')->first();
+        if (!is_null($dbSettings)) {
+            $settings = $dbSettings->toArray();
+        }
+        $eventsDb = System::getEvents();
+
+        $events = [];
+        foreach ($eventsDb as $event) {
+            $events[] = ['id' => $event->getKey(), 'name' => SystemEvent::getConstantName($event->getKey(), true)];
+        }
 
         return response([
             'existing' => $settings,

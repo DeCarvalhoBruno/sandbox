@@ -13,7 +13,11 @@
           </figure>
           <div class="comment-header-item">
             <div class="d-block">
-              <div class="username"><a :href="comment.name">{{comment.username}}</a></div>
+              <div class="username">
+                <a v-if="comment.username" :href="comment.url">{{comment.username}}</a>
+                <span v-else>{{$t('comments.deleted_user')}}</span>
+              </div>
+
               <div class="date">{{comment.updated_at}}</div>
             </div>
           </div>

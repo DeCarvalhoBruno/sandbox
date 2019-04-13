@@ -5,8 +5,6 @@ use Carbon\Carbon;
 
 class User extends Filters
 {
-    protected $filtersFor = \Naraki\Sentry\Models\User::class;
-
     protected $filters = ['sortBy', 'order', 'fullName', 'createdAt', 'group'];
 
     protected $acceptedSortColumns = ['full_name', 'email', 'created_at'];

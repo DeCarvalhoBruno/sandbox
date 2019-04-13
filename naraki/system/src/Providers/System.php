@@ -48,12 +48,12 @@ class System extends EloquentProvider implements SystemInterface
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return SystemEvent[]
      */
     public function getEvents()
     {
         return SystemEvent::query()
-            ->select(['system_event_id as id', 'system_event_name as name'])->get();
+            ->select(['system_event_id', 'system_event_name as name'])->get();
     }
 
 }

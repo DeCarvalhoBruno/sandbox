@@ -1,16 +1,16 @@
 <?php namespace Naraki\Oauth\Controllers;
 
-use Naraki\Sentry\Contracts\User as UserProvider;
-use Naraki\Core\Controllers\Frontend\Controller;
 use Firebase\JWT\JWT;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
+use Laravel\Socialite\Facades\Socialite;
+use Naraki\Core\Controllers\Frontend\Controller;
 use Naraki\Oauth\Exceptions\EmailNotVerified;
 use Naraki\Oauth\Socialite\GoogleUser;
+use Naraki\Sentry\Facades\User as UserProvider;
 
 class OAuth extends Controller
 {
@@ -46,17 +46,16 @@ class OAuth extends Controller
      *
      * @param  string $provider
      * @param \Illuminate\Http\Request $request
-     * @param \Naraki\Sentry\Contracts\User|\Naraki\Sentry\Providers\User $userRepo
      * @return \Illuminate\Http\Response
      */
-    public function handleProviderCallback($provider, Request $request, UserProvider $userRepo)
+    public function handleProviderCallback($provider, Request $request)
     {
         if ($provider !== 'twitter') {
             $socialiteUser = Socialite::driver($provider)->stateless()->user();
         } else {
             $socialiteUser = Socialite::driver($provider)->user();
         }
-        $this->processUser($request, $userRepo, $provider, $socialiteUser);
+        $this->processUser($request, $provider, $socialiteUser);
         \Cookie::queue('oauth_verified', true, 60 * 24 * 365);
 
         return view('oauth::callback', ['route' => route_i18n('home')]);
@@ -75,10 +74,9 @@ class OAuth extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param \Naraki\Sentry\Contracts\User|\Naraki\Sentry\Providers\User $userRepo
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function googleYolo(Request $request, UserProvider $userRepo)
+    public function googleYolo(Request $request)
     {
         $provider = 'google';
         $input = $request->only(['google_token', 'avatar']);
@@ -93,9 +91,12 @@ class OAuth extends Controller
         if ($tokenContents !== false) {
             $tokenContents['picture'] = $input['avatar'];
             try {
-                $this->processUserYolo($request, $userRepo, $provider, new GoogleUser($tokenContents));
+                $this->processUserYolo($request, $provider, new GoogleUser($tokenContents));
             } catch (EmailNotVerified $e) {
-                return response(trans('error.http.422.oauth_email_unverif'), Response::HTTP_UNPROCESSABLE_ENTITY);
+                return response(
+                    trans('error.http.422.oauth_email_unverif'),
+                    Response::HTTP_UNPROCESSABLE_ENTITY
+                );
             }
             \Cookie::queue('oauth_verified', true, 60 * 60 * 24 * 365);
             return response(null, Response::HTTP_NO_CONTENT);
@@ -106,25 +107,23 @@ class OAuth extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param \Naraki\Sentry\Contracts\User|\Naraki\Sentry\Providers\User $userRepo
      * @param string $provider
      * @param \Naraki\Oauth\Socialite\GoogleUser $socialiteUser
      */
-    private function processUserYolo($request, $userRepo, $provider, GoogleUser $socialiteUser)
+    private function processUserYolo($request, $provider, GoogleUser $socialiteUser)
     {
-        $user = $userRepo->processViaYolo($provider, $socialiteUser);
+        $user = UserProvider::processViaYolo($provider, $socialiteUser);
         $this->login($request, $user);
     }
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param \Naraki\Sentry\Contracts\User|\Naraki\Sentry\Providers\User $userRepo
      * @param string $provider
      * @param \Laravel\Socialite\Contracts\User $socialiteUser
      */
-    private function processUser($request, $userRepo, $provider, SocialiteUser $socialiteUser)
+    private function processUser($request, $provider, SocialiteUser $socialiteUser)
     {
-        $user = $userRepo->processViaOAuth($provider, $socialiteUser);
+        $user = UserProvider::processViaOAuth($provider, $socialiteUser);
         $this->login($request, $user);
 
     }

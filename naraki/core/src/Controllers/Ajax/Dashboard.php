@@ -1,6 +1,4 @@
-<?php
-
-namespace Naraki\Core\Controllers\Ajax\Admin;
+<?php namespace Naraki\Core\Controllers\Ajax;
 
 use Naraki\Core\Controllers\Admin\Controller;
 use Naraki\Core\Models\EntityCount;

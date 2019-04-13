@@ -33,6 +33,7 @@ class SystemEventLog extends Migration
         \Naraki\System\Models\SystemEvent::insert([
             ['system_event_id' => 1, 'system_event_name' => 'Newsletter Subscription'],
             ['system_event_id' => 2, 'system_event_name' => 'Contact form message'],
+            ['system_event_id' => 3, 'system_event_name' => 'Blog post Comment'],
         ]);
 
         Schema::create('system_sections', function (Blueprint $table) {
@@ -51,6 +52,7 @@ class SystemEventLog extends Migration
             $table->unsignedInteger('system_section_id');
             $table->unsignedInteger('user_id');
             $table->string('system_events_subscribed', 75)->nullable();
+            $table->string('system_email_subscribed', 75)->nullable();
 
             $table->foreign('system_section_id')
                 ->references('system_section_id')->on('system_sections')

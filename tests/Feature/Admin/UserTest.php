@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Admin;
 
-use Naraki\Sentry\Models\Group;
-use Naraki\Sentry\Models\GroupMember;
-use Naraki\Sentry\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Naraki\Sentry\Models\GroupMember;
+use Naraki\Sentry\Models\Person;
+use Naraki\Sentry\Models\User;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -15,8 +15,8 @@ class UserTest extends TestCase
 
     public function show()
     {
-        $user = $this->signIn()->createUser();
-
+        $user = $this->createUser();
+        $this->signIn($user);
         $response = $this->getJson('/ajax/admin/users/' . $user->username);
 
         $response->assertStatus(200);
@@ -26,7 +26,8 @@ class UserTest extends TestCase
 
     public function test_backend_users_update_normal()
     {
-        $user = $this->signIn()->createUser();
+        $user = $this->createUser();
+        $this->signIn($user);
         $username = 'b_wagner';
         $this->patchJson("/ajax/admin/users/{$user->username}",
             [
@@ -61,7 +62,8 @@ class UserTest extends TestCase
 
     public function test_backend_users_delete_one_user()
     {
-        $user = $this->signIn()->createUser();
+        $user = $this->createUser();
+        $this->signIn($user);
         $this->delete(
             "/ajax/admin/users/{$user->username}"
         )->assertStatus(204);
@@ -69,10 +71,12 @@ class UserTest extends TestCase
 
     public function test_backend_users_delete_batch_users()
     {
-        $user = $this->signIn()->createUser(3);
-        $this->assertCount(
-            12,
-            \Naraki\Sentry\Models\User::all());
+        $user = $this->createUser();
+        $this->signIn($user);
+        $user = $this->createUser(3);
+
+        $this->assertCount(6, User::all());
+        $this->assertCount(6, Person::all());
         $users = array_map(function ($v) {
             return $v->username;
         }, $user);
@@ -80,9 +84,8 @@ class UserTest extends TestCase
         $this->postJson(
             "/ajax/admin/users/batch/delete", ['users' => $users]
         )->assertStatus(204);
-        $this->assertCount(
-            3,
-            \Naraki\Sentry\Models\User::all());
+        $this->assertCount(3, User::all());
+        $this->assertCount(3, Person::all());
 
     }
 

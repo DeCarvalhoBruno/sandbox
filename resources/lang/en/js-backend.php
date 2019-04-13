@@ -183,7 +183,7 @@ return [
     'form' => [
         'description' => [
             'username' => 'The user\'s shorthand name. Limited to 25 characters, and may only contain letters and underscores.',
-            'username_help'=>'Limited to 25 characters, and may only contain letters and underscores.',
+            'username_help' => 'Limited to 25 characters, and may only contain letters and underscores.',
             'first_name' => 'The user\'s first (given) name.',
             'last_name' => 'The user\'s last (family) name.',
             'new_email' => '"{0}" is the current e-mail address.',
@@ -278,6 +278,8 @@ return [
             'language' => 'Language',
             'notifications' => 'Choose the events for which you would like to receive live notifications:',
             'settings' => 'Your settings',
+            'notification_header' => 'Live Notifications',
+            'email_header' => 'E-mail Notifications'
         ],
         'settings' => [
             'allow_robots' => 'Allow search engine bots to crawl pages',

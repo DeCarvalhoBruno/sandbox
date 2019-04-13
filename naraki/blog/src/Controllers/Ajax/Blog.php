@@ -1,8 +1,5 @@
 <?php namespace Naraki\Blog\Controllers\Ajax;
 
-use Naraki\Sentry\Contracts\User as UserProvider;
-use Naraki\Core\Controllers\Admin\Controller;
-use Naraki\Core\Models\Entity;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -13,8 +10,11 @@ use Naraki\Blog\Job\UpdateElasticsearch;
 use Naraki\Blog\Models\BlogStatus;
 use Naraki\Blog\Requests\CreateBlogPost;
 use Naraki\Blog\Requests\UpdateBlogPost;
+use Naraki\Core\Controllers\Admin\Controller;
+use Naraki\Core\Models\Entity;
 use Naraki\Media\Facades\Media as MediaRepo;
 use Naraki\Media\Models\MediaImgFormat;
+use Naraki\Sentry\Facades\User as UserProvider;
 
 
 class Blog extends Controller
@@ -113,15 +113,14 @@ class Blog extends Controller
 
     /**
      * @param \Naraki\Blog\Requests\CreateBlogPost $request
-     * @param \Naraki\Sentry\Contracts\User|\Naraki\Sentry\Providers\User $userRepo
      * @return \Illuminate\Http\Response
      */
-    public function create(CreateBlogPost $request, UserProvider $userRepo)
+    public function create(CreateBlogPost $request)
     {
         try {
-            $person = $userRepo->person()->buildOneBySlug(
+            $person = UserProvider::person()->buildOneBySlug(
                 $request->getPersonSlug(),
-                [$userRepo->person()->getKeyName()]
+                [UserProvider::person()->getKeyName()]
             )->first();
             $post = BlogRepo::createOne(
                 $request->all(),
@@ -151,17 +150,16 @@ class Blog extends Controller
     /**
      * @param $slug
      * @param \Naraki\Blog\Requests\UpdateBlogPost $request
-     * @param \Naraki\Sentry\Contracts\User|\Naraki\Sentry\Providers\User $userRepo
      * @return array
      */
-    public function update($slug, UpdateBlogPost $request, UserProvider $userRepo): array
+    public function update($slug, UpdateBlogPost $request): array
     {
         $person = $request->getPersonSlug();
 
         if (!is_null($person)) {
-            $query = $userRepo->person()->buildOneBySlug(
+            $query = UserProvider::person()->buildOneBySlug(
                 $person,
-                [$userRepo->person()->getKeyName()]
+                [UserProvider::person()->getKeyName()]
             )->first();
             if (!is_null($query)) {
                 $request->setPersonSlug($query->getKey());
@@ -184,6 +182,11 @@ class Blog extends Controller
         ];
     }
 
+    /**
+     * @param string $slug
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function updateUrl($slug, Request $request)
     {
         $post = BlogRepo::updateOne($slug, $request->all());

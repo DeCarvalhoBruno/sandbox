@@ -3,6 +3,7 @@
 use Naraki\Core\Controllers\Admin\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
+use Naraki\System\Facades\System as SystemProvider;
 
 class System extends Controller
 {
@@ -12,7 +13,7 @@ class System extends Controller
      */
     public function getLog()
     {
-        $events = System::log()->getFromThisWeek()->get();
+        $events = SystemProvider::log()->getFromThisWeek()->get();
         $schedule = [];
         if (!is_null($events)) {
             $today = Carbon::now()->setTime(0, 0, 0);

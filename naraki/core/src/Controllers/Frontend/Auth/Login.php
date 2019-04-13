@@ -1,9 +1,7 @@
-<?php
-
-namespace Naraki\Core\Controllers\Frontend\Auth;
+<?php namespace Naraki\Core\Controllers\Frontend\Auth;
 
 use Naraki\Core\Controllers\Frontend\Controller;
-use Naraki\Sentry\Providers\User as UserProvider;
+use Naraki\Sentry\Facades\User as UserProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -118,10 +116,14 @@ class Login extends Controller
         return redirect()->back();
     }
 
-    public function activate($token, UserProvider $userRepo)
+    /**
+     * @param string $token
+     * @return \Illuminate\Routing\Redirector
+     */
+    public function activate($token)
     {
         if (is_hex_uuid_string($token)) {
-            $nbDeletedRecords = $userRepo->activate($token);
+            $nbDeletedRecords = UserProvider::activate($token);
             if ($nbDeletedRecords === 1) {
                 return redirect(route_i18n('login'))->with('status', 'activated');
             }

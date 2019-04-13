@@ -85,18 +85,17 @@ class ServiceProvider extends LaravelServiceProvider
 
     private function registerCommands()
     {
+
         $commands = [];
         foreach ($this->commands as $command) {
             $class = new $command();
-            $name = sprintf('command.naraki.%', strtolower(get_class($class)));
-
+            $name = sprintf('command.naraki.%s', strtolower(class_basename($class)));
             $this->app->singleton($name, function () use ($class) {
                 return $class;
             });
             $commands[] = $name;
         }
         $this->commands($commands);
-
     }
 
 }

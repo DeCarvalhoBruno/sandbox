@@ -34,7 +34,7 @@ class Blog extends Migration
         Schema::create('blog_posts', function (Blueprint $table) {
             $table->increments('blog_post_id');
 
-            $table->unsignedInteger('person_id')->default(0);
+            $table->unsignedInteger('person_id')->nullable();
             $table->unsignedInteger('blog_status_id')
                 ->default(\Naraki\Blog\Models\BlogStatus::BLOG_STATUS_DRAFT);
             $table->unsignedInteger('language_id')->default(1);
@@ -48,7 +48,7 @@ class Blog extends Migration
             $table->timestamps();
 
             $table->foreign('person_id')
-                ->references('person_id')->on('people');
+                ->references('person_id')->on('people')->onDelete('set null');
             $table->foreign('language_id')
                 ->references('language_id')->on('languages');
             $table->unique(['blog_post_slug'], 'idx_blog_post_id_slug');

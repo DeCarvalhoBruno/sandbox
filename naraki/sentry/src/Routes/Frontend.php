@@ -14,7 +14,7 @@ class Frontend extends Routes
             $router->group([
                 'prefix' => sprintf('/%s', $k),
                 'middleware' => ['web'],
-                'namespace' => 'Naraki\Blog\Controllers\Frontend',
+                'namespace' => 'Naraki\Sentry\Controllers\Frontend',
             ], call_user_func('static::defaultRouteGroup', $k));
         }
     }

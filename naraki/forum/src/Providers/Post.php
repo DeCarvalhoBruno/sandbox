@@ -40,6 +40,10 @@ class Post extends EloquentProvider implements PostInterface
             ->orderBy('forum_post_tree.lft', 'asc');
     }
 
+    /**
+     * @param string $slug
+     * @return array
+     */
     public function getUserPostTreeBySlug($slug)
     {
         return \DB::select('select users.user_id,username,full_name,email

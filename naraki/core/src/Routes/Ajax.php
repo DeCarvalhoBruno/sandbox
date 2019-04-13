@@ -8,7 +8,7 @@ class Ajax
     {
         $router->group([
             'prefix' => '/ajax/admin',
-            'namespace' => 'Naraki\Core\Controllers\Admin',
+            'namespace' => 'Naraki\Core\Controllers\Ajax',
         ],
             function (Router $r) {
                 $r->group([

@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Naraki\Core\Controllers\Frontend\Controller;
+use Naraki\Sentry\Facades\User as UserProvider;
 
 class User extends Controller
 {
@@ -12,10 +13,11 @@ class User extends Controller
 
     public function delete(Request $request)
     {
-        $user = auth()->user()->toArray();
+        $user = auth()->user()->getAttribute('username');
         \Auth::guard('web')->logout();
         \Auth::guard('jwt')->logout();
         $request->session()->invalidate();
+        UserProvider::deleteByUsername($user);
     }
 
 }

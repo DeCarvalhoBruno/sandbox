@@ -27,24 +27,33 @@ class UserSettings extends EloquentProvider implements SystemInterface
      */
     public function save($userId, $systemSectionID, $data)
     {
-        if (isset($data['events']) && is_array($data['events'])) {
-            sort($data['events']);
-            $events = implode(',', $data['events']);
-            if (empty($events)) {
-                $events = null;
-            }
-            $existing = $this->build()
-                ->where('user_id', '=', $userId)
-                ->first();
-            if (!is_null($existing)) {
-                $existing->update(['system_events_subscribed' => $events]);
-            } else {
-                $this->createModel([
-                    'user_id' => $userId,
-                    'system_section_id' => $systemSectionID,
-                    'system_events_subscribed' => $events
-                ])->save();
-            }
+        $events = $email = null;
+        $setting = 'events';
+        if (isset($data[$setting]) && is_array($data[$setting])) {
+            sort($data[$setting]);
+            $events = implode(',', $data[$setting]);
+        }
+        $setting = 'email';
+        if (isset($data[$setting]) && is_array($data[$setting])) {
+            sort($data[$setting]);
+            $email = implode(',', $data[$setting]);
+        }
+
+        $existing = $this->build()
+            ->where('user_id', '=', $userId)
+            ->first();
+        if (!is_null($existing)) {
+            $existing->update([
+                'system_events_subscribed' => $events,
+                'system_email_subscribed' => $email
+            ]);
+        } else {
+            $this->createModel([
+                'user_id' => $userId,
+                'system_section_id' => $systemSectionID,
+                'system_events_subscribed' => $events,
+                'system_email_subscribed' => $email,
+            ])->save();
         }
     }
 

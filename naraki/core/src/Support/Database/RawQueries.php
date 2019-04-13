@@ -157,20 +157,21 @@ END;
         );
     }
 
-    public function triggerDeleteUser()
+    public function triggerUsersDelete()
     {
         \DB::unprepared('
 CREATE TRIGGER t_users_delete BEFORE DELETE ON users
-FOR EACH ROW
+    FOR EACH ROW
 BEGIN
-declare var_user_id INT DEFAULT 0;
-select user_id
-into var_user_id
-from users
-where user_id = old.user_id;
-update forum_posts
-set post_user_id = 0
-where user_id = var_user_id;
+    declare var_user_id INT DEFAULT 0;
+    select user_id
+           into var_user_id
+    from users
+    where user_id = old.user_id;
+
+    update forum_posts
+    set post_user_id = 0
+    where post_user_id = var_user_id;
 END;
         ');
     }

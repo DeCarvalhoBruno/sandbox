@@ -1,27 +1,24 @@
 <?php namespace Naraki\Sentry\Controllers\Ajax;
 
-use Naraki\Sentry\Contracts\Group as GroupProvider;
-use Naraki\Permission\Events\PermissionEntityUpdated;
-use Naraki\Sentry\Models\Filters\Group as GroupFilter;
+use Illuminate\Http\Response;
 use Naraki\Core\Controllers\Admin\Controller;
+use Naraki\Core\Models\Entity;
+use Naraki\Permission\Events\PermissionEntityUpdated;
+use Naraki\Permission\Facades\Permission;
+use Naraki\Sentry\Facades\Group as GroupProvider;
 use Naraki\Sentry\Requests\Admin\CreateGroup;
 use Naraki\Sentry\Requests\Admin\UpdateGroup;
-use Naraki\Core\Models\Entity;
-use Illuminate\Http\Response;
-use Naraki\Permission\Facades\Permission;
 
 class Group extends Controller
 {
     /**
-     * @param \Naraki\Sentry\Models\Filters\Group $filter
-     * @param \Naraki\Sentry\Contracts\Group|\Naraki\Sentry\Providers\Group $groupProvider
      * @return array
      */
-    public function index(GroupFilter $filter, GroupProvider $groupProvider)
+    public function index()
     {
+        $filter = GroupProvider::newFilter();
         return [
-            'table' => $groupProvider
-                ->select([
+            'table' => Group::select([
                     'groups.group_id',
                     'group_name',
                     'group_slug',
@@ -55,12 +52,11 @@ class Group extends Controller
 
     /**
      * @param string $groupSlug
-     * @param \Naraki\Sentry\Contracts\Group|\Naraki\Sentry\Providers\Group $groupProvider
      * @return array
      */
-    public function edit($groupSlug, GroupProvider $groupProvider)
+    public function edit($groupSlug)
     {
-        $groupDb = $groupProvider->getOneBySlug($groupSlug,
+        $groupDb = GroupProvider::getOneBySlug($groupSlug,
             ['group_slug', 'group_name', 'group_mask', 'entity_type_id'])
             ->scopes(['entityType'])->first();
         if (is_null($groupDb)) {
@@ -78,15 +74,13 @@ class Group extends Controller
     /**
      * @param string $groupName
      * @param \Naraki\Sentry\Requests\Admin\UpdateGroup $request
-     * @param \Naraki\Sentry\Contracts\Group|\Naraki\Sentry\Providers\Group $groupProvider
      * @return \Illuminate\Http\Response
      */
     public function update(
         $groupName,
-        UpdateGroup $request,
-        GroupProvider $groupProvider
+        UpdateGroup $request
     ) {
-        $group = $groupProvider->updateOneBySlug($groupName, $request->all());
+        $group = GroupProvider::updateOneBySlug($groupName, $request->all());
         $permissions = $request->getPermissions();
 
         if (!is_null($permissions)) {
@@ -102,12 +96,11 @@ class Group extends Controller
 
     /**
      * @param string $groupName
-     * @param \Naraki\Sentry\Contracts\Group|\Naraki\Sentry\Providers\Group $groupProvider
      * @return \Illuminate\Http\Response
      */
-    public function destroy($groupName, GroupProvider $groupProvider)
+    public function destroy($groupName)
     {
-        $groupProvider->deleteBySlug($groupName);
+        GroupProvider::deleteBySlug($groupName);
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
@@ -124,13 +117,12 @@ class Group extends Controller
 
     /**
      * @param \Naraki\Sentry\Requests\Admin\CreateGroup $request
-     * @param \Naraki\Sentry\Contracts\Group|\Naraki\Sentry\Providers\Group $groupProvider
      * @return \Illuminate\Http\Response
      */
-    public function create(CreateGroup $request, GroupProvider $groupProvider)
+    public function create(CreateGroup $request)
     {
 
-        $group = $groupProvider->createOne($request->all());
+        $group = GroupProvider::createOne($request->all());
         $permissions = $request->getPermissions();
 
         if (!is_null($permissions)) {

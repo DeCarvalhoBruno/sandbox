@@ -4,7 +4,7 @@ use Naraki\Core\Controllers\Frontend\Controller;
 use Naraki\Sentry\Requests\Frontend\UpdateUser;
 use Naraki\Sentry\Jobs\UpdateUserElasticsearch;
 use Naraki\Core\Support\Frontend\Breadcrumbs;
-use Naraki\Sentry\Contracts\User as UserProvider;
+use Naraki\Sentry\Facades\User as UserProvider;
 
 class Profile extends Controller
 {
@@ -19,10 +19,9 @@ class Profile extends Controller
     }
 
     /**
-     * @param \Naraki\Sentry\Contracts\User|\Naraki\Sentry\Providers\User $userProvider
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit(UserProvider $userProvider)
+    public function edit()
     {
         $user = auth()->user();
         return view('frontend.site.settings.panes.profile', [
@@ -31,30 +30,30 @@ class Profile extends Controller
             'breadcrumbs' => Breadcrumbs::render([
                 ['label' => trans('titles.routes.profile'), 'url' => route_i18n('profile')]
             ]),
-            'avatars' => $userProvider->getAvatars($user->getKey())
+            'avatars' => UserProvider::getAvatars($user->getKey())
         ]);
     }
 
     /**
      * @param \Naraki\Sentry\Requests\Frontend\UpdateUser $request
-     * @param \Naraki\Sentry\Contracts\User|\Naraki\Sentry\Providers\User $userRepo
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdateUser $request, UserProvider $userRepo)
+    public function update(UpdateUser $request)
     {
+        $user = auth()->user();
         if (!empty($request->all())) {
             $rest = $request->except(['notifications']);
             if (!empty($rest)) {
                 if (isset($rest['password'])) {
                     $rest['password'] = bcrypt($rest['password']);
                 }
-                $userRepo->updateOneByUsername(
-                    auth()->user()->getAttribute('username'),
+                UserProvider::updateOneByUsername(
+                    $user->getAttribute('username'),
                     $rest
                 );
                 $this->dispatch(new UpdateUserElasticsearch(
                         UpdateUserElasticsearch::WRITE_MODE_UPDATE,
-                        auth()->user()->getKey())
+                        $user->getKey())
                 );
             }
         }
@@ -65,7 +64,7 @@ class Profile extends Controller
             $lists = [];
         }
         $this->emailRepo->subscriber()->addUserToLists(
-            auth()->user()->getAttribute('person_id'),
+            $user->getAttribute('person_id'),
             $lists
         );
         return back()->with(

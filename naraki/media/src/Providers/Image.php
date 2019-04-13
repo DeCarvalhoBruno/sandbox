@@ -1,5 +1,6 @@
 <?php namespace Naraki\Media\Providers;
 
+use Illuminate\Support\Facades\Log;
 use Naraki\Media\Contracts\UploadedImage as ImageContract;
 use Naraki\Core\Models\Entity;
 use Naraki\Core\Models\EntityType;
@@ -263,7 +264,7 @@ class Image extends EloquentProvider implements ImageInterface
      * @param string $slug
      * @param int $entityId
      * @param array $columns
-     * @return \Naraki\Media\Models\MediaEntity
+     * @return \Naraki\Media\Models\MediaEntity[]
      */
     public function getImagesFromSlug($slug, $entityId = Entity::BLOG_POSTS, $columns = null, $entityTypeId = null)
     {
@@ -298,6 +299,28 @@ class Image extends EloquentProvider implements ImageInterface
             return \DB::unprepared(sprintf('CALL sp_update_media_type_in_use("%s",%s)', $uuid, $entityTypeId));
         }
         throw new \UnexpectedValueException('uuid is not valid');
+    }
+
+    /**
+     * @param int|array $entityTypeId
+     * @param int $entityId
+     * @param int $mediaType
+     * @throws \Exception
+     */
+    public function deleteByEntity($entityTypeId, $entityId, $mediaType = \Naraki\Media\Models\Media::IMAGE)
+    {
+        $media = $this->getImages($entityTypeId, ['media_uuid', 'media_extension']);
+
+        if (!is_null($media)) {
+            foreach ($media as $record) {
+                $this->deleteFiles(
+                    $entityId,
+                    $mediaType,
+                    $record->getAttribute('media_uuid'),
+                    $record->getAttribute('media_extension')
+                );
+            }
+        }
     }
 
     /**

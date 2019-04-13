@@ -4,7 +4,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 abstract class EloquentProvider
 {
-
     /**
      * The Eloquent user model.
      *
@@ -118,9 +117,9 @@ abstract class EloquentProvider
      */
     public function buildOneWithScopes(array $columns, array $scopes, array $wheres): Builder
     {
-        $q = $this->buildWithScopes($columns,$scopes);
+        $q = $this->buildWithScopes($columns, $scopes);
         foreach ($wheres as $where) {
-            if(!is_array($where)){
+            if (!is_array($where)) {
                 throw new \UnexpectedValueException('Where clause must be enclosed in an array');
             }
             $operator = '=';

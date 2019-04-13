@@ -20,7 +20,7 @@ class ServiceProvider extends LaravelServiceProvider
         $this->app['router']->group([
             'prefix' => '/ajax/admin',
             'namespace' => 'Naraki\System\Controllers',
-            'middleware' => ['admin_auth','admin']
+            'middleware' => ['admin_auth', 'admin']
         ], function (Router $r) {
             $r->get('user/general', 'General@edit');
             $r->patch('user/general', 'General@update');
@@ -36,14 +36,14 @@ class ServiceProvider extends LaravelServiceProvider
         $this->app['router']->group([
             'prefix' => '/ajax/admin',
             'namespace' => 'Naraki\System\Controllers',
-            'middleware' => ['admin_auth','admin','can:settings,Naraki\System\Models\System']
+            'middleware' => ['admin_auth', 'admin', 'can:settings,Naraki\System\Models\System']
         ], function (Router $r) {
-            $r->get('settings/general','Settings@edit');
-            $r->post('settings/general','Settings@update');
-            $r->get('settings/social','Settings@editSocial');
-            $r->post('settings/social','Settings@updateSocial');
-            $r->get('settings/sitemap','Settings@editSitemap');
-            $r->post('settings/sitemap','Settings@updateSitemap');
+            $r->get('settings/general', 'Settings@edit');
+            $r->post('settings/general', 'Settings@update');
+            $r->get('settings/social', 'Settings@editSocial');
+            $r->post('settings/social', 'Settings@updateSocial');
+            $r->get('settings/sitemap', 'Settings@editSitemap');
+            $r->post('settings/sitemap', 'Settings@updateSitemap');
         });
 
     }

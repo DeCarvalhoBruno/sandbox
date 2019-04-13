@@ -49,7 +49,7 @@ class MediaTest extends TestCase
         $imageFilename = sprintf('%s.%s', $imageTitle, $imageExtension);
         Storage::fake($imageFilename);
 
-        $file = UploadedFile::fake()->image($imageFilename, 1224, 864)->size(16);
+        $file = UploadedFile::fake()->image($imageFilename, 1224, 864)->size(1);
 
         $response = $this->postJson(
             "/ajax/admin/media/add",
@@ -99,7 +99,7 @@ class MediaTest extends TestCase
         $imageFilename = sprintf('%s.%s', $imageTitle, $imageExtension);
         Storage::fake($imageFilename);
 
-        $file = UploadedFile::fake()->image($imageFilename, 1224, 864)->size(16);
+        $file = UploadedFile::fake()->image($imageFilename, 1224, 864)->size(1);
 
         $response = $this->postJson(
             "/ajax/admin/media/add",

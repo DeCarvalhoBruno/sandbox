@@ -29,7 +29,7 @@ class GroupTest extends TestCase
     public function test_backend_group_update_without_data()
     {
         $this->withExceptionHandling();
-        $this->signIn()->createUser();
+        $this->signIn($this->createUser());
         $group = $this->createGroup();
         $response = $this->patchJson(
             "/ajax/admin/groups/{$group->group_name}", ['group_mask' => 'a', 'permissions' => []]
@@ -43,7 +43,7 @@ class GroupTest extends TestCase
     public function test_backend_group_update_with_bad_name()
     {
         $this->withExceptionHandling();
-        $this->signIn()->createUser();
+        $this->signIn($this->createUser());
         $group = $this->createGroup();
         $response = $this->patchJson(
             "/ajax/admin/groups/{$group->group_name}", ['new_group_name' => 'root', 'permissions' => []]

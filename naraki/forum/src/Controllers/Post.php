@@ -41,10 +41,11 @@ class Post extends Controller
                 $media[$m->getAttribute('username')] = $m;
             }
             foreach ($dbPosts as $key => $user) {
-                $dbPosts[$key]['name'] = route_i18n('user', ['slug' => $dbPosts[$key]['username']]);
+                $dbPosts[$key]['url'] = route_i18n('user', ['slug' => $dbPosts[$key]['username']]);
                 $dbPosts[$key]['owns'] = $dbPosts[$key]['user_id'] == $userId;
                 $dbPosts[$key]['fav'] = isset($favorites[$dbPosts[$key]['slug']]);
                 $dbPosts[$key]['edit_mode'] = false;
+                unset($dbPosts[$key]['user_id']);
 
                 if (isset($media[$user['username']])) {
                     $dbPosts[$key]['media'] = MediaEntity::assetStatic(
