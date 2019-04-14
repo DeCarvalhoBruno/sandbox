@@ -94,7 +94,10 @@
           this.$router.go()
         }
         await this.form.patch('/ajax/admin/user/general')
-        this.$store.dispatch('auth/patchUser', this.form.fields.events.join(','))
+        this.$store.dispatch('auth/patchUser', this.form.fields.events)
+        // if(this.form.fields.events.length===0){
+        //   this.$store.dispatch('broadcast/kill')
+        // }
 
         this.$store.dispatch('broadcast/updateNotifications', {
             data: {

@@ -29,8 +29,16 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function boot()
     {
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'core');
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../resources/views' => resource_path('views/vendor/core'),
+            ]);
+        }
         $this->registerComposers();
-        $this->registerCommands();
+        if ($this->app->runningInConsole()) {
+            $this->registerCommands();
+        }
         $router = $this->app->make(Router::class);
         foreach ($this->routeSets as $binder) {
             $this->app->make($binder)->bind($router);
@@ -59,26 +67,26 @@ class ServiceProvider extends LaravelServiceProvider
      */
     private function registerComposers()
     {
-        $this->app->make('view')->composer('admin.default', Composers\Admin::class);
+        $this->app->make('view')->composer('core::admin.default', Composers\Admin::class);
         $this->app->make('view')->composer(
             [
-                'frontend.site.settings.panes.profile',
-                'frontend.site.settings.panes.account'
+                'core::frontend.site.settings.panes.profile',
+                'core::frontend.site.settings.panes.account'
             ],
             Composers\Frontend\Profile::class
         );
         $this->app->make('view')->composer(
-            'frontend.site.settings.panes.*',
+            'core::frontend.site.settings.panes.*',
             Composers\Frontend\Settings::class
         );
         $this->app->make('view')->composer([
-            'frontend.auth.*',
-            'frontend.site.*',
-            'frontend.errors.*',
+            'core::frontend.auth.*',
+            'core::frontend.site.*',
+            'core::frontend.errors.*',
             'blog::*'
         ], Composers\Frontend::class);
         $this->app->make('view')->composer([
-            'frontend.site.home',
+            'core::frontend.site.home',
         ], Composers\Frontend\Home::class);
 
     }

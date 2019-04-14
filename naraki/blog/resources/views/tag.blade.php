@@ -1,4 +1,4 @@
-@extends('frontend.default')
+@extends('core::frontend.default')
 
 @section('content')
     <div id="blog-author" class="container p-0">
@@ -24,7 +24,7 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-5">
-                                        @include('partials.img',[
+                                        @include('core::partials.img',[
                                             'media'=>isset($media[$post->getAttribute('type')])?
                                             $media[$post->getAttribute('type')]->present('asset'):null,
                                             'alt'=>$post->getAttribute('title'),

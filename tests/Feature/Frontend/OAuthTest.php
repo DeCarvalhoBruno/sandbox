@@ -33,8 +33,8 @@ class OAuthTest extends TestCase
         Socialite::shouldReceive('driver->stateless->user')->andReturn($mockSocialiteUser);
 
         $this->get('/oauth/google/callback');
-        $this->assertEquals(3, User::query()->get()->count());
-        $this->assertEquals(1, OAuthProvider::query()->get()->count());
+        $this->assertEquals(3, $this->cnt(User::class));
+        $this->assertEquals(1, $this->cnt(OAuthProvider::class));
         $this->assertTrue(auth()->check());
         $this->assertEquals('email@domain.com', auth()->user()->getAttribute('email'));
     }
@@ -57,8 +57,8 @@ class OAuthTest extends TestCase
         Socialite::shouldReceive('driver->stateless->user')->andReturn($mockSocialiteUser);
 
         $this->get('/oauth/google/callback');
-        $this->assertEquals(2, User::query()->get()->count());
-        $this->assertEquals(1, OAuthProvider::query()->get()->count());
+        $this->assertEquals(2, $this->cnt(User::class));
+        $this->assertEquals(1, $this->cnt(OAuthProvider::class));
         $this->assertTrue(auth()->check());
         $this->assertEquals('system@localhost.local', auth()->user()->getAttribute('email'));
     }
@@ -70,7 +70,7 @@ class OAuthTest extends TestCase
         $accessToken = Str::random(40);
         $refreshToken = Str::random(40);
         $u = $this->createUser();
-        $this->assertEquals(3, User::query()->get()->count());
+        $this->assertEquals(3, $this->cnt(User::class));
         OAuthProvider::query()->create([
             'user_id' => $u->getKey(),
             'provider' => 'google',
@@ -100,8 +100,8 @@ class OAuthTest extends TestCase
         $this->get('/oauth/google/callback');
         $oauthProvider = OAuthProvider::query()->first();
         $this->assertEquals(null, $oauthProvider->getAttribute('access_token'));
-        $this->assertEquals(1, OAuthProvider::query()->get()->count());
-        $this->assertEquals(3, User::query()->get()->count());
+        $this->assertEquals(1, $this->cnt(OAuthProvider::class));
+        $this->assertEquals(3, $this->cnt(User::class));
         $this->assertTrue(auth()->check());
     }
 

@@ -66,7 +66,7 @@ class Home extends Controller
             'most_viewed' => []
         ];
         unset($dbResult);
-        return view('frontend.site.home', compact('posts', 'media'));
+        return view('core::frontend.site.home', compact('posts', 'media'));
     }
 
     /**

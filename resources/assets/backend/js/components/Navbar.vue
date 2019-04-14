@@ -2,10 +2,10 @@
   <header class="main-header">
     <!-- Logo -->
     <div v-if="user" id="logo-wrapper">
-      <a href="index2.html" class="logo">
+      <router-link :to="{ name: 'admin.dashboard' }" class="logo">
         <span class="logo-mini"><img src="/media/img/site/logo-bk.png"></span>
         <span class="logo-lg"><img src="/media/img/site/logo-text.png"></span>
-      </a>
+      </router-link>
     </div>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark main-header navbar-static-top">

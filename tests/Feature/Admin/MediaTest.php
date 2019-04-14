@@ -49,7 +49,7 @@ class MediaTest extends TestCase
         $imageFilename = sprintf('%s.%s', $imageTitle, $imageExtension);
         Storage::fake($imageFilename);
 
-        $file = UploadedFile::fake()->image($imageFilename, 1224, 864)->size(1);
+        $file = UploadedFile::fake()->image($imageFilename, 600, 300)->size(10);
 
         $response = $this->postJson(
             "/ajax/admin/media/add",
@@ -99,7 +99,7 @@ class MediaTest extends TestCase
         $imageFilename = sprintf('%s.%s', $imageTitle, $imageExtension);
         Storage::fake($imageFilename);
 
-        $file = UploadedFile::fake()->image($imageFilename, 1224, 864)->size(1);
+        $file = UploadedFile::fake()->image($imageFilename, 600, 300)->size(10);
 
         $response = $this->postJson(
             "/ajax/admin/media/add",
@@ -115,11 +115,11 @@ class MediaTest extends TestCase
         $this->postJson(
             '/ajax/admin/media/crop/avatar',
             [
-                'height' => 864,
-                'width' => 1224,
+                'height' => 600,
+                'width' => 300,
                 'uuid' => $imageDiskFilename,
-                'x' => 250,
-                'y' => 320
+                'x' => 50,
+                'y' => 10
             ]
         );
         $avatar = Media::image()

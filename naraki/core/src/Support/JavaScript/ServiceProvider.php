@@ -18,7 +18,7 @@ class ServiceProvider extends LaravelServiceProvider
             return new Transformer(
                 new LaravelViewBinder(
                     $app['events'],
-                    ['partials.javascript_footer']
+                    ['core::partials.javascript_footer']
                 ),
                 'config'
             );

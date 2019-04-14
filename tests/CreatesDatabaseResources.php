@@ -30,6 +30,19 @@ trait CreatesDatabaseResources
     }
 
     /**
+     * @param string $model
+     * @return int
+     */
+    protected function cnt($model)
+    {
+        /**
+         * @var \Illuminate\Database\Eloquent\Model $m
+         */
+        $m = new $model();
+        return $m->newQuery()->count($m->getQualifiedKeyName());
+    }
+
+    /**
      * @param \Naraki\Sentry\Models\User $user
      * @param \Naraki\Sentry\Models\Group $group
      */

@@ -24,7 +24,7 @@ class BlogCategoryTest extends TestCase
         $this->postJson(
             '/ajax/admin/blog/categories',
             ['label' => $str2, 'parent' => slugify($str)]);
-        $this->assertEquals(BlogCategory::query()->get()->count(), 3);
+        $this->assertEquals(3, $this->cnt(BlogCategory::class));
         //Testing whether the child category's parent is the one we specified
         $this->assertEquals(
             Blog::category()->getCat(slugify($str2))->getAttribute('parent_id'),
@@ -44,11 +44,11 @@ class BlogCategoryTest extends TestCase
         $this->postJson(
             '/ajax/admin/blog/categories',
             ['label' => $str, 'parent' => '']);
-        $this->assertEquals(BlogCategory::query()->get()->count(), 2);
+        $this->assertEquals(2, $this->cnt(BlogCategory::class));
         $response = $this->deleteJson(
             "/ajax/admin/blog/categories/".slugify($str));
         $response->assertStatus(204);
-        $this->assertEquals(BlogCategory::query()->get()->count(), 1);
+        $this->assertEquals(1, $this->cnt(BlogCategory::class));
     }
 
 }

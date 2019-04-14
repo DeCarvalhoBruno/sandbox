@@ -22,7 +22,7 @@ export const getters = {
 export const mutations = {
   [types.BROADCAST_INIT] (state, data) {
     if (data.user.hasOwnProperty('events_subscribed') &&
-      data.user.events_subscribed && !state.isBroadcasting) {
+      data.user.events_subscribed.length > 0 && !state.isBroadcasting) {
       state.broadcaster = new Echo({
         broadcaster: 'socket.io',
         client: io,
@@ -66,6 +66,11 @@ export const mutations = {
       }
     })
     state.joinedNotificationChannels = joined
+    if (data.events.length === 0) {
+      state.broadcaster.disconnect()
+      state.broadcaster = null
+      state.isBroadcasting = false
+    }
   }
 }
 
@@ -81,7 +86,6 @@ export const actions = {
       commit(types.BROADCAST_INIT, data)
     } else {
       commit(types.UPDATE_NOTIFICATIONS, data)
-
     }
   }
 }

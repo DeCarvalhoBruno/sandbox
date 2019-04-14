@@ -19,7 +19,7 @@ class Frontend extends Composer
                     sprintf(
                         'titles.%s',
                         (!is_null($view))
-                            ? str_replace('.', '_', $view->getName())
+                            ? str_replace(['.','core::'], ['_',''], $view->getName())
                             : 'error'
                     )
                 )

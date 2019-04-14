@@ -41,13 +41,13 @@ class BlogPostTest extends TestCase
             ]);
         $response->assertStatus(500);
         $this->assertEquals('Person for blog post creation not found.', $response->content());
-        $this->assertEquals(BlogPost::query()->get()->count(), 0);
+        $this->assertEquals(0, $this->cnt(BlogPost::class));
     }
 
     public function test_blog_post_create_normal()
     {
         $u = $this->createUser();
-        $this->assertEquals(BlogPost::query()->get()->count(), 0);
+        $this->assertEquals(0, $this->cnt(BlogPost::class));
         ElasticSearchIndex::shouldReceive('index')->times(1);
         $response = $this->postJson(
             "/ajax/admin/blog/post/create",
@@ -61,7 +61,7 @@ class BlogPostTest extends TestCase
             ]);
 
         $response->assertStatus(200);
-        $this->assertEquals(BlogPost::query()->get()->count(), 1);
+        $this->assertEquals(1, $this->cnt(BlogPost::class));
     }
 
     public function test_blog_post_create_without_title()
@@ -95,9 +95,9 @@ class BlogPostTest extends TestCase
                 'published_at' => "201902051959",
                 'tags' => []
             ]);
-        $this->assertEquals(0, BlogTag::query()->get()->count());
-        $this->assertEquals(1, BlogPost::query()->get()->count());
-        $this->assertEquals(0, BlogLabelRecord::query()->get()->count());
+        $this->assertEquals(0, $this->cnt(BlogTag::class));
+        $this->assertEquals(1, $this->cnt(BlogPost::class));
+        $this->assertEquals(0, $this->cnt(BlogLabelRecord::class));
         $string = 'modified post';
         ElasticSearchIndex::shouldReceive('update')->times(1);
         ElasticSearchIndex::shouldReceive('index')->times(2);
@@ -109,8 +109,8 @@ class BlogPostTest extends TestCase
                 'categories' => ['default']
             ]);
         $this->assertEquals($string, BlogPost::query()->first()->getAttribute('blog_post_title'));
-        $this->assertEquals(2, BlogTag::query()->get()->count());
-        $this->assertEquals(3, BlogLabelRecord::query()->get()->count());
+        $this->assertEquals(2, $this->cnt(BlogTag::class));
+        $this->assertEquals(3, $this->cnt(BlogLabelRecord::class));
         $response->assertStatus(200);
     }
 
@@ -128,8 +128,8 @@ class BlogPostTest extends TestCase
                 'published_at' => "201902051959",
                 'tags' => ['tag1', 'tag2', 'tag3']
             ]);
-        $this->assertEquals(3, BlogTag::query()->get()->count());
-        $this->assertEquals(3, BlogLabelRecord::query()->get()->count());
+        $this->assertEquals(3, $this->cnt(BlogTag::class));
+        $this->assertEquals(3, $this->cnt(BlogLabelRecord::class));
 
         $string = 'modified post';
         ElasticSearchIndex::shouldReceive('destroy')->twice();
@@ -141,8 +141,8 @@ class BlogPostTest extends TestCase
                 'tags' => ['tag1', 'tag4'],
                 'categories' => ['default']
             ]);
-        $this->assertEquals(2, BlogTag::query()->get()->count());
-        $this->assertEquals(3, BlogLabelRecord::query()->get()->count());
+        $this->assertEquals(2, $this->cnt(BlogTag::class));
+        $this->assertEquals(3, $this->cnt(BlogLabelRecord::class));
     }
 
     public function test_blog_post_delete_post()
@@ -157,15 +157,15 @@ class BlogPostTest extends TestCase
                 'blog_post_person' => $u->getAttribute('person_slug'),
                 'published_at' => "201902051959",
             ]);
-        $this->assertEquals(BlogPost::query()->get()->count(), 1);
+        $this->assertEquals(1, $this->cnt(BlogPost::class));
         ElasticSearchIndex::shouldReceive('destroy')->times(1);
         $response = $this->deleteJson('/ajax/admin/blog/post/dadsw');
         $response->assertStatus(204);
-        $this->assertEquals(BlogPost::query()->get()->count(), 1);
+        $this->assertEquals(1, $this->cnt(BlogPost::class));
 
         $response = $this->deleteJson('/ajax/admin/blog/post/dads');
         $response->assertStatus(204);
-        $this->assertEquals(BlogPost::query()->get()->count(), 0);
+        $this->assertEquals(0, $this->cnt(BlogPost::class));
     }
 
     public function test_blog_post_upload_image()

@@ -13,7 +13,7 @@ class Frontend extends Controller
 
     public function contact()
     {
-        return view('frontend.site.contact');
+        return view('core::frontend.site.contact');
     }
 
     public function sendContactEmail(SendContactEmail $request)
@@ -47,13 +47,13 @@ class Frontend extends Controller
 
     public function privacy()
     {
-        return view('frontend.site.privacy');
+        return view('core::frontend.site.privacy');
     }
 
     public function termsOfService()
     {
 
-        return view('frontend.site.terms_service');
+        return view('core::frontend.site.terms_service');
     }
 
 }

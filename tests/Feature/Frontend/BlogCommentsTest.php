@@ -11,6 +11,9 @@ use Naraki\Elasticsearch\Facades\ElasticSearchIndex;
 use Naraki\Forum\Facades\Forum;
 use Naraki\Forum\Models\ForumPost;
 use Naraki\Forum\Requests\CreateComment;
+use Naraki\System\Models\SystemEvent;
+use Naraki\System\Models\SystemEventType;
+use Naraki\System\Models\SystemUserSubscriptions;
 use Tests\TestCase;
 
 class BlogCommentsTest extends TestCase
@@ -163,16 +166,17 @@ class BlogCommentsTest extends TestCase
     {
         $u = $this->createUser();
         $this->signIn($u);
-        Redis::shouldReceive('hgetall')->shouldReceive('hmset')->with(
-            sprintf('comment_notif_opt.%s', $u->getKey()),
-            ['reply' => true]
-        );
+
         $this->patchJson('/ajax/forum/blog_posts/options',
             [
-                'option' => 'reply',
-                'flag' => true
+                'data' => ['blog_post_reply'=>true]
             ]
         );
+        $this->assertEquals(1, SystemUserSubscriptions::query()->count());
+        $sub =  SystemUserSubscriptions::query()->first();
+        $this->assertEquals($u->getKey(), $sub->getAttribute('user_id'));
+        $this->assertEquals(SystemEventType::EMAIL, $sub->getAttribute('system_event_type_id'));
+        $this->assertEquals(SystemEvent::BLOG_POST_REPLY, $sub->getAttribute('system_event_id'));
     }
 
 }

@@ -33,8 +33,8 @@ class UserSubscriptions extends EloquentProvider implements SystemInterface
      */
     public function getSubscribedUsers($event, $entityID = Entity::SYSTEM, $eventType = SystemEventType::EMAIL)
     {
-        $dbResult = $this->buildWithScopes(['email','full_name'],
-            ['systemEvent','user'])
+        $dbResult = $this->buildWithScopes(['email', 'full_name'],
+            ['systemEvent', 'user'])
             ->where('system_events.system_event_id', $event)
             ->where('entity_id', $entityID)
             ->where('system_event_type_id', $eventType)
@@ -142,6 +142,9 @@ class UserSubscriptions extends EloquentProvider implements SystemInterface
      */
     public function saveFrontend($userID, $data, $entityId = Entity::BLOG_POSTS)
     {
+        if (empty($data)) {
+            return [];
+        }
         $events = [];
         foreach ($data as $key => $item) {
             $const = SystemEvent::getConstant($key);
