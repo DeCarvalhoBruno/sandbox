@@ -21,11 +21,19 @@ class PersonSentContactRequest extends Listener
             'contact_subject' => $event->getContactSubject(),
             'message_body' => $event->getMessageBody()
         ];
-        $this->dispatch(
-            new SendMail(
-                new Contact($data)
-            )
-        );
+        $emailNotificationSubscribers = System::subscriptions()
+            ->getSubscribedUsers(SystemEvent::CONTACT_FORM_MESSAGE);
+        if (!$emailNotificationSubscribers->isEmpty()) {
+            foreach ($emailNotificationSubscribers as $sub) {
+                $data['user'] = $sub;
+
+                $this->dispatch(
+                    new SendMail(
+                        new Contact($data)
+                    )
+                );
+            }
+        }
         System::log()->log(SystemEvent::CONTACT_FORM_MESSAGE, $data);
     }
 

@@ -3,6 +3,7 @@
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Naraki\Core\Traits\Models\DoesSqlStuff;
+use Naraki\Sentry\Models\User;
 
 class SystemUserSubscriptions extends Model
 {
@@ -24,6 +25,16 @@ class SystemUserSubscriptions extends Model
     public function scopeSystemEvent(Builder $builder)
     {
         return $this->joinReverse($builder, SystemEvent::class);
+    }
+
+    /**
+     * @link https://laravel.com/docs/eloquent#local-scopes
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder $builder
+     */
+    public function scopeUser(Builder $builder)
+    {
+        return User::scopeGenericPerson($this->joinReverse($builder, User::class));
     }
 
 }

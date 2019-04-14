@@ -178,6 +178,15 @@ class User extends LaravelUser implements JWTSubject, HasAnEntityContract, HasPe
         return $this->join($query, Person::class);
     }
 
+    public static function scopeGenericPerson(Builder $builder)
+    {
+        return $builder->join('people',
+            'people.user_id',
+            '=',
+            'users.user_id'
+        );
+    }
+
     /**
      * @link https://laravel.com/docs/eloquent#local-scopes
      * @param \Illuminate\Database\Eloquent\Builder $builder

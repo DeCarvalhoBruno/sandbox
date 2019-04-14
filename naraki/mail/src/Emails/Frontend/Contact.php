@@ -10,11 +10,10 @@ class Contact extends Email
 
     public function prepareViewData()
     {
+        parent::prepareViewData();
         $this->viewData->add([
             'title' => trans('email.contact.title'),
             'subject' => trans('email.contact.email_subject', ['app_name' => config('app.name')]),
-            'recipient_email' => $this->config->get('from.address'),
-            'recipient_name' => $this->config->get('from.name')
         ]);
     }
 

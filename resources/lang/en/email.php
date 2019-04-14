@@ -23,6 +23,12 @@ return [
         'subject' => 'Subject:',
         'message_body' => 'Message body:'
     ],
+    'newsletter' => [
+        'title' => 'Someone subscribed to the newsletter',
+        'email_subject' => '[:app_name] New newsletter subscription',
+        'name' => 'Name:',
+        'email' => 'Email address:',
+    ],
     'mention' => [
         'title' => 'Someone mentioned you in a comment',
         'subject' => '[:app_name] Someone mentioned you in a comment',
@@ -30,9 +36,14 @@ return [
         'body2' => 'If you do not wish to receive such emails, notification settings can be modified by clicking on the cog icon in the comments section of a blog post.',
         'cta' => 'Go to discussion'
     ],
+    'comment' => [
+        'title' => 'A new comment was posted',
+        'subject' => '[:app_name] A new comment was posted',
+        'body1' => ':user commented in the ":post" post.',
+    ],
     'reply' => [
         'title' => 'Someone replied to one of your comments',
-        'subject'=>'[:app_name] Someone replied to one of your comments',
+        'subject' => '[:app_name] Someone replied to one of your comments',
         'body1' => ':user replied to one of your comments in the ":post" post.',
         'body2' => 'If you do not wish to receive such emails, notification settings can be modified by clicking on the cog icon in the comments section of a blog post.',
     ],

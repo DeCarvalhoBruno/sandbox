@@ -8,6 +8,7 @@ use Naraki\Forum\Emails\Mention;
 use Naraki\Forum\Events\PostCreated;
 use Naraki\Forum\Facades\Forum;
 use Naraki\Mail\Jobs\SendMail;
+use Naraki\System\Facades\System;
 
 class NotifyMentionees extends Job
 {
@@ -58,7 +59,7 @@ class NotifyMentionees extends Job
 
         foreach ($mentionedUsernames as $user) {
             $notifiedUserKey = $users[$user]->getKey();
-            $userNotifOptions = Redis::hgetall(sprintf('comment_notif_opt.%s', $notifiedUserKey));
+            $userNotifOptions = System::subscriptions()->cacheFrontendSubscriptions($notifiedUserKey);
 
             //The user has to have set notification preferences
             //Also we don't need to notify the person who's posting if the person includes a mention to itself.

@@ -1,17 +1,20 @@
 <?php namespace Naraki\Mail\Jobs;
 
-use Naraki\Sentry\Events\UserSubscribedToNewsletter;
-use Naraki\Core\Support\Requests\Sanitizer;
+use Illuminate\Bus\Dispatcher;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Naraki\Core\Job;
+use Naraki\Core\Support\Requests\Sanitizer;
+use Naraki\Mail\Emails\Admin\Newsletter;
 use Naraki\Mail\Facades\NarakiMail;
+use Naraki\Sentry\Events\UserSubscribedToNewsletter;
 use Naraki\System\Facades\System;
 use Naraki\System\Models\SystemEvent;
 
-class SubscribeToNewsletter implements ShouldQueue
+class SubscribeToNewsletter extends Job implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -37,16 +40,28 @@ class SubscribeToNewsletter implements ShouldQueue
     public function handle()
     {
         try {
-            $data = NarakiMail::subscriber()->addPersonToLists(
-                Sanitizer::clean($this->input)
-            );
+            $input = Sanitizer::clean($this->input);
+            $data = NarakiMail::subscriber()->addPersonToLists($input);
             if (is_array($data)) {
                 event(new UserSubscribedToNewsletter($data));
                 System::log()->log(
                     SystemEvent::NEWSLETTER_SUBSCRIPTION,
-                    $this->input
+                    $input
                 );
             }
+            $emailNotificationSubscribers = System::subscriptions()
+                ->getSubscribedUsers(SystemEvent::NEWSLETTER_SUBSCRIPTION);
+            if (!$emailNotificationSubscribers->isEmpty()) {
+                foreach ($emailNotificationSubscribers as $sub) {
+                    app(Dispatcher::class)->dispatch(new SendMail(new Newsletter([
+                        'newsletter_email' => $input['email'] ?? null,
+                        'newsletter_name' => $input['full_name'] ?? null,
+                        'user' => $sub,
+                    ])));
+                }
+
+            }
+
         } catch (\Exception $e) {
             \Log::critical($e->getMessage(), ['trace' => $e->getTraceAsString()]);
         }
