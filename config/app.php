@@ -168,11 +168,10 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        Illuminate\Foundation\Support\Providers\AuthServiceProvider::class,
-        App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class
+        Naraki\Core\Providers\BroadcastServiceProvider::class,
+        Illuminate\Foundation\Support\Providers\EventServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
+//        Illuminate\Foundation\Support\Providers\RouteServiceProvider::class
     ],
 
     /*
@@ -230,7 +229,9 @@ return [
         'Forum' => Naraki\Forum\Facades\Forum::class,
         'NarakiMail' => Naraki\Mail\Facades\NarakiMail::class,
         'System' => Naraki\System\Facades\System::class,
-        'Permission' => Naraki\Permission\Facades\Permission::class
+        'Permission' => Naraki\Permission\Facades\Permission::class,
+        'ElasticSearch' => Naraki\Elasticsearch\Facades\ElasticSearch::class,
+        'ElasticSearchIndex' => Naraki\Elasticsearch\Facades\ElasticSearchIndex::class
     ],
 
 ];

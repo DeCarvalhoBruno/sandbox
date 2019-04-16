@@ -28,7 +28,7 @@ $app = new Illuminate\Foundation\Application(
 
 $app->singleton(
     Illuminate\Contracts\Http\Kernel::class,
-    App\HttpKernel::class
+    Naraki\Core\HttpKernel::class
 );
 
 $app->singleton(
@@ -38,7 +38,7 @@ $app->singleton(
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
-    App\ExceptionHandler::class
+    Naraki\Core\ExceptionHandler::class
 );
 
 /*

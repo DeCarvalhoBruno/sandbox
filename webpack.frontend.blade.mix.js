@@ -4,21 +4,26 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const webpack = require('webpack')
 require('dotenv').config()
 
+const assetFolder = 'vendor/naraki/components'
 const folderName = '6aa0e'
 const publicPath = `public/${folderName}`
 
-mix.js('resources/assets/frontend/js/app.js', 'js/app.js')
-  .sass('resources/assets/frontend/sass/app.scss', 'css/app.css')
+mix.js('resources/assets/app.js', 'js/app.js')
+  .sass('resources/assets/app.scss', 'css/app.css', {
+    includePaths: [
+      // path.resolve(path.join(__dirname, './resources/assets')),
+      path.resolve(assetFolder + '/resources')
+    ]
+  })
   .sourceMaps()
   .disableNotifications()
   .setPublicPath(path.normalize(publicPath))
-  .autoload({
-    // 'exports-loader?Util!bootstrap/js/dist/util': ['Util'],
-    // 'exports-loader?Dropdown!bootstrap/js/dist/dropdown': ['Dropdown'],
-    // 'exports-loader?Tooltip!bootstrap/js/dist/tooltip': ['Tooltip'],
-    // 'exports-loader?Tab!bootstrap/js/dist/tab': ['Tab']
-  })
   .options({
+    // autoprefixer: {
+    //   options: {
+    //     browsers: ['> 10%', 'last 6 versions', 'ff ESR', 'opera >= 12', 'safari >= 5', 'ios >= 8', 'ie >= 8'],
+    //   }
+    // },
     fileLoaderDirs: {
       fonts: '../fonts'
     }
@@ -34,8 +39,7 @@ if (mix.inProduction()) {
     'popper.js',
     'vue-i18n',
     'sweetalert2',
-    '@fortawesome/fontawesome',
-    '@fortawesome/vue-fontawesome'
+    'fontawesome'
   ])
 }
 mix.browserSync({
@@ -43,10 +47,8 @@ mix.browserSync({
   browser: 'chrome',
   notify: false,
   files: [
-    `public/${folderName}/**/*`,
-    'resources/views/**/*',
     'app/**/*',
-    'naraki/**/*'
+    assetFolder + '/**/*'
   ]
 })
 
@@ -72,13 +74,13 @@ mix.webpackConfig({
   resolve: {
     extensions: ['.js', '.json', '.vue'],
     alias: {
-      'front_path': path.resolve(path.join(__dirname, './resources/assets/frontend/js')),
-      'back_path': path.resolve(path.join(__dirname, './resources/assets/backend/js')),
+      'front_path': path.resolve(assetFolder + '/resources/frontend/js'),
+      'front_main_path': path.resolve('resources/assets'),
+      'back_path': path.resolve(assetFolder + '/resources/backend/js'),
       'jquery': 'jquery/src/jquery'
     },
     modules: [
-      'node_modules',
-      path.resolve(__dirname, 'jquery-lazy')
+      'node_modules'
     ]
   },
   output: {

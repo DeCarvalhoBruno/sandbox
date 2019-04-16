@@ -4,25 +4,26 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const webpack = require('webpack')
 require('dotenv').config()
 
+const assetFolder = 'vendor/naraki/components/resources'
 const folderName = '1b8eb'
 const publicPath = `public/${folderName}`
 
-Mix.listen('configReady', function (config) {
-  const rules = config.module.rules
-  const targetRegex = /(\.(png|jpe?g|gif)$|^((?!font).)*\.svg$)/
+// Mix.listen('configReady', function (config) {
+//   const rules = config.module.rules
+//   const targetRegex = /(\.(png|jpe?g|gif)$|^((?!font).)*\.svg$)/
+//
+//   for (let rule of rules) {
+//     if (rule.test.toString() == targetRegex.toString()) {
+//       rule.exclude = /\.svg$/
+//       break
+//     }
+//   }
+// })
 
-  for (let rule of rules) {
-    if (rule.test.toString() == targetRegex.toString()) {
-      rule.exclude = /\.svg$/
-      break
-    }
-  }
-})
-
-mix.copy('resources/assets/_fonts/aladin-v6-latin-regular.ttf',
+mix.copy(assetFolder + '/_fonts/aladin-v6-latin-regular.ttf',
   `${path.resolve(__dirname, 'public')}/fonts`)
-mix.js('resources/assets/backend/js/app.js', 'js/app.js')
-  .sass('resources/assets/backend/sass/app.scss', 'css/app.css')
+mix.js(assetFolder + '/backend/js/app.js', 'js/app.js')
+  .sass(assetFolder + '/backend/sass/app.scss', 'css/app.css')
   .sourceMaps()
   .disableNotifications()
   .setPublicPath(path.normalize(publicPath))
@@ -57,26 +58,24 @@ mix.browserSync({
   browser: 'chrome',
   notify: false,
   files: [
-    `public/${folderName}/**/*`,
     'app/**/*',
-    'resources/assets/**/*',
-    'naraki/**/*'
+    assetFolder + '/**/*'
   ]
 })
 mix.webpackConfig({
-  module: {
-    rules: [
-      {
-        test: /\.svg$/,
-        use: [
-          {
-            loader: 'html-loader',
-            options: {
-              minimize: true
-            }
-          }]
-      }]
-  },
+  // module: {
+  //   rules: [
+  //     {
+  //       test: /\.svg$/,
+  //       use: [
+  //         {
+  //           loader: 'html-loader',
+  //           options: {
+  //             minimize: true
+  //           }
+  //         }]
+  //     }]
+  // },
   plugins: [
     new CleanWebpackPlugin([
       'js', 'css', 'fonts', 'mix-manifest.json'
@@ -96,8 +95,10 @@ mix.webpackConfig({
   resolve: {
     extensions: ['.js', '.json', '.vue'],
     alias: {
-      'front_path': path.resolve(path.join(__dirname, './resources/assets/frontend/js')),
-      'back_path': path.resolve(path.join(__dirname, './resources/assets/backend/js')),
+      'front_path': path.resolve(
+        assetFolder + '/frontend/js'),
+      'back_path': path.resolve(
+        assetFolder + '/backend/js'),
       'jquery': 'jquery/dist/jquery.min.js',
       'popper': 'popper.js/dist/popper.min.js'
     }
