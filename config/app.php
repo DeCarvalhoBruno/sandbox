@@ -151,6 +151,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+        Naraki\Components\ServiceProvider::class,
         Naraki\Core\ServiceProvider::class,
         Naraki\Sentry\ServiceProvider::class,
         Naraki\Media\ServiceProvider::class,

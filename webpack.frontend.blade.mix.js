@@ -11,7 +11,6 @@ const publicPath = `public/${folderName}`
 mix.js('resources/assets/app.js', 'js/app.js')
   .sass('resources/assets/app.scss', 'css/app.css', {
     includePaths: [
-      // path.resolve(path.join(__dirname, './resources/assets')),
       path.resolve(assetFolder + '/resources')
     ]
   })

@@ -13,6 +13,7 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     protected $namespace = 'App\Http\Controllers';
+
     /**
      * Define your route model bindings, pattern filters, etc.
      *
@@ -36,20 +37,23 @@ class RouteServiceProvider extends ServiceProvider
         $availableLocales = config('app.locales');
         unset($availableLocales[app()->getLocale()]);
         $availableLocales[''] = '';
-        foreach ($availableLocales as $k => $v) {
+        foreach ($availableLocales as $locale => $v) {
             $router->group([
-                'prefix' => sprintf('/%s', $k),
-                'namespace'=>'App\Http\Controllers',
+                'prefix' => sprintf('/%s', $locale),
+                'namespace' => 'App\Http\Controllers',
                 'middleware' => ['web'],
-            ], function () use ($router,$k) {
-                $router->get(trans('routes.blog_slug', [], $k), 'Blog@getPost')
-                    ->name(i18nRouteNames($k, 'blog'));
-                $router->get(trans('routes.blog_cat', [], $k), 'Blog@category')
-                    ->name(i18nRouteNames($k, 'blog.category'));
-                $router->get(trans('routes.blog_tag', [], $k), 'Blog@tag')
-                    ->name(i18nRouteNames($k, 'blog.tag'));
-                $router->get(trans('routes.blog_author', [], $k), 'Blog@author')
-                    ->name(i18nRouteNames($k, 'blog.author'));
+            ], function () use ($router, $locale) {
+                $router->get(trans('routes.blog_slug', [], $locale), 'Blog@getPost')
+                    ->name(i18nRouteNames($locale, 'blog'));
+                $router->get(trans('routes.blog_cat', [], $locale), 'Blog@category')
+                    ->name(i18nRouteNames($locale, 'blog.category'));
+                $router->get(trans('routes.blog_tag', [], $locale), 'Blog@tag')
+                    ->name(i18nRouteNames($locale, 'blog.tag'));
+                $router->get(trans('routes.blog_author', [], $locale), 'Blog@author')
+                    ->name(i18nRouteNames($locale, 'blog.author'));
+
+                $router->get(trans('routes.home', [], $locale), 'Home@index')
+                    ->name(i18nRouteNames($locale, 'home'));
             });
         }
 

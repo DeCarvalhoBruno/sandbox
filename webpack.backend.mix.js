@@ -20,7 +20,7 @@ const publicPath = `public/${folderName}`
 //   }
 // })
 
-mix.copy(assetFolder + '/_fonts/aladin-v6-latin-regular.ttf',
+mix.copy(assetFolder + '/backend/sass/fonts/aladin-v6-latin-regular.ttf',
   `${path.resolve(__dirname, 'public')}/fonts`)
 mix.js(assetFolder + '/backend/js/app.js', 'js/app.js')
   .sass(assetFolder + '/backend/sass/app.scss', 'css/app.css')
