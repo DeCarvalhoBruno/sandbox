@@ -36,8 +36,9 @@
         'written_by' => ':date by :author',
         'page_view_count' => 'Page view count',
         'more_reading' => 'More reading',
-        'share_facebook'=>'Share on Facebook',
-        'share_twitter'=>'Share on Twitter',
+        'share_facebook' => 'Share on Facebook',
+        'share_twitter' => 'Share on Twitter',
+        'categories' => 'Categories',
         'source_types' => [
             'url' => 'Link to resource'
         ],
@@ -49,12 +50,12 @@
             'sports' => 'Sports',
             'technology' => 'Technology'
         ],
-        'search_headers'=>[
+        'search_headers' => [
             'articles' => 'ARTICLES',
             'authors' => 'AUTHORS',
             'tags' => 'TAGS',
             'no_result' => 'NO RESULTS',
-            'more_results'=>'MORE RESULTS FOR \':search\''
+            'more_results' => 'MORE RESULTS FOR \':search\''
         ]
     ]
 ];

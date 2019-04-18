@@ -1,8 +1,8 @@
 <?php namespace App\Http\Controllers;
 
 use Naraki\Blog\Facades\Blog;
+use Naraki\Blog\Support\Collections\Blog as BlogCollection;
 use Naraki\Core\Controllers\Frontend\Home as HomeController;
-use Naraki\Core\Models\Language;
 use Naraki\Media\Facades\Media as MediaProvider;
 
 class Home extends HomeController
@@ -12,50 +12,50 @@ class Home extends HomeController
      */
     public function index()
     {
-        $dbResult = Blog::buildForDisplay()
-            ->orderBy('page_views', 'desc')
-            ->where('language_id', Language::getAppLanguageId())
-            ->where('blog_categories.parent_id', null)
-            ->limit(150)
-            ->get();
+        $dbResult = Blog::mostViewedByCategoryTotal();
+        $posts = [
+            'featured' => [],
+            'mvpcat' => [],
+            'most_viewed' => []
+        ];
+        $types = [];
+        foreach ($dbResult as $result) {
+            $types[] = $result->type;
+        }
         $dbImages = MediaProvider::image()->getImages(
-            $dbResult->pluck('type')->all(), [
+            $types, [
                 'media_uuid as uuid',
                 'media_extension as ext',
                 'entity_types.entity_type_id as type',
                 'entity_id'
             ]
         );
-        $media = [];
+        $mediaTmp = $media = [];
         foreach ($dbImages as $image) {
-            $media[$image->type] = $image;
+            $mediaTmp[$image->type] = $image;
         }
-        $posts = [
-            'featured' => [],
-            'most_viewed_cat' => [],
-            'most_viewed' => []
-        ];
 
         foreach ($dbResult as $post) {
-            if (empty($post->cat)) {
-                continue;
-            }
             if ($post->featured == 1) {
-                if (isset($media[$post->type])) {
-                    $posts['featured'][] = $post;
+                if (isset($mediaTmp[$post->type])) {
+                    $posts['featured'][] = new BlogCollection((array)$post);
+                    $media[$post->type] = $mediaTmp[$post->type];
                 }
             } else {
-                if (isset($media[$post->type])) {
-                    if (isset($posts['most_viewed_cat'][$post->cat])) {
-                        if (count($posts['most_viewed_cat'][$post->cat]) < 5) {
-                            $posts['most_viewed_cat'][$post->cat][] = $post;
+                if (isset($mediaTmp[$post->type])) {
+                    if (isset($posts['mvpcat'][$post->cat])) {
+                        if (count($posts['mvpcat'][$post->cat]) < 5) {
+                            $posts['mvpcat'][$post->cat][] = new BlogCollection((array)$post);
+                            $media[$post->type] = $mediaTmp[$post->type];
                         } else {
                             if (count($posts['most_viewed']) < 18) {
-                                $posts['most_viewed'][] = $post;
+                                $posts['most_viewed'][] = new BlogCollection((array)$post);
+                                $media[$post->type] = $mediaTmp[$post->type];
                             }
                         }
                     } else {
-                        $posts['most_viewed_cat'][$post->cat][] = $post;
+                        $posts['mvpcat'][$post->cat][] = new BlogCollection((array)$post);
+                        $media[$post->type] = $mediaTmp[$post->type];
                     }
                 }
             }

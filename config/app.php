@@ -169,10 +169,10 @@ return [
         /*
          * Application Service Providers...
          */
+        App\Providers\AppServiceProvider::class,
         Naraki\Core\Providers\BroadcastServiceProvider::class,
         Illuminate\Foundation\Support\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-//        Illuminate\Foundation\Support\Providers\RouteServiceProvider::class
     ],
 
     /*
