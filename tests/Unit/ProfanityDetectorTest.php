@@ -2,14 +2,13 @@
 
 namespace Tests\Unit;
 
-use Naraki\Core\Support\Requests\Detectors\Profanity;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Naraki\Core\Support\Requests\Detectors\Profanity;
 use Tests\TestCase;
 
 class ProfanityDetectorTest extends TestCase
 {
-    use DatabaseMigrations, WithoutMiddleware;
+    use WithoutMiddleware;
 
     public function test_profanity_detector_with_profanity()
     {

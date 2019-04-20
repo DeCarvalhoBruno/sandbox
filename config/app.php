@@ -163,6 +163,7 @@ return [
         Naraki\System\ServiceProvider::class,
         Naraki\Permission\ServiceProvider::class,
         Naraki\Oauth\ServiceProvider::class,
+        Naraki\Elasticsearch\ServiceProvider::class,
         Naraki\Core\Support\JavaScript\ServiceProvider::class,
         Naraki\Core\Support\Viewable\ServiceProvider::class,
 

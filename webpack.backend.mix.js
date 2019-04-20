@@ -8,17 +8,17 @@ const assetFolder = 'vendor/naraki/components/resources'
 const folderName = '1b8eb'
 const publicPath = `public/${folderName}`
 
-// Mix.listen('configReady', function (config) {
-//   const rules = config.module.rules
-//   const targetRegex = /(\.(png|jpe?g|gif)$|^((?!font).)*\.svg$)/
-//
-//   for (let rule of rules) {
-//     if (rule.test.toString() == targetRegex.toString()) {
-//       rule.exclude = /\.svg$/
-//       break
-//     }
-//   }
-// })
+Mix.listen('configReady', function (config) {
+  const rules = config.module.rules
+  const targetRegex = /(\.(png|jpe?g|gif)$|^((?!font).)*\.svg$)/
+
+  for (let rule of rules) {
+    if (rule.test.toString() == targetRegex.toString()) {
+      rule.exclude = /\.svg$/
+      break
+    }
+  }
+})
 
 mix.copy(assetFolder + '/backend/sass/fonts/aladin-v6-latin-regular.ttf',
   `${path.resolve(__dirname, 'public')}/fonts`)
@@ -59,23 +59,23 @@ mix.browserSync({
   notify: false,
   files: [
     'app/**/*',
-    assetFolder + '/**/*'
+    'vendor/naraki/components/**/*'
   ]
 })
 mix.webpackConfig({
-  // module: {
-  //   rules: [
-  //     {
-  //       test: /\.svg$/,
-  //       use: [
-  //         {
-  //           loader: 'html-loader',
-  //           options: {
-  //             minimize: true
-  //           }
-  //         }]
-  //     }]
-  // },
+  module: {
+    rules: [
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'html-loader',
+            options: {
+              minimize: true
+            }
+          }]
+      }]
+  },
   plugins: [
     new CleanWebpackPlugin([
       'js', 'css', 'fonts', 'mix-manifest.json'

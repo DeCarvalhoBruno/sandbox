@@ -43,8 +43,8 @@ trait CreatesDatabaseResources
     }
 
     /**
-     * @param \Naraki\Sentry\Models\User $user
-     * @param \Naraki\Sentry\Models\Group $group
+     * @param \Naraki\Sentry\Models\User|\Illuminate\Database\Eloquent\Model $user
+     * @param \Naraki\Sentry\Models\Group|\Illuminate\Database\Eloquent\Model $group
      */
     protected function assignUserToGroup($user, $group)
     {
