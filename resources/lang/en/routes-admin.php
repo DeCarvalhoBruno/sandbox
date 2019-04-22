@@ -10,6 +10,7 @@ return [
     'admin.user' => '',
     'admin.settings' => '',
     'admin.settings.general' => 'admin/settings/general',
+    'admin.settings.homepage' => 'admin/settings/homepage',
     'admin.settings.social' => 'admin/settings/social',
     'admin.settings.sitemap' => 'admin/settings/sitemap',
     'admin.system.log' => 'admin/system/log',

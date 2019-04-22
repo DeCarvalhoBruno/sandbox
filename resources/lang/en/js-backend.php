@@ -42,6 +42,7 @@ return [
         'admin-system-log' => 'System Log',
         'admin-settings-settings' => 'Website settings',
         'admin-settings-general' => 'General settings',
+        'admin-settings-homepage' => 'Homepage settings',
         'admin-settings-social' => 'Social media settings',
         'admin-settings-sitemap' => 'Sitemap settings'
     ],
@@ -312,6 +313,7 @@ return [
             'twitter_publisher' => 'Twitter publisher username',
             'website_title' => 'Website title',
             'website_type' => 'Website type',
+            'homepage' => 'Homepage'
         ],
         'blog' => [
             'add_post' => 'Add post',
