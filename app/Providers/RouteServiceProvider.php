@@ -43,16 +43,16 @@ class RouteServiceProvider extends ServiceProvider
                 'namespace' => 'App\Http\Controllers',
                 'middleware' => ['web'],
             ], function () use ($router, $locale) {
-                $router->get(trans('routes.blog_slug', [], $locale), 'Blog@getPost')
+                $router->get(trans('blog::tr.blog_slug', [], $locale), 'Blog@getPost')
                     ->name(i18nRouteNames($locale, 'blog'));
-                $router->get(trans('routes.blog_cat', [], $locale), 'Blog@category')
+                $router->get(trans('blog::tr.blog_cat', [], $locale), 'Blog@category')
                     ->name(i18nRouteNames($locale, 'blog.category'));
-                $router->get(trans('routes.blog_tag', [], $locale), 'Blog@tag')
+                $router->get(trans('blog::tr.blog_tag', [], $locale), 'Blog@tag')
                     ->name(i18nRouteNames($locale, 'blog.tag'));
-                $router->get(trans('routes.blog_author', [], $locale), 'Blog@author')
+                $router->get(trans('blog::tr.blog_author', [], $locale), 'Blog@author')
                     ->name(i18nRouteNames($locale, 'blog.author'));
 
-                $router->get(trans('routes.home', [], $locale), 'Home@index')
+                $router->get(trans('core::tr.routes.home', [], $locale), 'Home@index')
                     ->name(i18nRouteNames($locale, 'home'));
             });
         }
