@@ -29,33 +29,9 @@ class RouteServiceProvider extends ServiceProvider
      * Define the routes for the application.
      *
      * @return void
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function map()
     {
-        $router = $this->app->make(Router::class);
-        $availableLocales = config('app.locales');
-        unset($availableLocales[app()->getLocale()]);
-        $availableLocales[''] = '';
-        foreach ($availableLocales as $locale => $v) {
-            $router->group([
-                'prefix' => sprintf('/%s', $locale),
-                'namespace' => 'App\Http\Controllers',
-                'middleware' => ['web'],
-            ], function () use ($router, $locale) {
-                $router->get(trans('blog::tr.blog_slug', [], $locale), 'Blog@getPost')
-                    ->name(i18nRouteNames($locale, 'blog'));
-                $router->get(trans('blog::tr.blog_cat', [], $locale), 'Blog@category')
-                    ->name(i18nRouteNames($locale, 'blog.category'));
-                $router->get(trans('blog::tr.blog_tag', [], $locale), 'Blog@tag')
-                    ->name(i18nRouteNames($locale, 'blog.tag'));
-                $router->get(trans('blog::tr.blog_author', [], $locale), 'Blog@author')
-                    ->name(i18nRouteNames($locale, 'blog.author'));
-
-                $router->get(trans('core::tr.routes.home', [], $locale), 'Home@index')
-                    ->name(i18nRouteNames($locale, 'home'));
-            });
-        }
 
     }
 

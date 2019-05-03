@@ -23,6 +23,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->make('view')->composer(['core::frontend.site.*', 'blog::*'], HomeComposer::class);
     }
 }
