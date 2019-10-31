@@ -70,7 +70,7 @@
     "sass": "^1.16.1",
     "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.6.2",
-    "webpack-bundle-analyzer": "^2.9.2",
+    "webpack-bundle-analyzer": "^3.6.0",
     "webpack-uglify-js-plugin": "^1.1.9"
   }
 }
